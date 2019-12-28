@@ -62,19 +62,12 @@ Crater is a product of [Bytefury](https://bytefury.com)
 
 **Special thanks to:**
 * [Birkhoff Lee](https://github.com/BirkhoffLee)
-<<<<<<< HEAD
 * [Hassan A. Ba Abdullah](https://github.com/hsnapps)
 
 ## Translate
 Help us translate or suggest changes to existing languages if you find any mistakes by creating a new PR. 
 
 Here's the [english-version](https://github.com/bytefury/crater/blob/master/resources/assets/js/plugins/en.json) json file which you can use as a reference.
-=======
-
-
-## Translate
-Help us translate on [Transifex](https://www.transifex.com/bytefury/crater-invoice)
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 
 ## License
 Crater is released under the Attribution Assurance License.

@@ -19,21 +19,16 @@ use Crater\Currency;
 use Crater\CompanySetting;
 
 class CompanyController extends Controller
-<<<<<<< HEAD
 {   
     /**
      * Retrive the Admin account.
      * @return \Crater\User
      */
-=======
-{
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getAdmin()
     {
         return User::find(1);
     }
 
-<<<<<<< HEAD
     /**
      * Update the Admin profile.
      * Includes name, email and (or) password
@@ -41,8 +36,6 @@ class CompanyController extends Controller
      * @param  \Crater\Http\Requests\ProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function updateAdminProfile(ProfileRequest $request)
     {
         $verifyEmail = User::where('email', $request->email)->first();
@@ -72,7 +65,6 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
 
     
     /**
@@ -81,8 +73,6 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getAdminCompany()
     {
         $user = User::with(['addresses', 'addresses.country', 'company'])->find(1);
@@ -92,7 +82,6 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
 
 
     /**
@@ -100,8 +89,6 @@ class CompanyController extends Controller
      * @param \Crater\Http\Requests\CompanyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function updateAdminCompany(CompanyRequest $request)
     {
         $user = User::find(1);
@@ -124,14 +111,11 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
     /**
      * Retrieve General App Settings
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getGeneralSettings(Request $request)
     {
         $date_formats = DateFormatter::get_list();
@@ -162,12 +146,8 @@ class CompanyController extends Controller
         $languages = [
             ["code"=>"en", "name" => "English"],
             ["code"=>"fr", "name" => "French"],
-<<<<<<< HEAD
             ["code"=>"es", "name" => "Spanish"],
             ["code"=>"ar", "name" => "العربية"],
-=======
-            ["code"=>"es", "name" => "Spanish"]
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
         ];
 
         return response()->json([
@@ -185,7 +165,6 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
 
 
     /**
@@ -193,8 +172,6 @@ class CompanyController extends Controller
      * @param \Crater\Http\Requests\CompanySettingRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function updateGeneralSettings(CompanySettingRequest $request)
     {
         $sets = [
@@ -214,11 +191,7 @@ class CompanyController extends Controller
             'success' => true
         ]);
     }
-<<<<<<< HEAD
   
-=======
-
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getCustomizeSetting (Request $request)
     {
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
@@ -271,14 +244,11 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
     /**
      * Update a specific Company Setting
      * @param \Crater\Http\Requests\SettingRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function updateSetting(SettingRequest $request)
     {
         CompanySetting::setSetting($request->key, $request->value, $request->header('company'));
@@ -288,14 +258,11 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
     /**
      * Retrieve Specific Company Setting
      * @param \Crater\Http\Requests\SettingKeyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getSetting(SettingKeyRequest $request)
     {
         $setting = CompanySetting::getSetting($request->key, $request->header('company'));
@@ -305,15 +272,12 @@ class CompanyController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
 
     /**
      * Retrieve App Colors
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getColors(Request $request)
     {
         $colors = [
@@ -348,11 +312,7 @@ class CompanyController extends Controller
      * Upload the company logo to storage.
      *
      * @param  \Illuminate\Http\Request $request
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function uploadCompanyLogo(Request $request)
     {
@@ -379,11 +339,7 @@ class CompanyController extends Controller
      * Upload the Admin Avatar to public storage.
      *
      * @param  \Illuminate\Http\Request $request
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function uploadAdminAvatar(Request $request)
     {

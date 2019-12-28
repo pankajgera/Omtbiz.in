@@ -41,11 +41,7 @@
     "guid": "0.0.12",
     "lodash": "^4.17.13",
     "moment": "^2.18.1",
-<<<<<<< HEAD
     "npm": "^6.13.4",
-=======
-    "npm": "^6.4.1",
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     "popper.js": "^1.12.9",
     "sweet-modal-vue": "^2.0.0",
     "sweetalert": "^2.1.2",

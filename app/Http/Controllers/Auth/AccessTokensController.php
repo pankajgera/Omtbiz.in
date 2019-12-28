@@ -54,11 +54,7 @@ class AccessTokensController extends Controller
 	{
 		$request->validate([
 			'username' => 'required|email',
-<<<<<<< HEAD
 			'password' => 'required|string|min:8',
-=======
-			'password' => 'required|string|min:6',
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 		]);
 
 		if ($this->hasTooManyLoginAttempts($request)) {
@@ -141,15 +137,9 @@ class AccessTokensController extends Controller
 	public function requestPasswordGrant(Request $request)
 	{
 		$response = $this->proxy->postJson('oauth/token', [
-<<<<<<< HEAD
 			'client_id' => config('auth.proxy.client_id'),
 			'client_secret' => config('auth.proxy.client_secret'),
 			'grant_type' => config('auth.proxy.grant_type'),
-=======
-			'client_id' => 1,
-			'client_secret' => '2qgTWZrOESI4NXaVRvwZaH0TVDvbPHTob3OXA23P',
-			'grant_type' => 'password',
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 			'username' => $request->username,
 			'password' => $request->password,
 			'scopes' => '[*]'
@@ -158,10 +148,6 @@ class AccessTokensController extends Controller
         $user = User::where('email', $request->username)->first();
 
         if ($response->isSuccessful()) {
-<<<<<<< HEAD
-=======
-			// Auth::login($user);
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
             $this->clearLoginAttempts($request);
 			return $this->sendSuccessResponse($response, $user);
 		}

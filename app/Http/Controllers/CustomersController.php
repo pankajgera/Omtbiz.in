@@ -19,11 +19,7 @@ class CustomersController extends Controller
     /**
      * Display a listing of the resource.
      *
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function index(Request $request)
     {
@@ -57,11 +53,7 @@ class CustomersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function store(Requests\CustomerRequest $request)
     {
@@ -112,11 +104,7 @@ class CustomersController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function show($id)
     {
@@ -136,11 +124,7 @@ class CustomersController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function edit($id)
     {
@@ -160,11 +144,7 @@ class CustomersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
-=======
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function update($id, Requests\CustomerRequest $request)
     {
@@ -224,17 +204,10 @@ class CustomersController extends Controller
     }
 
     /**
-<<<<<<< HEAD
      * Remove the specified Customer along side all his/her resources (ie. Estimates, Invoices, Payments and Addresses)
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
-=======
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function destroy($id)
     {
@@ -245,7 +218,6 @@ class CustomersController extends Controller
         ]);
     }
 
-<<<<<<< HEAD
 
     /**
      * Remove a list of Customers along side all their resources (ie. Estimates, Invoices, Payments and Addresses)
@@ -253,8 +225,6 @@ class CustomersController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function delete(Request $request)
     {
         foreach ($request->id as $id) {

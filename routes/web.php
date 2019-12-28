@@ -49,22 +49,16 @@ Route::group(['prefix' => 'reports'], function () {
 
 });
 
-<<<<<<< HEAD
 // download invoice pdf with a unique_hash $id
 // -------------------------------------------------
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 Route::get('/invoices/pdf/{id}', [
     'as' => 'get.invoice.pdf',
     'uses' => 'FrontendController@getInvoicePdf'
 ]);
 
-<<<<<<< HEAD
 
 // download estimate pdf with a unique_hash $id
 // -------------------------------------------------
-=======
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 Route::get('/estimates/pdf/{id}', [
     'as' => 'get.estimate.pdf',
     'uses' => 'FrontendController@getEstimatePdf'
@@ -85,22 +79,14 @@ Route::get('/expenses/{id}/receipt/{hash}', [
     'uses' => 'ExpensesController@downloadReceipt'
 ]);
 
-<<<<<<< HEAD
 // Setup for instalation of app
 // ----------------------------------------------
-=======
-
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 Route::get('/on-boarding', function () {
     return view('app');
 })->name('install')->middleware('redirect-if-installed');
 
-<<<<<<< HEAD
 // Move other http requests to the Vue App
 // -------------------------------------------------
-=======
-
->>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
 Route::get('/{vue?}', function () {
     return view('app');
 })->where('vue', '[\/\w\.-]*')->name('home')->middleware('install');
