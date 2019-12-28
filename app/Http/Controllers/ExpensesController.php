@@ -17,7 +17,11 @@ class ExpensesController extends Controller
     /**
      * Display a listing of the resource.
      *
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function index(Request $request)
     {
@@ -48,7 +52,11 @@ class ExpensesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function create(Request $request)
     {
@@ -63,7 +71,11 @@ class ExpensesController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function store(ExpenseRequest $request)
     {
@@ -91,7 +103,11 @@ class ExpensesController extends Controller
      * Display the specified resource.
      *
      * @param  \Crater\Expense $expense
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function show(Expense $expense)
     {
@@ -102,7 +118,11 @@ class ExpensesController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  $id
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function edit(Request $request,$id)
     {
@@ -122,7 +142,11 @@ class ExpensesController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Crater\Expense $expense
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function update(ExpenseRequest $request, Expense $expense)
     {
@@ -150,7 +174,11 @@ class ExpensesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \Crater\Expense $expense
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function destroy(Expense $expense)
     {
@@ -175,7 +203,11 @@ class ExpensesController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param   $id
+<<<<<<< HEAD
      * @return \Illuminate\Http\JsonResponse
+=======
+     * @return \Illuminate\Http\Response
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
      */
     public function uploadReceipts(Request $request, $id)
     {
@@ -200,12 +232,15 @@ class ExpensesController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
     /**
      * Retrive details of an expense receipt from storage.
      * @param   int $id
      * @return  \Illuminate\Http\JsonResponse
      */ 
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function showReceipt($id)
     {
         $expense = Expense::find($id);
@@ -232,6 +267,7 @@ class ExpensesController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
 
     /**
@@ -240,6 +276,8 @@ class ExpensesController extends Controller
      * @param   strig $hash
      * @return  \Symfony\Component\HttpFoundation\BinaryFileResponse | \Illuminate\Http\JsonResponse
      */    
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function downloadReceipt($id, $hash)
     {
         $company = Company::where('unique_hash', $hash)->first();

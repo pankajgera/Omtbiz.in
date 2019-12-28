@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Artisan;
 
 class OnboardingController extends Controller
 {
+<<<<<<< HEAD
 
     /**
      * Retrieve Onboarding data.
@@ -25,6 +26,8 @@ class OnboardingController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function getOnboardingData(Request $request)
     {
         if (!\Storage::disk('local')->has('database_created')) {
@@ -79,6 +82,7 @@ class OnboardingController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
     /**
      * Setup Admin Profile.
@@ -86,6 +90,8 @@ class OnboardingController extends Controller
      * @param  \Crater\Http\Requests\ProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function adminProfile(ProfileRequest $request)
     {
         $setting = Setting::getSetting('profile_complete');
@@ -111,12 +117,15 @@ class OnboardingController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Setup Admin Avatar.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function uploadAdminAvatar(Request $request)
     {
         $setting = Setting::getSetting('profile_complete');
@@ -143,12 +152,15 @@ class OnboardingController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Setup Admin Company.
      *
      * @param  \Crater\Http\Requests\CompanyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function adminCompany(CompanyRequest $request)
     {
         $setting = Setting::getSetting('profile_complete');
@@ -200,6 +212,7 @@ class OnboardingController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
     /**
      * Setup Company Settings.
@@ -207,6 +220,8 @@ class OnboardingController extends Controller
      * @param  \Crater\Http\Requests\CompanySettingRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function companySettings(CompanySettingRequest $request)
     {
         $setting = Setting::getSetting('profile_complete');

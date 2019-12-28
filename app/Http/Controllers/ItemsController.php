@@ -43,6 +43,7 @@ class ItemsController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
      /**
      * Create Item.
@@ -50,6 +51,8 @@ class ItemsController extends Controller
      * @param  Crater\Http\Requests\ItemsRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function store(Requests\ItemsRequest $request)
     {
         $item = new Item();
@@ -74,6 +77,7 @@ class ItemsController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
     /**
      * Update an existing Item.
      *
@@ -81,6 +85,8 @@ class ItemsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function update(Requests\ItemsRequest $request, $id)
     {
         $item = Item::find($id);
@@ -110,6 +116,7 @@ class ItemsController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
     /**
      * Delete an existing Item.
@@ -117,6 +124,8 @@ class ItemsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function destroy($id)
     {
         $data = Item::deleteItem($id);
@@ -132,6 +141,7 @@ class ItemsController extends Controller
         ]);
     }
 
+<<<<<<< HEAD
 
 
     /**
@@ -140,6 +150,8 @@ class ItemsController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+=======
+>>>>>>> b7cd4d4c92eb822c2c1930072dceeafcc38c7c9d
     public function delete(Request $request)
     {
         $items = [];
