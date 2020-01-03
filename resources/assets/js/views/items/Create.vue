@@ -48,13 +48,20 @@
               </div>
               <div class="form-group">
                 <label>{{ $t('items.unit') }}</label>
-                <base-select
+                <!-- <base-select
                   v-model="formData.unit"
                   :options="units"
                   :searchable="true"
                   :show-labels="false"
                   :placeholder="$t('items.select_a_unit')"
                   label="name"
+                /> -->
+                <base-input
+                  v-model.trim="formData.unit"
+                  focus
+                  type="text"
+                  name="unit"
+                  @input="$v.formData.unit.$touch()"
                 />
               </div>
               <div class="form-group">
@@ -68,6 +75,9 @@
                 <div v-if="$v.formData.description.$error">
                   <span v-if="!$v.formData.description.maxLength" class="text-danger">{{ $t('validation.description_maxlength') }}</span>
                 </div>
+              </div>
+              <div class="form-group">
+                <input type="file" accept="image/*" capture="environment" />
               </div>
               <div class="form-group">
                 <base-button

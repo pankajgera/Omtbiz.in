@@ -3,8 +3,8 @@
     <div class="step-indicator">
       <img
         id="logo-crater"
-        src="/assets/img/crater-logo.png"
-        alt="Crater Logo"
+        src="/assets/img/bill.png"
+        alt="Omtbiz Logo"
         class="logo-main"
       >
       <div class="indicator-line">

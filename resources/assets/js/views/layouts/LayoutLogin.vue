@@ -6,8 +6,8 @@
           <div class="logo-main">
             <a href="/admin">
               <img
-                src="/assets/img/crater-logo.png"
-                alt="Crater Logo">
+                src="/assets/img/bill.png"
+                alt="Omtbiz Logo">
             </a>
           </div>
           <router-view></router-view>

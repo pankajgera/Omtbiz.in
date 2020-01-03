@@ -36,7 +36,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="bills/create">
+        <!-- <router-link slot="item-title" class="col-xs-2" to="bills/create">
           <base-button
             color="theme"
             icon="plus"
@@ -44,7 +44,7 @@
           >
             {{ $t('bills.add_bill') }}
           </base-button>
-        </router-link>
+        </router-link> -->
       </div>
     </div>
 

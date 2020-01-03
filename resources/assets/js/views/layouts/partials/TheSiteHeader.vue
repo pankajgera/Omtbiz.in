@@ -3,13 +3,13 @@
     <a href="/" class="brand-main">
       <img
         id="logo-white"
-        src="/assets/img/logo-white.png"
-        alt="Crater Logo"
+        src="/assets/img/bill.png"
+        alt="Omtbiz Logo"
         class="d-none d-md-inline"
       >
       <img
         id="logo-mobile"
-        src="/assets/img/crater-white-small.png"
+        src="/assets/img/bill.png"
         alt="Laraspace Logo"
         class="d-md-none">
     </a>
