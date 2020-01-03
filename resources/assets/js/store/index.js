@@ -19,6 +19,7 @@ import userProfile from './modules/settings/user-profile'
 import payment from './modules/payment'
 import preferences from './modules/settings/preferences'
 import item from './modules/item'
+import bill from './modules/bill'
 import modal from './modules/modal'
 import currency from './modules/currency'
 import general from './modules/settings/general'
@@ -51,6 +52,7 @@ export default new Vuex.Store({
     dashboard,
     estimate,
     item,
+    bill,
     invoice,
     expense,
     modal,
