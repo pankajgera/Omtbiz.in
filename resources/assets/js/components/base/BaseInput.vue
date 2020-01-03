@@ -13,6 +13,8 @@
       :placeholder="placeholder"
       :autocomplete="autocomplete"
       class="input-field"
+      :accept="fileInput==='image' ? 'image/*' : ''" 
+      :capture="fileInput==='image' ? 'camera' : ''"
       @input="handleInput"
       @change="handleChange"
       @keyup="handleKeyupEnter"
@@ -44,6 +46,10 @@ export default {
     value: {
       type: [String, Number, File],
       default: ''
+    },
+    fileInput: {
+      type: String,
+      default: 'false',
     },
     placeholder: {
       type: String,

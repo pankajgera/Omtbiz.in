@@ -59,6 +59,11 @@ export default {
             route: '/admin/invoices'
           },
           {
+            title: 'navigation.bills',
+            icon: 'star',
+            route: '/admin/bills'
+          },
+          {
             title: 'navigation.payments',
             icon: 'credit-card',
             route: '/admin/payments'

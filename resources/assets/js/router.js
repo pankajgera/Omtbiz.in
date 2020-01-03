@@ -38,6 +38,10 @@ import CustomerCreate from './views/customers/Create.vue'
 import ItemsIndex from './views/items/Index.vue'
 import ItemCreate from './views/items/Create.vue'
 
+// Raw Bill
+import BillIndex from './views/raw-bill/Index.vue'
+import BillCreate from './views/raw-bill/Create.vue'
+
 // Invoices
 import InvoiceIndex from './views/invoices/Index.vue'
 import InvoiceCreate from './views/invoices/Create.vue'
@@ -193,6 +197,16 @@ const routes = [
         component: ItemCreate
       },
 
+      //Raw bill
+      {
+        path: 'bills',
+        component: BillIndex
+      },
+      {
+        path: 'bill/create',
+        name: 'bill.create',
+        component: BillCreate
+      },
       // Estimate
       {
         path: 'estimates',
