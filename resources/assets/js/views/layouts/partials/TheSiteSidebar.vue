@@ -36,21 +36,21 @@ export default {
             route: '/admin/dashboard'
           },
           {
-            title: 'navigation.bills',
+            title: 'navigation.items',
             icon: 'star',
-            route: '/admin/bills'
+            route: '/admin/items'
           }
+          // {
+          //   title: 'navigation.bills',
+          //   icon: 'star',
+          //   route: '/admin/bills'
+          // }
           // {
           //   title: 'navigation.customers',
           //   icon: 'user',
           //   route: '/admin/customers'
           // },
-          // {
-          //   title: 'navigation.items',
-          //   icon: 'star',
-          //   route: '/admin/items'
-          // }
-        ],
+        ]
 
         // [
         //   {
