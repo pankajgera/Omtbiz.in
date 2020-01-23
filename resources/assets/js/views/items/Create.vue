@@ -77,7 +77,8 @@
                 </div>
               </div>
               <div class="form-group">
-                <input type="file" accept="image/*" capture="environment" />
+                <img :src="previewImage" class="uploading-image" style="width: 100px">
+                <input type="file" accept="image/*" capture="environment" name="image" @change="uploadImage">
               </div>
               <div class="form-group">
                 <base-button
@@ -129,7 +130,8 @@ export default {
         name: '',
         description: '',
         price: '',
-        unit: null
+        unit: '',
+        image: ''
       },
       money: {
         decimal: '.',
@@ -137,7 +139,8 @@ export default {
         prefix: '$ ',
         precision: 2,
         masked: false
-      }
+      },
+      previewImage: ''
     }
   },
   computed: {
@@ -178,6 +181,9 @@ export default {
       },
       description: {
         maxLength: maxLength(255)
+      },
+      unit: {
+        required
       }
     }
   },
@@ -197,9 +203,6 @@ export default {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
         return false
-      }
-      if (this.formData.unit) {
-        this.formData.unit = this.formData.unit.name
       }
       if (this.isEdit) {
         this.isLoading = true
@@ -222,6 +225,16 @@ export default {
           return true
         }
         window.toastr['success'](response.data.success)
+      }
+    },
+    uploadImage (e) {
+      const image = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(image)
+      reader.onload = e => {
+        this.previewImage = e.target.result
+        this.formData.image = this.previewImage
+        console.log(this.previewImage, image)
       }
     }
   }
