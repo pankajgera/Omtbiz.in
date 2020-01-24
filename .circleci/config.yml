@@ -22,17 +22,6 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
-      
-      - run: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      - run: php -r "if (hash_file('SHA384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-      - run: php composer-setup.php
-      - run: php -r "unlink('composer-setup.php');"
-      - run: php composer.phar self-update
-      - run: sudo mv composer.phar /usr/local/bin/composer
-      
-      - run: composer install -n --prefer-dist
-      
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -40,6 +29,30 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
+      
+      - run: 
+          command: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+      
+      - run:
+          command: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+     
+      - run:
+          command: php -r "if (hash_file('SHA384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+      
+      - run:
+          command: php composer-setup.php
+      
+      - run:
+          command: php -r "unlink('composer-setup.php');"
+      
+      - run:
+          command: php composer.phar self-update
+      
+      - run:
+          command: sudo mv composer.phar /usr/local/bin/composer
+      
+      - run: composer install -n --prefer-dist
+            
 
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
@@ -62,17 +75,18 @@ jobs:
             # Each step uses the same `$BASH_ENV`, so need to modify it
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
-      - save_cache:
+     
+     - save_cache:
           key: node-v1-{{ checksum "package.json" }}
           paths:
             - node_modules
 
       # prepare the database
       #- run: touch storage/testing.sqlite
-      - run: php artisan migrate
+      - run: sudo php artisan migrate
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
       #- run: ./vendor/bin/codecept build
       #- run: ./vendor/bin/codecept run
-      - run: npm run production
+      - run: sudo npm run production
