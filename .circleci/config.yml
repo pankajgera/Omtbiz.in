@@ -111,7 +111,7 @@ jobs:
 
       # prepare the database
       #- run: touch storage/testing.sqlite
-      - run: sudo php artisan migrate --database=mysql --force
+      - run: sudo php artisan migrate --env=production --database=mysql --force
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
