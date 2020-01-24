@@ -57,8 +57,10 @@ jobs:
       - run: composer install -n --prefer-dist
             
       - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths: - ./vendor
+          key: 
+            v1-dependencies-{{ checksum "composer.json" }}
+          paths: 
+            - ./vendor
       
       - restore_cache:
           keys:
@@ -80,8 +82,10 @@ jobs:
             echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
      
      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
-          paths: - node_modules
+          key: 
+            node-v1-{{ checksum "package.json" }}
+          paths: 
+            - node_modules
 
       # prepare the database
       #- run: touch storage/testing.sqlite
