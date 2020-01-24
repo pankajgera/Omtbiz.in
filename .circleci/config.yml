@@ -80,11 +80,11 @@ jobs:
             # Each step uses the same `$BASH_ENV`, so need to modify it
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
-     
-     - save_cache:
-          key: 
+      
+      - save_cache:
+          key:
             node-v1-{{ checksum "package.json" }}
-          paths: 
+          paths:
             - node_modules
 
       # prepare the database
