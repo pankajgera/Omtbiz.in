@@ -51,7 +51,7 @@ jobs:
             fi
 
             sudo apt-get update
-            sudo apt-get install -y php7.2
+            sudo apt-get install -y php
 
       - run:
           command: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
