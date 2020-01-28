@@ -186,6 +186,18 @@
           show="formattedCreatedAt"
         />
         <table-column
+          label="Image"
+          show="images"
+        >
+          <template v-if="row.images" slot-scope="row">
+            <div v-if="selectedImage" max-width="85vw">
+              <img :src="selectedImage" alt="" width="100%" @click.stop="selectedImage = null">
+              <hr>
+            </div>
+            <img :src="row.images.thumbnail_path" @click="zoom(row.images.image_path)">
+          </template>
+        </table-column>
+        <table-column
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"
@@ -217,7 +229,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
@@ -254,7 +265,8 @@ export default {
         name: '',
         unit: '',
         price: ''
-      }
+      },
+      selectedImage: null
     }
   },
   computed: {
@@ -403,6 +415,10 @@ export default {
           }
         }
       })
+    },
+    zoom (url) {
+      console.log('Zoom', url)
+      this.selectedImage = url
     }
   }
 }

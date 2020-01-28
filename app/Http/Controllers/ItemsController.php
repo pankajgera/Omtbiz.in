@@ -7,6 +7,7 @@ use Crater\Http\Requests;
 use Crater\Item;
 use Crater\TaxType;
 use Crater\Tax;
+use Illuminate\Support\Facades\Log;
 
 class ItemsController extends Controller
 {
@@ -20,7 +21,7 @@ class ItemsController extends Controller
                 'unit',
                 'orderByField',
                 'orderBy',
-            ]))
+            ]))->with('images')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
@@ -60,6 +61,7 @@ class ItemsController extends Controller
         $item->price = $request->price;
         $item->save();
 
+        Log::info('image-in-base-64', $request->image);
         $image = $item->uploadImage($request->image);
 
         if ($request->has('taxes')) {
