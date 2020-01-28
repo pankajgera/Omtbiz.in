@@ -131,7 +131,6 @@ class Item extends Model
     {
         //make an Intervention Image object
         $image = Image::make($request_image);
-        Log::info('$image', [$image]);
         $fileName = str_random(30).'-'.time().'.jpg';
         Log::info('$fileName', [$fileName]);
         // store our uploaded file in our uploads folder

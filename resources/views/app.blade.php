@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Omtbiz - Self Hosted Invoicing Platform</title>
+    <title>Omtbiz</title>
     <script src="/assets/js/pace.js"></script>
     <link href="{{mix("/assets/css/crater.css")}}" rel="stylesheet" type="text/css">
     <meta name="viewport" content="width=device-width,initial-scale=1">
