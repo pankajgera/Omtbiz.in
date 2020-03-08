@@ -2,7 +2,7 @@
     "navigation": {
         "dashboard": "Dashboard",
         "customers": "Customers",
-        "items": "Items",
+        "items": "Bill-ty",
         "bills": "Raw Bill",
         "invoices": "Invoices",
         "expenses": "Expenses",
@@ -162,7 +162,11 @@
         "deleted_message": "Customer deleted successfully | Customers deleted successfully"
     },
     "items": {
+        "add_bill": "Add Bill",
+        "edit_bill": "Edit Bill",
+        "new_bill": "New Bill",
         "title": "Items",
+        "date": "Date",
         "items_list": "Items List",
         "name": "Name",
         "unit": "Unit",
@@ -181,7 +185,7 @@
         "no_items": "No items yet!",
         "list_of_items": "This section will contain the list of items.",
         "select_a_unit": "select unit",
-
+        "bill_ty": "Bill Ty",
         "item_attached_message": "Cannot delete an item which is already in use",
         "confirm_delete": "You will not be able to recover this Item | You will not be able to recover these Items",
         "created_message": "Item created successfully",

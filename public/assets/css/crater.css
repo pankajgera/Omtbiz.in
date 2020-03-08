@@ -507,7 +507,7 @@ mark,
 }
 
 .blockquote-footer::before {
-  content: "\2014\A0";
+  content: "— ";
 }
 
 .img-fluid {
@@ -11860,7 +11860,7 @@ code,
 }
 
 .side-nav .collapse-group .collapse-group-item .collapse-item-title > a > .icon-fa.arrow:before {
-  content: "\F104";
+  content: "";
 }
 
 .side-nav .collapse-group .collapse-group-item a {
@@ -11886,7 +11886,7 @@ code,
 }
 
 .side-nav .collapse-group .collapse-group-item.active > .collapse-item-title > a .icon > .icon-fa.arrow:before {
-  content: "\F107";
+  content: "";
 }
 
 .side-nav .collapse-group .collapse-group-item .collapse-group-items {
@@ -13282,11 +13282,11 @@ code,
 }
 
 .table-component__th--sort-asc:after {
-  content: "\2191";
+  content: "↑";
 }
 
 .table-component__th--sort-desc:after {
-  content: "\2193";
+  content: "↓";
 }
 
 .table-component .pagination {
@@ -14396,7 +14396,7 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__tag-icon:after {
-  content: "\D7";
+  content: "×";
   color: #266d4d;
   font-size: 14px;
 }

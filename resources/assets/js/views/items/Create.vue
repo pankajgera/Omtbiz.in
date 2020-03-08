@@ -1,11 +1,11 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ isEdit ? $t('items.edit_item') : $t('items.new_item') }}</h3>
+      <h3 class="page-title">{{ isEdit ? $t('items.edit_bill') : $t('items.new_bill') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/dashboard">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/items">{{ $tc('items.item',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('items.edit_item') : $t('items.new_item') }}</a></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/items">{{ $tc('items.bill_ty',2) }}</router-link></li>
+        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('items.edit_bill') : $t('items.new_bill') }}</a></li>
       </ol>
     </div>
     <div class="row">
@@ -30,7 +30,7 @@
                   </span>
                 </div>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label>{{ $t('items.price') }}</label><span class="text-danger"> *</span>
                 <div class="base-input">
                   <money
@@ -45,17 +45,9 @@
                   <span v-if="!$v.formData.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
                   <span v-if="!$v.formData.price.minValue" class="text-danger">{{ $t('validation.price_minvalue') }}</span>
                 </div>
-              </div>
-              <div class="form-group">
+              </div> -->
+              <!-- <div class="form-group">
                 <label>{{ $t('items.unit') }}</label>
-                <!-- <base-select
-                  v-model="formData.unit"
-                  :options="units"
-                  :searchable="true"
-                  :show-labels="false"
-                  :placeholder="$t('items.select_a_unit')"
-                  label="name"
-                /> -->
                 <base-input
                   v-model.trim="formData.unit"
                   focus
@@ -63,9 +55,32 @@
                   name="unit"
                   @input="$v.formData.unit.$touch()"
                 />
+              </div> -->
+              <div class="form-group">
+                <label>{{ $t('items.bill_ty') }}</label><span class="text-danger"> *</span>
+                <base-input
+                  v-model.trim="formData.bill_ty"
+                  focus
+                  type="text"
+                  name="bill_ty"
+                  @input="$v.formData.bill_ty.$touch()"
+                />
               </div>
               <div class="form-group">
-                <label for="description">{{ $t('items.description') }}</label>
+                <label for="date">{{ $t('items.date') }}</label><span class="text-danger"> *</span>
+                <base-date-picker
+                  v-model="formData.date"
+                  :invalid="$v.formData.date.$error"
+                  :calendar-button="true"
+                  calendar-button-icon="calendar"
+                  @change="$v.formData.date.$touch()"
+                />
+                <div v-if="$v.formData.date.$error">
+                  <span v-if="!$v.formData.date" class="text-danger">{{ $t('validation.required') }}</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">{{ $t('items.description') }}</label><span class="text-danger"> *</span>
                 <base-text-area
                   v-model="formData.description"
                   rows="2"
@@ -131,7 +146,9 @@ export default {
         description: '',
         price: '',
         unit: '',
-        image: ''
+        image: '',
+        date: '',
+        bill_ty: ''
       },
       money: {
         decimal: '.',
@@ -184,6 +201,12 @@ export default {
       },
       unit: {
         required
+      },
+      date: {
+        required
+      },
+      bill_ty: {
+        required
       }
     }
   },
@@ -234,7 +257,6 @@ export default {
       reader.onload = e => {
         this.previewImage = e.target.result
         this.formData.image = this.previewImage
-        console.log(this.previewImage, image)
       }
     }
   }

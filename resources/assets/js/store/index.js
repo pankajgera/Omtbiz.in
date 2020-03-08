@@ -28,43 +28,45 @@ import profitLossReport from './modules/reports/profit-loss'
 import salesReport from './modules/reports/sales'
 import ExpensesReport from './modules/reports/expense'
 import TaxReport from './modules/reports/tax'
+import VueExpandableImage from 'vue-expandable-image'
 
 Vue.use(Vuex)
+Vue.use(VueExpandableImage)
 
 const initialState = {
-  isAppLoaded: false
+    isAppLoaded: false
 }
 
 export default new Vuex.Store({
-  strict: true,
-  state: initialState,
-  getters,
-  mutations,
-  actions,
+    strict: true,
+    state: initialState,
+    getters,
+    mutations,
+    actions,
 
-  modules: {
-    auth,
-    user,
-    category,
-    company,
-    companyInfo,
-    customer,
-    dashboard,
-    estimate,
-    item,
-    bill,
-    invoice,
-    expense,
-    modal,
-    userProfile,
-    currency,
-    payment,
-    preferences,
-    general,
-    taxType,
-    profitLossReport,
-    salesReport,
-    ExpensesReport,
-    TaxReport
-  }
+    modules: {
+        auth,
+        user,
+        category,
+        company,
+        companyInfo,
+        customer,
+        dashboard,
+        estimate,
+        item,
+        bill,
+        invoice,
+        expense,
+        modal,
+        userProfile,
+        currency,
+        payment,
+        preferences,
+        general,
+        taxType,
+        profitLossReport,
+        salesReport,
+        ExpensesReport,
+        TaxReport
+    }
 })
