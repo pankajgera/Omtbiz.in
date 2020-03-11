@@ -3,7 +3,7 @@
     <div class="page-header">
       <div class="d-flex flex-row">
         <div>
-          <h3 class="page-title">{{ $tc('items.item', 2) }}</h3>
+          <h3 class="page-title">{{ $tc('items.bill_ty', 2) }}</h3>
         </div>
       </div>
       <ol class="breadcrumb">
@@ -18,7 +18,7 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('items.item', 2) }}
+            {{ $tc('items.bill_ty', 2) }}
           </router-link>
         </li>
       </ol>
@@ -42,7 +42,7 @@
             icon="plus"
             size="large"
           >
-            {{ $t('items.add_item') }}
+            {{ $t('items.add_bill') }}
           </base-button>
         </router-link>
       </div>
@@ -60,7 +60,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
+          <!-- <div class="col-sm-4">
             <label class="form-label"> {{ $tc('items.unit') }} </label>
             <base-select
               v-model="filters.unit"
@@ -79,6 +79,44 @@
               type="text"
               name="name"
               autocomplete="off"
+            />
+          </div> -->
+          <div class="col-sm-4">
+            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
+            <base-input
+              v-model="filters.bill_ty"
+              type="text"
+              name="name"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
+            <base-input
+              v-model="filters.bill_ty"
+              type="text"
+              name="name"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
+            <base-date-picker
+              v-model="formData.from_date"
+              :invalid="$v.formData.from_date.$error"
+              :calendar-button="true"
+              calendar-button-icon="calendar"
+              @change="$v.formData.from_date.$touch()"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
+            <base-date-picker
+              v-model="formData.to_date"
+              :invalid="$v.formData.to_date.$error"
+              :calendar-button="true"
+              calendar-button-icon="calendar"
+              @change="$v.formData.to_date.$touch()"
             />
           </div>
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
@@ -168,6 +206,10 @@
           show="name"
         />
         <table-column
+          :label="$t('items.bill_ty')"
+          show="bill_ty"
+        />
+        <!-- <table-column
           :label="$t('items.unit')"
           show="unit"
         />
@@ -179,7 +221,7 @@
             <span> {{ $t('items.price') }} </span>
             <div v-html="$utils.formatMoney(row.price, defaultCurrency)" />
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :label="$t('items.added_on')"
           sort-as="created_at"
@@ -190,14 +232,14 @@
           show="images"
         >
           <template v-if="row.images" slot-scope="row">
-            <div v-if="selectedImage" max-width="85vw">
-              <img :src="selectedImage" alt="" width="100%" @click.stop="selectedImage = null">
-              <hr>
-            </div>
-            <img :src="row.images.thumbnail_path" @click="zoom(row.images.image_path)">
+            <expandable-image
+              class="image"
+              :src="row.images.original_image_path"
+            ></expandable-image>
           </template>
         </table-column>
         <table-column
+          :key="Math.random()"
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"
@@ -229,6 +271,14 @@
     </div>
   </div>
 </template>
+<style>
+body > .expandable-image.expanded {
+  width: 100% !important;
+}
+.expandable-image{
+  width: 100px;
+}
+</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
@@ -239,7 +289,7 @@ export default {
   components: {
     DotIcon,
     SatelliteIcon,
-    BaseButton
+    BaseButton,
   },
   data () {
     return {
@@ -264,9 +314,10 @@ export default {
       filters: {
         name: '',
         unit: '',
-        price: ''
+        price: '',
+        bill_ty: ''
       },
-      selectedImage: null
+      index: null
     }
   },
   computed: {
@@ -330,6 +381,7 @@ export default {
         search: this.filters.name !== null ? this.filters.name : '',
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
         price: this.filters.price * 100,
+        bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -355,7 +407,8 @@ export default {
       this.filters = {
         name: '',
         unit: '',
-        price: ''
+        price: '',
+        bill_ty: ''
       }
 
       this.$nextTick(() => {
@@ -416,9 +469,8 @@ export default {
         }
       })
     },
-    zoom (url) {
-      console.log('Zoom', url)
-      this.selectedImage = url
+    setIndex(index) {
+      this.index = index
     }
   }
 }

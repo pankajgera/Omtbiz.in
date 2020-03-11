@@ -37,7 +37,7 @@ export default {
           },
           {
             title: 'navigation.items',
-            icon: 'star',
+            icon: 'file',
             route: '/admin/items'
           }
           // {

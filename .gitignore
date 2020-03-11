@@ -6,7 +6,6 @@
 /.idea
 Homestead.json
 Homestead.yaml
-.env
 .phpunit.result.cache
 .rnd
 /.expo
@@ -14,3 +13,4 @@ Homestead.yaml
 docker-compose.yml
 docker-compose.yaml
 /production
+.env
