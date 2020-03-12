@@ -90,35 +90,26 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
+          <!-- <div class="col-sm-4">
             <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
-            <base-input
-              v-model="filters.bill_ty"
-              type="text"
-              name="name"
-              autocomplete="off"
+            <base-date-picker
+              v-model="filters.from_date"
+              :invalid="$v.filters.from_date.$error"
+              :calendar-button="true"
+              calendar-button-icon="calendar"
+              @change="$v.filters.from_date.$touch()"
             />
           </div>
           <div class="col-sm-4">
             <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
             <base-date-picker
-              v-model="formData.from_date"
-              :invalid="$v.formData.from_date.$error"
+              v-model="filters.to_date"
+              :invalid="$v.filters.to_date.$error"
               :calendar-button="true"
               calendar-button-icon="calendar"
-              @change="$v.formData.from_date.$touch()"
+              @change="$v.filters.to_date.$touch()"
             />
-          </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
-            <base-date-picker
-              v-model="formData.to_date"
-              :invalid="$v.formData.to_date.$error"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-              @change="$v.formData.to_date.$touch()"
-            />
-          </div>
+          </div> -->
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
@@ -209,19 +200,6 @@
           :label="$t('items.bill_ty')"
           show="bill_ty"
         />
-        <!-- <table-column
-          :label="$t('items.unit')"
-          show="unit"
-        />
-        <table-column
-          :label="$t('items.price')"
-          show="price"
-        >
-          <template slot-scope="row">
-            <span> {{ $t('items.price') }} </span>
-            <div v-html="$utils.formatMoney(row.price, defaultCurrency)" />
-          </template>
-        </table-column> -->
         <table-column
           :label="$t('items.added_on')"
           sort-as="created_at"

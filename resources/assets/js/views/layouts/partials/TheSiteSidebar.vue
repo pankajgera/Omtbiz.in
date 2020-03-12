@@ -39,59 +39,53 @@ export default {
             title: 'navigation.items',
             icon: 'file',
             route: '/admin/items'
+          },
+          {
+            title: 'navigation.bills',
+            icon: 'star',
+            route: '/admin/bills'
+          },
+          {
+            title: 'navigation.customers',
+            icon: 'user',
+            route: '/admin/customers'
+          },
+          {
+            title: 'navigation.estimates',
+            icon: 'file',
+            route: '/adsamin/estimates'
+          },
+          {
+            title: 'navigation.invoices',
+            icon: 'file-alt',
+            route: '/admin/invoices'
+          },
+          {
+            title: 'navigation.bills',
+            icon: 'star',
+            route: '/admin/bills'
+          },
+          {
+            title: 'navigation.payments',
+            icon: 'credit-card',
+            route: '/admin/payments'
+          },
+          {
+            title: 'navigation.expenses',
+            icon: 'space-shuttle',
+            route: '/admin/expenses'
+          },
+          {
+            title: 'navigation.reports',
+            icon: 'signal',
+            route: '/admin/reports'
+          },
+          {
+            title: 'navigation.settings',
+            icon: 'cog',
+            route: '/admin/settings'
           }
-          // {
-          //   title: 'navigation.bills',
-          //   icon: 'star',
-          //   route: '/admin/bills'
-          // }
-          // {
-          //   title: 'navigation.customers',
-          //   icon: 'user',
-          //   route: '/admin/customers'
-          // },
         ]
-
-        // [
-        //   {
-        //     title: 'navigation.estimates',
-        //     icon: 'file',
-        //     route: '/admin/estimates'
-        //   },
-        //   {
-        //     title: 'navigation.invoices',
-        //     icon: 'file-alt',
-        //     route: '/admin/invoices'
-        //   },
-        //   {
-        //     title: 'navigation.bills',
-        //     icon: 'star',
-        //     route: '/admin/bills'
-        //   },
-        //   {
-        //     title: 'navigation.payments',
-        //     icon: 'credit-card',
-        //     route: '/admin/payments'
-        //   },
-        //   {
-        //     title: 'navigation.expenses',
-        //     icon: 'space-shuttle',
-        //     route: '/admin/expenses'
-        //   }
-        // ],
-
-        // [
-        //   {
-        //     title: 'navigation.reports',
-        //     icon: 'signal',
-        //     route: '/admin/reports'
-        //   },
-        //   {
-        //     title: 'navigation.settings',
-        //     icon: 'cog',
-        //     route: '/admin/settings'
-        //   }
-        // ]
 
       ]
     }
