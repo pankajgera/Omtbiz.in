@@ -40,11 +40,11 @@ export default {
             icon: 'file',
             route: '/admin/items'
           },
-          {
-            title: 'navigation.bills',
-            icon: 'star',
-            route: '/admin/bills'
-          },
+          // {
+          //   title: 'navigation.bills',
+          //   icon: 'star',
+          //   route: '/admin/bills'
+          // },
           {
             title: 'navigation.customers',
             icon: 'user',
@@ -60,11 +60,11 @@ export default {
             icon: 'file-alt',
             route: '/admin/invoices'
           },
-          {
-            title: 'navigation.bills',
-            icon: 'star',
-            route: '/admin/bills'
-          },
+          // {
+          //   title: 'navigation.bills',
+          //   icon: 'star',
+          //   route: '/admin/bills'
+          // },
           {
             title: 'navigation.payments',
             icon: 'credit-card',
