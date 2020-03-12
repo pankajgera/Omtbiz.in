@@ -80,7 +80,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="description">{{ $t('items.description') }}</label><span class="text-danger"> *</span>
+                <label for="description">{{ $t('items.description') }}</label>
                 <base-text-area
                   v-model="formData.description"
                   rows="2"
@@ -144,8 +144,8 @@ export default {
       formData: {
         name: '',
         description: '',
-        price: '',
-        unit: '',
+        price: '0.00',
+        unit: '0',
         image: '',
         date: '',
         bill_ty: ''
@@ -190,18 +190,18 @@ export default {
         required,
         minLength: minLength(3)
       },
-      price: {
-        required,
-        numeric,
-        maxLength: maxLength(20),
-        minValue: minValue(0.1)
-      },
+      // price: {
+      //   required,
+      //   numeric,
+      //   maxLength: maxLength(20),
+      //   minValue: minValue(0.1)
+      // },
       description: {
         maxLength: maxLength(255)
       },
-      unit: {
-        required
-      },
+      // unit: {
+      //   required
+      // },
       date: {
         required
       },
@@ -225,6 +225,7 @@ export default {
     async submitItem () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
+        console.log('asd');
         return false
       }
       if (this.isEdit) {
