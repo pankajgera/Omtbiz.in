@@ -93,7 +93,7 @@
               </div>
               <div class="form-group">
                 <img :src="previewImage" class="uploading-image" style="width: 100px">
-                <input type="file" accept="image/*" capture="environment" name="image" @change="uploadImage">
+                <input type="file" accept="image/*" name="image" @change="uploadImage">
               </div>
               <div class="form-group">
                 <base-button
