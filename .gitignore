@@ -14,3 +14,4 @@ docker-compose.yml
 docker-compose.yaml
 /production
 .env
+npm-debug.log
