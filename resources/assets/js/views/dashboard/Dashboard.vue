@@ -16,7 +16,7 @@
               </span>
             </div>
             <div class="icon">
-              <dollar-icon class="card-icon" />
+              <rupee-icon class="card-icon" />
             </div>
           </div>
         </router-link>
@@ -76,7 +76,7 @@
         </router-link>
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <div class="col-lg-12 mt-2">
         <div class="card dashboard-card">
           <div class="graph-body">
@@ -140,7 +140,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <base-loader v-if="!getLoadedData"/>
     <div class="row table-row">
       <div class="col-lg-12 col-xl-6 mt-2">
@@ -337,7 +337,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
 import LineChart from '../../components/chartjs/LineChart'
-import DollarIcon from '../../components/icon/DollarIcon'
+import RupeeIcon from '../../components/icon/RupeeIcon'
 import ContactIcon from '../../components/icon/ContactIcon'
 import InvoiceIcon from '../../components/icon/InvoiceIcon'
 import EstimateIcon from '../../components/icon/EstimateIcon'
@@ -345,7 +345,7 @@ import EstimateIcon from '../../components/icon/EstimateIcon'
 export default {
   components: {
     LineChart,
-    DollarIcon,
+    RupeeIcon,
     ContactIcon,
     InvoiceIcon,
     EstimateIcon
