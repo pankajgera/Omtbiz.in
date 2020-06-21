@@ -82,11 +82,17 @@ export default {
           iconType: 'far'
         },
         {
-          link: '/admin/settings/update-app',
-          title: 'settings.menu_title.update_app',
-          icon: 'sync-alt',
-          iconType: 'fas'
-        }
+          link: '/admin/settings/add-user',
+          title: 'settings.menu_title.add-user',
+          icon: 'user-plus',
+          iconType: 'fa'
+        },
+        // {
+        //   link: '/admin/settings/update-app',
+        //   title: 'settings.menu_title.update_app',
+        //   icon: 'sync-alt',
+        //   iconType: 'fas'
+        // }
       ]
     }
   },

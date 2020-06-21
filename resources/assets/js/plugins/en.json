@@ -534,6 +534,7 @@
     "settings": {
         "menu_title": {
             "account_settings": "Account Settings",
+            "add-user": "Add User",
             "company_information": "Company Information",
             "customization": "Customization",
             "preferences": "Preferences",
@@ -549,6 +550,21 @@
         "primary_currency": "Primary Currency",
         "timezone": "Time Zone",
         "date_format": "Date Format",
+        "add-user": {
+            "add-user": "Add User",
+            "company-name": "Company Name",
+            "companies": "Select Company",
+            "confirm_password": "Confirm Password",
+            "email": "User email",
+            "name": "User name",
+            "password": "Password",
+            "profile_picture": "User Image",
+            "role": "Role",
+            "roles": "Select Role",
+            "save": "Save",
+            "section_description": "Add new user to company with responsibilty",
+            "updated_message": "User added successfully 👍"
+        },
         "currencies": {
             "title": "Currencies",
             "currency": "Currency | Currencies",
