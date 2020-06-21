@@ -373,6 +373,16 @@ Route::group(['middleware' => 'api'], function () {
                 'uses' => 'EnvironmentController@saveMailEnvironment'
             ]);
 
+            Route::get('/add-user', [
+                'as' => 'get.admin.add-user',
+                'uses' => 'UsersController@getAddUser'
+            ]);
+
+            Route::put('/add-user', [
+                'as' => 'get.admin.add-user',
+                'uses' => 'UsersController@updateAddUser'
+            ]);
+
         });
 
     });

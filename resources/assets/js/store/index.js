@@ -28,6 +28,7 @@ import profitLossReport from './modules/reports/profit-loss'
 import salesReport from './modules/reports/sales'
 import ExpensesReport from './modules/reports/expense'
 import TaxReport from './modules/reports/tax'
+import addUser from './modules/settings/add-user'
 
 Vue.use(Vuex)
 
@@ -65,6 +66,7 @@ export default new Vuex.Store({
         profitLossReport,
         salesReport,
         ExpensesReport,
-        TaxReport
+        TaxReport,
+        addUser
     }
 })

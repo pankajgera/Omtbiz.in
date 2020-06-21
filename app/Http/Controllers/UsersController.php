@@ -13,6 +13,10 @@ use Carbon\Carbon;
 use Auth;
 use Crater\Company;
 use Crater\CompanySetting;
+use Exception;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UsersController extends Controller
 {
@@ -50,6 +54,10 @@ class UsersController extends Controller
 
         $taxTypes = TaxType::latest()->get();
 
+        $companies = Company::all()->toArray();
+
+        $roles = Role::all()->toArray();
+
         return response()->json([
             'user' => $user,
             'customers' => $customers,
@@ -57,7 +65,8 @@ class UsersController extends Controller
             'default_currency' => $default_currency,
             'default_language' => $default_language,
             'company' => $user->company,
-            'companies' => Company::all(),
+            'companies' => $companies,
+            'roles' => $roles,
             'items' => $items,
             'taxTypes' => $taxTypes,
             'moment_date_format' => $moment_date_format,
@@ -70,5 +79,33 @@ class UsersController extends Controller
         return response()->json([
             'success' => 'crater-self-hosted'
         ]);
+    }
+
+    public function getAddUser(Request $request)
+    {
+        $companies = Company::all()->toArray();
+
+        $roles = Role::all()->toArray();
+
+        return response()->json([
+            'companies' => $companies,
+            'roles' => $roles
+        ]);
+    }
+
+    public function updateAddUser(Request $request)
+    {
+        try {
+            $user = User::updateOrCreate(
+                ['email' => $request->email, 'role' => $request->role['name'], 'company_id' => $request->company['id']],
+                ['name' => $request->name, 'company_name' => $request->company['name'], 'password' => Hash::make($request->password)]
+            );
+            return response()->json([
+                'user' => $user,
+                'success' => true
+            ]);
+        } catch (Exception $e) {
+            throw ValidationException::withMessages(['field' => ['Error while adding new user '. $e]]);
+        }
     }
 }
