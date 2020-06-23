@@ -18,7 +18,7 @@ class AdminMiddleware
     {
         if (Auth::guard($guard)->guest() || !Auth::user()->isAdmin()) {
             if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
+                return response('Unauthorized Adm.', 401);
             } else {
                 return response()->json(['error' => 'user_is_not_admin'], 404);
             }

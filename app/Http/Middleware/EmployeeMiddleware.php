@@ -18,7 +18,7 @@ class EmployeeMiddleware
     {
         if (Auth::guard($guard)->guest() || !Auth::user()->isEmployee()) {
             if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
+                return response('Unauthorized Emp.', 401);
             } else {
                 return response()->json(['error' => 'user_is_not_admin'], 404);
             }

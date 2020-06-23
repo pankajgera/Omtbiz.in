@@ -18,7 +18,7 @@ class AccountantMiddleware
     {
         if (Auth::guard($guard)->guest() || !Auth::user()->isAccountant()) {
             if ($request->ajax() || $request->wantsJson()) {
-                return response('Unauthorized.', 401);
+                return response('Unauthorized Acc.', 401);
             } else {
                 return response()->json(['error' => 'user_is_not_admin'], 404);
             }
