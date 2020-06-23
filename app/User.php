@@ -73,6 +73,16 @@ class User extends Authenticatable implements HasMedia
         return ($this->role == 'admin');
     }
 
+    public function isAccountant()
+    {
+        return ($this->role == 'accountant');
+    }
+
+    public function isEmployee()
+    {
+        return ($this->role == 'employee');
+    }
+
     public static function login($request)
     {
         $remember = $request->remember;

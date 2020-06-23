@@ -118,10 +118,7 @@ Route::get('/settings/app/version', [
 
 Route::group(['middleware' => 'api'], function () {
 
-    Route::group([
-      'middleware' => 'admin'
-    ], function () {
-
+    Route::group(['middleware' => 'admin'], function () {
 
         // Auto update routes
         //----------------------------------
@@ -382,6 +379,31 @@ Route::group(['middleware' => 'api'], function () {
                 'as' => 'get.admin.add-user',
                 'uses' => 'UsersController@updateAddUser'
             ]);
+
+        });
+
+        /**
+         * Accountant API Routes
+         */
+        Route::group(['middleware' => 'accountant'], function () {
+
+            Route::get('/bootstrap', [
+                'as' => 'bootstrap',
+                'uses' => 'UsersController@getBootstrap'
+            ]);
+
+        });
+
+        /**
+         * Employee API Routes
+         */
+        Route::group(['middleware' => 'employee'], function () {
+
+            Route::get('/bootstrap', [
+                'as' => 'bootstrap',
+                'uses' => 'UsersController@getBootstrap'
+            ]);
+
 
         });
 
