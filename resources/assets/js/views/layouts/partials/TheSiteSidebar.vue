@@ -3,7 +3,7 @@
     <div class="sidebar-body scroll-pane">
       <div class="side-nav">
         <div
-          v-for="(menuItems, index) in menu"
+          v-for="(menuItems, index) in setSidebarWithRole"
           :key="index"
           class="menu-group"
         >
@@ -24,11 +24,11 @@
 
 <script type="text/babel">
 export default {
+  props: ['type', 'role'],
   data () {
     return {
       sidebar: 'sidebar',
       menu: [
-
         [
           {
             title: 'navigation.dashboard',
@@ -86,14 +86,87 @@ export default {
             route: '/admin/settings'
           }
         ]
-
-      ]
+      ],
     }
   },
-
+  updated() {
+    this.update();
+  },
+  computed: {
+    setSidebarWithRole() {
+      let links = [];
+      switch(this.role) {
+        case 'admin':
+          links = [[
+              {
+                title: 'navigation.dashboard',
+                icon: 'tachometer-alt',
+                route: '/admin/dashboard'
+              },
+              {
+                title: 'navigation.items',
+                icon: 'file',
+                route: '/admin/items'
+              },
+              {
+                title: 'navigation.customers',
+                icon: 'user',
+                route: '/admin/customers'
+              },
+              {
+                title: 'navigation.estimates',
+                icon: 'file',
+                route: '/adsamin/estimates'
+              },
+              {
+                title: 'navigation.invoices',
+                icon: 'file-alt',
+                route: '/admin/invoices'
+              },
+              {
+                title: 'navigation.payments',
+                icon: 'credit-card',
+                route: '/admin/payments'
+              },
+              {
+                title: 'navigation.expenses',
+                icon: 'space-shuttle',
+                route: '/admin/expenses'
+              },
+              {
+                title: 'navigation.reports',
+                icon: 'signal',
+                route: '/admin/reports'
+              },
+              {
+                title: 'navigation.settings',
+                icon: 'cog',
+                route: '/admin/settings'
+              }
+          ]];
+          return links;
+          break;
+        case 'accountant':
+          break;
+        case 'employee':
+          links = [[
+              {
+                title: 'navigation.items',
+                icon: 'file',
+                route: '/admin/items'
+              }
+          ]];
+          return links;
+          break;
+      }
+    }
+  },
   methods: {
     Toggle () {
       this.$utils.toggleSidebar()
+    },
+    update(){
+      this.$mount();
     }
   }
 }
