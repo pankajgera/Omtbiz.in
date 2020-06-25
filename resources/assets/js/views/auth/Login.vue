@@ -116,7 +116,6 @@ export default {
       this.isLoading = true
 
       this.login(this.loginData).then((res) => {
-        console.log('res', res, this.user);
         this.$router.push('/')
         this.isLoading = false
       }).catch(() => {
