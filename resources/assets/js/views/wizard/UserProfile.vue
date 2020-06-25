@@ -180,7 +180,7 @@ export default {
         return true
       }
       this.loading = true
-      let response = await window.axios.post('/api/admin/onboarding/profile', this.profileData)
+      let response = await window.axios.post('/api/onboarding/profile', this.profileData)
       console.log('user_id', response.data.user.id)
 
       if (response.data) {

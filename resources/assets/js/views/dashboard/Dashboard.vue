@@ -2,7 +2,7 @@
   <div id="app" class="main-content dashboard">
     <div class="row">
       <div class="dash-item col-sm-6">
-        <router-link slot="item-title" to="/admin/invoices">
+        <router-link slot="item-title" to="/invoices">
           <div class="dashbox">
             <div class="desc">
               <span
@@ -22,7 +22,7 @@
         </router-link>
       </div>
       <div class="dash-item col-sm-6">
-        <router-link slot="item-title" to="/admin/customers">
+        <router-link slot="item-title" to="/customers">
           <div class="dashbox">
             <div class="desc">
               <span v-if="isLoaded"
@@ -40,7 +40,7 @@
         </router-link>
       </div>
       <div class="dash-item col-sm-6">
-        <router-link slot="item-title" to="/admin/invoices">
+        <router-link slot="item-title" to="/invoices">
           <div class="dashbox">
             <div class="desc">
               <span v-if="isLoaded"
@@ -58,7 +58,7 @@
         </router-link>
       </div>
       <div class="dash-item col-sm-6">
-        <router-link slot="item-title" to="/admin/estimates">
+        <router-link slot="item-title" to="/estimates">
           <div class="dashbox">
             <div class="desc">
               <span v-if="isLoaded"
@@ -148,7 +148,7 @@
           <h6 class="table-title">
             {{ $t('dashboard.recent_invoices_card.title') }}
           </h6>
-          <router-link to="/admin/invoices">
+          <router-link to="/invoices">
             <base-button
               :outline="true"
               color="theme"
@@ -232,7 +232,7 @@
           <h6 class="table-title">
             {{ $t('dashboard.recent_estimate_card.title') }}
           </h6>
-          <router-link to="/admin/estimates">
+          <router-link to="/estimates">
             <base-button
               :outline="true"
               color="theme"

@@ -148,7 +148,7 @@ const routes = [
      |--------------------------------------------------------------------------|
      */
     {
-        path: '/admin',
+        path: '/',
         component: LayoutBasic, // Change the desired Layout here
         meta: { requiresAuth: true },
         children: [
@@ -389,7 +389,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
-        return next('/admin/dashboard')
+        return next('/dashboard')
     }
 
     return next()

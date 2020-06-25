@@ -4,8 +4,8 @@
       <div class="page-header">
         <h3 class="page-title">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/dashboard">{{ $t('general.home') }}</router-link></li>
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/payments">{{ $tc('payments.payment', 2) }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/payments">{{ $tc('payments.payment', 2) }}</router-link></li>
           <li class="breadcrumb-item">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</li>
         </ol>
         <div class="page-actions header-button-container">
@@ -352,7 +352,7 @@ export default {
           let response = await this.updatePayment(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.updated_message'))
-            this.$router.push('/admin/payments')
+            this.$router.push('/payments')
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -378,7 +378,7 @@ export default {
           let response = await this.addPayment(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.created_message'))
-            this.$router.push('/admin/payments')
+            this.$router.push('/payments')
             this.isLoading = true
             return true
           }

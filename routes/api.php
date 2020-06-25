@@ -50,57 +50,57 @@ Route::get('/countries', [
 //----------------------------------
 Route::group(['middleware' => 'redirect-if-installed'], function () {
 
-    Route::get('/admin/onboarding', [
+    Route::get('/onboarding', [
         'as' => 'admin.onboarding',
         'uses' => 'OnboardingController@getOnboardingData'
     ]);
 
-    Route::get('/admin/onboarding/requirements', [
+    Route::get('/onboarding/requirements', [
         'as' => 'admin.onboarding.requirements',
         'uses' => 'RequirementsController@requirements'
     ]);
 
-    Route::get('/admin/onboarding/permissions', [
+    Route::get('/onboarding/permissions', [
         'as' => 'admin.onboarding.permissions',
         'uses' => 'PermissionsController@permissions'
     ]);
 
-    Route::post('/admin/onboarding/environment/database', [
+    Route::post('/onboarding/environment/database', [
         'as' => 'admin.onboarding.database',
         'uses' => 'EnvironmentController@saveDatabaseEnvironment'
     ]);
 
-    Route::get('/admin/onboarding/environment/mail', [
+    Route::get('/onboarding/environment/mail', [
         'as' => 'admin.onboarding.mail',
         'uses' => 'EnvironmentController@getMailDrivers'
     ]);
 
-    Route::post('/admin/onboarding/environment/mail', [
+    Route::post('/onboarding/environment/mail', [
         'as' => 'admin.onboarding.mail',
         'uses' => 'EnvironmentController@saveMailEnvironment'
     ]);
 
-    Route::post('/admin/onboarding/profile', [
+    Route::post('/onboarding/profile', [
         'as' => 'admin.profile',
         'uses' => 'OnboardingController@adminProfile'
     ]);
 
-    Route::post('/admin/profile/upload-avatar', [
+    Route::post('/profile/upload-avatar', [
         'as' => 'admin.on_boarding.avatar',
         'uses' => 'OnboardingController@uploadAdminAvatar'
     ]);
 
-    Route::post('/admin/onboarding/company', [
+    Route::post('/onboarding/company', [
         'as' => 'admin.company',
         'uses' => 'OnboardingController@adminCompany'
     ]);
 
-    Route::post('/admin/onboarding/company/upload-logo', [
+    Route::post('/onboarding/company/upload-logo', [
         'as' => 'upload.admin.company.logo',
         'uses' => 'CompanyController@uploadCompanyLogo'
     ]);
 
-    Route::post('/admin/onboarding/settings', [
+    Route::post('/onboarding/settings', [
         'as' => 'admin.settings',
         'uses' => 'OnboardingController@companySettings'
     ]);

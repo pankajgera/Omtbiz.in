@@ -33,22 +33,22 @@ export default {
           {
             title: 'navigation.dashboard',
             icon: 'tachometer-alt',
-            route: '/admin/dashboard'
+            route: '/dashboard'
           },
           {
             title: 'navigation.items',
             icon: 'file',
-            route: '/admin/items'
+            route: '/items'
           },
           // {
           //   title: 'navigation.bills',
           //   icon: 'star',
-          //   route: '/admin/bills'
+          //   route: '/bills'
           // },
           {
             title: 'navigation.customers',
             icon: 'user',
-            route: '/admin/customers'
+            route: '/customers'
           },
           {
             title: 'navigation.estimates',
@@ -58,32 +58,32 @@ export default {
           {
             title: 'navigation.invoices',
             icon: 'file-alt',
-            route: '/admin/invoices'
+            route: '/invoices'
           },
           // {
           //   title: 'navigation.bills',
           //   icon: 'star',
-          //   route: '/admin/bills'
+          //   route: '/bills'
           // },
           {
             title: 'navigation.payments',
             icon: 'credit-card',
-            route: '/admin/payments'
+            route: '/payments'
           },
           {
             title: 'navigation.expenses',
             icon: 'space-shuttle',
-            route: '/admin/expenses'
+            route: '/expenses'
           },
           {
             title: 'navigation.reports',
             icon: 'signal',
-            route: '/admin/reports'
+            route: '/reports'
           },
           {
             title: 'navigation.settings',
             icon: 'cog',
-            route: '/admin/settings'
+            route: '/settings'
           }
         ]
       ],
@@ -101,17 +101,17 @@ export default {
               {
                 title: 'navigation.dashboard',
                 icon: 'tachometer-alt',
-                route: '/admin/dashboard'
+                route: '/dashboard'
               },
               {
                 title: 'navigation.items',
                 icon: 'file',
-                route: '/admin/items'
+                route: '/items'
               },
               {
                 title: 'navigation.customers',
                 icon: 'user',
-                route: '/admin/customers'
+                route: '/customers'
               },
               {
                 title: 'navigation.estimates',
@@ -121,27 +121,27 @@ export default {
               {
                 title: 'navigation.invoices',
                 icon: 'file-alt',
-                route: '/admin/invoices'
+                route: '/invoices'
               },
               {
                 title: 'navigation.payments',
                 icon: 'credit-card',
-                route: '/admin/payments'
+                route: '/payments'
               },
               {
                 title: 'navigation.expenses',
                 icon: 'space-shuttle',
-                route: '/admin/expenses'
+                route: '/expenses'
               },
               {
                 title: 'navigation.reports',
                 icon: 'signal',
-                route: '/admin/reports'
+                route: '/reports'
               },
               {
                 title: 'navigation.settings',
                 icon: 'cog',
-                route: '/admin/settings'
+                route: '/settings'
               }
           ]];
           return links;
@@ -153,7 +153,7 @@ export default {
               {
                 title: 'navigation.items',
                 icon: 'file',
-                route: '/admin/items'
+                route: '/items'
               }
           ]];
           return links;

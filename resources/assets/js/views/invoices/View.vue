@@ -25,7 +25,7 @@
         >
           {{ $t('invoices.send_invoice') }}
         </base-button>
-        <router-link v-if="invoice.status === 'SENT'" :to="`/admin/payments/${$route.params.id}/create`">
+        <router-link v-if="invoice.status === 'SENT'" :to="`/payments/${$route.params.id}/create`">
           <base-button
             color="theme"
           >
@@ -39,7 +39,7 @@
             </base-button>
           </a>
           <v-dropdown-item>
-            <router-link :to="{path: `/admin/invoices/${$route.params.id}/edit`}" class="dropdown-item">
+            <router-link :to="{path: `/invoices/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
@@ -121,7 +121,7 @@
       <div v-else class="side-content">
         <router-link
           v-for="(invoice,index) in invoices"
-          :to="`/admin/invoices/${invoice.id}/view`"
+          :to="`/invoices/${invoice.id}/view`"
           :key="index"
           class="side-invoice"
         >
@@ -299,7 +299,7 @@ export default {
           let request = await this.deleteInvoice(this.id)
           if (request.data.success) {
             window.toastr['success'](this.$tc('invoices.deleted_message', 1))
-            this.$router.push('/admin/invoices')
+            this.$router.push('/invoices')
           } else if (request.data.error) {
             window.toastr['error'](request.data.message)
           }

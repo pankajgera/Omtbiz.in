@@ -32,7 +32,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="/admin/invoices/create">
+        <router-link slot="item-title" class="col-xs-2" to="/invoices/create">
           <base-button size="large" icon="plus" color="theme">
             {{ $t('invoices.new_invoice') }}
           </base-button>

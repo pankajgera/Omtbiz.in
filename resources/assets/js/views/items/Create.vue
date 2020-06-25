@@ -3,8 +3,8 @@
     <div class="page-header">
       <h3 class="page-title">{{ isEdit ? $t('items.edit_bill') : $t('items.new_bill') }}</h3>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/dashboard">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/items">{{ $tc('items.bill_ty',2) }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/items">{{ $tc('items.bill_ty',2) }}</router-link></li>
         <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('items.edit_bill') : $t('items.new_bill') }}</a></li>
       </ol>
     </div>
@@ -234,7 +234,7 @@ export default {
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('items.updated_message'))
-          this.$router.push('/admin/items')
+          this.$router.push('/items')
           return true
         }
         window.toastr['error'](response.data.error)
@@ -244,7 +244,7 @@ export default {
 
         if (response.data) {
           window.toastr['success'](this.$tc('items.created_message'))
-          this.$router.push('/admin/items')
+          this.$router.push('/items')
           this.isLoading = false
           return true
         }

@@ -50,7 +50,7 @@ export default {
     async getPermissions () {
       this.loading = true
 
-      let response = await window.axios.get('/api/admin/onboarding/permissions', this.profileData)
+      let response = await window.axios.get('/api/onboarding/permissions', this.profileData)
 
       if (response.data) {
         this.permissions = response.data.permissions.permissions

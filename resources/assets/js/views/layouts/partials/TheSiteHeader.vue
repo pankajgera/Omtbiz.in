@@ -32,17 +32,17 @@
             <font-awesome-icon icon="plus" />
           </a>
           <v-dropdown-item>
-            <router-link class="dropdown-item" to="/admin/invoices/create">
+            <router-link class="dropdown-item" to="/invoices/create">
               <font-awesome-icon icon="file-alt" class="dropdown-item-icon" /> <span> {{ $t('invoices.new_invoice') }} </span>
             </router-link>
           </v-dropdown-item>
           <v-dropdown-item>
-            <router-link class="dropdown-item" to="/admin/estimates/create">
+            <router-link class="dropdown-item" to="/estimates/create">
               <font-awesome-icon class="dropdown-item-icon" icon="file" /> <span> {{ $t('estimates.new_estimate') }} </span>
             </router-link>
           </v-dropdown-item>
           <v-dropdown-item>
-            <router-link class="dropdown-item" to="/admin/customers/create">
+            <router-link class="dropdown-item" to="/customers/create">
               <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('customers.new_customer') }} </span>
             </router-link>
           </v-dropdown-item>
@@ -61,7 +61,7 @@
             <img :src="profilePicture" alt="Avatar">
           </a>
           <v-dropdown-item>
-            <router-link class="dropdown-item" to="/admin/settings">
+            <router-link class="dropdown-item" to="/settings">
               <font-awesome-icon icon="cogs" class="dropdown-item-icon"/> <span> {{ $t('navigation.settings') }} </span>
             </router-link>
           </v-dropdown-item>

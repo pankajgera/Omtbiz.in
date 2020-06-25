@@ -50,7 +50,7 @@ export default {
     async getMailDrivers () {
       this.loading = true
 
-      let response = await window.axios.get('/api/admin/onboarding/environment/mail')
+      let response = await window.axios.get('/api/onboarding/environment/mail')
 
       if (response.data) {
         this.mail_drivers = response.data
@@ -60,7 +60,7 @@ export default {
     async next (mailConfigData) {
       this.loading = true
       try {
-        let response = await window.axios.post('/api/admin/onboarding/environment/mail', mailConfigData)
+        let response = await window.axios.post('/api/onboarding/environment/mail', mailConfigData)
         if (response.data.success) {
           this.$emit('next')
           window.toastr['success'](this.$t('wizard.success.' + response.data.success))

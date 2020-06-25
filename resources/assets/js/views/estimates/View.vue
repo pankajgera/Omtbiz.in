@@ -34,7 +34,7 @@
             </base-button>
           </a>
           <v-dropdown-item>
-            <router-link :to="{path: `/admin/estimates/${$route.params.id}/edit`}" class="dropdown-item">
+            <router-link :to="{path: `/estimates/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
@@ -116,7 +116,7 @@
       <div class="side-content">
         <router-link
           v-for="(estimate,index) in estimates"
-          :to="`/admin/estimates/${estimate.id}/view`"
+          :to="`/estimates/${estimate.id}/view`"
           :key="index"
           class="side-estimate"
         >
@@ -295,7 +295,7 @@ export default {
           let request = await this.deleteEstimate(id)
           if (request.data.success) {
             window.toastr['success'](this.$tc('estimates.deleted_message', 1))
-            this.$router.push('/admin/estimates')
+            this.$router.push('/estimates')
           } else if (request.data.error) {
             window.toastr['error'](request.data.message)
           }

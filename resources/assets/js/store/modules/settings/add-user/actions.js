@@ -24,7 +24,7 @@ export const editUser = ({ commit, dispatch, state }, data) => {
 
 export const uploadOnboardAvatar = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
-        window.axios.post(`/api/admin/add-user/upload-avatar`, data).then((response) => {
+        window.axios.post(`/api/add-user/upload-avatar`, data).then((response) => {
             commit(types.UPDATE_USER, response.data.user)
             resolve(response)
         }).catch((err) => {
