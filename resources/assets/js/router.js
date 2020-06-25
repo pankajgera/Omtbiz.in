@@ -388,8 +388,21 @@ router.beforeEach((to, from, next) => {
         }
     }
 
+    let role = Ls.get('role');
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
-        return next('/dashboard')
+        switch (role) {
+            case 'admin':
+                return next('/dashboard')
+                break;
+            case 'accountant':
+                return next('/invoices')
+                break;
+            case 'employee':
+                return next('/items')
+                break;
+            default:
+                return next('/dashboard')
+        }
     }
 
     return next()

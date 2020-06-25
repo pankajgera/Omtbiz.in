@@ -68,6 +68,7 @@ window.axios.interceptors.request.use(function(config) {
     // Do something before request is sent
     const AUTH_TOKEN = Ls.get('auth.token')
     const companyId = Ls.get('selectedCompany')
+    const role = Ls.get('role')
 
     if (AUTH_TOKEN) {
         config.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`
@@ -75,6 +76,10 @@ window.axios.interceptors.request.use(function(config) {
 
     if (companyId) {
         config.headers.common['company'] = companyId
+    }
+
+    if (role) {
+        config.headers.common['role'] = role
     }
 
     return config
@@ -90,7 +95,7 @@ window.axios.interceptors.request.use(function(config) {
 global.axios.interceptors.response.use(undefined, function(err) {
     // Do something with request error
     return new Promise((resolve, reject) => {
-        console.log(err.response)
+        console.log(err)
         if (err.response.data.error === 'invalid_credentials') {
             window.toastr['error']('Invalid Credentials')
         }
