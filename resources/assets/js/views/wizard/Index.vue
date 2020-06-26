@@ -74,10 +74,10 @@ export default {
   },
   methods: {
     async getOnboardingData () {
-      let response = await window.axios.get('/api/admin/onboarding')
+      let response = await window.axios.get('/api/onboarding')
       if (response.data) {
         if (response.data.profile_complete === 'COMPLETED') {
-          this.$router.push('/admin/dashboard')
+          this.$router.push('/dashboard')
 
           return
         }

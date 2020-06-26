@@ -106,6 +106,7 @@ export default {
     ...mapActions('auth', [
       'login'
     ]),
+
     async validateBeforeSubmit () {
       this.$v.loginData.$touch()
       if (this.$v.$invalid) {
@@ -115,7 +116,7 @@ export default {
       this.isLoading = true
 
       this.login(this.loginData).then((res) => {
-        this.$router.push('/admin/dashboard')
+        this.$router.push('/')
         this.isLoading = false
       }).catch(() => {
         this.isLoading = false

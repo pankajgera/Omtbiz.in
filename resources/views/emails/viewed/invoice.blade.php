@@ -2,7 +2,7 @@
 # Introduction
 Customer viewed this Invoice.
 
-@component('mail::button', ['url' => url('/admin/invoices/'.$data['invoice']['id'].'/view')])
+@component('mail::button', ['url' => url('/invoices/'.$data['invoice']['id'].'/view')])
 Invoice
 @endcomponent
 

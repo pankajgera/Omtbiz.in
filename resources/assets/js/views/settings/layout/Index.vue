@@ -3,8 +3,8 @@
     <div class="page-header">
       <h3 class="page-title">{{ $tc('settings.setting',1) }}</h3>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/dashboard">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/settings/user-profile">{{ $tc('settings.setting', 2) }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/settings/user-profile">{{ $tc('settings.setting', 2) }}</router-link></li>
       </ol>
     </div>
     <div class="row settings-container">
@@ -34,61 +34,61 @@ export default {
     return {
       menuItems: [
         {
-          link: '/admin/settings/user-profile',
+          link: '/settings/user-profile',
           title: 'settings.menu_title.account_settings',
           icon: 'user',
           iconType: 'far'
         },
         {
-          link: '/admin/settings/company-info',
+          link: '/settings/company-info',
           title: 'settings.menu_title.company_information',
           icon: 'building',
           iconType: 'far'
         },
         {
-          link: '/admin/settings/customization',
+          link: '/settings/customization',
           title: 'settings.menu_title.customization',
           icon: 'edit',
           iconType: 'fa'
         },
         {
-          link: '/admin/settings/preferences',
+          link: '/settings/preferences',
           title: 'settings.menu_title.preferences',
           icon: 'cog',
           iconType: 'fas'
         },
         {
-          link: '/admin/settings/tax-types',
+          link: '/settings/tax-types',
           title: 'settings.menu_title.tax_types',
           icon: 'check-circle',
           iconType: 'far'
         },
         {
-          link: '/admin/settings/expense-category',
+          link: '/settings/expense-category',
           title: 'settings.menu_title.expense_category',
           icon: 'list-alt',
           iconType: 'far'
         },
         {
-          link: '/admin/settings/mail-configuration',
+          link: '/settings/mail-configuration',
           title: 'settings.mail.mail_config',
           icon: 'envelope',
           iconType: 'fa'
         },
         {
-          link: '/admin/settings/notifications',
+          link: '/settings/notifications',
           title: 'settings.menu_title.notifications',
           icon: 'bell',
           iconType: 'far'
         },
         {
-          link: '/admin/settings/add-user',
+          link: '/settings/add-user',
           title: 'settings.menu_title.add-user',
           icon: 'user-plus',
           iconType: 'fa'
         },
         // {
-        //   link: '/admin/settings/update-app',
+        //   link: '/settings/update-app',
         //   title: 'settings.menu_title.update_app',
         //   icon: 'sync-alt',
         //   iconType: 'fas'
@@ -98,14 +98,14 @@ export default {
   },
   watch: {
     '$route.path' (newValue) {
-      if (newValue === '/admin/settings') {
-        this.$router.push('/admin/settings/user-profile')
+      if (newValue === '/settings') {
+        this.$router.push('/settings/user-profile')
       }
     }
   },
   created () {
-    if (this.$route.path === '/admin/settings') {
-      this.$router.push('/admin/settings/user-profile')
+    if (this.$route.path === '/settings') {
+      this.$router.push('/settings/user-profile')
     }
   },
   methods: {

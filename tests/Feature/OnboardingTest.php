@@ -17,7 +17,7 @@ class OnboardingTest extends TestCase
     public function testGetOnboardingData()
     {
         $this->seed();
-        $response = $this->json('GET', 'api/admin/onboarding');
+        $response = $this->json('GET', 'api/onboarding');
 
         $response->assertOk();
 
@@ -34,7 +34,7 @@ class OnboardingTest extends TestCase
             'email' => 'admin@crater.in'
         ];
 
-        $response = $this->json('POST', 'api/admin/onboarding/profile', $user);
+        $response = $this->json('POST', 'api/onboarding/profile', $user);
 
         $user2 = $response->decodeResponseJson()['user'];
         $response->assertOk();
@@ -45,7 +45,7 @@ class OnboardingTest extends TestCase
     /** @test */
     public function testGetOnboardingDataAfterProfileUpdate()
     {
-        $response = $this->json('GET', 'api/admin/onboarding');
+        $response = $this->json('GET', 'api/onboarding');
 
         $response->assertOk();
 
@@ -61,7 +61,7 @@ class OnboardingTest extends TestCase
             'country_id' => 2
         ];
 
-        $response = $this->json('POST', 'api/admin/onboarding/company', $company);
+        $response = $this->json('POST', 'api/onboarding/company', $company);
 
         $response->assertOk();
         $company2 = $response->decodeResponseJson()['user']['company'];
@@ -73,7 +73,7 @@ class OnboardingTest extends TestCase
     /** @test */
     public function testGetOnboardingDataAfterCompanyUpdate()
     {
-        $response = $this->json('GET', 'api/admin/onboarding');
+        $response = $this->json('GET', 'api/onboarding');
 
         $response->assertOk();
 
@@ -93,7 +93,7 @@ class OnboardingTest extends TestCase
             'moment_date_format' => 'YYYY/MM/DD'
         ];
 
-        $response = $this->json('POST', 'api/admin/onboarding/settings', $settings);
+        $response = $this->json('POST', 'api/onboarding/settings', $settings);
 
         $response->assertOk();
     }
@@ -101,7 +101,7 @@ class OnboardingTest extends TestCase
     /** @test */
     public function testGetOnboardingDataAfterSettingsUpdate()
     {
-        $response = $this->json('GET', 'api/admin/onboarding');
+        $response = $this->json('GET', 'api/onboarding');
 
         $response->assertOk();
 

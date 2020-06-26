@@ -4,7 +4,7 @@
       <div class="login-box">
         <div class="box-wrapper">
           <div class="logo-main">
-            <a href="/admin">
+            <a href="/">
               <img
                 src="/assets/img/bill.png"
                 alt="Omtbiz Logo">

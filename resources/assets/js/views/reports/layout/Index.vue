@@ -13,7 +13,7 @@
         <li class="breadcrumb-item">
           <router-link
             slot="item-title"
-            to="/admin/reports/sales">
+            to="/reports/sales">
             {{ $tc('reports.report', 2) }}
           </router-link>
         </li>
@@ -31,16 +31,16 @@
         <!-- Tabs -->
         <ul class="tabs">
           <li class="tab">
-            <router-link class="tab-link" to="/admin/reports/sales">{{ $t('reports.sales.sales') }}</router-link>
+            <router-link class="tab-link" to="/reports/sales">{{ $t('reports.sales.sales') }}</router-link>
           </li>
           <li class="tab">
-            <router-link class="tab-link" to="/admin/reports/profit-loss">{{ $t('reports.profit_loss.profit_loss') }}</router-link>
+            <router-link class="tab-link" to="/reports/profit-loss">{{ $t('reports.profit_loss.profit_loss') }}</router-link>
           </li>
           <li class="tab">
-            <router-link class="tab-link" to="/admin/reports/expenses">{{ $t('reports.expenses.expenses') }}</router-link>
+            <router-link class="tab-link" to="/reports/expenses">{{ $t('reports.expenses.expenses') }}</router-link>
           </li>
           <li class="tab">
-            <router-link class="tab-link" to="/admin/reports/taxes">{{ $t('reports.taxes.taxes') }}</router-link>
+            <router-link class="tab-link" to="/reports/taxes">{{ $t('reports.taxes.taxes') }}</router-link>
           </li>
         </ul>
       </div>
@@ -57,14 +57,14 @@
 export default {
   watch: {
     '$route.path' (newValue) {
-      if (newValue === '/admin/reports') {
-        this.$router.push('/admin/reports/sales')
+      if (newValue === '/reports') {
+        this.$router.push('/reports/sales')
       }
     }
   },
   created () {
-    if (this.$route.path === '/admin/reports') {
-      this.$router.push('/admin/reports/sales')
+    if (this.$route.path === '/reports') {
+      this.$router.push('/reports/sales')
     }
   },
   methods: {

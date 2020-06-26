@@ -2,7 +2,7 @@
   <div class="template-container" v-if="isAppLoaded">
     <base-modal />
     <site-header/>
-    <site-sidebar type="basic"/>
+    <site-sidebar type="basic" :role="user.role"/>
 
     <transition
       name="fade"
@@ -42,8 +42,15 @@ export default {
       companies: 'getCompanies'
     }),
 
+    ...mapGetters('user', {
+      user: 'currentUser'
+    }),
+
     isShow () {
       return true
+    },
+    Auth() {
+      return this.user;
     }
   },
   mounted () {

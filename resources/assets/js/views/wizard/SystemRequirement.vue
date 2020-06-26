@@ -94,7 +94,7 @@ export default {
     async getRequirements () {
       this.loading = true
 
-      let response = await window.axios.get('/api/admin/onboarding/requirements', this.profileData)
+      let response = await window.axios.get('/api/onboarding/requirements', this.profileData)
 
       if (response.data) {
         this.requirements = response.data.requirements.requirements.php

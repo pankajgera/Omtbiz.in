@@ -2,7 +2,7 @@
 # Introduction
 Customer viewed this Estimate.
 
-@component('mail::button', ['url' => url('/admin/estimates/'.$data['estimate']['id'].'/view')])
+@component('mail::button', ['url' => url('/estimates/'.$data['estimate']['id'].'/view')])
 Estimate
 @endcomponent
 

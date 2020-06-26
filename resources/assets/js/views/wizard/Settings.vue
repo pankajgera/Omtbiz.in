@@ -158,10 +158,10 @@ export default {
       'loginOnBoardingUser'
     ]),
     async getOnboardingData () {
-      let response = await window.axios.get('/api/admin/onboarding')
+      let response = await window.axios.get('/api/onboarding')
       if (response.data) {
         if (response.data.profile_complete === 'COMPLETED') {
-          this.$router.push('/admin/dashboard')
+          this.$router.push('/dashboard')
 
           return
         }
@@ -203,7 +203,7 @@ export default {
         moment_date_format: this.settingData.dateFormat.moment_format_value
       }
 
-      let response = await window.axios.post('/api/admin/onboarding/settings', data)
+      let response = await window.axios.post('/api/onboarding/settings', data)
 
       if (response.data) {
         // this.$emit('next')
@@ -211,7 +211,7 @@ export default {
         Ls.set('auth.token', response.data.token)
         this.loginOnBoardingUser(response.data.token)
         window.toastr['success']('Login Successful')
-        this.$router.push('/admin/dashboard')
+        this.$router.push('/dashboard')
       }
     }
   }

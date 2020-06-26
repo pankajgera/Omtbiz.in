@@ -4,8 +4,8 @@
       <div class="page-header">
         <h3 class="page-title">{{ isEdit ? $t('customers.edit_customer') : $t('customers.new_customer') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/dashboard">{{ $t('general.home') }}</router-link></li>
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/customers">{{ $tc('customers.customer', 2) }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/customers">{{ $tc('customers.customer', 2) }}</router-link></li>
           <li class="breadcrumb-item">{{ isEdit ? $t('customers.edit_customer') : $t('customers.new_customer') }}</li>
         </ol>
         <div class="page-actions header-button-container">
@@ -556,7 +556,7 @@ export default {
           let response = await this.updateCustomer(this.formData)
           if (response.data.success) {
             window.toastr['success'](this.$t('customers.updated_message'))
-            this.$router.push('/admin/customers')
+            this.$router.push('/customers')
             this.isLoading = false
             return true
           } else {
@@ -581,7 +581,7 @@ export default {
           let response = await this.addCustomer(this.formData)
           if (response.data.success) {
             window.toastr['success'](this.$t('customers.created_message'))
-            this.$router.push('/admin/customers')
+            this.$router.push('/customers')
             this.isLoading = false
             return true
           }

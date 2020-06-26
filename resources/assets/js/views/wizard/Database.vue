@@ -198,7 +198,7 @@ export default {
       }
       this.loading = true
       try {
-        let response = await window.axios.post('/api/admin/onboarding/environment/database', this.databaseData)
+        let response = await window.axios.post('/api/onboarding/environment/database', this.databaseData)
         if (response.data.success) {
           this.$emit('next')
           window.toastr['success'](this.$t('wizard.success.' + response.data.success))

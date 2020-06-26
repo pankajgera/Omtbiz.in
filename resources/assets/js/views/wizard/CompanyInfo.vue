@@ -223,7 +223,7 @@ export default {
         return true
       }
       this.loading = true
-      let response = await window.axios.post('/api/admin/onboarding/company', this.companyData)
+      let response = await window.axios.post('/api/onboarding/company', this.companyData)
 
       if (response.data) {
         if (this.fileObject && this.previewLogo) {
@@ -233,7 +233,7 @@ export default {
             data: this.previewLogo
           }))
 
-          await axios.post('/api/admin/onboarding/company/upload-logo', logoData, {
+          await axios.post('/api/onboarding/company/upload-logo', logoData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               'company': response.data.user.company.id

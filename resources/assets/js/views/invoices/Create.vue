@@ -5,8 +5,8 @@
         <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
         <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }} </h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/dashboard">{{ $t('general.home') }}</router-link></li>
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/admin/invoices">{{ $tc('invoices.invoice', 2) }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $tc('invoices.invoice', 2) }}</router-link></li>
           <li v-if="$route.name === 'invoices.edit'" class="breadcrumb-item">{{ $t('invoices.edit_invoice') }}</li>
           <li v-else class="breadcrumb-item">{{ $t('invoices.new_invoice') }}</li>
         </ol>
@@ -639,7 +639,7 @@ export default {
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
-          this.$router.push('/admin/invoices')
+          this.$router.push('/invoices')
         }
 
         this.isLoading = false
@@ -657,7 +657,7 @@ export default {
         this.isLoading = false
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
-          this.$router.push('/admin/invoices')
+          this.$router.push('/invoices')
         }
 
         if (res.data.error === 'invalid_due_amount') {

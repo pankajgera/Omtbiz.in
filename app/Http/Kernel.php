@@ -3,6 +3,8 @@ namespace Crater\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Crater\Http\Middleware\AdminMiddleware;
+use Crater\Http\Middleware\AccountantMiddleware;
+use Crater\Http\Middleware\EmployeeMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -58,6 +60,8 @@ class Kernel extends HttpKernel
         'guest' => \Crater\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'admin' => AdminMiddleware::class,
+        'accountant' => AccountantMiddleware::class,
+        'employee' => EmployeeMiddleware::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'install' => \Crater\Http\Middleware\InstallationMiddleware::class,
         'redirect-if-installed' => \Crater\Http\Middleware\RedirectIfInstalled::class,
