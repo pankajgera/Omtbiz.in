@@ -5,7 +5,6 @@ export default {
         state.currentUser = null
     },
     [types.BOOTSTRAP_CURRENT_USER](state, user) {
-        Ls.set('role', user.role)
         state.currentUser = user
     },
     [types.UPDATE_CURRENT_USER](state, user) {

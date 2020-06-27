@@ -114,9 +114,21 @@ export default {
       }
 
       this.isLoading = true
-
       this.login(this.loginData).then((res) => {
-        this.$router.push('/')
+        let role = Ls.get('role');
+        switch (role) {
+            case 'admin':
+                return this.$router.push('/dashboard')
+                break;
+            case 'accountant':
+                return this.$router.push('/invoices')
+                break;
+            case 'employee':
+                return this.$router.push('/items')
+                break;
+            default:
+                return this.$router.push('/')
+        }
         this.isLoading = false
       }).catch(() => {
         this.isLoading = false
