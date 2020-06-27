@@ -238,7 +238,7 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item">
+                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -248,19 +248,19 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendInvoice(row.id)" >
+                <a class="dropdown-item" href="#/" @click="sendInvoice(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
                   {{ $t('invoices.send_invoice') }}
                 </a>
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="markInvoiceAsSent(row.id)">
+                <a class="dropdown-item" href="#/" @click="markInvoiceAsSent(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
                   {{ $t('invoices.mark_as_sent') }}
                 </a>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeInvoice(row.id)">
+                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -316,7 +316,8 @@ export default {
         from_date: '',
         to_date: '',
         invoice_number: ''
-      }
+      },
+      role: this.$store.state.user.currentUser.role
     }
   },
 

@@ -364,7 +364,8 @@ export default {
       isLoading: false,
       maxDiscount: 0,
       invoicePrefix: null,
-      invoiceNumAttribute: null
+      invoiceNumAttribute: null,
+      role: this.$store.state.user.currentUser.role
     }
   },
   validations () {

@@ -264,7 +264,7 @@ const routes = [
                 path: 'invoices/:id/edit',
                 name: 'invoices.edit',
                 component: InvoiceCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             // Payments
@@ -272,26 +272,25 @@ const routes = [
                 path: 'payments',
                 name: 'payments.index',
                 component: PaymentsIndex,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'payments/create',
                 name: 'payments.create',
                 component: PaymentCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'payments/:id/create',
                 name: 'invoice.payments.create',
                 component: PaymentCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
-
             {
                 path: 'payments/:id/edit',
                 name: 'payments.edit',
                 component: PaymentCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
 
             // Expenses
