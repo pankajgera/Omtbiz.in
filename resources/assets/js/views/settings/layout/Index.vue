@@ -10,7 +10,7 @@
     <div class="row settings-container">
       <div class="col-lg-3 settings-sidebar-container">
         <ol class="settings-sidebar">
-          <li v-for="(menuItem, index) in menuItems" :key="index" class="settings-menu-item">
+          <li v-for="(menuItem, index) in menuItems.filter(each => each.meta.includes(role))" :key="index" class="settings-menu-item">
             <router-link :class="['link-color', {'active-setting': hasActiveUrl(menuItem.link)}]" :to="menuItem.link">
               <font-awesome-icon :icon="[menuItem.iconType, menuItem.icon]" class="setting-icon"/>
               <span class="menu-title ml-3">{{ $t(menuItem.title) }}</span>
@@ -37,55 +37,64 @@ export default {
           link: '/settings/user-profile',
           title: 'settings.menu_title.account_settings',
           icon: 'user',
-          iconType: 'far'
+          iconType: 'far',
+          meta: ['admin', 'accountant', 'employee']
         },
         {
           link: '/settings/company-info',
           title: 'settings.menu_title.company_information',
           icon: 'building',
-          iconType: 'far'
+          iconType: 'far',
+          meta: ['admin']
         },
         {
           link: '/settings/customization',
           title: 'settings.menu_title.customization',
           icon: 'edit',
-          iconType: 'fa'
+          iconType: 'fa',
+          meta: ['admin']
         },
         {
           link: '/settings/preferences',
           title: 'settings.menu_title.preferences',
           icon: 'cog',
-          iconType: 'fas'
+          iconType: 'fas',
+          meta: ['admin']
         },
         {
           link: '/settings/tax-types',
           title: 'settings.menu_title.tax_types',
           icon: 'check-circle',
-          iconType: 'far'
+          iconType: 'far',
+          meta: ['admin']
         },
         {
           link: '/settings/expense-category',
           title: 'settings.menu_title.expense_category',
           icon: 'list-alt',
-          iconType: 'far'
+          iconType: 'far',
+          meta: ['admin']
         },
         {
           link: '/settings/mail-configuration',
           title: 'settings.mail.mail_config',
           icon: 'envelope',
-          iconType: 'fa'
+          iconType: 'fa',
+          meta: ['admin']
         },
         {
           link: '/settings/notifications',
           title: 'settings.menu_title.notifications',
           icon: 'bell',
-          iconType: 'far'
+          iconType: 'far',
+          meta: ['admin']
         },
         {
           link: '/settings/add-user',
           title: 'settings.menu_title.add-user',
           icon: 'user-plus',
-          iconType: 'fa'
+          iconType: 'fa',
+          meta: ['admin']
         },
         // {
         //   link: '/settings/update-app',
@@ -93,7 +102,8 @@ export default {
         //   icon: 'sync-alt',
         //   iconType: 'fas'
         // }
-      ]
+      ],
+      role: this.$store.state.user.currentUser.role
     }
   },
   watch: {

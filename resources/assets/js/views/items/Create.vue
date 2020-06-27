@@ -225,7 +225,6 @@ export default {
     async submitItem () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
-        console.log('asd');
         return false
       }
       if (this.isEdit) {
