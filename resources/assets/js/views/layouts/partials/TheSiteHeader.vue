@@ -27,7 +27,7 @@
     </a>
     <ul class="action-list">
       <li>
-        <v-dropdown :show-arrow="false">
+        <v-dropdown :show-arrow="false" v-if="role === 'admin'">
           <a slot="activator" href="#">
             <font-awesome-icon icon="plus" />
           </a>
@@ -42,10 +42,15 @@
             </router-link>
           </v-dropdown-item>
           <v-dropdown-item>
+            <router-link class="dropdown-item" to="/settings/add-user">
+              <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('settings.menu_title.add-user') }} </span>
+            </router-link>
+          </v-dropdown-item>
+          <!-- <v-dropdown-item>
             <router-link class="dropdown-item" to="/customers/create">
               <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('customers.new_customer') }} </span>
             </router-link>
-          </v-dropdown-item>
+          </v-dropdown-item> -->
         </v-dropdown>
       </li>
       <li>
@@ -93,6 +98,9 @@ export default {
       } else {
         return '/images/default-avatar.jpg'
       }
+    },
+    role() {
+      return this.$store.state.user.currentUser.role
     }
   },
   created () {

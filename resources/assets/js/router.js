@@ -133,15 +133,15 @@ const routes = [
      | Onboarding Routes
      |--------------------------------------------------------------------------|
      */
-    {
-        path: '/on-boarding',
-        component: LayoutWizard,
-        children: [{
-            path: '/',
-            component: Wizard,
-            name: 'wizard'
-        }]
-    },
+    // {
+    //     path: '/on-boarding',
+    //     component: LayoutWizard,
+    //     children: [{
+    //         path: '/',
+    //         component: Wizard,
+    //         name: 'wizard'
+    //     }]
+    // },
     /*
      |--------------------------------------------------------------------------
      | Admin Backend Routes
@@ -156,136 +156,161 @@ const routes = [
             {
                 path: '/',
                 component: Dashboard,
-                name: 'dashboard'
+                name: 'dashboard',
+                meta: ['admin']
             },
             {
                 path: 'dashboard',
-                component: Dashboard
+                component: Dashboard,
+                meta: ['admin']
             },
 
             // Customer
             {
                 path: 'customers',
-                component: CustomerIndex
+                component: CustomerIndex,
+                meta: ['admin']
             },
             {
                 path: 'customers/create',
                 name: 'customers.create',
-                component: CustomerCreate
+                component: CustomerCreate,
+                meta: ['admin']
             },
             {
                 path: 'customers/:id/edit',
                 name: 'customers.edit',
-                component: CustomerCreate
+                component: CustomerCreate,
+                meta: ['admin']
             },
 
             // Items
             {
                 path: 'items',
-                component: ItemsIndex
+                component: ItemsIndex,
+                meta: ['admin', 'employee']
             },
             {
                 path: 'items/create',
                 name: 'items.create',
-                component: ItemCreate
+                component: ItemCreate,
+                meta: ['admin', 'employee']
             },
             {
                 path: 'items/:id/edit',
                 name: 'items.edit',
-                component: ItemCreate
+                component: ItemCreate,
+                meta: ['admin', 'employee']
             },
 
             //Raw bill
             {
                 path: 'bills',
-                component: BillIndex
+                component: BillIndex,
+                meta: ['admin']
             },
             {
                 path: 'bill/create',
                 name: 'bill.create',
-                component: BillCreate
+                component: BillCreate,
+                meta: ['admin']
             },
             // Estimate
             {
                 path: 'estimates',
                 name: 'estimates.index',
-                component: EstimateIndex
+                component: EstimateIndex,
+                meta: ['admin']
             },
             {
                 path: 'estimates/create',
                 name: 'estimates.create',
-                component: EstimateCreate
+                component: EstimateCreate,
+                meta: ['admin']
             },
             {
                 path: 'estimates/:id/view',
                 name: 'estimates.view',
-                component: EstimateView
+                component: EstimateView,
+                meta: ['admin']
             },
             {
                 path: 'estimates/:id/edit',
                 name: 'estimates.edit',
-                component: EstimateCreate
+                component: EstimateCreate,
+                meta: ['admin']
             },
 
             // Invoice
             {
                 path: 'invoices',
                 name: 'invoices.index',
-                component: InvoiceIndex
+                component: InvoiceIndex,
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'invoices/create',
                 name: 'invoices.create',
-                component: InvoiceCreate
+                component: InvoiceCreate,
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'invoices/:id/view',
                 name: 'invoices.view',
-                component: InvoiceView
+                component: InvoiceView,
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'invoices/:id/edit',
                 name: 'invoices.edit',
-                component: InvoiceCreate
+                component: InvoiceCreate,
+                meta: ['admin', 'accountant']
             },
 
             // Payments
             {
                 path: 'payments',
                 name: 'payments.index',
-                component: PaymentsIndex
+                component: PaymentsIndex,
+                meta: ['admin']
             },
             {
                 path: 'payments/create',
                 name: 'payments.create',
-                component: PaymentCreate
+                component: PaymentCreate,
+                meta: ['admin']
             },
             {
                 path: 'payments/:id/create',
                 name: 'invoice.payments.create',
-                component: PaymentCreate
+                component: PaymentCreate,
+                meta: ['admin']
             },
 
             {
                 path: 'payments/:id/edit',
                 name: 'payments.edit',
-                component: PaymentCreate
+                component: PaymentCreate,
+                meta: ['admin']
             },
 
             // Expenses
             {
                 path: 'expenses',
-                component: ExpensesIndex
+                component: ExpensesIndex,
+                meta: ['admin']
             },
             {
                 path: 'expenses/create',
                 name: 'expenses.create',
-                component: ExpenseCreate
+                component: ExpenseCreate,
+                meta: ['admin']
             },
             {
                 path: 'expenses/:id/edit',
                 name: 'expenses.edit',
-                component: ExpenseCreate
+                component: ExpenseCreate,
+                meta: ['admin']
             },
 
             // Reports
@@ -294,19 +319,23 @@ const routes = [
                 component: ReportLayout,
                 children: [{
                         path: 'sales',
-                        component: SalesReports
+                        component: SalesReports,
+                        meta: ['admin']
                     },
                     {
                         path: 'expenses',
-                        component: ExpensesReport
+                        component: ExpensesReport,
+                        meta: ['admin']
                     },
                     {
                         path: 'profit-loss',
-                        component: ProfitLossReport
+                        component: ProfitLossReport,
+                        meta: ['admin']
                     },
                     {
                         path: 'taxes',
-                        component: TaxReport
+                        component: TaxReport,
+                        meta: ['admin']
                     }
                 ]
             },
@@ -318,47 +347,56 @@ const routes = [
                 children: [{
                         path: 'company-info',
                         name: 'company.info',
-                        component: CompanyInfo
+                        component: CompanyInfo,
+                        meta: ['admin']
                     },
                     {
                         path: 'customization',
                         name: 'customization',
-                        component: Customization
+                        component: Customization,
+                        meta: ['admin']
                     },
                     {
                         path: 'user-profile',
                         name: 'user.profile',
-                        component: UserProfile
+                        component: UserProfile,
+                        meta: ['admin', 'accountant', 'employee']
                     },
                     {
                         path: 'preferences',
                         name: 'preferences',
-                        component: Preferences
+                        component: Preferences,
+                        meta: ['admin']
                     },
                     {
                         path: 'tax-types',
                         name: 'tax.types',
-                        component: TaxTypes
+                        component: TaxTypes,
+                        meta: ['admin']
                     },
                     {
                         path: 'expense-category',
                         name: 'expense.category',
-                        component: ExpenseCategory
+                        component: ExpenseCategory,
+                        meta: ['admin']
                     },
                     {
                         path: 'mail-configuration',
                         name: 'mailconfig',
-                        component: MailConfig
+                        component: MailConfig,
+                        meta: ['admin']
                     },
                     {
                         path: 'notifications',
                         name: 'notifications',
-                        component: Notifications
+                        component: Notifications,
+                        meta: ['admin']
                     },
                     {
                         path: 'add-user',
                         name: 'add-user',
-                        component: AddUser
+                        component: AddUser,
+                        meta: ['admin']
                     },
                     // {
                     //   path: 'update-app',
@@ -402,6 +440,33 @@ router.beforeEach((to, from, next) => {
                 break;
             default:
                 return next('/dashboard')
+        }
+    }
+
+    if (to.meta.length) {
+        if (to.meta.includes('admin') && role === 'admin') {
+            console.log('admin')
+            next()
+        } else if (to.meta.includes('accountant') && role === 'accountant') {
+            console.log('accountant')
+            next()
+        } else if (to.meta.includes('employee') && role === 'employee') {
+            console.log('employee')
+            next()
+        } else {
+            switch (role) {
+                case 'admin':
+                    return next('/dashboard')
+                    break;
+                case 'accountant':
+                    return next('/invoices')
+                    break;
+                case 'employee':
+                    return next('/items')
+                    break;
+                default:
+                    return next('/dashboard')
+            }
         }
     }
 
