@@ -13,7 +13,7 @@ export const login = ({ commit, dispatch, state }, data) => {
         axios.post('/api/auth/login', loginData).then((response) => {
             let token = response.data.access_token
             Ls.set('auth.token', token)
-
+            Ls.set('role', response.data.role)
             commit('user/' + userTypes.RESET_CURRENT_USER, null, { root: true })
             commit(rootTypes.UPDATE_APP_LOADING_STATUS, false, { root: true })
 

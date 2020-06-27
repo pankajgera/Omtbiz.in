@@ -381,6 +381,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    let role = Ls.get('role');
     //  Redirect if not authenticated on secured routes
     if (to.matched.some(m => m.meta.requiresAuth)) {
         if (!store.getters['auth/isAuthenticated']) {
@@ -388,7 +389,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 
-    let role = Ls.get('role');
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
         switch (role) {
             case 'admin':

@@ -166,10 +166,10 @@ class AccessTokensController extends Controller
 	public function sendSuccessResponse(Response $response, $user)
 	{
 		$data = json_decode($response->getContent());
-
         $content = [
 			'access_token' => $data->access_token,
-			'expires_in' => $data->expires_in,
+            'expires_in' => $data->expires_in,
+            'role' => $user->role,
 		];
 
 		return response($content, $response->getStatusCode())->cookie(

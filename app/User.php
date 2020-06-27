@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater;
 
 use Illuminate\Notifications\Notifiable;
@@ -154,25 +155,25 @@ class User extends Authenticatable implements HasMedia
     {
         foreach (explode(' ', $search) as $term) {
             $query->where(function ($query) use ($term) {
-                $query->where('name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('company_name', 'LIKE', '%'.$term.'%');
+                $query->where('name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('company_name', 'LIKE', '%' . $term . '%');
             });
         }
     }
 
     public function scopeWhereContactName($query, $contactName)
     {
-        return $query->where('contact_name', 'LIKE', '%'.$contactName.'%');
+        return $query->where('contact_name', 'LIKE', '%' . $contactName . '%');
     }
 
     public function scopeWhereDisplayName($query, $displayName)
     {
-        return $query->where('name', 'LIKE', '%'.$displayName.'%');
+        return $query->where('name', 'LIKE', '%' . $displayName . '%');
     }
 
     public function scopeWherePhone($query, $phone)
     {
-        return $query->where('phone', 'LIKE', '%'.$phone.'%');
+        return $query->where('phone', 'LIKE', '%' . $phone . '%');
     }
 
     public function scopeCustomer($query)
@@ -264,6 +265,6 @@ class User extends Authenticatable implements HasMedia
         if ($avatar) {
             return  asset($avatar->getUrl());
         }
-        return ;
+        return;
     }
 }
