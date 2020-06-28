@@ -51,7 +51,7 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <div class="filter-status">
+          <!-- <div class="filter-status">
             <label>{{ $t('invoices.status') }}</label>
             <base-select
               v-model="filters.status"
@@ -66,7 +66,7 @@
               label="name"
               @remove="clearStatusSearch()"
             />
-          </div>
+          </div> -->
           <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
