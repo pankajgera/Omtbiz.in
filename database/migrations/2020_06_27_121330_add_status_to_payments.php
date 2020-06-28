@@ -14,7 +14,7 @@ class AddStatusToPayments extends Migration
     public function up()
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->string('status')->default('draft');
+            $table->string('payment_status')->default('draft');
         });
     }
 
@@ -26,7 +26,7 @@ class AddStatusToPayments extends Migration
     public function down()
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('payment_status');
         });
     }
 }

@@ -16,6 +16,7 @@ $factory->define(Payment::class, function (Faker $faker) {
         'notes' => $faker->text(80),
         'amount' => $faker->randomDigitNotNull,
         'payment_number' => 'PAY-'.Payment::getNextPaymentNumber(),
+        'payment_status' => 'Draft',
         'payment_mode' => 'OTHER'
     ];
 });

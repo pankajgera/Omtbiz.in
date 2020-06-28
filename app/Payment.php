@@ -23,6 +23,7 @@ class Payment extends Model
         'company_id',
         'notes',
         'payment_number',
+        'payment_status',
         'payment_mode',
         'amount'
     ];
