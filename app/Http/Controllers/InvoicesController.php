@@ -121,7 +121,7 @@ class InvoicesController extends Controller
             'user_id' => $request->user_id,
             'company_id' => $request->header('company'),
             'invoice_template_id' => $request->invoice_template_id,
-            'status' => $status,
+            'status' => 'SENT',
             'paid_status' => Invoice::STATUS_UNPAID,
             'sub_total' => $request->sub_total,
             'discount' => $request->discount,
@@ -279,17 +279,18 @@ class InvoicesController extends Controller
         $invoice->due_amount = ($invoice->due_amount + $oldAmount);
 
         if ($invoice->due_amount == 0 && $invoice->paid_status != Invoice::STATUS_PAID) {
-            $invoice->status = Invoice::STATUS_COMPLETED;
+            //$invoice->status = Invoice::STATUS_COMPLETED;
             $invoice->paid_status = Invoice::STATUS_PAID;
         } elseif ($invoice->due_amount < 0 && $invoice->paid_status != Invoice::STATUS_UNPAID) {
             return response()->json([
                 'error' => 'invalid_due_amount'
             ]);
         } elseif ($invoice->due_amount != 0 && $invoice->paid_status == Invoice::STATUS_PAID) {
-            $invoice->status = $invoice->getPreviousStatus();
+            //$invoice->status = $invoice->getPreviousStatus();
             $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
         }
 
+        $invoice->status = 'SENT';
         $invoice->invoice_date = $invoice_date;
         $invoice->due_date = $due_date;
         $invoice->invoice_number =  $number_attributes['invoice_number'];
