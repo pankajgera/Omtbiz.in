@@ -47,7 +47,7 @@
     <transition name="fade" mode="out-in">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label">{{ $t('payments.customer') }}</label>
             <base-customer-select
               ref="customerSelect"
@@ -55,7 +55,7 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label for="">{{ $t('payments.payment_number') }}</label>
             <base-input
               v-model="filters.payment_number"
@@ -63,7 +63,7 @@
               name="payment_number"
             />
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label class="form-label">{{ $t('payments.payment_mode') }}</label>
             <base-select
               v-model="filters.payment_mode"
@@ -71,6 +71,16 @@
               :searchable="true"
               :show-labels="false"
               :placeholder="$t('payments.payment_mode')"
+            />
+          </div>
+          <div class="col-sm-3">
+            <label class="form-label">{{ $t('payments.payment_status') }}</label>
+            <base-select
+              v-model="filters.payment_status"
+              :options="payment_status"
+              :searchable="true"
+              :show-labels="false"
+              :placeholder="$t('payments.payment_status')"
             />
           </div>
         </div>
@@ -169,6 +179,10 @@
           show="payment_mode"
         />
         <table-column
+          :label="$t('payments.payment_status')"
+          show="payment_status"
+        />
+        <table-column
           :label="$t('payments.payment_number')"
           show="payment_number"
         />
@@ -238,10 +252,12 @@ export default {
       filtersApplied: false,
       isRequestOngoing: true,
       payment_mode: ['Cash', 'Check', 'Credit Card', 'Bank Transfer'],
+      payment_status: ['Draft', 'Sent'],
       filters: {
         customer: null,
         payment_mode: '',
-        payment_number: ''
+        payment_number: '',
+        payment_status: ''
       }
     }
   },
@@ -309,6 +325,7 @@ export default {
         customer_id: this.filters.customer !== null ? this.filters.customer.id : '',
         payment_number: this.filters.payment_number,
         payment_mode: this.filters.payment_mode ? this.filters.payment_mode : '',
+        payment_status: this.filters.payment_status ? this.filters.payment_status : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -344,7 +361,8 @@ export default {
       this.filters = {
         customer: null,
         payment_mode: '',
-        payment_number: ''
+        payment_number: '',
+        payment_status: ''
       }
 
       this.$nextTick(() => {

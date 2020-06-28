@@ -1,6 +1,7 @@
 <?php
 namespace Crater\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Crater\CompanySetting;
 use Crater\Currency;
@@ -29,6 +30,7 @@ class PaymentController extends Controller
             ->applyFilters($request->only([
                 'search',
                 'payment_number',
+                'payment_status',
                 'payment_mode',
                 'customer_id',
                 'orderByField',
@@ -107,9 +109,16 @@ class PaymentController extends Controller
             $invoice->save();
         }
 
+        $payment_status = 'Draft';
+
+        if ('admin' === Auth::user()->role) {
+            $payment_status = 'Done';
+        }
+
         $payment = Payment::create([
             'payment_date' => $payment_date,
             'payment_number' => $number_attributes['payment_number'],
+            'payment_status' => $payment_status,
             'user_id' => $request->user_id,
             'company_id' => $request->header('company'),
             'invoice_id' => $request->invoice_id,
@@ -206,6 +215,7 @@ class PaymentController extends Controller
 
         $payment->payment_date = $payment_date;
         $payment->payment_number = $number_attributes['payment_number'];
+        $payment->payment_status = $request->payment_status;
         $payment->user_id = $request->user_id;
         $payment->invoice_id = $request->invoice_id;
         $payment->payment_mode = $request->payment_mode;

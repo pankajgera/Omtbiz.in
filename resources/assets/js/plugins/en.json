@@ -405,7 +405,7 @@
         "no_payments": "No payments yet!",
         "list_of_payments": "This section will contain the list of payments.",
         "select_payment_mode": "Select payment mode",
-
+        "payment_status": "Status",
         "confirm_delete": "You will not be able to recover this Payment | You will not be able to recover these Payments",
         "created_message": "Payment created successfully",
         "updated_message": "Payment updated successfully",

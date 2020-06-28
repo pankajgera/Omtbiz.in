@@ -3,12 +3,12 @@
     <div class="sidebar-body scroll-pane">
       <div class="side-nav">
         <div
-          v-for="(menuItems, index) in setSidebarWithRole"
+          v-for="(menuItems, index) in menu"
           :key="index"
           class="menu-group"
         >
           <router-link
-            v-for="(item, index1) in menuItems"
+            v-for="(item, index1) in menuItems.filter(each => each.meta.includes(role))"
             :key="index1"
             :to="item.route"
             class="menu-item"
@@ -33,12 +33,14 @@ export default {
           {
             title: 'navigation.dashboard',
             icon: 'tachometer-alt',
-            route: '/dashboard'
+            route: '/dashboard',
+            meta: ['admin']
           },
           {
             title: 'navigation.items',
             icon: 'file',
-            route: '/items'
+            route: '/items',
+            meta: ['admin', 'accountant', 'employee']
           },
           // {
           //   title: 'navigation.bills',
@@ -48,17 +50,20 @@ export default {
           {
             title: 'navigation.customers',
             icon: 'user',
-            route: '/customers'
+            route: '/customers',
+            meta: ['admin', 'accountant']
           },
           {
             title: 'navigation.estimates',
             icon: 'file',
-            route: '/adsamin/estimates'
+            route: '/estimates',
+            meta: ['admin', 'accountant']
           },
           {
             title: 'navigation.invoices',
             icon: 'file-alt',
-            route: '/invoices'
+            route: '/invoices',
+            meta: ['admin', 'accountant']
           },
           // {
           //   title: 'navigation.bills',
@@ -68,22 +73,26 @@ export default {
           {
             title: 'navigation.payments',
             icon: 'credit-card',
-            route: '/payments'
+            route: '/payments',
+            meta: ['admin', 'accountant']
           },
           {
             title: 'navigation.expenses',
             icon: 'space-shuttle',
-            route: '/expenses'
+            route: '/expenses',
+            meta: ['admin', 'accountant']
           },
           {
             title: 'navigation.reports',
             icon: 'signal',
-            route: '/reports'
+            route: '/reports',
+            meta: ['admin', 'accountant']
           },
           {
             title: 'navigation.settings',
             icon: 'cog',
-            route: '/settings'
+            route: '/settings',
+            meta: ['admin', 'accountant']
           }
         ]
       ],
@@ -91,75 +100,6 @@ export default {
   },
   updated() {
     this.update();
-  },
-  computed: {
-    setSidebarWithRole() {
-      let links = [];
-      switch(this.role) {
-        case 'admin':
-          links = [[
-              {
-                title: 'navigation.dashboard',
-                icon: 'tachometer-alt',
-                route: '/dashboard'
-              },
-              {
-                title: 'navigation.items',
-                icon: 'file',
-                route: '/items'
-              },
-              {
-                title: 'navigation.customers',
-                icon: 'user',
-                route: '/customers'
-              },
-              {
-                title: 'navigation.estimates',
-                icon: 'file',
-                route: '/adsamin/estimates'
-              },
-              {
-                title: 'navigation.invoices',
-                icon: 'file-alt',
-                route: '/invoices'
-              },
-              {
-                title: 'navigation.payments',
-                icon: 'credit-card',
-                route: '/payments'
-              },
-              {
-                title: 'navigation.expenses',
-                icon: 'space-shuttle',
-                route: '/expenses'
-              },
-              {
-                title: 'navigation.reports',
-                icon: 'signal',
-                route: '/reports'
-              },
-              {
-                title: 'navigation.settings',
-                icon: 'cog',
-                route: '/settings'
-              }
-          ]];
-          return links;
-          break;
-        case 'accountant':
-          break;
-        case 'employee':
-          links = [[
-              {
-                title: 'navigation.items',
-                icon: 'file',
-                route: '/items'
-              }
-          ]];
-          return links;
-          break;
-      }
-    }
   },
   methods: {
     Toggle () {
