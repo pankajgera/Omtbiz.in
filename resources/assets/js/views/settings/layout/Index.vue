@@ -89,13 +89,6 @@ export default {
           iconType: 'far',
           meta: ['admin']
         },
-        {
-          link: '/settings/add-user',
-          title: 'settings.menu_title.add-user',
-          icon: 'user-plus',
-          iconType: 'fa',
-          meta: ['admin']
-        },
         // {
         //   link: '/settings/update-app',
         //   title: 'settings.menu_title.update_app',

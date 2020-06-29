@@ -391,19 +391,19 @@ const routes = [
                         component: Notifications,
                         meta: ['admin']
                     },
-                    {
-                        path: 'add-user',
-                        name: 'add-user',
-                        component: AddUser,
-                        meta: ['admin']
-                    },
                     // {
                     //   path: 'update-app',
                     //   name: 'updateapp',
                     //   component: UpdateApp
                     // }
                 ]
-            }
+            },
+            {
+                path: 'add-user',
+                name: 'add-user',
+                component: AddUser,
+                meta: ['admin']
+            },
         ]
     },
 

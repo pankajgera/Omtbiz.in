@@ -1,140 +1,142 @@
 <template>
-  <div class="setting-main-container">
-    <form action="" @submit.prevent="updateUserData">
-      <div class="card setting-card">
-        <div class="page-header">
-          <h3 class="page-title">{{ $t('settings.add-user.add-user') }}</h3>
-          <p class="page-sub-title">
-            {{ $t('settings.add-user.section_description') }}
-          </p>
-        </div>
-        <div class="row mb-4">
-          <div class="col-md-6">
-            <label class="input-label">{{ $tc('settings.add-user.profile_picture') }}</label>
-            <div id="pick-avatar" class="image-upload-box avatar-upload">
-              <div class="overlay">
-                <font-awesome-icon class="white-icon" icon="camera"/>
+  <div class="main-content">
+    <div class="setting-main-container">
+      <form action="" @submit.prevent="updateUserData">
+        <div class="card setting-card" style="padding: 30px">
+          <div class="page-header">
+            <h3 class="page-title">{{ $t('settings.add-user.add-user') }}</h3>
+            <p class="page-sub-title">
+              {{ $t('settings.add-user.section_description') }}
+            </p>
+          </div>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="input-label">{{ $tc('settings.add-user.profile_picture') }}</label>
+              <div id="pick-avatar" class="image-upload-box avatar-upload">
+                <div class="overlay">
+                  <font-awesome-icon class="white-icon" icon="camera"/>
+                </div>
+                <img v-if="previewAvatar" :src="previewAvatar" class="preview-logo">
+                <div v-if="!previewAvatar" class="upload-content">
+                  <font-awesome-icon class="upload-icon" icon="cloud-upload-alt"/>
+                  <p class="upload-text"> {{ $tc('general.choose_file') }} </p>
+                </div>
               </div>
-              <img v-if="previewAvatar" :src="previewAvatar" class="preview-logo">
-              <div v-if="!previewAvatar" class="upload-content">
-                <font-awesome-icon class="upload-icon" icon="cloud-upload-alt"/>
-                <p class="upload-text"> {{ $tc('general.choose_file') }} </p>
+            </div>
+            <avatar-cropper
+              :labels="{ submit: 'submit', cancel: 'Cancle'}"
+              :cropper-options="cropperOptions"
+              :output-options="cropperOutputOptions"
+              :output-quality="0.8"
+              :upload-handler="cropperHandler"
+              trigger="#pick-avatar"
+              @changed="setFileObject"
+              @error="handleUploadError"
+            />
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-4 form-group">
+              <label class="input-label">{{ $tc('settings.add-user.name') }}</label>
+              <base-input
+                v-model="formData.name"
+                :invalid="$v.formData.name.$error"
+                :placeholder="$t('settings.add-user.name')"
+                @input="$v.formData.name.$touch()"
+              />
+              <div v-if="$v.formData.name.$error">
+                <span v-if="!$v.formData.name.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4 form-group">
+              <label class="input-label">{{ $tc('settings.add-user.email') }}</label>
+              <base-input
+                v-model="formData.email"
+                :invalid="$v.formData.email.$error"
+                :placeholder="$t('settings.add-user.email')"
+                @input="$v.formData.email.$touch()"
+              />
+              <div v-if="$v.formData.email.$error">
+                <span v-if="!$v.formData.email.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                <span v-if="!$v.formData.email.email" class="text-danger">{{ $tc('validation.email_incorrect') }}</span>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4 form-group">
+              <label class="input-label">{{ $tc('settings.add-user.password') }}</label>
+              <base-input
+                v-model="formData.password"
+                :invalid="$v.formData.password.$error"
+                :placeholder="$t('settings.add-user.password')"
+                type="password"
+                @input="$v.formData.password.$touch()"
+              />
+              <div v-if="$v.formData.password.$error">
+                <span v-if="!$v.formData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.formData.password.$params.minLength.min, {count: $v.formData.password.$params.minLength.min}) }} </span>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4 form-group">
+              <label class="input-label">{{ $tc('settings.add-user.confirm_password') }}</label>
+              <base-input
+                v-model="formData.confirm_password"
+                :invalid="$v.formData.confirm_password.$error"
+                :placeholder="$t('settings.add-user.confirm_password')"
+                type="password"
+                @input="$v.formData.confirm_password.$touch()"
+              />
+              <div v-if="$v.formData.confirm_password.$error">
+                <span v-if="!$v.formData.confirm_password.sameAsPassword" class="text-danger">{{ $tc('validation.password_incorrect') }}</span>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4 form-group">
+              <label class="input-label">{{ $tc('settings.add-user.company-name') }}</label><span class="text-danger"> * </span>
+              <base-select
+                v-model="formData.company"
+                :options="companies"
+                :class="{'error': $v.formData.company.$error }"
+                :searchable="true"
+                :show-labels="false"
+                :allow-empty="false"
+                :placeholder="$tc('settings.add-user.companies')"
+                label="name"
+                track-by="id"
+              />
+              <div v-if="$v.formData.company.$error">
+                <span v-if="!$v.formData.company.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4 form-group">
+              <label class="input-label">{{ $tc('settings.add-user.role') }}</label><span class="text-danger"> * </span>
+              <base-select
+                v-model="formData.role"
+                :options="roles"
+                :class="{'error': $v.formData.role.$error}"
+                :searchable="true"
+                :show-labels="false"
+                :allow-empty="false"
+                :placeholder="$tc('settings.add-user.roles')"
+                label="name"
+                track-by="id"
+              />
+              <div v-if="$v.formData.role.$error">
+                <span v-if="!$v.formData.role.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
           </div>
-          <avatar-cropper
-            :labels="{ submit: 'submit', cancel: 'Cancle'}"
-            :cropper-options="cropperOptions"
-            :output-options="cropperOutputOptions"
-            :output-quality="0.8"
-            :upload-handler="cropperHandler"
-            trigger="#pick-avatar"
-            @changed="setFileObject"
-            @error="handleUploadError"
-          />
-        </div>
-        <div class="row">
-          <div class="col-md-6 mb-4 form-group">
-            <label class="input-label">{{ $tc('settings.add-user.name') }}</label>
-            <base-input
-              v-model="formData.name"
-              :invalid="$v.formData.name.$error"
-              :placeholder="$t('settings.add-user.name')"
-              @input="$v.formData.name.$touch()"
-            />
-            <div v-if="$v.formData.name.$error">
-              <span v-if="!$v.formData.name.required" class="text-danger">{{ $tc('validation.required') }}</span>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4 form-group">
-            <label class="input-label">{{ $tc('settings.add-user.email') }}</label>
-            <base-input
-              v-model="formData.email"
-              :invalid="$v.formData.email.$error"
-              :placeholder="$t('settings.add-user.email')"
-              @input="$v.formData.email.$touch()"
-            />
-            <div v-if="$v.formData.email.$error">
-              <span v-if="!$v.formData.email.required" class="text-danger">{{ $tc('validation.required') }}</span>
-              <span v-if="!$v.formData.email.email" class="text-danger">{{ $tc('validation.email_incorrect') }}</span>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4 form-group">
-            <label class="input-label">{{ $tc('settings.add-user.password') }}</label>
-            <base-input
-              v-model="formData.password"
-              :invalid="$v.formData.password.$error"
-              :placeholder="$t('settings.add-user.password')"
-              type="password"
-              @input="$v.formData.password.$touch()"
-            />
-            <div v-if="$v.formData.password.$error">
-              <span v-if="!$v.formData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.formData.password.$params.minLength.min, {count: $v.formData.password.$params.minLength.min}) }} </span>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4 form-group">
-            <label class="input-label">{{ $tc('settings.add-user.confirm_password') }}</label>
-            <base-input
-              v-model="formData.confirm_password"
-              :invalid="$v.formData.confirm_password.$error"
-              :placeholder="$t('settings.add-user.confirm_password')"
-              type="password"
-              @input="$v.formData.confirm_password.$touch()"
-            />
-            <div v-if="$v.formData.confirm_password.$error">
-              <span v-if="!$v.formData.confirm_password.sameAsPassword" class="text-danger">{{ $tc('validation.password_incorrect') }}</span>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4 form-group">
-            <label class="input-label">{{ $tc('settings.add-user.company-name') }}</label><span class="text-danger"> * </span>
-            <base-select
-              v-model="formData.company"
-              :options="companies"
-              :class="{'error': $v.formData.company.$error }"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="false"
-              :placeholder="$tc('settings.add-user.companies')"
-              label="name"
-              track-by="id"
-            />
-            <div v-if="$v.formData.company.$error">
-              <span v-if="!$v.formData.company.required" class="text-danger">{{ $tc('validation.required') }}</span>
-            </div>
-          </div>
-          <div class="col-md-6 mb-4 form-group">
-            <label class="input-label">{{ $tc('settings.add-user.role') }}</label><span class="text-danger"> * </span>
-            <base-select
-              v-model="formData.role"
-              :options="roles"
-              :class="{'error': $v.formData.role.$error}"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="false"
-              :placeholder="$tc('settings.add-user.roles')"
-              label="name"
-              track-by="id"
-            />
-            <div v-if="$v.formData.role.$error">
-              <span v-if="!$v.formData.role.required" class="text-danger">{{ $tc('validation.required') }}</span>
+          <div class="row  mb-4">
+            <div class="col-md-12 input-group">
+              <base-button
+                :loading="isLoading"
+                :disabled="isLoading"
+                icon="save"
+                color="theme"
+                type="submit"
+              >
+                {{ $tc('settings.add-user.save') }}
+              </base-button>
             </div>
           </div>
         </div>
-        <div class="row  mb-4">
-          <div class="col-md-12 input-group">
-            <base-button
-              :loading="isLoading"
-              :disabled="isLoading"
-              icon="save"
-              color="theme"
-              type="submit"
-            >
-              {{ $tc('settings.add-user.save') }}
-            </base-button>
-          </div>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 <script>
