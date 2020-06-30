@@ -267,4 +267,15 @@ class User extends Authenticatable implements HasMedia
         }
         return;
     }
+
+    public function deleteUser($id)
+    {
+        $user = self::find($id);
+
+        if ($user) {
+            $user->delete();
+            return true;
+        }
+        return false;
+    }
 }

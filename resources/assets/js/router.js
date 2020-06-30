@@ -67,6 +67,10 @@ import ProfitLossReport from './views/reports/ProfitLossReport'
 import TaxReport from './views/reports/TaxReport.vue'
 import ReportLayout from './views/reports/layout/Index.vue'
 
+// Users
+import UserIndex from './views/users/Index.vue'
+import UserCreate from './views/users/Create.vue'
+
 // Settings
 import SettingsLayout from './views/settings/layout/Index.vue'
 import CompanyInfo from './views/settings/CompanyInfo.vue'
@@ -339,6 +343,25 @@ const routes = [
                 ]
             },
 
+            // User
+            {
+                path: 'users',
+                component: UserIndex,
+                meta: ['admin']
+            },
+            {
+                path: 'users/create',
+                name: 'users.create',
+                component: UserCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'users/:id/edit',
+                name: 'users.edit',
+                component: UserCreate,
+                meta: ['admin']
+            },
+
             // Settings
             {
                 path: 'settings',
@@ -398,12 +421,12 @@ const routes = [
                     // }
                 ]
             },
-            {
-                path: 'add-user',
-                name: 'add-user',
-                component: AddUser,
-                meta: ['admin']
-            },
+            // {
+            //     path: 'add-user',
+            //     name: 'add-user',
+            //     component: AddUser,
+            //     meta: ['admin']
+            // },
         ]
     },
 
