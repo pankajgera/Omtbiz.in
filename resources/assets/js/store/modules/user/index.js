@@ -6,7 +6,11 @@ const initialState = {
   currentUser: null,
   roles: [],
   permissions: [],
-  stations: []
+  stations: [],
+  users: [],
+  totalUsers: 0,
+  selectAllField: false,
+  selectedUsers: []
 }
 
 export default {
@@ -20,3 +24,4 @@ export default {
 
   mutations: mutations
 }
+

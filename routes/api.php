@@ -375,15 +375,16 @@ Route::group(['middleware' => 'api'], function () {
             'as' => 'admin.environment.mail.save',
             'uses' => 'EnvironmentController@saveMailEnvironment'
         ]);
-
-        Route::get('/add-user', [
-            'as' => 'get.admin.add-user',
-            'uses' => 'UsersController@getAddUser'
-        ]);
-
-        Route::put('/add-user', [
-            'as' => 'get.admin.add-user',
-            'uses' => 'UsersController@updateAddUser'
-        ]);
     });
+
+    // Users Routes
+    //----------------------------------
+
+    Route::post('/users/delete', [
+        'as' => 'users.delete',
+        'uses' => 'UsersController@delete'
+    ]);
+
+    Route::resource('users', 'UsersController');
+
 });

@@ -41,11 +41,6 @@
               <font-awesome-icon class="dropdown-item-icon" icon="file" /> <span> {{ $t('estimates.new_estimate') }} </span>
             </router-link>
           </v-dropdown-item>
-          <v-dropdown-item>
-            <router-link class="dropdown-item" to="/settings/add-user">
-              <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('settings.menu_title.add-user') }} </span>
-            </router-link>
-          </v-dropdown-item>
           <!-- <v-dropdown-item>
             <router-link class="dropdown-item" to="/customers/create">
               <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('customers.new_customer') }} </span>

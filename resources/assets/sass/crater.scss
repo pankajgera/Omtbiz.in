@@ -1,46 +1,28 @@
 // Variables & Functions
 //----------------------------------
-
 @import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
 @import 'variables';
-
 // Plugins
 //----------------------------------
-
 @import "../../../node_modules/bootstrap/scss/bootstrap";
 @import "../../../node_modules/toastr/toastr";
-
-
 // Skins
 //----------------------------------
-
 @import 'skins/skin-crater';
-
-
 // Site Base
 //----------------------------------
-
 @import 'base';
-
-
 // Layouts
 //----------------------------------
-
 @import 'layouts/layout';
 @import 'layouts/crater-sidebar';
-
-
 // Partials
 //----------------------------------
-
 @import 'partials/header';
 @import 'partials/sidebar';
-
-
 // Base Components
 //----------------------------------
-
 @import 'components/base/base-date-picker';
 @import 'components/base/base-input';
 @import 'components/base/base-button';
@@ -49,11 +31,8 @@
 @import "components/base/base-switch";
 @import 'components/base/base-loader/index';
 @import 'components/base/base-prefix-input';
-
-
 // Components
 //----------------------------------
-
 @import 'components/buttons';
 @import 'components/forms';
 @import 'components/cards';
@@ -72,22 +51,16 @@
 @import "components/item-select";
 @import "components/tax-select";
 @import "components/avatar-cropper";
-
-
 // Modals
 //----------------------------------
-
 @import "components/base-modal";
 @import "components/item-modal";
 @import "components/template-modal";
 @import "components/customer-modal";
 @import "components/tax-type-modal";
 @import "components/category-modal";
-
-
 // Pages
 //----------------------------------
-
 @import 'pages/dashboard';
 @import 'pages/login';
 @import 'pages/login-3';
