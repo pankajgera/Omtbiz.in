@@ -278,4 +278,9 @@ class User extends Authenticatable implements HasMedia
         }
         return false;
     }
+
+    public function scopeAddedUsers($query)
+    {
+        return $query->where('role', '!=', 'customer');
+    }
 }

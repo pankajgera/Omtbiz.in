@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -95,30 +96,36 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 10;
+        try {
+            $limit = $request->has('limit') ? $request->limit : 10;
 
-        $users = User::user()
-            ->applyFilters($request->only([
-                'search',
-                'contact_name',
-                'display_name',
-                'phone',
-                'orderByField',
-                'orderBy'
-            ]))
-            ->whereCompany($request->header('company'))
-            ->select('users.*',
-                DB::raw('sum(invoices.due_amount) as due_amount')
-            )
-            ->groupBy('users.id')
-            ->leftJoin('invoices', 'users.id', '=', 'invoices.user_id')
-            ->paginate($limit);
+            $users = User::addedUsers()
+                ->applyFilters($request->only([
+                    'search',
+                    'contact_name',
+                    'display_name',
+                    'phone',
+                    'orderByField',
+                    'orderBy'
+                ]))
+                ->whereCompany($request->header('company'))
+                ->select(
+                    'users.*',
+                    DB::raw('sum(invoices.due_amount) as due_amount')
+                )
+                ->groupBy('users.id')
+                ->leftJoin('invoices', 'users.id', '=', 'invoices.user_id')
+                ->paginate($limit);
 
-        $siteData = [
-            'users' => $users
-        ];
+            $siteData = [
+                'users' => $users
+            ];
 
-        return response()->json($siteData);
+            return response()->json($siteData);
+
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
     }
 
     /**
@@ -132,14 +139,14 @@ class UsersController extends Controller
         try {
             if (null !== $request->email) {
                 $verifyEmail = User::where('email', $request->email)->first();
-    
+
                 if ($verifyEmail) {
                     return response()->json([
                         'error' => 'Email already in use'
                     ]);
                 }
             }
-    
+
             $user = new User();
             $user->name = $request->name;
             $user->currency_id = $request->currency_id;
@@ -153,7 +160,7 @@ class UsersController extends Controller
             $user->role = $request->role;
             $user->password = Hash::make($request->password);
             $user->save();
-    
+
             return response()->json([
                 'user' => $user,
                 'success' => true
@@ -171,7 +178,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-       try {
+        try {
             $user = User::find($id);
 
             return response()->json([
@@ -192,9 +199,13 @@ class UsersController extends Controller
     {
         try {
             $user = User::findOrFail($id);
+            $companies = Company::all()->toArray();
+            $roles = Role::all()->toArray();
 
             return response()->json([
-                'user' => $user
+                'user' => $user,
+                'companies' => $companies,
+                'roles' => $roles,
             ]);
         } catch (Exception $e) {
             return ['error_message' => $e->getMessage()];
@@ -259,8 +270,8 @@ class UsersController extends Controller
     public function destroy($id)
     {
         try {
-            User::deleteUser($id);
-
+            $user = User::findOrFail($id);
+            $user->deleteUser();
             return response()->json([
                 'success' => true
             ]);
@@ -280,7 +291,8 @@ class UsersController extends Controller
     {
         try {
             foreach ($request->id as $id) {
-                User::deleteUser($id);
+                $user = User::findOrFail($id);
+                $user->deleteUser();
             }
             return response()->json([
                 'success' => true
@@ -289,32 +301,4 @@ class UsersController extends Controller
             return ['error_message' => $e->getMessage()];
         }
     }
-
-    // public function getAddUser(Request $request)
-    // {
-    //     $companies = Company::all()->toArray();
-
-    //     $roles = Role::all()->toArray();
-
-    //     return response()->json([
-    //         'companies' => $companies,
-    //         'roles' => $roles
-    //     ]);
-    // }
-
-    // public function updateAddUser(Request $request)
-    // {
-    //     try {
-    //         $user = User::updateOrCreate(
-    //             ['email' => $request->email, 'role' => $request->role['name'], 'company_id' => $request->company['id']],
-    //             ['name' => $request->name, 'company_name' => $request->company['name'], 'password' => Hash::make($request->password)]
-    //         );
-    //         return response()->json([
-    //             'user' => $user,
-    //             'success' => true
-    //         ]);
-    //     } catch (Exception $e) {
-    //         throw ValidationException::withMessages(['field' => ['Error while adding new user '. $e]]);
-    //     }
-    // }
 }

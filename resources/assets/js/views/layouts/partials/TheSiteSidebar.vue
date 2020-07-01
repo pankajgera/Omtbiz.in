@@ -101,13 +101,6 @@ export default {
             route: '/settings',
             meta: ['admin', 'accountant']
           },
-          // {
-          //   title: 'settings.menu_title.add-user',
-          //   icon: 'user-plus',
-          //   iconType: 'fa',
-          //   route: '/add-user',
-          //   meta: ['admin']
-          // }
         ]
       ],
     }

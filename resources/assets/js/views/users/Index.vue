@@ -21,7 +21,7 @@
       <div class="page-actions row">
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalusers || filtersApplied"
+            v-show="totalUsers || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             size="large"
@@ -101,10 +101,10 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ users.length }}</b> {{ $t('general.of') }} <b>{{ totalusers }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ users.length }}</b> {{ $t('general.of') }} <b>{{ totalUsers }}</b></p>
 
         <transition name="fade">
-          <v-dropdown v-if="selectedusers.length" :show-arrow="false">
+          <v-dropdown v-if="selectedUsers.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -243,20 +243,20 @@ export default {
   },
   computed: {
     showEmptyScreen () {
-      return !this.totalusers && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalUsers && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
     },
     ...mapGetters('user', [
       'users',
-      'selectedusers',
-      'totalusers',
+      'selectedUsers',
+      'totalUsers',
       'selectAllField'
     ]),
     selectField: {
       get: function () {
-        return this.selectedusers
+        return this.selectedUsers
       },
       set: function (val) {
         this.selectuser(val)
@@ -284,7 +284,7 @@ export default {
   },
   methods: {
     ...mapActions('user', [
-      'fetchusers',
+      'fetchUsers',
       'selectAllusers',
       'selectuser',
       'deleteuser',
@@ -305,7 +305,7 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchusers(data)
+      let response = await this.fetchUsers(data)
       this.isRequestOngoing = false
 
       return {

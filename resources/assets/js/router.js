@@ -81,7 +81,6 @@ import UserProfile from './views/settings/UserProfile.vue'
 import TaxTypes from './views/settings/TaxTypes.vue'
 import ExpenseCategory from './views/settings/ExpenseCategory.vue'
 import MailConfig from './views/settings/MailConfig.vue'
-import AddUser from './views/settings/AddUser.vue'
 //import UpdateApp from './views/settings/UpdateApp.vue'
 
 import Wizard from './views/wizard/Index.vue'
@@ -421,12 +420,6 @@ const routes = [
                     // }
                 ]
             },
-            // {
-            //     path: 'add-user',
-            //     name: 'add-user',
-            //     component: AddUser,
-            //     meta: ['admin']
-            // },
         ]
     },
 
