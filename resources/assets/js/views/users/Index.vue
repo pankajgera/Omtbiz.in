@@ -56,20 +56,20 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label">{{ $t('users.contact_name') }}</label>
+            <label class="form-label">{{ $t('users.email') }}</label>
             <base-input
-              v-model="filters.contact_name"
+              v-model="filters.email"
               type="text"
               name="address_name"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label">{{ $t('users.phone') }}</label>
+            <label class="form-label">{{ $t('users.role') }}</label>
             <base-input
-              v-model="filters.phone"
+              v-model="filters.role"
               type="text"
-              name="phone"
+              name="role"
               autocomplete="off"
             />
           </div>
@@ -160,22 +160,13 @@
           show="name"
         />
         <table-column
-          :label="$t('users.contact_name')"
-          show="contact_name"
+          :label="$t('users.email')"
+          show="email"
         />
         <table-column
-          :label="$t('users.phone')"
-          show="phone"
+          :label="$t('users.role')"
+          show="role"
         />
-        <table-column
-          :label="$t('users.amount_due')"
-          show="due_amount"
-        >
-          <template slot-scope="row">
-            <span> {{ $t('users.amount_due') }} </span>
-            <div v-html="$utils.formatMoney(row.due_amount, row.currency)"/>
-          </template>
-        </table-column>
         <table-column
           :label="$t('users.added_on')"
           sort-as="created_at"
@@ -236,8 +227,8 @@ export default {
       isRequestOngoing: true,
       filters: {
         display_name: '',
-        contact_name: '',
-        phone: ''
+        email: '',
+        role: ''
       }
     }
   },
@@ -297,8 +288,8 @@ export default {
     async fetchData ({ page, filter, sort }) {
       let data = {
         display_name: this.filters.display_name,
-        contact_name: this.filters.contact_name,
-        phone: this.filters.phone,
+        email: this.filters.email,
+        role: this.filters.role,
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -323,8 +314,8 @@ export default {
     clearFilter () {
       this.filters = {
         display_name: '',
-        contact_name: '',
-        phone: ''
+        email: '',
+        role: ''
       }
 
       this.$nextTick(() => {

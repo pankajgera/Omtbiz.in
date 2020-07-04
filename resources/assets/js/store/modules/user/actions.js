@@ -34,6 +34,16 @@ export const fetchUser = ({ commit, dispatch }, id) => {
     })
 }
 
+export const fetchRolesAndCompanies = ({ commit, dispatch }, id) => {
+    return new Promise((resolve, reject) => {
+        window.axios.get(`/api/users/fetch-roles-and-companies`).then((response) => {
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
 export const addUser = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
         window.axios.post('/api/users', data).then((response) => {

@@ -1,6 +1,7 @@
 <?php
 namespace Crater\Http\Requests;
 
+use Auth;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
@@ -12,7 +13,9 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        if ('admin' === Auth::user()->role) {
+            return true;
+        }
     }
 
     /**
@@ -26,7 +29,7 @@ class UserRequest extends FormRequest
             case 'POST':
                 return [
                     'name' => 'required',
-                    'email' => 'email|nullable|unique:users,email',
+                    'email' => 'email|unique:users,email',
                 ];
                 break;
             case 'PUT':
