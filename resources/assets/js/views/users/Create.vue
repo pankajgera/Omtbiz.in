@@ -145,14 +145,11 @@ export default {
       formData: {
         name: null,
         email: null,
-        currency_id: null,
         website: null,
         addresses: [],
         company: null,
         role: null
       },
-      currency: null,
-      currencyList: [],
       companies: [],
       roles: []
     }
@@ -203,18 +200,15 @@ export default {
   mounted () {
     if (this.isEdit) {
       this.loaduser()
-    } else {
-      this.currency = this.defaultCurrency
     }
+    this.loadNewUser()
   },
   methods: {
-    currencyNameWithCode ({name, code}) {
-      return `${code} - ${name}`
-    },
     ...mapActions('user', [
       'addUser',
       'fetchUser',
-      'updateUser'
+      'updateUser',
+      'fetchRolesAndCompanies'
     ]),
     async loaduser () {
       let { data: { user, companies, roles } } = await this.fetchUser(this.$route.params.id)
@@ -222,15 +216,18 @@ export default {
       this.formData.id = user.id
       this.formData.name = user.name
       this.formData.email = user.email
-      this.formData.currency_id = user.currency_id
       this.formData.website = user.website
       this.companies = companies
       this.roles = roles
-
-      this.formData.currency_id = user.currency_id
-      this.currency = currency
     },
-    
+
+    async loadNewUser () {
+      let { data: { companies, roles } } = await this.fetchRolesAndCompanies()
+
+      this.roles = roles
+      this.companies = companies
+    },
+
     async submitUserData () {
       this.$v.formData.$touch()
 
@@ -239,9 +236,6 @@ export default {
       }
 
       if (this.isEdit) {
-        if (this.currency) {
-          this.formData.currency_id = this.currency.id
-        }
         this.isLoading = true
         try {
           let response = await this.updateUser(this.formData)
@@ -264,10 +258,6 @@ export default {
         }
       } else {
         this.isLoading = true
-        if (this.currency) {
-          this.isLoading = true
-          this.formData.currency_id = this.currency.id
-        }
         try {
           let response = await this.addUser(this.formData)
           if (response.data.success) {

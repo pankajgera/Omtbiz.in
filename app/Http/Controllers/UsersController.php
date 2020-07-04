@@ -128,6 +128,19 @@ class UsersController extends Controller
         }
     }
 
+    /***
+     * Get all roles and companies
+     */
+    public function getRolesAndCompanies() {
+        $companies = Company::all()->toArray();
+        $roles = Role::all()->toArray();
+
+        return response()->json([
+            'companies' => $companies,
+            'roles' => $roles,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -149,15 +162,12 @@ class UsersController extends Controller
 
             $user = new User();
             $user->name = $request->name;
-            $user->currency_id = $request->currency_id;
             $user->company_id = $request->header('company');
             $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->company_name = $request->company_name;
+            $user->company_name = $request->company['name'];
             $user->contact_name = $request->contact_name;
             $user->website = $request->website;
-            $user->enable_portal = $request->enable_portal;
-            $user->role = $request->role;
+            $user->role = $request->role['name'];
             $user->password = Hash::make($request->password);
             $user->save();
 
@@ -242,13 +252,9 @@ class UsersController extends Controller
             }
 
             $user->name = $request->name;
-            $user->currency_id = $request->currency_id;
             $user->email = $request->email;
-            $user->phone = $request->phone;
             $user->company_name = $request->company_name;
             $user->contact_name = $request->contact_name;
-            $user->website = $request->website;
-            $user->enable_portal = $request->enable_portal;
             $user->role = $request->role;
             $user->save();
 

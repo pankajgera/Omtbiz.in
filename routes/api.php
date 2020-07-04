@@ -385,6 +385,8 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'UsersController@delete'
     ]);
 
+    Route::get('/users/fetch-roles-and-companies', 'UsersController@getRolesAndCompanies');
+
     Route::resource('users', 'UsersController');
 
 });
