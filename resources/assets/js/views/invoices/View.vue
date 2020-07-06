@@ -86,7 +86,7 @@
               >
               <label class="inv-label" for="filter_invoice_date">{{ $t('invoices.invoice_date') }}</label>
             </div>
-            <div class="filter-items">
+            <!-- <div class="filter-items">
               <input
                 id="filter_due_date"
                 v-model="searchData.orderByField"
@@ -97,7 +97,7 @@
                 @change="onSearch"
               >
               <label class="inv-label" for="filter_due_date">{{ $t('invoices.due_date') }}</label>
-            </div>
+            </div> -->
             <div class="filter-items">
               <input
                 id="filter_invoice_number"
