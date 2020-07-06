@@ -103,7 +103,7 @@ class InvoicesController extends Controller
         ])->validate();
 
         $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date);
-        $due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
+        //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
         $status = Invoice::STATUS_DRAFT;
 
         $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
@@ -115,7 +115,7 @@ class InvoicesController extends Controller
 
         $invoice = Invoice::create([
             'invoice_date' => $invoice_date,
-            'due_date' => $due_date,
+            //'due_date' => $due_date,
             'invoice_number' => $number_attributes['invoice_number'],
             'reference_number' => $request->reference_number,
             'user_id' => $request->user_id,
