@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
+use Exception;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -185,27 +186,18 @@ class User extends Authenticatable implements HasMedia
     {
         $filters = collect($filters);
 
-        if ($filters->get('search')) {
-            $query->whereSearch($filters->get('search'));
-        }
-
-        if ($filters->get('contact_name')) {
-            $query->whereContactName($filters->get('contact_name'));
-        }
-
         if ($filters->get('display_name')) {
             $query->whereDisplayName($filters->get('display_name'));
         }
 
-        if ($filters->get('phone')) {
-            $query->wherePhone($filters->get('phone'));
+        if ($filters->get('email')) {
+            $query->whereSearch($filters->get('email'));
         }
 
-        if ($filters->get('orderByField') || $filters->get('orderBy')) {
-            $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'name';
-            $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
-            $query->whereOrder($field, $orderBy);
+        if ($filters->get('role')) {
+            $query->whereContactName($filters->get('role'));
         }
+
     }
 
     public function scopeWhereCompany($query, $company_id)
@@ -268,15 +260,14 @@ class User extends Authenticatable implements HasMedia
         return;
     }
 
-    public function deleteUser($id)
+    public function deleteUser()
     {
-        $user = self::find($id);
-
-        if ($user) {
-            $user->delete();
+        try {
+            $this->delete();
             return true;
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
         }
-        return false;
     }
 
     public function scopeAddedUsers($query)

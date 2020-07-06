@@ -109,7 +109,7 @@
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleusers">
+              <div class="dropdown-item" @click="removeMultipleUsers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -124,7 +124,7 @@
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
-          @change="selectAllusers"
+          @change="selectAllUsers"
         >
         <label for="select-all" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
@@ -192,7 +192,7 @@
 
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeuser(row.id)">
+                <div class="dropdown-item" @click="removeUser(row.id)">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -250,7 +250,7 @@ export default {
         return this.selectedUsers
       },
       set: function (val) {
-        this.selectuser(val)
+        this.selectUser(val)
       }
     },
     selectAllFieldStatus: {
@@ -270,16 +270,16 @@ export default {
   },
   destroyed () {
     if (this.selectAllField) {
-      this.selectAllusers()
+      this.selectAllUsers()
     }
   },
   methods: {
     ...mapActions('user', [
       'fetchUsers',
-      'selectAllusers',
-      'selectuser',
-      'deleteuser',
-      'deleteMultipleusers',
+      'selectAllUsers',
+      'selectUser',
+      'deleteUser',
+      'deleteMultipleUsers',
       'setSelectAllState'
     ]),
     refreshTable () {
@@ -330,7 +330,7 @@ export default {
 
       this.showFilters = !this.showFilters
     },
-    async removeuser (id) {
+    async removeUser (id) {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('users.confirm_delete'),
@@ -339,7 +339,7 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteuser(id)
+          let res = await this.deleteUser(id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('users.deleted_message'))
             this.refreshTable()
@@ -350,7 +350,7 @@ export default {
         }
       })
     },
-    async removeMultipleusers () {
+    async removeMultipleUsers () {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('users.confirm_delete', 2),
@@ -359,7 +359,7 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let request = await this.deleteMultipleusers()
+          let request = await this.deleteMultipleUsers()
           if (request.data.success) {
             window.toastr['success'](this.$tc('users.deleted_message', 2))
             this.refreshTable()

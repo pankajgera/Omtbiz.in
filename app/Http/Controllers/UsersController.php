@@ -101,12 +101,9 @@ class UsersController extends Controller
 
             $users = User::addedUsers()
                 ->applyFilters($request->only([
-                    'search',
-                    'contact_name',
                     'display_name',
-                    'phone',
-                    'orderByField',
-                    'orderBy'
+                    'email',
+                    'role'
                 ]))
                 ->whereCompany($request->header('company'))
                 ->select(
@@ -164,10 +161,10 @@ class UsersController extends Controller
             $user->name = $request->name;
             $user->company_id = $request->header('company');
             $user->email = $request->email;
-            $user->company_name = $request->company['name'];
+            $user->company_name = $request->company;
             $user->contact_name = $request->contact_name;
             $user->website = $request->website;
-            $user->role = $request->role['name'];
+            $user->role = $request->role;
             $user->password = Hash::make($request->password);
             $user->save();
 
