@@ -77,6 +77,15 @@
           <template>{{ currentOptionLabel }}</template>
         </slot>
       </span>
+      <span
+        v-else
+        class="multiselect__single"
+        @mousedown.prevent="toggle"
+      >
+        <slot :option="value" name="singleLabel">
+          <template>{{ value }}</template>
+        </slot>
+      </span>
     </div>
     <transition name="multiselect">
       <div
