@@ -182,6 +182,16 @@ class User extends Authenticatable implements HasMedia
         return $query->where('role', 'customer');
     }
 
+    public function scopeWhereEmail($query, $email)
+    {
+        return $query->where('email', 'LIKE', '%' . $email . '%');
+    }
+
+    public function scopeWhereRole($query, $role)
+    {
+        return $query->where('role', 'LIKE', '%' . $role . '%');
+    }
+
     public function scopeApplyFilters($query, array $filters)
     {
         $filters = collect($filters);
@@ -191,11 +201,11 @@ class User extends Authenticatable implements HasMedia
         }
 
         if ($filters->get('email')) {
-            $query->whereSearch($filters->get('email'));
+            $query->whereEmail($filters->get('email'));
         }
 
         if ($filters->get('role')) {
-            $query->whereContactName($filters->get('role'));
+            $query->whereRole($filters->get('role'));
         }
 
     }
