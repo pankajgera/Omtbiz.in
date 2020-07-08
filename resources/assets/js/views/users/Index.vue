@@ -66,12 +66,16 @@
           </div>
           <div class="col-sm-4">
             <label class="form-label">{{ $t('users.role') }}</label>
-            <base-input
-              v-model="filters.role"
-              type="text"
-              name="role"
-              autocomplete="off"
-            />
+            <base-select
+                v-model="filters.role"
+                :options="roles"
+                :searchable="true"
+                :show-labels="false"
+                :allow-empty="false"
+                :placeholder="$tc('users.roles')"
+                label="name"
+                track-by="id"
+              />
           </div>
           <label class="clear-filter" @click="clearFilter">{{ $t('general.clear_all') }}</label>
         </div>
@@ -229,8 +233,12 @@ export default {
         display_name: '',
         email: '',
         role: ''
-      }
+      },
+      roles: []
     }
+  },
+  mounted () {
+    this.loadRoles();
   },
   computed: {
     showEmptyScreen () {
@@ -280,7 +288,8 @@ export default {
       'selectUser',
       'deleteUser',
       'deleteMultipleUsers',
-      'setSelectAllState'
+      'setSelectAllState',
+      'fetchRolesAndCompanies'
     ]),
     refreshTable () {
       this.$refs.table.refresh()
@@ -368,7 +377,12 @@ export default {
           }
         }
       })
-    }
+    },
+    async loadRoles () {
+      let { data: { companies, roles } } = await this.fetchRolesAndCompanies()
+
+      this.roles = roles;
+    },
   }
 }
 </script>
