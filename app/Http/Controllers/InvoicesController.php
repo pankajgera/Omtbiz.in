@@ -77,6 +77,7 @@ class InvoicesController extends Controller
         }
 
         return response()->json([
+            'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
             'nextInvoiceNumber' => $invoice_prefix.'-'.$nextInvoiceNumber,
             'items' => Item::with('taxes')->whereCompany($request->header('company'))->get(),
