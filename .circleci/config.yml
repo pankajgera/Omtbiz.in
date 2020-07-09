@@ -80,7 +80,7 @@ jobs:
           command: sudo mkdir -p /usr/local/bin
 
       - run:
-          command: sudo mv composer.phar /usr/local/bin/composer.phar
+          command: sudo mv composer.phar /usr/local/bin/composer
 
       - run: composer install -n --prefer-dist
             
