@@ -1,7 +1,8 @@
 // Basic Styles
 // -------------------------
-
-html, body , .site-wrapper{
+html,
+body,
+.site-wrapper {
     height: 100%;
     font-size: 14px;
 }
@@ -10,31 +11,36 @@ body {
     background-color: $ls-color-gray--light;
     font-family: $base-font-family;
     color: $base-font-color;
-
     overflow-x: hidden;
-
     i {
         font-family: 'Font Awesome 5 Free'!important;
     }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     color: $heading-font-color;
     font-weight: bold;
 }
 
 a {
     color: $ls-color-black--light;
-
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         color: lighten($ls-color-black--light, 10%);
+        border: 1px solid rgba(187, 187, 187, 0.5) !important;
         text-decoration: none;
-        outline: none;
+        border-radius: 30px;
+        // outline: none;
     }
-
 }
 
-mark, .mark {
+mark,
+.mark {
     background-color: #efefef;
     border-radius: 5px;
     color: $ls-color-black;
@@ -42,23 +48,30 @@ mark, .mark {
     margin: 0 1px;
 }
 
-code, .code {
+code,
+.code {
     background-color: $code-bg;
     color: $ls-color-primary;
 }
 
-:active, :focus, :hover {
+:active,
+ :focus,
+ :hover {
     outline: 0;
 }
 
-[v-cloak] {display: none}
+[v-cloak] {
+    display: none
+}
 
 .text-default {
     color: $ls-color-black !important;
 }
 
 @keyframes spinner {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .fa-spinner {
@@ -87,16 +100,14 @@ code, .code {
     display: flex;
     width: 100%;
     padding: 13px 10px;
-    background:$ls-color-gray--light;
+    background: $ls-color-gray--light;
     justify-content: center;
     border: none;
     outline: none;
     align-items: center;
-
     .icon {
         color: $ls-color-primary--light;
     }
-
     label {
         font-family: Poppins;
         font-size: 14px;
@@ -116,13 +127,13 @@ code, .code {
     height: 70px !important;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
+.custom-control-input:checked~.custom-control-label::before {
     color: #fff;
     border-color: $ls-color-primary !important;
     background-color: $ls-color-primary !important;
 }
 
-.avatar-cropper-btn:hover  {
+.avatar-cropper-btn:hover {
     background-color: $ls-color-primary !important;
     color: $white;
 }
