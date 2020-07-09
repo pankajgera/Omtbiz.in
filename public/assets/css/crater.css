@@ -11423,8 +11423,9 @@ a {
 a:hover,
 a:focus {
   color: #355282;
+  border: 1px solid rgba(187, 187, 187, 0.5) !important;
   text-decoration: none;
-  outline: none;
+  border-radius: 30px;
 }
 
 mark,
