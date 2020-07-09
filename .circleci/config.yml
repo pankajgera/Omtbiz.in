@@ -77,7 +77,9 @@ jobs:
       #    command: composer self-update
 
       - run:
-          command: sudo mv composer.phar /usr/local/bin/composer.phar
+          command: 
+            mkdir -p /usr/local/bin
+            sudo mv composer.phar /usr/local/bin/composer.phar
       
       - run: composer install -n --prefer-dist
             
