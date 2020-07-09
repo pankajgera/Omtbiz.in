@@ -58,25 +58,28 @@ jobs:
             sudo apt-get install php7.2-simplexml
             sudo apt-get install php7.2-mysql
 
+      - run :
+          command: rm -rf /usr/local/bin/composer
+
       - run:
           command: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
      
       - run:
           command: php -r "if (hash_file('SHA384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
       
-      - run:
-          command: composer install
+      #- run:
+      #    command: composer install
       
       - run:
           command: php -r "unlink('composer-setup.php');"
       
       #- run:
       #    command: composer self-update
-      
+
       - run:
           command: sudo mv composer.phar /usr/local/bin/composer
       
-      #- run: composer install -n --prefer-dist
+      - run: composer install -n --prefer-dist
             
       - save_cache:
           key: 
