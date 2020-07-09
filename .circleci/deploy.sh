@@ -1,0 +1,14 @@
+version: 2.1
+
+orbs:
+  aws-code-deploy: circleci/aws-code-deploy@0.0.11
+
+workflows:
+  deploy_application:
+    jobs:
+      - aws-code-deploy/deploy:
+          application-name: myApplication
+          deployment-group: myDeploymentGroup
+          service-role-arn: myDeploymentGroupRoleARN
+          bundle-bucket: myApplicationS3Bucket
+          bundle-key: myS3BucketKey
