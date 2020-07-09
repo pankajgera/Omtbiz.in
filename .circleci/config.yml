@@ -77,10 +77,11 @@ jobs:
       #    command: composer self-update
 
       - run:
-          command: 
-            mkdir -p /usr/local/bin
-            sudo mv composer.phar /usr/local/bin/composer.phar
-      
+          command: sudo mkdir -p /usr/local/bin
+
+      - run:
+          command: sudo mv composer.phar /usr/local/bin/composer.phar
+
       - run: composer install -n --prefer-dist
             
       - save_cache:
