@@ -52,11 +52,11 @@ jobs:
 
             sudo add-apt-repository -y ppa:ondrej/php
             sudo apt-get update
-            sudo apt-get install -y php7.2
-            sudo apt-get install php7.2-dom
-            sudo apt-get install php7.2-mbstring
-            sudo apt-get install php7.2-simplexml
-            sudo apt-get install php7.2-mysql
+            sudo apt-get install -y php7.4
+            sudo apt-get install php7.4-dom
+            sudo apt-get install php7.4-mbstring
+            sudo apt-get install php7.4-simplexml
+            sudo apt-get install php7.4-mysql
 
       - run:
           command: |
