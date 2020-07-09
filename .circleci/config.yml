@@ -58,29 +58,12 @@ jobs:
             sudo apt-get install php7.2-simplexml
             sudo apt-get install php7.2-mysql
 
-      - run :
-          command: rm -rf /usr/local/bin/composer
-
       - run:
-          command: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-     
-      - run:
-          command: php -r "if (hash_file('SHA384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-      
-      #- run:
-      #    command: composer install
-      
-      - run:
-          command: php -r "unlink('composer-setup.php');"
-      
-      #- run:
-      #    command: composer self-update
-
-      - run:
-          command: sudo mkdir -p /usr/local/bin
-
-      - run:
-          command: sudo mv composer.phar /usr/local/bin/composer
+          command: |
+            cd ~
+            curl -sS https://getcomposer.org/installer -o composer-setup.php
+            php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e5325b19b381bfd88ce90a5ddb7823406b2a38cff6bb704b0acc289a09c8128d4a8ce2bbafcd1fcbdc38666422fe2806') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+            sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
       - run: composer install -n --prefer-dist
             
