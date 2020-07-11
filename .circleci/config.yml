@@ -22,8 +22,8 @@ jobs:
       # - image: redis:2.8.19
     working_directory: ~/Ombtbiz.in
     
-    steps:
-      - checkout
+    #steps:
+    #  - checkout
 
       # Download and cache dependencies
       - restore_cache:
