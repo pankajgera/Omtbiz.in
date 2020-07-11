@@ -22,8 +22,8 @@ jobs:
       # - image: redis:2.8.19
     working_directory: ~/Ombtbiz.in
     
-    #steps:
-    #  - checkout
+    steps:
+      - checkout
 
       # Download and cache dependencies
       - restore_cache:
@@ -111,16 +111,16 @@ jobs:
       #- run: sudo npm run production
 
       deploy:
-      #docker:
-      #  - image: circleci/node:chakracore-8.11.1
-      steps:
-        - restore_cache:
-            keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-        - run:
-            name: AWS EC2 deploy
-            command: |
-              #upload all the code to machine
-              scp -r -o StrictHostKeyChecking=no ./ ubuntu@172.31.41.93:/home/ubuntu/Omtbiz.in
-              #Run script inside of machine
-              ssh -o StrictHostKeyChecking=no ubuntu@172.31.41.93 ".circleci/deploy.sh"
+        #docker:
+        #  - image: circleci/node:chakracore-8.11.1
+        steps:
+          - restore_cache:
+              keys:
+              - v1-dependencies-{{ checksum "package.json" }}
+          - run:
+              name: AWS EC2 deploy
+              command: |
+                #upload all the code to machine
+                scp -r -o StrictHostKeyChecking=no ./ ubuntu@172.31.41.93:/home/ubuntu/Omtbiz.in
+                #Run script inside of machine
+                ssh -o StrictHostKeyChecking=no ubuntu@172.31.41.93 ".circleci/deploy.sh"
