@@ -103,6 +103,7 @@ jobs:
       - run: 
           name: Run migration
           command: |
+            sudo php artisan key:generate
             sudo php artisan config:clear
             sudo php artisan view:clear
             sudo php artisan migrate --force
