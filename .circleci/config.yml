@@ -104,7 +104,7 @@ jobs:
           name: Run migration
           command: |
             sudo php artisan config:clear
-            sudo php artisan migrate:install
+            sudo php artisan migrate:rollback
             sudo php artisan migrate --force
 
       # run tests with phpunit or codecept
