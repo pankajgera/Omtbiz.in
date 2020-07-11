@@ -107,7 +107,7 @@ jobs:
             sudo php artisan view:clear
             sudo php artisan cache:clear
             sudo composer dump-autoload
-            sudo php artisan migrate:rollback
+            sudo php artisan migrate:refresh
             sudo php artisan migrate --force
 
       # run tests with phpunit or codecept
