@@ -102,7 +102,10 @@ jobs:
       #- run: touch storage/testing.sqlite
       - run: 
           name: Run migration
-          command: sudo php artisan migrate --env=production --database=mysql --force
+          command: |
+            sudo php artisan config:clear
+            sudo php artisan migrate:install
+            sudo php artisan migrate --env=production --database=mysql --force
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
