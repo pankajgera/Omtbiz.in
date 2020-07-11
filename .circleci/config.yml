@@ -105,7 +105,7 @@ jobs:
           command: |
             sudo php artisan config:clear
             sudo php artisan view:clear
-            sudo php artisan migrate
+            sudo php artisan migrate --production
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
