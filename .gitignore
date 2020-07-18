@@ -13,6 +13,6 @@ Homestead.yaml
 docker-compose.yml
 docker-compose.yaml
 .production
-/.env
+.env
 npm-debug.log
 _ide_helper.php
