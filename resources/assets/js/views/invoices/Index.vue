@@ -51,7 +51,7 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <div class="filter-status">
+          <!-- <div class="filter-status">
             <label>{{ $t('invoices.status') }}</label>
             <base-select
               v-model="filters.status"
@@ -66,7 +66,7 @@
               label="name"
               @remove="clearStatusSearch()"
             />
-          </div>
+          </div> -->
           <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
@@ -195,7 +195,7 @@
           width="20%"
           show="name"
         />
-        <table-column
+        <!-- <table-column
           :label="$t('invoices.status')"
           sort-as="status"
         >
@@ -203,7 +203,7 @@
             <span> {{ $t('invoices.status') }}</span>
             <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'PARTIALLY_PAID')? row.status : row.status.replace('_', ' ') }}</span>
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :label="$t('invoices.paid_status')"
           sort-as="paid_status"

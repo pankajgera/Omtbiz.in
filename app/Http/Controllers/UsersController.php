@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,9 +18,13 @@ use Exception;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Crater\Http\Requests\UserRequest;
 
 class UsersController extends Controller
 {
+    /**
+     * Load all required data on login to state
+     */
     public function getBootstrap(Request $request)
     {
         $user = Auth::user();
@@ -74,6 +79,9 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * Ping test
+     */
     public function ping()
     {
         return response()->json([
@@ -81,31 +89,219 @@ class UsersController extends Controller
         ]);
     }
 
-    public function getAddUser(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Request $request)
     {
-        $companies = Company::all()->toArray();
+        try {
+            $limit = $request->has('limit') ? $request->limit : 10;
 
+            $users = User::addedUsers()
+                ->applyFilters($request->only([
+                    'display_name',
+                    'email',
+                    'role'
+                ]))
+                ->whereCompany($request->header('company'))
+                ->select(
+                    'users.*',
+                    DB::raw('sum(invoices.due_amount) as due_amount')
+                )
+                ->groupBy('users.id')
+                ->leftJoin('invoices', 'users.id', '=', 'invoices.user_id')
+                ->paginate($limit);
+
+            $siteData = [
+                'users' => $users
+            ];
+
+            return response()->json($siteData);
+
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+    /***
+     * Get all roles and companies
+     */
+    public function getRolesAndCompanies() {
+        $companies = Company::all()->toArray();
         $roles = Role::all()->toArray();
 
         return response()->json([
             'companies' => $companies,
-            'roles' => $roles
+            'roles' => $roles,
         ]);
     }
 
-    public function updateAddUser(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(UserRequest $request)
     {
         try {
-            $user = User::updateOrCreate(
-                ['email' => $request->email, 'role' => $request->role['name'], 'company_id' => $request->company['id']],
-                ['name' => $request->name, 'company_name' => $request->company['name'], 'password' => Hash::make($request->password)]
-            );
+            if (null !== $request->email) {
+                $verifyEmail = User::where('email', $request->email)->first();
+
+                if ($verifyEmail) {
+                    return response()->json([
+                        'error' => 'Email already in use'
+                    ]);
+                }
+            }
+
+            $user = new User();
+            $user->name = $request->name;
+            $user->company_id = $request->header('company');
+            $user->email = $request->email;
+            $user->company_name = $request->company;
+            $user->contact_name = $request->contact_name;
+            $user->website = $request->website;
+            $user->role = $request->role;
+            $user->password = Hash::make($request->password);
+            $user->save();
+
             return response()->json([
                 'user' => $user,
                 'success' => true
             ]);
         } catch (Exception $e) {
-            throw ValidationException::withMessages(['field' => ['Error while adding new user '. $e]]);
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        try {
+            $user = User::find($id);
+
+            return response()->json([
+                'user' => $user
+            ]);
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function edit($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $companies = Company::all()->toArray();
+            $roles = Role::all()->toArray();
+
+            return response()->json([
+                'user' => $user,
+                'companies' => $companies,
+                'roles' => $roles,
+            ]);
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update($id, UserRequest $request)
+    {
+        try {
+            $user = User::find($id);
+
+            if ($request->email != null) {
+                $verifyEmail = User::where('email', $request->email)->first();
+
+                if ($verifyEmail) {
+                    if ($verifyEmail->id !== $user->id) {
+                        return response()->json([
+                            'success' => false,
+                            'error' => 'Email already in use'
+                        ]);
+                    }
+                }
+            }
+
+            if ($request->has('password')) {
+                $user->password = Hash::make($request->password);
+            }
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->company_name = $request->company_name;
+            $user->contact_name = $request->contact_name;
+            $user->role = $request->role;
+            $user->save();
+
+            return response()->json([
+                'user' => $user,
+                'success' => true
+            ]);
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+    /**
+     * Remove the specified User along side all his/her resources (ie. Estimates, Invoices, Payments and Addresses)
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->deleteUser();
+            return response()->json([
+                'success' => true
+            ]);
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+
+    /**
+     * Remove a list of Users along side all their resources (ie. Estimates, Invoices, Payments and Addresses)
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request)
+    {
+        try {
+            foreach ($request->id as $id) {
+                $user = User::findOrFail($id);
+                $user->deleteUser();
+            }
+            return response()->json([
+                'success' => true
+            ]);
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
         }
     }
 }

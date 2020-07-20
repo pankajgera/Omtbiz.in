@@ -5,10 +5,10 @@
 version: 2
 jobs:
   build:
-  
+
     machine:
       image: ubuntu-1604:201903-01
-    
+
     branches:
       only:
         - master
@@ -21,7 +21,7 @@ jobs:
       #
       # - image: redis:2.8.19
     working_directory: ~/Ombtbiz.in
-    
+
     steps:
       - checkout
 
@@ -32,10 +32,10 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      
-      - run: 
-          command: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
-      
+
+      #- run:
+      #    command: sudo apt update # PHP CircleCI 2.0 Configuration File# PHP CircleCI 2.0 Configuration File sudo apt install zlib1g-dev libsqlite3-dev
+
       - run:
           name: "Install PHP"
           command: |
@@ -52,47 +52,36 @@ jobs:
 
             sudo add-apt-repository -y ppa:ondrej/php
             sudo apt-get update
-            sudo apt-get install -y php7.2
-            sudo apt-get install php7.2-dom
-            sudo apt-get install php7.2-mbstring
-            sudo apt-get install php7.2-simplexml
-            sudo apt-get install php7.2-mysql
+            sudo apt-get install -y php7.4
+            sudo apt-get install php7.4-dom
+            sudo apt-get install php7.4-mbstring
+            sudo apt-get install php7.4-simplexml
+            sudo apt-get install php7.4-mysql
 
       - run:
-          command: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-     
-      - run:
-          command: php -r "if (hash_file('SHA384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-      
-      - run:
-          command: php composer-setup.php
-      
-      - run:
-          command: php -r "unlink('composer-setup.php');"
-      
-      - run:
-          command: php composer.phar self-update
-      
-      - run:
-          command: sudo mv composer.phar /usr/local/bin/composer
-      
+          command: |
+            cd ~
+            curl -sS https://getcomposer.org/installer -o composer-setup.php
+            php -r "if (hash_file('SHA384', 'composer-setup.php') === 'e5325b19b381bfd88ce90a5ddb7823406b2a38cff6bb704b0acc289a09c8128d4a8ce2bbafcd1fcbdc38666422fe2806') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+            sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
       - run: composer install -n --prefer-dist
-            
+
       - save_cache:
-          key: 
+          key:
             v1-dependencies-{{ checksum "composer.json" }}
-          paths: 
+          paths:
             - ./vendor
-      
+
       - restore_cache:
           keys:
             - node-v1-{{ checksum "package.json" }}
             - node-v1-
-      
+
       - run:
           name: Install node@13.6.0 (need right version for `yarn`)
           command: |
-            set +e             
+            set +e
             curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
             export NVM_DIR="/opt/circleci/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -102,7 +91,7 @@ jobs:
             # Each step uses the same `$BASH_ENV`, so need to modify it
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo "[ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\"" >> $BASH_ENV
-      
+
       - save_cache:
           key:
             node-v1-{{ checksum "package.json" }}
@@ -111,7 +100,12 @@ jobs:
 
       # prepare the database
       #- run: touch storage/testing.sqlite
-      #- run: sudo php artisan migrate --env=production --database=mysql --force
+      - run:
+          name: Run migration
+          command: |
+            sudo php artisan config:clear
+            sudo php artisan key:generate
+      #      sudo php artisan migrate --database=mysql -n --force
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit

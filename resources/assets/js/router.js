@@ -67,6 +67,10 @@ import ProfitLossReport from './views/reports/ProfitLossReport'
 import TaxReport from './views/reports/TaxReport.vue'
 import ReportLayout from './views/reports/layout/Index.vue'
 
+// Users
+import UserIndex from './views/users/Index.vue'
+import UserCreate from './views/users/Create.vue'
+
 // Settings
 import SettingsLayout from './views/settings/layout/Index.vue'
 import CompanyInfo from './views/settings/CompanyInfo.vue'
@@ -77,7 +81,6 @@ import UserProfile from './views/settings/UserProfile.vue'
 import TaxTypes from './views/settings/TaxTypes.vue'
 import ExpenseCategory from './views/settings/ExpenseCategory.vue'
 import MailConfig from './views/settings/MailConfig.vue'
-import AddUser from './views/settings/AddUser.vue'
 //import UpdateApp from './views/settings/UpdateApp.vue'
 
 import Wizard from './views/wizard/Index.vue'
@@ -339,6 +342,25 @@ const routes = [
                 ]
             },
 
+            // User
+            {
+                path: 'users',
+                component: UserIndex,
+                meta: ['admin']
+            },
+            {
+                path: 'users/create',
+                name: 'users.create',
+                component: UserCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'users/:id/edit',
+                name: 'users.edit',
+                component: UserCreate,
+                meta: ['admin']
+            },
+
             // Settings
             {
                 path: 'settings',
@@ -391,19 +413,13 @@ const routes = [
                         component: Notifications,
                         meta: ['admin']
                     },
-                    {
-                        path: 'add-user',
-                        name: 'add-user',
-                        component: AddUser,
-                        meta: ['admin']
-                    },
                     // {
                     //   path: 'update-app',
                     //   name: 'updateapp',
                     //   component: UpdateApp
                     // }
                 ]
-            }
+            },
         ]
     },
 

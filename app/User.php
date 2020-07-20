@@ -16,6 +16,7 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
+use Exception;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -181,31 +182,32 @@ class User extends Authenticatable implements HasMedia
         return $query->where('role', 'customer');
     }
 
+    public function scopeWhereEmail($query, $email)
+    {
+        return $query->where('email', 'LIKE', '%' . $email . '%');
+    }
+
+    public function scopeWhereRole($query, $role)
+    {
+        return $query->where('role', 'LIKE', '%' . $role . '%');
+    }
+
     public function scopeApplyFilters($query, array $filters)
     {
         $filters = collect($filters);
-
-        if ($filters->get('search')) {
-            $query->whereSearch($filters->get('search'));
-        }
-
-        if ($filters->get('contact_name')) {
-            $query->whereContactName($filters->get('contact_name'));
-        }
 
         if ($filters->get('display_name')) {
             $query->whereDisplayName($filters->get('display_name'));
         }
 
-        if ($filters->get('phone')) {
-            $query->wherePhone($filters->get('phone'));
+        if ($filters->get('email')) {
+            $query->whereEmail($filters->get('email'));
         }
 
-        if ($filters->get('orderByField') || $filters->get('orderBy')) {
-            $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'name';
-            $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
-            $query->whereOrder($field, $orderBy);
+        if ($filters->get('role')) {
+            $query->whereRole($filters->get('role'));
         }
+
     }
 
     public function scopeWhereCompany($query, $company_id)
@@ -266,5 +268,20 @@ class User extends Authenticatable implements HasMedia
             return  asset($avatar->getUrl());
         }
         return;
+    }
+
+    public function deleteUser()
+    {
+        try {
+            $this->delete();
+            return true;
+        } catch (Exception $e) {
+            return ['error_message' => $e->getMessage()];
+        }
+    }
+
+    public function scopeAddedUsers($query)
+    {
+        return $query->where('role', '!=', 'customer');
     }
 }

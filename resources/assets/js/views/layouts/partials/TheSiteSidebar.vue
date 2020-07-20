@@ -89,11 +89,18 @@ export default {
             meta: ['admin', 'accountant']
           },
           {
+            title: 'navigation.users',
+            icon: 'user-plus',
+            iconType: 'fa',
+            route: '/users',
+            meta: ['admin', 'accountant']
+          },
+          {
             title: 'navigation.settings',
             icon: 'cog',
             route: '/settings',
             meta: ['admin', 'accountant']
-          }
+          },
         ]
       ],
     }

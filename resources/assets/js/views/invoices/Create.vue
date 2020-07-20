@@ -10,20 +10,6 @@
           <li v-if="$route.name === 'invoices.edit'" class="breadcrumb-item">{{ $t('invoices.edit_invoice') }}</li>
           <li v-else class="breadcrumb-item">{{ $t('invoices.new_invoice') }}</li>
         </ol>
-        <div class="page-actions row">
-          <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
-            {{ $t('general.view_pdf') }}
-          </a>
-          <base-button
-            :loading="isLoading"
-            :disabled="isLoading"
-            icon="save"
-            color="theme"
-            class="invoice-action-btn"
-            type="submit">
-            {{ $t('invoices.save_invoice') }}
-          </base-button>
-        </div>
       </div>
       <div class="row invoice-input-group">
         <div class="col-md-5 invoice-customer-container">
@@ -104,15 +90,23 @@
           <div class="row mb-3">
             <div class="col collapse-input">
               <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
-              <base-date-picker
+              <!-- <base-date-picker
                 v-model="newInvoice.invoice_date"
                 :calendar-button="true"
                 calendar-button-icon="calendar"
                 @change="$v.newInvoice.invoice_date.$touch()"
+              /> -->
+              <input
+                v-model="newInvoice.invoice_date"
+                type="date"
+                data-date=""
+                data-date-format="DD-MM-YYYY"
+                class="base-prefix-input"
+                @change="$v.newInvoice.invoice_date.$touch()"
               />
               <span v-if="$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
             </div>
-            <div class="col collapse-input">
+            <!-- <div class="col collapse-input">
               <label>{{ $t('invoices.due_date') }}<span class="text-danger"> * </span></label>
               <base-date-picker
                 v-model="newInvoice.due_date"
@@ -122,7 +116,7 @@
                 @change="$v.newInvoice.due_date.$touch()"
               />
               <span v-if="$v.newInvoice.due_date.$error && !$v.newInvoice.due_date.required" class="text-danger mt-1"> {{ $t('validation.required') }}</span>
-            </div>
+            </div> -->
           </div>
           <div class="row mt-4">
             <div class="col collapse-input">
@@ -305,6 +299,20 @@
           </div>
         </div>
       </div>
+      <div class="page-actions row">
+          <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+            {{ $t('general.view_pdf') }}
+          </a>
+          <base-button
+            :loading="isLoading"
+            :disabled="isLoading"
+            icon="save"
+            color="theme"
+            class="invoice-action-btn"
+            type="submit">
+            {{ $t('invoices.save_invoice') }}
+          </base-button>
+        </div>
     </form>
     <base-loader v-else />
   </div>
@@ -335,7 +343,7 @@ export default {
     return {
       newInvoice: {
         invoice_date: null,
-        due_date: null,
+        //due_date: null,
         invoice_number: null,
         user_id: null,
         invoice_template_id: 1,
@@ -374,9 +382,9 @@ export default {
         invoice_date: {
           required
         },
-        due_date: {
-          required
-        },
+        // due_date: {
+        //   required
+        // },
         discount_val: {
           between: between(0, this.subtotal)
         },
@@ -527,7 +535,6 @@ export default {
       if (this.newInvoice.discount_type === 'fixed') {
         return
       }
-
       this.newInvoice.discount_val = this.newInvoice.discount * 100
       this.newInvoice.discount_type = 'fixed'
     },
@@ -535,9 +542,7 @@ export default {
       if (this.newInvoice.discount_type === 'percentage') {
         return
       }
-
       this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount) / 100
-
       this.newInvoice.discount_type = 'percentage'
     },
     updateTax (data) {
@@ -558,8 +563,8 @@ export default {
         if (response.data) {
           this.selectCustomer(response.data.invoice.user_id)
           this.newInvoice = response.data.invoice
-          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date, 'YYYY-MM-DD').toString()
-          this.newInvoice.due_date = moment(response.data.invoice.due_date, 'YYYY-MM-DD').toString()
+          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date, 'DD-MM-YYYY').format('DD-MM-YYYY')
+          //this.newInvoice.due_date = moment(response.data.invoice.due_date, 'DD-MM-YYYY').toString()
           this.discountPerItem = response.data.discount_per_item
           this.taxPerItem = response.data.tax_per_item
           this.selectedCurrency = this.defaultCurrency
@@ -578,9 +583,8 @@ export default {
         this.taxPerItem = response.data.tax_per_item
         this.selectedCurrency = this.defaultCurrency
         this.invoiceTemplates = response.data.invoiceTemplates
-        let today = new Date()
-        this.newInvoice.invoice_date = moment(today).toString()
-        this.newInvoice.due_date = moment(today).add(7, 'days').toString()
+        this.newInvoice.invoice_date = response.data.invoice_today_date
+        //this.newInvoice.due_date = moment().add(7, 'days').format('DD-MM-YYYY')
         this.itemList = response.data.items
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
@@ -616,8 +620,8 @@ export default {
 
       let data = {
         ...this.newInvoice,
-        invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
-        due_date: moment(this.newInvoice.due_date).format('DD/MM/YYYY'),
+        invoice_date: moment(this.newInvoice.invoice_date).format('DD-MM-YYYY'),
+        //due_date: moment(this.newInvoice.due_date).format('DD-MM-YYYY'),
         sub_total: this.subtotal,
         total: this.total,
         tax: this.totalTax,
