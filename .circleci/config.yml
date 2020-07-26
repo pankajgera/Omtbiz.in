@@ -105,7 +105,7 @@ jobs:
           command: |
             sudo php artisan config:clear
             sudo php artisan key:generate
-      #      sudo php artisan migrate --database=mysql -n --force
+            sudo php artisan migrate --database=mysql -n --force
 
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
