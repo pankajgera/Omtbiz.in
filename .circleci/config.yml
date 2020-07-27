@@ -108,7 +108,7 @@ jobs:
       #     sudo php artisan migrate --no-interaction --force
 
       # Deploy code to AWS
-      - run: ~/Ombtbiz.in/.circleci/deploy.sh
+      - run: sudo ~/Ombtbiz.in/.circleci/deploy.sh
             
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
