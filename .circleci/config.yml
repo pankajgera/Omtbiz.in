@@ -106,12 +106,38 @@ jobs:
       #      sudo php artisan config:clear
       #      sudo php artisan key:generate
       #     sudo php artisan migrate --no-interaction --force
-
-      # Deploy code to AWS
-      - run: bash .circleci/deploy.sh
             
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
       #- run: ./vendor/bin/codecept build
       #- run: ./vendor/bin/codecept run
       #- run: sudo npm run production
+
+  deploy:
+    machine:
+        enabled: true
+    working_directory: ~/Omtbiz.in
+    environment:
+      APP: $APP_ENV
+    steps:
+      - checkout
+      - run:
+          name: Deploy
+          command: bash .circleci/deploy.sh
+
+      - run:
+          command: |
+            git push origin master
+      #      php artisan migrate
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
