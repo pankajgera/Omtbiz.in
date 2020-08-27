@@ -8,7 +8,7 @@
           class="menu-group"
         >
           <router-link
-            v-for="(item, index1) in menuItems.filter(each => each.meta.includes(role))"
+            v-for="(item, index1) in menuItems.filter(i => i.meta.includes(role))"
             :key="index1"
             :to="item.route"
             class="menu-item"
@@ -54,12 +54,6 @@ export default {
             meta: ['admin', 'accountant']
           },
           {
-            title: 'navigation.estimates',
-            icon: 'file',
-            route: '/estimates',
-            meta: ['admin', 'accountant']
-          },
-          {
             title: 'navigation.invoices',
             icon: 'file-alt',
             route: '/invoices',
@@ -77,16 +71,30 @@ export default {
             meta: ['admin', 'accountant']
           },
           {
-            title: 'navigation.expenses',
-            icon: 'space-shuttle',
-            route: '/expenses',
-            meta: ['admin', 'accountant']
-          },
-          {
             title: 'navigation.reports',
             icon: 'signal',
             route: '/reports',
-            meta: ['admin', 'accountant']
+            meta: ['admin']
+          },
+          {
+            title: 'navigation.notes',
+            icon: 'signal',
+            route: '/notes',
+            meta: ['admin']
+          },
+        ],
+        [
+          {
+            title: 'navigation.estimates',
+            icon: 'file',
+            route: '/estimates',
+            meta: ['admin']
+          },
+          {
+            title: 'navigation.expenses',
+            icon: 'space-shuttle',
+            route: '/expenses',
+            meta: ['admin']
           },
           {
             title: 'navigation.users',
@@ -102,7 +110,7 @@ export default {
             meta: ['admin', 'accountant']
           },
         ]
-      ],
+      ]
     }
   },
   updated() {
@@ -114,7 +122,7 @@ export default {
     },
     update(){
       this.$mount();
-    }
+    },
   }
 }
 </script>
