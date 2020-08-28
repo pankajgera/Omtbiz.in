@@ -346,6 +346,25 @@ const routes = [
                 ]
             },
 
+            // Notes
+            {
+              path: 'notes',
+              component: NotesIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'notes/create',
+                name: 'notes.create',
+                component: NotesCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'notes/:id/edit',
+                name: 'notes.edit',
+                component: NotesCreate,
+                meta: ['admin']
+            },
+
             // User
             {
                 path: 'users',

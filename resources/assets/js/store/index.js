@@ -66,6 +66,6 @@ export default new Vuex.Store({
         salesReport,
         ExpensesReport,
         TaxReport,
-        user
+        notes
     }
 })

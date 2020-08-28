@@ -11,7 +11,8 @@
         "reports": "Reports",
         "settings": "Settings",
         "logout": "Logout",
-        "users": "Users"
+        "users": "Users",
+        "notes": "Notes"
     },
     "general": {
         "view_pdf": "View PDF",
