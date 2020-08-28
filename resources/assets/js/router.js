@@ -83,6 +83,10 @@ import ExpenseCategory from './views/settings/ExpenseCategory.vue'
 import MailConfig from './views/settings/MailConfig.vue'
 //import UpdateApp from './views/settings/UpdateApp.vue'
 
+// notes
+import NotesIndex from './views/notes/Index.vue'
+import NotesCreate from './views/notes/Create.vue'
+
 import Wizard from './views/wizard/Index.vue'
 
 Vue.use(VueRouter)
