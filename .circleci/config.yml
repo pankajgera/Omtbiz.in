@@ -100,15 +100,44 @@ jobs:
 
       # prepare the database
       #- run: touch storage/testing.sqlite
-      - run:
-          name: Run migration
-          command: |
-            sudo php artisan config:clear
-            sudo php artisan key:generate
-            sudo php artisan migrate --database=mysql -n --force
-
+      #- run:
+      #    name: Run migration
+      #    command: |
+      #      sudo php artisan config:clear
+      #      sudo php artisan key:generate
+      #     sudo php artisan migrate --no-interaction --force
+            
       # run tests with phpunit or codecept
       #- run: ./vendor/bin/phpunit
       #- run: ./vendor/bin/codecept build
       #- run: ./vendor/bin/codecept run
       #- run: sudo npm run production
+
+  deploy:
+    machine:
+        enabled: true
+    working_directory: ~/Omtbiz.in
+    environment:
+      APP: $APP_ENV
+    steps:
+      - checkout
+      - run:
+          name: Deploy
+          command: bash .circleci/deploy.sh
+
+      - run:
+          command: |
+            git push origin master
+      #      php artisan migrate
+
+# workflows:
+#   version: 2
+#   build-and-deploy:
+#     jobs:
+#       - build
+#       - deploy:
+#           requires:
+#             - build
+#           filters:
+#             branches:
+#               only: master
