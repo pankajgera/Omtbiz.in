@@ -11,7 +11,6 @@ export default {
         state.currentNote = note
     },
 
-
     [types.BOOTSTRAP_NOTES](state, notes) {
         state.notes = notes
     },

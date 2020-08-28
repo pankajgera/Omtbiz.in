@@ -389,4 +389,14 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('users', 'UsersController');
 
+    // Notes
+    //----------------------------------
+
+    Route::post('/notes/delete', [
+        'as' => 'notes.delete',
+        'uses' => 'NotesController@delete'
+    ]);
+
+    Route::resource('notes', 'NotesController');
+
 });

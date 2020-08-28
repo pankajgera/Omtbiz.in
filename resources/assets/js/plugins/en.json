@@ -831,7 +831,7 @@
         "list_of_notes": "This section will contain the list of notes.",
         "select_a_unit": "select unit",
         "notes": "Notes",
-        "design": "Design no.",
+        "design_no": "Design no.",
         "rate": "Rate",
         "average": "Average",
         "per_price": "Per Price",

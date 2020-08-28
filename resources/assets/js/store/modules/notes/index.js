@@ -4,9 +4,6 @@ import * as getters from './getters'
 
 const initialState = {
   currentNote: null,
-  roles: [],
-  permissions: [],
-  stations: [],
   notes: [],
   totalNotes: 0,
   selectAllField: false,

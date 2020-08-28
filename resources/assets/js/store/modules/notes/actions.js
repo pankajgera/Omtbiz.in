@@ -34,16 +34,6 @@ export const fetchNote = ({ commit, dispatch }, id) => {
     })
 }
 
-export const fetchRolesAndCompanies = ({ commit, dispatch }, id) => {
-    return new Promise((resolve, reject) => {
-        window.axios.get(`/api/notes/fetch-roles-and-companies`).then((response) => {
-            resolve(response)
-        }).catch((err) => {
-            reject(err)
-        })
-    })
-}
-
 export const addNote = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
         window.axios.post('/api/notes', data).then((response) => {
@@ -88,10 +78,6 @@ export const deleteMultipleNotes = ({ commit, dispatch, state }, id) => {
             reject(err)
         })
     })
-}
-
-export const setSelectAllState = ({ commit, dispatch, state }, data) => {
-    commit(types.SET_SELECT_ALL_STATE, data)
 }
 
 export const selectAllNotes = ({ commit, dispatch, state }) => {

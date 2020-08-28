@@ -31,13 +31,12 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('notes.design') }}</label>
+                <label class="control-label">{{ $t('notes.design_no') }}</label>
                 <base-input
-                  v-model.trim="formData.design"
+                  v-model.trim="formData.design_no"
                   focus
                   type="text"
-                  name="design"
-                  @input="$v.formData.design.$touch()"
+                  name="design_no"
                 />
               </div>
               <div class="form-group">
@@ -47,7 +46,6 @@
                   focus
                   type="text"
                   name="rate"
-                  @input="$v.formData.rate.$touch()"
                 />
               </div>
               <div class="form-group">
@@ -57,27 +55,24 @@
                   focus
                   type="text"
                   name="average"
-                  @input="$v.formData.average.$touch()"
                 />
               </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('notes.per_price') }}</label>
                 <base-input
-                  v-model.trim="formData.perPrice"
+                  v-model.trim="formData.per_price"
                   focus
                   type="text"
-                  name="perPrice"
-                  @input="$v.formData.perPrice.$touch()"
+                  name="per_price"
                 />
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('notes.average') }}</label>
+                <label class="control-label">{{ $t('notes.note') }}</label>
                 <base-text-area
                   v-model.trim="formData.note"
                   focus
                   type="text"
                   name="note"
-                  @input="$v.formData.note.$touch()"
                 />
               </div>
 
@@ -116,23 +111,15 @@ export default {
       title: 'Add Note',
       formData: {
         name: '',
-        design: '',
-        rate: '0.00',
+        design_no: '',
+        rate: '',
         average: '',
-        perPrice: '',
+        per_price: '',
         note: ''
       },
     }
   },
   computed: {
-    price: {
-      get: function () {
-        return this.formData.price / 100
-      },
-      set: function (newValue) {
-        this.formData.price = newValue * 100
-      }
-    },
     isEdit () {
       if (this.$route.name === 'notes.edit') {
         return true
@@ -162,7 +149,6 @@ export default {
     async loadEditData () {
       let response = await this.fetchNote(this.$route.params.id)
       this.formData = response.data.note
-      this.fractional_price = response.data.note.price
     },
     async submitNote () {
       this.$v.formData.$touch()
