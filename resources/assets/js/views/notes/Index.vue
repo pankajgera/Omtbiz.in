@@ -3,7 +3,7 @@
     <div class="page-header">
       <div class="d-flex flex-row">
         <div>
-          <h3 class="page-title">{{ $tc('notes.bill_ty', 2) }}</h3>
+          <h3 class="page-title">{{ $tc('notes.notes', 2) }}</h3>
         </div>
       </div>
       <ol class="breadcrumb">
@@ -18,7 +18,7 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('notes.bill_ty', 2) }}
+            {{ $tc('notes.notes', 2) }}
           </router-link>
         </li>
       </ol>
@@ -82,16 +82,16 @@
             />
           </div> -->
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.bill_ty') }} </label>
+            <label class="form-label"> {{ $tc('notes.notes') }} </label>
             <base-input
-              v-model="filters.bill_ty"
+              v-model="filters.notes"
               type="text"
               name="name"
               autocomplete="off"
             />
           </div>
           <!-- <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.bill_ty') }} </label>
+            <label class="form-label"> {{ $tc('notes.notes') }} </label>
             <base-date-picker
               v-model="filters.from_date"
               :invalid="$v.filters.from_date.$error"
@@ -101,7 +101,7 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.bill_ty') }} </label>
+            <label class="form-label"> {{ $tc('notes.notes') }} </label>
             <base-date-picker
               v-model="filters.to_date"
               :invalid="$v.filters.to_date.$error"
@@ -197,8 +197,8 @@
           show="name"
         />
         <table-column
-          :label="$t('notes.bill_ty')"
-          show="bill_ty"
+          :label="$t('notes.notes')"
+          show="notes"
         />
         <table-column
           :label="$t('notes.added_on')"
@@ -293,13 +293,13 @@ export default {
         name: '',
         unit: '',
         price: '',
-        bill_ty: ''
+        notes: ''
       },
       index: null
     }
   },
   computed: {
-    ...mapGetters('note', [
+    ...mapGetters('notes', [
       'notes',
       'selectedNotes',
       'totalNotes',
@@ -343,7 +343,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('note', [
+    ...mapActions('notes', [
       'fetchNotes',
       'selectAllNotes',
       'selectItem',
@@ -359,7 +359,7 @@ export default {
         search: this.filters.name !== null ? this.filters.name : '',
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
         price: this.filters.price * 100,
-        bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
+        notes: this.filters.notes !== null ? this.filters.notes : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -386,7 +386,7 @@ export default {
         name: '',
         unit: '',
         price: '',
-        bill_ty: ''
+        notes: ''
       }
 
       this.$nextTick(() => {
