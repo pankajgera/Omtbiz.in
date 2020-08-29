@@ -66,4 +66,11 @@ class Note extends Model
             $query->whereOrder($field, $orderBy);
         }
     }
+
+    public static function deleteNote($id)
+    {
+        $note = Note::find($id);
+        $note->delete();
+        return true;
+    }
 }

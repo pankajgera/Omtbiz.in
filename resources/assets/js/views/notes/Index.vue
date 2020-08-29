@@ -185,6 +185,35 @@
           :label="$t('notes.average')"
           show="average"
         />
+        <table-column
+          :key="Math.random()"
+          :sortable="false"
+          :filterable="false"
+          cell-class="action-dropdown"
+        >
+        <template slot-scope="row">
+          <span> {{ $t('notes.action') }} </span>
+          <v-dropdown>
+            <a slot="activator" href="#">
+              <dot-icon />
+            </a>
+            <v-dropdown-item>
+
+              <router-link :to="{path: `notes/${row.id}/edit`}" class="dropdown-item">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                {{ $t('general.edit') }}
+              </router-link>
+
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeNotes(row.id)">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </template>
+      </table-column>
       </table-component>
     </div>
   </div>
@@ -243,7 +272,7 @@ export default {
         return this.selectedNotes
       },
       set: function (val) {
-        this.selectItem(val)
+        this.selectNote(val)
       }
     },
     selectAllFieldStatus: {
@@ -270,8 +299,8 @@ export default {
     ...mapActions('notes', [
       'fetchNotes',
       'selectAllNotes',
-      'selectItem',
-      'deleteItem',
+      'selectNote',
+      'deleteNote',
       'deleteMultipleNotes',
       'setSelectAllState'
     ]),
@@ -335,15 +364,10 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteItem(this.id)
+          let res = await this.deleteNote(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('notes.deleted_message', 1))
             this.$refs.table.refresh()
-            return true
-          }
-
-          if (res.data.error === 'note_attached') {
-            window.toastr['error'](this.$tc('notes.note_attached_message'), this.$t('general.action_failed'))
             return true
           }
 
