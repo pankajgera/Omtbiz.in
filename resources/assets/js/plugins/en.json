@@ -11,7 +11,8 @@
         "reports": "Reports",
         "settings": "Settings",
         "logout": "Logout",
-        "users": "Users"
+        "users": "Users",
+        "notes": "Notes"
     },
     "general": {
         "view_pdf": "View PDF",
@@ -808,6 +809,37 @@
         "companies": "Companies",
         "role": "Role",
         "roles": "Roles"
+    },
+    "notes": {
+        "add_note": "Add Note",
+        "edit_note": "Edit Note",
+        "new_note": "New Note",
+        "title": "Notes",
+        "date": "Date",
+        "name": "Name",
+        "unit": "Unit",
+        "description": "Description",
+        "added_on": "Added On",
+        "price": "Price",
+        "date_of_creation": "Date Of Creation",
+        "action": "Action",
+        "save_note": "Save Note",
+        "update_note": "Update Note",
+        "note": "Note | Notes",
+        "add_new_note": "Add New Note",
+        "no_notes": "No notes yet!",
+        "list_of_notes": "This section will contain the list of notes.",
+        "select_a_unit": "select unit",
+        "notes": "Notes",
+        "design_no": "Design no.",
+        "rate": "Rate",
+        "average": "Average",
+        "per_price": "Per Price",
+        "note_attached_message": "Cannot delete an note which is already in use",
+        "confirm_delete": "You will not be able to recover this Note | You will not be able to recover these Notes",
+        "created_message": "Note created successfully",
+        "updated_message": "Note updated successfully",
+        "deleted_message": "Note deleted successfully | Notes deleted successfully"
     },
     "wizard": {
         "account_info": "Account Information",

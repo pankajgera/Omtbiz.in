@@ -83,6 +83,10 @@ import ExpenseCategory from './views/settings/ExpenseCategory.vue'
 import MailConfig from './views/settings/MailConfig.vue'
 //import UpdateApp from './views/settings/UpdateApp.vue'
 
+// notes
+import NotesIndex from './views/notes/Index.vue'
+import NotesCreate from './views/notes/Create.vue'
+
 import Wizard from './views/wizard/Index.vue'
 
 Vue.use(VueRouter)
@@ -340,6 +344,25 @@ const routes = [
                         meta: ['admin']
                     }
                 ]
+            },
+
+            // Notes
+            {
+              path: 'notes',
+              component: NotesIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'notes/create',
+                name: 'notes.create',
+                component: NotesCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'notes/:id/edit',
+                name: 'notes.edit',
+                component: NotesCreate,
+                meta: ['admin']
             },
 
             // User

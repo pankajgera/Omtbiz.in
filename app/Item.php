@@ -42,6 +42,11 @@ class Item extends Model
         return $query->where('unit', $unit);
     }
 
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('company_id', $company_id);
+    }
+
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
@@ -80,11 +85,6 @@ class Item extends Model
     public function taxes()
     {
         return $this->hasMany(Tax::class);
-    }
-
-    public function scopeWhereCompany($query, $company_id)
-    {
-        $query->where('company_id', $company_id);
     }
 
     public function invoiceItems()
