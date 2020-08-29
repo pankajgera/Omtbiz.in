@@ -12,31 +12,27 @@ class Note extends Model
         'rate',
         'average',
         'per_price',
+        'note'
     ];
-
-    public function scopeWhereSearch($query, $search)
-    {
-        return $query->where('name', 'LIKE', '%'.$search.'%');
-    }
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', $name);
+        return $query->where('name', 'LIKE', '%'.$name.'%');
     }
 
     public function scopeWhereDesignNo($query, $design_no)
     {
-        return $query->where('design_no', $design_no);
+        return $query->where('design_no', 'LIKE', '%'.$design_no.'%');
     }
 
     public function scopeWhereRate($query, $rate)
     {
-        return $query->where('rate', $rate);
+        return $query->where('rate', 'LIKE', '%'.$rate.'%');
     }
 
     public function scopeWhereAverage($query, $average)
     {
-        return $query->where('average', $average);
+        return $query->where('average', 'LIKE', '%'.$average.'%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -47,10 +43,6 @@ class Note extends Model
     public function scopeApplyFilters($query, array $filters)
     {
         $filters = collect($filters);
-
-        if ($filters->get('search')) {
-            $query->whereSearch($filters->get('search'));
-        }
 
         if ($filters->get('name')) {
             $query->whereName($filters->get('name'));

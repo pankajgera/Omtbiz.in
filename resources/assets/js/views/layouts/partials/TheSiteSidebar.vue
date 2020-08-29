@@ -78,7 +78,7 @@ export default {
           },
           {
             title: 'navigation.notes',
-            icon: 'signal',
+            icon: 'envelope',
             route: '/notes',
             meta: ['admin']
           },

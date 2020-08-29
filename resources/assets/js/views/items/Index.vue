@@ -60,56 +60,15 @@
               autocomplete="off"
             />
           </div>
-          <!-- <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('items.unit') }} </label>
-            <base-select
-              v-model="filters.unit"
-              :options="units"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('items.select_a_unit')"
-              label="name"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('items.price') }} </label>
-            <base-input
-              v-model="filters.price"
-              type="text"
-              name="name"
-              autocomplete="off"
-            />
-          </div> -->
           <div class="col-sm-4">
             <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
             <base-input
               v-model="filters.bill_ty"
               type="text"
-              name="name"
+              name="bill_ty"
               autocomplete="off"
             />
           </div>
-          <!-- <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
-            <base-date-picker
-              v-model="filters.from_date"
-              :invalid="$v.filters.from_date.$error"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-              @change="$v.filters.from_date.$touch()"
-            />
-          </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('items.bill_ty') }} </label>
-            <base-date-picker
-              v-model="filters.to_date"
-              :invalid="$v.filters.to_date.$error"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-              @change="$v.filters.to_date.$touch()"
-            />
-          </div> -->
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
@@ -274,19 +233,6 @@ export default {
       id: null,
       showFilters: false,
       sortedBy: 'created_at',
-      units: [
-        { name: 'box', value: 'box' },
-        { name: 'cm', value: 'cm' },
-        { name: 'dz', value: 'dz' },
-        { name: 'ft', value: 'ft' },
-        { name: 'g', value: 'g' },
-        { name: 'in', value: 'in' },
-        { name: 'kg', value: 'kg' },
-        { name: 'km', value: 'km' },
-        { name: 'lb', value: 'lb' },
-        { name: 'mg', value: 'mg' },
-        { name: 'pc', value: 'pc' }
-      ],
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {

@@ -394,9 +394,9 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::post('/notes/delete', [
         'as' => 'notes.delete',
-        'uses' => 'NotesController@delete'
+        'uses' => 'NoteController@delete'
     ]);
 
-    Route::resource('notes', 'NotesController');
+    Route::resource('notes', 'NoteController');
 
 });

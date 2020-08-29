@@ -15,12 +15,12 @@ class CreateNotesTable extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('design_no')->unsigned()->nullable();
             $table->string('name');
+            $table->string('design_no')->nullable();
             $table->string('rate')->nullable();
             $table->string('average')->nullable();
             $table->string('per_price')->nullable();
-            $table->text('notes')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

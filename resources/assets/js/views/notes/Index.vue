@@ -42,7 +42,7 @@
             icon="plus"
             size="large"
           >
-            {{ $t('notes.add_bill') }}
+            {{ $t('notes.new_note') }}
           </base-button>
         </router-link>
       </div>
@@ -51,7 +51,7 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label class="form-label"> {{ $tc('notes.name') }} </label>
             <base-input
               v-model="filters.name"
@@ -60,56 +60,33 @@
               autocomplete="off"
             />
           </div>
-          <!-- <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.unit') }} </label>
-            <base-select
-              v-model="filters.unit"
-              :options="units"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('notes.select_a_unit')"
-              label="name"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.price') }} </label>
+          <div class="col-sm-3">
+            <label class="form-label"> {{ $tc('notes.design_no') }} </label>
             <base-input
-              v-model="filters.price"
+              v-model="filters.design_no"
               type="text"
-              name="name"
+              name="design_no"
               autocomplete="off"
             />
-          </div> -->
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.notes') }} </label>
+          </div>
+          <div class="col-sm-3">
+            <label class="form-label"> {{ $tc('notes.rate') }} </label>
             <base-input
-              v-model="filters.notes"
+              v-model="filters.rate"
               type="text"
-              name="name"
+              name="rate"
               autocomplete="off"
             />
           </div>
-          <!-- <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.notes') }} </label>
-            <base-date-picker
-              v-model="filters.from_date"
-              :invalid="$v.filters.from_date.$error"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-              @change="$v.filters.from_date.$touch()"
+          <div class="col-sm-3">
+            <label class="form-label"> {{ $tc('notes.average') }} </label>
+            <base-input
+              v-model="filters.average"
+              type="text"
+              name="average"
+              autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('notes.notes') }} </label>
-            <base-date-picker
-              v-model="filters.to_date"
-              :invalid="$v.filters.to_date.$error"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-              @change="$v.filters.to_date.$touch()"
-            />
-          </div> -->
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
@@ -197,54 +174,17 @@
           show="name"
         />
         <table-column
-          :label="$t('notes.notes')"
-          show="notes"
+          :label="$t('notes.design_no')"
+          show="design_no"
         />
         <table-column
-          :label="$t('notes.added_on')"
-          sort-as="created_at"
-          show="formattedCreatedAt"
+          :label="$t('notes.rate')"
+          show="rate"
         />
         <table-column
-          label="Image"
-          show="images"
-        >
-          <template v-if="row.images" slot-scope="row">
-            <expandable-image
-              class="image"
-              :src="row.images.original_image_path"
-            ></expandable-image>
-          </template>
-        </table-column>
-        <table-column
-          :key="Math.random()"
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-          <template slot-scope="row">
-            <span> {{ $t('notes.action') }} </span>
-            <v-dropdown>
-              <a slot="activator" href="#">
-                <dot-icon />
-              </a>
-              <v-dropdown-item>
-
-                <router-link :to="{path: `notes/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                  {{ $t('general.edit') }}
-                </router-link>
-
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="removeNotes(row.id)">
-                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                  {{ $t('general.delete') }}
-                </div>
-              </v-dropdown-item>
-            </v-dropdown>
-          </template>
-        </table-column>
+          :label="$t('notes.average')"
+          show="average"
+        />
       </table-component>
     </div>
   </div>
@@ -274,26 +214,13 @@ export default {
       id: null,
       showFilters: false,
       sortedBy: 'created_at',
-      units: [
-        { name: 'box', value: 'box' },
-        { name: 'cm', value: 'cm' },
-        { name: 'dz', value: 'dz' },
-        { name: 'ft', value: 'ft' },
-        { name: 'g', value: 'g' },
-        { name: 'in', value: 'in' },
-        { name: 'kg', value: 'kg' },
-        { name: 'km', value: 'km' },
-        { name: 'lb', value: 'lb' },
-        { name: 'mg', value: 'mg' },
-        { name: 'pc', value: 'pc' }
-      ],
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
         name: '',
-        unit: '',
-        price: '',
-        notes: ''
+        design_no: '',
+        rate: '',
+        average: ''
       },
       index: null
     }
@@ -304,9 +231,6 @@ export default {
       'selectedNotes',
       'totalNotes',
       'selectAllField'
-    ]),
-    ...mapGetters('currency', [
-      'defaultCurrency'
     ]),
     showEmptyScreen () {
       return !this.totalNotes && !this.isRequestOngoing && !this.filtersApplied
@@ -356,10 +280,10 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
-        search: this.filters.name !== null ? this.filters.name : '',
-        unit: this.filters.unit !== null ? this.filters.unit.name : '',
-        price: this.filters.price * 100,
-        notes: this.filters.notes !== null ? this.filters.notes : '',
+        name: this.filters.name !== null ? this.filters.name : '',
+        rate: this.filters.rate !== null ? this.filters.rate : '',
+        average: this.filters.average !== null ? this.filters.average : '',
+        design_no: this.filters.design_no !== null ? this.filters.design_no : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -384,9 +308,9 @@ export default {
     clearFilter () {
       this.filters = {
         name: '',
-        unit: '',
-        price: '',
-        notes: ''
+        design_no: '',
+        rate: '',
+        average: ''
       }
 
       this.$nextTick(() => {

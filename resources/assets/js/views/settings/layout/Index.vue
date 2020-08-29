@@ -89,12 +89,6 @@ export default {
           iconType: 'far',
           meta: ['admin']
         },
-        // {
-        //   link: '/settings/update-app',
-        //   title: 'settings.menu_title.update_app',
-        //   icon: 'sync-alt',
-        //   iconType: 'fas'
-        // }
       ],
       role: this.$store.state.user.currentUser.role
     }

@@ -48,7 +48,6 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info($request);
         try {
             $note = new Note();
             $note->name = $request->name;
@@ -56,6 +55,7 @@ class NoteController extends Controller
             $note->rate = $request->rate;
             $note->average = $request->average;
             $note->per_price = $request->per_price;
+            $note->note = $request->note;
             $note->save();
 
             $note = Note::find($note->id);
@@ -64,7 +64,7 @@ class NoteController extends Controller
                 'note' => $note,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving note', [$e]);
+            Log::error('Error while saving note', [$e->getMessage()]);
         }
     }
 
@@ -77,19 +77,24 @@ class NoteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $note = Note::find($id);
-        $note->name = $request->name;
-        $note->design_no = $request->design_no;
-        $note->rate = $request->rate;
-        $note->average = $request->average;
-        $note->per_price = $request->per_price;
-        $note->save();
+        try {
+            $note = Note::find($id);
+            $note->name = $request->name;
+            $note->design_no = $request->design_no;
+            $note->rate = $request->rate;
+            $note->average = $request->average;
+            $note->per_price = $request->per_price;
+            $note->note = $request->note;
+            $note->save();
 
-        $note = Note::find($note->id);
+            $note = Note::find($note->id);
 
-        return response()->json([
-            'note' => $note,
-        ]);
+            return response()->json([
+                'note' => $note,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while updating note', [$e->getMessage()]);
+        }
     }
 
     /**
