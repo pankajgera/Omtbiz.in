@@ -30,12 +30,12 @@ export default {
       sidebar: 'sidebar',
       menu: [
         [
-          {
-            title: 'navigation.dashboard',
-            icon: 'tachometer-alt',
-            route: '/dashboard',
-            meta: ['admin']
-          },
+          // {
+          //   title: 'navigation.dashboard',
+          //   icon: 'tachometer-alt',
+          //   route: '/dashboard',
+          //   meta: ['admin']
+          // },
           {
             title: 'navigation.items',
             icon: 'file',

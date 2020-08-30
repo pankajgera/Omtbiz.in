@@ -154,7 +154,7 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::get('/dashboard', [
         'as' => 'dashboard',
-        'uses' => 'DashboardController@index'
+        'uses' => 'InvoicesController@index'
     ])->middleware('admin');
 
 
