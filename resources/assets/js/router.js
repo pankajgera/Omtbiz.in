@@ -28,7 +28,7 @@ import NotFoundPage from './views/errors/404.vue'
  */
 
 // Dashbord
-import Dashboard from './views/dashboard/Dashboard.vue'
+//import Dashboard from './views/dashboard/Dashboard.vue'
 
 // Customers
 import CustomerIndex from './views/customers/Index.vue'
@@ -160,17 +160,17 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
             // Dashbord
-            {
-                path: '/',
-                component: Dashboard,
-                name: 'dashboard',
-                meta: ['admin']
-            },
-            {
-                path: 'dashboard',
-                component: Dashboard,
-                meta: ['admin']
-            },
+            // {
+            //     path: '/',
+            //     component: Dashboard,
+            //     name: 'dashboard',
+            //     meta: ['admin']
+            // },
+            // {
+            //     path: 'dashboard',
+            //     component: Dashboard,
+            //     meta: ['admin']
+            // },
 
             // Customer
             {
@@ -468,7 +468,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
         switch (role) {
             case 'admin':
-                return next('/dashboard')
+                return next('/invoices')
                 break;
             case 'accountant':
                 return next('/invoices')
@@ -477,7 +477,7 @@ router.beforeEach((to, from, next) => {
                 return next('/items')
                 break;
             default:
-                return next('/dashboard')
+                return next('/invoices')
         }
     }
 
@@ -494,7 +494,7 @@ router.beforeEach((to, from, next) => {
         } else {
             switch (role) {
                 case 'admin':
-                    return next('/dashboard')
+                    return next('/invoices')
                     break;
                 case 'accountant':
                     return next('/invoices')
@@ -503,7 +503,7 @@ router.beforeEach((to, from, next) => {
                     return next('/items')
                     break;
                 default:
-                    return next('/dashboard')
+                    return next('/invoices')
             }
         }
     }
