@@ -87,6 +87,10 @@ import MailConfig from './views/settings/MailConfig.vue'
 import NotesIndex from './views/notes/Index.vue'
 import NotesCreate from './views/notes/Create.vue'
 
+// inventory
+import InventoryIndex from './views/inventory/Index.vue'
+import InventoryCreate from './views/inventory/Create.vue'
+
 import Wizard from './views/wizard/Index.vue'
 
 Vue.use(VueRouter)
@@ -362,6 +366,25 @@ const routes = [
                 path: 'notes/:id/edit',
                 name: 'notes.edit',
                 component: NotesCreate,
+                meta: ['admin']
+            },
+
+             // Inventroy
+            {
+              path: 'inventory',
+              component: InventoryIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'inventory/create',
+                name: 'inventory.create',
+                component: InventoryCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'inventory/:id/edit',
+                name: 'inventory.edit',
+                component: InventoryCreate,
                 meta: ['admin']
             },
 

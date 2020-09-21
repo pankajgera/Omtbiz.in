@@ -82,6 +82,12 @@ export default {
             route: '/notes',
             meta: ['admin']
           },
+          {
+            title: 'navigation.inventory',
+            icon: 'envelope',
+            route: '/inventory',
+            meta: ['admin']
+          },
         ],
         [
           {
