@@ -4,7 +4,7 @@
       <div class="page-header">
         <h3 class="page-title">{{ isEdit ? $t('expenses.edit_expense') : $t('expenses.new_expense') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
           <li class="breadcrumb-item"><router-link slot="item-title" to="/expenses">{{ $tc('expenses.expense', 2) }}</router-link></li>
           <li class="breadcrumb-item"><a href="#">{{ isEdit ? $t('expenses.edit_expense') : $t('expenses.new_expense') }}</a></li>
         </ol>

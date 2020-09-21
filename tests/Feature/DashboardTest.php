@@ -30,18 +30,18 @@ class DashboardTest extends TestCase
     }
 
     /** @test */
-    public function testDashboard()
-    {
-        $response = $this->json('GET', 'api/dashboard');
+    // public function testDashboard()
+    // {
+    //     $response = $this->json('GET', 'api/dashboard');
 
-        $response->assertOk();
-    }
+    //     $response->assertOk();
+    // }
 
-    /** @test */
-    public function testPieChartData()
-    {
-        $response = $this->json('GET', 'api/dashboard/expense/chart');
+    // /** @test */
+    // public function testPieChartData()
+    // {
+    //     $response = $this->json('GET', 'api/dashboard/expense/chart');
 
-        $response->assertOk();
-    }
+    //     $response->assertOk();
+    // }
 }

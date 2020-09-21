@@ -4,7 +4,7 @@
       <div class="page-header">
         <h3 class="page-title">{{ $t('settings.title') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
           <li class="breadcrumb-item"><router-link slot="item-title" to="#">{{ $t('settings.general') }}</router-link></li>
         </ol>
       </div>

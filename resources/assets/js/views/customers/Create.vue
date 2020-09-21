@@ -4,7 +4,7 @@
       <div class="page-header">
         <h3 class="page-title">{{ isEdit ? $t('customers.edit_customer') : $t('customers.new_customer') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
           <li class="breadcrumb-item"><router-link slot="item-title" to="/customers">{{ $tc('customers.customer', 2) }}</router-link></li>
           <li class="breadcrumb-item">{{ isEdit ? $t('customers.edit_customer') : $t('customers.new_customer') }}</li>
         </ol>
