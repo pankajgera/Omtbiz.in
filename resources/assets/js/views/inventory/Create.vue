@@ -31,48 +31,30 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('inventory.design_no') }}</label>
+                <label class="control-label">{{ $t('inventory.quantity') }}</label>
                 <base-input
-                  v-model.trim="formData.design_no"
+                  v-model.trim="formData.quantity"
                   focus
                   type="text"
-                  name="design_no"
+                  name="quantity"
                 />
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('inventory.rate') }}</label>
+                <label class="control-label">{{ $t('inventory.price') }}</label>
                 <base-input
-                  v-model.trim="formData.rate"
+                  v-model.trim="formData.price"
                   focus
                   type="text"
-                  name="rate"
+                  name="price"
                 />
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('inventory.average') }}</label>
+                <label class="control-label">{{ $t('inventory.unit') }}</label>
                 <base-input
-                  v-model.trim="formData.average"
+                  v-model.trim="formData.unit"
                   focus
                   type="text"
-                  name="average"
-                />
-              </div>
-              <div class="form-group">
-                <label class="control-label">{{ $t('inventory.per_price') }}</label>
-                <base-input
-                  v-model.trim="formData.per_price"
-                  focus
-                  type="text"
-                  name="per_price"
-                />
-              </div>
-              <div class="form-group">
-                <label class="control-label">{{ $t('inventory.inventory') }}</label>
-                <base-text-area
-                  v-model.trim="formData.inventory"
-                  focus
-                  type="text"
-                  name="inventory"
+                  name="unit"
                 />
               </div>
 
@@ -111,9 +93,9 @@ export default {
       title: 'Add Inventory',
       formData: {
         name: '',
-        design_no: '',
-        rate: '',
-        average: '',
+        quantity: '',
+        price: '',
+        unit: '',
         per_price: '',
         inventory: ''
       },

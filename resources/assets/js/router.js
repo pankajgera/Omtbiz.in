@@ -506,13 +506,13 @@ router.beforeEach((to, from, next) => {
 
     if (to.meta.length) {
         if (to.meta.includes('admin') && role === 'admin') {
-            console.log('admin')
+            //console.log('admin')
             next()
         } else if (to.meta.includes('accountant') && role === 'accountant') {
-            console.log('accountant')
+            //console.log('accountant')
             next()
         } else if (to.meta.includes('employee') && role === 'employee') {
-            console.log('employee')
+            //console.log('employee')
             next()
         } else {
             switch (role) {

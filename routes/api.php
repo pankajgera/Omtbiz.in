@@ -152,10 +152,10 @@ Route::group(['middleware' => 'api'], function () {
     // Dashboard
     //----------------------------------
 
-    Route::get('/dashboard', [
-        'as' => 'dashboard',
-        'uses' => 'InvoicesController@index'
-    ])->middleware('admin');
+    // Route::get('/dashboard', [
+    //     'as' => 'dashboard',
+    //     'uses' => 'InvoicesController@index'
+    // ])->middleware('admin');
 
 
     // Customers

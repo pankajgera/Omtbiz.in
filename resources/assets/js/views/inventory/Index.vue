@@ -61,29 +61,29 @@
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('inventory.design_no') }} </label>
+            <label class="form-label"> {{ $tc('inventory.unit') }} </label>
             <base-input
-              v-model="filters.design_no"
+              v-model="filters.unit"
               type="text"
-              name="design_no"
+              name="unit"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('inventory.rate') }} </label>
+            <label class="form-label"> {{ $tc('inventory.price') }} </label>
             <base-input
-              v-model="filters.rate"
+              v-model="filters.price"
               type="text"
-              name="rate"
+              name="price"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('inventory.average') }} </label>
+            <label class="form-label"> {{ $tc('inventory.quantity') }} </label>
             <base-input
-              v-model="filters.average"
+              v-model="filters.quantity"
               type="text"
-              name="average"
+              name="quantity"
               autocomplete="off"
             />
           </div>
@@ -174,16 +174,16 @@
           show="name"
         />
         <table-column
-          :label="$t('inventory.design_no')"
-          show="design_no"
+          :label="$t('inventory.unit')"
+          show="unit"
         />
         <table-column
-          :label="$t('inventory.rate')"
-          show="rate"
+          :label="$t('inventory.price')"
+          show="price"
         />
         <table-column
-          :label="$t('inventory.average')"
-          show="average"
+          :label="$t('inventory.quantity')"
+          show="quantity"
         />
         <table-column
           :key="Math.random()"
@@ -247,9 +247,9 @@ export default {
       filtersApplied: false,
       filters: {
         name: '',
-        design_no: '',
-        rate: '',
-        average: ''
+        unit: '',
+        price: '',
+        quantity: ''
       },
       index: null
     }
@@ -310,9 +310,9 @@ export default {
     async fetchData ({ page, filter, sort }) {
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
-        rate: this.filters.rate !== null ? this.filters.rate : '',
-        average: this.filters.average !== null ? this.filters.average : '',
-        design_no: this.filters.design_no !== null ? this.filters.design_no : '',
+        price: this.filters.price !== null ? this.filters.price : '',
+        quantity: this.filters.quantity !== null ? this.filters.quantity : '',
+        unit: this.filters.unit !== null ? this.filters.unit : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -337,9 +337,9 @@ export default {
     clearFilter () {
       this.filters = {
         name: '',
-        design_no: '',
-        rate: '',
-        average: ''
+        unit: '',
+        price: '',
+        quantity: ''
       }
 
       this.$nextTick(() => {
