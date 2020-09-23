@@ -11,9 +11,10 @@ class InventoryController extends Controller
 {
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 20;
+        try {
+            $limit = $request->has('limit') ? $request->limit : 20;
 
-        $inventory = Inventory::applyFilters($request->only([
+            $inventory = Inventory::applyFilters($request->only([
                 'name',
                 'quantity',
                 'price',
@@ -21,21 +22,28 @@ class InventoryController extends Controller
                 'orderByField',
                 'orderBy',
             ]))
-            ->latest()
-            ->paginate($limit);
+                ->latest()
+                ->paginate($limit);
 
-        return response()->json([
-            'inventory' => $inventory,
-        ]);
+            return response()->json([
+                'inventory' => $inventory,
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function edit(Request $request, $id)
     {
-        $inventory = Inventory::find($id);
+        try {
+            $inventory = Inventory::find($id);
 
-        return response()->json([
-            'inventory' => $inventory,
-        ]);
+            return response()->json([
+                'inventory' => $inventory,
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

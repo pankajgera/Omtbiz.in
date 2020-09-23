@@ -297,7 +297,7 @@ export default {
   },
   methods: {
     ...mapActions('inventory', [
-      'fetchInventory',
+      'fetchAllInventory',
       'selectAllInventory',
       'selectInventory',
       'deleteInventory',
@@ -319,7 +319,7 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchInventory(data)
+      let response = await this.fetchAllInventory(data)
       this.isRequestOngoing = false
 
       return {

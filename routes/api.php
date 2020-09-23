@@ -399,4 +399,16 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('notes', 'NoteController');
 
+
+    // Inventroy
+    //----------------------------------
+
+    Route::post('/inventory/delete', [
+        'as' => 'inventory.delete',
+        'uses' => 'InventoryController@delete'
+    ]);
+
+    Route::resource('inventory', 'InventoryController');
+
+
 });

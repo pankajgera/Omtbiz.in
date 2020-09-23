@@ -12,7 +12,7 @@ export const updateCurrentInventory = ({ commit, dispatch, state }, data) => {
 }
 
 //new
-export const fetchInventory = ({ commit, dispatch, state }, params) => {
+export const fetchAllInventory = ({ commit, dispatch, state }, params) => {
     return new Promise((resolve, reject) => {
         window.axios.get(`/api/inventory`, { params }).then((response) => {
             commit(types.BOOTSTRAP_INVENTORY, response.data.inventory.data)
