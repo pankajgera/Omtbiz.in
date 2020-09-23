@@ -5,7 +5,7 @@
         <h3 v-if="$route.name === 'estimates.edit'" class="page-title">{{ $t('estimates.edit_estimate') }}</h3>
         <h3 v-else class="page-title">{{ $t('estimates.new_estimate') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/dashboard">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
           <li class="breadcrumb-item"><router-link slot="item-title" to="/estimates">{{ $tc('estimates.estimate', 2) }}</router-link></li>
           <li v-if="$route.name === 'estimates.edit'" class="breadcrumb-item">{{ $t('estimates.edit_estimate') }}</li>
           <li v-else class="breadcrumb-item">{{ $t('estimates.new_estimate') }}</li>

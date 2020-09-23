@@ -161,7 +161,7 @@ export default {
       let response = await window.axios.get('/api/onboarding')
       if (response.data) {
         if (response.data.profile_complete === 'COMPLETED') {
-          this.$router.push('/dashboard')
+          this.$router.push('/invoices')
 
           return
         }
@@ -211,7 +211,7 @@ export default {
         Ls.set('auth.token', response.data.token)
         this.loginOnBoardingUser(response.data.token)
         window.toastr['success']('Login Successful')
-        this.$router.push('/dashboard')
+        this.$router.push('/')
       }
     }
   }

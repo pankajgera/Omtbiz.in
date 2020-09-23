@@ -4,8 +4,6 @@ namespace Crater\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Crater\Note;
-use Crater\TaxType;
-use Crater\Tax;
 use Exception;
 use Log;
 
@@ -28,7 +26,6 @@ class NoteController extends Controller
 
         return response()->json([
             'notes' => $notes,
-            'taxTypes' => TaxType::latest()->get(),
         ]);
     }
 

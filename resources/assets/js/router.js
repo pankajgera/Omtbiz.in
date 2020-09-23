@@ -87,6 +87,10 @@ import MailConfig from './views/settings/MailConfig.vue'
 import NotesIndex from './views/notes/Index.vue'
 import NotesCreate from './views/notes/Create.vue'
 
+// inventory
+import InventoryIndex from './views/inventory/Index.vue'
+import InventoryCreate from './views/inventory/Create.vue'
+
 import Wizard from './views/wizard/Index.vue'
 
 Vue.use(VueRouter)
@@ -365,6 +369,25 @@ const routes = [
                 meta: ['admin']
             },
 
+             // Inventroy
+            {
+              path: 'inventory',
+              component: InventoryIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'inventory/create',
+                name: 'inventory.create',
+                component: InventoryCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'inventory/:id/edit',
+                name: 'inventory.edit',
+                component: InventoryCreate,
+                meta: ['admin']
+            },
+
             // User
             {
                 path: 'users',
@@ -483,13 +506,13 @@ router.beforeEach((to, from, next) => {
 
     if (to.meta.length) {
         if (to.meta.includes('admin') && role === 'admin') {
-            console.log('admin')
+            //console.log('admin')
             next()
         } else if (to.meta.includes('accountant') && role === 'accountant') {
-            console.log('accountant')
+            //console.log('accountant')
             next()
         } else if (to.meta.includes('employee') && role === 'employee') {
-            console.log('employee')
+            //console.log('employee')
             next()
         } else {
             switch (role) {

@@ -12,7 +12,8 @@
         "settings": "Settings",
         "logout": "Logout",
         "users": "Users",
-        "notes": "Notes"
+        "notes": "Notes",
+        "inventory": "Inventory"
     },
     "general": {
         "view_pdf": "View PDF",
@@ -840,6 +841,37 @@
         "created_message": "Note created successfully",
         "updated_message": "Note updated successfully",
         "deleted_message": "Note deleted successfully | Notes deleted successfully"
+    },
+    "inventory": {
+        "add_inventory": "Add Inventory",
+        "edit_inventory": "Edit Inventory",
+        "new_inventory": "New Inventory",
+        "title": "Inventory",
+        "date": "Date",
+        "name": "Name",
+        "unit": "Unit",
+        "description": "Description",
+        "added_on": "Added On",
+        "price": "Price",
+        "date_of_creation": "Date Of Creation",
+        "action": "Action",
+        "save_inventory": "Save Inventory",
+        "update_inventory": "Update Inventory",
+        "add_new_inventory": "Add New Inventory",
+        "no_inventory": "No inventory yet!",
+        "list_of_inventory": "This section will contain the list of inventory.",
+        "select_a_unit": "select unit",
+        "inventory": "Inventory",
+        "design_no": "Design no.",
+        "rate": "Rate",
+        "average": "Average",
+        "per_price": "Per Price",
+        "quantity": "Quantity",
+        "inventory_attached_message": "Cannot delete an inventory which is already in use",
+        "confirm_delete": "You will not be able to recover this Inventory | You will not be able to recover these Inventory",
+        "created_message": "Inventory created successfully",
+        "updated_message": "Inventory updated successfully",
+        "deleted_message": "Inventory deleted successfully | Inventory deleted successfully"
     },
     "wizard": {
         "account_info": "Account Information",
