@@ -50,12 +50,14 @@
               </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('inventory.unit') }}</label>
-                <base-input
-                  v-model.trim="formData.unit"
-                  focus
-                  type="text"
-                  name="unit"
-                />
+                 <base-select
+                    v-model="formData.unit"
+                    :options="unitOptions"
+                    :allow-empty="false"
+                    :show-labels="false"
+                    :searchable="false"
+                    class="hide-select-header"
+                  />
               </div>
 
               <div class="form-group">
@@ -77,7 +79,11 @@
     </div>
   </div>
 </template>
-
+<style>
+div.hide-select-header div.multiselect__tags input.multiselect__input{
+  display: none;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -95,10 +101,9 @@ export default {
         name: '',
         quantity: '',
         price: '',
-        unit: '',
-        per_price: '',
-        inventory: ''
+        unit: 'pc',
       },
+      unitOptions: ['pc', 'sqm']
     }
   },
   computed: {

@@ -866,6 +866,7 @@
         "rate": "Rate",
         "average": "Average",
         "per_price": "Per Price",
+        "quantity": "Quantity",
         "inventory_attached_message": "Cannot delete an inventory which is already in use",
         "confirm_delete": "You will not be able to recover this Inventory | You will not be able to recover these Inventory",
         "created_message": "Inventory created successfully",

@@ -48,7 +48,7 @@ class InventoryController extends Controller
 
     /**
      * Create Inventory.
-     *     *
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
@@ -60,8 +60,6 @@ class InventoryController extends Controller
             $inventory->price = $request->price;
             $inventory->unit = $request->unit;
             $inventory->save();
-
-            $inventory = Inventory::find($inventory->id);
 
             return response()->json([
                 'inventory' => $inventory,
@@ -87,8 +85,6 @@ class InventoryController extends Controller
             $inventory->price = $request->price;
             $inventory->unit = $request->unit;
             $inventory->save();
-
-            $inventory = Inventory::find($inventory->id);
 
             return response()->json([
                 'inventory' => $inventory,
