@@ -321,7 +321,7 @@
 <script>
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
-import InvoiceItem from './Item'
+import InvoiceItem from './Inventory'
 import InvoiceStub from '../../stub/invoice'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
