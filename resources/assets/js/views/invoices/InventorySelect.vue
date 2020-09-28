@@ -2,7 +2,6 @@
   <div class="item-selector">
     <div v-if="inventory.inventory_id" class="selected-inventory">
       {{ inventory.name }}
-
       <span class="deselect-icon" @click="deselectInventory">
         <font-awesome-icon icon="times-circle" />
       </span>
@@ -11,7 +10,7 @@
       v-else
       ref="baseSelect"
       v-model="inventorySelect"
-      :options="inventorys"
+      :options="inventories"
       :show-labels="false"
       :preserve-search="true"
       :initial-search="inventory.name"
@@ -25,11 +24,11 @@
       <div slot="afterList">
         <button type="button" class="list-add-button" @click="openInventoryModal">
           <font-awesome-icon class="icon" icon="cart-plus" />
-          <label>{{ $t('general.add_new_inventory') }}</label>
+          <label>{{ $t('general.add_new_item') }}</label>
         </button>
       </div>
     </base-select>
-    <div class="item-description">
+    <!-- <div class="item-description">
       <base-text-area
         v-autoresize
         v-model="inventory.description"
@@ -43,11 +42,15 @@
       <div v-if="invalidDescription">
         <span class="text-danger">{{ $tc('validation.description_maxlength') }}</span>
       </div>
-      <!-- <textarea type="text" v-autoresize rows="1" class="description-input" v-model="inventory.description" placeholder="Type Inventory Description (optional)" /> -->
-    </div>
+      <textarea type="text" v-autoresize rows="1" class="description-input" v-model="inventory.description" placeholder="Type Inventory Description (optional)" />
+    </div> -->
   </div>
 </template>
-
+<style>
+div.hide-select-header div.multiselect__tags input.multiselect__input{
+  display: none;
+}
+</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
@@ -76,8 +79,8 @@ export default {
   },
   computed: {
     ...mapGetters('inventory', [
-      'inventorys'
-    ])
+      'inventories'
+    ]),
   },
   watch: {
     invalidDescription (newValue) {
@@ -89,7 +92,7 @@ export default {
       'openModal'
     ]),
     ...mapActions('inventory', [
-      'fetchInventory'
+      'fetchAllInventory'
     ]),
     async searchInventory (search) {
       let data = {
@@ -105,7 +108,7 @@ export default {
 
       this.loading = true
 
-      await this.fetchInventory(data)
+      await this.fetchAllInventory(data)
 
       this.loading = false
     },

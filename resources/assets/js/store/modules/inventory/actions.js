@@ -15,8 +15,8 @@ export const updateCurrentInventory = ({ commit, dispatch, state }, data) => {
 export const fetchAllInventory = ({ commit, dispatch, state }, params) => {
     return new Promise((resolve, reject) => {
         window.axios.get(`/api/inventory`, { params }).then((response) => {
-            commit(types.BOOTSTRAP_INVENTORY, response.data.inventory.data)
-            commit(types.SET_TOTAL_INVENTORY, response.data.inventory.total)
+            commit(types.BOOTSTRAP_INVENTORIES, response.data.inventories.data)
+            commit(types.SET_TOTAL_INVENTORIES, response.data.inventories.total)
             resolve(response)
         }).catch((err) => {
             reject(err)
@@ -26,6 +26,7 @@ export const fetchAllInventory = ({ commit, dispatch, state }, params) => {
 
 export const fetchInventory = ({ commit, dispatch }, id) => {
     return new Promise((resolve, reject) => {
+      console.log('id', id);
         window.axios.get(`/api/inventory/${id}/edit`).then((response) => {
             resolve(response)
         }).catch((err) => {

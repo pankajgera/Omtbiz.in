@@ -25,7 +25,7 @@
       <div class="page-actions row">
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalInventory || filtersApplied"
+            v-show="totalInventories || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -115,7 +115,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventory.length }}</b> {{ $t('general.of') }} <b>{{ totalInventory }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventory.length }}</b> {{ $t('general.of') }} <b>{{ totalInventories }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedInventory.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -257,12 +257,13 @@ export default {
   computed: {
     ...mapGetters('inventory', [
       'inventory',
+      'inventories',
       'selectedInventory',
-      'totalInventory',
+      'totalInventories',
       'selectAllField'
     ]),
     showEmptyScreen () {
-      return !this.totalInventory && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalInventories && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -323,9 +324,9 @@ export default {
       this.isRequestOngoing = false
 
       return {
-        data: response.data.inventory.data,
+        data: response.data.inventories.data,
         pagination: {
-          totalPages: response.data.inventory.last_page,
+          totalPages: response.data.inventories.last_page,
           currentPage: page
         }
       }

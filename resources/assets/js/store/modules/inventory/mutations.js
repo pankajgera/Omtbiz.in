@@ -10,12 +10,11 @@ export default {
     [types.UPDATE_CURRENT_INVENTORY](state, inventory) {
         state.currentInventory = inventory
     },
-
-    [types.BOOTSTRAP_INVENTORY](state, inventory) {
-        state.inventory = inventory
+    [types.BOOTSTRAP_INVENTORIES](state, inventories) {
+      state.inventories = inventories
     },
-    [types.SET_TOTAL_INVENTORY](state, totalInventory) {
-        state.totalInventory = totalInventory
+    [types.SET_TOTAL_INVENTORIES](state, totalInventories) {
+      state.totalInventories = totalInventories
     },
     [types.ADD_INVENTORY](state, data) {
         state.inventory.push(data.inventory)

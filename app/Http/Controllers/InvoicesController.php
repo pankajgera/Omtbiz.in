@@ -11,6 +11,7 @@ use Crater\Http\Requests;
 use Crater\Invoice;
 use Crater\InvoiceItem;
 use Carbon\Carbon;
+use Crater\Inventory;
 use Crater\Item;
 use Crater\Mail\invoicePdf;
 use function MongoDB\BSON\toJSON;
@@ -21,6 +22,7 @@ use PDF;
 use Validator;
 use Crater\TaxType;
 use Crater\Tax;
+use Exception;
 
 class InvoicesController extends Controller
 {
@@ -31,30 +33,34 @@ class InvoicesController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 10;
+        try {
+            $limit = $request->has('limit') ? $request->limit : 10;
 
-        $invoices = Invoice::with(['items', 'user', 'invoiceTemplate', 'taxes'])
-            ->join('users', 'users.id', '=', 'invoices.user_id')
-            ->applyFilters($request->only([
-                'status',
-                'paid_status',
-                'customer_id',
-                'invoice_number',
-                'from_date',
-                'to_date',
-                'orderByField',
-                'orderBy',
-                'search',
-            ]))
-            ->whereCompany($request->header('company'))
-            ->select('invoices.*', 'users.name')
-            ->latest()
-            ->paginate($limit);
+            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])
+                ->join('users', 'users.id', '=', 'invoices.user_id')
+                ->applyFilters($request->only([
+                    'status',
+                    'paid_status',
+                    'customer_id',
+                    'invoice_number',
+                    'from_date',
+                    'to_date',
+                    'orderByField',
+                    'orderBy',
+                    'search',
+                ]))
+                ->whereCompany($request->header('company'))
+                ->select('invoices.*', 'users.name')
+                ->latest()
+                ->paginate($limit);
 
-        return response()->json([
-            'invoices' => $invoices,
-            'invoiceTotalCount' => Invoice::count()
-        ]);
+            return response()->json([
+                'invoices' => $invoices,
+                'invoiceTotalCount' => Invoice::count()
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while getting invoice index ', [$e->getMessage()]);
+        }
     }
 
     /**
@@ -80,7 +86,7 @@ class InvoicesController extends Controller
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
             'nextInvoiceNumber' => $invoice_prefix.'-'.$nextInvoiceNumber,
-            'items' => Item::with('taxes')->whereCompany($request->header('company'))->get(),
+            'inventory' => Inventory::all(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
@@ -230,6 +236,7 @@ class InvoicesController extends Controller
      */
     public function edit(Request $request,$id)
     {
+        \Log::info('asd', [$request,$id]);
         $invoice = Invoice::with([
             'items',
             'items.taxes',

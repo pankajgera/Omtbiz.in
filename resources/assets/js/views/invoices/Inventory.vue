@@ -200,8 +200,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('inventory', [
-      'inventorys'
+    ...mapGetters('inventories', [
+      'inventories'
     ]),
     ...mapGetters('modal', [
       'modalActive'

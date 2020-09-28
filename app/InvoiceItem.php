@@ -5,16 +5,16 @@ use Illuminate\Database\Eloquent\Model;
 
 use Crater\Invoice;
 use Crater\Tax;
-use Crater\Item;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Crater\Inventory;
 
 class InvoiceItem extends Model
 {
     protected $fillable = [
         'invoice_id',
         'name',
-        'item_id',
+        'inventory_id',
         'description',
         'company_id',
         'quantity',
@@ -40,9 +40,9 @@ class InvoiceItem extends Model
         return $this->belongsTo(Invoice::class);
     }
 
-    public function item()
+    public function inventory()
     {
-        return $this->belongsTo(Item::class);
+        return $this->belongsTo(Inventory::class, 'id');
     }
 
     public function taxes()
@@ -76,11 +76,11 @@ class InvoiceItem extends Model
         }
     }
 
-    public function scopeItemAttributes($query)
+    public function scopeInventoryAttributes($query)
     {
         $query->select(
-            DB::raw('sum(quantity) as total_quantity, sum(total) as total_amount, invoice_items.name')
-        )->groupBy('invoice_items.name');
+            DB::raw('sum(quantity) as total_quantity, sum(total) as total_amount, invoice_inventory.name')
+        )->groupBy('invoice_inventory.name');
 
     }
 }

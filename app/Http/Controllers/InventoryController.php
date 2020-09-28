@@ -14,7 +14,7 @@ class InventoryController extends Controller
         try {
             $limit = $request->has('limit') ? $request->limit : 20;
 
-            $inventory = Inventory::applyFilters($request->only([
+            $inventories = Inventory::applyFilters($request->only([
                 'name',
                 'quantity',
                 'price',
@@ -26,7 +26,7 @@ class InventoryController extends Controller
                 ->paginate($limit);
 
             return response()->json([
-                'inventory' => $inventory,
+                'inventories' => $inventories,
             ]);
         } catch (Exception $e) {
             return $e->getMessage();
