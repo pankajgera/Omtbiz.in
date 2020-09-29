@@ -5,7 +5,8 @@ import * as getters from './getters'
 const initialState = {
   currentInventory: null,
   inventory: [],
-  totalInventory: 0,
+  inventories: [],
+  totalInventories: 0,
   selectAllField: false,
   selectedInventory: []
 }

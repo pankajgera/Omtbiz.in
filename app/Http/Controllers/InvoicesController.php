@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Crater\Http\Requests;
 use Crater\Invoice;
 use Crater\InvoiceItem;
 use Carbon\Carbon;
+use Crater\Inventory;
 use Crater\Item;
 use Crater\Mail\invoicePdf;
 use function MongoDB\BSON\toJSON;
@@ -21,6 +23,7 @@ use PDF;
 use Validator;
 use Crater\TaxType;
 use Crater\Tax;
+use Exception;
 
 class InvoicesController extends Controller
 {
@@ -31,30 +34,34 @@ class InvoicesController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 10;
+        try {
+            $limit = $request->has('limit') ? $request->limit : 10;
 
-        $invoices = Invoice::with(['items', 'user', 'invoiceTemplate', 'taxes'])
-            ->join('users', 'users.id', '=', 'invoices.user_id')
-            ->applyFilters($request->only([
-                'status',
-                'paid_status',
-                'customer_id',
-                'invoice_number',
-                'from_date',
-                'to_date',
-                'orderByField',
-                'orderBy',
-                'search',
-            ]))
-            ->whereCompany($request->header('company'))
-            ->select('invoices.*', 'users.name')
-            ->latest()
-            ->paginate($limit);
+            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])
+                ->join('users', 'users.id', '=', 'invoices.user_id')
+                ->applyFilters($request->only([
+                    'status',
+                    'paid_status',
+                    'customer_id',
+                    'invoice_number',
+                    'from_date',
+                    'to_date',
+                    'orderByField',
+                    'orderBy',
+                    'search',
+                ]))
+                ->whereCompany($request->header('company'))
+                ->select('invoices.*', 'users.name')
+                ->latest()
+                ->paginate($limit);
 
-        return response()->json([
-            'invoices' => $invoices,
-            'invoiceTotalCount' => Invoice::count()
-        ]);
+            return response()->json([
+                'invoices' => $invoices,
+                'invoiceTotalCount' => Invoice::count()
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while getting invoice index ', [$e->getMessage()]);
+        }
     }
 
     /**
@@ -79,8 +86,8 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' => $invoice_prefix.'-'.$nextInvoiceNumber,
-            'items' => Item::with('taxes')->whereCompany($request->header('company'))->get(),
+            'nextInvoiceNumber' => $invoice_prefix . '-' . $nextInvoiceNumber,
+            'inventory' => Inventory::all(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
@@ -96,106 +103,110 @@ class InvoicesController extends Controller
      */
     public function store(Requests\InvoicesRequest $request)
     {
-        $invoice_number = explode("-",$request->invoice_number);
-        $number_attributes['invoice_number'] = $invoice_number[0].'-'.sprintf('%06d', intval($invoice_number[1]));
+        try {
+            $invoice_number = explode("-", $request->invoice_number);
+            $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
 
-        Validator::make($number_attributes, [
-            'invoice_number' => 'required|unique:invoices,invoice_number'
-        ])->validate();
+            Validator::make($number_attributes, [
+                'invoice_number' => 'required|unique:invoices,invoice_number'
+            ])->validate();
 
-        $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date);
-        //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
-        $status = Invoice::STATUS_DRAFT;
+            $invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
+            //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
+            $status = Invoice::STATUS_DRAFT;
 
-        $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
-        $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company')) ?? 'NO';
+            $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
+            $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company')) ?? 'NO';
 
-        if ($request->has('invoiceSend')) {
-            $status = Invoice::STATUS_SENT;
-        }
+            if ($request->has('invoiceSend')) {
+                $status = Invoice::STATUS_SENT;
+            }
 
-        $invoice = Invoice::create([
-            'invoice_date' => $invoice_date,
-            //'due_date' => $due_date,
-            'invoice_number' => $number_attributes['invoice_number'],
-            'reference_number' => $request->reference_number,
-            'user_id' => $request->user_id,
-            'company_id' => $request->header('company'),
-            'invoice_template_id' => $request->invoice_template_id,
-            'status' => 'SENT',
-            'paid_status' => Invoice::STATUS_UNPAID,
-            'sub_total' => $request->sub_total,
-            'discount' => $request->discount,
-            'discount_type' => $request->discount_type,
-            'discount_val' => $request->discount_val,
-            'total' => $request->total,
-            'due_amount' => $request->total,
-            'tax_per_item' => $tax_per_item,
-            'discount_per_item' => $discount_per_item,
-            'tax' => $request->tax,
-            'notes' => $request->notes,
-            'unique_hash' => str_random(60)
-        ]);
+            $invoice = Invoice::create([
+                'invoice_date' => $invoice_date,
+                //'due_date' => $due_date,
+                'invoice_number' => $number_attributes['invoice_number'],
+                'reference_number' => $request->reference_number,
+                'user_id' => $request->user_id,
+                'company_id' => $request->header('company'),
+                'invoice_template_id' => $request->invoice_template_id,
+                'status' => 'SENT',
+                'paid_status' => Invoice::STATUS_UNPAID,
+                'sub_total' => $request->sub_total,
+                'discount' => $request->discount,
+                'discount_type' => $request->discount_type,
+                'discount_val' => $request->discount_val,
+                'total' => $request->total,
+                'due_amount' => $request->total,
+                'tax_per_item' => $tax_per_item,
+                'discount_per_item' => $discount_per_item,
+                'tax' => $request->tax,
+                'notes' => $request->notes,
+                'unique_hash' => str_random(60)
+            ]);
 
-        $invoiceItems = $request->items;
+            $invoiceInventories = $request->inventory;
 
-        foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
-            $item = $invoice->items()->create($invoiceItem);
-
-            if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
-                foreach ($invoiceItem['taxes'] as $tax) {
-                    $tax['company_id'] = $request->header('company');
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $item->taxes()->create($tax);
+            foreach ($invoiceInventories as $invoiceInventory) {
+                $invoiceInventory['company_id'] = $request->header('company');
+                $inventory = $invoice->inventories()->create($invoiceInventory);
+                if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
+                    foreach ($invoiceInventory['taxes'] as $tax) {
+                        $tax['company_id'] = $request->header('company');
+                        if (gettype($tax['amount']) !== "NULL") {
+                            $inventory->taxes()->create($tax);
+                        }
                     }
                 }
             }
-        }
 
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                $tax['company_id'] = $request->header('company');
+            if ($request->has('taxes')) {
+                foreach ($request->taxes as $tax) {
+                    $tax['company_id'] = $request->header('company');
 
-                if (gettype($tax['amount']) !== "NULL") {
-                    $invoice->taxes()->create($tax);
+                    if (gettype($tax['amount']) !== "NULL") {
+                        $invoice->taxes()->create($tax);
+                    }
                 }
             }
-        }
 
-        if ($request->has('invoiceSend')) {
-            $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
-            $data['user'] = User::find($request->user_id)->toArray();
-            $data['company'] = Company::find($invoice->company_id);
+            if ($request->has('invoiceSend')) {
+                $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
+                $data['user'] = User::find($request->user_id)->toArray();
+                $data['company'] = Company::find($invoice->company_id);
 
-            $notificationEmail = CompanySetting::getSetting(
-                'notification_email',
-                $request->header('company')
-            );
+                $notificationEmail = CompanySetting::getSetting(
+                    'notification_email',
+                    $request->header('company')
+                );
 
-            $email = $data['user']['email'];
+                $email = $data['user']['email'];
 
-            if (!$email) {
-                return response()->json([
-                    'error' => 'user_email_does_not_exist'
-                ]);
+                if (!$email) {
+                    return response()->json([
+                        'error' => 'user_email_does_not_exist'
+                    ]);
+                }
+
+                if (!$notificationEmail) {
+                    return response()->json([
+                        'error' => 'notification_email_does_not_exist'
+                    ]);
+                }
+
+                \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
             }
 
-            if (!$notificationEmail) {
-                return response()->json([
-                    'error' => 'notification_email_does_not_exist'
-                ]);
-            }
+            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
 
-            \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
+            return response()->json([
+                'url' => url('/invoices/pdf/' . $invoice->unique_hash),
+                'invoice' => $invoice
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while storing invoice ', [$e]);
+            return false;
         }
-
-        $invoice = Invoice::with(['items', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
-
-        return response()->json([
-            'url' => url('/invoices/pdf/'.$invoice->unique_hash),
-            'invoice' => $invoice
-        ]);
     }
 
     /**
@@ -228,7 +239,7 @@ class InvoicesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function edit(Request $request,$id)
+    public function edit(Request $request, $id)
     {
         $invoice = Invoice::with([
             'items',
@@ -244,7 +255,7 @@ class InvoicesController extends Controller
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $invoice->tax_per_item,
             'discount_per_item' => $invoice->discount_per_item,
-            'shareable_link' => url('/invoices/pdf/'.$invoice->unique_hash),
+            'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'invoice_prefix' => $invoice->getInvoicePrefixAttribute()
         ]);
     }
@@ -258,15 +269,15 @@ class InvoicesController extends Controller
      */
     public function update(Requests\InvoicesRequest $request, $id)
     {
-        $invoice_number = explode("-",$request->invoice_number);
-        $number_attributes['invoice_number'] = $invoice_number[0].'-'.sprintf('%06d', intval($invoice_number[1]));
+        $invoice_number = explode("-", $request->invoice_number);
+        $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
 
         Validator::make($number_attributes, [
-            'invoice_number' => 'required|unique:invoices,invoice_number'.','.$id
+            'invoice_number' => 'required|unique:invoices,invoice_number' . ',' . $id
         ])->validate();
 
-        $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date);
-        $due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
+        $invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
+        //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
 
         $invoice = Invoice::find($id);
         $oldAmount = $invoice->total;
@@ -293,7 +304,7 @@ class InvoicesController extends Controller
 
         $invoice->status = 'SENT';
         $invoice->invoice_date = $invoice_date;
-        $invoice->due_date = $due_date;
+        //$invoice->due_date = $due_date;
         $invoice->invoice_number =  $number_attributes['invoice_number'];
         $invoice->reference_number = $request->reference_number;
         $invoice->user_id = $request->user_id;
@@ -395,7 +406,7 @@ class InvoicesController extends Controller
 
 
 
-     /**
+    /**
      * Mail a specific invoice to the correponding cusitomer's email address.
      *
      * @param  \Illuminate\Http\Request $request
@@ -442,7 +453,7 @@ class InvoicesController extends Controller
     }
 
 
-     /**
+    /**
      * Mark a specific invoice as sent.
      *
      * @param  \Illuminate\Http\Request $request
@@ -461,7 +472,7 @@ class InvoicesController extends Controller
     }
 
 
-     /**
+    /**
      * Mark a specific invoice as paid.
      *
      * @param  \Illuminate\Http\Request $request
@@ -481,7 +492,7 @@ class InvoicesController extends Controller
     }
 
 
-     /**
+    /**
      * Retrive a specified user's unpaid invoices from storage.
      *
      * @param  \Illuminate\Http\Request $request

@@ -149,54 +149,54 @@
           <col style="width: 40%;">
           <col style="width: 10%;">
           <col style="width: 15%;">
-          <col v-if="discountPerItem === 'YES'" style="width: 15%;">
+          <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
           <col style="width: 15%;">
         </colgroup>
         <thead class="item-table-header">
           <tr>
             <th class="text-left">
               <span class="column-heading item-heading">
-                {{ $tc('items.item',2) }}
+                {{ $tc('invoices.inventory.title',2) }}
               </span>
             </th>
             <th class="text-right">
               <span class="column-heading">
-                {{ $t('invoices.item.quantity') }}
+                {{ $t('invoices.inventory.quantity') }}
               </span>
             </th>
             <th class="text-left">
               <span class="column-heading">
-                {{ $t('invoices.item.price') }}
+                {{ $t('invoices.inventory.price') }}
               </span>
             </th>
-            <th v-if="discountPerItem === 'YES'" class="text-right">
+            <th v-if="discountPerInventory === 'YES'" class="text-right">
               <span class="column-heading">
-                {{ $t('invoices.item.discount') }}
+                {{ $t('invoices.inventory.discount') }}
               </span>
             </th>
             <th class="text-right">
               <span class="column-heading amount-heading">
-                {{ $t('invoices.item.amount') }}
+                {{ $t('invoices.inventory.amount') }}
               </span>
             </th>
           </tr>
         </thead>
-        <draggable v-model="newInvoice.items" class="item-body" tag="tbody" handle=".handle">
-          <invoice-item
-            v-for="(item, index) in newInvoice.items"
-            :key="item.id"
+        <draggable v-model="newInvoice.inventory" class="item-body" tag="tbody" handle=".handle">
+          <invoice-inventory
+            v-for="(each, index) in newInvoice.inventory"
+            :key="each.id"
             :index="index"
-            :item-data="item"
+            :inventory-data="each"
             :currency="currency"
-            :tax-per-item="taxPerItem"
-            :discount-per-item="discountPerItem"
-            @remove="removeItem"
-            @update="updateItem"
-            @itemValidate="checkItemsData"
+            :tax-per-inventory="taxPerInventory"
+            :discount-per-inventory="discountPerInventory"
+            @remove="removeInventory"
+            @update="updateInventory"
+            @inventoryValidate="checkInventoryData"
           />
         </draggable>
       </table>
-      <div class="add-item-action" @click="addItem">
+      <div class="add-item-action" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </div>
@@ -232,7 +232,7 @@
               <div v-html="$utils.formatMoney(tax.amount, currency)" />
             </label>
           </div>
-          <div v-if="discountPerItem === 'NO' || discountPerItem === null" class="section mt-2">
+          <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
             <label class="invoice-label">{{ $t('invoices.discount') }}</label>
             <div
               class="btn-group discount-drop-down"
@@ -269,7 +269,7 @@
             </div>
           </div>
 
-          <div v-if="taxPerItem === 'NO' || taxPerItem === null">
+          <div v-if="taxPerInventory === 'NO' || taxPerInventory === null">
             <tax
               v-for="(tax, index) in newInvoice.taxes"
               :index="index"
@@ -284,7 +284,7 @@
             />
           </div>
 
-          <base-popup v-if="taxPerItem === 'NO' || taxPerItem === null" ref="taxModal" class="tax-selector">
+          <base-popup v-if="taxPerInventory === 'NO' || taxPerInventory === null" ref="taxModal" class="tax-selector">
             <div slot="activator" class="float-right">
               + {{ $t('invoices.add_tax') }}
             </div>
@@ -321,7 +321,7 @@
 <script>
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
-import InvoiceItem from './Item'
+import InvoiceInventory from './Inventory'
 import InvoiceStub from '../../stub/invoice'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
@@ -333,7 +333,7 @@ const { required, between, maxLength, numeric } = require('vuelidate/lib/validat
 
 export default {
   components: {
-    InvoiceItem,
+    InvoiceInventory,
     MultiSelect,
     Tax,
     draggable
@@ -355,7 +355,7 @@ export default {
         discount_val: 0,
         discount: 0,
         reference_number: null,
-        items: [{
+        inventory: [{
           ...InvoiceStub,
           id: Guid.raw(),
           taxes: [{...TaxStub, id: Guid.raw()}]
@@ -363,11 +363,11 @@ export default {
         taxes: []
       },
       customers: [],
-      itemList: [],
+      inventoryList: [],
       invoiceTemplates: [],
       selectedCurrency: '',
-      taxPerItem: null,
-      discountPerItem: null,
+      taxPerInventory: null,
+      discountPerInventory: null,
       initLoading: false,
       isLoading: false,
       maxDiscount: 0,
@@ -405,9 +405,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('general', [
-      'itemDiscount'
-    ]),
+    // ...mapGetters('general', [
+    //   'inventoryDiscount'
+    // ]),
     ...mapGetters('currency', [
       'defaultCurrency'
     ]),
@@ -425,7 +425,7 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      return this.newInvoice.items.reduce(function (a, b) {
+      return this.newInvoice.inventory.reduce(function (a, b) {
         return a + b['total']
       }, 0)
     },
@@ -463,19 +463,18 @@ export default {
       })
     },
     totalTax () {
-      if (this.taxPerItem === 'NO' || this.taxPerItem === null) {
+      if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
         return this.totalSimpleTax + this.totalCompoundTax
       }
 
-      return window._.sumBy(this.newInvoice.items, function (tax) {
+      return window._.sumBy(this.newInvoice.inventory, function (tax) {
         return tax.tax
       })
     },
     allTaxes () {
       let taxes = []
-
-      this.newInvoice.items.forEach((item) => {
-        item.taxes.forEach((tax) => {
+      this.newInvoice.inventory.forEach((inventory) => {
+        inventory.taxes.forEach((tax) => {
           let found = taxes.find((_tax) => {
             return _tax.tax_type_id === tax.tax_type_id
           })
@@ -512,7 +511,7 @@ export default {
   },
   created () {
     this.loadData()
-    this.fetchInitialItems()
+    this.fetchInitialInventory()
     this.resetSelectedCustomer()
     window.hub.$on('newTax', this.onSelectTax)
   },
@@ -528,8 +527,8 @@ export default {
       'selectCustomer',
       'updateInvoice'
     ]),
-    ...mapActions('item', [
-      'fetchItems'
+    ...mapActions('inventory', [
+      'fetchAllInventory'
     ]),
     selectFixed () {
       if (this.newInvoice.discount_type === 'fixed') {
@@ -546,10 +545,10 @@ export default {
       this.newInvoice.discount_type = 'percentage'
     },
     updateTax (data) {
-      Object.assign(this.newInvoice.taxes[data.index], {...data.item})
+      Object.assign(this.newInvoice.taxes[data.index], {...data.inventory})
     },
-    async fetchInitialItems () {
-      await this.fetchItems({
+    async fetchInitialInventory () {
+      await this.fetchAllInventory({
         filter: {},
         orderByField: '',
         orderBy: ''
@@ -565,8 +564,8 @@ export default {
           this.newInvoice = response.data.invoice
           this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date, 'DD-MM-YYYY').format('DD-MM-YYYY')
           //this.newInvoice.due_date = moment(response.data.invoice.due_date, 'DD-MM-YYYY').toString()
-          this.discountPerItem = response.data.discount_per_item
-          this.taxPerItem = response.data.tax_per_item
+          this.discountPerInventory = response.data.discount_per_inventory
+          this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
           this.invoiceTemplates = response.data.invoiceTemplates
           this.invoicePrefix = response.data.invoice_prefix
@@ -579,13 +578,13 @@ export default {
       this.initLoading = true
       let response = await this.fetchCreateInvoice()
       if (response.data) {
-        this.discountPerItem = response.data.discount_per_item
-        this.taxPerItem = response.data.tax_per_item
+        this.discountPerInventory = response.data.discount_per_inventory
+        this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
         this.invoiceTemplates = response.data.invoiceTemplates
         this.newInvoice.invoice_date = response.data.invoice_today_date
         //this.newInvoice.due_date = moment().add(7, 'days').format('DD-MM-YYYY')
-        this.itemList = response.data.items
+        this.inventoryList = response.data.inventory
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
       }
@@ -601,14 +600,14 @@ export default {
         'data': this.invoiceTemplates
       })
     },
-    addItem () {
-      this.newInvoice.items.push({...InvoiceStub, id: Guid.raw(), taxes: [{...TaxStub, id: Guid.raw()}]})
+    addInventory () {
+      this.newInvoice.inventory.push({...InvoiceStub, id: Guid.raw(), taxes: [{...TaxStub, id: Guid.raw()}]})
     },
-    removeItem (index) {
-      this.newInvoice.items.splice(index, 1)
+    removeInventory (index) {
+      this.newInvoice.inventory.splice(index, 1)
     },
-    updateItem (data) {
-      Object.assign(this.newInvoice.items[data.index], {...data.item})
+    updateInventory (data) {
+      Object.assign(this.newInvoice.inventory[data.index], {...data.inventory})
     },
     submitInvoiceData () {
       if (!this.checkValid()) {
@@ -677,8 +676,8 @@ export default {
         console.log(err)
       })
     },
-    checkItemsData (index, isValid) {
-      this.newInvoice.items[index].valid = isValid
+    checkInventoryData (index, isValid) {
+      this.newInvoice.inventory[index].valid = isValid
     },
     onSelectTax (selectedTax) {
       let amount = 0
@@ -708,10 +707,10 @@ export default {
       this.$v.newInvoice.$touch()
       this.$v.selectedCustomer.$touch()
 
-      window.hub.$emit('checkItems')
+      window.hub.$emit('checkInventory')
       let isValid = true
-      this.newInvoice.items.forEach((item) => {
-        if (!item.valid) {
+      this.newInvoice.inventory.forEach((each) => {
+        if (!each.valid) {
           isValid = false
         }
       })

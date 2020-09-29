@@ -21,11 +21,12 @@ import EstimateTemplate from './EstimateTemplate'
 import InvoiceTemplate from './InvoiceTemplate'
 import CustomerModal from './CustomerModal'
 import CategoryModal from './CategoryModal'
+import InventoryModal from './InventoryModal'
 
 export default {
   components: {
     TaxTypeModal,
-    ItemModal,
+    InventoryModal,
     EstimateTemplate,
     InvoiceTemplate,
     CustomerModal,
