@@ -210,8 +210,8 @@ export default {
 
       if (response.data) {
         window.toastr['success'](this.$tc('items.created_message'))
-        this.setInventory(response.data.item)
-        window.hub.$emit('newInventory', response.data.item)
+        this.setInventory(response.data.inventory)
+        window.hub.$emit('newInventory', response.data.inventory)
         this.isLoading = false
         this.resetModalData()
         this.resetFormData()

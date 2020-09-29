@@ -17,7 +17,7 @@
       :invalid="invalid"
       :placeholder="$t('invoices.inventory.select_an_inventory')"
       label="name"
-      class="multi-select-inventory"
+      class="multi-select-inventory remove-extra"
       @value="onTextChange"
       @select="(val) => $emit('select', val)"
     >
@@ -47,8 +47,8 @@
   </div>
 </template>
 <style>
-div.hide-select-header div.multiselect__tags input.multiselect__input{
-  display: none;
+div.remove-extra div.multiselect__tags span.multiselect__single{
+    display: none !important;
 }
 </style>
 <script>

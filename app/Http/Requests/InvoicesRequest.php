@@ -32,12 +32,11 @@ class InvoicesRequest extends FormRequest
             'total' => 'required',
             'tax' => 'required',
             'invoice_template_id' => 'required',
-            'items' => 'required|array',
-            'items.*' => 'required|max:255',
-            'items.*.description' => 'max:255',
-            'items.*.name' => 'required',
-            'items.*.quantity' => 'required',
-            'items.*.price' => 'required'
+            'inventory' => 'required|array',
+            'inventory.*' => 'required|max:255',
+            'inventory.*.name' => 'required',
+            'inventory.*.quantity' => 'required',
+            'inventory.*.price' => 'required'
         ];
 
         return $rules;
