@@ -16,8 +16,8 @@ class CreateAccountMastersTable extends Migration
         Schema::create('account_masters', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('group');
-            $table->string('address');
+            $table->string('groups');
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }
