@@ -91,6 +91,18 @@ import NotesCreate from './views/notes/Create.vue'
 import InventoryIndex from './views/inventory/Index.vue'
 import InventoryCreate from './views/inventory/Create.vue'
 
+// Account Master
+import MastersIndex from './views/master/Index.vue'
+import MasterCreate from './views/master/Create.vue'
+
+// Account Ledgers
+import LedgersIndex from './views/ledger/Index.vue'
+import LedgerCreate from './views/ledger/Create.vue'
+
+// Vouchers
+import VouchersIndex from './views/voucher/Index.vue'
+import VoucherCreate from './views/voucher/Create.vue'
+
 import Wizard from './views/wizard/Index.vue'
 
 Vue.use(VueRouter)
@@ -212,6 +224,63 @@ const routes = [
                 name: 'items.edit',
                 component: ItemCreate,
                 meta: ['admin', 'employee']
+            },
+
+            // Account Masters
+            {
+              path: 'masters',
+              component: MastersIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'masters/create',
+                name: 'masters.create',
+                component: MasterCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'masters/:id/edit',
+                name: 'masters.edit',
+                component: MasterCreate,
+                meta: ['admin']
+            },
+
+            // Account Ledger
+            {
+                path: 'ledgers',
+                component: LedgersIndex,
+                meta: ['admin']
+            },
+            {
+                path: 'ledgers/create',
+                name: 'ledgers.create',
+                component: LedgerCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'ledgers/:id/edit',
+                name: 'ledgers.edit',
+                component: LedgerCreate,
+                meta: ['admin']
+            },
+
+            // Voucher
+            {
+              path: 'vouchers',
+              component: VouchersIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'vouchers/create',
+                name: 'vouchers.create',
+                component: VoucherCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'vouchers/:id/edit',
+                name: 'vouchers.edit',
+                component: VoucherCreate,
+                meta: ['admin']
             },
 
             //Raw bill

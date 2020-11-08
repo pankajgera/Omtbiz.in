@@ -13,7 +13,10 @@
         "logout": "Logout",
         "users": "Users",
         "notes": "Notes",
-        "inventory": "Inventory"
+        "inventory": "Inventory",
+        "master": "Account Master",
+        "ledger": "Account Ledger",
+        "voucher": "Voucher"
     },
     "general": {
         "view_pdf": "View PDF",
@@ -66,7 +69,6 @@
         "four_zero_four": "404",
         "you_got_lost": "Whoops! You got Lost!",
         "go_home": "Go Home",
-
         "setting_updated": "Setting updated successfully",
         "select_state": "Select state",
         "select_country": "Select Country",
