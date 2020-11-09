@@ -30,6 +30,9 @@ import ExpensesReport from './modules/reports/expense'
 import TaxReport from './modules/reports/tax'
 import notes from './modules/notes'
 import inventory from './modules/inventory'
+import master from './modules/master'
+import ledger from './modules/ledger'
+import voucher from './modules/voucher'
 
 Vue.use(Vuex)
 
@@ -69,6 +72,9 @@ export default new Vuex.Store({
         ExpensesReport,
         TaxReport,
         notes,
-        inventory
+        inventory,
+        master,
+        ledger,
+        voucher
     }
 })

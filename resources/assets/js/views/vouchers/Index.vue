@@ -1,9 +1,9 @@
 <template>
-  <div class="items main-content">
+  <div class="vouchers main-content">
     <div class="page-header">
       <div class="d-flex flex-row">
         <div>
-          <h3 class="page-title">{{ $tc('ledgers.bill_ty', 2) }}</h3>
+          <h3 class="page-title">{{ $tc('vouchers.bill_ty', 2) }}</h3>
         </div>
       </div>
       <ol class="breadcrumb">
@@ -18,14 +18,14 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('ledgers.bill_ty', 2) }}
+            {{ $tc('vouchers.bill_ty', 2) }}
           </router-link>
         </li>
       </ol>
       <div class="page-actions row">
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalItems || filtersApplied"
+            v-show="totalVouchers || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -36,13 +36,13 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="ledgers/create">
+        <router-link slot="item-title" class="col-xs-2" to="vouchers/create">
           <base-button
             color="theme"
             icon="plus"
             size="large"
           >
-            {{ $t('ledgers.add_bill') }}
+            {{ $t('vouchers.add_bill') }}
           </base-button>
         </router-link>
       </div>
@@ -52,7 +52,7 @@
       <div v-show="showFilters" class="filter-section">
         <div class="row">
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.name') }} </label>
+            <label class="form-label"> {{ $tc('vouchers.name') }} </label>
             <base-input
               v-model="filters.name"
               type="text"
@@ -61,7 +61,7 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.bill_ty') }} </label>
+            <label class="form-label"> {{ $tc('vouchers.bill_ty') }} </label>
             <base-input
               v-model="filters.bill_ty"
               type="text"
@@ -77,10 +77,10 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <satellite-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('ledgers.no_ledgers') }}</label>
+        <label class="col title">{{ $t('vouchers.no_vouchers') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('ledgers.list_of_ledgers') }}</label>
+        <label class="description col mt-1" align="center">{{ $t('vouchers.list_of_vouchers') }}</label>
       </div>
       <div class="btn-container">
         <base-button
@@ -88,23 +88,23 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('ledgers/create')"
+          @click="$router.push('vouchers/create')"
         >
-          {{ $t('ledgers.add_new_ledger') }}
+          {{ $t('vouchers.add_new_voucher') }}
         </base-button>
       </div>
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ ledgers.length }}</b> {{ $t('general.of') }} <b>{{ totalItems }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ vouchers.length }}</b> {{ $t('general.of') }} <b>{{ totalVouchers }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedItems.length" :show-arrow="false">
+          <v-dropdown v-if="selectedVouchers.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleItems">
+              <div class="dropdown-item" @click="removeMultipleVouchers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -119,7 +119,7 @@
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
-          @change="selectAllItems"
+          @change="selectAllVouchers"
         >
         <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
@@ -152,15 +152,15 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.name')"
+          :label="$t('vouchers.name')"
           show="name"
         />
         <table-column
-          :label="$t('ledgers.bill_ty')"
+          :label="$t('vouchers.bill_ty')"
           show="bill_ty"
         />
         <table-column
-          :label="$t('ledgers.added_on')"
+          :label="$t('vouchers.added_on')"
           sort-as="created_at"
           show="formattedCreatedAt"
         />
@@ -182,21 +182,21 @@
           cell-class="action-dropdown"
         >
           <template slot-scope="row">
-            <span> {{ $t('ledgers.action') }} </span>
+            <span> {{ $t('vouchers.action') }} </span>
             <v-dropdown>
               <a slot="activator" href="#">
                 <dot-icon />
               </a>
               <v-dropdown-item>
 
-                <router-link :to="{path: `ledgers/${row.id}/edit`}" class="dropdown-item">
+                <router-link :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                   {{ $t('general.edit') }}
                 </router-link>
 
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeItems(row.id)">
+                <div class="dropdown-item" @click="removeVouchers(row.id)">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -245,24 +245,21 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('item', [
-      'ledgers',
-      'selectedItems',
-      'totalItems',
+    ...mapGetters('voucher', [
+      'vouchers',
+      'selectedVouchers',
+      'totalVouchers',
       'selectAllField'
     ]),
-    ...mapGetters('currency', [
-      'defaultCurrency'
-    ]),
     showEmptyScreen () {
-      return !this.totalItems && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalVouchers && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
     },
     selectField: {
       get: function () {
-        return this.selectedItems
+        return this.selectedVouchers
       },
       set: function (val) {
         this.selectItem(val)
@@ -285,16 +282,16 @@ export default {
   },
   destroyed () {
     if (this.selectAllField) {
-      this.selectAllItems()
+      this.selectAllVouchers()
     }
   },
   methods: {
-    ...mapActions('ledger', [
-      'fetchItems',
-      'selectAllItems',
+    ...mapActions('voucher', [
+      'fetchVouchers',
+      'selectAllVouchers',
       'selectItem',
       'deleteItem',
-      'deleteMultipleItems',
+      'deleteMultipleVouchers',
       'setSelectAllState'
     ]),
     refreshTable () {
@@ -312,13 +309,13 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchItems(data)
+      let response = await this.fetchVouchers(data)
       this.isRequestOngoing = false
 
       return {
-        data: response.data.ledgers.data,
+        data: response.data.vouchers.data,
         pagination: {
-          totalPages: response.data.ledgers.last_page,
+          totalPages: response.data.vouchers.last_page,
           currentPage: page
         }
       }
@@ -347,11 +344,11 @@ export default {
 
       this.showFilters = !this.showFilters
     },
-    async removeItems (id) {
+    async removeVouchers (id) {
       this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('ledgers.confirm_delete'),
+        text: this.$tc('vouchers.confirm_delete'),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
@@ -359,13 +356,13 @@ export default {
         if (willDelete) {
           let res = await this.deleteItem(this.id)
           if (res.data.success) {
-            window.toastr['success'](this.$tc('ledgers.deleted_message', 1))
+            window.toastr['success'](this.$tc('vouchers.deleted_message', 1))
             this.$refs.table.refresh()
             return true
           }
 
-          if (res.data.error === 'ledger_attached') {
-            window.toastr['error'](this.$tc('ledgers.ledger_attached_message'), this.$t('general.action_failed'))
+          if (res.data.error === 'voucher_attached') {
+            window.toastr['error'](this.$tc('vouchers.voucher_attached_message'), this.$t('general.action_failed'))
             return true
           }
 
@@ -374,18 +371,18 @@ export default {
         }
       })
     },
-    async removeMultipleItems () {
+    async removeMultipleVouchers () {
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('ledgers.confirm_delete', 2),
+        text: this.$tc('vouchers.confirm_delete', 2),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteMultipleItems()
+          let res = await this.deleteMultipleVouchers()
           if (res.data.success) {
-            window.toastr['success'](this.$tc('ledgers.deleted_message', 2))
+            window.toastr['success'](this.$tc('vouchers.deleted_message', 2))
             this.$refs.table.refresh()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)

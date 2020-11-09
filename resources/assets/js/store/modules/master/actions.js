@@ -2,9 +2,10 @@ import * as types from './mutation-types'
 
 export const fetchMasters = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/master`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_MASTERS, response.data.master.data)
-      commit(types.SET_TOTAL_MASTERS, response.data.master.total)
+    window.axios.get(`/api/masters`, {params}).then((response) => {
+      console.log(response.data.masters);
+      commit(types.BOOTSTRAP_MASTERS, response.data.masters.data)
+      commit(types.SET_TOTAL_MASTERS, response.data.masters.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -14,7 +15,7 @@ export const fetchMasters = ({ commit, dispatch, state }, params) => {
 
 export const fetchMaster = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/master/${id}/edit`).then((response) => {
+    window.axios.get(`/api/masters/${id}/edit`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -24,7 +25,7 @@ export const fetchMaster = ({ commit, dispatch }, id) => {
 
 export const addMaster = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.post('/api/master', data).then((response) => {
+    window.axios.post('/api/masters', data).then((response) => {
       commit(types.ADD_MASTER, response.data)
 
       resolve(response)
@@ -36,7 +37,7 @@ export const addMaster = ({ commit, dispatch, state }, data) => {
 
 export const updateMaster = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.put(`/api/master/${data.id}`, data).then((response) => {
+    window.axios.put(`/api/masters/${data.id}`, data).then((response) => {
       commit(types.UPDATE_MASTER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -47,7 +48,7 @@ export const updateMaster = ({ commit, dispatch, state }, data) => {
 
 export const deleteMaster = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/master/${id}`).then((response) => {
+    window.axios.delete(`/api/masters/${id}`).then((response) => {
       commit(types.DELETE_MASTER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -58,7 +59,7 @@ export const deleteMaster = ({ commit, dispatch, state }, id) => {
 
 export const deleteMultipleMasters = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/master/delete`, {'id': state.selectedMasters}).then((response) => {
+    window.axios.post(`/api/masters/delete`, {'id': state.selectedMasters}).then((response) => {
       commit(types.DELETE_MULTIPLE_MASTERS, state.selectedMasters)
       resolve(response)
     }).catch((err) => {

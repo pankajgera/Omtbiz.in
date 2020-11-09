@@ -91,19 +91,19 @@ export default {
           {
             title: 'navigation.master',
             icon: 'file',
-            route: '/master',
+            route: '/masters',
             meta: ['admin']
           },
           {
             title: 'navigation.ledger',
             icon: 'file',
-            route: '/ledger',
+            route: '/ledgers',
             meta: ['admin']
           },
           {
             title: 'navigation.voucher',
             icon: 'file',
-            route: '/voucher',
+            route: '/vouchers',
             meta: ['admin']
           },
         ],

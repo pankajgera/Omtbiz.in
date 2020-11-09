@@ -411,4 +411,33 @@ Route::group(['middleware' => 'api'], function () {
     Route::resource('inventory', 'InventoryController');
 
 
+    // Account Masters
+    //----------------------------------
+
+    Route::post('/masters/delete', [
+        'as' => 'masters.delete',
+        'uses' => 'AccountMastersController@delete'
+    ]);
+
+    Route::resource('masters', 'AccountMastersController');
+
+    // Account Ledgers
+    //----------------------------------
+
+    Route::post('/ledgers/delete', [
+        'as' => 'ledgers.delete',
+        'uses' => 'AccountLedgersController@delete'
+    ]);
+
+    Route::resource('ledgers', 'AccountLedgersController');
+
+    // Vouchers
+    //----------------------------------
+
+    Route::post('/vouchers/delete', [
+        'as' => 'vouchers.delete',
+        'uses' => 'VouchersController@delete'
+    ]);
+
+    Route::resource('vouchers', 'VouchersController');
 });

@@ -92,16 +92,16 @@ import InventoryIndex from './views/inventory/Index.vue'
 import InventoryCreate from './views/inventory/Create.vue'
 
 // Account Master
-import MastersIndex from './views/master/Index.vue'
-import MasterCreate from './views/master/Create.vue'
+import MastersIndex from './views/masters/Index.vue'
+import MastersCreate from './views/masters/Create.vue'
 
 // Account Ledgers
-import LedgersIndex from './views/ledger/Index.vue'
-import LedgerCreate from './views/ledger/Create.vue'
+import LedgersIndex from './views/ledgers/Index.vue'
+import LedgersCreate from './views/ledgers/Create.vue'
 
 // Vouchers
-import VouchersIndex from './views/voucher/Index.vue'
-import VoucherCreate from './views/voucher/Create.vue'
+import VouchersIndex from './views/vouchers/Index.vue'
+import VouchersCreate from './views/vouchers/Create.vue'
 
 import Wizard from './views/wizard/Index.vue'
 
@@ -235,13 +235,13 @@ const routes = [
             {
                 path: 'masters/create',
                 name: 'masters.create',
-                component: MasterCreate,
+                component: MastersCreate,
                 meta: ['admin']
             },
             {
                 path: 'masters/:id/edit',
                 name: 'masters.edit',
-                component: MasterCreate,
+                component: MastersCreate,
                 meta: ['admin']
             },
 
@@ -254,13 +254,13 @@ const routes = [
             {
                 path: 'ledgers/create',
                 name: 'ledgers.create',
-                component: LedgerCreate,
+                component: LedgersCreate,
                 meta: ['admin']
             },
             {
                 path: 'ledgers/:id/edit',
                 name: 'ledgers.edit',
-                component: LedgerCreate,
+                component: LedgersCreate,
                 meta: ['admin']
             },
 
@@ -273,13 +273,13 @@ const routes = [
             {
                 path: 'vouchers/create',
                 name: 'vouchers.create',
-                component: VoucherCreate,
+                component: VouchersCreate,
                 meta: ['admin']
             },
             {
                 path: 'vouchers/:id/edit',
                 name: 'vouchers.edit',
-                component: VoucherCreate,
+                component: VouchersCreate,
                 meta: ['admin']
             },
 
