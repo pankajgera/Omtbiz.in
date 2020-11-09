@@ -2,9 +2,9 @@ import * as types from './mutation-types'
 
 export const fetchLedgers = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/ledger`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_LEDGERS, response.data.ledger.data)
-      commit(types.SET_TOTAL_LEDGERS, response.data.ledger.total)
+    window.axios.get(`/api/ledgers`, {params}).then((response) => {
+      commit(types.BOOTSTRAP_LEDGERS, response.data.ledgers.data)
+      commit(types.SET_TOTAL_LEDGERS, response.data.ledgers.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -14,7 +14,7 @@ export const fetchLedgers = ({ commit, dispatch, state }, params) => {
 
 export const fetchLedger = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/ledger/${id}/edit`).then((response) => {
+    window.axios.get(`/api/ledgers/${id}/edit`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -24,7 +24,7 @@ export const fetchLedger = ({ commit, dispatch }, id) => {
 
 export const addLedger = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.post('/api/ledger', data).then((response) => {
+    window.axios.post('/api/ledgers', data).then((response) => {
       commit(types.ADD_LEDGER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -35,7 +35,7 @@ export const addLedger = ({ commit, dispatch, state }, data) => {
 
 export const updateLedger = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.put(`/api/ledger/${data.id}`, data).then((response) => {
+    window.axios.put(`/api/ledgers/${data.id}`, data).then((response) => {
       commit(types.UPDATE_LEDGER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -46,7 +46,7 @@ export const updateLedger = ({ commit, dispatch, state }, data) => {
 
 export const deleteLedger = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/ledger/${id}`).then((response) => {
+    window.axios.delete(`/api/ledgers/${id}`).then((response) => {
       commit(types.DELETE_LEDGER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -57,7 +57,7 @@ export const deleteLedger = ({ commit, dispatch, state }, id) => {
 
 export const deleteMultipleLedgers = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/ledger/delete`, {'id': state.selectedLedgers}).then((response) => {
+    window.axios.post(`/api/ledgers/delete`, {'id': state.selectedLedgers}).then((response) => {
       commit(types.DELETE_MULTIPLE_LEDGERS, state.selectedLedgers)
       resolve(response)
     }).catch((err) => {

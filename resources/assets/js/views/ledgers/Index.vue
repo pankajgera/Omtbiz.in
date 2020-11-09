@@ -3,7 +3,7 @@
     <div class="page-header">
       <div class="d-flex flex-row">
         <div>
-          <h3 class="page-title">{{ $tc('ledgers.bill_ty', 2) }}</h3>
+          <h3 class="page-title">{{ $tc('ledgers.account_ledger', 2) }}</h3>
         </div>
       </div>
       <ol class="breadcrumb">
@@ -18,7 +18,7 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('ledgers.bill_ty', 2) }}
+            {{ $tc('ledgers.account_ledger', 2) }}
           </router-link>
         </li>
       </ol>
@@ -42,7 +42,7 @@
             icon="plus"
             size="large"
           >
-            {{ $t('ledgers.add_bill') }}
+            {{ $t('ledgers.add_account_ledger') }}
           </base-button>
         </router-link>
       </div>
@@ -61,11 +61,11 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.bill_ty') }} </label>
+            <label class="form-label"> {{ $tc('ledgers.groups') }} </label>
             <base-input
-              v-model="filters.bill_ty"
+              v-model="filters.groups"
               type="text"
-              name="bill_ty"
+              name="groups"
               autocomplete="off"
             />
           </div>
@@ -90,7 +90,7 @@
           size="large"
           @click="$router.push('ledgers/create')"
         >
-          {{ $t('ledgers.add_new_ledger') }}
+          {{ $t('ledgers.add_new_master') }}
         </base-button>
       </div>
     </div>
@@ -156,54 +156,38 @@
           show="name"
         />
         <table-column
-          :label="$t('ledgers.bill_ty')"
-          show="bill_ty"
+          :label="$t('ledgers.groups')"
+          show="groups"
         />
-        <table-column
-          :label="$t('ledgers.added_on')"
-          sort-as="created_at"
-          show="formattedCreatedAt"
-        />
-        <table-column
-          label="Image"
-          show="images"
-        >
-          <template v-if="row.images" slot-scope="row">
-            <expandable-image
-              class="image"
-              :src="row.images.original_image_path"
-            ></expandable-image>
-          </template>
-        </table-column>
         <table-column
           :key="Math.random()"
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"
         >
-          <template slot-scope="row">
-            <span> {{ $t('ledgers.action') }} </span>
-            <v-dropdown>
-              <a slot="activator" href="#">
-                <dot-icon />
-              </a>
-              <v-dropdown-item>
+        <template slot-scope="row">
+          <span> {{ $t('ledgers.action') }} </span>
+          <v-dropdown>
+            <a slot="activator" href="#">
+              <dot-icon />
+            </a>
+            <v-dropdown-item>
 
-                <router-link :to="{path: `ledgers/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                  {{ $t('general.edit') }}
-                </router-link>
+              <router-link :to="{path: `ledgers/${row.id}/edit`}" class="dropdown-item">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                {{ $t('general.edit') }}
+              </router-link>
 
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="removeLedgers(row.id)">
-                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                  {{ $t('general.delete') }}
-                </div>
-              </v-dropdown-item>
-            </v-dropdown>
-          </template>
-        </table-column>
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeLedgers(row.id)">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </template>
+      </table-column>
       </table-component>
     </div>
   </div>
@@ -237,9 +221,7 @@ export default {
       filtersApplied: false,
       filters: {
         name: '',
-        unit: '',
-        price: '',
-        bill_ty: ''
+        groups: '',
       },
       index: null
     }
@@ -299,10 +281,8 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
-        search: this.filters.name !== null ? this.filters.name : '',
-        unit: this.filters.unit !== null ? this.filters.unit.name : '',
-        price: this.filters.price * 100,
-        bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
+        name: this.filters.name !== null ? this.filters.name : '',
+        groups: this.filters.groups !== null ? this.filters.groups : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -327,9 +307,7 @@ export default {
     clearFilter () {
       this.filters = {
         name: '',
-        unit: '',
-        price: '',
-        bill_ty: ''
+        groups: '',
       }
 
       this.$nextTick(() => {

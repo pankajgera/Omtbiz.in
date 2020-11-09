@@ -99,7 +99,7 @@ class AccountMastersController extends Controller
 
         if (!$data) {
             return response()->json([
-                'error' => 'Error while deleting account master',
+                'error' => 'master_attached',
             ]);
         }
 

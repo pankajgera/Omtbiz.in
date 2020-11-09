@@ -1,17 +1,17 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ isEdit ? $t('masters.edit_bill') : $t('masters.new_bill') }}</h3>
+      <h3 class="page-title">{{ isEdit ? $t('masters.edit_master') : $t('masters.new_master') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/masters">{{ $tc('masters.bill_ty',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('masters.edit_bill') : $t('masters.new_bill') }}</a></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/masters">{{ $tc('masters.account_master',2) }}</router-link></li>
+        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('masters.edit_master') : $t('masters.new_master') }}</a></li>
       </ol>
     </div>
     <div class="row">
       <div class="col-sm-6">
         <div class="card">
-          <form action="" @submit.prevent="submitItem">
+          <form action="" @submit.prevent="submitMaster">
             <div class="card-body">
               <div class="form-group">
                 <label class="control-label">{{ $t('masters.name') }}</label><span class="text-danger"> *</span>
@@ -30,82 +30,23 @@
                   </span>
                 </div>
               </div>
-              <!-- <div class="form-group">
-                <label>{{ $t('masters.price') }}</label><span class="text-danger"> *</span>
-                <div class="base-input">
-                  <money
-                    :class="{'invalid' : $v.formData.price.$error}"
-                    v-model="price"
-                    v-bind="defaultCurrencyForInput"
-                    class="input-field"
-                  />
-                </div>
-                <div v-if="$v.formData.price.$error">
-                  <span v-if="!$v.formData.price.required" class="text-danger">{{ $t('validation.required') }} </span>
-                  <span v-if="!$v.formData.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
-                  <span v-if="!$v.formData.price.minValue" class="text-danger">{{ $t('validation.price_minvalue') }}</span>
-                </div>
-              </div> -->
-              <!-- <div class="form-group">
-                <label>{{ $t('masters.unit') }}</label>
-                <base-input
-                  v-model.trim="formData.unit"
-                  focus
-                  type="text"
-                  name="unit"
-                  @input="$v.formData.unit.$touch()"
-                />
-              </div> -->
-              <div class="form-group">
-                <label>{{ $t('masters.bill_ty') }}</label><span class="text-danger"> *</span>
-                <base-input
-                  v-model.trim="formData.bill_ty"
-                  focus
-                  type="text"
-                  name="bill_ty"
-                  @input="$v.formData.bill_ty.$touch()"
-                />
+              <div class="form-group col-sm-6">
+                <label>{{ $t('expenses.group') }}</label>
+                <select v-model="formData.group" name="group" class="form-control ls-select2">
+                  <option v-for="(group, index) in groups.filter((v, i, a) => a.indexOf(v) === i)" :key="index" :value="group.id"> {{ group.name }}</option>
+                </select>
               </div>
               <div class="form-group">
-                <label for="date">{{ $t('masters.date') }}</label><span class="text-danger"> *</span>
-                <base-date-picker
-                  v-model="formData.date"
-                  :invalid="$v.formData.date.$error"
-                  :calendar-button="true"
-                  calendar-button-icon="calendar"
-                  @change="$v.formData.date.$touch()"
-                />
-                <div v-if="$v.formData.date.$error">
-                  <span v-if="!$v.formData.date" class="text-danger">{{ $t('validation.required') }}</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="description">{{ $t('masters.description') }}</label>
+                <label for="address">{{ $t('masters.address') }}</label>
                 <base-text-area
-                  v-model="formData.description"
+                  v-model="formData.address"
                   rows="2"
-                  name="description"
-                  @input="$v.formData.description.$touch()"
+                  name="address"
+                  @input="$v.formData.address.$touch()"
                 />
-                <div v-if="$v.formData.description.$error">
-                  <span v-if="!$v.formData.description.maxLength" class="text-danger">{{ $t('validation.description_maxlength') }}</span>
+                <div v-if="$v.formData.address.$error">
+                  <span v-if="!$v.formData.address.maxLength" class="text-danger">{{ $t('validation.address_maxlength') }}</span>
                 </div>
-              </div>
-              <div class="form-group">
-                <img :src="previewImage" class="uploading-image" style="width: 100px">
-                <input type="file" accept="image/*" name="image" @change="uploadImage">
-              </div>
-              <div class="form-group">
-                <base-button
-                  :loading="isLoading"
-                  :disabled="isLoading"
-                  icon="save"
-                  color="theme"
-                  type="submit"
-                  class="collapse-button"
-                >
-                  {{ isEdit ? $t('masters.update_master') : $t('masters.save_master') }}
-                </base-button>
               </div>
             </div>
           </form>
@@ -127,20 +68,7 @@ export default {
   data () {
     return {
       isLoading: false,
-      title: 'Add Item',
-      units: [
-        { name: 'box', value: 'box' },
-        { name: 'cm', value: 'cm' },
-        { name: 'dz', value: 'dz' },
-        { name: 'ft', value: 'ft' },
-        { name: 'g', value: 'g' },
-        { name: 'in', value: 'in' },
-        { name: 'kg', value: 'kg' },
-        { name: 'km', value: 'km' },
-        { name: 'lb', value: 'lb' },
-        { name: 'mg', value: 'mg' },
-        { name: 'pc', value: 'pc' }
-      ],
+      title: 'Add Master',
       formData: {
         name: '',
         description: '',
@@ -148,7 +76,7 @@ export default {
         unit: '0',
         image: '',
         date: '',
-        bill_ty: ''
+        account_master: ''
       },
       money: {
         decimal: '.',
@@ -190,46 +118,32 @@ export default {
         required,
         minLength: minLength(3)
       },
-      // price: {
-      //   required,
-      //   numeric,
-      //   maxLength: maxLength(20),
-      //   minValue: minValue(0.1)
-      // },
-      description: {
+      groups: {
+        required,
+      },
+      address: {
         maxLength: maxLength(255)
       },
-      // unit: {
-      //   required
-      // },
-      date: {
-        required
-      },
-      bill_ty: {
-        required
-      }
     }
   },
   methods: {
     ...mapActions('master', [
-      'addItem',
-      'fetchItem',
-      'updateItem'
+      'addMaster',
+      'fetchMaster',
+      'updateMaster'
     ]),
     async loadEditData () {
-      let response = await this.fetchItem(this.$route.params.id)
+      let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
-      this.formData.unit = this.units.find(_unit => response.data.master.unit === _unit.name)
-      this.fractional_price = response.data.master.price
     },
-    async submitItem () {
+    async submitMaster () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
         return false
       }
       if (this.isEdit) {
         this.isLoading = true
-        let response = await this.updateItem(this.formData)
+        let response = await this.updateMaster(this.formData)
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('masters.updated_message'))
@@ -239,7 +153,7 @@ export default {
         window.toastr['error'](response.data.error)
       } else {
         this.isLoading = true
-        let response = await this.addItem(this.formData)
+        let response = await this.addMaster(this.formData)
 
         if (response.data) {
           window.toastr['success'](this.$tc('masters.created_message'))
@@ -250,15 +164,6 @@ export default {
         window.toastr['success'](response.data.success)
       }
     },
-    uploadImage (e) {
-      const image = e.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(image)
-      reader.onload = e => {
-        this.previewImage = e.target.result
-        this.formData.image = this.previewImage
-      }
-    }
   }
 }
 </script>

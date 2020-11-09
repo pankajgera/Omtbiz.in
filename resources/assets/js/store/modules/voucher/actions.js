@@ -2,9 +2,9 @@ import * as types from './mutation-types'
 
 export const fetchVouchers = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/voucher`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_VOUCHERS, response.data.voucher.data)
-      commit(types.SET_TOTAL_VOUCHERS, response.data.voucher.total)
+    window.axios.get(`/api/vouchers`, {params}).then((response) => {
+      commit(types.BOOTSTRAP_VOUCHERS, response.data.vouchers.data)
+      commit(types.SET_TOTAL_VOUCHERS, response.data.vouchers.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -14,7 +14,7 @@ export const fetchVouchers = ({ commit, dispatch, state }, params) => {
 
 export const fetchVoucher = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/voucher/${id}/edit`).then((response) => {
+    window.axios.get(`/api/vouchers/${id}/edit`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -24,7 +24,7 @@ export const fetchVoucher = ({ commit, dispatch }, id) => {
 
 export const addVoucher = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.post('/api/voucher', data).then((response) => {
+    window.axios.post('/api/vouchers', data).then((response) => {
       commit(types.ADD_VOUCHER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -35,7 +35,7 @@ export const addVoucher = ({ commit, dispatch, state }, data) => {
 
 export const updateVoucher = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.put(`/api/voucher/${data.id}`, data).then((response) => {
+    window.axios.put(`/api/vouchers/${data.id}`, data).then((response) => {
       commit(types.UPDATE_VOUCHER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -46,7 +46,7 @@ export const updateVoucher = ({ commit, dispatch, state }, data) => {
 
 export const deleteVoucher = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/voucher/${id}`).then((response) => {
+    window.axios.delete(`/api/vouchers/${id}`).then((response) => {
       commit(types.DELETE_VOUCHER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -57,7 +57,7 @@ export const deleteVoucher = ({ commit, dispatch, state }, id) => {
 
 export const deleteMultipleVouchers = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/voucher/delete`, {'id': state.selectedVouchers}).then((response) => {
+    window.axios.post(`/api/vouchers/delete`, {'id': state.selectedVouchers}).then((response) => {
       commit(types.DELETE_MULTIPLE_VOUCHERS, state.selectedVouchers)
       resolve(response)
     }).catch((err) => {
