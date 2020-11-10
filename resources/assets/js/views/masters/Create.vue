@@ -30,11 +30,23 @@
                   </span>
                 </div>
               </div>
-              <div class="form-group col-sm-6">
-                <label>{{ $t('expenses.group') }}</label>
-                <select v-model="formData.group" name="group" class="form-control ls-select2">
-                  <option v-for="(group, index) in groups.filter((v, i, a) => a.indexOf(v) === i)" :key="index" :value="group.id"> {{ group.name }}</option>
-                </select>
+              <div class="form-group">
+                <label class="control-label">{{ $t('masters.groups') }}</label><span class="text-danger"> *</span>
+                <group-select
+                  ref="groupSelect"
+                  :invalid="$v.formData.group.$error"
+                  :group-options="groupOptions"
+                  @search="searchVal"
+                  @select="onSelectGroup"
+                  @deselect="deselectGroup"
+                  @onSelectGroup="isSelected = true"
+                />
+                <div v-if="$v.formData.group.$error">
+                  <span v-if="!$v.formData.group.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
+                </div>
+                <!-- <select v-model="formData.group" name="group" class="form-control ls-select2">
+                  <option v-for="(group, index) in getGroups.filter((v, i, a) => a.indexOf(v) === i)" :key="index" :value="group"> {{ group }}</option>
+                </select> -->
               </div>
               <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
@@ -59,9 +71,13 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
+import GroupSelect from './GroupSelect'
 const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
 
 export default {
+  components: {
+    GroupSelect
+  },
   mixins: {
     validationMixin
   },
@@ -71,35 +87,12 @@ export default {
       title: 'Add Master',
       formData: {
         name: '',
-        description: '',
-        price: '0.00',
-        unit: '0',
-        image: '',
-        date: '',
-        account_master: ''
+        group: '',
       },
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '$ ',
-        precision: 2,
-        masked: false
-      },
-      previewImage: ''
+      groupOptions: [],
     }
   },
   computed: {
-    ...mapGetters('currency', [
-      'defaultCurrencyForInput'
-    ]),
-    price: {
-      get: function () {
-        return this.formData.price / 100
-      },
-      set: function (newValue) {
-        this.formData.price = newValue * 100
-      }
-    },
     isEdit () {
       if (this.$route.name === 'masters.edit') {
         return true
@@ -111,6 +104,11 @@ export default {
     if (this.isEdit) {
       this.loadEditData()
     }
+    window.hub.$on('newGroup', (val) => {
+      if (!this.formData.group && this.modalActive && this.isSelected) {
+        this.onSelectGroup(val)
+      }
+    })
   },
   validations: {
     formData: {
@@ -118,7 +116,7 @@ export default {
         required,
         minLength: minLength(3)
       },
-      groups: {
+      group: {
         required,
       },
       address: {
@@ -130,11 +128,15 @@ export default {
     ...mapActions('master', [
       'addMaster',
       'fetchMaster',
+      'fetchGroups',
       'updateMaster'
     ]),
     async loadEditData () {
       let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
+      let groupResponse = await this.fetchGroups()
+      console.log(groupResponse)
+      this.groupOptions = groupResponse.data.groups
     },
     async submitMaster () {
       this.$v.formData.$touch()
@@ -163,6 +165,18 @@ export default {
         }
         window.toastr['success'](response.data.success)
       }
+    },
+    searchVal (val) {
+      this.formData.group = val
+    },
+    onSelectGroup (obj) {
+      this.formData.group = obj.group
+    },
+    deselectGroup () {
+      this.formData.group = ''
+      this.$nextTick(() => {
+        this.$refs.groupSelect.$refs.baseSelect.$refs.search.focus()
+      })
     },
   }
 }

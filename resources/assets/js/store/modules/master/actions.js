@@ -23,6 +23,17 @@ export const fetchMaster = ({ commit, dispatch }, id) => {
   })
 }
 
+export const fetchGroups = ({ commit, dispatch }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/masters/groups`).then((response) => {
+      console.log('response', response)
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const addMaster = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/masters', data).then((response) => {

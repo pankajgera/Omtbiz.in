@@ -2,6 +2,7 @@
 
 namespace Crater\Http\Controllers;
 
+use Crater\AccountGroup;
 use Crater\AccountMaster;
 use Exception;
 use Illuminate\Http\Request;
@@ -33,6 +34,15 @@ class AccountMastersController extends Controller
 
         return response()->json([
             'master' => $master,
+        ]);
+    }
+
+    public function getGroups()
+    {
+        $groups = AccountGroup::all();
+
+        return response()->json([
+            'groups' => $groups,
         ]);
     }
 

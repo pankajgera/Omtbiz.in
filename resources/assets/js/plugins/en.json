@@ -223,11 +223,16 @@
         "select_a_unit": "select unit",
         "account_master": "Account Master",
         "groups": "Group",
+        "address": "Address",
         "master_attached_message": "Cannot delete an master which is already in use",
         "confirm_delete": "You will not be able to recover this Account Master | You will not be able to recover these Account Master",
         "created_message": "Master created successfully",
         "updated_message": "Master updated successfully",
         "deleted_message": "Master deleted successfully | Account Master deleted successfully"
+    },
+    "groups": {
+        "add_new_group": "Add new Group",
+        "select_an_group": "Select an Group"
     },
     "ledgers": {
         "add_bill": "Add Bill",
