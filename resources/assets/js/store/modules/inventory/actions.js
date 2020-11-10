@@ -26,7 +26,6 @@ export const fetchAllInventory = ({ commit, dispatch, state }, params) => {
 
 export const fetchInventory = ({ commit, dispatch }, id) => {
     return new Promise((resolve, reject) => {
-      console.log('id', id);
         window.axios.get(`/api/inventory/${id}/edit`).then((response) => {
             resolve(response)
         }).catch((err) => {

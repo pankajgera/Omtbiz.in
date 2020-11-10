@@ -88,11 +88,9 @@ export default {
             }, 2000)
           }, 1000)
         } else {
-          console.log(res.data)
           window.toastr['error'](res.data.error)
         }
       } catch (e) {
-        console.log(e)
         window.toastr['error']('Something went wrong')
       }
 

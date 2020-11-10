@@ -3,7 +3,6 @@ import * as types from './mutation-types'
 export const fetchGroups = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/groups`, {params}).then((response) => {
-      console.log(response.data.groups);
       commit(types.BOOTSTRAP_GROUPS, response.data.groups.data)
       commit(types.SET_TOTAL_GROUPS, response.data.groups.total)
       resolve(response)

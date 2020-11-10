@@ -135,7 +135,6 @@ export default {
       let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
       let groupResponse = await this.fetchGroups()
-      console.log(groupResponse)
       this.groupOptions = groupResponse.data.groups
     },
     async submitMaster () {

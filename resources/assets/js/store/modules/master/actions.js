@@ -3,7 +3,6 @@ import * as types from './mutation-types'
 export const fetchMasters = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/masters`, {params}).then((response) => {
-      console.log(response.data.masters);
       commit(types.BOOTSTRAP_MASTERS, response.data.masters.data)
       commit(types.SET_TOTAL_MASTERS, response.data.masters.total)
       resolve(response)
@@ -26,7 +25,6 @@ export const fetchMaster = ({ commit, dispatch }, id) => {
 export const fetchGroups = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/masters/groups`).then((response) => {
-      console.log('response', response)
       resolve(response)
     }).catch((err) => {
       reject(err)
