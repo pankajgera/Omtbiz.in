@@ -379,7 +379,6 @@ Route::group(['middleware' => 'api'], function () {
 
     // Users Routes
     //----------------------------------
-
     Route::post('/users/delete', [
         'as' => 'users.delete',
         'uses' => 'UsersController@delete'
@@ -391,7 +390,6 @@ Route::group(['middleware' => 'api'], function () {
 
     // Notes
     //----------------------------------
-
     Route::post('/notes/delete', [
         'as' => 'notes.delete',
         'uses' => 'NoteController@delete'
@@ -402,7 +400,6 @@ Route::group(['middleware' => 'api'], function () {
 
     // Inventroy
     //----------------------------------
-
     Route::post('/inventory/delete', [
         'as' => 'inventory.delete',
         'uses' => 'InventoryController@delete'
@@ -411,4 +408,39 @@ Route::group(['middleware' => 'api'], function () {
     Route::resource('inventory', 'InventoryController');
 
 
+    // Account Masters
+    //----------------------------------
+    Route::post('/masters/delete', [
+        'as' => 'masters.delete',
+        'uses' => 'AccountMastersController@delete'
+    ]);
+
+    Route::resource('masters', 'AccountMastersController');
+
+    // Account Groups
+    //----------------------------------
+    Route::post('/groups/delete', [
+        'as' => 'groups.delete',
+        'uses' => 'AccountGroupsController@delete'
+    ]);
+
+    Route::resource('groups', 'AccountGroupsController');
+
+    // Account Ledgers
+    //----------------------------------
+    Route::post('/ledgers/delete', [
+        'as' => 'ledgers.delete',
+        'uses' => 'AccountLedgersController@delete'
+    ]);
+
+    Route::resource('ledgers', 'AccountLedgersController');
+
+    // Vouchers
+    //----------------------------------
+    Route::post('/vouchers/delete', [
+        'as' => 'vouchers.delete',
+        'uses' => 'VouchersController@delete'
+    ]);
+
+    Route::resource('vouchers', 'VouchersController');
 });

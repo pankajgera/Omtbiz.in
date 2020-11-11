@@ -90,7 +90,6 @@ window.axios.interceptors.request.use(function(config) {
 global.axios.interceptors.response.use(undefined, function(err) {
     // Do something with request error
     return new Promise((resolve, reject) => {
-        console.log(err)
         if (err.response.data.error === 'invalid_credentials') {
             window.toastr['error']('Invalid Credentials')
         }

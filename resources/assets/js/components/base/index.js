@@ -17,6 +17,7 @@ import TaxSelectPopup from './popup/TaxSelectPopup.vue'
 import InventoryModal from './modal/InventoryModal.vue'
 
 import {TableColumn, TableComponent} from './base-table/index'
+import GroupModal from './modal/GroupModal.vue'
 
 Vue.component('base-button', BaseButton)
 Vue.component('item-modal', ItemModal)
@@ -39,3 +40,4 @@ Vue.component('customer-select-popup', CustomerSelectPopup)
 Vue.component('tax-select-popup', TaxSelectPopup)
 
 Vue.component('inventory-modal', InventoryModal)
+Vue.component('group-modal', GroupModal)

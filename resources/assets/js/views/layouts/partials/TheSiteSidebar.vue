@@ -88,6 +88,24 @@ export default {
             route: '/inventory',
             meta: ['admin']
           },
+          {
+            title: 'navigation.master',
+            icon: 'file',
+            route: '/masters',
+            meta: ['admin']
+          },
+          {
+            title: 'navigation.ledger',
+            icon: 'file',
+            route: '/ledgers',
+            meta: ['admin']
+          },
+          {
+            title: 'navigation.voucher',
+            icon: 'file',
+            route: '/vouchers',
+            meta: ['admin']
+          },
         ],
         [
           {

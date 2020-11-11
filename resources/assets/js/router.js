@@ -91,6 +91,18 @@ import NotesCreate from './views/notes/Create.vue'
 import InventoryIndex from './views/inventory/Index.vue'
 import InventoryCreate from './views/inventory/Create.vue'
 
+// Account Master
+import MastersIndex from './views/masters/Index.vue'
+import MastersCreate from './views/masters/Create.vue'
+
+// Account Ledgers
+import LedgersIndex from './views/ledgers/Index.vue'
+import LedgersCreate from './views/ledgers/Create.vue'
+
+// Vouchers
+import VouchersIndex from './views/vouchers/Index.vue'
+import VouchersCreate from './views/vouchers/Create.vue'
+
 import Wizard from './views/wizard/Index.vue'
 
 Vue.use(VueRouter)
@@ -212,6 +224,63 @@ const routes = [
                 name: 'items.edit',
                 component: ItemCreate,
                 meta: ['admin', 'employee']
+            },
+
+            // Account Masters
+            {
+              path: 'masters',
+              component: MastersIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'masters/create',
+                name: 'masters.create',
+                component: MastersCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'masters/:id/edit',
+                name: 'masters.edit',
+                component: MastersCreate,
+                meta: ['admin']
+            },
+
+            // Account Ledger
+            {
+                path: 'ledgers',
+                component: LedgersIndex,
+                meta: ['admin']
+            },
+            {
+                path: 'ledgers/create',
+                name: 'ledgers.create',
+                component: LedgersCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'ledgers/:id/edit',
+                name: 'ledgers.edit',
+                component: LedgersCreate,
+                meta: ['admin']
+            },
+
+            // Voucher
+            {
+              path: 'vouchers',
+              component: VouchersIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'vouchers/create',
+                name: 'vouchers.create',
+                component: VouchersCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'vouchers/:id/edit',
+                name: 'vouchers.edit',
+                component: VouchersCreate,
+                meta: ['admin']
             },
 
             //Raw bill
@@ -506,13 +575,10 @@ router.beforeEach((to, from, next) => {
 
     if (to.meta.length) {
         if (to.meta.includes('admin') && role === 'admin') {
-            //console.log('admin')
             next()
         } else if (to.meta.includes('accountant') && role === 'accountant') {
-            //console.log('accountant')
             next()
         } else if (to.meta.includes('employee') && role === 'employee') {
-            //console.log('employee')
             next()
         } else {
             switch (role) {
