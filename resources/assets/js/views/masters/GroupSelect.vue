@@ -1,7 +1,7 @@
 <template>
   <div class="item-selector">
     <div v-if="groupOptions.id" class="selected-item">
-      {{ groupOptions.name }}
+      {{ groupSelect.name }}
       <span class="deselect-icon" @click="deselectGroup">
         <font-awesome-icon icon="times-circle" />
       </span>
@@ -30,7 +30,6 @@
     </base-select>
   </div>
 </template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex'
 

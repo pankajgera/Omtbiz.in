@@ -415,11 +415,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountMastersController@delete'
     ]);
 
-    Route::get('/masters/groups', [
-        'as' => 'masters.groups',
-        'uses' => 'AccountMastersController@getGroup'
-    ]);
-
     Route::resource('masters', 'AccountMastersController');
 
     // Account Groups

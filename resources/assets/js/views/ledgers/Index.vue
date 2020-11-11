@@ -3,7 +3,7 @@
     <div class="page-header">
       <div class="d-flex flex-row">
         <div>
-          <h3 class="page-title">{{ $tc('ledgers.account_ledger', 2) }}</h3>
+          <h3 class="page-title">{{ $tc('ledgers.title', 2) }}</h3>
         </div>
       </div>
       <ol class="breadcrumb">
@@ -18,7 +18,7 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('ledgers.account_ledger', 2) }}
+            {{ $tc('ledgers.title', 2) }}
           </router-link>
         </li>
       </ol>
@@ -42,7 +42,7 @@
             icon="plus"
             size="large"
           >
-            {{ $t('ledgers.add_account_ledger') }}
+            {{ $t('ledgers.add_new_ledger') }}
           </base-button>
         </router-link>
       </div>
@@ -90,7 +90,7 @@
           size="large"
           @click="$router.push('ledgers/create')"
         >
-          {{ $t('ledgers.add_new_master') }}
+          {{ $t('ledgers.add_new_ledger') }}
         </base-button>
       </div>
     </div>

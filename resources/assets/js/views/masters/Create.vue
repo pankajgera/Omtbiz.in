@@ -104,6 +104,7 @@ export default {
     if (this.isEdit) {
       this.loadEditData()
     }
+    this.loadGroups()
     window.hub.$on('newGroup', (val) => {
       if (!this.formData.group && this.modalActive && this.isSelected) {
         this.onSelectGroup(val)
@@ -128,14 +129,18 @@ export default {
     ...mapActions('master', [
       'addMaster',
       'fetchMaster',
-      'fetchGroups',
       'updateMaster'
     ]),
+    ...mapActions('group', [
+      'fetchGroups'
+    ]),
+    async loadGroups () {
+      let groupResponse = await this.fetchGroups()
+      this.groupOptions = groupResponse.data.groups
+    },
     async loadEditData () {
       let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
-      let groupResponse = await this.fetchGroups()
-      this.groupOptions = groupResponse.data.groups
     },
     async submitMaster () {
       this.$v.formData.$touch()

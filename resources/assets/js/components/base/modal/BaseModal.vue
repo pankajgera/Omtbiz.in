@@ -22,6 +22,7 @@ import InvoiceTemplate from './InvoiceTemplate'
 import CustomerModal from './CustomerModal'
 import CategoryModal from './CategoryModal'
 import InventoryModal from './InventoryModal'
+import GroupModal from './GroupModal'
 
 export default {
   components: {
@@ -30,7 +31,8 @@ export default {
     EstimateTemplate,
     InvoiceTemplate,
     CustomerModal,
-    CategoryModal
+    CategoryModal,
+    GroupModal
   },
   data () {
     return {

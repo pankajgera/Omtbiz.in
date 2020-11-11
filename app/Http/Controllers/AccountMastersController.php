@@ -12,7 +12,7 @@ class AccountMastersController extends Controller
 {
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 20;
+        $limit = $request->has('limit') ? $request->limit : 50;
 
         $masters = AccountMaster::applyFilters($request->only([
             'name',
@@ -34,15 +34,6 @@ class AccountMastersController extends Controller
 
         return response()->json([
             'master' => $master,
-        ]);
-    }
-
-    public function getGroups()
-    {
-        $groups = AccountGroup::all();
-
-        return response()->json([
-            'groups' => $groups,
         ]);
     }
 

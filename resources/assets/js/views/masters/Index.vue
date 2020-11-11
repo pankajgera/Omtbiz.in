@@ -199,6 +199,10 @@ body > .expandable-image.expanded {
 .expandable-image{
   width: 100px;
 }
+.table .table-component__table__body td {
+    padding: 5px 15px !important;
+    height: 20px !important;
+}
 </style>
 <script>
 import { mapActions, mapGetters } from 'vuex'

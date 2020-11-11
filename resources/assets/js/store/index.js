@@ -33,6 +33,7 @@ import inventory from './modules/inventory'
 import master from './modules/master'
 import ledger from './modules/ledger'
 import voucher from './modules/voucher'
+import group from './modules/group'
 
 Vue.use(Vuex)
 
@@ -75,6 +76,7 @@ export default new Vuex.Store({
         inventory,
         master,
         ledger,
-        voucher
+        voucher,
+        group
     }
 })
