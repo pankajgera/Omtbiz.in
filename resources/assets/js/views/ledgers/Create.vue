@@ -58,7 +58,6 @@
                 <label class="control-label">{{ $t('ledgers.debit') }}</label>
                 <base-input
                   v-model.trim="formData.debit"
-                  :invalid="$v.formData.debit.$error"
                   focus
                   type="number"
                   name="debit"
@@ -69,7 +68,6 @@
                 <label class="control-label">{{ $t('ledgers.credit') }}</label>
                 <base-input
                   v-model.trim="formData.credit"
-                  :invalid="$v.formData.credit.$error"
                   focus
                   type="number"
                   name="credit"
@@ -84,9 +82,6 @@
                   name="short_narration"
                   @input="$v.formData.short_narration.$touch()"
                 />
-                <div v-if="$v.formData.short_narration.$error">
-                  <span v-if="!$v.formData.short_narration.maxLength" class="text-danger">{{ $t('validation.short_narration_maxlength') }}</span>
-                </div>
               </div>
               <div class="form-group">
                 <base-button
