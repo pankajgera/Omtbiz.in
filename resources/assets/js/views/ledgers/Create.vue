@@ -117,7 +117,7 @@
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
-
+              <button @click="addNewRow()">Add new</button>
             </div>
           </form>
         </div>
@@ -143,19 +143,26 @@ export default {
     return {
       isLoading: false,
       title: 'Add Account Ledger',
-      formData: {
-        date: '',
-        type: '',
-        account: '',
-        credit: '',
-        debit: '',
-        short_narration: ''
-      },
+      // formData: {
+      //   date: '',
+      //   type: '',
+      //   account: '',
+      //   credit: '',
+      //   debit: '',
+      //   short_narration: ''
+      // },
       rows: [
-
+        {
+          date: '',
+          type: '',
+          account: '',
+          credit: '',
+          debit: '',
+          short_narration: ''
+        }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'date', headerName: 'Date', editable: true },
+        { sortable: true, filter: true, field: 'date', headerName: 'Date (DD/MM/YYYY)', type: 'date', format: 'DD/MM/YYYY', editable: true },
         { sortable: true, filter: true, field: 'type', headerName: 'Type', editable: true },
         { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
         { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'number', editable: true },
@@ -177,19 +184,20 @@ export default {
       this.loadEditData()
     }
   },
-  validations: {
-    formData: {
-      date: {
-        required
-      },
-      type: {
-        required
-      },
-      account: {
-        required
-      }
-    }
-  },
+  // validations: {
+  //   rows: {
+  //     date: {
+  //       required,
+  //       type: Date
+  //     },
+  //     type: {
+  //       required
+  //     },
+  //     account: {
+  //       required
+  //     }
+  //   }
+  // },
   methods: {
     ...mapActions('ledger', [
       'addLedger',
@@ -236,6 +244,17 @@ export default {
     },
     linkClicked() {
 
+    },
+    addNewRow() {
+      console.log('add new row');
+      this.rows.push({
+          date: '',
+          type: '',
+          account: '',
+          credit: '',
+          debit: '',
+          short_narration: ''
+        });
     }
   }
 }
