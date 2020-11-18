@@ -4,16 +4,16 @@
       <h3 class="page-title">{{ isEdit ? $t('ledgers.edit_ledger') : $t('ledgers.new_ledger') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/ledgers">{{ $tc('ledgers.bill_ty',2) }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/ledgers">{{ $tc('ledgers.ledgers_list',2) }}</router-link></li>
         <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('ledgers.edit_ledger') : $t('ledgers.new_ledger') }}</a></li>
       </ol>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <div class="card">
           <form action="" @submit.prevent="submitLedger">
             <div class="card-body">
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="date">{{ $t('ledgers.date') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
                   v-model="formData.date"
@@ -94,7 +94,30 @@
                 >
                   {{ isEdit ? $t('ledgers.update_ledger') : $t('ledgers.save_ledger') }}
                 </base-button>
-              </div>
+              </div> -->
+
+
+              <!---- Grid table start -->
+              <vue-editable-grid
+                class="my-grid-class"
+                ref="grid"
+                id="mygrid"
+                :column-defs="columnDefs"
+                :row-data="rows"
+                row-data-key='shipmentId'
+                @cell-updated="cellUpdated"
+                @row-selected="rowSelected"
+                @link-clicked="linkClicked"
+              >
+                <template v-slot:header>
+                  Add / Edit Account Ledgers
+                </template>
+                <template v-slot:header-r>
+                  Total rows: {{ rows.length }}
+                </template>
+              </vue-editable-grid>
+              <!--- Grid table end -->
+
             </div>
           </form>
         </div>
@@ -102,7 +125,11 @@
     </div>
   </div>
 </template>
-
+<style scoped>
+.my-grid-class {
+  height: 400px;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -124,6 +151,17 @@ export default {
         debit: '',
         short_narration: ''
       },
+      rows: [
+
+      ],
+      columnDefs: [
+        { sortable: true, filter: true, field: 'date', headerName: 'Date', editable: true },
+        { sortable: true, filter: true, field: 'type', headerName: 'Type', editable: true },
+        { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
+        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'number', editable: true },
+        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'number', editable: true },
+        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: false }
+      ]
     }
   },
   computed: {
@@ -190,6 +228,15 @@ export default {
         window.toastr['success'](response.data.success)
       }
     },
+    cellUpdated() {
+
+    },
+    rowSelected() {
+
+    },
+    linkClicked() {
+
+    }
   }
 }
 </script>
