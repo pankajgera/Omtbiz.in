@@ -1,112 +1,40 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ isEdit ? $t('vouchers.edit_bill') : $t('vouchers.new_bill') }}</h3>
+      <h3 class="page-title">{{ isEdit ? $t('vouchers.edit_voucher') : $t('vouchers.new_voucher') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/vouchers">{{ $tc('vouchers.bill_ty',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('vouchers.edit_bill') : $t('vouchers.new_bill') }}</a></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/vouchers">{{ $tc('vouchers.vouchers_list',2) }}</router-link></li>
+        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('vouchers.edit_voucher') : $t('vouchers.new_voucher') }}</a></li>
       </ol>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <div class="card">
-          <form action="" @submit.prevent="submitItem">
+          <form action="" @submit.prevent="submitVoucher">
             <div class="card-body">
-              <div class="form-group">
-                <label class="control-label">{{ $t('vouchers.name') }}</label><span class="text-danger"> *</span>
-                <base-input
-                  v-model.trim="formData.name"
-                  :invalid="$v.formData.name.$error"
-                  focus
-                  type="text"
-                  name="name"
-                  @input="$v.formData.name.$touch()"
-                />
-                <div v-if="$v.formData.name.$error">
-                  <span v-if="!$v.formData.name.required" class="text-danger">{{ $t('validation.required') }} </span>
-                  <span v-if="!$v.formData.name.minLength" class="text-danger">
-                    {{ $tc('validation.name_min_length', $v.formData.name.$params.minLength.min, { count: $v.formData.name.$params.minLength.min }) }}
-                  </span>
-                </div>
-              </div>
-              <!-- <div class="form-group">
-                <label>{{ $t('vouchers.price') }}</label><span class="text-danger"> *</span>
-                <div class="base-input">
-                  <money
-                    :class="{'invalid' : $v.formData.price.$error}"
-                    v-model="price"
-                    v-bind="defaultCurrencyForInput"
-                    class="input-field"
-                  />
-                </div>
-                <div v-if="$v.formData.price.$error">
-                  <span v-if="!$v.formData.price.required" class="text-danger">{{ $t('validation.required') }} </span>
-                  <span v-if="!$v.formData.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
-                  <span v-if="!$v.formData.price.minValue" class="text-danger">{{ $t('validation.price_minvalue') }}</span>
-                </div>
-              </div> -->
-              <!-- <div class="form-group">
-                <label>{{ $t('vouchers.unit') }}</label>
-                <base-input
-                  v-model.trim="formData.unit"
-                  focus
-                  type="text"
-                  name="unit"
-                  @input="$v.formData.unit.$touch()"
-                />
-              </div> -->
-              <div class="form-group">
-                <label>{{ $t('vouchers.bill_ty') }}</label><span class="text-danger"> *</span>
-                <base-input
-                  v-model.trim="formData.bill_ty"
-                  focus
-                  type="text"
-                  name="bill_ty"
-                  @input="$v.formData.bill_ty.$touch()"
-                />
-              </div>
-              <div class="form-group">
-                <label for="date">{{ $t('vouchers.date') }}</label><span class="text-danger"> *</span>
-                <base-date-picker
-                  v-model="formData.date"
-                  :invalid="$v.formData.date.$error"
-                  :calendar-button="true"
-                  calendar-button-icon="calendar"
-                  @change="$v.formData.date.$touch()"
-                />
-                <div v-if="$v.formData.date.$error">
-                  <span v-if="!$v.formData.date" class="text-danger">{{ $t('validation.required') }}</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="description">{{ $t('vouchers.description') }}</label>
-                <base-text-area
-                  v-model="formData.description"
-                  rows="2"
-                  name="description"
-                  @input="$v.formData.description.$touch()"
-                />
-                <div v-if="$v.formData.description.$error">
-                  <span v-if="!$v.formData.description.maxLength" class="text-danger">{{ $t('validation.description_maxlength') }}</span>
-                </div>
-              </div>
-              <div class="form-group">
-                <img :src="previewImage" class="uploading-image" style="width: 100px">
-                <input type="file" accept="image/*" name="image" @change="uploadImage">
-              </div>
-              <div class="form-group">
-                <base-button
-                  :loading="isLoading"
-                  :disabled="isLoading"
-                  icon="save"
-                  color="theme"
-                  type="submit"
-                  class="collapse-button"
-                >
-                  {{ isEdit ? $t('vouchers.update_voucher') : $t('vouchers.save_voucher') }}
-                </base-button>
-              </div>
+              <!---- Grid table start -->
+              <vue-editable-grid
+                class="my-grid-class"
+                ref="grid"
+                id="mygrid"
+                :column-defs="columnDefs"
+                :row-data="rows"
+                row-data-key='voucherId'
+                @cell-updated="cellUpdated"
+                @row-selected="rowSelected"
+                @link-clicked="linkClicked"
+                @contextmenu="contextMenu"
+              >
+                <template v-slot:header>
+                  Add / Edit Account Vouchers
+                </template>
+                <template v-slot:header-r>
+                  Total rows: {{ rows.length }}
+                </template>
+              </vue-editable-grid>
+              <!--- Grid table end -->
+              <button @click="addNewRow()">Add new</button>
             </div>
           </form>
         </div>
@@ -114,7 +42,11 @@
     </div>
   </div>
 </template>
-
+<style scoped>
+.my-grid-class {
+  height: 400px;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -127,51 +59,35 @@ export default {
   data () {
     return {
       isLoading: false,
-      title: 'Add Item',
-      units: [
-        { name: 'box', value: 'box' },
-        { name: 'cm', value: 'cm' },
-        { name: 'dz', value: 'dz' },
-        { name: 'ft', value: 'ft' },
-        { name: 'g', value: 'g' },
-        { name: 'in', value: 'in' },
-        { name: 'kg', value: 'kg' },
-        { name: 'km', value: 'km' },
-        { name: 'lb', value: 'lb' },
-        { name: 'mg', value: 'mg' },
-        { name: 'pc', value: 'pc' }
+      title: 'Add Account Voucher',
+      // formData: {
+      //   date: '',
+      //   type: '',
+      //   account: '',
+      //   credit: '',
+      //   debit: '',
+      //   short_narration: ''
+      // },
+      rows: [
+        {
+          type: '',
+          account: '',
+          credit: '',
+          debit: '',
+          short_narration: ''
+        }
       ],
-      formData: {
-        name: '',
-        description: '',
-        price: '0.00',
-        unit: '0',
-        image: '',
-        date: '',
-        bill_ty: ''
-      },
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '$ ',
-        precision: 2,
-        masked: false
-      },
-      previewImage: ''
+      columnDefs: [
+        { sortable: true, filter: true, field: 'type', headerName: 'Type', placeholder: 'Cr, Dr', editable: true },
+        { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
+        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', editable: true },
+        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', editable: true },
+        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: true }
+      ],
+      resetActiveColIndex: false,
     }
   },
   computed: {
-    ...mapGetters('currency', [
-      'defaultCurrencyForInput'
-    ]),
-    price: {
-      get: function () {
-        return this.formData.price / 100
-      },
-      set: function (newValue) {
-        this.formData.price = newValue * 100
-      }
-    },
     isEdit () {
       if (this.$route.name === 'vouchers.edit') {
         return true
@@ -184,52 +100,38 @@ export default {
       this.loadEditData()
     }
   },
-  validations: {
-    formData: {
-      name: {
-        required,
-        minLength: minLength(3)
-      },
-      // price: {
-      //   required,
-      //   numeric,
-      //   maxLength: maxLength(20),
-      //   minValue: minValue(0.1)
-      // },
-      description: {
-        maxLength: maxLength(255)
-      },
-      // unit: {
-      //   required
-      // },
-      date: {
-        required
-      },
-      bill_ty: {
-        required
-      }
-    }
-  },
+  // validations: {
+  //   rows: {
+  //     date: {
+  //       required,
+  //       type: Date
+  //     },
+  //     type: {
+  //       required
+  //     },
+  //     account: {
+  //       required
+  //     }
+  //   }
+  // },
   methods: {
     ...mapActions('voucher', [
-      'addItem',
-      'fetchItem',
-      'updateItem'
+      'addVoucher',
+      'fetchVoucher',
+      'updateVoucher'
     ]),
     async loadEditData () {
-      let response = await this.fetchItem(this.$route.params.id)
+      let response = await this.fetchVoucher(this.$route.params.id)
       this.formData = response.data.voucher
-      this.formData.unit = this.units.find(_unit => response.data.voucher.unit === _unit.name)
-      this.fractional_price = response.data.voucher.price
     },
-    async submitItem () {
+    async submitVoucher () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
         return false
       }
       if (this.isEdit) {
         this.isLoading = true
-        let response = await this.updateItem(this.formData)
+        let response = await this.updateVoucher(this.formData)
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('vouchers.updated_message'))
@@ -239,7 +141,7 @@ export default {
         window.toastr['error'](response.data.error)
       } else {
         this.isLoading = true
-        let response = await this.addItem(this.formData)
+        let response = await this.addVoucher(this.formData)
 
         if (response.data) {
           window.toastr['success'](this.$tc('vouchers.created_message'))
@@ -250,14 +152,72 @@ export default {
         window.toastr['success'](response.data.success)
       }
     },
-    uploadImage (e) {
-      const image = e.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(image)
-      reader.onload = e => {
-        this.previewImage = e.target.result
-        this.formData.image = this.previewImage
+    cellUpdated($event) {
+      console.log('cellUpdated', $event)
+      if ($event.$event.key === 'Tab' && $event.columnIndex === 4) {
+        this.addNewRow();
+        this.resetActiveColIndex = true;
       }
+
+      if ($event.colIndex === 0) {
+        if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
+          $event.row.type = 'D';
+          $event.value = 'D';
+        } else {
+          $event.row.type = 'C';
+          $event.value = 'D';
+        }
+      }
+    },
+    rowSelected($event) {
+      console.log('rowSelected', $event)
+      if (this.resetActiveColIndex) {
+        $event.colIndex = 0;
+      }
+      //Type of Voucher Column
+      if ($event.colIndex === 0) {
+        if ($event.rowData.type === 'Dr' || $event.rowData.type === 'D' || $event.rowData.type === 'd') {
+          $event.rowData.type = 'D';
+        } else {
+          $event.rowData.type = 'C';
+        }
+      }
+
+      if ($event.rowData.type === 'D' && $event.colIndex === 2) {
+        $event.colData.editable = false;
+        $event.colIndex = 3;
+      }
+
+      //Account Column
+      if ($event.colIndex === 1) {
+
+      }
+
+      //Credit Column
+      if ($event.colIndex === 2 ) {
+
+      }
+
+      //Debit Column
+      if ($event.colIndex === 3) {
+
+      }
+    },
+    linkClicked($event) {
+      console.log('linkClicked', $event)
+    },
+    contextMenu($event) {
+      console.log('contextMenu', $event)
+    },
+    addNewRow() {
+      this.rows.push({
+          date: '',
+          type: '',
+          account: '',
+          credit: '',
+          debit: '',
+          short_narration: ''
+        });
     }
   }
 }
