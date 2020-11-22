@@ -18,6 +18,7 @@ import VueExpandableImage from 'vue-expandable-image'
  * Global css plugins
  */
 import 'vue-tabs-component/docs/resources/tabs-component.css'
+import 'vue-select/dist/vue-select.css'
 
 Vue.use(Vuelidate)
 Vue.use(VueExpandableImage)

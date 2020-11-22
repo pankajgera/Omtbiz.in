@@ -21,6 +21,7 @@
                 :column-defs="columnDefs"
                 :row-data="rows"
                 row-data-key='voucherId'
+                :master-options="masterData"
                 @cell-updated="cellUpdated"
                 @row-selected="rowSelected"
                 @link-clicked="linkClicked"
@@ -85,14 +86,14 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', placeholder: 'C, D', editable: true },
-        { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
+        { sortable: true, filter: true, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', editable: true },
+        { sortable: true, filter: true, field: 'account', headerName: 'Account', type: 'select', editable: true },
         { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', editable: true },
         { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', editable: true },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: true }
+        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', type: 'text', editable: true }
       ],
       resetActiveColIndex: false,
-      masterData: '',
+      masterData: [],
     }
   },
   computed: {
