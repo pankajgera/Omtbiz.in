@@ -50,7 +50,6 @@
     "v-money": "^0.8.1",
     "vue": "^2.5.17",
     "vue-avatar-cropper": "^1.0.5",
-    "vue-editable-grid": "^0.3.16",
     "vue-expandable-image": "^0.1.0",
     "vue-i18n": "^8.14.0",
     "vue-multiselect": "^2.1.3",

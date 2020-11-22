@@ -52,9 +52,16 @@ import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
 
+// Vue editable grid component and styles
+import VueEditableGrid from '../../components/grid-table/VueEditableGrid'
+import '../../components/grid-table/VueEditableGrid.css'
+
 export default {
   mixins: {
     validationMixin
+  },
+  components: {
+    VueEditableGrid
   },
   data () {
     return {
@@ -78,13 +85,14 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', placeholder: 'Cr, Dr', editable: true },
+        { sortable: true, filter: true, field: 'type', headerName: 'Type', placeholder: 'C, D', editable: true },
         { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
         { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', editable: true },
         { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', editable: true },
         { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: true }
       ],
       resetActiveColIndex: false,
+      masterData: '',
     }
   },
   computed: {
@@ -99,6 +107,7 @@ export default {
     if (this.isEdit) {
       this.loadEditData()
     }
+    this.loadMasters();
   },
   // validations: {
   //   rows: {
@@ -120,9 +129,16 @@ export default {
       'fetchVoucher',
       'updateVoucher'
     ]),
+    ...mapActions('master', [
+      'fetchMasters'
+    ]),
     async loadEditData () {
       let response = await this.fetchVoucher(this.$route.params.id)
       this.formData = response.data.voucher
+    },
+    async loadMasters () {
+      let response = await this.fetchMasters({limit: 500})
+      this.masterData = response.data.masters.data
     },
     async submitVoucher () {
       this.$v.formData.$touch()
@@ -190,7 +206,8 @@ export default {
 
       //Account Column
       if ($event.colIndex === 1) {
-
+        var search = new RegExp($event.rowData.account , 'i'); // prepare a regex object
+        let findFromMaster = this.masterData.filter(each => search.test($event.rowData.account))
       }
 
       //Credit Column
