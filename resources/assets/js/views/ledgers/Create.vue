@@ -167,7 +167,7 @@ export default {
         { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
         { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'number', editable: true },
         { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'number', editable: true },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: false }
+        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: true }
       ]
     }
   },
@@ -246,7 +246,6 @@ export default {
 
     },
     addNewRow() {
-      console.log('add new row');
       this.rows.push({
           date: '',
           type: '',
