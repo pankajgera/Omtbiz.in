@@ -21,6 +21,7 @@
                 :column-defs="columnDefs"
                 :row-data="rows"
                 row-data-key='voucherId'
+                :master-options="masterData"
                 @cell-updated="cellUpdated"
                 @row-selected="rowSelected"
                 @link-clicked="linkClicked"
@@ -85,14 +86,15 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', placeholder: 'C, D', editable: true },
-        { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
-        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', editable: true },
-        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', editable: true },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: true }
+        { sortable: true, filter: true, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
+        { sortable: true, filter: true, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
+        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', size: '150px', editable: true },
+        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', size: '150px', editable: true },
+        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', type: 'text', size: '150px', editable: true }
       ],
       resetActiveColIndex: false,
-      masterData: '',
+      masterData: [],
+      currentData: '',
     }
   },
   computed: {
@@ -141,13 +143,13 @@ export default {
       this.masterData = response.data.masters.data
     },
     async submitVoucher () {
-      this.$v.formData.$touch()
-      if (this.$v.$invalid) {
-        return false
-      }
+      //this.$v.currentData.$touch()
+      // if (this.$v.$invalid) {
+      //   return false
+      // }
       if (this.isEdit) {
         this.isLoading = true
-        let response = await this.updateVoucher(this.formData)
+        let response = await this.updateVoucher(this.currentData)
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('vouchers.updated_message'))
@@ -157,11 +159,11 @@ export default {
         window.toastr['error'](response.data.error)
       } else {
         this.isLoading = true
-        let response = await this.addVoucher(this.formData)
+        let response = await this.addVoucher(this.currentData)
 
         if (response.data) {
           window.toastr['success'](this.$tc('vouchers.created_message'))
-          this.$router.push('/vouchers')
+          //this.$router.push('/vouchers')
           this.isLoading = false
           return true
         }
@@ -175,21 +177,25 @@ export default {
         this.resetActiveColIndex = true;
       }
 
-      if ($event.colIndex === 0) {
+      if ($event.columnIndex === 0) {
         if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
           $event.row.type = 'D';
           $event.value = 'D';
         } else {
           $event.row.type = 'C';
-          $event.value = 'D';
+          $event.value = 'C';
         }
+      }
+
+      if ($event.columnIndex === 4) {
+        this.currentData = $event.row
       }
     },
     rowSelected($event) {
       console.log('rowSelected', $event)
-      if (this.resetActiveColIndex) {
-        $event.colIndex = 0;
-      }
+      // if (this.resetActiveColIndex) {
+      //   $event.colIndex = 0;
+      // }
       //Type of Voucher Column
       if ($event.colIndex === 0) {
         if ($event.rowData.type === 'Dr' || $event.rowData.type === 'D' || $event.rowData.type === 'd') {
@@ -199,26 +205,30 @@ export default {
         }
       }
 
-      if ($event.rowData.type === 'D' && $event.colIndex === 2) {
-        $event.colData.editable = false;
-        $event.colIndex = 3;
-      }
-
       //Account Column
       if ($event.colIndex === 1) {
-        var search = new RegExp($event.rowData.account , 'i'); // prepare a regex object
-        let findFromMaster = this.masterData.filter(each => search.test($event.rowData.account))
+
       }
 
+      $event.colData.editable = true;
       //Credit Column
-      if ($event.colIndex === 2 ) {
-
+      if ($event.colIndex === 2 && $event.rowData.type === 'D') {
+        console.log('cant edit credit')
+        $event.colData.editable = false;
       }
 
       //Debit Column
-      if ($event.colIndex === 3) {
-
+      if ($event.colIndex === 3 && $event.rowData.type === 'C') {
+        console.log('cant edit debit')
+        $event.colData.editable = false;
       }
+
+      if ($event.colIndex === 4) {
+        // console.log('event', $event)
+        // this.addNewRow();
+        // this.resetActiveColIndex = true;
+      }
+
     },
     linkClicked($event) {
       console.log('linkClicked', $event)

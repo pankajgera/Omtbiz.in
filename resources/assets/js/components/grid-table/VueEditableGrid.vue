@@ -45,6 +45,8 @@
                             :cellEditing="cellEditing"
                             :cellsWithErrors="cellsWithErrors"
                             :onlyBorder="onlyBorder"
+                            :masterOptions="masterOptions"
+                            :placeholder="column.placeholder"
                             @click="selectCell(offsetRows + rowIndex, columnIndex, $event)"
                             @dblclick="tryEdit(row, column, offsetRows + rowIndex, columnIndex)"
                             @edited="cellEdited"
@@ -93,7 +95,8 @@ export default {
     pageCount: { type: Number, default: 0 },
     itemHeight: { type: Number, default: 30 },
     virtualScrollOffset: { type: Number, default: 3 },
-    onlyBorder: { type: Boolean, default: true }
+    onlyBorder: { type: Boolean, default: true },
+    masterOptions: { type: Array, default: [] },
   },
   data () {
     return {

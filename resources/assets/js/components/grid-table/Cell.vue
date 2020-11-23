@@ -2,7 +2,7 @@
   <td
       class="cell noselect"
       :id="`cell${rowIndex}-${columnIndex}`"
-      :class='{ selected: !onlyBorder &amp;&amp; selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
+      :class='{ selected: !onlyBorder && selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
       :title="invalid"
       :style="cellStyle"
       @click='$emit("click", $event)'
@@ -12,11 +12,42 @@
       @mouseover='$emit("mouseover", $event)'
       @mouseup='$emit("mouseup", $event)'
   >
-      <span class="editable-field" v-if="cellEditing[0] === rowIndex &amp;&amp; cellEditing[1] === columnIndex">
-          <input :type="inputType" ref="input" @keyup.enter="setEditableValue" @keydown.tab="setEditableValue" @keyup.esc="editCancelled" @focus="editPending = true" @blur="leaved" />
+      <span v-if="inputType === 'select'">
+        <v-select
+          ref="select"
+          :options="masterOptions"
+          label="name"
+          v-model="selectMaster"
+        >
+          <template v-slot:option="option">
+            {{ option.name }}
+          </template>
+        </v-select>
       </span>
-      <span class="cell-content" v-else>
-          <a @click.prevent="linkClicked" v-if='column.type === "link"' href="#">{{ row[column.field] | cellFormatter(column, row) }}</a><span v-else>{{ row[column.field] | cellFormatter(column, row) }}</span>
+      <span v-else>
+        <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
+            <input
+              :type="inputType"
+              ref="input"
+              :placeholder="placeholder"
+              @keyup.enter="setEditableValue"
+              @keydown.tab="setEditableValue"
+              @keyup.esc="editCancelled"
+              @focus="editPending = true"
+              @blur="leaved" />
+        </span>
+        <span class="cell-content" v-else>
+            <a
+              @click.prevent="linkClicked"
+              v-if='column.type === "link"'
+              href="#"
+              >
+              {{ row[column.field] | cellFormatter(column, row) }}
+              </a>
+            <span v-else>
+              {{ row[column.field] | cellFormatter(column, row) }}
+            </span>
+        </span>
       </span>
   </td>
 </template>
@@ -39,10 +70,12 @@ export default {
     selEnd: { type: Array },
     cellEditing: { type: Array },
     cellsWithErrors: { type: Object },
-    onlyBorder: { type: Boolean }
+    onlyBorder: { type: Boolean },
+    masterOptions: { type: Array, default: [] },
+    placeholder: { type: String, default: null }
   },
   data () {
-    return { value: null, rowValue: null, editPending: false }
+    return { value: null, rowValue: null, editPending: false, selectMaster: null }
   },
   computed: {
     selected () {
@@ -75,6 +108,7 @@ export default {
         case 'percent': return 'number'
         case 'date': return 'date'
         case 'datetime': return 'datetime-local'
+        case 'select': return 'select'
       }
       return 'text'
     },
@@ -90,7 +124,14 @@ export default {
         this.value = this.getEditableValue(this.cellEditing[2] || this.row[this.column.field])
 
         Vue.nextTick(() => {
-          const input = this.$refs.input
+          const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
+          if (this.inputType === 'select') {
+            input.focus()
+            console.log(input, this.selectMaster)
+            if (!this.selectMaster) return
+            input.value = this.selectMaster.name
+            return
+          }
           if (!this.value && this.value !== 0 && this.value !== false) {
             input.value = null
             input.focus()
