@@ -189,9 +189,9 @@ export default {
     },
     rowSelected($event) {
       console.log('rowSelected', $event)
-      if (this.resetActiveColIndex) {
-        $event.colIndex = 0;
-      }
+      // if (this.resetActiveColIndex) {
+      //   $event.colIndex = 0;
+      // }
       //Type of Voucher Column
       if ($event.colIndex === 0) {
         if ($event.rowData.type === 'Dr' || $event.rowData.type === 'D' || $event.rowData.type === 'd') {
@@ -201,37 +201,29 @@ export default {
         }
       }
 
-      if ($event.rowData.type === 'D' && $event.colIndex === 2) {
-        $event.colData.editable = false;
-        $event.colIndex = 3;
-      }
-
       //Account Column
       if ($event.colIndex === 1) {
 
       }
 
+      $event.colData.editable = true;
       //Credit Column
       if ($event.colIndex === 2 && $event.rowData.type === 'D') {
         console.log('cant edit credit')
         $event.colData.editable = false;
-      } else {
-        $event.colData.editable = true;
       }
 
       //Debit Column
       if ($event.colIndex === 3 && $event.rowData.type === 'C') {
         console.log('cant edit debit')
         $event.colData.editable = false;
-      } else {
-        $event.colData.editable = true;
       }
 
       if ($event.colIndex === 4) {
-        console.log('event', $event.$event)
-        this.addNewRow();
-        this.resetActiveColIndex = true;
-        this.currentData.push($event.rowData);
+        // console.log('event', $event)
+        // this.addNewRow();
+        // this.resetActiveColIndex = true;
+        // this.currentData.push($event.rowData);
       }
 
     },
