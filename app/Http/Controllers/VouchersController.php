@@ -46,6 +46,7 @@ class VouchersController extends Controller
      */
     public function store(Request $request)
     {
+        \Log::info('request', [$request]);
         try {
             $voucher = new Voucher();
             $voucher->account_master_id = $request->account_master_id;

@@ -18,7 +18,11 @@
           :options="masterOptions"
           label="name"
           v-model="selectMaster"
-        />
+        >
+          <template v-slot:option="option">
+            {{ option.name }}
+          </template>
+        </v-select>
       </span>
       <span v-else>
         <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
@@ -123,6 +127,7 @@ export default {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
+            console.log(input, this.selectMaster)
             if (!this.selectMaster) return
             input.value = this.selectMaster.name
             return
