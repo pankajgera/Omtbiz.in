@@ -12,22 +12,37 @@
       @mouseover='$emit("mouseover", $event)'
       @mouseup='$emit("mouseup", $event)'
   >
-      <v-select
-          v-if="inputType === 'select'"
+      <span v-if="inputType === 'select'">
+        <v-select
+          ref="select"
           :options="masterOptions"
           label="name"
-          autocomplete="on"
-          v-model="selectMaster">
-          <template v-slot:option="option">
-            {{ option.name }}
-          </template>
-      </v-select>
+          v-model="selectMaster"
+        />
+      </span>
       <span v-else>
         <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
-            <input :type="inputType" ref="input" @keyup.enter="setEditableValue" @keydown.tab="setEditableValue" @keyup.esc="editCancelled" @focus="editPending = true" @blur="leaved" />
+            <input
+              :type="inputType"
+              ref="input"
+              :placeholder="placeholder"
+              @keyup.enter="setEditableValue"
+              @keydown.tab="setEditableValue"
+              @keyup.esc="editCancelled"
+              @focus="editPending = true"
+              @blur="leaved" />
         </span>
         <span class="cell-content" v-else>
-            <a @click.prevent="linkClicked" v-if='column.type === "link"' href="#">{{ row[column.field] | cellFormatter(column, row) }}</a><span v-else>{{ row[column.field] | cellFormatter(column, row) }}</span>
+            <a
+              @click.prevent="linkClicked"
+              v-if='column.type === "link"'
+              href="#"
+              >
+              {{ row[column.field] | cellFormatter(column, row) }}
+              </a>
+            <span v-else>
+              {{ row[column.field] | cellFormatter(column, row) }}
+            </span>
         </span>
       </span>
   </td>
@@ -53,6 +68,7 @@ export default {
     cellsWithErrors: { type: Object },
     onlyBorder: { type: Boolean },
     masterOptions: { type: Array, default: [] },
+    placeholder: { type: String, default: null }
   },
   data () {
     return { value: null, rowValue: null, editPending: false, selectMaster: null }
@@ -104,11 +120,11 @@ export default {
         this.value = this.getEditableValue(this.cellEditing[2] || this.row[this.column.field])
 
         Vue.nextTick(() => {
-          const input = this.inputType !== 'select' ? this.$refs.input : null
+          const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
+            input.focus()
             if (!this.selectMaster) return
             input.value = this.selectMaster.name
-            input.focus()
             return
           }
           if (!this.value && this.value !== 0 && this.value !== false) {

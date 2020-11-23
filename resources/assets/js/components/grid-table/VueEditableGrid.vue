@@ -46,6 +46,7 @@
                             :cellsWithErrors="cellsWithErrors"
                             :onlyBorder="onlyBorder"
                             :masterOptions="masterOptions"
+                            :placeholder="column.placeholder"
                             @click="selectCell(offsetRows + rowIndex, columnIndex, $event)"
                             @dblclick="tryEdit(row, column, offsetRows + rowIndex, columnIndex)"
                             @edited="cellEdited"
@@ -383,7 +384,6 @@ export default {
     setEditableValue (row, column, rowIndex, columnIndex, value, valueChanged, $event) {
       return new Promise(resolve => {
         if (!valueChanged) {
-          console.log('valueChanged')
           this.cellEditing = []
           resolve()
           return
@@ -400,7 +400,6 @@ export default {
             this.cellEditing = []
           }
         }
-        console.log('prevent', prevent)
         const markAsPending = () => {
           changePending = true
           if (input) {
