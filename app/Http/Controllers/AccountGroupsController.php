@@ -11,7 +11,7 @@ class AccountGroupsController extends Controller
 {
     public function index(Request $request)
     {
-        $groups = AccountGroup::all();
+        $groups = AccountGroup::get(['id', 'name']);
 
         return response()->json([
             'groups' => $groups,
