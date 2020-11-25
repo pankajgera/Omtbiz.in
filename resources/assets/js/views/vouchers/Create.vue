@@ -11,8 +11,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <form action="" @submit.prevent="submitVoucher">
-            <div class="card-body">
+          <div class="card-body">
               <!---- Grid table start -->
               <vue-editable-grid
                 class="my-grid-class"
@@ -35,9 +34,9 @@
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
-              <button @click="addNewRow()">Add new</button>
+              <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
+              <button @click="submitVoucher()" class="btn btn-success">Save Voucher</button>
             </div>
-          </form>
         </div>
       </div>
     </div>
