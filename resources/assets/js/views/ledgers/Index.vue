@@ -36,7 +36,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="ledgers/create">
+        <!-- <router-link slot="item-title" class="col-xs-2" to="ledgers/create">
           <base-button
             color="theme"
             icon="plus"
@@ -44,7 +44,7 @@
           >
             {{ $t('ledgers.add_new_ledger') }}
           </base-button>
-        </router-link>
+        </router-link> -->
       </div>
     </div>
 
@@ -82,7 +82,7 @@
       <div class="row">
         <label class="description col mt-1" align="center">{{ $t('ledgers.list_of_ledgers') }}</label>
       </div>
-      <div class="btn-container">
+      <!-- <div class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -92,7 +92,7 @@
         >
           {{ $t('ledgers.add_new_ledger') }}
         </base-button>
-      </div>
+      </div> -->
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">

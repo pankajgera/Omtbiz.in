@@ -33,20 +33,18 @@
               <div class="form-group">
                 <label class="control-label">{{ $t('masters.groups') }}</label><span class="text-danger"> *</span>
                 <group-select
-                  ref="groupSelect"
-                  :invalid="$v.formData.group.$error"
+                  ref="selectedGroup"
+                  :invalid="$v.formData.groups.$error"
                   :group-options="groupOptions"
+                  :selected-group="groupOptions.find(each => each.name === this.formData.groups)"
                   @search="searchVal"
                   @select="onSelectGroup"
                   @deselect="deselectGroup"
                   @onSelectGroup="isSelected = true"
                 />
-                <div v-if="$v.formData.group.$error">
-                  <span v-if="!$v.formData.group.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
+                <div v-if="$v.formData.groups.$error">
+                  <span v-if="!$v.formData.groups.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
-                <!-- <select v-model="formData.group" name="group" class="form-control ls-select2">
-                  <option v-for="(group, index) in getGroups.filter((v, i, a) => a.indexOf(v) === i)" :key="index" :value="group"> {{ group }}</option>
-                </select> -->
               </div>
               <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
@@ -59,6 +57,18 @@
                 <div v-if="$v.formData.address.$error">
                   <span v-if="!$v.formData.address.maxLength" class="text-danger">{{ $t('validation.address_maxlength') }}</span>
                 </div>
+              </div>
+               <div class="form-group">
+                <base-button
+                  :loading="isLoading"
+                  :disabled="isLoading"
+                  icon="save"
+                  color="theme"
+                  type="submit"
+                  class="collapse-button"
+                >
+                  {{ isEdit ? $t('masters.update_master') : $t('masters.save_master') }}
+                </base-button>
               </div>
             </div>
           </form>
@@ -87,9 +97,11 @@ export default {
       title: 'Add Master',
       formData: {
         name: '',
-        group: '',
+        groups: '',
+        address: '',
       },
       groupOptions: [],
+      selectedGroup: '',
     }
   },
   computed: {
@@ -101,10 +113,10 @@ export default {
     }
   },
   created () {
+    this.loadGroups()
     if (this.isEdit) {
       this.loadEditData()
     }
-    this.loadGroups()
     window.hub.$on('newGroup', (val) => {
       if (!this.formData.group && this.modalActive && this.isSelected) {
         this.onSelectGroup(val)
@@ -117,8 +129,7 @@ export default {
         required,
         minLength: minLength(3)
       },
-      group: {
-        required,
+      groups: {
       },
       address: {
         maxLength: maxLength(255)
@@ -171,15 +182,15 @@ export default {
       }
     },
     searchVal (val) {
-      this.formData.group = val
+      this.formData.groups = val
     },
     onSelectGroup (obj) {
-      this.formData.group = obj.group
+      this.formData.groups = obj.name
     },
     deselectGroup () {
-      this.formData.group = ''
+      this.formData.groups = ''
       this.$nextTick(() => {
-        this.$refs.groupSelect.$refs.baseSelect.$refs.search.focus()
+        this.$refs.selectedGroup.$refs.baseSelect.$refs.search.focus()
       })
     },
   }

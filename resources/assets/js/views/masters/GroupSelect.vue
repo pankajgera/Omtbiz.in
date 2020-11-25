@@ -39,6 +39,11 @@ export default {
       type: Array,
       required: true
     },
+    selectedGroup: {
+      type: Object,
+      required: false,
+      default: null,
+    },
     invalid: {
       type: Boolean,
       required: false,
@@ -59,6 +64,9 @@ export default {
   watch: {
     invalidDescription (newValue) {
       console.log(newValue)
+    },
+    selectedGroup(newValue) {
+      this.groupSelect = newValue
     }
   },
   methods: {
