@@ -2,6 +2,7 @@
 
 namespace Crater\Http\Controllers;
 
+use Crater\AccountMaster;
 use Crater\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -48,16 +49,19 @@ class VouchersController extends Controller
     {
         \Log::info('request', [$request]);
         try {
-            $voucher = new Voucher();
-            $voucher->account_master_id = $request->account_master_id;
-            $voucher->type = $request->type;
-            $voucher->account = $request->account;
-            $voucher->debit_amount = $request->debit_amount;
-            $voucher->credit_amount = $request->credit_amount;
-            $voucher->short_narration = $request->short_narration;
-            $voucher->save();
+            foreach ($request as $each) {
+                $voucher = new Voucher();
+                $voucher->account_master_id = AccountMaster::where('name', $each->account)->first()->pluck('id');
+                $voucher->type = $each->type;
+                $voucher->account = $each->account;
+                $voucher->debit_amount = $each->debit;
+                $voucher->credit_amount = $each->credit;
+                $voucher->short_narration = $each->short_narration;
+                $voucher->save();
+            }
 
-            $voucher = Voucher::find($voucher->id);
+
+            $voucher = Voucher::where('id', $voucher->id);
 
             return response()->json([
                 'voucher' => $voucher,

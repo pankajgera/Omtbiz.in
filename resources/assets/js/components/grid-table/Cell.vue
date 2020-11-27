@@ -18,6 +18,7 @@
           :options="masterOptions"
           label="name"
           v-model="selectMaster"
+          @input="setSelected"
         >
           <template v-slot:option="option">
             {{ option.name }}
@@ -121,16 +122,16 @@ export default {
     cellEditing () {
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
-        this.value = this.getEditableValue(this.cellEditing[2] || this.row[this.column.field])
+        this.value = this.getEditableValue(this.row[this.column.field])
 
         Vue.nextTick(() => {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
-            console.log(input, this.selectMaster)
             if (!this.selectMaster) return
             input.value = this.selectMaster.name
-            return
+            this.value = this.selectMaster.name
+            this.rowValue = this.selectMaster.name
           }
           if (!this.value && this.value !== 0 && this.value !== false) {
             input.value = null
@@ -150,6 +151,13 @@ export default {
             input.focus()
           }
         })
+      }
+      if (this.inputType === 'select') {
+        if (this.selectMaster) {
+            this.value = this.selectMaster
+            this.rowValue = this.selectMaster
+            this.row.account = this.selectMaster
+        }
       }
     }
   },
@@ -184,6 +192,9 @@ export default {
     },
     linkClicked () {
       this.$emit('link-clicked')
+    },
+    setSelected(value) {
+      this.selectMaster = value.name;
     }
   }
 }

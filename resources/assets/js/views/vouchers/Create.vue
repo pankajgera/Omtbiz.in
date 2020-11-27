@@ -93,7 +93,6 @@ export default {
       ],
       resetActiveColIndex: false,
       masterData: [],
-      currentData: '',
     }
   },
   computed: {
@@ -142,13 +141,9 @@ export default {
       this.masterData = response.data.masters.data
     },
     async submitVoucher () {
-      //this.$v.currentData.$touch()
-      // if (this.$v.$invalid) {
-      //   return false
-      // }
       if (this.isEdit) {
         this.isLoading = true
-        let response = await this.updateVoucher(this.currentData)
+        let response = await this.updateVoucher(this.rows)
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('vouchers.updated_message'))
@@ -158,7 +153,7 @@ export default {
         window.toastr['error'](response.data.error)
       } else {
         this.isLoading = true
-        let response = await this.addVoucher(this.currentData)
+        let response = await this.addVoucher(this.rows)
 
         if (response.data) {
           window.toastr['success'](this.$tc('vouchers.created_message'))
@@ -187,7 +182,7 @@ export default {
       }
 
       if ($event.columnIndex === 4) {
-        this.currentData = $event.row
+
       }
     },
     rowSelected($event) {
