@@ -13,7 +13,14 @@ class UpdateAccountLedgersTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('account_ledgers', function (Blueprint $table) {
+            $table->dropForeign('account_ledgers_voucher_id_foreign');
+            $table->dropColumn('voucher_id');
+            $table->string('type')->nullable()->change();
+            $table->string('bill_no')->nullable()->change();
+            $table->string('account')->nullable()->change();
+            $table->string('short_narration')->nullable()->change();
+        });
     }
 
     /**

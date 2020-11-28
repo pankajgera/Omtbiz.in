@@ -13,7 +13,11 @@ class UpdateVouchersTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('vouchers', function (Blueprint $table) {
+            $table->integer('account_ledger_id')->unsigned();
+            $table->foreign('account_ledger_id')->references('id')->on('account_ledgers');
+            $table->dateTime('date');
+        });
     }
 
     /**
@@ -23,6 +27,6 @@ class UpdateVouchersTable extends Migration
      */
     public function down()
     {
-        //
+       //
     }
 }
