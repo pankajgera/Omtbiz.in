@@ -2,6 +2,9 @@
 
 namespace Crater\Http\Controllers;
 
+use Carbon\Carbon;
+use Crater\AccountLedger;
+use Crater\AccountMaster;
 use Crater\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -48,16 +51,26 @@ class VouchersController extends Controller
     {
         \Log::info('request', [$request]);
         try {
-            $voucher = new Voucher();
-            $voucher->account_master_id = $request->account_master_id;
-            $voucher->type = $request->type;
-            $voucher->account = $request->account;
-            $voucher->debit_amount = $request->debit_amount;
-            $voucher->credit_amount = $request->credit_amount;
-            $voucher->short_narration = $request->short_narration;
-            $voucher->save();
+            $ledger = AccountLedger::create([
+                'date' => Carbon::now(),
+                'debit' => $request[0]->total_debit,
+                'credit' => $request[0]->total_credit,
+                'balance' => $request[0]->balance,
+            ]);
 
-            $voucher = Voucher::find($voucher->id);
+            foreach ($request as $each) {
+                $voucher = new Voucher();
+                $voucher->account_master_id = AccountMaster::where('name', $each->account)->first()->pluck('id');
+                $voucher->account_ledger_id = $ledger->id;
+                $voucher->type = $each->type;
+                $voucher->account = $each->account;
+                $voucher->debit_amount = $each->debit;
+                $voucher->credit_amount = $each->credit;
+                $voucher->short_narration = $each->short_narration;
+                $voucher->save();
+            }
+
+            $voucher = Voucher::where('account_ledger_id', $ledger->id)->get();
 
             return response()->json([
                 'voucher' => $voucher,

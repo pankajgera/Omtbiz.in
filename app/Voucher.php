@@ -8,7 +8,9 @@ class Voucher extends Model
 {
     protected $fillable = [
         'type',
+        'date',
         'account_master_id',
+        'account_ledger_id',
         'account',
         'debit_amount',
         'credit_amount',
@@ -18,6 +20,11 @@ class Voucher extends Model
     public function accountMaster()
     {
         return $this->belongsTo(\Crater\AccountMaster::class);
+    }
+
+    public function accountLedger()
+    {
+        return $this->belongsTo(\Crater\AccountLedger::class);
     }
 
     public function scopeWhereType($query, $type)

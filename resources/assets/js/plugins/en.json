@@ -294,7 +294,9 @@
         "confirm_delete": "You will not be able to recover this Account Voucher | You will not be able to recover these Account Vouchers",
         "created_message": "Account Voucher created successfully",
         "updated_message": "Account Voucher updated successfully",
-        "deleted_message": "Account Voucher deleted successfully | Account Vouchers deleted successfully"
+        "deleted_message": "Account Voucher deleted successfully | Account Vouchers deleted successfully",
+        "balace_not_equal_title": "Balance!",
+        "balace_not_equal_desc": "Voucher debit/credit balance should be equal"
     },
     "estimates": {
         "title": "Estimates",

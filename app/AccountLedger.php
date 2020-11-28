@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class AccountLedger extends Model
 {
     protected $fillable = [
-        'voucher_id',
         'date',
         'type',
         'bill_no',
@@ -17,11 +16,6 @@ class AccountLedger extends Model
         'balance',
         'short_narration',
     ];
-
-    public function voucher()
-    {
-        return $this->belongsTo(\Crater\Voucher::class);
-    }
 
     public function scopeWhereDate($query, $date)
     {

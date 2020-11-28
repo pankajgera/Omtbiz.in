@@ -81,7 +81,10 @@ export default {
           account: '',
           credit: '',
           debit: '',
-          short_narration: ''
+          short_narration: '',
+          total_debit: '',
+          total_credit: '',
+          balance: '',
         }
       ],
       columnDefs: [
@@ -93,7 +96,6 @@ export default {
       ],
       resetActiveColIndex: false,
       masterData: [],
-      currentData: '',
     }
   },
   computed: {
@@ -142,13 +144,28 @@ export default {
       this.masterData = response.data.masters.data
     },
     async submitVoucher () {
-      //this.$v.currentData.$touch()
-      // if (this.$v.$invalid) {
-      //   return false
-      // }
+      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c);
+      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c);
+
+      let calc_balance = 0;
+      if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {
+        swal({
+            title: this.$t('vouchers.balace_not_equal_title'),
+            text: this.$t('vouchers.balace_not_equal_desc'),
+            icon: 'error',
+            buttons: false,
+            dangerMode: true
+          })
+          return false
+      }
+      this.rows.map(each => {
+        each['total_debit'] = debit_sum
+        each['total_credit'] = credit_sum
+        each['balance'] = calc_balance
+      });
       if (this.isEdit) {
         this.isLoading = true
-        let response = await this.updateVoucher(this.currentData)
+        let response = await this.updateVoucher(this.rows)
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('vouchers.updated_message'))
@@ -158,11 +175,10 @@ export default {
         window.toastr['error'](response.data.error)
       } else {
         this.isLoading = true
-        let response = await this.addVoucher(this.currentData)
+        let response = await this.addVoucher(this.rows)
 
         if (response.data) {
           window.toastr['success'](this.$tc('vouchers.created_message'))
-          //this.$router.push('/vouchers')
           this.isLoading = false
           return true
         }
@@ -187,7 +203,7 @@ export default {
       }
 
       if ($event.columnIndex === 4) {
-        this.currentData = $event.row
+
       }
     },
     rowSelected($event) {
