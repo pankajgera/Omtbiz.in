@@ -47,7 +47,6 @@ class VouchersController extends Controller
         $ledger = '';
         try {
             foreach ($request->all() as $each) {
-                \Log::info($each);
                 $ledger = AccountLedger::updateOrCreate([
                     'account' => $each['account'],
                     'account_master_id' => $each['account_id'],
