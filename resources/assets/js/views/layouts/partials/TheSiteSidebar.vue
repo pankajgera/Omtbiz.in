@@ -103,7 +103,7 @@ export default {
           {
             title: 'navigation.voucher',
             icon: 'file',
-            route: '/vouchers',
+            route: '/vouchers/create',
             meta: ['admin']
           },
         ],

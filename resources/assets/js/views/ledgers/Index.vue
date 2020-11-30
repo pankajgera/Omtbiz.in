@@ -52,20 +52,38 @@
       <div v-show="showFilters" class="filter-section">
         <div class="row">
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.name') }} </label>
+            <label class="form-label"> {{ $tc('ledgers.account') }} </label>
             <base-input
-              v-model="filters.name"
+              v-model="filters.account"
               type="text"
-              name="name"
+              name="account"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.groups') }} </label>
+            <label class="form-label"> {{ $tc('ledgers.credit') }} </label>
             <base-input
-              v-model="filters.groups"
+              v-model="filters.credit"
               type="text"
-              name="groups"
+              name="credit"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label"> {{ $tc('ledgers.debit') }} </label>
+            <base-input
+              v-model="filters.debit"
+              type="text"
+              name="debit"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-4">
+            <label class="form-label"> {{ $tc('ledgers.balance') }} </label>
+            <base-input
+              v-model="filters.balance"
+              type="text"
+              name="balance"
               autocomplete="off"
             />
           </div>
@@ -152,12 +170,20 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.name')"
-          show="name"
+          :label="$t('ledgers.account')"
+          show="account"
         />
         <table-column
-          :label="$t('ledgers.groups')"
-          show="groups"
+          :label="$t('ledgers.credit')"
+          show="credit"
+        />
+        <table-column
+          :label="$t('ledgers.debit')"
+          show="debit"
+        />
+        <table-column
+          :label="$t('ledgers.balance')"
+          show="balance"
         />
         <table-column
           :key="Math.random()"
@@ -220,8 +246,10 @@ export default {
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
-        name: '',
-        groups: '',
+        account: '',
+        credit: '',
+        debit: '',
+        balance: ''
       },
       index: null
     }
@@ -244,7 +272,7 @@ export default {
         return this.selectedLedgers
       },
       set: function (val) {
-        this.selectItem(val)
+        this.selectLedger(val)
       }
     },
     selectAllFieldStatus: {
@@ -271,8 +299,8 @@ export default {
     ...mapActions('ledger', [
       'fetchLedgers',
       'selectAllLedgers',
-      'selectItem',
-      'deleteItem',
+      'selectLedger',
+      'deleteLedger',
       'deleteMultipleLedgers',
       'setSelectAllState'
     ]),
@@ -281,8 +309,10 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
-        name: this.filters.name !== null ? this.filters.name : '',
-        groups: this.filters.groups !== null ? this.filters.groups : '',
+        account: this.filters.account !== null ? this.filters.account : '',
+        credit: this.filters.credit !== null ? this.filters.credit : '',
+        debit: this.filters.debit !== null ? this.filters.debit : '',
+        balance: this.filters.balance !== null ? this.filters.balance : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -306,8 +336,10 @@ export default {
     },
     clearFilter () {
       this.filters = {
-        name: '',
-        groups: '',
+        account: '',
+        credit: '',
+        debit: '',
+        balance: '',
       }
 
       this.$nextTick(() => {
@@ -332,7 +364,7 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteItem(this.id)
+          let res = await this.deleteLedger(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('ledgers.deleted_message', 1))
             this.$refs.table.refresh()

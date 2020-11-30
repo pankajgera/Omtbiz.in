@@ -15,10 +15,10 @@ class AccountLedgersController extends Controller
 
         $ledgers = AccountLedger::applyFilters($request->only([
             'date',
-            'type',
             'account',
             'debit',
             'credit',
+            'balance',
             'orderByField',
             'orderBy',
         ]))

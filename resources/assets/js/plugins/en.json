@@ -16,7 +16,7 @@
         "inventory": "Inventory",
         "master": "Ledger",
         "ledger": "Display",
-        "voucher": "Voucher"
+        "voucher": "Create Voucher"
     },
     "general": {
         "view_pdf": "View PDF",
@@ -262,6 +262,7 @@
         "account": "Account",
         "debit": "Debit",
         "credit": "Credit",
+        "balance": "Balance",
         "short_narration": "Short Narration",
         "ledger_attached_message": "Cannot delete an ledger which is already in use",
         "confirm_delete": "You will not be able to recover this Display | You will not be able to recover these Displays",
@@ -282,7 +283,6 @@
         "action": "Action",
         "add_voucher": "Add Account Voucher",
         "save_voucher": "Save Account Voucher",
-        "update_voucher": "Update Account Voucher",
         "voucher": "Account Voucher | Account Vouchers",
         "add_new_voucher": "Add New Account Voucher",
         "new_voucher": "New Account Voucher",

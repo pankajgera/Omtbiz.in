@@ -13,12 +13,6 @@ export default {
     state.vouchers.push(data.voucher)
   },
 
-  [types.UPDATE_VOUCHER] (state, data) {
-    let pos = state.vouchers.findIndex(voucher => voucher.id === data.voucher.id)
-
-    state.vouchers[pos] = data.voucher
-  },
-
   [types.DELETE_VOUCHER] (state, id) {
     let index = state.vouchers.findIndex(voucher => voucher.id === id)
     state.vouchers.splice(index, 1)

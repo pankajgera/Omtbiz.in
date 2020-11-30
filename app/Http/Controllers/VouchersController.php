@@ -16,12 +16,7 @@ class VouchersController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 20;
 
-        $vouchers = Voucher::applyFilters($request->only([
-            'type',
-            'account',
-            'debit_amount',
-            'credit_amount',
-            'short_narration',
+        $vouchers = AccountLedger::applyFilters($request->only([
             'orderByField',
             'orderBy',
         ]))
@@ -49,63 +44,39 @@ class VouchersController extends Controller
      */
     public function store(Request $request)
     {
-        \Log::info('request', [$request]);
+        $ledger = '';
         try {
-            $ledger = AccountLedger::create([
-                'date' => Carbon::now(),
-                'debit' => $request[0]->total_debit,
-                'credit' => $request[0]->total_credit,
-                'balance' => $request[0]->balance,
-            ]);
+            foreach ($request->all() as $each) {
+                \Log::info($each);
+                $ledger = AccountLedger::updateOrCreate([
+                    'account' => $each['account'],
+                    'account_master_id' => $each['account_id'],
+                ], [
+                    'debit' => $each['total_debit'],
+                    'credit' => $each['total_credit'],
+                    'balance' => $each['balance'],
+                    'date' => Carbon::now()->toDateTimeString(),
+                ]);
 
-            foreach ($request as $each) {
-                $voucher = new Voucher();
-                $voucher->account_master_id = AccountMaster::where('name', $each->account)->first()->pluck('id');
-                $voucher->account_ledger_id = $ledger->id;
-                $voucher->type = $each->type;
-                $voucher->account = $each->account;
-                $voucher->debit_amount = $each->debit;
-                $voucher->credit_amount = $each->credit;
-                $voucher->short_narration = $each->short_narration;
-                $voucher->save();
+                Voucher::updateOrCreate([
+                    'account_ledger_id' => $ledger->id,
+                    'account_master_id' => $each['account_id'],
+                ], [
+                    'type' => $each['type'],
+                    'account' => $each['account'],
+                    'debit_amount' => $each['debit'],
+                    'credit_amount' => $each['credit'],
+                    'short_narration' => $each['short_narration'],
+                    'date' => Carbon::now()->toDateTimeString(),
+                ]);
             }
 
             $voucher = Voucher::where('account_ledger_id', $ledger->id)->get();
-
             return response()->json([
                 'voucher' => $voucher,
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving account voucher', [$e->getMessage()]);
-        }
-    }
-
-    /**
-     * Update an existing Account Ledger.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, $id)
-    {
-        try {
-            $voucher = Voucher::find($id);
-            $voucher->account_master_id = $request->account_master_id;
-            $voucher->type = $request->type;
-            $voucher->account = $request->account;
-            $voucher->debit_amount = $request->debit_amount;
-            $voucher->credit_amount = $request->credit_amount;
-            $voucher->short_narration = $request->short_narration;
-            $voucher->save();
-
-            $voucher = Voucher::find($voucher->id);
-
-            return response()->json([
-                'voucher' => $voucher,
-            ]);
-        } catch (Exception $e) {
-            Log::error('Error while updating account voucher', [$e->getMessage()]);
         }
     }
 

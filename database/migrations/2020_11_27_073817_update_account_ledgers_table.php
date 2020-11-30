@@ -16,9 +16,11 @@ class UpdateAccountLedgersTable extends Migration
         Schema::table('account_ledgers', function (Blueprint $table) {
             $table->dropForeign('account_ledgers_voucher_id_foreign');
             $table->dropColumn('voucher_id');
+            $table->dateTime('date')->change();
             $table->string('type')->nullable()->change();
             $table->string('bill_no')->nullable()->change();
-            $table->string('account')->nullable()->change();
+            $table->integer('account_master_id')->unsigned();
+            $table->foreign('account_master_id')->references('id')->on('account_masters');
             $table->string('short_narration')->nullable()->change();
         });
     }

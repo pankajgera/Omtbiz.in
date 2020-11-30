@@ -24,20 +24,8 @@ export const fetchVoucher = ({ commit, dispatch }, id) => {
 
 export const addVoucher = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    console.log(data)
     window.axios.post('/api/vouchers', data).then((response) => {
       commit(types.ADD_VOUCHER, response.data)
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
-export const updateVoucher = ({ commit, dispatch, state }, data) => {
-  return new Promise((resolve, reject) => {
-    window.axios.put(`/api/vouchers/${data.id}`, data).then((response) => {
-      commit(types.UPDATE_VOUCHER, response.data)
       resolve(response)
     }).catch((err) => {
       reject(err)
