@@ -5,8 +5,8 @@ export default {
     state.ledgers = ledgers
   },
 
-  [types.SET_TOTAL_LEDGERS] (state, totalVouchers) {
-    state.totalVouchers = totalVouchers
+  [types.SET_TOTAL_LEDGERS] (state, totalLedgers) {
+    state.totalLedgers = totalLedgers
   },
 
   [types.ADD_LEDGER] (state, data) {
@@ -24,17 +24,17 @@ export default {
     state.ledgers.splice(index, 1)
   },
 
-  [types.DELETE_MULTIPLE_LEDGERS] (state, selectedVouchers) {
-    selectedVouchers.forEach((ledger) => {
+  [types.DELETE_MULTIPLE_LEDGERS] (state, selectedLedgers) {
+    selectedLedgers.forEach((ledger) => {
       let index = state.ledgers.findIndex(_ledger => _ledger.id === ledger.id)
       state.ledgers.splice(index, 1)
     })
 
-    state.selectedVouchers = []
+    state.selectedLedgers = []
   },
 
   [types.SET_SELECTED_LEDGERS] (state, data) {
-    state.selectedVouchers = data
+    state.selectedLedgers = data
   },
 
   [types.SET_SELECT_ALL_STATE] (state, data) {

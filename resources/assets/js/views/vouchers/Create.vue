@@ -67,24 +67,17 @@ export default {
     return {
       isLoading: false,
       title: 'Add Account Voucher',
-      // formData: {
-      //   date: '',
-      //   type: '',
-      //   account: '',
-      //   credit: '',
-      //   debit: '',
-      //   short_narration: ''
-      // },
       rows: [
         {
           type: '',
           account: '',
-          credit: '',
-          debit: '',
+          account_id: '',
+          credit: 0,
+          debit: 0,
           short_narration: '',
-          total_debit: '',
-          total_credit: '',
-          balance: '',
+          total_debit: 0,
+          total_credit: 0,
+          balance: 0,
         }
       ],
       columnDefs: [
@@ -99,11 +92,11 @@ export default {
     }
   },
   computed: {
-    isEdit () {
+    isEdit() {
       if (this.$route.name === 'vouchers.edit') {
-        return true
-      }
-      return false
+          return true
+        }
+        return false
     }
   },
   created () {
@@ -112,40 +105,25 @@ export default {
     }
     this.loadMasters();
   },
-  // validations: {
-  //   rows: {
-  //     date: {
-  //       required,
-  //       type: Date
-  //     },
-  //     type: {
-  //       required
-  //     },
-  //     account: {
-  //       required
-  //     }
-  //   }
-  // },
   methods: {
     ...mapActions('voucher', [
       'addVoucher',
       'fetchVoucher',
-      'updateVoucher'
     ]),
     ...mapActions('master', [
       'fetchMasters'
     ]),
     async loadEditData () {
       let response = await this.fetchVoucher(this.$route.params.id)
-      this.formData = response.data.voucher
+      this.rows = response.data.voucher
     },
     async loadMasters () {
       let response = await this.fetchMasters({limit: 500})
       this.masterData = response.data.masters.data
     },
     async submitVoucher () {
-      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c);
-      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c);
+      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseInt(c));
+      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseInt(c));
 
       let calc_balance = 0;
       if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {
@@ -163,30 +141,18 @@ export default {
         each['total_credit'] = credit_sum
         each['balance'] = calc_balance
       });
-      if (this.isEdit) {
-        this.isLoading = true
-        let response = await this.updateVoucher(this.rows)
-        if (response.data) {
-          this.isLoading = false
-          window.toastr['success'](this.$tc('vouchers.updated_message'))
-          this.$router.push('/vouchers')
-          return true
-        }
-        window.toastr['error'](response.data.error)
-      } else {
-        this.isLoading = true
-        let response = await this.addVoucher(this.rows)
 
-        if (response.data) {
-          window.toastr['success'](this.$tc('vouchers.created_message'))
-          this.isLoading = false
-          return true
-        }
-        window.toastr['success'](response.data.success)
+      this.isLoading = true
+      let response = await this.addVoucher(this.rows)
+
+      if (response.data) {
+        window.toastr['success'](this.$tc('vouchers.created_message'))
+        this.isLoading = false
+        return true
       }
+      window.toastr['success'](response.data.success)
     },
     cellUpdated($event) {
-      console.log('cellUpdated', $event)
       if ($event.$event.key === 'Tab' && $event.columnIndex === 4) {
         this.addNewRow();
         this.resetActiveColIndex = true;
@@ -207,7 +173,6 @@ export default {
       }
     },
     rowSelected($event) {
-      console.log('rowSelected', $event)
       // if (this.resetActiveColIndex) {
       //   $event.colIndex = 0;
       // }
@@ -228,36 +193,32 @@ export default {
       $event.colData.editable = true;
       //Credit Column
       if ($event.colIndex === 2 && $event.rowData.type === 'D') {
-        console.log('cant edit credit')
         $event.colData.editable = false;
       }
 
       //Debit Column
       if ($event.colIndex === 3 && $event.rowData.type === 'C') {
-        console.log('cant edit debit')
         $event.colData.editable = false;
       }
 
       if ($event.colIndex === 4) {
-        // console.log('event', $event)
         // this.addNewRow();
         // this.resetActiveColIndex = true;
       }
 
     },
     linkClicked($event) {
-      console.log('linkClicked', $event)
     },
     contextMenu($event) {
-      console.log('contextMenu', $event)
     },
     addNewRow() {
       this.rows.push({
           date: '',
           type: '',
           account: '',
-          credit: '',
-          debit: '',
+          account_id: 0,
+          credit: 0,
+          debit: 0,
           short_narration: ''
         });
     }

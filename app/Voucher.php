@@ -9,8 +9,8 @@ class Voucher extends Model
     protected $fillable = [
         'type',
         'date',
-        'account_master_id',
         'account_ledger_id',
+        'account_master_id',
         'account',
         'debit_amount',
         'credit_amount',

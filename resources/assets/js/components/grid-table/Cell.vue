@@ -194,6 +194,7 @@ export default {
       this.$emit('link-clicked')
     },
     setSelected(value) {
+      this.row.account_id = value.id;
       this.selectMaster = value.name;
     }
   }

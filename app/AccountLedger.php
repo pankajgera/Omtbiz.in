@@ -11,6 +11,7 @@ class AccountLedger extends Model
         'type',
         'bill_no',
         'account',
+        'account_master_id',
         'debit',
         'credit',
         'balance',
@@ -42,6 +43,11 @@ class AccountLedger extends Model
         return $query->where('credit', 'LIKE', '%'.$credit.'%');
     }
 
+    public function scopeWhereBalance($query, $balance)
+    {
+        return $query->where('balance', 'LIKE', '%'.$balance.'%');
+    }
+
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
@@ -69,6 +75,10 @@ class AccountLedger extends Model
 
         if ($filters->get('credit')) {
             $query->whereName($filters->get('credit'));
+        }
+
+        if ($filters->get('balance')) {
+            $query->whereName($filters->get('balance'));
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {

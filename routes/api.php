@@ -442,5 +442,10 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'VouchersController@delete'
     ]);
 
+    Route::post('/vouchers/update', [
+        'as' => 'vouchers.update',
+        'uses' => 'VouchersController@update'
+    ]);
+
     Route::resource('vouchers', 'VouchersController');
 });
