@@ -224,6 +224,8 @@
         "account_master": "Ledger",
         "groups": "Group",
         "address": "Address",
+        "country": "Country",
+        "region": "State",
         "save_masters": "Save Ledger",
         "master_attached_message": "Cannot delete an master which is already in use",
         "confirm_delete": "You will not be able to recover this Ledger | You will not be able to recover these Ledger",

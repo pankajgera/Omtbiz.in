@@ -47,6 +47,29 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="control-label">{{ $t('masters.country') }}</label><span class="text-danger"> *</span>
+                      <country-select
+                        v-model="formData.country"
+                        :country="formData.country"
+                        :className="'base-input select-input'"
+                        topCountry="IN" />
+                <div v-if="$v.formData.country.$error">
+                  <span v-if="!$v.formData.country.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">{{ $t('masters.region') }}</label><span class="text-danger"> *</span>
+                   <region-select
+                    v-model="formData.region"
+                    :country="formData.country"
+                    :defaultRegion="'IN'"
+                    :className="'base-input select-input'"
+                    :region="formData.region" />
+                <div v-if="$v.formData.region.$error">
+                  <span v-if="!$v.formData.region.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
                 <base-text-area
                   v-model="formData.address"
@@ -77,7 +100,22 @@
     </div>
   </div>
 </template>
-
+<style scoped>
+.base-input.select-input{
+    width: 100%;
+    height: 40px;
+    padding: 8px 13px;
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid #EBF1FA;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -99,6 +137,8 @@ export default {
         name: '',
         groups: '',
         address: '',
+        country: '',
+        region: ''
       },
       groupOptions: [],
       selectedGroup: '',
@@ -134,6 +174,12 @@ export default {
       address: {
         maxLength: maxLength(255)
       },
+      country: {
+        required,
+      },
+      region: {
+        required,
+      }
     }
   },
   methods: {
