@@ -51,7 +51,8 @@ class AccountMastersController extends Controller
             $master->address = $request->address;
             $master->country = $request->country;
             $master->state = $request->state;
-            $master->balance = $request->balance;
+            $master->opening_balance = $request->opening_balance;
+            $master->type = $request->type;
             $master->save();
 
             $master = AccountMaster::find($master->id);
@@ -80,7 +81,8 @@ class AccountMastersController extends Controller
             $master->address = $request->address;
             $master->country = $request->country;
             $master->state = $request->state;
-            $master->balance = $request->balance;
+            $master->opening_balance = $request->opening_balance;
+            $master->type = $request->type;
             $master->save();
 
             $master = AccountMaster::find($master->id);
