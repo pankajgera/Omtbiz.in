@@ -16,7 +16,8 @@ class UpdateAccountMastersTable extends Migration
         Schema::table('account_masters', function (Blueprint $table) {
             $table->string('country')->nullable();
             $table->string('state')->nullable();
-            $table->integer('balance')->nullable();
+            $table->integer('opening_balance')->nullable();
+            $table->enum('type', ['Dr','Cr'])->default('Cr');
         });
     }
 

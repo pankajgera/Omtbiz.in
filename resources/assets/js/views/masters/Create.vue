@@ -76,15 +76,18 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.balance') }}</label>
+                <label class="control-label">{{ $t('masters.opening_balance') }}</label>
                 <base-input
-                  v-model.trim="formData.balance"
-                  :invalid="$v.formData.balance.$error"
+                  v-model.trim="formData.opening_balance"
                   focus
                   type="number"
-                  name="balance"
-                  @input="$v.formData.balance.$touch()"
+                  name="opening_balance"
+                  @input="$v.formData.opening_balance.$touch()"
                 />
+                <select v-model="formData.type">
+                  <option value="Cr">Cr</option>
+                  <option value="Dr">Dr</option>
+              </select>
               </div>
                <div class="form-group">
                 <base-button
@@ -144,7 +147,8 @@ export default {
         address: '',
         country: '',
         state: '',
-        balance: 0,
+        opening_balance: 0,
+        type: 'Cr'
       },
       groupOptions: [],
       selectedGroup: '',
@@ -179,12 +183,6 @@ export default {
       },
       address: {
         maxLength: maxLength(255)
-      },
-      country: {
-      },
-      state: {
-      },
-      balance: {
       },
     }
   },
