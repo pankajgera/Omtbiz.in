@@ -47,6 +47,23 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="control-label">{{ $t('masters.country') }}</label>
+                  <country-select
+                    v-model="formData.country"
+                    :country="formData.country"
+                    :className="'base-input select-input'"
+                    topCountry="IN" />
+              </div>
+              <div class="form-group">
+                <label class="control-label">{{ $t('masters.state') }}</label>
+                   <region-select
+                    v-model="formData.state"
+                    :country="formData.country"
+                    :defaultRegion="'IN'"
+                    :className="'base-input select-input'"
+                    :region="formData.state" />
+              </div>
+              <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
                 <base-text-area
                   v-model="formData.address"
@@ -57,6 +74,17 @@
                 <div v-if="$v.formData.address.$error">
                   <span v-if="!$v.formData.address.maxLength" class="text-danger">{{ $t('validation.address_maxlength') }}</span>
                 </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">{{ $t('masters.balance') }}</label>
+                <base-input
+                  v-model.trim="formData.balance"
+                  :invalid="$v.formData.balance.$error"
+                  focus
+                  type="number"
+                  name="balance"
+                  @input="$v.formData.balance.$touch()"
+                />
               </div>
                <div class="form-group">
                 <base-button
@@ -77,7 +105,22 @@
     </div>
   </div>
 </template>
-
+<style scoped>
+.base-input.select-input{
+    width: 100%;
+    height: 40px;
+    padding: 8px 13px;
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid #EBF1FA;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -99,6 +142,9 @@ export default {
         name: '',
         groups: '',
         address: '',
+        country: '',
+        state: '',
+        balance: 0,
       },
       groupOptions: [],
       selectedGroup: '',
@@ -133,6 +179,12 @@ export default {
       },
       address: {
         maxLength: maxLength(255)
+      },
+      country: {
+      },
+      state: {
+      },
+      balance: {
       },
     }
   },

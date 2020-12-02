@@ -10,6 +10,9 @@ class AccountMaster extends Model
         'name',
         'group',
         'address',
+        'country',
+        'state',
+        'balance'
     ];
 
     public function scopeWhereName($query, $name)
@@ -48,6 +51,7 @@ class AccountMaster extends Model
 
     public static function deleteAccountMaster($id)
     {
+        \Log::info($id);
         $master = self::find($id);
         $master->delete();
         return true;

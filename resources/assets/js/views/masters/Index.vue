@@ -248,7 +248,7 @@ export default {
         return this.selectedMasters
       },
       set: function (val) {
-        this.selectItem(val)
+        this.selectMaster(val)
       }
     },
     selectAllFieldStatus: {
@@ -275,8 +275,8 @@ export default {
     ...mapActions('master', [
       'fetchMasters',
       'selectAllMasters',
-      'selectItem',
-      'deleteItem',
+      'selectMaster',
+      'deleteMaster',
       'deleteMultipleMasters',
       'setSelectAllState'
     ]),
@@ -336,7 +336,7 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteItem(this.id)
+          let res = await this.deleteMaster(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('masters.deleted_message', 1))
             this.$refs.table.refresh()
