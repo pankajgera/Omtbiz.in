@@ -47,27 +47,21 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.country') }}</label><span class="text-danger"> *</span>
-                      <country-select
-                        v-model="formData.country"
-                        :country="formData.country"
-                        :className="'base-input select-input'"
-                        topCountry="IN" />
-                <div v-if="$v.formData.country.$error">
-                  <span v-if="!$v.formData.country.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
-                </div>
+                <label class="control-label">{{ $t('masters.country') }}</label>
+                  <country-select
+                    v-model="formData.country"
+                    :country="formData.country"
+                    :className="'base-input select-input'"
+                    topCountry="IN" />
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.state') }}</label><span class="text-danger"> *</span>
+                <label class="control-label">{{ $t('masters.state') }}</label>
                    <region-select
                     v-model="formData.state"
                     :country="formData.country"
                     :defaultRegion="'IN'"
                     :className="'base-input select-input'"
                     :region="formData.state" />
-                <div v-if="$v.formData.state.$error">
-                  <span v-if="!$v.formData.state.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
-                </div>
               </div>
               <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
@@ -82,7 +76,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.balance') }}</label><span class="text-danger"> *</span>
+                <label class="control-label">{{ $t('masters.balance') }}</label>
                 <base-input
                   v-model.trim="formData.balance"
                   :invalid="$v.formData.balance.$error"
@@ -91,9 +85,6 @@
                   name="balance"
                   @input="$v.formData.balance.$touch()"
                 />
-                <div v-if="$v.formData.balance.$error">
-                    {{ $tc('validation.balance_min_length') }}
-                </div>
               </div>
                <div class="form-group">
                 <base-button
