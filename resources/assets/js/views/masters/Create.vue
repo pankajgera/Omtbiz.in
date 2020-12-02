@@ -58,15 +58,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.region') }}</label><span class="text-danger"> *</span>
+                <label class="control-label">{{ $t('masters.state') }}</label><span class="text-danger"> *</span>
                    <region-select
-                    v-model="formData.region"
+                    v-model="formData.state"
                     :country="formData.country"
                     :defaultRegion="'IN'"
                     :className="'base-input select-input'"
-                    :region="formData.region" />
-                <div v-if="$v.formData.region.$error">
-                  <span v-if="!$v.formData.region.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
+                    :region="formData.state" />
+                <div v-if="$v.formData.state.$error">
+                  <span v-if="!$v.formData.state.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
               <div class="form-group">
@@ -79,6 +79,20 @@
                 />
                 <div v-if="$v.formData.address.$error">
                   <span v-if="!$v.formData.address.maxLength" class="text-danger">{{ $t('validation.address_maxlength') }}</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">{{ $t('masters.balance') }}</label><span class="text-danger"> *</span>
+                <base-input
+                  v-model.trim="formData.balance"
+                  :invalid="$v.formData.balance.$error"
+                  focus
+                  type="number"
+                  name="balance"
+                  @input="$v.formData.balance.$touch()"
+                />
+                <div v-if="$v.formData.balance.$error">
+                    {{ $tc('validation.balance_min_length') }}
                 </div>
               </div>
                <div class="form-group">
@@ -138,7 +152,8 @@ export default {
         groups: '',
         address: '',
         country: '',
-        region: ''
+        state: '',
+        balance: 0,
       },
       groupOptions: [],
       selectedGroup: '',
@@ -175,11 +190,11 @@ export default {
         maxLength: maxLength(255)
       },
       country: {
-        required,
       },
-      region: {
-        required,
-      }
+      state: {
+      },
+      balance: {
+      },
     }
   },
   methods: {

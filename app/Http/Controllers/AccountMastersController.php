@@ -49,6 +49,9 @@ class AccountMastersController extends Controller
             $master->name = $request->name;
             $master->groups = $request->groups;
             $master->address = $request->address;
+            $master->country = $request->country;
+            $master->state = $request->state;
+            $master->balance = $request->balance;
             $master->save();
 
             $master = AccountMaster::find($master->id);
@@ -75,6 +78,9 @@ class AccountMastersController extends Controller
             $master->name = $request->name;
             $master->groups = $request->groups;
             $master->address = $request->address;
+            $master->country = $request->country;
+            $master->state = $request->state;
+            $master->balance = $request->balance;
             $master->save();
 
             $master = AccountMaster::find($master->id);

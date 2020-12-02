@@ -244,7 +244,7 @@ export default {
         return this.selectedVouchers
       },
       set: function (val) {
-        this.selectItem(val)
+        this.selectVoucher(val)
       }
     },
     selectAllFieldStatus: {
@@ -271,8 +271,8 @@ export default {
     ...mapActions('voucher', [
       'fetchVouchers',
       'selectAllVouchers',
-      'selectItem',
-      'deleteItem',
+      'selectVoucher',
+      'deleteVoucher',
       'deleteMultipleVouchers',
       'setSelectAllState'
     ]),
@@ -332,7 +332,7 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteItem(this.id)
+          let res = await this.deleteVoucher(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('vouchers.deleted_message', 1))
             this.$refs.table.refresh()
