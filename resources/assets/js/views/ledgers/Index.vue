@@ -199,9 +199,9 @@
             </a>
             <v-dropdown-item>
 
-              <router-link :to="{path: `ledgers/${row.id}/edit`}" class="dropdown-item">
+              <router-link :to="{path: `ledgers/${row.id}/view`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.edit') }}
+                {{ $t('general.view') }}
               </router-link>
 
             </v-dropdown-item>

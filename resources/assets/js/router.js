@@ -263,6 +263,12 @@ const routes = [
                 component: LedgersCreate,
                 meta: ['admin']
             },
+            {
+              path: 'ledgers/:id/view',
+              name: 'ledgers.view',
+              component: LedgersCreate,
+              meta: ['admin']
+          },
 
             // Voucher
             {
