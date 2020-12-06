@@ -47,18 +47,53 @@ class VouchersController extends Controller
         $ledger = '';
         try {
             foreach ($request->all() as $each) {
-                $ledger = AccountLedger::updateOrCreate([
+                // If accountLedger is already present then update
+                // Credit and Debit with balance with 'type'
+                $ledgerPresent = AccountLedger::where([
                     'account' => $each['account'],
                     'account_master_id' => $each['account_id'],
-                ], [
-                    'type' => $each['type'],
-                    'debit' => $each['debit'] ?? 0,
-                    'credit' => $each['credit'] ?? 0,
-                    'balance' => $each['balance'],
-                    'date' => Carbon::now()->toDateTimeString(),
-                ]);
+                ])->first();
+                $ledger = null;
+                if (!empty($ledgerPresent)) {
+                    $updateCredit = 0;
+                    $updateDebit = 0;
+                    if ('C' === $each['type']) {
+                        $updateCredit = $ledgerPresent->credit + $each['credit'];
+                        $ledgerPresent->update(['credit' => $updateCredit]);
+                    } else {
+                        $updateDebit = $ledgerPresent->debit + $each['debit'];
+                        $ledgerPresent->update(['debit' => $updateDebit]);
+                    }
+                    //Update balance according to 'debit' or 'credit'
+                    if ($ledgerPresent->debit > $ledgerPresent->credit) {
+                        $ledgerPresent->update([
+                            'type' => 'D',
+                            'balance' => $ledgerPresent->debit - $ledgerPresent->credit,
+                        ]);
+                    } else {
+                        $ledgerPresent->update([
+                            'type' => 'C',
+                            'balance' => $ledgerPresent->credit - $ledgerPresent->debit,
+                        ]);
+                    }
 
-                Voucher::create ([
+                    $ledger = AccountLedger::where([
+                        'account' => $each['account'],
+                        'account_master_id' => $each['account_id'],
+                    ])->first();
+                } else {
+                    $ledger = AccountLedger::create([
+                        'account' => $each['account'],
+                        'account_master_id' => $each['account_id'],
+                        'type' => $each['type'],
+                        'debit' => $each['debit'] ?? 0,
+                        'credit' => $each['credit'] ?? 0,
+                        'balance' => $each['balance'],
+                        'date' => Carbon::now()->toDateTimeString(),
+                    ]);
+                }
+
+                Voucher::create([
                     'account_ledger_id' => $ledger->id,
                     'account_master_id' => $each['account_id'],
                     'type' => $each['type'],

@@ -96,7 +96,7 @@ export default {
     itemHeight: { type: Number, default: 30 },
     virtualScrollOffset: { type: Number, default: 3 },
     onlyBorder: { type: Boolean, default: true },
-    masterOptions: { type: Array, default: [] },
+    masterOptions: { type: Array, default: [], required: false },
   },
   data () {
     return {
