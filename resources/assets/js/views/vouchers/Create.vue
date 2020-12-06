@@ -81,11 +81,11 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
-        { sortable: true, filter: true, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
-        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', size: '150px', editable: true },
-        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', size: '150px', editable: true },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', type: 'text', size: '150px', editable: true }
+        { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
+        { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
+        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '150px', editable: true },
+        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '150px', editable: true },
+        { sortable: true, filter: false, field: 'short_narration', headerName: 'Short Narration', type: 'text', size: '150px', editable: true }
       ],
       resetActiveColIndex: false,
       masterData: [],
@@ -153,23 +153,24 @@ export default {
       window.toastr['success'](response.data.success)
     },
     cellUpdated($event) {
-      if ($event.$event.key === 'Tab' && $event.columnIndex === 4) {
+      console.log($event)
+      if ($event.$event.key === 'Tab' && $event.columnIndex === 4 || $event.$event.key === 'Enter' && $event.columnIndex === 4) {
         this.addNewRow();
         this.resetActiveColIndex = true;
       }
 
       if ($event.columnIndex === 0) {
-        if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
-          $event.row.type = 'D';
-          $event.value = 'D';
-        } else {
+        if ($event.value !== 'Dr' || $event.value !== 'D' || $event.value !== 'd') {
           $event.row.type = 'C';
           $event.value = 'C';
+        } else {
+          $event.row.type = 'D';
+          $event.value = 'D';
         }
       }
 
       if ($event.columnIndex === 4) {
-
+        console.log($event)
       }
     },
     rowSelected($event) {
@@ -178,10 +179,10 @@ export default {
       // }
       //Type of Voucher Column
       if ($event.colIndex === 0) {
-        if ($event.rowData.type === 'Dr' || $event.rowData.type === 'D' || $event.rowData.type === 'd') {
-          $event.rowData.type = 'D';
-        } else {
+        if ($event.rowData.type !== 'Dr' || $event.rowData.type !== 'D' || $event.rowData.type !== 'd') {
           $event.rowData.type = 'C';
+        } else {
+          $event.rowData.type = 'D';
         }
       }
 
@@ -202,6 +203,7 @@ export default {
       }
 
       if ($event.colIndex === 4) {
+        console.log('row', $event)
         // this.addNewRow();
         // this.resetActiveColIndex = true;
       }

@@ -18,6 +18,11 @@ class AccountLedger extends Model
         'short_narration',
     ];
 
+    public function masters()
+    {
+        return $this->belongsTo('Crater\AccountMaster');
+    }
+
     public function scopeWhereDate($query, $date)
     {
         return $query->where('date', 'LIKE', '%'.$date.'%');

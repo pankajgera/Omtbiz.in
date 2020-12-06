@@ -11,8 +11,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="card">
-          <form action="" @submit.prevent="submitLedger">
-            <div class="card-body">
+          <div class="card-body">
               <!---- Grid table start -->
               <vue-editable-grid
                 class="my-grid-class"
@@ -20,22 +19,22 @@
                 id="mygrid"
                 :column-defs="columnDefs"
                 :row-data="rows"
-                row-data-key='shipmentId'
+                row-data-key='ledgerId'
+                :master-options="masterData"
                 @cell-updated="cellUpdated"
                 @row-selected="rowSelected"
-                @link-clicked="linkClicked"
               >
                 <template v-slot:header>
-                  Add / Edit Account Ledgers
+                  Add / Edit Account Vouchers
                 </template>
                 <template v-slot:header-r>
                   Total rows: {{ rows.length }}
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
-              <button @click="addNewRow()">Add new</button>
+              <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
+              <button @click="submitVoucher()" class="btn btn-success">Save Voucher</button>
             </div>
-          </form>
         </div>
       </div>
     </div>
@@ -50,10 +49,16 @@
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
+// Vue editable grid component and styles
+import VueEditableGrid from '../../components/grid-table/VueEditableGrid'
+import '../../components/grid-table/VueEditableGrid.css'
 
 export default {
   mixins: {
     validationMixin
+  },
+  components: {
+    VueEditableGrid
   },
   data () {
     return {
@@ -78,18 +83,25 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'date', headerName: 'Date (DD/MM/YYYY)', type: 'date', format: 'DD/MM/YYYY', editable: true },
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', editable: true },
-        { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: true },
-        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'number', editable: true },
-        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'number', editable: true },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: true }
-      ]
+        { sortable: true, filter: false, field: 'date', headerName: 'Date (DD/MM/YYYY)', type: 'date', format: 'DD/MM/YYYY', editable: true },
+        { sortable: true, filter: false, field: 'type', headerName: 'Type', editable: true },
+        { sortable: true, filter: false, field: 'account', headerName: 'Account', editable: true },
+        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'number', editable: true },
+        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'number', editable: true },
+        { sortable: true, filter: false, field: 'short_narration', headerName: 'Short Narration', editable: true }
+      ],
+      masterData: [],
     }
   },
   computed: {
     isEdit () {
       if (this.$route.name === 'ledgers.edit') {
+        return true
+      }
+      return false
+    },
+    isView () {
+      if (this.$route.name === 'ledgers.view') {
         return true
       }
       return false
@@ -123,6 +135,10 @@ export default {
     async loadEditData () {
       let response = await this.fetchLedger(this.$route.params.id)
       this.formData = response.data.ledger
+    },
+    async loadMasters () {
+      let response = await this.fetchMasters({limit: 500})
+      this.masterData = response.data.masters.data
     },
     async submitLedger () {
       this.$v.formData.$touch()
