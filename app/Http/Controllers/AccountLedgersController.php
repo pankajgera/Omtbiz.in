@@ -30,7 +30,22 @@ class AccountLedgersController extends Controller
         ]);
     }
 
+    /**
+     * Edit account ledger
+     */
     public function edit(Request $request, $id)
+    {
+        $ledger = AccountLedger::find($id);
+
+        return response()->json([
+            'ledger' => $ledger,
+        ]);
+    }
+
+    /**
+     * Get ledgers to display
+     */
+    public function display(Request $request, $id)
     {
         $ledger = AccountLedger::find($id);
 

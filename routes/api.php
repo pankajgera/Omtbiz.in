@@ -433,6 +433,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountLedgersController@delete'
     ]);
 
+    Route::get('/ledgers/{id}/display', [
+        'as' => 'ledgers.display',
+        'uses' => 'AccountLedgersController@display'
+    ]);
+
     Route::resource('ledgers', 'AccountLedgersController');
 
     // Vouchers

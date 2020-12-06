@@ -83,12 +83,12 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'date', headerName: 'Date (DD/MM/YYYY)', type: 'date', format: 'DD/MM/YYYY', editable: !this.isView },
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', editable: !this.isView },
-        { sortable: true, filter: true, field: 'account', headerName: 'Account', editable: !this.isView },
-        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'number', editable: !this.isView },
-        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'number', editable: !this.isView },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', editable: !this.isView }
+        { sortable: true, filter: false, field: 'date', headerName: 'Date (DD/MM/YYYY)', type: 'date', format: 'DD/MM/YYYY', editable: true },
+        { sortable: true, filter: false, field: 'type', headerName: 'Type', editable: true },
+        { sortable: true, filter: false, field: 'account', headerName: 'Account', editable: true },
+        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'number', editable: true },
+        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'number', editable: true },
+        { sortable: true, filter: false, field: 'short_narration', headerName: 'Short Narration', editable: true }
       ],
       masterData: [],
     }

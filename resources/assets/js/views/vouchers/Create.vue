@@ -81,11 +81,11 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: true, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
-        { sortable: true, filter: true, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
-        { sortable: true, filter: true, field: 'credit', headerName: 'Credit', type: 'numeric', size: '150px', editable: true },
-        { sortable: true, filter: true, field: 'debit', headerName: 'Debit', type: 'numeric', size: '150px', editable: true },
-        { sortable: true, filter: true, field: 'short_narration', headerName: 'Short Narration', type: 'text', size: '150px', editable: true }
+        { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
+        { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
+        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '150px', editable: true },
+        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '150px', editable: true },
+        { sortable: true, filter: false, field: 'short_narration', headerName: 'Short Narration', type: 'text', size: '150px', editable: true }
       ],
       resetActiveColIndex: false,
       masterData: [],
