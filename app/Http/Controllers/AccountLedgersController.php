@@ -3,6 +3,7 @@
 namespace Crater\Http\Controllers;
 
 use Crater\AccountLedger;
+use Crater\Voucher;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -47,9 +48,11 @@ class AccountLedgersController extends Controller
      */
     public function display(Request $request, $id)
     {
+        $vouchers = Voucher::where('account_ledger_id', $id)->get();
         $ledger = AccountLedger::find($id);
 
         return response()->json([
+            'vouchers' => $vouchers,
             'ledger' => $ledger,
         ]);
     }

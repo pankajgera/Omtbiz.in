@@ -12,8 +12,8 @@ class Voucher extends Model
         'account_ledger_id',
         'account_master_id',
         'account',
-        'debit_amount',
-        'credit_amount',
+        'debit',
+        'credit',
         'short_narration',
     ];
 
@@ -37,14 +37,14 @@ class Voucher extends Model
         return $query->where('account', 'LIKE', '%'.$account.'%');
     }
 
-    public function scopeWhereDebitAmount($query, $debit_amount)
+    public function scopeWhereDebitAmount($query, $debit)
     {
-        return $query->where('debit_amount', 'LIKE', '%'.$debit_amount.'%');
+        return $query->where('debit', 'LIKE', '%'.$debit.'%');
     }
 
-    public function scopeWhereCreditAmount($query, $credit_amount)
+    public function scopeWhereCreditAmount($query, $credit)
     {
-        return $query->where('credit_amount', 'LIKE', '%'.$credit_amount.'%');
+        return $query->where('credit', 'LIKE', '%'.$credit.'%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -64,12 +64,12 @@ class Voucher extends Model
             $query->whereDesignNo($filters->get('account'));
         }
 
-        if ($filters->get('debit_amount')) {
-            $query->whereName($filters->get('debit_amount'));
+        if ($filters->get('debit')) {
+            $query->whereName($filters->get('debit'));
         }
 
-        if ($filters->get('credit_amount')) {
-            $query->whereDesignNo($filters->get('credit_amount'));
+        if ($filters->get('credit')) {
+            $query->whereDesignNo($filters->get('credit'));
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {

@@ -121,7 +121,7 @@ export default {
         },
       ],
       displayArray: [],
-      ledgerData: '',
+      ledgerData: ''
     };
   },
   created() {
@@ -131,6 +131,7 @@ export default {
     ...mapActions("ledger", ["fetchLedgerDisplay"]),
     async loadEditData() {
       let response = await this.fetchLedgerDisplay(this.$route.params.id);
+      this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
       this.displayArray.push(this.ledgerData);
     },

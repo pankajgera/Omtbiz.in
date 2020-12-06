@@ -20,7 +20,7 @@ class AccountLedger extends Model
 
     public function masters()
     {
-        return $this->belongsTo('Crater\AccountMaster');
+        return $this->belongsTo(\Crater\AccountMaster::class);
     }
 
     public function scopeWhereDate($query, $date)
