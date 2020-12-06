@@ -28,6 +28,7 @@
               id="displayLedger"
               :column-defs="columnDefs"
               :row-data="displayArray"
+              :master-options="[]"
               row-data-key="ledgerDisplayId"
             >
               <template v-slot:header-r>
