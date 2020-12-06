@@ -58,10 +58,9 @@ class VouchersController extends Controller
                     'date' => Carbon::now()->toDateTimeString(),
                 ]);
 
-                Voucher::updateOrCreate([
+                Voucher::create ([
                     'account_ledger_id' => $ledger->id,
                     'account_master_id' => $each['account_id'],
-                ], [
                     'type' => $each['type'],
                     'account' => $each['account'],
                     'debit_amount' => $each['debit'],
