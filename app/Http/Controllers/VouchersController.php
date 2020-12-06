@@ -98,8 +98,8 @@ class VouchersController extends Controller
                     'account_master_id' => $each['account_id'],
                     'type' => $each['type'],
                     'account' => $each['account'],
-                    'debit_amount' => $each['debit'],
-                    'credit_amount' => $each['credit'],
+                    'debit' => $each['debit'],
+                    'credit' => $each['credit'],
                     'short_narration' => $each['short_narration'],
                     'date' => Carbon::now()->toDateTimeString(),
                 ]);
