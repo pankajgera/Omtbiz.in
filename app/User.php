@@ -37,7 +37,8 @@ class User extends Authenticatable implements HasMedia
         'facebook_id',
         'google_id',
         'github_id',
-        'group_id'
+        'group_id',
+        'permissions'
     ];
 
     /**

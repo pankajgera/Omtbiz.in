@@ -103,6 +103,21 @@
                 <span v-if="!$v.formData.role.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
+            <div class="col-md-6 mb-4 form-group">
+              <div>
+                <label class="typo__label">{{ $tc('users.permissions') }}</label>
+                <base-select
+                  v-model="formData.permission"
+                  placeholder="Search or add a permission"
+                  label="name"
+                  track-by="name"
+                  class="user-permissions"
+                  :options="permissionOptions"
+                  :multiple="true"
+                  :taggable="true"
+                  @tag="addPermission"/>
+              </div>
+            </div>
           </div>
           <hr>
           <div class="page-actions header-button-container">
@@ -142,12 +157,29 @@ export default {
         name: null,
         email: null,
         company: null,
-        role: null
+        role: null,
+        permission: null,
       },
       companies: [],
       roles: [],
       companyBind: null,
-      roleBind: null
+      roleBind: null,
+      permissionOptions: [
+        { name: 'Bill-Ty' },
+        { name: 'Customers' },
+        { name: 'Invoices' },
+        { name: 'Payments' },
+        { name: 'Reports' },
+        { name: 'Notes' },
+        { name: 'Inventory' },
+        { name: 'Ledger' },
+        { name: 'Display' },
+        { name: 'Voucher' },
+        { name: 'Esitmates' },
+        { name: 'Expenses' },
+        { name: 'Users' },
+        { name: 'Settings' },
+      ],
     }
   },
   validations: {
@@ -237,6 +269,8 @@ export default {
 
     async submitUserData () {
       this.$v.formData.$touch()
+      //Convert permission array to string
+      this.formData.permission = this.formData.permission.map(each => each.name).toString();
 
       if (this.$v.$invalid) {
         return true
@@ -280,6 +314,9 @@ export default {
           }
         }
       }
+    },
+    addPermission(newVal) {
+      this.formData.permission.push(newVal);
     }
   }
 }

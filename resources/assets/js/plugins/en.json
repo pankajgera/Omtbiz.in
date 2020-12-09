@@ -915,7 +915,8 @@
         "company_name": "Company Name",
         "companies": "Companies",
         "role": "Role",
-        "roles": "Roles"
+        "roles": "Roles",
+        "permissions": "Permissions"
     },
     "notes": {
         "add_note": "Add Note",

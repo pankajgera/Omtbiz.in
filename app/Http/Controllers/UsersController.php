@@ -166,6 +166,7 @@ class UsersController extends Controller
             $user->website = $request->website;
             $user->role = $request->role;
             $user->password = Hash::make($request->password);
+            $user->permissions = $request->permission;
             $user->save();
 
             return response()->json([
@@ -253,6 +254,7 @@ class UsersController extends Controller
             $user->company_name = $request->company_name;
             $user->contact_name = $request->contact_name;
             $user->role = $request->role;
+            $user->permissions = $request->permission;
             $user->save();
 
             return response()->json([
