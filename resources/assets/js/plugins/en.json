@@ -637,6 +637,15 @@
             "to_date": "To Date",
             "from_date": "From Date",
             "date_range": "Select Date Range"
+        },
+        "customers": {
+            "customers": "Customers",
+            "category": "Category",
+            "date": "Date",
+            "amount": "Amount",
+            "to_date": "To Date",
+            "from_date": "From Date",
+            "date_range": "Select Date Range"
         }
     },
     "settings": {
