@@ -172,7 +172,13 @@
         <table-column
           :label="$t('ledgers.account')"
           show="account"
-        />
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `ledgers/${row.id}/display`}" class="dropdown-item">
+               {{ row.account }}
+              </router-link>
+          </template>
+        </table-column>
         <table-column
           :label="$t('ledgers.credit')"
           show="credit"

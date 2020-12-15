@@ -34,6 +34,16 @@
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
+              <div class="col-sm-12">
+                <textarea
+                  type="text"
+                  v-autoresize
+                  rows="2"
+                  width="400"
+                  class="form-control description-input m-3"
+                  v-model="short_narration"
+                  placeholder="Type Short Narration (optional)" />
+              </div>
               <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
               <button @click="submitVoucher()" class="btn btn-success">Save Voucher</button>
             </div>
@@ -45,6 +55,14 @@
 <style scoped>
 .my-grid-class {
   height: 400px;
+}
+</style>
+<style>
+.vs__dropdown-menu{
+  z-index: 1010 !important;
+}
+.vs__actions {
+  display: none !important;
 }
 </style>
 <script>
@@ -74,7 +92,6 @@ export default {
           account_id: '',
           credit: 0,
           debit: 0,
-          short_narration: '',
           total_debit: 0,
           total_credit: 0,
           balance: 0,
@@ -83,12 +100,12 @@ export default {
       columnDefs: [
         { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
         { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
-        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '150px', editable: true },
-        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '150px', editable: true },
-        { sortable: true, filter: false, field: 'short_narration', headerName: 'Short Narration', type: 'text', size: '150px', editable: true }
+        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '200px', editable: true },
+        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '200px', editable: true },
       ],
       resetActiveColIndex: false,
       masterData: [],
+      short_narration: '',
     }
   },
   computed: {
@@ -140,8 +157,8 @@ export default {
         each['total_debit'] = debit_sum
         each['total_credit'] = credit_sum
         each['balance'] = calc_balance
+        each['short_narration'] = this.short_narration
       });
-
       this.isLoading = true
       let response = await this.addVoucher(this.rows)
 
@@ -154,7 +171,8 @@ export default {
     },
     cellUpdated($event) {
       console.log($event)
-      if ($event.$event.key === 'Tab' && $event.columnIndex === 4 || $event.$event.key === 'Enter' && $event.columnIndex === 4) {
+
+      if ($event.$event.key === 'Tab' && $event.columnIndex === 3 || $event.$event.key === 'Enter' && $event.columnIndex === 3) {
         this.addNewRow();
         this.resetActiveColIndex = true;
       }
@@ -163,20 +181,31 @@ export default {
         if ($event.value !== 'Dr' || $event.value !== 'D' || $event.value !== 'd') {
           $event.row.type = 'C';
           $event.value = 'C';
+          this.rows.push({
+            type: 'D',
+            account: '',
+            account_id: 0,
+            credit: 0,
+            debit: 0,
+          });
         } else {
           $event.row.type = 'D';
           $event.value = 'D';
+          this.rows.push({
+            type: 'C',
+            account: '',
+            account_id: 0,
+            credit: 0,
+            debit: 0,
+          });
         }
-      }
-
-      if ($event.columnIndex === 4) {
-        console.log($event)
       }
     },
     rowSelected($event) {
       // if (this.resetActiveColIndex) {
       //   $event.colIndex = 0;
       // }
+
       //Type of Voucher Column
       if ($event.colIndex === 0) {
         if ($event.rowData.type !== 'Dr' || $event.rowData.type !== 'D' || $event.rowData.type !== 'd') {
@@ -202,12 +231,6 @@ export default {
         $event.colData.editable = false;
       }
 
-      if ($event.colIndex === 4) {
-        console.log('row', $event)
-        // this.addNewRow();
-        // this.resetActiveColIndex = true;
-      }
-
     },
     linkClicked($event) {
     },
@@ -215,13 +238,11 @@ export default {
     },
     addNewRow() {
       this.rows.push({
-          date: '',
           type: '',
           account: '',
           account_id: 0,
           credit: 0,
           debit: 0,
-          short_narration: ''
         });
     }
   }

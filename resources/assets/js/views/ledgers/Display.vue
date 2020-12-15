@@ -35,6 +35,10 @@
                 Total rows: {{ rows.length }}
               </template>
             </vue-editable-grid>
+
+            <div class="col-sm-12" style="font-size: 16px;">
+                Balance: ₹ {{ ledgerData ? ledgerData.balance : null}} {{ ledgerData ? ledgerData.type === 'D' ? 'Dr' : 'Cr' : null  }}
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +81,6 @@ export default {
           type: "",
           credit: "",
           debit: "",
-          balance: "",
         },
       ],
       columnDefs: [
@@ -112,13 +115,6 @@ export default {
           type: "number",
           editable: false,
         },
-        {
-          sortable: true,
-          filter: false,
-          field: "balance",
-          headerName: "Balance",
-          editable: false,
-        },
       ],
       displayArray: [],
       ledgerData: ''
@@ -133,7 +129,6 @@ export default {
       let response = await this.fetchLedgerDisplay(this.$route.params.id);
       this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
-      this.displayArray.push(this.ledgerData);
     },
   },
 };
