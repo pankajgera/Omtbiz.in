@@ -45,7 +45,7 @@
                   placeholder="Type Short Narration (optional)" />
               </div>
               <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button @click="submitVoucher()" class="btn btn-success">Save Voucher</button>
+              <button @click="validateSubmitVoucher()" class="btn btn-success">Save Voucher</button>
             </div>
         </div>
       </div>
@@ -106,6 +106,7 @@ export default {
       resetActiveColIndex: false,
       masterData: [],
       short_narration: '',
+      alreadySubmitted: false,
     }
   },
   computed: {
@@ -138,6 +139,23 @@ export default {
       let response = await this.fetchMasters({limit: 500})
       this.masterData = response.data.masters.data
     },
+    validateSubmitVoucher() {
+      if (this.alreadySubmitted) {
+        swal({
+          title: this.$t('general.are_you_sure'),
+          text: this.$tc('vouchers.duplicate_vouchers', 2),
+          icon: '/assets/icon/trash-solid.svg',
+          buttons: true,
+          dangerMode: false
+        }).then(async (duplicate) => {
+          if (duplicate) {
+            this.submitVoucher()
+          }
+        })
+      } else {
+        this.submitVoucher()
+      }
+    },
     async submitVoucher () {
       let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseInt(c));
       let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseInt(c));
@@ -165,6 +183,7 @@ export default {
       if (response.data) {
         window.toastr['success'](this.$tc('vouchers.created_message'))
         this.isLoading = false
+        this.alreadySubmitted = true;
         return true
       }
       window.toastr['success'](response.data.success)

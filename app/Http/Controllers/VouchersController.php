@@ -64,23 +64,8 @@ class VouchersController extends Controller
                         $updateDebit = $ledgerPresent->debit + $each['debit'];
                         $ledgerPresent->update(['debit' => $updateDebit]);
                     }
-                    //Update balance according to 'debit' or 'credit'
-                    if ($ledgerPresent->debit > $ledgerPresent->credit) {
-                        $ledgerPresent->update([
-                            'type' => 'D',
-                            'balance' => $ledgerPresent->debit - $ledgerPresent->credit,
-                        ]);
-                    } else {
-                        $ledgerPresent->update([
-                            'type' => 'C',
-                            'balance' => $ledgerPresent->credit - $ledgerPresent->debit,
-                        ]);
-                    }
 
-                    $ledger = AccountLedger::where([
-                        'account' => $each['account'],
-                        'account_master_id' => $each['account_id'],
-                    ])->first();
+                    $ledger = $ledgerPresent;
                 } else {
                     $ledger = AccountLedger::create([
                         'account' => $each['account'],

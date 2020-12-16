@@ -51,6 +51,25 @@ class AccountLedgersController extends Controller
         $vouchers = Voucher::where('account_ledger_id', $id)->get();
         $ledger = AccountLedger::find($id);
 
+        $vouchers_debit_sum = $vouchers->sum('debit');
+        $vouchers_credit_sum = $vouchers->sum('credit');
+        //Update balance according to 'debit' or 'credit'
+        if ($ledger->debit > $ledger->credit) {
+            $ledger->update([
+                'type' => 'D',
+                'credit' => $vouchers_credit_sum,
+                'debit' => $vouchers_debit_sum,
+                'balance' => $ledger->debit - $ledger->credit,
+            ]);
+        } elseif ($ledger->debit < $ledger->credit) {
+            $ledger->update([
+                'type' => 'C',
+                'credit' => $vouchers_credit_sum,
+                'debit' => $vouchers_debit_sum,
+                'balance' => $ledger->credit - $ledger->debit,
+            ]);
+        }
+
         return response()->json([
             'vouchers' => $vouchers,
             'ledger' => $ledger,
