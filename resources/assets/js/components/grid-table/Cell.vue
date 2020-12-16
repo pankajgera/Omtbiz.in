@@ -1,5 +1,6 @@
 <template>
   <td
+      :tabindex="rowIndex+columnIndex"
       class="cell noselect"
       :id="`cell${rowIndex}-${columnIndex}`"
       :class='{ selected: !onlyBorder && selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
@@ -15,9 +16,15 @@
       <span v-if="inputType === 'select'">
         <v-select
           ref="select"
+          :autocomplete="'on'"
+          :tabindex="columnIndex"
+          :append-to-body="true"
+          :input-id="'select-account-option'"
           :options="masterOptions"
+          :select-on-tab="true"
           label="name"
-          v-model="selectMaster"
+          class="style-chooser"
+          v-model.lazy="selectMaster"
           @input="setSelected"
         >
           <template v-slot:option="option">
@@ -52,7 +59,30 @@
       </span>
   </td>
 </template>
-
+<style scoped>
+  .style-chooser .vs__search::placeholder,
+  .style-chooser .vs__dropdown-toggle,
+  .style-chooser .vs__dropdown-menu {
+    background: #3c4b81;
+    border: none;
+    color: #394066;
+    text-transform: lowercase;
+    font-variant: small-caps;
+    z-index: 10;
+  }
+  .style-chooser .vs__clear,
+  .style-chooser .vs__open-indicator {
+    fill: #394066;
+  }
+</style>
+<style>
+  .vs__actions {
+    display: none !important;
+  }
+  .input-group .form-control {
+    z-index: 0 !important;
+  }
+</style>
 <script>
 import { format } from 'date-fns'
 import { cellValueParser, sameDates } from './helpers'
@@ -173,11 +203,15 @@ export default {
     },
     setEditableValue ($event) {
       const value = cellValueParser(this.column, this.row, this.$refs.input.value, true)
+      if (!value) return
       this.editPending = false
       let valueChanged = true
-      if (value === this.rowValue) valueChanged = false
-      else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
-        if (sameDates(value, this.rowValue)) valueChanged = false
+      if (value === this.rowValue) {
+        valueChanged = false
+      } else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
+        if (sameDates(value, this.rowValue)) {
+          valueChanged = false
+        }
       }
       const { row, column, rowIndex, columnIndex } = this
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
@@ -196,7 +230,7 @@ export default {
     setSelected(value) {
       this.row.account_id = value.id;
       this.selectMaster = value.name;
-    }
+    },
   }
 }
 </script>

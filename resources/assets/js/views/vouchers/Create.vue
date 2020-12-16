@@ -57,14 +57,6 @@
   height: 400px;
 }
 </style>
-<style>
-.vs__dropdown-menu{
-  z-index: 1010 !important;
-}
-.vs__actions {
-  display: none !important;
-}
-</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -191,32 +183,23 @@ export default {
     cellUpdated($event) {
       console.log($event)
 
-      if ($event.$event.key === 'Tab' && $event.columnIndex === 3 || $event.$event.key === 'Enter' && $event.columnIndex === 3) {
-        this.addNewRow();
-        this.resetActiveColIndex = true;
-      }
-
       if ($event.columnIndex === 0) {
-        if ($event.value !== 'Dr' || $event.value !== 'D' || $event.value !== 'd') {
-          $event.row.type = 'C';
-          $event.value = 'C';
-          this.rows.push({
-            type: 'D',
-            account: '',
-            account_id: 0,
-            credit: 0,
-            debit: 0,
-          });
-        } else {
-          $event.row.type = 'D';
-          $event.value = 'D';
-          this.rows.push({
-            type: 'C',
-            account: '',
-            account_id: 0,
-            credit: 0,
-            debit: 0,
-          });
+        if ($event.value === 'Cr' || $event.value === 'C' || $event.value === 'c') {
+          $event.row.type = 'C'
+          $event.value = 'C'
+          this.addNewRow('D')
+          if ($event.$event.key === 'Enter') {
+            this.addNewRow('C');
+            this.resetActiveColIndex = true;
+          }
+        } else if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
+          $event.row.type = 'D'
+          $event.value = 'D'
+          this.addNewRow('C')
+          if ($event.$event.key === 'Enter') {
+            this.addNewRow('D');
+            this.resetActiveColIndex = true;
+          }
         }
       }
     },
@@ -227,11 +210,11 @@ export default {
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {
-        if ($event.rowData.type !== 'Dr' || $event.rowData.type !== 'D' || $event.rowData.type !== 'd') {
-          $event.rowData.type = 'C';
-        } else {
-          $event.rowData.type = 'D';
-        }
+        // if ($event.rowData.type !== 'Dr' || $event.rowData.type !== 'D' || $event.rowData.type !== 'd') {
+        //   $event.rowData.type = 'C';
+        // } else {
+        //   $event.rowData.type = 'D';
+        // }
       }
 
       //Account Column
@@ -255,13 +238,16 @@ export default {
     },
     contextMenu($event) {
     },
-    addNewRow() {
+    addNewRow(val) {
       this.rows.push({
-          type: '',
+          type: val,
           account: '',
-          account_id: 0,
+          account_id: '',
           credit: 0,
           debit: 0,
+          total_debit: 0,
+          total_credit: 0,
+          balance: 0,
         });
     }
   }
