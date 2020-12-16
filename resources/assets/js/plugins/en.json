@@ -299,7 +299,8 @@
         "updated_message": "Account Voucher updated successfully",
         "deleted_message": "Account Voucher deleted successfully | Account Vouchers deleted successfully",
         "balace_not_equal_title": "Balance!",
-        "balace_not_equal_desc": "Voucher debit/credit balance should be equal"
+        "balace_not_equal_desc": "Voucher debit/credit balance should be equal",
+        "duplicate_vouchers": "This will duplicate/update existing vouchers"
     },
     "estimates": {
         "title": "Estimates",
