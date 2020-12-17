@@ -1,17 +1,11 @@
 <template>
   <td
-      :tabindex="rowIndex+columnIndex"
       class="cell noselect"
       :id="`cell${rowIndex}-${columnIndex}`"
       :class='{ selected: !onlyBorder && selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
       :title="invalid"
       :style="cellStyle"
       @click='$emit("click", $event)'
-      @dblclick='$emit("dblclick", $event)'
-      @contextmenu='$emit("contextmenu", $event)'
-      @mousedown='$emit("mousedown", $event)'
-      @mouseover='$emit("mouseover", $event)'
-      @mouseup='$emit("mouseup", $event)'
   >
       <span v-if="inputType === 'select'">
         <v-select
@@ -26,6 +20,7 @@
           class="style-chooser"
           v-model.lazy="selectMaster"
           @input="setSelected"
+          @search:blur="onSelectLeave"
         >
           <template v-slot:option="option">
             {{ option.name }}
@@ -33,7 +28,19 @@
         </v-select>
       </span>
       <span v-else>
-        <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
+        <span class="editable-field">
+          <input
+            :type="inputType"
+            ref="input"
+            :tabindex="rowIndex"
+            :placeholder="placeholder"
+            @keyup.enter="setEditableValue"
+            @keydown.tab="setEditableValue"
+            @keyup.esc="editCancelled"
+            @focus="editPending = true"
+            @blur="leaved" />
+          </span>
+        <!-- <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
             <input
               :type="inputType"
               ref="input"
@@ -55,7 +62,7 @@
             <span v-else>
               {{ row[column.field] | cellFormatter(column, row) }}
             </span>
-        </span>
+        </span> -->
       </span>
   </td>
 </template>
@@ -150,6 +157,7 @@ export default {
   },
   watch: {
     cellEditing () {
+      //console.log('as', this.cellEditing, this.rowIndex, this.columnIndex)
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
@@ -231,6 +239,13 @@ export default {
       this.row.account_id = value.id;
       this.selectMaster = value.name;
     },
+    onSelectLeave() {
+      this.editPending = false;
+      // this.cellEditing[1] = this.cellEditing[1] + 1
+      // this.columnIndex = this.columnIndex + 1
+      //console.log('here', this.cellEditing[1], this.columnIndex)
+      this.$refs.select.$parent.$el.nextElementSibling.childNodes[0].childNodes[0].childNodes[0].focus();
+    }
   }
 }
 </script>

@@ -204,6 +204,7 @@ export default {
       }
     },
     rowSelected($event) {
+      console.log($event)
       // if (this.resetActiveColIndex) {
       //   $event.colIndex = 0;
       // }
