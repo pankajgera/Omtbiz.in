@@ -182,15 +182,27 @@
         <table-column
           :label="$t('ledgers.credit')"
           show="credit"
-        />
+        >
+          <template slot-scope="row">
+            ₹ {{ row.credit }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('ledgers.debit')"
           show="debit"
-        />
+        >
+          <template slot-scope="row">
+            ₹ {{ row.debit }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('ledgers.balance')"
           show="balance"
-        />
+        >
+          <template slot-scope="row">
+            ₹ {{ row.balance }}
+          </template>
+        </table-column>
         <table-column
           :key="Math.random()"
           :sortable="false"
@@ -204,12 +216,10 @@
               <dot-icon />
             </a>
             <v-dropdown-item>
-
               <router-link :to="{path: `ledgers/${row.id}/display`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.view') }}
               </router-link>
-
             </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeLedgers(row.id)">

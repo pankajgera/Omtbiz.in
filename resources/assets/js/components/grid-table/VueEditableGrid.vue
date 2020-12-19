@@ -217,6 +217,7 @@ export default {
   },
   watch: {
     selStart (value, old) {
+      //console.log('selStart', value, old)
       if (value[0] !== old[0]) {
         this.emitRowSelected()
       }
@@ -260,6 +261,7 @@ export default {
     emitRowSelected () {
       if ((this.selStart[0] === this.selEnd[0] && this.selStart[1] === this.selEnd[1])) {
         const cell = this.getCell()
+        console.log('cell', cell)
         this.$emit('row-selected', cell)
       } else {
         this.$emit('row-selected', { rowData: null })
@@ -310,6 +312,7 @@ export default {
       }
       const maxrow = this.rowDataFiltered.length - 1
       const maxcol = this.columnDefs.length - 1
+      //console.log('maxrow, maxcol, rowIndex, colIndex', maxrow, maxcol, rowIndex, colIndex)
       rowIndex = rowIndex < 0 ? 0 : rowIndex > maxrow ? maxrow : rowIndex
       colIndex = colIndex < 0 ? 0 : colIndex > maxcol ? maxcol : colIndex
       const shift = $event && $event.shiftKey
@@ -321,6 +324,13 @@ export default {
       } else {
         this.selEnd = [rowIndex, colIndex]
         this.selStart = [rowIndex, colIndex]
+        console.log(colIndex === maxcol, $event)
+        //Check if last tab
+        if (colIndex === maxcol && !$event) {
+          this.selEnd = [rowIndex+1, 0]
+          this.selStart = [rowIndex+1, 0]
+          console.log('this.selEnd, this.selStart', this.selEnd, this.selStart)
+        }
       }
       if (this.cellEditing[0] !== rowIndex || this.cellEditing[1] !== colIndex) {
         this.cellEditing = []
@@ -424,6 +434,7 @@ export default {
         }
 
         this.$emit('cell-updated', { value, row, column, rowIndex, columnIndex, $event, preventDefault, markAsPending, confirm, markAsFailed, markAsSuccess })
+
         if (prevent) {
           this.cellEditing = []
           resolve()
@@ -473,11 +484,13 @@ export default {
     sumSelectionCol (sum) {
       let [row, col] = this.selStart
       col += sum
+      //console.log('sumSelectionCol', row, col)
       this.selectCell(row, col)
     },
     sumSelectionRow (sum) {
       let [row, col] = this.selStart
       row += sum
+      //console.log('sumSelectionRow', row, col)
       this.selectCell(row, col)
     },
     removeFilter (field) {
