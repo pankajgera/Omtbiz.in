@@ -1,31 +1,25 @@
 <template>
   <td
-      :tabindex="rowIndex+columnIndex"
       class="cell noselect"
       :id="`cell${rowIndex}-${columnIndex}`"
       :class='{ selected: !onlyBorder && selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
       :title="invalid"
       :style="cellStyle"
       @click='$emit("click", $event)'
-      @dblclick='$emit("dblclick", $event)'
-      @contextmenu='$emit("contextmenu", $event)'
-      @mousedown='$emit("mousedown", $event)'
-      @mouseover='$emit("mouseover", $event)'
-      @mouseup='$emit("mouseup", $event)'
   >
       <span v-if="inputType === 'select'">
         <v-select
           ref="select"
           :autocomplete="'on'"
-          :tabindex="columnIndex"
           :append-to-body="true"
           :input-id="'select-account-option'"
-          :options="masterOptions"
+          :options="setOptions"
           :select-on-tab="true"
           label="name"
-          class="style-chooser"
-          v-model.lazy="selectMaster"
+          :class="column.field === 'type' ? 'width-100 style-chooser' : 'width-500 style-chooser'"
+          v-model.lazy="selectedValue"
           @input="setSelected"
+          @close="setEditableValue"
         >
           <template v-slot:option="option">
             {{ option.name }}
@@ -33,7 +27,18 @@
         </v-select>
       </span>
       <span v-else>
-        <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
+        <span class="editable-field">
+          <input
+            :type="inputType"
+            ref="input"
+            :placeholder="placeholder"
+            @keyup.enter="setEditableValue"
+            @keydown.tab="setEditableValue"
+            @keyup.esc="editCancelled"
+            @focus="editPending = true"
+            @blur="leaved" />
+          </span>
+        <!-- <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
             <input
               :type="inputType"
               ref="input"
@@ -55,7 +60,7 @@
             <span v-else>
               {{ row[column.field] | cellFormatter(column, row) }}
             </span>
-        </span>
+        </span> -->
       </span>
   </td>
 </template>
@@ -106,7 +111,7 @@ export default {
     placeholder: { type: String, default: null }
   },
   data () {
-    return { value: null, rowValue: null, editPending: false, selectMaster: null }
+    return { value: null, rowValue: null, editPending: false, selectedValue: null }
   },
   computed: {
     selected () {
@@ -146,10 +151,17 @@ export default {
     cellStyle () {
       const cellStyle = this.row.$cellStyle && this.row.$cellStyle[this.column.field]
       return { ...this.row.$rowStyle, ...cellStyle }
+    },
+    setOptions() {
+      if (this.column.field === 'type') {
+        return [{'name':'C'}, {'name':'D'}]
+      }
+      return this.masterOptions
     }
   },
   watch: {
     cellEditing () {
+      //console.log('as', this.cellEditing, this.rowIndex, this.columnIndex)
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
@@ -158,10 +170,10 @@ export default {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
-            if (!this.selectMaster) return
-            input.value = this.selectMaster.name
-            this.value = this.selectMaster.name
-            this.rowValue = this.selectMaster.name
+            if (!this.selectedValue) return
+            input.value = this.selectedValue.name
+            this.value = this.selectedValue.name
+            this.rowValue = this.selectedValue.name
           }
           if (!this.value && this.value !== 0 && this.value !== false) {
             input.value = null
@@ -183,10 +195,14 @@ export default {
         })
       }
       if (this.inputType === 'select') {
-        if (this.selectMaster) {
-            this.value = this.selectMaster
-            this.rowValue = this.selectMaster
-            this.row.account = this.selectMaster
+        if (this.selectedValue) {
+            this.value = this.selectedValue
+            this.rowValue = this.selectedValue
+            if (this.column.field === 'type') {
+              this.row.type = this.selectedValue
+            } else {
+              this.row.account = this.selectedValue
+            }
         }
       }
     }
@@ -202,7 +218,8 @@ export default {
       return value
     },
     setEditableValue ($event) {
-      const value = cellValueParser(this.column, this.row, this.$refs.input.value, true)
+      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue.name
+      const value = cellValueParser(this.column, this.row, input, true)
       if (!value) return
       this.editPending = false
       let valueChanged = true
@@ -227,10 +244,21 @@ export default {
     linkClicked () {
       this.$emit('link-clicked')
     },
-    setSelected(value) {
-      this.row.account_id = value.id;
-      this.selectMaster = value.name;
+    setSelected(val) {
+      if (val.id) {
+        this.row.account_id = val.id;
+      }
+      this.selectedValue = val.name;
     },
+    onSelectLeave() {
+      // if (this.editPending) {
+      //   this.setEditableValue($event)
+      // }
+      // this.cellEditing[1] = this.cellEditing[1] + 1
+      // this.columnIndex = this.columnIndex + 1
+      //console.log('here', this.cellEditing[1], this.columnIndex)
+      //this.$refs.select.$parent.$el.nextElementSibling.childNodes[0].childNodes[0].childNodes[0].focus();
+    }
   }
 }
 </script>

@@ -82,6 +82,7 @@ export default {
           type: '',
           account: '',
           account_id: '',
+          amount: 0,
           credit: 0,
           debit: 0,
           total_debit: 0,
@@ -90,12 +91,11 @@ export default {
         }
       ],
       columnDefs: [
-        { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'text', placeholder: 'C / D', size: '100px', editable: true },
+        { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'select', placeholder: 'C / D', size: '100px', editable: true },
         { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
-        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '200px', editable: true },
-        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '200px', editable: true },
+        { sortable: true, filter: false, field: 'amount', headerName: 'Credit/Debit', type: 'numeric', size: '200px', editable: true },
       ],
-      resetActiveColIndex: false,
+      //resetActiveColIndex: false,
       masterData: [],
       short_narration: '',
       alreadySubmitted: false,
@@ -149,6 +149,14 @@ export default {
       }
     },
     async submitVoucher () {
+      this.rows = this.rows.filter(each => each['amount'] !== 0);
+      this.rows.map(each => {
+        if (each['type'] === 'C') {
+          each['credit'] = each['amount']
+        } else {
+          each['debit'] = each['amount']
+        }
+      });
       let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseInt(c));
       let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseInt(c));
 
@@ -181,29 +189,39 @@ export default {
       window.toastr['success'](response.data.success)
     },
     cellUpdated($event) {
-      console.log($event)
-
+      //console.log($event)
       if ($event.columnIndex === 0) {
-        if ($event.value === 'Cr' || $event.value === 'C' || $event.value === 'c') {
-          $event.row.type = 'C'
-          $event.value = 'C'
-          this.addNewRow('D')
-          if ($event.$event.key === 'Enter') {
-            this.addNewRow('C');
-            this.resetActiveColIndex = true;
-          }
-        } else if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
-          $event.row.type = 'D'
-          $event.value = 'D'
-          this.addNewRow('C')
-          if ($event.$event.key === 'Enter') {
-            this.addNewRow('D');
-            this.resetActiveColIndex = true;
-          }
+        // if ($event.value === 'Cr' || $event.value === 'C' || $event.value === 'c') {
+        //   $event.row.type = 'C'
+        //   $event.value = 'C'
+        //   this.addNewRow('D')
+        //   if ($event.$event.key === 'Enter') {
+        //     this.addNewRow('C');
+        //     //this.resetActiveColIndex = true;
+        //   }
+        // } else if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
+        //   $event.row.type = 'D'
+        //   $event.value = 'D'
+        //   this.addNewRow('C')
+        //   if ($event.$event.key === 'Enter') {
+        //     this.addNewRow('D');
+        //     //this.resetActiveColIndex = true;
+        //   }
+        // }
+      }
+
+      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' && $event.row.amount) {
+        if($event.row.type === 'C') {
+          this.addNewRow('C');
+        } else {
+          this.addNewRow('D');
         }
+        $event.rowIndex = $event.rowIndex + 1
+        $event.columnIndex = 0
       }
     },
     rowSelected($event) {
+      //console.log($event)
       // if (this.resetActiveColIndex) {
       //   $event.colIndex = 0;
       // }
@@ -222,16 +240,21 @@ export default {
 
       }
 
-      $event.colData.editable = true;
-      //Credit Column
-      if ($event.colIndex === 2 && $event.rowData.type === 'D') {
-        $event.colData.editable = false;
+      if ($event.colIndex === 2 && $event.rowData.amount) {
+        // $event.rowIndex = $event.rowIndex + 1
+        // $event.colIndex = 0
       }
 
+      //$event.colData.editable = true;
+      //Credit Column
+      // if ($event.colIndex === 2 && $event.rowData.type === 'D') {
+      //   $event.colData.editable = false;
+      // }
+
       //Debit Column
-      if ($event.colIndex === 3 && $event.rowData.type === 'C') {
-        $event.colData.editable = false;
-      }
+      // if ($event.colIndex === 3 && $event.rowData.type === 'C') {
+      //   $event.colData.editable = false;
+      // }
 
     },
     linkClicked($event) {
@@ -243,6 +266,7 @@ export default {
           type: val,
           account: '',
           account_id: '',
+          amount: 0,
           credit: 0,
           debit: 0,
           total_debit: 0,

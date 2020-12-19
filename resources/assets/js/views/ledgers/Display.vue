@@ -4,6 +4,9 @@
       <h3 class="page-title">
         {{ ledgerData ? ledgerData.account : '' }}
       </h3>
+      <h4 style="float: right">
+         Balance: ₹ {{ ledgerData ? ledgerData.balance : null}} {{ ledgerData ? ledgerData.type === 'D' ? 'Dr' : 'Cr' : null  }}
+      </h4>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link slot="item-title" to="/">{{
@@ -21,24 +24,37 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-body">
-            <!---- Grid table start -->
-            <vue-editable-grid
-              class="my-grid-class"
-              ref="grid"
-              id="displayLedger"
-              :column-defs="columnDefs"
-              :row-data="displayArray"
-              :master-options="[]"
-              row-data-key="ledgerDisplayId"
-            >
-              <template v-slot:header-r>
-                Total rows: {{ rows.length }}
-              </template>
-            </vue-editable-grid>
-
-            <div class="col-sm-12" style="font-size: 16px;">
-                Balance: ₹ {{ ledgerData ? ledgerData.balance : null}} {{ ledgerData ? ledgerData.type === 'D' ? 'Dr' : 'Cr' : null  }}
-            </div>
+            <table-component
+                ref="table"
+                :data="displayArray"
+                :show-filter="false"
+                table-class="table display-ledger"
+              >
+               <table-column
+                  :label="$t('ledgers.date')"
+                  show="date"
+                >
+                  <template slot-scope="row">
+                    {{ getFormattedDate(row.date) }}
+                  </template>
+                </table-column>
+                <table-column
+                  :label="$t('ledgers.credit')"
+                  show="credit"
+                >
+                  <template slot-scope="row">
+                    ₹ {{ row.credit }}
+                  </template>
+                </table-column>
+                <table-column
+                  :label="$t('ledgers.debit')"
+                  show="debit"
+                >
+                  <template slot-scope="row">
+                    ₹ {{ row.debit }}
+                  </template>
+                </table-column>
+              </table-component>
           </div>
         </div>
       </div>
@@ -48,6 +64,14 @@
 <style scoped>
 .my-grid-class {
   height: 400px;
+}
+</style>
+<style>
+.table.display-ledger {
+  background: #f4f4ff;
+  margin:30px 0px;
+  padding:30px;
+  top: 15px;
 }
 </style>
 <script>
@@ -63,6 +87,7 @@ const {
 // Vue editable grid component and styles
 import VueEditableGrid from "../../components/grid-table/VueEditableGrid";
 import "../../components/grid-table/VueEditableGrid.css";
+import moment from 'moment'
 
 export default {
   mixins: {
@@ -130,6 +155,9 @@ export default {
       this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
     },
+    getFormattedDate(date) {
+      return moment(date).format('LLLL');
+    }
   },
 };
 </script>
