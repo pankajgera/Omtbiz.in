@@ -25,6 +25,7 @@
                 @row-selected="rowSelected"
                 @link-clicked="linkClicked"
                 @contextmenu="contextMenu"
+                @add-new-row="addNewRow"
               >
                 <template v-slot:header>
                   Add / Edit Account Vouchers
@@ -82,7 +83,6 @@ export default {
           type: '',
           account: '',
           account_id: '',
-          amount: 0,
           credit: 0,
           debit: 0,
           total_debit: 0,
@@ -93,7 +93,8 @@ export default {
       columnDefs: [
         { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'select', placeholder: 'C / D', size: '100px', editable: true },
         { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },
-        { sortable: true, filter: false, field: 'amount', headerName: 'Credit/Debit', type: 'numeric', size: '200px', editable: true },
+        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '200px', editable: true },
+        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '200px', editable: true },
       ],
       //resetActiveColIndex: false,
       masterData: [],
@@ -149,14 +150,7 @@ export default {
       }
     },
     async submitVoucher () {
-      this.rows = this.rows.filter(each => each['amount'] !== 0);
-      this.rows.map(each => {
-        if (each['type'] === 'C') {
-          each['credit'] = each['amount']
-        } else {
-          each['debit'] = each['amount']
-        }
-      });
+      this.rows = this.rows.filter(each => each['account'] !== '');
       let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseInt(c));
       let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseInt(c));
 
@@ -210,14 +204,15 @@ export default {
         // }
       }
 
-      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' && $event.row.amount) {
-        if($event.row.type === 'C') {
-          this.addNewRow('C');
-        } else {
-          this.addNewRow('D');
-        }
+      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter') {
+        // if($event.row.type === 'C') {
+        //   this.addNewRow('C');
+        // } else {
+        //   this.addNewRow('D');
+        // }
         $event.rowIndex = $event.rowIndex + 1
         $event.columnIndex = 0
+        $event.target.input.blur()
       }
     },
     rowSelected($event) {
@@ -240,18 +235,13 @@ export default {
 
       }
 
-      if ($event.colIndex === 2 && $event.rowData.amount) {
-        // $event.rowIndex = $event.rowIndex + 1
-        // $event.colIndex = 0
-      }
-
-      //$event.colData.editable = true;
-      //Credit Column
+      // $event.colData.editable = true;
+      // //Credit Column
       // if ($event.colIndex === 2 && $event.rowData.type === 'D') {
       //   $event.colData.editable = false;
       // }
 
-      //Debit Column
+      // //Debit Column
       // if ($event.colIndex === 3 && $event.rowData.type === 'C') {
       //   $event.colData.editable = false;
       // }
@@ -266,7 +256,6 @@ export default {
           type: val,
           account: '',
           account_id: '',
-          amount: 0,
           credit: 0,
           debit: 0,
           total_debit: 0,

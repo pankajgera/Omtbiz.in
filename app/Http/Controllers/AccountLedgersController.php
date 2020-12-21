@@ -49,7 +49,7 @@ class AccountLedgersController extends Controller
     public function display(Request $request, $id)
     {
         $vouchers = Voucher::where('account_ledger_id', $id)->get();
-        $ledger = AccountLedger::find($id);
+        $ledger = AccountLedger::findOrFail($id);
 
         $vouchers_debit_sum = $vouchers->sum('debit');
         $vouchers_credit_sum = $vouchers->sum('credit');

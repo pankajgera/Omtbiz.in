@@ -30,12 +30,36 @@
                 :show-filter="false"
                 table-class="table display-ledger"
               >
-               <table-column
+                <table-column
                   :label="$t('ledgers.date')"
                   show="date"
                 >
                   <template slot-scope="row">
                     {{ getFormattedDate(row.date) }}
+                  </template>
+                </table-column>
+                <table-column
+                  :label="$t('ledgers.particulars')"
+                  show="account"
+                >
+                  <template slot-scope="row">
+                    {{ row.account }}
+                  </template>
+                </table-column>
+                <table-column
+                  :label="$t('ledgers.voucher_type')"
+                  show="voucher_type"
+                >
+                  <template slot-scope="row">
+                    {{ row.voucher_type }}
+                  </template>
+                </table-column>
+                <table-column
+                  :label="$t('ledgers.voucher_id')"
+                  show="id"
+                >
+                  <template slot-scope="row">
+                    {{ row.id }}
                   </template>
                 </table-column>
                 <table-column
@@ -100,47 +124,6 @@ export default {
     return {
       isLoading: false,
       title: "Display Account Ledger",
-      rows: [
-        {
-          date: "",
-          type: "",
-          credit: "",
-          debit: "",
-        },
-      ],
-      columnDefs: [
-        {
-          sortable: true,
-          filter: false,
-          field: "date",
-          headerName: "Date Time",
-          type: "datetime",
-          editable: false,
-        },
-        {
-          sortable: true,
-          filter: false,
-          field: "type",
-          headerName: "Type",
-          editable: false,
-        },
-        {
-          sortable: true,
-          filter: false,
-          field: "credit",
-          headerName: "Credit",
-          type: "number",
-          editable: false,
-        },
-        {
-          sortable: true,
-          filter: false,
-          field: "debit",
-          headerName: "Debit",
-          type: "number",
-          editable: false,
-        },
-      ],
       displayArray: [],
       ledgerData: ''
     };
@@ -156,7 +139,7 @@ export default {
       this.ledgerData = response.data.ledger;
     },
     getFormattedDate(date) {
-      return moment(date).format('LLLL');
+      return moment(date).format('DD-MM-YYYY');
     }
   },
 };

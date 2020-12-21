@@ -56,6 +56,7 @@
                             @mousedown="startSelection(offsetRows + rowIndex, columnIndex, $event)"
                             @mouseover="onSelection(offsetRows + rowIndex, columnIndex)"
                             @mouseup="stopSelection"
+                            @add-row="addOneRow"
                         ></cell>
                     </tr>
                 </div>
@@ -258,10 +259,13 @@ export default {
     }
   },
   methods: {
+    addOneRow(value){
+      this.$emit('add-new-row', value)
+    },
     emitRowSelected () {
       if ((this.selStart[0] === this.selEnd[0] && this.selStart[1] === this.selEnd[1])) {
         const cell = this.getCell()
-        console.log('cell', cell)
+        //console.log('cell', cell)
         this.$emit('row-selected', cell)
       } else {
         this.$emit('row-selected', { rowData: null })
@@ -324,12 +328,12 @@ export default {
       } else {
         this.selEnd = [rowIndex, colIndex]
         this.selStart = [rowIndex, colIndex]
-        console.log(colIndex === maxcol, $event)
+        //console.log(colIndex === maxcol, $event)
         //Check if last tab
         if (colIndex === maxcol && !$event) {
           this.selEnd = [rowIndex+1, 0]
           this.selStart = [rowIndex+1, 0]
-          console.log('this.selEnd, this.selStart', this.selEnd, this.selStart)
+          //console.log('this.selEnd, this.selStart', this.selEnd, this.selStart)
         }
       }
       if (this.cellEditing[0] !== rowIndex || this.cellEditing[1] !== colIndex) {
