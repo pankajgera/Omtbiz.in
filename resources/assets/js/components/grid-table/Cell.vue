@@ -2,7 +2,7 @@
   <td
       class="cell noselect"
       :id="`cell${rowIndex}-${columnIndex}`"
-      :class='{ selected: !onlyBorder && selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
+      :class='{ selected: !onlyBorder && selected, editable, invalid, [column.type || "text"]: true }'
       :title="invalid"
       :style="cellStyle"
       @click='$emit("click", $event)'
@@ -17,9 +17,9 @@
           :select-on-tab="true"
           label="name"
           :class="column.field === 'type' ? 'width-100 style-chooser' : 'width-500 style-chooser'"
-          v-model.lazy="selectedValue"
-          @input="setSelected"
-          @close="setEditableValue"
+          :value="value"
+          @input="setEditableValue"
+          @option:selected="setSelected"
         >
           <template v-slot:option="option">
             {{ option.name }}
@@ -32,6 +32,7 @@
             :type="inputType"
             ref="input"
             :placeholder="placeholder"
+            :disabled="disableInput"
             @keyup.enter="setEditableValue"
             @keydown.tab="setEditableValue"
             @keyup.esc="editCancelled"
@@ -111,24 +112,30 @@ export default {
     placeholder: { type: String, default: null }
   },
   data () {
-    return { value: null, rowValue: null, editPending: false, selectedValue: null }
+    return { value: null, rowValue: null, editPending: false, selectedValue: null}
+  },
+  mounted() {
+    if (this.column.field === 'type') {
+      this.value = this.row.type
+      this.rowValue = this.row.type
+    }
   },
   computed: {
     selected () {
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
     },
-    selectedTop () {
-      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
-    },
-    selectedRight () {
-      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
-    },
-    selectedBottom () {
-      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
-    },
-    selectedLeft () {
-      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
-    },
+    // selectedTop () {
+    //   return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
+    // },
+    // selectedRight () {
+    //   return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
+    // },
+    // selectedBottom () {
+    //   return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
+    // },
+    // selectedLeft () {
+    //   return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
+    // },
     editable () {
       return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex
     },
@@ -154,14 +161,21 @@ export default {
     },
     setOptions() {
       if (this.column.field === 'type') {
-        return [{'name':'C'}, {'name':'D'}]
+        return [{'name':'D'}, {'name':'C'}]
       }
       return this.masterOptions
+    },
+    disableInput() {
+      let bool = false
+      if (this.row.type === 'D' && this.column.field === 'credit' || this.row.type === 'C' && this.column.field === 'debit') {
+          bool = true
+      }
+      return bool
     }
   },
   watch: {
     cellEditing () {
-      //console.log('as', this.cellEditing, this.rowIndex, this.columnIndex)
+      //console.log('ww', this.row, this.column)
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
@@ -196,12 +210,13 @@ export default {
       }
       if (this.inputType === 'select') {
         if (this.selectedValue) {
-            this.value = this.selectedValue
-            this.rowValue = this.selectedValue
+            this.value = this.selectedValue.name
+            this.rowValue = this.selectedValue.name
             if (this.column.field === 'type') {
-              this.row.type = this.selectedValue
-            } else {
-              this.row.account = this.selectedValue
+              this.row.type = this.selectedValue.name
+            }
+            if(this.column.field === 'account') {
+              this.row.account = this.selectedValue.name
             }
         }
       }
@@ -218,7 +233,7 @@ export default {
       return value
     },
     setEditableValue ($event) {
-      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue.name
+      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
       const value = cellValueParser(this.column, this.row, input, true)
       if (!value) return
       this.editPending = false
@@ -229,6 +244,12 @@ export default {
         if (sameDates(value, this.rowValue)) {
           valueChanged = false
         }
+      }
+      if (this.columnIndex === 3 && $event.key === 'Enter') {
+        this.$emit('add-row','D')
+      }
+      if (this.columnIndex === 2 && $event.key === 'Enter') {
+        this.$emit('add-row','C')
       }
       const { row, column, rowIndex, columnIndex } = this
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
@@ -246,9 +267,24 @@ export default {
     },
     setSelected(val) {
       if (val.id) {
-        this.row.account_id = val.id;
+        this.row.account_id = val.id
       }
-      this.selectedValue = val.name;
+      if (!this.row.account && this.column.field === 'account') {
+         this.row.account = val.name
+      }
+      if (!this.row.type && this.column.field === 'type') {
+         this.row.type = val.name
+      }
+      this.selectedValue = val
+      this.value = this.selectedValue.name
+      this.rowValue = this.selectedValue.name
+      // console.log('select', this.column.field === 'type' && this.row.type !== '')
+
+      // if (this.column.field === 'type' && this.row.type !== '') {
+      //   this.value = this.selectedValue
+      //   this.rowValue = this.selectedValue
+      //   console.log(this.value)
+      // }
     },
     onSelectLeave() {
       // if (this.editPending) {
@@ -258,7 +294,7 @@ export default {
       // this.columnIndex = this.columnIndex + 1
       //console.log('here', this.cellEditing[1], this.columnIndex)
       //this.$refs.select.$parent.$el.nextElementSibling.childNodes[0].childNodes[0].childNodes[0].focus();
-    }
+    },
   }
 }
 </script>

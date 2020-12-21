@@ -78,7 +78,7 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                Voucher::create([
+                $voucher = Voucher::create([
                     'account_ledger_id' => $ledger->id,
                     'account_master_id' => $each['account_id'],
                     'type' => $each['type'],
@@ -87,6 +87,18 @@ class VouchersController extends Controller
                     'credit' => $each['credit'],
                     'short_narration' => $each['short_narration'],
                     'date' => Carbon::now()->toDateTimeString(),
+                ]);
+
+                //Update voucher_id's in ledger->bill_no
+                $bill_no = 0;
+                $existing_voucher_id = $ledger->bill_no;
+                if (!empty($existing_voucher_id)) {
+                    $bill_no = $existing_voucher_id . ', ' . $voucher->id;
+                } else {
+                    $bill_no = $voucher->id;
+                }
+                $ledger->update([
+                    'bill_no' => $bill_no,
                 ]);
             }
 
