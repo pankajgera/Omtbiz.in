@@ -83,31 +83,31 @@
             <hr/>
             <p class="row" v-if="masterData">
               <span>Opening Balance:</span>
-              <span class="ml-60" v-if="masterData.type === 'Cr'">
-                {{ masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
+              <span class="ml-60">
+                {{ masterData.type === 'Cr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
               </span>
-              <span class="ml-60" v-else>
-                {{ masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
+              <span class="ml-60">
+                {{ masterData.type === 'Dr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
               </span>
             </p>
             <hr/>
             <p class="row" v-if="currentTotalCredit">
               <span class="mr-30">Current Total:</span>
               <span class="ml-60">
-                {{ currentTotalCredit ? ' ₹ ' + currentTotalCredit + ' Cr' : null}}
+                {{ currentTotalCredit ? ' ₹ ' + currentTotalCredit + ' Cr' : ' ₹ ' + 0}}
               </span>
               <span class="ml-60">
-                {{ currentTotalDebit ? ' ₹ ' + currentTotalDebit + ' Dr' : null}}
+                {{ currentTotalDebit ? ' ₹ ' + currentTotalDebit + ' Dr' : ' ₹ ' + 0}}
               </span>
             </p>
             <hr/>
             <h6 class="row" v-if="ledgerData">
               <span class="mr-10">Closing Balance:</span>
-              <span class="ml-60" v-if="ledgerData.type === 'C'">
-                ₹ {{ ledgerData ? ledgerData.balance + ' Cr': null}}
+              <span class="ml-60">
+                {{ ledgerData.type === 'C' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Cr': ' ₹ ' + 0}}
               </span>
-              <span class="ml-60" v-else>
-                ₹ {{ ledgerData ? ledgerData.balance + ' Dr': null}}
+              <span class="ml-60">
+                {{ ledgerData.type === 'D' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Dr': ' ₹ ' + 0}}
               </span>
             </h6>
           </div>
