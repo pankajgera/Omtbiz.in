@@ -40,10 +40,10 @@
                 </table-column>
                 <table-column
                   :label="$t('ledgers.particulars')"
-                  show="account"
+                  show="particulars"
                 >
                   <template slot-scope="row">
-                    {{ row.account }}
+                    {{ row.particulars }}
                   </template>
                 </table-column>
                 <table-column

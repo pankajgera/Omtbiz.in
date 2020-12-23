@@ -45,6 +45,9 @@ export const cellValueParser = (column, row, value, fromInput) => {
   if (!column.type || column.type === 'text') {
     return value
   }
+  if (!column.type || column.type === 'select') {
+    return value
+  }
   if (column.type === 'date') {
     if (fromInput) {
       value = parse(value, 'yyyy-MM-dd', new Date())

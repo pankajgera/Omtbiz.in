@@ -183,7 +183,7 @@ export default {
       window.toastr['success'](response.data.success)
     },
     cellUpdated($event) {
-      //console.log($event)
+      console.log($event)
       if ($event.columnIndex === 0) {
         // if ($event.value === 'Cr' || $event.value === 'C' || $event.value === 'c') {
         //   $event.row.type = 'C'
@@ -204,15 +204,16 @@ export default {
         // }
       }
 
+      if($event.row.type === 'C') {
+        $event.row.debit = 0;
+      } else {
+        $event.row.credit = 0;
+      }
+
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter') {
-        // if($event.row.type === 'C') {
-        //   this.addNewRow('C');
-        // } else {
-        //   this.addNewRow('D');
-        // }
         $event.rowIndex = $event.rowIndex + 1
         $event.columnIndex = 0
-        $event.target.input.blur()
+        $event.$event.target.blur()
       }
     },
     rowSelected($event) {
@@ -220,6 +221,12 @@ export default {
       // if (this.resetActiveColIndex) {
       //   $event.colIndex = 0;
       // }
+
+      if($event.rowData.type === 'C') {
+        $event.rowData.debit = 0;
+      } else {
+        $event.rowData.credit = 0;
+      }
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {
