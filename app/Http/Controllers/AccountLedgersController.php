@@ -51,8 +51,17 @@ class AccountLedgersController extends Controller
     {
         $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
         $ledger = AccountLedger::findOrFail($id);
-        $related_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')->first()->value('related_voucher');
-        $related_vouchers = Voucher::whereIn('id', explode(',', $related_voucher_ids))->where('account_ledger_id', '!=', $id)->orderBy('id')->get();
+        $all_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')->get();
+        $each_ids = null;
+        foreach ($all_voucher_ids as $each) {
+            if ($each_ids) {
+                $each_ids = $each_ids . ', ' . $each->related_voucher;
+            } else {
+                $each_ids = $each->related_voucher;
+            }
+        }
+        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))->where('account_ledger_id', '!=', $id)->orderBy('id')->get();
         //Update balance according to 'debit' or 'credit'
         $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
