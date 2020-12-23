@@ -3,6 +3,7 @@
 namespace Crater\Http\Controllers;
 
 use Crater\AccountLedger;
+use Crater\AccountMaster;
 use Crater\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -48,12 +49,13 @@ class AccountLedgersController extends Controller
      */
     public function display(Request $request, $id)
     {
-        $vouchers = Voucher::where('account_ledger_id', $id)->get();
+        $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
         $ledger = AccountLedger::findOrFail($id);
-
-        $vouchers_debit_sum = $vouchers->sum('debit');
-        $vouchers_credit_sum = $vouchers->sum('credit');
+        $related_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')->first()->value('related_voucher');
+        $related_vouchers = Voucher::whereIn('id', explode(',', $related_voucher_ids))->where('account_ledger_id', '!=', $id)->orderBy('id')->get();
         //Update balance according to 'debit' or 'credit'
+        $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
+        $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
         if ($ledger->debit > $ledger->credit) {
             $ledger->update([
                 'type' => 'D',
@@ -70,9 +72,17 @@ class AccountLedgersController extends Controller
             ]);
         }
 
+        //Extra's for vouchers collection
+        foreach ($related_vouchers as $each) {
+            $particulars = $each->account;
+            $each['voucher_type'] = 'Journal';
+            $each['particulars'] = $particulars;
+        }
+
         return response()->json([
-            'vouchers' => $vouchers,
+            'vouchers' => $related_vouchers,
             'ledger' => $ledger,
+            'account_master' => AccountMaster::where('id', $ledger->account_master_id)->first(),
         ]);
     }
 

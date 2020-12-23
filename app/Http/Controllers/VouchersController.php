@@ -45,6 +45,8 @@ class VouchersController extends Controller
     public function store(Request $request)
     {
         $ledger = '';
+        $ledger_ids = [];
+        $voucher_ids = '';
         try {
             foreach ($request->all() as $each) {
                 // If accountLedger is already present then update
@@ -100,9 +102,23 @@ class VouchersController extends Controller
                 $ledger->update([
                     'bill_no' => $bill_no,
                 ]);
+
+                array_push($ledger_ids, $ledger->id);
+                if (!empty($voucher_ids)) {
+                    $voucher_ids = $voucher_ids . ', ' . $voucher->id;
+                } else {
+                    $voucher_ids = $voucher->id;
+                }
             }
 
-            $voucher = Voucher::where('account_ledger_id', $ledger->id)->get();
+            $voucher = Voucher::whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            foreach ($voucher as $key => $each) {
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
+                }
+            }
             return response()->json([
                 'voucher' => $voucher,
             ]);

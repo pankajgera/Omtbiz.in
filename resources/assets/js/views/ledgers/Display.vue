@@ -4,9 +4,6 @@
       <h3 class="page-title">
         {{ ledgerData ? ledgerData.account : '' }}
       </h3>
-      <h4 style="float: right">
-         Balance: ₹ {{ ledgerData ? ledgerData.balance : null}} {{ ledgerData ? ledgerData.type === 'D' ? 'Dr' : 'Cr' : null  }}
-      </h4>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link slot="item-title" to="/">{{
@@ -40,10 +37,10 @@
                 </table-column>
                 <table-column
                   :label="$t('ledgers.particulars')"
-                  show="account"
+                  show="particulars"
                 >
                   <template slot-scope="row">
-                    {{ row.account }}
+                    {{ row.particulars }}
                   </template>
                 </table-column>
                 <table-column
@@ -81,6 +78,40 @@
               </table-component>
           </div>
         </div>
+        <div class="row" style="float: right">
+          <div class="col-sm-12" style="width: 500px">
+            <hr/>
+            <p class="row" v-if="masterData">
+              <span>Opening Balance:</span>
+              <span class="ml-60" v-if="masterData.type === 'Cr'">
+                {{ masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
+              </span>
+              <span class="ml-60" v-else>
+                {{ masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
+              </span>
+            </p>
+            <hr/>
+            <p class="row" v-if="currentTotalCredit">
+              <span class="mr-30">Current Total:</span>
+              <span class="ml-60">
+                {{ currentTotalCredit ? ' ₹ ' + currentTotalCredit + ' Cr' : null}}
+              </span>
+              <span class="ml-60">
+                {{ currentTotalDebit ? ' ₹ ' + currentTotalDebit + ' Dr' : null}}
+              </span>
+            </p>
+            <hr/>
+            <h6 class="row" v-if="ledgerData">
+              <span class="mr-10">Closing Balance:</span>
+              <span class="ml-60" v-if="ledgerData.type === 'C'">
+                ₹ {{ ledgerData ? ledgerData.balance + ' Cr': null}}
+              </span>
+              <span class="ml-60" v-else>
+                ₹ {{ ledgerData ? ledgerData.balance + ' Dr': null}}
+              </span>
+            </h6>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -88,6 +119,15 @@
 <style scoped>
 .my-grid-class {
   height: 400px;
+}
+.ml-60 {
+  margin-left: 60px;
+}
+.mr-30 {
+  margin-right: 30px;
+}
+.mr-10 {
+  margin-right: 10px;
 }
 </style>
 <style>
@@ -125,7 +165,10 @@ export default {
       isLoading: false,
       title: "Display Account Ledger",
       displayArray: [],
-      ledgerData: ''
+      ledgerData: '',
+      masterData: '',
+      currentTotalCredit: 0,
+      currentTotalDebit: 0,
     };
   },
   created() {
@@ -134,9 +177,12 @@ export default {
   methods: {
     ...mapActions("ledger", ["fetchLedgerDisplay"]),
     async loadEditData() {
-      let response = await this.fetchLedgerDisplay(this.$route.params.id);
-      this.displayArray = response.data.vouchers;
-      this.ledgerData = response.data.ledger;
+      let response = await this.fetchLedgerDisplay(this.$route.params.id)
+      this.displayArray = response.data.vouchers
+      this.ledgerData = response.data.ledger
+      this.masterData = response.data.account_master
+      this.currentTotalCredit = this.displayArray.map(o => parseInt(o.credit)).reduce((a,c) => a + parseInt(c))
+      this.currentTotalDebit = this.displayArray.map(o => parseInt(o.debit)).reduce((a,c) => a + parseInt(c))
     },
     getFormattedDate(date) {
       return moment(date).format('DD-MM-YYYY');

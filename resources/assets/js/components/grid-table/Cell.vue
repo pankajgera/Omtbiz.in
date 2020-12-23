@@ -234,6 +234,7 @@ export default {
     },
     setEditableValue ($event) {
       const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
+      console.log('input', input)
       const value = cellValueParser(this.column, this.row, input, true)
       if (!value) return
       this.editPending = false
@@ -273,7 +274,9 @@ export default {
          this.row.account = val.name
       }
       if (!this.row.type && this.column.field === 'type') {
-         this.row.type = val.name
+          this.row.type = val.name
+          this.row.credit = 0;
+          this.row.debit = 0;
       }
       this.selectedValue = val
       this.value = this.selectedValue.name
