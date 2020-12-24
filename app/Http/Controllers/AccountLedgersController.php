@@ -67,14 +67,14 @@ class AccountLedgersController extends Controller
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
         if ($ledger->debit > $ledger->credit) {
             $ledger->update([
-                'type' => 'D',
+                'type' => 'Dr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
                 'balance' => $ledger->debit - $ledger->credit,
             ]);
         } elseif ($ledger->debit < $ledger->credit) {
             $ledger->update([
-                'type' => 'C',
+                'type' => 'Cr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
                 'balance' => $ledger->credit - $ledger->debit,

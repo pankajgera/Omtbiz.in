@@ -151,8 +151,8 @@ export default {
     },
     async submitVoucher () {
       this.rows = this.rows.filter(each => each['account'] !== '');
-      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseInt(c));
-      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseInt(c));
+      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseFloat(c));
+      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseFloat(c));
 
       let calc_balance = 0;
       if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {
@@ -185,26 +185,10 @@ export default {
     cellUpdated($event) {
       console.log($event)
       if ($event.columnIndex === 0) {
-        // if ($event.value === 'Cr' || $event.value === 'C' || $event.value === 'c') {
-        //   $event.row.type = 'C'
-        //   $event.value = 'C'
-        //   this.addNewRow('D')
-        //   if ($event.$event.key === 'Enter') {
-        //     this.addNewRow('C');
-        //     //this.resetActiveColIndex = true;
-        //   }
-        // } else if ($event.value === 'Dr' || $event.value === 'D' || $event.value === 'd') {
-        //   $event.row.type = 'D'
-        //   $event.value = 'D'
-        //   this.addNewRow('C')
-        //   if ($event.$event.key === 'Enter') {
-        //     this.addNewRow('D');
-        //     //this.resetActiveColIndex = true;
-        //   }
-        // }
+
       }
 
-      if($event.row.type === 'C') {
+      if($event.row.type === 'Cr') {
         $event.row.debit = 0;
       } else {
         $event.row.credit = 0;
@@ -222,7 +206,7 @@ export default {
       //   $event.colIndex = 0;
       // }
 
-      if($event.rowData.type === 'C') {
+      if($event.rowData.type === 'Cr') {
         $event.rowData.debit = 0;
       } else {
         $event.rowData.credit = 0;
@@ -230,28 +214,13 @@ export default {
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {
-        // if ($event.rowData.type !== 'Dr' || $event.rowData.type !== 'D' || $event.rowData.type !== 'd') {
-        //   $event.rowData.type = 'C';
-        // } else {
-        //   $event.rowData.type = 'D';
-        // }
+
       }
 
       //Account Column
       if ($event.colIndex === 1) {
 
       }
-
-      // $event.colData.editable = true;
-      // //Credit Column
-      // if ($event.colIndex === 2 && $event.rowData.type === 'D') {
-      //   $event.colData.editable = false;
-      // }
-
-      // //Debit Column
-      // if ($event.colIndex === 3 && $event.rowData.type === 'C') {
-      //   $event.colData.editable = false;
-      // }
 
     },
     linkClicked($event) {
