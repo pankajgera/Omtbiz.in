@@ -45,6 +45,8 @@ class VouchersController extends Controller
     public function store(Request $request)
     {
         $ledger = '';
+        $ledger_ids = [];
+        $voucher_ids = '';
         try {
             foreach ($request->all() as $each) {
                 // If accountLedger is already present then update
@@ -57,30 +59,15 @@ class VouchersController extends Controller
                 if (!empty($ledgerPresent)) {
                     $updateCredit = 0;
                     $updateDebit = 0;
-                    if ('C' === $each['type']) {
+                    if ('Cr' === $each['type']) {
                         $updateCredit = $ledgerPresent->credit + $each['credit'];
                         $ledgerPresent->update(['credit' => $updateCredit]);
                     } else {
                         $updateDebit = $ledgerPresent->debit + $each['debit'];
                         $ledgerPresent->update(['debit' => $updateDebit]);
                     }
-                    //Update balance according to 'debit' or 'credit'
-                    if ($ledgerPresent->debit > $ledgerPresent->credit) {
-                        $ledgerPresent->update([
-                            'type' => 'D',
-                            'balance' => $ledgerPresent->debit - $ledgerPresent->credit,
-                        ]);
-                    } else {
-                        $ledgerPresent->update([
-                            'type' => 'C',
-                            'balance' => $ledgerPresent->credit - $ledgerPresent->debit,
-                        ]);
-                    }
 
-                    $ledger = AccountLedger::where([
-                        'account' => $each['account'],
-                        'account_master_id' => $each['account_id'],
-                    ])->first();
+                    $ledger = $ledgerPresent;
                 } else {
                     $ledger = AccountLedger::create([
                         'account' => $each['account'],
@@ -93,7 +80,7 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                Voucher::create([
+                $voucher = Voucher::create([
                     'account_ledger_id' => $ledger->id,
                     'account_master_id' => $each['account_id'],
                     'type' => $each['type'],
@@ -103,9 +90,35 @@ class VouchersController extends Controller
                     'short_narration' => $each['short_narration'],
                     'date' => Carbon::now()->toDateTimeString(),
                 ]);
+
+                //Update voucher_id's in ledger->bill_no
+                $bill_no = 0;
+                $existing_voucher_id = $ledger->bill_no;
+                if (!empty($existing_voucher_id)) {
+                    $bill_no = $existing_voucher_id . ', ' . $voucher->id;
+                } else {
+                    $bill_no = $voucher->id;
+                }
+                $ledger->update([
+                    'bill_no' => $bill_no,
+                ]);
+
+                array_push($ledger_ids, $ledger->id);
+                if (!empty($voucher_ids)) {
+                    $voucher_ids = $voucher_ids . ', ' . $voucher->id;
+                } else {
+                    $voucher_ids = $voucher->id;
+                }
             }
 
-            $voucher = Voucher::where('account_ledger_id', $ledger->id)->get();
+            $voucher = Voucher::whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            foreach ($voucher as $key => $each) {
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
+                }
+            }
             return response()->json([
                 'voucher' => $voucher,
             ]);

@@ -267,6 +267,9 @@
         "credit": "Credit",
         "balance": "Balance",
         "short_narration": "Short Narration",
+        "particulars": "Particulars",
+        "voucher_type": "Voucher Type",
+        "voucher_id": "Voucher Id",
         "ledger_attached_message": "Cannot delete an ledger which is already in use",
         "confirm_delete": "You will not be able to recover this Display | You will not be able to recover these Displays",
         "created_message": "Display created successfully",
@@ -299,7 +302,8 @@
         "updated_message": "Account Voucher updated successfully",
         "deleted_message": "Account Voucher deleted successfully | Account Vouchers deleted successfully",
         "balace_not_equal_title": "Balance!",
-        "balace_not_equal_desc": "Voucher debit/credit balance should be equal"
+        "balace_not_equal_desc": "Voucher debit/credit balance should be equal",
+        "duplicate_vouchers": "This will duplicate/update existing vouchers"
     },
     "estimates": {
         "title": "Estimates",

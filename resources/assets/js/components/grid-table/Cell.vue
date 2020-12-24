@@ -2,23 +2,24 @@
   <td
       class="cell noselect"
       :id="`cell${rowIndex}-${columnIndex}`"
-      :class='{ selected: !onlyBorder && selected, "selected-top": selectedTop, "selected-right": selectedRight, "selected-bottom": selectedBottom, "selected-left": selectedLeft, editable, invalid, [column.type || "text"]: true }'
+      :class='{ selected: !onlyBorder && selected, editable, invalid, [column.type || "text"]: true }'
       :title="invalid"
       :style="cellStyle"
       @click='$emit("click", $event)'
-      @dblclick='$emit("dblclick", $event)'
-      @contextmenu='$emit("contextmenu", $event)'
-      @mousedown='$emit("mousedown", $event)'
-      @mouseover='$emit("mouseover", $event)'
-      @mouseup='$emit("mouseup", $event)'
   >
       <span v-if="inputType === 'select'">
         <v-select
           ref="select"
-          :options="masterOptions"
+          :autocomplete="'on'"
+          :append-to-body="true"
+          :input-id="'select-account-option'"
+          :options="setOptions"
+          :select-on-tab="true"
           label="name"
-          v-model="selectMaster"
-          @input="setSelected"
+          :class="column.field === 'type' ? 'width-100 style-chooser' : 'width-500 style-chooser'"
+          :value="value"
+          @input="setEditableValue"
+          @option:selected="setSelected"
         >
           <template v-slot:option="option">
             {{ option.name }}
@@ -26,7 +27,19 @@
         </v-select>
       </span>
       <span v-else>
-        <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
+        <span class="editable-field">
+          <input
+            :type="inputType"
+            ref="input"
+            :placeholder="placeholder"
+            :disabled="disableInput"
+            @keyup.enter="setEditableValue"
+            @keydown.tab="setEditableValue"
+            @keyup.esc="editCancelled"
+            @focus="editPending = true"
+            @blur="leaved" />
+          </span>
+        <!-- <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
             <input
               :type="inputType"
               ref="input"
@@ -48,11 +61,34 @@
             <span v-else>
               {{ row[column.field] | cellFormatter(column, row) }}
             </span>
-        </span>
+        </span> -->
       </span>
   </td>
 </template>
-
+<style scoped>
+  .style-chooser .vs__search::placeholder,
+  .style-chooser .vs__dropdown-toggle,
+  .style-chooser .vs__dropdown-menu {
+    background: #3c4b81;
+    border: none;
+    color: #394066;
+    text-transform: lowercase;
+    font-variant: small-caps;
+    z-index: 10;
+  }
+  .style-chooser .vs__clear,
+  .style-chooser .vs__open-indicator {
+    fill: #394066;
+  }
+</style>
+<style>
+  .vs__actions {
+    display: none !important;
+  }
+  .input-group .form-control {
+    z-index: 0 !important;
+  }
+</style>
 <script>
 import { format } from 'date-fns'
 import { cellValueParser, sameDates } from './helpers'
@@ -76,24 +112,30 @@ export default {
     placeholder: { type: String, default: null }
   },
   data () {
-    return { value: null, rowValue: null, editPending: false, selectMaster: null }
+    return { value: null, rowValue: null, editPending: false, selectedValue: null}
+  },
+  mounted() {
+    if (this.column.field === 'type') {
+      this.value = this.row.type
+      this.rowValue = this.row.type
+    }
   },
   computed: {
     selected () {
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
     },
-    selectedTop () {
-      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
-    },
-    selectedRight () {
-      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
-    },
-    selectedBottom () {
-      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
-    },
-    selectedLeft () {
-      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
-    },
+    // selectedTop () {
+    //   return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
+    // },
+    // selectedRight () {
+    //   return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
+    // },
+    // selectedBottom () {
+    //   return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
+    // },
+    // selectedLeft () {
+    //   return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
+    // },
     editable () {
       return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex
     },
@@ -116,10 +158,24 @@ export default {
     cellStyle () {
       const cellStyle = this.row.$cellStyle && this.row.$cellStyle[this.column.field]
       return { ...this.row.$rowStyle, ...cellStyle }
+    },
+    setOptions() {
+      if (this.column.field === 'type') {
+        return [{'name':'Dr'}, {'name':'Cr'}]
+      }
+      return this.masterOptions
+    },
+    disableInput() {
+      let bool = false
+      if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
+          bool = true
+      }
+      return bool
     }
   },
   watch: {
     cellEditing () {
+      //console.log('ww', this.row, this.column)
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
@@ -128,10 +184,10 @@ export default {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
-            if (!this.selectMaster) return
-            input.value = this.selectMaster.name
-            this.value = this.selectMaster.name
-            this.rowValue = this.selectMaster.name
+            if (!this.selectedValue) return
+            input.value = this.selectedValue.name
+            this.value = this.selectedValue.name
+            this.rowValue = this.selectedValue.name
           }
           if (!this.value && this.value !== 0 && this.value !== false) {
             input.value = null
@@ -153,10 +209,15 @@ export default {
         })
       }
       if (this.inputType === 'select') {
-        if (this.selectMaster) {
-            this.value = this.selectMaster
-            this.rowValue = this.selectMaster
-            this.row.account = this.selectMaster
+        if (this.selectedValue) {
+            this.value = this.selectedValue.name
+            this.rowValue = this.selectedValue.name
+            if (this.column.field === 'type') {
+              this.row.type = this.selectedValue.name
+            }
+            if(this.column.field === 'account') {
+              this.row.account = this.selectedValue.name
+            }
         }
       }
     }
@@ -172,12 +233,24 @@ export default {
       return value
     },
     setEditableValue ($event) {
-      const value = cellValueParser(this.column, this.row, this.$refs.input.value, true)
+      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
+      console.log('input', input)
+      const value = cellValueParser(this.column, this.row, input, true)
+      if (!value) return
       this.editPending = false
       let valueChanged = true
-      if (value === this.rowValue) valueChanged = false
-      else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
-        if (sameDates(value, this.rowValue)) valueChanged = false
+      if (value === this.rowValue) {
+        valueChanged = false
+      } else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
+        if (sameDates(value, this.rowValue)) {
+          valueChanged = false
+        }
+      }
+      if (this.columnIndex === 3 && $event.key === 'Enter') {
+        this.$emit('add-row','Dr')
+      }
+      if (this.columnIndex === 2 && $event.key === 'Enter') {
+        this.$emit('add-row','Cr')
       }
       const { row, column, rowIndex, columnIndex } = this
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
@@ -193,10 +266,38 @@ export default {
     linkClicked () {
       this.$emit('link-clicked')
     },
-    setSelected(value) {
-      this.row.account_id = value.id;
-      this.selectMaster = value.name;
-    }
+    setSelected(val) {
+      if (val.id) {
+        this.row.account_id = val.id
+      }
+      if (!this.row.account && this.column.field === 'account') {
+         this.row.account = val.name
+      }
+      if (!this.row.type && this.column.field === 'type') {
+          this.row.type = val.name
+          this.row.credit = 0;
+          this.row.debit = 0;
+      }
+      this.selectedValue = val
+      this.value = this.selectedValue.name
+      this.rowValue = this.selectedValue.name
+      // console.log('select', this.column.field === 'type' && this.row.type !== '')
+
+      // if (this.column.field === 'type' && this.row.type !== '') {
+      //   this.value = this.selectedValue
+      //   this.rowValue = this.selectedValue
+      //   console.log(this.value)
+      // }
+    },
+    onSelectLeave() {
+      // if (this.editPending) {
+      //   this.setEditableValue($event)
+      // }
+      // this.cellEditing[1] = this.cellEditing[1] + 1
+      // this.columnIndex = this.columnIndex + 1
+      //console.log('here', this.cellEditing[1], this.columnIndex)
+      //this.$refs.select.$parent.$el.nextElementSibling.childNodes[0].childNodes[0].childNodes[0].focus();
+    },
   }
 }
 </script>

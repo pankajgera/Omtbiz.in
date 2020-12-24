@@ -15,6 +15,7 @@ class Voucher extends Model
         'debit',
         'credit',
         'short_narration',
+        'related_voucher'
     ];
 
     public function accountMaster()

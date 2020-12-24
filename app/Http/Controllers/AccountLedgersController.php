@@ -3,6 +3,7 @@
 namespace Crater\Http\Controllers;
 
 use Crater\AccountLedger;
+use Crater\AccountMaster;
 use Crater\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -48,12 +49,49 @@ class AccountLedgersController extends Controller
      */
     public function display(Request $request, $id)
     {
-        $vouchers = Voucher::where('account_ledger_id', $id)->get();
-        $ledger = AccountLedger::find($id);
+        $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
+        $ledger = AccountLedger::findOrFail($id);
+        $all_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')->get();
+        $each_ids = null;
+        foreach ($all_voucher_ids as $each) {
+            if ($each_ids) {
+                $each_ids = $each_ids . ', ' . $each->related_voucher;
+            } else {
+                $each_ids = $each->related_voucher;
+            }
+        }
+        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))->where('account_ledger_id', '!=', $id)->orderBy('id')->get();
+        //Update balance according to 'debit' or 'credit'
+        $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
+        $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+        if ($ledger->debit > $ledger->credit) {
+            $ledger->update([
+                'type' => 'Dr',
+                'credit' => $vouchers_credit_sum,
+                'debit' => $vouchers_debit_sum,
+                'balance' => $ledger->debit - $ledger->credit,
+            ]);
+        } elseif ($ledger->debit < $ledger->credit) {
+            $ledger->update([
+                'type' => 'Cr',
+                'credit' => $vouchers_credit_sum,
+                'debit' => $vouchers_debit_sum,
+                'balance' => $ledger->credit - $ledger->debit,
+            ]);
+        }
+
+        //Extra's for vouchers collection
+        foreach ($related_vouchers as $each) {
+            $particulars = $each->account;
+            $each['voucher_type'] = 'Journal';
+            $each['particulars'] = $particulars;
+        }
 
         return response()->json([
-            'vouchers' => $vouchers,
+            'vouchers' => $related_vouchers,
             'ledger' => $ledger,
+            'account_master' => AccountMaster::where('id', $ledger->account_master_id)->first(),
         ]);
     }
 
