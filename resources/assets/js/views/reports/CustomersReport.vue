@@ -191,7 +191,6 @@ export default {
       if (this.$v.$invalid) {
         return true
       }
-
       this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
       return true
     },
