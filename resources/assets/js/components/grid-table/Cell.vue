@@ -161,13 +161,13 @@ export default {
     },
     setOptions() {
       if (this.column.field === 'type') {
-        return [{'name':'D'}, {'name':'C'}]
+        return [{'name':'Dr'}, {'name':'Cr'}]
       }
       return this.masterOptions
     },
     disableInput() {
       let bool = false
-      if (this.row.type === 'D' && this.column.field === 'credit' || this.row.type === 'C' && this.column.field === 'debit') {
+      if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
           bool = true
       }
       return bool
@@ -247,10 +247,10 @@ export default {
         }
       }
       if (this.columnIndex === 3 && $event.key === 'Enter') {
-        this.$emit('add-row','D')
+        this.$emit('add-row','Dr')
       }
       if (this.columnIndex === 2 && $event.key === 'Enter') {
-        this.$emit('add-row','C')
+        this.$emit('add-row','Cr')
       }
       const { row, column, rowIndex, columnIndex } = this
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })

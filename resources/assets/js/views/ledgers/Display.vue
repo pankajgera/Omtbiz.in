@@ -104,10 +104,10 @@
             <h6 class="row" v-if="ledgerData">
               <span class="mr-10">Closing Balance:</span>
               <span class="ml-60">
-                {{ ledgerData.type === 'C' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Cr': ' ₹ ' + 0}}
+                {{ ledgerData.type === 'Cr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Cr': ' ₹ ' + 0}}
               </span>
               <span class="ml-60">
-                {{ ledgerData.type === 'D' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Dr': ' ₹ ' + 0}}
+                {{ ledgerData.type === 'Dr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Dr': ' ₹ ' + 0}}
               </span>
             </h6>
           </div>
@@ -181,8 +181,8 @@ export default {
       this.displayArray = response.data.vouchers
       this.ledgerData = response.data.ledger
       this.masterData = response.data.account_master
-      this.currentTotalCredit = this.displayArray.map(o => parseInt(o.credit)).reduce((a,c) => a + parseInt(c))
-      this.currentTotalDebit = this.displayArray.map(o => parseInt(o.debit)).reduce((a,c) => a + parseInt(c))
+      this.currentTotalCredit = this.displayArray.map(o => parseFloat(o.credit)).reduce((a,c) => a + parseFloat(c))
+      this.currentTotalDebit = this.displayArray.map(o => parseFloat(o.debit)).reduce((a,c) => a + parseFloat(c))
     },
     getFormattedDate(date) {
       return moment(date).format('DD-MM-YYYY');

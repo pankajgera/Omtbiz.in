@@ -59,7 +59,7 @@ class VouchersController extends Controller
                 if (!empty($ledgerPresent)) {
                     $updateCredit = 0;
                     $updateDebit = 0;
-                    if ('C' === $each['type']) {
+                    if ('Cr' === $each['type']) {
                         $updateCredit = $ledgerPresent->credit + $each['credit'];
                         $ledgerPresent->update(['credit' => $updateCredit]);
                     } else {
