@@ -16,10 +16,13 @@ class UpdateTypeAndIntAccountLedger extends Migration
         Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         Schema::table('account_ledgers', function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
+
+        Schema::table('account_ledgers', function (Blueprint $table) {
             $table->decimal('debit', 15, 2)->change();
             $table->decimal('credit', 15, 2)->change();
             $table->decimal('balance', 15, 2)->change();
-            $table->dropColumn('type');
             $table->enum('type', ['Dr', 'Cr']);
         });
     }
