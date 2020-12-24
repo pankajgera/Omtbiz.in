@@ -81,7 +81,7 @@
         <div class="row" style="float: right">
           <div class="col-sm-12" style="width: 500px">
             <hr/>
-            <p class="row" v-if="masterData">
+            <p class="row">
               <span>Opening Balance:</span>
               <span class="ml-60">
                 {{ masterData.type === 'Cr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ ' + 0}}
@@ -91,7 +91,7 @@
               </span>
             </p>
             <hr/>
-            <p class="row" v-if="currentTotalCredit">
+            <p class="row">
               <span class="mr-30">Current Total:</span>
               <span class="ml-60">
                 {{ currentTotalCredit ? ' ₹ ' + currentTotalCredit + ' Cr' : ' ₹ ' + 0}}
@@ -101,7 +101,7 @@
               </span>
             </p>
             <hr/>
-            <h6 class="row" v-if="ledgerData">
+            <h6 class="row">
               <span class="mr-10">Closing Balance:</span>
               <span class="ml-60">
                 {{ ledgerData.type === 'Cr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Cr': ' ₹ ' + 0}}

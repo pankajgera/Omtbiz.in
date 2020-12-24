@@ -42,6 +42,9 @@
           <li class="tab">
             <router-link class="tab-link" to="/reports/taxes">{{ $t('reports.taxes.taxes') }}</router-link>
           </li>
+          <li class="tab">
+            <router-link class="tab-link" to="/reports/customers">{{ $t('reports.customers.customers') }}</router-link>
+          </li>
         </ul>
       </div>
     </div>
