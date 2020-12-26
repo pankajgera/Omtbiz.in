@@ -51,7 +51,7 @@ Route::group(['prefix' => 'reports'], function () {
     //----------------------------------
     Route::get('/customers/{hash}', [
         'as' => 'get.customers',
-        'uses' => 'ReportController@customers'
+        'uses' => 'ReportController@customersReport'
     ]);
 
 });

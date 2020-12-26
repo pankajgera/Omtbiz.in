@@ -11,6 +11,7 @@ use Crater\CompanySetting;
 use Crater\Tax;
 use PDF;
 use Carbon\Carbon;
+use Crater\AccountLedger;
 use Illuminate\Database\Eloquent\Builder;
 
 class ReportController extends Controller
@@ -292,19 +293,18 @@ class ReportController extends Controller
     }
 
 
-    public function customers($hash, Request $request)
+    public function customersReport($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
 
-        $taxTypes = Tax::with('taxType', 'invoice', 'invoiceItem')
-            ->whereCompany($company->id)
-            ->whereInvoicesFilters($request->only(['from_date', 'to_date']))
-            ->taxAttributes()
+        $ledgerTypes = AccountLedger::whereIn('account', ['Sundry Debtors', 'Sundry Creditors'])
+            ->applyFilters($request->only(['from_date', 'to_date']))
             ->get();
 
         $totalAmount = 0;
-        foreach ($taxTypes as $taxType) {
-            $totalAmount += $taxType->total_tax_amount;
+        foreach ($ledgerTypes as $each) {
+            $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+            $totalAmount += $each->balance;
         }
 
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
@@ -328,15 +328,15 @@ class ReportController extends Controller
             ->get();
 
         view()->share([
-            'taxTypes' => $taxTypes,
-            'totalTaxAmount' => $totalAmount,
+            'ledgerTypes' => $ledgerTypes,
+            'totalAmount' => $totalAmount,
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
             'to_date' => $to_date
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.tax-summary');
+        $pdf = PDF::loadView('app.pdf.reports.customers');
 
         if ($request->has('download')) {
             return $pdf->download();
