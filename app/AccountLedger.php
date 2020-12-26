@@ -2,6 +2,7 @@
 
 namespace Crater;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class AccountLedger extends Model
@@ -25,38 +26,46 @@ class AccountLedger extends Model
 
     public function scopeWhereDate($query, $date)
     {
-        return $query->where('date', 'LIKE', '%'.$date.'%');
+        return $query->where('date', 'LIKE', '%' . $date . '%');
     }
 
     public function scopeWhereType($query, $type)
     {
-        return $query->where('type', 'LIKE', '%'.$type.'%');
+        return $query->where('type', 'LIKE', '%' . $type . '%');
     }
 
     public function scopeWhereAccount($query, $account)
     {
-        return $query->where('account', 'LIKE', '%'.$account.'%');
+        return $query->where('account', 'LIKE', '%' . $account . '%');
     }
 
     public function scopeWhereDebit($query, $debit)
     {
-        return $query->where('debit', 'LIKE', '%'.$debit.'%');
+        return $query->where('debit', 'LIKE', '%' . $debit . '%');
     }
 
     public function scopeWhereCredit($query, $credit)
     {
-        return $query->where('credit', 'LIKE', '%'.$credit.'%');
+        return $query->where('credit', 'LIKE', '%' . $credit . '%');
     }
 
     public function scopeWhereBalance($query, $balance)
     {
-        return $query->where('balance', 'LIKE', '%'.$balance.'%');
+        return $query->where('balance', 'LIKE', '%' . $balance . '%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
     }
+
+    public function scopeEstimatesBetween($query, $start, $end)
+    {
+        return $query->whereBetween('date',
+            [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')]
+        );
+    }
+
 
     public function scopeApplyFilters($query, array $filters)
     {
@@ -84,6 +93,12 @@ class AccountLedger extends Model
 
         if ($filters->get('balance')) {
             $query->whereName($filters->get('balance'));
+        }
+
+        if ($filters->get('from_date') && $filters->get('to_date')) {
+            $start = Carbon::createFromFormat('d/m/Y', $filters->get('from_date'));
+            $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
+            $query->estimatesBetween($start, $end);
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {

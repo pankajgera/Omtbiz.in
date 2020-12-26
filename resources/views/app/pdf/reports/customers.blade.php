@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Tax Summary Report</title>
+    <title>Customers Report</title>
     {{-- <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet"> --}}
     <style type="text/css">
         body {
@@ -186,23 +186,23 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <p class="sub-heading-text">TAX REPORT</p>
+                        <p class="sub-heading-text">SUNDARY REPORT</p>
                     </td>
                 </tr>
             </table>
-            <p class="types-title">Tax Types</p>
+            <p class="types-title">Types</p>
             <div class="tax-table-container">
                 <table class="tax-table">
-                    @foreach ($taxTypes as $tax)
+                    @foreach ($ledgerTypes as $ledger)
                         <tr>
                             <td>
                                 <p class="tax-title">
-                                    {{ $tax->taxType->name }}
+                                    {{ $ledger->account }}
                                 </p>
                             </td>
                             <td>
                                 <p class="tax-money">
-                                    {!! format_money_pdf($tax->total_tax_amount) !!}
+                                    ₹ {!! ($ledger->balance) !!}
                                 </p>
                             </td>
                         </tr>
@@ -216,7 +216,7 @@
             <tr>
                 <td class="tax-total-cell">
                     <p class="tax-total">
-                        {!! format_money_pdf($totalTaxAmount) !!}
+                        {!! ($totalAmount) !!}
                     </p>
                 </td>
             </tr>
@@ -224,11 +224,11 @@
         <table class="total-tax-table">
             <tr>
                 <td>
-                    <p class="total-tax-title">TOTAL TAX</p>
+                    <p class="total-tax-title">TOTAL</p>
                 </td>
                 <td>
                     <p class="total-tax-money">
-                        {!! format_money_pdf($totalTaxAmount) !!}
+                        {!! ($totalAmount) !!}
                     </p>
                 </td>
             </tr>
