@@ -108,6 +108,10 @@ import VouchersCreate from './views/vouchers/Create.vue'
 
 import Wizard from './views/wizard/Index.vue'
 
+// bank
+import BankIndex from './views/bank/Index.vue'
+import BankCreate from './views/bank/Create.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -449,6 +453,25 @@ const routes = [
                 path: 'notes/:id/edit',
                 name: 'notes.edit',
                 component: NotesCreate,
+                meta: ['admin']
+            },
+
+            // Bank
+            {
+              path: 'bank',
+              component: BankIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'bank/create',
+                name: 'bank.create',
+                component: BankCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'bank/:id/edit',
+                name: 'bank.edit',
+                component: BankCreate,
                 meta: ['admin']
             },
 
