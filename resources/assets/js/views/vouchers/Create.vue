@@ -96,7 +96,6 @@ export default {
         { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '200px', editable: true },
         { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '200px', editable: true },
       ],
-      //resetActiveColIndex: false,
       masterData: [],
       short_narration: '',
       alreadySubmitted: false,
@@ -196,16 +195,11 @@ export default {
 
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter') {
         $event.rowIndex = $event.rowIndex + 1
-        $event.columnIndex = 0
+        $event.columnIndex = 1
         $event.$event.target.blur()
       }
     },
     rowSelected($event) {
-      //console.log($event)
-      // if (this.resetActiveColIndex) {
-      //   $event.colIndex = 0;
-      // }
-
       if($event.rowData.type === 'Cr') {
         $event.rowData.debit = 0;
       } else {
