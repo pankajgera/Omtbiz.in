@@ -25,10 +25,6 @@ class AddCompanyIdToAllTables extends Migration
             $table->integer('company_id')->unsigned()->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
         });
-        Schema::table('items', function (Blueprint $table) {
-            $table->integer('company_id')->unsigned()->nullable();
-            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
-        });
         Schema::table('notes', function (Blueprint $table) {
             $table->integer('company_id')->unsigned()->nullable();
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
@@ -55,10 +51,6 @@ class AddCompanyIdToAllTables extends Migration
             $table->removeColumn('company_id');
         });
         Schema::table('inventories', function (Blueprint $table) {
-            $table->dropForeign(['company_id']);
-            $table->removeColumn('company_id');
-        });
-        Schema::table('items', function (Blueprint $table) {
             $table->dropForeign(['company_id']);
             $table->removeColumn('company_id');
         });
