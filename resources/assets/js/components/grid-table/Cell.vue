@@ -234,7 +234,6 @@ export default {
     },
     setEditableValue ($event) {
       const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
-      console.log('input', input)
       const value = cellValueParser(this.column, this.row, input, true)
       if (!value) return
       this.editPending = false
@@ -281,22 +280,6 @@ export default {
       this.selectedValue = val
       this.value = this.selectedValue.name
       this.rowValue = this.selectedValue.name
-      // console.log('select', this.column.field === 'type' && this.row.type !== '')
-
-      // if (this.column.field === 'type' && this.row.type !== '') {
-      //   this.value = this.selectedValue
-      //   this.rowValue = this.selectedValue
-      //   console.log(this.value)
-      // }
-    },
-    onSelectLeave() {
-      // if (this.editPending) {
-      //   this.setEditableValue($event)
-      // }
-      // this.cellEditing[1] = this.cellEditing[1] + 1
-      // this.columnIndex = this.columnIndex + 1
-      //console.log('here', this.cellEditing[1], this.columnIndex)
-      //this.$refs.select.$parent.$el.nextElementSibling.childNodes[0].childNodes[0].childNodes[0].focus();
     },
   }
 }
