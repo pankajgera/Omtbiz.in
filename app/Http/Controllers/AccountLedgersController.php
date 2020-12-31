@@ -24,6 +24,7 @@ class AccountLedgersController extends Controller
             'orderByField',
             'orderBy',
         ]))
+            ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
@@ -61,7 +62,12 @@ class AccountLedgersController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))->where('account_ledger_id', '!=', $id)->orderBy('id')->get();
+        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+            ->where('account_ledger_id', '!=', $id)
+            ->whereCompany($request->header('company'))
+            ->orderBy('id')
+            ->get();
+
         //Update balance according to 'debit' or 'credit'
         $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
@@ -113,6 +119,7 @@ class AccountLedgersController extends Controller
             $ledger->credit = $request->credit;
             $ledger->balance = $request->balance;
             $ledger->short_narration = $request->short_narration;
+            $ledger->company_id = $request->header('company');
             $ledger->save();
 
             $ledger = AccountLedger::find($ledger->id);
@@ -145,6 +152,7 @@ class AccountLedgersController extends Controller
             $ledger->credit = $request->credit;
             $ledger->balance = $request->balance;
             $ledger->short_narration = $request->short_narration;
+            $ledger->company_id = $request->header('company');
             $ledger->save();
 
             $ledger = AccountLedger::find($ledger->id);

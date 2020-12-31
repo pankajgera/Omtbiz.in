@@ -21,6 +21,7 @@ class NoteController extends Controller
                 'orderByField',
                 'orderBy',
             ]))
+            ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
@@ -53,6 +54,7 @@ class NoteController extends Controller
             $note->average = $request->average;
             $note->per_price = $request->per_price;
             $note->note = $request->note;
+            $note->company_id = $request->header('company');
             $note->save();
 
             $note = Note::find($note->id);
@@ -82,6 +84,7 @@ class NoteController extends Controller
             $note->average = $request->average;
             $note->per_price = $request->per_price;
             $note->note = $request->note;
+            $note->company_id = $request->header('company');
             $note->save();
 
             $note = Note::find($note->id);

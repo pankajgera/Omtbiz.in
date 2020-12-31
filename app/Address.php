@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater;
 
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +22,8 @@ class Address extends Model
         'phone',
         'fax',
         'type',
-        'user_id'
+        'user_id',
+        'company_id'
     ];
 
     public function user()
@@ -32,5 +34,10 @@ class Address extends Model
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('company_id', $company_id);
     }
 }

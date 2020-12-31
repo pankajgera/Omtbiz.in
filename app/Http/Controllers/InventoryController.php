@@ -22,6 +22,7 @@ class InventoryController extends Controller
                 'orderByField',
                 'orderBy',
             ]))
+                ->whereCompany($request->header('company'))
                 ->latest()
                 ->paginate($limit);
 
@@ -59,6 +60,7 @@ class InventoryController extends Controller
             $inventory->quantity = $request->quantity;
             $inventory->price = $request->price;
             $inventory->unit = $request->unit;
+            $inventory->company_id = $request->header('company');
             $inventory->save();
 
             return response()->json([
@@ -84,6 +86,7 @@ class InventoryController extends Controller
             $inventory->quantity = $request->quantity;
             $inventory->price = $request->price;
             $inventory->unit = $request->unit;
+            $inventory->company_id = $request->header('company');
             $inventory->save();
 
             return response()->json([
