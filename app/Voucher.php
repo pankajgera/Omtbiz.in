@@ -15,7 +15,8 @@ class Voucher extends Model
         'debit',
         'credit',
         'short_narration',
-        'related_voucher'
+        'related_voucher',
+        'company_id'
     ];
 
     public function accountMaster()
@@ -30,27 +31,32 @@ class Voucher extends Model
 
     public function scopeWhereType($query, $type)
     {
-        return $query->where('type', 'LIKE', '%'.$type.'%');
+        return $query->where('type', 'LIKE', '%' . $type . '%');
     }
 
     public function scopeWhereAccount($query, $account)
     {
-        return $query->where('account', 'LIKE', '%'.$account.'%');
+        return $query->where('account', 'LIKE', '%' . $account . '%');
     }
 
     public function scopeWhereDebitAmount($query, $debit)
     {
-        return $query->where('debit', 'LIKE', '%'.$debit.'%');
+        return $query->where('debit', 'LIKE', '%' . $debit . '%');
     }
 
     public function scopeWhereCreditAmount($query, $credit)
     {
-        return $query->where('credit', 'LIKE', '%'.$credit.'%');
+        return $query->where('credit', 'LIKE', '%' . $credit . '%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
+    }
+
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('company_id', $company_id);
     }
 
     public function scopeApplyFilters($query, array $filters)
