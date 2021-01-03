@@ -33,9 +33,9 @@
             ref="input"
             :placeholder="placeholder"
             :disabled="disableInput"
+            :value="value"
             @keyup.enter="setEditableValue"
             @keydown.tab="setEditableValue"
-            @keyup.esc="editCancelled"
             @focus="editPending = true"
             @blur="leaved" />
           </span>
@@ -46,7 +46,6 @@
               :placeholder="placeholder"
               @keyup.enter="setEditableValue"
               @keydown.tab="setEditableValue"
-              @keyup.esc="editCancelled"
               @focus="editPending = true"
               @blur="leaved" />
         </span>
@@ -119,9 +118,14 @@ export default {
       this.value = this.row.type
       this.rowValue = this.row.type
     }
+    if (this.column.field === 'account') {
+      this.rowValue = this.row.account
+      this.value = this.row.account
+    }
   },
   computed: {
     selected () {
+      //return true
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
     },
     // selectedTop () {
@@ -137,6 +141,7 @@ export default {
     //   return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
     // },
     editable () {
+      //return true
       return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex
     },
     invalid () {
@@ -171,11 +176,21 @@ export default {
           bool = true
       }
       return bool
+    },
+    isEdit() {
+      if (this.$route.name === 'vouchers.edit') {
+          return true
+        }
+        return false
+    }
+  },
+  created () {
+    if (this.isEdit) {
+      this.loadEditData()
     }
   },
   watch: {
     cellEditing () {
-      //console.log('ww', this.row, this.column)
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
@@ -184,6 +199,7 @@ export default {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
+            this.$refs.select.$el.focus()
             if (!this.selectedValue) return
             input.value = this.selectedValue.name
             this.value = this.selectedValue.name
@@ -220,9 +236,31 @@ export default {
             }
         }
       }
-    }
+    },
   },
   methods: {
+    loadEditData() {
+      if (this.row.type !== '') {
+        if (this.column.field === 'type') {
+          this.selectedValue = {name: this.row.type}
+          this.rowValue = this.row.type
+          this.value = this.row.type
+        }
+        if (this.column.field === 'account') {
+          this.selectedValue = {name: this.row.account, id: this.row.account_id}
+          this.rowValue = this.row.account
+          this.value = this.row.account
+        }
+        if (this.column.field === 'debit') {
+          this.rowValue = this.row.debit
+          this.value = this.row.debit
+        }
+        if (this.column.field === 'credit') {
+          this.rowValue = this.row.credit
+          this.value = this.row.credit
+        }
+      }
+    },
     getEditableValue (value) {
       if (this.column.type === 'datetime' || this.column.type === 'date') {
         if (typeof value === 'string') {
@@ -245,17 +283,10 @@ export default {
           valueChanged = false
         }
       }
-      if (this.columnIndex === 3 && $event.key === 'Enter') {
-        this.$emit('add-row','Dr')
-      }
-      if (this.columnIndex === 2 && $event.key === 'Enter') {
-        this.$emit('add-row','Cr')
-      }
+      this.rowValue = value
+      this.value = value
       const { row, column, rowIndex, columnIndex } = this
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
-    },
-    editCancelled () {
-      this.$emit('edit-cancelled')
     },
     leaved ($event) {
       if (this.editPending) {
