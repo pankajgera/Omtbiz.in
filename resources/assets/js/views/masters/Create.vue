@@ -46,14 +46,14 @@
                   <span v-if="!$v.formData.groups.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label class="control-label">{{ $t('masters.country') }}</label>
                   <country-select
                     v-model="formData.country"
                     :country="formData.country"
                     :className="'base-input select-input'"
                     topCountry="IN" />
-              </div>
+              </div> -->
               <div class="form-group">
                 <label class="control-label">{{ $t('masters.state') }}</label>
                    <region-select
@@ -145,7 +145,7 @@ export default {
         name: '',
         groups: '',
         address: '',
-        country: '',
+        country: 'IN',
         state: '',
         opening_balance: 0,
         type: 'Cr'

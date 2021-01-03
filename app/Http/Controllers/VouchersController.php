@@ -31,7 +31,13 @@ class VouchersController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $voucher = Voucher::find($id);
+        $voucher = Voucher::where('related_voucher', 'like', '%' . $id . '%')->select([
+            'type',
+            'account',
+            'account_master_id',
+            'credit',
+            'debit'
+        ])->get();
 
         return response()->json([
             'voucher' => $voucher,
@@ -83,13 +89,14 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                $voucher = Voucher::create([
+                $voucher = Voucher::updateOrCreate([
                     'account_ledger_id' => $ledger->id,
                     'account_master_id' => $each['account_id'],
                     'type' => $each['type'],
                     'account' => $each['account'],
                     'debit' => $each['debit'],
                     'credit' => $each['credit'],
+                ], [
                     'short_narration' => $each['short_narration'],
                     'date' => Carbon::now()->toDateTimeString(),
                     'company_id' => $request->header('company')

@@ -25,7 +25,6 @@
                 @row-selected="rowSelected"
                 @link-clicked="linkClicked"
                 @contextmenu="contextMenu"
-                @add-new-row="addNewRow"
               >
                 <template v-slot:header>
                   Add / Edit Account Vouchers
@@ -43,6 +42,8 @@
                   width="400"
                   class="form-control description-input m-3"
                   v-model="short_narration"
+                  autofocus
+                  id="narration-voucher"
                   placeholder="Type Short Narration (optional)" />
               </div>
               <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
@@ -82,7 +83,7 @@ export default {
         {
           type: '',
           account: '',
-          account_id: '',
+          account_id: 0,
           credit: 0,
           debit: 0,
           total_debit: 0,
@@ -125,7 +126,19 @@ export default {
     ]),
     async loadEditData () {
       let response = await this.fetchVoucher(this.$route.params.id)
-      this.rows = response.data.voucher
+      this.rows = []
+      response.data.voucher.map(each => {
+        let obj = {}
+        obj['type'] = each.type
+        obj['account'] = each.account,
+        obj['account_id'] = each.account_master_id,
+        obj['credit'] = parseInt(each.credit),
+        obj['debit'] = parseInt(each.debit),
+        obj['total_debit'] = 0,
+        obj['total_credit'] = 0,
+        obj['balance'] = 0,
+        this.rows.push(obj)
+      })
     },
     async loadMasters () {
       let response = await this.fetchMasters({limit: 500})
@@ -182,29 +195,44 @@ export default {
       window.toastr['success'](response.data.success)
     },
     cellUpdated($event) {
-      console.log($event)
       if ($event.columnIndex === 0) {
 
       }
 
-      if($event.row.type === 'Cr') {
-        $event.row.debit = 0;
-      } else {
-        $event.row.credit = 0;
+      // if($event.row.type === 'Cr') {
+      //   $event.row.debit = 0;
+      // } else if ($event.row.type === 'Dr') {
+      //   $event.row.credit = 0;
+      // }
+
+      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
+      {
+        let typeValue = '';
+        let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseFloat(c));
+        let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseFloat(c));
+        if (0 < credit_sum && credit_sum > debit_sum || $event.columnIndex === 3 && credit_sum + $event.value > debit_sum) {
+          this.addNewRow('Dr')
+        } else if (0 < debit_sum && credit_sum < debit_sum || $event.columnIndex === 2 && debit_sum + $event.value > credit_sum) {
+          this.addNewRow('Cr')
+        }
+
+        $event.rowIndex = $event.rowIndex + 1
+        $event.columnIndex = 0
+        $event.$event.target.blur()
       }
 
-      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter') {
-        $event.rowIndex = $event.rowIndex + 1
-        $event.columnIndex = 1
+      if ($event.columnIndex === 2 && $event.$event.key === 'Tab' || $event.columnIndex === 3 && $event.$event.key === 'Tab')
+      {
         $event.$event.target.blur()
+        $event.$event.path[10].childNodes[2].lastChild.focus()
       }
     },
     rowSelected($event) {
-      if($event.rowData.type === 'Cr') {
-        $event.rowData.debit = 0;
-      } else {
-        $event.rowData.credit = 0;
-      }
+      // if($event.rowData && $event.rowData.type === 'Cr') {
+      //   $event.rowData.debit = 0;
+      // } else if ($event.rowData && $event.rowData.type === 'Dr') {
+      //   $event.rowData.credit = 0;
+      // }
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {
@@ -225,7 +253,7 @@ export default {
       this.rows.push({
           type: val,
           account: '',
-          account_id: '',
+          account_id: 0,
           credit: 0,
           debit: 0,
           total_debit: 0,
