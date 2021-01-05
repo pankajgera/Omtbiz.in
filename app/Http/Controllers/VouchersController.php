@@ -135,6 +135,9 @@ class VouchersController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving account voucher', [$e->getMessage()]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
     }
 

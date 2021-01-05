@@ -131,6 +131,9 @@ class AccountLedgersController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving account ledger', [$e->getMessage()]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
     }
 

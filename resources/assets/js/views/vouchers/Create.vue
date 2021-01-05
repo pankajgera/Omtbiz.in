@@ -183,16 +183,23 @@ export default {
         each['balance'] = calc_balance
         each['short_narration'] = this.short_narration
       });
-      this.isLoading = true
-      let response = await this.addVoucher(this.rows)
 
-      if (response.data) {
-        window.toastr['success'](this.$tc('vouchers.created_message'))
-        this.isLoading = false
-        this.alreadySubmitted = true;
-        return true
+      try {
+        this.isLoading = true
+        let response = await this.addVoucher(this.rows)
+
+        if (response.data) {
+          window.toastr['success'](this.$tc('vouchers.created_message'))
+          this.isLoading = false
+          this.alreadySubmitted = true;
+          return true
+        }
+      } catch (err) {
+        if (err) {
+          this.isLoading = false
+          window.toastr['error'](err)
+        }
       }
-      window.toastr['success'](response.data.success)
     },
     cellUpdated($event) {
       if ($event.columnIndex === 0) {

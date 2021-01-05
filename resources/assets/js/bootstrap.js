@@ -13,13 +13,11 @@ import TaxTypeModal from './components/base/modal/TaxTypeModal.vue'
 import CategoryModal from './components/base/modal/CategoryModal.vue'
 import money from 'v-money'
 import VueExpandableImage from 'vue-expandable-image'
-import vueCountryRegionSelect from 'vue-country-region-select';
 
 /**
  * Global css plugins
  */
 import 'vue-tabs-component/docs/resources/tabs-component.css'
-import 'vue-select/dist/vue-select.css'
 
 Vue.use(Vuelidate)
 Vue.use(VueExpandableImage)
@@ -113,8 +111,6 @@ Vue.use(Vuex)
 
 // register directive v-money and component <money>
 Vue.use(money, { precision: 2 })
-
-Vue.use(vueCountryRegionSelect);
 
 Vue.component('v-dropdown', VDropdown)
 Vue.component('v-dropdown-item', VDropdownItem)

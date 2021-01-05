@@ -7,24 +7,37 @@
       :style="cellStyle"
       @click='$emit("click", $event)'
   >
-      <span v-if="inputType === 'select'">
-        <v-select
-          ref="select"
-          :autocomplete="'on'"
-          :append-to-body="true"
-          :input-id="'select-account-option'"
-          :options="setOptions"
-          :select-on-tab="true"
-          label="name"
-          :class="column.field === 'type' ? 'width-100 style-chooser' : 'width-500 style-chooser'"
-          :value="value"
-          @input="setEditableValue"
-          @option:selected="setSelected"
-        >
-          <template v-slot:option="option">
-            {{ option.name }}
-          </template>
-        </v-select>
+      <span class="editable-field" v-if="inputType === 'select'">
+        <span v-if="column.field === 'type'">
+          <base-select
+            ref="select"
+            v-model="selectTypeBind"
+            :options="setOptions"
+            :searchable="true"
+            :show-labels="false"
+            :allow-empty="false"
+            :class="{'remove-extra': !selectTypeBind, 'width-100 style-chooser': true }"
+            :placeholder="''"
+            track-by="id"
+            label="name"
+            :open-direction="'bottom'"
+          />
+        </span>
+        <span v-if="column.field === 'account'">
+          <base-select
+            ref="select"
+            v-model="selectAccountBind"
+            :options="setOptions"
+            :searchable="true"
+            :show-labels="false"
+            :allow-empty="false"
+            :class="{'remove-extra': !selectAccountBind, 'width-500 style-chooser': true }"
+            :placeholder="''"
+            track-by="id"
+            label="name"
+            :open-direction="'bottom'"
+          />
+        </span>
       </span>
       <span v-else>
         <span class="editable-field">
@@ -39,28 +52,6 @@
             @focus="editPending = true"
             @blur="leaved" />
           </span>
-        <!-- <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
-            <input
-              :type="inputType"
-              ref="input"
-              :placeholder="placeholder"
-              @keyup.enter="setEditableValue"
-              @keydown.tab="setEditableValue"
-              @focus="editPending = true"
-              @blur="leaved" />
-        </span>
-        <span class="cell-content" v-else>
-            <a
-              @click.prevent="linkClicked"
-              v-if='column.type === "link"'
-              href="#"
-              >
-              {{ row[column.field] | cellFormatter(column, row) }}
-              </a>
-            <span v-else>
-              {{ row[column.field] | cellFormatter(column, row) }}
-            </span>
-        </span> -->
       </span>
   </td>
 </template>
@@ -122,8 +113,41 @@ export default {
       this.rowValue = this.row.account
       this.value = this.row.account
     }
+    if (this.$refs.select && this.column.field === 'type') {
+      this.$refs.select.$refs.search.focus()
+    }
   },
   computed: {
+    selectTypeBind: {
+      get: function () {
+        if (this.column.field === 'type') {
+          return this.selectedValue
+        }
+        return this.value
+      },
+      set: function (val) {
+        if (this.column.field === 'type') {
+          this.selectedValue = val
+          this.value = this.selectedValue.name
+          this.rowValue = this.selectedValue.name
+        }
+      }
+    },
+    selectAccountBind: {
+      get: function () {
+        if (this.column.field === 'account') {
+          return this.selectedValue
+        }
+        return this.value
+      },
+      set: function (val) {
+        if (this.column.field === 'account') {
+          this.selectedValue = val
+          this.value = this.selectedValue.name
+          this.rowValue = this.selectedValue.name
+        }
+      }
+    },
     selected () {
       //return true
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
@@ -166,13 +190,16 @@ export default {
     },
     setOptions() {
       if (this.column.field === 'type') {
-        return [{'name':'Dr'}, {'name':'Cr'}]
+        return [{'id': 1, 'name':'Dr'}, {'id': 2, 'name':'Cr'}]
       }
       return this.masterOptions
     },
     disableInput() {
       let bool = false
       if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
+          bool = true
+      }
+      if (this.value === 'Dr' && this.column.field === 'credit' || this.value === 'Cr' && this.column.field === 'debit') {
           bool = true
       }
       return bool
@@ -324,7 +351,7 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-
+  min-height: 40px;
   border: solid 1px transparent;
   border-bottom-color: $cell-border-color;
   border-right-color: $cell-border-color;
