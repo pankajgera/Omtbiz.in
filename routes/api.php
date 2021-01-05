@@ -453,4 +453,7 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::resource('vouchers', 'VouchersController');
+
+    //States
+    Route::resource('states', 'StatesController');
 });

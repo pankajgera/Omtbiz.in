@@ -35,6 +35,7 @@ import ledger from './modules/ledger'
 import voucher from './modules/voucher'
 import group from './modules/group'
 import CustomersReport from './modules/reports/customers'
+import states from './modules/states'
 
 Vue.use(Vuex)
 
@@ -79,6 +80,7 @@ export default new Vuex.Store({
         ledger,
         voucher,
         group,
-        CustomersReport
+        CustomersReport,
+        states
     }
 })

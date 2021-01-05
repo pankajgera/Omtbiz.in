@@ -226,6 +226,7 @@
         "address": "Address",
         "country": "Country",
         "state": "State",
+        "select-state": "Select a State",
         "opening_balance": "Opening Balance",
         "save_masters": "Save Ledger",
         "master_attached_message": "Cannot delete an master which is already in use",
