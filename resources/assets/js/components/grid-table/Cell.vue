@@ -130,6 +130,11 @@ export default {
           this.selectedValue = val
           this.value = this.selectedValue.name
           this.rowValue = this.selectedValue.name
+          const { row, column, rowIndex, columnIndex } = this
+          let valueChanged = true
+          let event = this.$refs.select.$el
+          let value = this.selectedValue.name
+          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })
         }
       }
     },
@@ -145,6 +150,11 @@ export default {
           this.selectedValue = val
           this.value = this.selectedValue.name
           this.rowValue = this.selectedValue.name
+          const { row, column, rowIndex, columnIndex } = this
+          let valueChanged = true
+          let event = this.$refs.select.$el
+          let value = this.selectedValue.name
+          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })
         }
       }
     },
@@ -190,16 +200,13 @@ export default {
     },
     setOptions() {
       if (this.column.field === 'type') {
-        return [{'id': 1, 'name':'Dr'}, {'id': 2, 'name':'Cr'}]
+        return [{id: 1, name: 'Dr'}, {id: 2, name: 'Cr'}]
       }
       return this.masterOptions
     },
     disableInput() {
       let bool = false
       if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
-          bool = true
-      }
-      if (this.value === 'Dr' && this.column.field === 'credit' || this.value === 'Cr' && this.column.field === 'debit') {
           bool = true
       }
       return bool
@@ -226,7 +233,6 @@ export default {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
-            this.$refs.select.$el.focus()
             if (!this.selectedValue) return
             input.value = this.selectedValue.name
             this.value = this.selectedValue.name
@@ -260,6 +266,7 @@ export default {
             }
             if(this.column.field === 'account') {
               this.row.account = this.selectedValue.name
+              this.row.account_id = this.selectedValue.id
             }
         }
       }
@@ -322,22 +329,6 @@ export default {
     },
     linkClicked () {
       this.$emit('link-clicked')
-    },
-    setSelected(val) {
-      if (val.id) {
-        this.row.account_id = val.id
-      }
-      if (!this.row.account && this.column.field === 'account') {
-         this.row.account = val.name
-      }
-      if (!this.row.type && this.column.field === 'type') {
-          this.row.type = val.name
-          this.row.credit = 0;
-          this.row.debit = 0;
-      }
-      this.selectedValue = val
-      this.value = this.selectedValue.name
-      this.rowValue = this.selectedValue.name
     },
   }
 }
