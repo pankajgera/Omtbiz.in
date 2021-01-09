@@ -24,6 +24,7 @@ class AccountLedgersController extends Controller
             'orderByField',
             'orderBy',
         ]))
+            ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
@@ -61,23 +62,30 @@ class AccountLedgersController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))->where('account_ledger_id', '!=', $id)->orderBy('id')->get();
+        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+            ->where('account_ledger_id', '!=', $id)
+            ->whereCompany($request->header('company'))
+            ->orderBy('id')
+            ->get();
+
         //Update balance according to 'debit' or 'credit'
         $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+        $balance = $ledger->debit - $ledger->credit;
+        $opening_balance = $ledger->accountMaster->opening_balance;
         if ($ledger->debit > $ledger->credit) {
             $ledger->update([
                 'type' => 'Dr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
-                'balance' => $ledger->debit - $ledger->credit,
+                'balance' => $opening_balance > $balance ? $opening_balance - $balance :  $balance - $opening_balance,
             ]);
         } elseif ($ledger->debit < $ledger->credit) {
             $ledger->update([
                 'type' => 'Cr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
-                'balance' => $ledger->credit - $ledger->debit,
+                'balance' => $opening_balance > $balance ? $opening_balance - $balance :  $balance - $opening_balance,
             ]);
         }
 
@@ -113,6 +121,7 @@ class AccountLedgersController extends Controller
             $ledger->credit = $request->credit;
             $ledger->balance = $request->balance;
             $ledger->short_narration = $request->short_narration;
+            $ledger->company_id = $request->header('company');
             $ledger->save();
 
             $ledger = AccountLedger::find($ledger->id);
@@ -122,6 +131,9 @@ class AccountLedgersController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving account ledger', [$e->getMessage()]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
     }
 
@@ -145,6 +157,7 @@ class AccountLedgersController extends Controller
             $ledger->credit = $request->credit;
             $ledger->balance = $request->balance;
             $ledger->short_narration = $request->short_narration;
+            $ledger->company_id = $request->header('company');
             $ledger->save();
 
             $ledger = AccountLedger::find($ledger->id);

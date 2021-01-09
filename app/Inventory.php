@@ -11,31 +11,37 @@ class Inventory extends Model
         'quantity',
         'price',
         'unit',
+        'company_id'
     ];
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', 'LIKE', '%'.$name.'%');
+        return $query->where('name', 'LIKE', '%' . $name . '%');
     }
 
     public function scopeWhereQuantity($query, $quantity)
     {
-        return $query->where('quantity', 'LIKE', '%'.$quantity.'%');
+        return $query->where('quantity', 'LIKE', '%' . $quantity . '%');
     }
 
     public function scopeWherePrice($query, $price)
     {
-        return $query->where('price', 'LIKE', '%'.$price.'%');
+        return $query->where('price', 'LIKE', '%' . $price . '%');
     }
 
     public function scopeWhereUnit($query, $unit)
     {
-        return $query->where('unit', 'LIKE', '%'.$unit.'%');
+        return $query->where('unit', 'LIKE', '%' . $unit . '%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
+    }
+
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('company_id', $company_id);
     }
 
     public function scopeApplyFilters($query, array $filters)

@@ -20,6 +20,7 @@ class VouchersController extends Controller
             'orderByField',
             'orderBy',
         ]))
+            ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
@@ -30,7 +31,13 @@ class VouchersController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $voucher = Voucher::find($id);
+        $voucher = Voucher::where('related_voucher', 'like', '%' . $id . '%')->select([
+            'type',
+            'account',
+            'account_master_id',
+            'credit',
+            'debit'
+        ])->get();
 
         return response()->json([
             'voucher' => $voucher,
@@ -51,10 +58,11 @@ class VouchersController extends Controller
             foreach ($request->all() as $each) {
                 // If accountLedger is already present then update
                 // Credit and Debit with balance with 'type'
-                $ledgerPresent = AccountLedger::where([
-                    'account' => $each['account'],
-                    'account_master_id' => $each['account_id'],
-                ])->first();
+                $ledgerPresent = AccountLedger::whereCompany($request->header('company'))
+                    ->where([
+                        'account' => $each['account'],
+                        'account_master_id' => $each['account_id'],
+                    ])->first();
                 $ledger = null;
                 if (!empty($ledgerPresent)) {
                     $updateCredit = 0;
@@ -77,18 +85,21 @@ class VouchersController extends Controller
                         'credit' => $each['credit'] ?? 0,
                         'balance' => $each['balance'],
                         'date' => Carbon::now()->toDateTimeString(),
+                        'company_id' => $request->header('company')
                     ]);
                 }
 
-                $voucher = Voucher::create([
+                $voucher = Voucher::updateOrCreate([
                     'account_ledger_id' => $ledger->id,
                     'account_master_id' => $each['account_id'],
                     'type' => $each['type'],
                     'account' => $each['account'],
                     'debit' => $each['debit'],
                     'credit' => $each['credit'],
+                ], [
                     'short_narration' => $each['short_narration'],
                     'date' => Carbon::now()->toDateTimeString(),
+                    'company_id' => $request->header('company')
                 ]);
 
                 //Update voucher_id's in ledger->bill_no
@@ -111,7 +122,7 @@ class VouchersController extends Controller
                 }
             }
 
-            $voucher = Voucher::whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
             foreach ($voucher as $key => $each) {
                 if ($key < substr_count($voucher_ids, ',') + 1) {
                     $each->update([
@@ -124,6 +135,9 @@ class VouchersController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving account voucher', [$e->getMessage()]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
     }
 

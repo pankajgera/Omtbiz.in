@@ -18,12 +18,12 @@ class AccountMaster extends Model
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', 'LIKE', '%'.$name.'%');
+        return $query->where('name', 'LIKE', '%' . $name . '%');
     }
 
     public function scopeWhereGroup($query, $group)
     {
-        return $query->where('group', 'LIKE', '%'.$group.'%');
+        return $query->where('group', 'LIKE', '%' . $group . '%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -52,7 +52,6 @@ class AccountMaster extends Model
 
     public static function deleteAccountMaster($id)
     {
-        \Log::info($id);
         $master = self::find($id);
         $master->delete();
         return true;

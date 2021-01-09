@@ -1,0 +1,1 @@
+export const BOOTSTRAP_STATES = 'BOOTSTRAP_STATES'

@@ -17,11 +17,12 @@ class AccountLedger extends Model
         'credit',
         'balance',
         'short_narration',
+        'company_id'
     ];
 
-    public function masters()
+    public function accountMaster()
     {
-        return $this->belongsTo(\Crater\AccountMaster::class);
+        return $this->belongsTo(AccountMaster::class);
     }
 
     public function scopeWhereDate($query, $date)
@@ -61,11 +62,16 @@ class AccountLedger extends Model
 
     public function scopeEstimatesBetween($query, $start, $end)
     {
-        return $query->whereBetween('date',
+        return $query->whereBetween(
+            'date',
             [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')]
         );
     }
 
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('company_id', $company_id);
+    }
 
     public function scopeApplyFilters($query, array $filters)
     {

@@ -207,7 +207,6 @@ class User extends Authenticatable implements HasMedia
         if ($filters->get('role')) {
             $query->whereRole($filters->get('role'));
         }
-
     }
 
     public function scopeWhereCompany($query, $company_id)

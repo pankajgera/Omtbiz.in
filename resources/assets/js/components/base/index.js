@@ -18,9 +18,7 @@ import InventoryModal from './modal/InventoryModal.vue'
 
 import {TableColumn, TableComponent} from './base-table/index'
 import GroupModal from './modal/GroupModal.vue'
-import vSelect from "vue-select";
 
-Vue.component('v-select', vSelect);
 Vue.component('base-button', BaseButton)
 Vue.component('item-modal', ItemModal)
 Vue.component('base-modal', BaseModal)

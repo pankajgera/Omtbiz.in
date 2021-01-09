@@ -7,24 +7,37 @@
       :style="cellStyle"
       @click='$emit("click", $event)'
   >
-      <span v-if="inputType === 'select'">
-        <v-select
-          ref="select"
-          :autocomplete="'on'"
-          :append-to-body="true"
-          :input-id="'select-account-option'"
-          :options="setOptions"
-          :select-on-tab="true"
-          label="name"
-          :class="column.field === 'type' ? 'width-100 style-chooser' : 'width-500 style-chooser'"
-          :value="value"
-          @input="setEditableValue"
-          @option:selected="setSelected"
-        >
-          <template v-slot:option="option">
-            {{ option.name }}
-          </template>
-        </v-select>
+      <span class="editable-field" v-if="inputType === 'select'">
+        <span v-if="column.field === 'type'">
+          <base-select
+            ref="select"
+            v-model="selectTypeBind"
+            :options="setOptions"
+            :searchable="true"
+            :show-labels="false"
+            :allow-empty="false"
+            :class="{'remove-extra': !selectTypeBind, 'width-100 style-chooser': true }"
+            :placeholder="''"
+            track-by="id"
+            label="name"
+            :open-direction="'bottom'"
+          />
+        </span>
+        <span v-if="column.field === 'account'">
+          <base-select
+            ref="select"
+            v-model="selectAccountBind"
+            :options="setOptions"
+            :searchable="true"
+            :show-labels="false"
+            :allow-empty="false"
+            :class="{'remove-extra': !selectAccountBind, 'width-500 style-chooser': true }"
+            :placeholder="''"
+            track-by="id"
+            label="name"
+            :open-direction="'bottom'"
+          />
+        </span>
       </span>
       <span v-else>
         <span class="editable-field">
@@ -33,35 +46,12 @@
             ref="input"
             :placeholder="placeholder"
             :disabled="disableInput"
+            :value="value"
             @keyup.enter="setEditableValue"
             @keydown.tab="setEditableValue"
-            @keyup.esc="editCancelled"
             @focus="editPending = true"
             @blur="leaved" />
           </span>
-        <!-- <span class="editable-field" v-if="cellEditing[0] === rowIndex && cellEditing[1] === columnIndex">
-            <input
-              :type="inputType"
-              ref="input"
-              :placeholder="placeholder"
-              @keyup.enter="setEditableValue"
-              @keydown.tab="setEditableValue"
-              @keyup.esc="editCancelled"
-              @focus="editPending = true"
-              @blur="leaved" />
-        </span>
-        <span class="cell-content" v-else>
-            <a
-              @click.prevent="linkClicked"
-              v-if='column.type === "link"'
-              href="#"
-              >
-              {{ row[column.field] | cellFormatter(column, row) }}
-              </a>
-            <span v-else>
-              {{ row[column.field] | cellFormatter(column, row) }}
-            </span>
-        </span> -->
       </span>
   </td>
 </template>
@@ -119,9 +109,57 @@ export default {
       this.value = this.row.type
       this.rowValue = this.row.type
     }
+    if (this.column.field === 'account') {
+      this.rowValue = this.row.account
+      this.value = this.row.account
+    }
+    if (this.$refs.select && this.column.field === 'type') {
+      this.$refs.select.$refs.search.focus()
+    }
   },
   computed: {
+    selectTypeBind: {
+      get: function () {
+        if (this.column.field === 'type') {
+          return this.selectedValue
+        }
+        return this.value
+      },
+      set: function (val) {
+        if (this.column.field === 'type') {
+          this.selectedValue = val
+          this.value = this.selectedValue.name
+          this.rowValue = this.selectedValue.name
+          const { row, column, rowIndex, columnIndex } = this
+          let valueChanged = true
+          let event = this.$refs.select.$el
+          let value = this.selectedValue.name
+          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })
+        }
+      }
+    },
+    selectAccountBind: {
+      get: function () {
+        if (this.column.field === 'account') {
+          return this.selectedValue
+        }
+        return this.value
+      },
+      set: function (val) {
+        if (this.column.field === 'account') {
+          this.selectedValue = val
+          this.value = this.selectedValue.name
+          this.rowValue = this.selectedValue.name
+          const { row, column, rowIndex, columnIndex } = this
+          let valueChanged = true
+          let event = this.$refs.select.$el
+          let value = this.selectedValue.name
+          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })
+        }
+      }
+    },
     selected () {
+      //return true
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
     },
     // selectedTop () {
@@ -137,6 +175,7 @@ export default {
     //   return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
     // },
     editable () {
+      //return true
       return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex
     },
     invalid () {
@@ -161,7 +200,7 @@ export default {
     },
     setOptions() {
       if (this.column.field === 'type') {
-        return [{'name':'Dr'}, {'name':'Cr'}]
+        return [{id: 1, name: 'Dr'}, {id: 2, name: 'Cr'}]
       }
       return this.masterOptions
     },
@@ -171,11 +210,21 @@ export default {
           bool = true
       }
       return bool
+    },
+    isEdit() {
+      if (this.$route.name === 'vouchers.edit') {
+          return true
+        }
+        return false
+    }
+  },
+  created () {
+    if (this.isEdit) {
+      this.loadEditData()
     }
   },
   watch: {
     cellEditing () {
-      //console.log('ww', this.row, this.column)
       if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
@@ -217,12 +266,35 @@ export default {
             }
             if(this.column.field === 'account') {
               this.row.account = this.selectedValue.name
+              this.row.account_id = this.selectedValue.id
             }
         }
       }
-    }
+    },
   },
   methods: {
+    loadEditData() {
+      if (this.row.type !== '') {
+        if (this.column.field === 'type') {
+          this.selectedValue = {name: this.row.type}
+          this.rowValue = this.row.type
+          this.value = this.row.type
+        }
+        if (this.column.field === 'account') {
+          this.selectedValue = {name: this.row.account, id: this.row.account_id}
+          this.rowValue = this.row.account
+          this.value = this.row.account
+        }
+        if (this.column.field === 'debit') {
+          this.rowValue = this.row.debit
+          this.value = this.row.debit
+        }
+        if (this.column.field === 'credit') {
+          this.rowValue = this.row.credit
+          this.value = this.row.credit
+        }
+      }
+    },
     getEditableValue (value) {
       if (this.column.type === 'datetime' || this.column.type === 'date') {
         if (typeof value === 'string') {
@@ -234,7 +306,6 @@ export default {
     },
     setEditableValue ($event) {
       const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
-      console.log('input', input)
       const value = cellValueParser(this.column, this.row, input, true)
       if (!value) return
       this.editPending = false
@@ -246,17 +317,10 @@ export default {
           valueChanged = false
         }
       }
-      if (this.columnIndex === 3 && $event.key === 'Enter') {
-        this.$emit('add-row','Dr')
-      }
-      if (this.columnIndex === 2 && $event.key === 'Enter') {
-        this.$emit('add-row','Cr')
-      }
+      this.rowValue = value
+      this.value = value
       const { row, column, rowIndex, columnIndex } = this
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
-    },
-    editCancelled () {
-      this.$emit('edit-cancelled')
     },
     leaved ($event) {
       if (this.editPending) {
@@ -265,38 +329,6 @@ export default {
     },
     linkClicked () {
       this.$emit('link-clicked')
-    },
-    setSelected(val) {
-      if (val.id) {
-        this.row.account_id = val.id
-      }
-      if (!this.row.account && this.column.field === 'account') {
-         this.row.account = val.name
-      }
-      if (!this.row.type && this.column.field === 'type') {
-          this.row.type = val.name
-          this.row.credit = 0;
-          this.row.debit = 0;
-      }
-      this.selectedValue = val
-      this.value = this.selectedValue.name
-      this.rowValue = this.selectedValue.name
-      // console.log('select', this.column.field === 'type' && this.row.type !== '')
-
-      // if (this.column.field === 'type' && this.row.type !== '') {
-      //   this.value = this.selectedValue
-      //   this.rowValue = this.selectedValue
-      //   console.log(this.value)
-      // }
-    },
-    onSelectLeave() {
-      // if (this.editPending) {
-      //   this.setEditableValue($event)
-      // }
-      // this.cellEditing[1] = this.cellEditing[1] + 1
-      // this.columnIndex = this.columnIndex + 1
-      //console.log('here', this.cellEditing[1], this.columnIndex)
-      //this.$refs.select.$parent.$el.nextElementSibling.childNodes[0].childNodes[0].childNodes[0].focus();
     },
   }
 }
@@ -310,7 +342,7 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-
+  min-height: 40px;
   border: solid 1px transparent;
   border-bottom-color: $cell-border-color;
   border-right-color: $cell-border-color;

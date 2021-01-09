@@ -1,16 +1,11 @@
 <template>
   <div class="setting-list-box">
     <div id="myApp list-box-container">
-      <!-- <v-select
-        :value.sync="selected"
-        :options="list"
-        :on-change ="setValue"
-      /> -->
+
     </div>
   </div>
 </template>
 <script>
-// import vSelect from 'vue-select'
 export default {
   // components: {vSelect},
   props: {

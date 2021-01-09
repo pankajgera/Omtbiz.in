@@ -30,6 +30,11 @@
     </base-select>
   </div>
 </template>
+<style>
+div.multiselect--active div.multiselect__tags span.multiselect__single{
+    display: none !important;
+}
+</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 

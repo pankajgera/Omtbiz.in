@@ -35,7 +35,7 @@
                         <cell
                             v-for="(column, columnIndex) in columnDefs"
                             :ref="`cell`"
-                            :key="columnIndex"
+                            :key="$route.name === 'vouchers.edit' ? columnIndex + row.account_id : columnIndex"
                             :column="column"
                             :row="row"
                             :columnIndex="columnIndex"
@@ -50,13 +50,11 @@
                             @click="selectCell(offsetRows + rowIndex, columnIndex, $event)"
                             @dblclick="tryEdit(row, column, offsetRows + rowIndex, columnIndex)"
                             @edited="cellEdited"
-                            @edit-cancelled="cellEditing = []"
                             @link-clicked="linkClicked(row, column, offsetRows + rowIndex, columnIndex)"
                             @contextmenu="contextMenu(row, column, rowIndex, columnIndex, $event)"
                             @mousedown="startSelection(offsetRows + rowIndex, columnIndex, $event)"
                             @mouseover="onSelection(offsetRows + rowIndex, columnIndex)"
                             @mouseup="stopSelection"
-                            @add-row="addOneRow"
                         ></cell>
                     </tr>
                 </div>
@@ -218,7 +216,6 @@ export default {
   },
   watch: {
     selStart (value, old) {
-      //console.log('selStart', value, old)
       if (value[0] !== old[0]) {
         this.emitRowSelected()
       }
@@ -259,13 +256,9 @@ export default {
     }
   },
   methods: {
-    addOneRow(value){
-      this.$emit('add-new-row', value)
-    },
     emitRowSelected () {
       if ((this.selStart[0] === this.selEnd[0] && this.selStart[1] === this.selEnd[1])) {
         const cell = this.getCell()
-        //console.log('cell', cell)
         this.$emit('row-selected', cell)
       } else {
         this.$emit('row-selected', { rowData: null })
@@ -316,7 +309,6 @@ export default {
       }
       const maxrow = this.rowDataFiltered.length - 1
       const maxcol = this.columnDefs.length - 1
-      //console.log('maxrow, maxcol, rowIndex, colIndex', maxrow, maxcol, rowIndex, colIndex)
       rowIndex = rowIndex < 0 ? 0 : rowIndex > maxrow ? maxrow : rowIndex
       colIndex = colIndex < 0 ? 0 : colIndex > maxcol ? maxcol : colIndex
       const shift = $event && $event.shiftKey
@@ -328,12 +320,10 @@ export default {
       } else {
         this.selEnd = [rowIndex, colIndex]
         this.selStart = [rowIndex, colIndex]
-        //console.log(colIndex === maxcol, $event)
         //Check if last tab
         if (colIndex === maxcol && !$event) {
           this.selEnd = [rowIndex+1, 0]
           this.selStart = [rowIndex+1, 0]
-          //console.log('this.selEnd, this.selStart', this.selEnd, this.selStart)
         }
       }
       if (this.cellEditing[0] !== rowIndex || this.cellEditing[1] !== colIndex) {
@@ -446,9 +436,9 @@ export default {
           confirm()
         }
 
-        if (eventCode === 'Tab') {
-          $event.preventDefault()
-        }
+        // if (eventCode === 'Tab') {
+        //   $event.preventDefault()
+        // }
       })
     },
     sort (column) {
@@ -488,13 +478,11 @@ export default {
     sumSelectionCol (sum) {
       let [row, col] = this.selStart
       col += sum
-      //console.log('sumSelectionCol', row, col)
       this.selectCell(row, col)
     },
     sumSelectionRow (sum) {
       let [row, col] = this.selStart
       row += sum
-      //console.log('sumSelectionRow', row, col)
       this.selectCell(row, col)
     },
     removeFilter (field) {

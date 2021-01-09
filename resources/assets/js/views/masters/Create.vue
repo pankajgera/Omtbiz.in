@@ -47,23 +47,6 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.country') }}</label>
-                  <country-select
-                    v-model="formData.country"
-                    :country="formData.country"
-                    :className="'base-input select-input'"
-                    topCountry="IN" />
-              </div>
-              <div class="form-group">
-                <label class="control-label">{{ $t('masters.state') }}</label>
-                   <region-select
-                    v-model="formData.state"
-                    :country="formData.country"
-                    :defaultRegion="'IN'"
-                    :className="'base-input select-input'"
-                    :region="formData.state" />
-              </div>
-              <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
                 <base-text-area
                   v-model="formData.address"
@@ -76,13 +59,29 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="input-label">{{ $tc('masters.state') }}</label><span class="text-danger"> * </span>
+                <base-select
+                    v-model="stateBind"
+                    :options="stateOptions"
+                    :searchable="true"
+                    :show-labels="false"
+                    :allow-empty="false"
+                    :placeholder="$tc('masters.select-state')"
+                    track-by="code"
+                    label="name"
+                  />
+                <div v-if="$v.formData.state.$error">
+                  <span v-if="!$v.formData.state.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="control-label">{{ $t('masters.opening_balance') }}</label>
                 <base-input
                   v-model.trim="formData.opening_balance"
                   focus
                   type="number"
                   name="opening_balance"
-                  @input="$v.formData.opening_balance.$touch()"
+                  @input="formData.opening_balance"
                 />
                 <select v-model="formData.type">
                   <option value="Cr">Cr</option>
@@ -145,13 +144,14 @@ export default {
         name: '',
         groups: '',
         address: '',
-        country: '',
+        country: 'IN',
         state: '',
         opening_balance: 0,
         type: 'Cr'
       },
       groupOptions: [],
       selectedGroup: '',
+      stateOptions: []
     }
   },
   computed: {
@@ -160,7 +160,15 @@ export default {
         return true
       }
       return false
-    }
+    },
+    stateBind: {
+      get: function () {
+        return this.formData.state
+      },
+      set: function (val) {
+        this.formData.state = val
+      }
+    },
   },
   created () {
     this.loadGroups()
@@ -172,6 +180,7 @@ export default {
         this.onSelectGroup(val)
       }
     })
+    this.loadStates()
   },
   validations: {
     formData: {
@@ -180,6 +189,8 @@ export default {
         minLength: minLength(3)
       },
       groups: {
+      },
+      state: {
       },
       address: {
         maxLength: maxLength(255)
@@ -195,9 +206,16 @@ export default {
     ...mapActions('group', [
       'fetchGroups'
     ]),
+    ...mapActions('states', [
+      'fetchStates'
+    ]),
     async loadGroups () {
       let groupResponse = await this.fetchGroups()
       this.groupOptions = groupResponse.data.groups
+    },
+    async loadStates () {
+      let stateResponse = await this.fetchStates()
+      this.stateOptions = stateResponse.data.states
     },
     async loadEditData () {
       let response = await this.fetchMaster(this.$route.params.id)
@@ -208,27 +226,39 @@ export default {
       if (this.$v.$invalid) {
         return false
       }
+      this.formData.state = this.formData.state.name
       if (this.isEdit) {
-        this.isLoading = true
-        let response = await this.updateMaster(this.formData)
-        if (response.data) {
-          this.isLoading = false
-          window.toastr['success'](this.$tc('masters.updated_message'))
-          this.$router.push('/masters')
-          return true
+        try {
+          this.isLoading = true
+          let response = await this.updateMaster(this.formData)
+          if (response.data) {
+            this.isLoading = false
+            window.toastr['success'](this.$tc('masters.updated_message'))
+            this.$router.push('/masters')
+            return true
+          }
+        } catch (err) {
+          if (err) {
+            this.isLoading = false
+            window.toastr['error'](err)
+          }
         }
-        window.toastr['error'](response.data.error)
       } else {
-        this.isLoading = true
-        let response = await this.addMaster(this.formData)
-
-        if (response.data) {
-          window.toastr['success'](this.$tc('masters.created_message'))
-          this.$router.push('/masters')
-          this.isLoading = false
-          return true
+        try {
+          this.isLoading = true
+          let response = await this.addMaster(this.formData)
+          if (response.data) {
+            window.toastr['success'](this.$tc('masters.created_message'))
+            this.$router.push('/masters')
+            this.isLoading = false
+            return true
+          }
+        } catch (err) {
+          if (err) {
+            this.isLoading = false
+            window.toastr['error'](err)
+          }
         }
-        window.toastr['success'](response.data.success)
       }
     },
     searchVal (val) {
