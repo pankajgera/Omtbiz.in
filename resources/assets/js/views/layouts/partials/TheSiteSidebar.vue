@@ -83,6 +83,12 @@ export default {
             meta: ['admin']
           },
           {
+            title: 'navigation.bank',
+            icon: 'file',
+            route: '/bank',
+            meta: ['admin']
+          },
+          {
             title: 'navigation.inventory',
             icon: 'envelope',
             route: '/inventory',

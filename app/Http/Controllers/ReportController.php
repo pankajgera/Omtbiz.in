@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Crater\Tax;
 use PDF;
 use Carbon\Carbon;
 use Crater\AccountLedger;
+use Crater\Voucher;
 use Illuminate\Database\Eloquent\Builder;
 
 class ReportController extends Controller
@@ -24,11 +26,11 @@ class ReportController extends Controller
         $end = Carbon::createFromFormat('d/m/Y', $request->to_date);
 
         $customers = User::with(['invoices' => function ($query) use ($start, $end) {
-                $query->whereBetween(
-                    'invoice_date',
-                    [$start->format('Y-m-d'), $end->format('Y-m-d')]
-                );
-            }])
+            $query->whereBetween(
+                'invoice_date',
+                [$start->format('Y-m-d'), $end->format('Y-m-d')]
+            );
+        }])
             ->customer()
             ->whereCompany($company->id)
             ->applyInvoiceFilters($request->only(['from_date', 'to_date']))
@@ -297,19 +299,25 @@ class ReportController extends Controller
     {
         $company = Company::where('unique_hash', $hash)->first();
 
-        $ledgerTypes = AccountLedger::whereIn('account', ['Sundry Debtors', 'Sundry Creditors'])
-            ->applyFilters($request->only(['from_date', 'to_date']))
-            ->get();
-
+        // $ledgerTypes = AccountLedger::whereIn('account', ['Sundry Debtors', 'Sundry Creditors'])
+        //     ->applyFilters($request->only(['from_date', 'to_date']))
+        //     ->get();
+        $ledgerTypes = AccountLedger::findOrFail($request->ledger_id);
         $totalAmount = 0;
-        foreach ($ledgerTypes as $each) {
-            $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
-            $totalAmount += $each->balance;
-        }
-
+        $totalAmountVoucher = 0;
+        // foreach ($ledgerTypes as $each) {
+        //     $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+        //     $totalAmount += $each->balance;
+        // }
+        $totalAmount = $ledgerTypes->balance;
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
         $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date)->format($dateFormat);
+        $vouchers = Voucher::where('account_ledger_id', $request->ledger_id)->get();
+
+        foreach ($vouchers as $each) {
+            $totalAmountVoucher += 0 < $each->credit ? $each->credit : $each->debit;
+        }
 
         $colors = [
             'primary_text_color',
@@ -329,7 +337,9 @@ class ReportController extends Controller
 
         view()->share([
             'ledgerTypes' => $ledgerTypes,
+            'vouchers' => $vouchers,
             'totalAmount' => $totalAmount,
+            'totalAmountVoucher' => $totalAmountVoucher,
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
@@ -343,5 +353,13 @@ class ReportController extends Controller
         }
 
         return $pdf->stream();
+    }
+
+    public function getLedgersInReport(Request $request)
+    {
+        $ledgers = AccountLedger::get();
+        return response()->json([
+            'ledgers' => $ledgers,
+        ]);
     }
 }

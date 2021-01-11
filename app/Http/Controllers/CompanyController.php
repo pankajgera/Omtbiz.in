@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ use Crater\Currency;
 use Crater\CompanySetting;
 
 class CompanyController extends Controller
-{   
+{
     /**
      * Retrive the Admin account.
      * @return \Crater\User
@@ -66,9 +67,9 @@ class CompanyController extends Controller
     }
 
 
-    
+
     /**
-     * Get Admin Account alongside the country from the addresses table and 
+     * Get Admin Account alongside the country from the addresses table and
      * The company from companies table
      *
      * @return \Illuminate\Http\JsonResponse
@@ -122,17 +123,17 @@ class CompanyController extends Controller
 
         $time_zones = TimeZones::get_list();
         $fiscal_years = [
-            ['key' => 'january-december' , 'value' => '1-12'],
-            ['key' => 'february-january' , 'value' => '2-1'],
-            ['key' => 'march-february'   , 'value' => '3-2'],
-            ['key' => 'april-march'      , 'value' => '4-3'],
-            ['key' => 'may-april'        , 'value' => '5-4'],
-            ['key' => 'june-may'         , 'value' => '6-5'],
-            ['key' => 'july-june'        , 'value' => '7-6'],
-            ['key' => 'august-july'      , 'value' => '8-7'],
-            ['key' => 'september-august' , 'value' => '9-8'],
+            ['key' => 'january-december', 'value' => '1-12'],
+            ['key' => 'february-january', 'value' => '2-1'],
+            ['key' => 'march-february', 'value' => '3-2'],
+            ['key' => 'april-march', 'value' => '4-3'],
+            ['key' => 'may-april', 'value' => '5-4'],
+            ['key' => 'june-may', 'value' => '6-5'],
+            ['key' => 'july-june', 'value' => '7-6'],
+            ['key' => 'august-july', 'value' => '8-7'],
+            ['key' => 'september-august', 'value' => '9-8'],
             ['key' => 'october-september', 'value' => '10-9'],
-            ['key' => 'november-october' , 'value' => '11-10'],
+            ['key' => 'november-october', 'value' => '11-10'],
             ['key' => 'december-november', 'value' => '12-11'],
         ];
 
@@ -144,10 +145,10 @@ class CompanyController extends Controller
         $fiscal_year = CompanySetting::getSetting('fiscal_year', $request->header('company'));
 
         $languages = [
-            ["code"=>"en", "name" => "English"],
-            ["code"=>"fr", "name" => "French"],
-            ["code"=>"es", "name" => "Spanish"],
-            ["code"=>"ar", "name" => "العربية"],
+            ["code" => "en", "name" => "English"],
+            ["code" => "fr", "name" => "French"],
+            ["code" => "es", "name" => "Spanish"],
+            ["code" => "ar", "name" => "العربية"],
         ];
 
         return response()->json([
@@ -191,8 +192,8 @@ class CompanyController extends Controller
             'success' => true
         ]);
     }
-  
-    public function getCustomizeSetting (Request $request)
+
+    public function getCustomizeSetting(Request $request)
     {
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
@@ -213,7 +214,7 @@ class CompanyController extends Controller
         ]);
     }
 
-    public function updateCustomizeSetting (Request $request)
+    public function updateCustomizeSetting(Request $request)
     {
         $sets = [];
 
@@ -318,10 +319,10 @@ class CompanyController extends Controller
     {
         $data = json_decode($request->company_logo);
 
-        if($data) {
+        if ($data) {
             $company = Company::find($request->header('company'));
 
-            if($company) {
+            if ($company) {
                 $company->clearMediaCollection('logo');
 
                 $company->addMediaFromBase64($data->data)
@@ -345,10 +346,10 @@ class CompanyController extends Controller
     {
         $data = json_decode($request->admin_avatar);
 
-        if($data) {
+        if ($data) {
             $user = auth()->user();
 
-            if($user) {
+            if ($user) {
                 $user->clearMediaCollection('admin_avatar');
 
                 $user->addMediaFromBase64($data->data)
