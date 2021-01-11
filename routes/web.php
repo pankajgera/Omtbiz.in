@@ -47,13 +47,12 @@ Route::group(['prefix' => 'reports'], function () {
         'uses' => 'ReportController@profitLossReport'
     ]);
 
-     // report for customers
+    // report for customers
     //----------------------------------
     Route::get('/customers/{hash}', [
         'as' => 'get.customers',
         'uses' => 'ReportController@customersReport'
     ]);
-
 });
 
 // download invoice pdf with a unique_hash $id

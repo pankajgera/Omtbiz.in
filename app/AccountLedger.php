@@ -25,6 +25,11 @@ class AccountLedger extends Model
         return $this->belongsTo(AccountMaster::class);
     }
 
+    public function vouchers()
+    {
+        return $this->belongsToMany(Voucher::class);
+    }
+
     public function scopeWhereDate($query, $date)
     {
         return $query->where('date', 'LIKE', '%' . $date . '%');

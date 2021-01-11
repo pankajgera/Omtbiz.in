@@ -456,4 +456,8 @@ Route::group(['middleware' => 'api'], function () {
 
     //States
     Route::resource('states', 'StatesController');
+
+
+    //Get ledgers for report
+    Route::get('reports/ledgers', 'ReportController@getLedgersInReport');
 });

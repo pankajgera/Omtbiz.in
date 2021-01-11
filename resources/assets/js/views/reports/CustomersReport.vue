@@ -2,6 +2,19 @@
   <div class="row">
     <div class="col-md-4 reports-tab-container">
       <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="report-label">{{ $t('reports.customers.ledgers') }}</label>
+          <base-select
+            v-model="selectedLedger"
+            :options="ledgersArr.map(i => i.account)"
+            :allow-empty="false"
+            :show-labels="false"
+            @input="getReports"
+          />
+          <span v-if="$v.range.$error && !$v.range.required" class="text-danger"> {{ $t('validation.required') }} </span>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-md-8">
           <label class="report-label">{{ $t('reports.customers.date_range') }}</label>
           <base-select
@@ -56,7 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 const { required } = require('vuelidate/lib/validators')
@@ -84,7 +97,10 @@ export default {
         to_date: moment().endOf('month').toString()
       },
       url: null,
-      siteURL: null
+      siteURL: null,
+      ledgersArr: [],
+      ledger: '',
+      vouchersListArr: [],
     }
   },
   validations: {
@@ -106,7 +122,23 @@ export default {
     ]),
     getReportUrl () {
       return this.url
+    },
+    selectedLedger: {
+      get: function() {
+        return this.ledger
+      },
+      set: function(value) {
+        this.ledger = value;
+        // let legder_id = this.ledgersArr.find(i => i.account === value).id
+        // console.log('legder_id', legder_id,value)
+        // if (legder_id) {
+        //   this.onChangeLedgers(legder_id)
+        // }
+      }
     }
+  },
+  created() {
+    this.loadLedgers()
   },
   watch: {
     range (newRange) {
@@ -119,6 +151,10 @@ export default {
     this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
   },
   methods: {
+     ...mapActions('customer', [
+      'fetchLedgersReport',
+      'fetchVouchersReport'
+    ]),
     getThisDate (type, time) {
       return moment()[type](time).toString()
     },
@@ -191,7 +227,8 @@ export default {
       if (this.$v.$invalid) {
         return true
       }
-      this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
+      this.url = `${this.siteURL}?
+        from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${this.ledgersArr.find(i => i.account === this.ledger).id}`
       return true
     },
     downloadReport () {
@@ -206,7 +243,17 @@ export default {
       setTimeout(() => {
         this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
       }, 200)
-    }
+    },
+    async loadLedgers () {
+      let response = await this.fetchLedgersReport()
+      this.ledgersArr = response.data.ledgers
+    },
+    // async onChangeLedgers (legder_id) {
+    //   if(/^\d+$/.test(legder_id)) {
+    //     let response = await this.fetchVouchersReport(legder_id)
+    //     this.vouchersListArr = response.data.vouchers
+    //   }
+    // }
   }
 }
 </script>

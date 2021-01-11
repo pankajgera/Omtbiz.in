@@ -12,6 +12,16 @@ export const fetchCustomers = ({ commit, dispatch, state }, params) => {
   })
 }
 
+export const fetchLedgersReport = ({ commit, dispatch }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/reports/ledgers`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const fetchCustomer = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/customers/${id}/edit`).then((response) => {

@@ -653,7 +653,8 @@
             "amount": "Amount",
             "to_date": "To Date",
             "from_date": "From Date",
-            "date_range": "Select Date Range"
+            "date_range": "Select Date Range",
+            "ledgers": "Select Ledgers"
         }
     },
     "settings": {

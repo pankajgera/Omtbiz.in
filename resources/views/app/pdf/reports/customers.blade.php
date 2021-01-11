@@ -186,23 +186,29 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <p class="sub-heading-text">SUNDARY REPORT</p>
+                        <p class="sub-heading-text"> REPORT</p>
                     </td>
                 </tr>
             </table>
             <p class="types-title">Types</p>
             <div class="tax-table-container">
                 <table class="tax-table">
-                    @foreach ($ledgerTypes as $ledger)
+                    @foreach ($vouchers as $each)
                         <tr>
                             <td>
                                 <p class="tax-title">
-                                    {{ $ledger->account }}
+                                    {{ $each->account }}
+                                </p>
+                            </td>
+                            <td>
+                                <p class="tax-title">
+                                    {{ \Carbon\Carbon::parse($each->date, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ss a') }}
                                 </p>
                             </td>
                             <td>
                                 <p class="tax-money">
-                                    ₹ {!! ($ledger->balance) !!}
+                                    ₹ {!! ($each->debit > 0 ? $each->debit : $each->credit) !!}
+                                    {!! ($each->debit > 0 ? ' Dr' : ' Cr') !!}
                                 </p>
                             </td>
                         </tr>
@@ -214,9 +220,12 @@
 
         <table class="tax-total-table">
             <tr>
+                <td>
+                    <p class="total-tax-title">TOTAL</p>
+                </td>
                 <td class="tax-total-cell">
                     <p class="tax-total">
-                        {!! ($totalAmount) !!}
+                        '₹ '{{ ($totalAmountVoucher) }}
                     </p>
                 </td>
             </tr>
@@ -224,11 +233,11 @@
         <table class="total-tax-table">
             <tr>
                 <td>
-                    <p class="total-tax-title">TOTAL</p>
+                    <p class="total-tax-title">BALANCE</p>
                 </td>
                 <td>
                     <p class="total-tax-money">
-                        {!! ($totalAmount) !!}
+                        '₹ '{{ ($totalAmount) }}
                     </p>
                 </td>
             </tr>
