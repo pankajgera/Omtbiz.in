@@ -78,14 +78,14 @@ class AccountLedgersController extends Controller
                 'type' => 'Dr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
-                'balance' => $opening_balance > $balance ? $opening_balance - $balance :  $balance - $opening_balance,
+                'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
             ]);
         } elseif ($ledger->debit < $ledger->credit) {
             $ledger->update([
                 'type' => 'Cr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
-                'balance' => $opening_balance > $balance ? $opening_balance - $balance :  $balance - $opening_balance,
+                'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
             ]);
         }
 

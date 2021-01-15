@@ -120,7 +120,6 @@
 
         .tax-total-cell {
             padding-right: 20px;
-            padding-top: 10px;
         }
 
         .tax-total {
@@ -190,19 +189,18 @@
                     </td>
                 </tr>
             </table>
-            <p class="types-title">Types</p>
             <div class="tax-table-container">
                 <table class="tax-table">
-                    @foreach ($vouchers as $each)
+                    @foreach ($related_vouchers as $each)
                         <tr>
                             <td>
                                 <p class="tax-title">
-                                    {{ $each->account }}
+                                    {{ \Carbon\Carbon::parse($each->date, 'UTC')->isoFormat('DD/MM/YYYY') }}
                                 </p>
                             </td>
                             <td>
                                 <p class="tax-title">
-                                    {{ \Carbon\Carbon::parse($each->date, 'UTC')->isoFormat('MMMM Do YYYY, h:mm:ss a') }}
+                                    {{ $each->account }}
                                 </p>
                             </td>
                             <td>
@@ -213,7 +211,6 @@
                             </td>
                         </tr>
                     @endforeach
-
                 </table>
             </div>
         </div>
@@ -221,23 +218,21 @@
         <table class="tax-total-table">
             <tr>
                 <td>
-                    <p class="total-tax-title">TOTAL</p>
+                    <p class="total-tax-title">OPENING BALANCE</p>
                 </td>
                 <td class="tax-total-cell">
-                    <p class="tax-total">
-                        '₹ '{{ ($totalAmountVoucher) }}
+                    <p class="" style="float:right; padding:0px; margin: 0px">
+                        ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
                     </p>
                 </td>
             </tr>
-        </table>
-        <table class="total-tax-table">
             <tr>
                 <td>
-                    <p class="total-tax-title">BALANCE</p>
+                    <p class="total-tax-title">CLOSING BALANCE</p>
                 </td>
-                <td>
-                    <p class="total-tax-money">
-                        '₹ '{{ ($totalAmount) }}
+                <td class="tax-total-cell">
+                    <p class="" style="float:right; padding:0px; margin: 0px">
+                        ₹ {!! $totalAmount !!} {!! $ledger->type !!}
                     </p>
                 </td>
             </tr>
