@@ -329,6 +329,7 @@ export default {
       if (this.cellEditing[0] !== rowIndex || this.cellEditing[1] !== colIndex) {
         this.cellEditing = []
       }
+      this.cellEditing = [rowIndex, colIndex, $event ? $event.target.value : null]
       this.focus()
     },
     focus () {
