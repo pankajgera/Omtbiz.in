@@ -38,11 +38,11 @@
                 <textarea
                   type="text"
                   v-autoresize
+                  autofocus
                   rows="2"
                   width="400"
                   class="form-control description-input m-3"
                   v-model="short_narration"
-                  autofocus
                   id="narration-voucher"
                   placeholder="Type Short Narration (optional)" />
               </div>
@@ -84,8 +84,8 @@ export default {
           type: '',
           account: '',
           account_id: 0,
-          credit: 0,
-          debit: 0,
+          credit: null,
+          debit: null,
           total_debit: 0,
           total_credit: 0,
           balance: 0,
@@ -163,8 +163,8 @@ export default {
     },
     async submitVoucher () {
       this.rows = this.rows.filter(each => each['account'] !== '');
-      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseFloat(c));
-      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseFloat(c));
+      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c);
+      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c);
 
       let calc_balance = 0;
       if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {
@@ -211,16 +211,15 @@ export default {
       // } else if ($event.row.type === 'Dr') {
       //   $event.row.credit = 0;
       // }
-
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
       {
         let typeValue = '';
-        let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + parseFloat(c));
-        let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + parseFloat(c));
+        let credit_sum = this.rows.map(o => (o.credit)).reduce((a,c) => a + c)
+        let debit_sum = this.rows.map(o => (o.debit)).reduce((a,c) => a + c)
         if (0 < credit_sum && credit_sum > debit_sum || $event.columnIndex === 3 && credit_sum + $event.value > debit_sum) {
-          this.addNewRow('Dr')
+          this.addNewRow('Dr', $event.value)
         } else if (0 < debit_sum && credit_sum < debit_sum || $event.columnIndex === 2 && debit_sum + $event.value > credit_sum) {
-          this.addNewRow('Cr')
+          this.addNewRow('Cr', $event.value)
         }
 
         $event.rowIndex = $event.rowIndex + 1
@@ -235,11 +234,11 @@ export default {
       }
     },
     rowSelected($event) {
-      // if($event.rowData && $event.rowData.type === 'Cr') {
-      //   $event.rowData.debit = 0;
-      // } else if ($event.rowData && $event.rowData.type === 'Dr') {
-      //   $event.rowData.credit = 0;
-      // }
+      if($event.rowData && $event.rowData.type === 'Cr') {
+        $event.rowData.debit = null;
+      } else if ($event.rowData && $event.rowData.type === 'Dr') {
+        $event.rowData.credit = null;
+      }
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {
@@ -251,18 +250,25 @@ export default {
 
       }
 
+      // if ($event.colIndex === 2 && $event.rowData.type === 'Cr') {
+
+      // }
+      // if ($event.colIndex === 3) {
+
+      // }
+
     },
     linkClicked($event) {
     },
     contextMenu($event) {
     },
-    addNewRow(val) {
+    addNewRow(val, sum) {
       this.rows.push({
           type: val,
           account: '',
           account_id: 0,
-          credit: 0,
-          debit: 0,
+          credit: val === 'Dr' ? sum : null,
+          debit: val === 'Cr' ? sum : null,
           total_debit: 0,
           total_credit: 0,
           balance: 0,

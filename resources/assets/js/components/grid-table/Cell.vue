@@ -108,14 +108,15 @@ export default {
     if (this.column.field === 'type') {
       this.value = this.row.type
       this.rowValue = this.row.type
+      this.selectedValue = this.setOptions.find(each => each.name === this.value)
     }
     if (this.column.field === 'account') {
       this.rowValue = this.row.account
       this.value = this.row.account
     }
-    if (this.$refs.select && this.column.field === 'type') {
-      this.$refs.select.$refs.search.focus()
-    }
+    // if (this.$refs.select && this.column.field === 'type') {
+    //   this.$refs.select.$refs.search.focus()
+    // }
   },
   computed: {
     selectTypeBind: {
@@ -175,6 +176,9 @@ export default {
     //   return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
     // },
     editable () {
+      if (this.disableInput) {
+        return false
+      }
       //return true
       return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex
     },
@@ -207,7 +211,9 @@ export default {
     disableInput() {
       let bool = false
       if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
-          bool = true
+        this.rowValue = null
+        this.value = null
+        bool = true
       }
       return bool
     },
@@ -270,13 +276,21 @@ export default {
             }
         }
       }
+      if (this.column.field === 'credit' && !this.rowValue && !this.disableInput) {
+        this.rowValue = this.row.debit
+        this.value = this.row.debit
+      }
+      if (this.column.field === 'debit' && !this.rowValue && !this.disableInput) {
+        this.rowValue = this.row.credit
+        this.value = this.row.credit
+      }
     },
   },
   methods: {
     loadEditData() {
       if (this.row.type !== '') {
         if (this.column.field === 'type') {
-          this.selectedValue = {name: this.row.type}
+          this.selectedValue = {name: this.row.type, id: this.row.account_id}
           this.rowValue = this.row.type
           this.value = this.row.type
         }
@@ -307,19 +321,21 @@ export default {
     setEditableValue ($event) {
       const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
       const value = cellValueParser(this.column, this.row, input, true)
+      console.log('value', value, input)
       if (!value) return
       this.editPending = false
       let valueChanged = true
-      if (value === this.rowValue) {
-        valueChanged = false
-      } else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
-        if (sameDates(value, this.rowValue)) {
-          valueChanged = false
-        }
-      }
+      // if (value === this.rowValue) {
+      //   valueChanged = false
+      // } else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
+      //   if (sameDates(value, this.rowValue)) {
+      //     valueChanged = false
+      //   }
+      // }
       this.rowValue = value
       this.value = value
       const { row, column, rowIndex, columnIndex } = this
+      console.log('valueChanged', valueChanged)
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
     },
     leaved ($event) {
