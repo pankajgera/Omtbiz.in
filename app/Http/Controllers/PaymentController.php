@@ -1,4 +1,5 @@
 <?php
+
 namespace Crater\Http\Controllers;
 
 use Auth;
@@ -8,9 +9,13 @@ use Crater\Currency;
 use Crater\Invoice;
 use Crater\Payment;
 use Carbon\Carbon;
+use Crater\AccountLedger;
+use Crater\AccountMaster;
+
 use function MongoDB\BSON\toJSON;
 use Crater\User;
 use Crater\Http\Requests\PaymentRequest;
+use Crater\Voucher;
 use Validator;
 
 class PaymentController extends Controller
@@ -69,7 +74,7 @@ class PaymentController extends Controller
                 ->whereCompany($request->header('company'))
                 ->get(),
             'nextPaymentNumberAttribute' => $nextPaymentNumberAttribute,
-            'nextPaymentNumber' => $payment_prefix.'-'.$nextPaymentNumber,
+            'nextPaymentNumber' => $payment_prefix . '-' . $nextPaymentNumber,
             'payment_prefix' => $payment_prefix
         ]);
     }
@@ -82,8 +87,8 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        $payment_number = explode("-",$request->payment_number);
-        $number_attributes['payment_number'] = $payment_number[0].'-'.sprintf('%06d', intval($payment_number[1]));
+        $payment_number = explode("-", $request->payment_number);
+        $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
 
         Validator::make($number_attributes, [
             'payment_number' => 'required|unique:payments,payment_number'
@@ -91,28 +96,114 @@ class PaymentController extends Controller
 
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
 
-        if ($request->has('invoice_id') && $request->invoice_id != null) {
-            $invoice = Invoice::find($request->invoice_id);
-            if ($invoice && $invoice->due_amount == $request->amount) {
-                $invoice->status = Invoice::STATUS_COMPLETED;
-                $invoice->paid_status = Invoice::STATUS_PAID;
-                $invoice->due_amount = 0;
-            } elseif ($invoice && $invoice->due_amount != $request->amount) {
-                $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
-                if ($invoice->due_amount < 0) {
-                    return response()->json([
-                        'error' => 'invalid_amount'
-                    ]);
-                }
-                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-            }
-            $invoice->save();
-        }
+        // if ($request->has('invoice_id') && $request->invoice_id != null) {
+        //     $invoice = Invoice::find($request->invoice_id);
+        //     if ($invoice && $invoice->due_amount == $request->amount) {
+        //         $invoice->status = Invoice::STATUS_COMPLETED;
+        //         $invoice->paid_status = Invoice::STATUS_PAID;
+        //         $invoice->due_amount = 0;
+        //     } elseif ($invoice && $invoice->due_amount != $request->amount) {
+        //         $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
+        //         if ($invoice->due_amount < 0) {
+        //             return response()->json([
+        //                 'error' => 'invalid_amount'
+        //             ]);
+        //         }
+        //         $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
+        //     }
+        //     $invoice->save();
+        // }
 
         $payment_status = 'Draft';
 
         if ('admin' === Auth::user()->role) {
             $payment_status = 'Done';
+        }
+        $voucher_ids = [];
+        $company_id = (int) $request->header('company');
+
+        if ($request->payment_mode !== 'Cash') {
+            $account_master = AccountMaster::where('name', 'Bank')->first();
+            $account_ledger = AccountLedger::create([
+                'date' => Carbon::now()->toDateTimeString(),
+                'bill_no' => null,
+                'account' => 'Bank',
+                'debit' => 0,
+                'credit' => $request->amount,
+                'balance' => $request->amount,
+                'account_master_id' => $account_master->id,
+                'type' => 'Cr',
+                'company_id' => $company_id,
+            ]);
+            $voucher_1 = Voucher::create([
+                'account_master_id' => $account_master->id,
+                'account' => $request->list,
+                'debit' => $request->amount,
+                'credit' => 0,
+                'account_ledger_id' => $account_ledger->id,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Dr',
+                'company_id' => $company_id
+            ]);
+            $voucher_2 = Voucher::create([
+                'account_master_id' => $account_master->id,
+                'account' => 'Bank',
+                'debit' => 0,
+                'credit' => $request->amount,
+                'account_ledger_id' => $account_ledger->id,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Cr',
+                'company_id' => $company_id
+            ]);
+        } else {
+            $account_master = AccountMaster::where('name', 'Cash')->first();
+            $account_ledger = AccountLedger::create([
+                'date' => Carbon::now()->toDateTimeString(),
+                'bill_no' => null,
+                'account' => $request->list,
+                'debit' => 0,
+                'credit' => $request->amount,
+                'balance' => $request->amount,
+                'account_master_id' => $account_master->id,
+                'type' => 'Cr',
+                'company_id' => $company_id,
+            ]);
+            $voucher_1 = Voucher::create([
+                'account_master_id' => $account_master->id,
+                'account' => $request->list,
+                'debit' => $request->amount,
+                'credit' => 0,
+                'account_ledger_id' => $account_ledger->id,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Dr',
+                'company_id' => $company_id
+            ]);
+            $voucher_2 = Voucher::create([
+                'account_master_id' => $account_master->id,
+                'account' => 'Cash',
+                'debit' => 0,
+                'credit' => $request->amount,
+                'account_ledger_id' => $account_ledger->id,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Cr',
+                'company_id' => $company_id
+            ]);
+        }
+        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+        $account_ledger->update([
+            'bill_no' => $voucher_ids,
+        ]);
+        foreach ($voucher as $key => $each) {
+            if ($key < substr_count($voucher_ids, ',') + 1) {
+                $each->update([
+                    'related_voucher' => $voucher_ids,
+                ]);
+            }
         }
 
         $payment = Payment::create([
@@ -120,8 +211,8 @@ class PaymentController extends Controller
             'payment_number' => $number_attributes['payment_number'],
             'payment_status' => $payment_status,
             'user_id' => $request->user_id,
-            'company_id' => $request->header('company'),
-            'invoice_id' => $request->invoice_id,
+            'company_id' => $company_id,
+            //'invoice_id' => $request->invoice_id,
             'payment_mode' => $request->payment_mode,
             'amount' => $request->amount,
             'notes' => $request->notes,
@@ -179,11 +270,11 @@ class PaymentController extends Controller
      */
     public function update(PaymentRequest $request, $id)
     {
-        $payment_number = explode("-",$request->payment_number);
-        $number_attributes['payment_number'] = $payment_number[0].'-'.sprintf('%06d', intval($payment_number[1]));
+        $payment_number = explode("-", $request->payment_number);
+        $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
 
         Validator::make($number_attributes, [
-            'payment_number' => 'required|unique:payments,payment_number'.','.$id
+            'payment_number' => 'required|unique:payments,payment_number' . ',' . $id
         ])->validate();
 
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);

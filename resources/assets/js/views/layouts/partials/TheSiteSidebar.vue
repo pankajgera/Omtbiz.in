@@ -47,12 +47,12 @@ export default {
           //   icon: 'star',
           //   route: '/bills'
           // },
-          {
-            title: 'navigation.customers',
-            icon: 'user',
-            route: '/customers',
-            meta: ['admin', 'accountant']
-          },
+          // {
+          //   title: 'navigation.customers',
+          //   icon: 'user',
+          //   route: '/customers',
+          //   meta: ['admin', 'accountant']
+          // },
           {
             title: 'navigation.invoices',
             icon: 'file-alt',

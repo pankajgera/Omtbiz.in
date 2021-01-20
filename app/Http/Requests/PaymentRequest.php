@@ -24,7 +24,7 @@ class PaymentRequest extends FormRequest
     {
         $rules = [
             'payment_date' => 'required',
-            'user_id' => 'required',
+            'payment_mode' => 'required',
             'amount' => 'required',
         ];
 
