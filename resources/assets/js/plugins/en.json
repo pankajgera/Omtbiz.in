@@ -500,6 +500,7 @@
     },
     "payments": {
         "title": "Payments",
+        "list": "List",
         "payments_list": "Payments List",
         "record_payment": "Record Payment",
         "customer": "Customer",
@@ -510,6 +511,7 @@
         "payment_mode": "Payment Mode",
         "invoice": "Invoice",
         "note": "Note",
+        "select_a_list": "Select from list",
         "add_payment": "Add Payment",
         "new_payment": "New Payment",
         "edit_payment": "Edit Payment",

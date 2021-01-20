@@ -8,16 +8,6 @@
           <li class="breadcrumb-item"><router-link slot="item-title" to="/payments">{{ $tc('payments.payment', 2) }}</router-link></li>
           <li class="breadcrumb-item">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</li>
         </ol>
-        <div class="page-actions header-button-container">
-          <base-button
-            :loading="isLoading"
-            :disabled="isLoading"
-            icon="save"
-            color="theme"
-            type="submit">
-            {{ isEdit ? $t('payments.update_payment') : $t('payments.save_payment') }}
-          </base-button>
-        </div>
       </div>
       <div class="payment-card card">
         <div class="card-body">
@@ -53,25 +43,24 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label class="form-label">{{ $t('payments.customer') }}</label><span class="text-danger"> *</span>
+              <label class="form-label">{{ $t('payments.list') }}</label><span class="text-danger"> *</span>
               <base-select
-                ref="baseSelect"
-                v-model="customer"
-                :invalid="$v.customer.$error"
-                :options="customerList"
+                v-model="formData.list"
+                :invalid="$v.formData.list.$error"
+                :options="listArr"
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
                 :disabled="isEdit"
-                :placeholder="$t('customers.select_a_customer')"
+                :placeholder="$t('payments.select_a_list')"
                 label="name"
                 track-by="id"
               />
-              <div v-if="$v.customer.$error">
-                <span v-if="!$v.customer.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <div v-if="$v.formData.list.$error">
+                <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.invoice') }}</label>
                 <base-select
@@ -86,7 +75,7 @@
                   track-by="invoice_number"
                 />
               </div>
-            </div>
+            </div> -->
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.amount') }}</label><span class="text-danger"> *</span>
@@ -105,28 +94,25 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 mt-2">
               <div class="form-group">
-                <label class="form-label">{{ $t('payments.payment_mode') }}</label>
+                <label class="form-label">{{ $t('payments.payment_mode') }}</label><span class="text-danger"> *</span>
                 <base-select
                   v-model="formData.payment_mode"
                   :options="getPaymentMode"
                   :searchable="true"
                   :show-labels="false"
+                  :class="{'invalid' : $v.formData.amount.$error}"
                   :placeholder="$t('payments.select_payment_mode')"
                 />
               </div>
             </div>
-            <div class="col-sm-12 ">
+            <div class="col-sm-6 ">
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.note') }}</label>
                 <base-text-area
                   v-model="formData.notes"
-                  @input="$v.formData.notes.$touch()"
                 />
-                <div v-if="$v.formData.notes.$error">
-                  <span v-if="!$v.formData.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
-                </div>
               </div>
             </div>
             <div class="col-sm-12">
@@ -141,6 +127,16 @@
                   {{ $t('payments.save_payment') }}
                 </base-button>
               </div>
+            </div>
+            <div class="page-actions header-button-container">
+              <base-button
+                :loading="isLoading"
+                :disabled="isLoading"
+                icon="save"
+                color="theme"
+                type="submit">
+                {{ isEdit ? $t('payments.update_payment') : $t('payments.save_payment') }}
+              </base-button>
             </div>
           </div>
         </div>
@@ -162,13 +158,14 @@ export default {
   data () {
     return {
       formData: {
-        user_id: null,
+        // user_id: null,
         payment_number: null,
         payment_date: null,
         amount: 0,
         payment_mode: null,
-        invoice_id: null,
-        notes: null
+        // invoice_id: null,
+        notes: null,
+        list: null,
       },
       money: {
         decimal: '.',
@@ -178,32 +175,33 @@ export default {
         masked: false
       },
       customer: null,
-      invoice: null,
-      customerList: [],
-      invoiceList: [],
+      //invoice: null,
+      //customerList: [],
+      //invoiceList: [],
       isLoading: false,
       maxPayableAmount: Number.MAX_SAFE_INTEGER,
       isSettingInitialData: true,
       paymentNumAttribute: null,
-      paymentPrefix: ''
+      paymentPrefix: '',
+      listArr: [{id: 1, name: 'Sundry Creditor'}]
     }
   },
   validations () {
     return {
-      customer: {
-        required
-      },
       formData: {
+        list: {
+          required
+        },
         payment_date: {
+          required
+        },
+        payment_mode: {
           required
         },
         amount: {
           required,
           between: between(1, this.maxPayableAmount + 1)
         },
-        notes: {
-          maxLength: maxLength(255)
-        }
       },
       paymentNumAttribute: {
         required,
@@ -215,15 +213,18 @@ export default {
     ...mapGetters('currency', [
       'defaultCurrencyForInput'
     ]),
+    ...mapGetters('user', {
+      user: 'currentUser'
+    }),
     getPaymentMode () {
       return ['Cash', 'Check', 'Credit Card', 'Bank Transfer']
     },
     amount: {
       get: function () {
-        return this.formData.amount / 100
+        return this.formData.amount
       },
       set: function (newValue) {
-        this.formData.amount = newValue * 100
+        this.formData.amount = newValue
       }
     },
     isEdit () {
@@ -247,35 +248,35 @@ export default {
     }
   },
   watch: {
-    customer (newValue) {
-      this.formData.user_id = newValue.id
-      if (!this.isEdit) {
-        if (this.isSettingInitialData) {
-          this.isSettingInitialData = false
-        } else {
-          this.invoice = null
-          this.formData.invoice_id = null
-        }
-        this.formData.amount = 0
-        this.invoiceList = []
-        this.fetchCustomerInvoices(newValue.id)
-      }
-    },
-    invoice (newValue) {
-      if (newValue) {
-        this.formData.invoice_id = newValue.id
-        if (!this.isEdit) {
-          this.setPaymentAmountByInvoiceData(newValue.id)
-        }
-      }
-    }
+    // customer (newValue) {
+    //   this.formData.user_id = newValue.id
+    //   if (!this.isEdit) {
+    //     if (this.isSettingInitialData) {
+    //       this.isSettingInitialData = false
+    //     } else {
+    //       this.invoice = null
+    //       this.formData.invoice_id = null
+    //     }
+    //     this.formData.amount = 0
+    //     this.invoiceList = []
+    //     this.fetchCustomerInvoices(newValue.id)
+    //   }
+    // },
+    // invoice (newValue) {
+    //   if (newValue) {
+    //     this.formData.invoice_id = newValue.id
+    //     if (!this.isEdit) {
+    //       this.setPaymentAmountByInvoiceData(newValue.id)
+    //     }
+    //   }
+    // }
   },
   async mounted () {
     this.$nextTick(() => {
       this.loadData()
-      if (this.$route.params.id && !this.isEdit) {
-        this.setInvoicePaymentData()
-      }
+      // if (this.$route.params.id && !this.isEdit) {
+      //   this.setInvoicePaymentData()
+      // }
     })
   },
   methods: {
@@ -294,9 +295,9 @@ export default {
     async loadData () {
       if (this.isEdit) {
         let response = await this.fetchPayment(this.$route.params.id)
-        this.customerList = response.data.customers
+        //this.customerList = response.data.customers
         this.formData = { ...response.data.payment }
-        this.customer = response.data.payment.user
+        //this.customer = response.data.payment.user
         this.formData.payment_date = moment(response.data.payment.payment_date, 'YYYY-MM-DD').toString()
         this.formData.amount = parseFloat(response.data.payment.amount)
         this.paymentPrefix = response.data.payment_prefix
@@ -308,38 +309,39 @@ export default {
         // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreatePayment()
-        this.customerList = response.data.customers
+        //this.customerList = response.data.customers
         this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix
         this.formData.payment_date = moment(new Date()).toString()
       }
       return true
     },
-    async setInvoicePaymentData () {
-      let data = await this.fetchInvoice(this.$route.params.id)
-      this.customer = data.data.invoice.user
-      this.invoice = data.data.invoice
-    },
+    // async setInvoicePaymentData () {
+    //   let data = await this.fetchInvoice(this.$route.params.id)
+    //   this.customer = data.data.invoice.user
+    //   this.invoice = data.data.invoice
+    // },
     async setPaymentAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)
       this.formData.amount = data.data.invoice.due_amount
       this.maxPayableAmount = data.data.invoice.due_amount
     },
-    async fetchCustomerInvoices (userID) {
-      let response = await axios.get(`/api/invoices/unpaid/${userID}`)
-      if (response.data) {
-        this.invoiceList = response.data.invoices
-      }
-    },
+    // async fetchCustomerInvoices (userID) {
+    //   let response = await axios.get(`/api/invoices/unpaid/${userID}`)
+    //   if (response.data) {
+    //     this.invoiceList = response.data.invoices
+    //   }
+    // },
     async submitPaymentData () {
-      this.$v.customer.$touch()
+      //this.$v.customer.$touch()
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
         return true
       }
 
       this.formData.payment_number = this.paymentPrefix + '-' + this.paymentNumAttribute
-
+      this.formData.list = this.formData.list.name
+      this.formData.user_id = this.user.id
       if (this.isEdit) {
         let data = {
           editData: {
