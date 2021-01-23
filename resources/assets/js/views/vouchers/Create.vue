@@ -23,8 +23,6 @@
                 :master-options="masterData"
                 @cell-updated="cellUpdated"
                 @row-selected="rowSelected"
-                @link-clicked="linkClicked"
-                @contextmenu="contextMenu"
               >
                 <template v-slot:header>
                   Add / Edit Account Vouchers
@@ -227,18 +225,20 @@ export default {
         $event.$event.target.blur()
       }
 
-      if ($event.columnIndex === 2 && $event.$event.key === 'Tab' || $event.columnIndex === 3 && $event.$event.key === 'Tab')
-      {
-        $event.$event.target.blur()
-        $event.$event.path[10].childNodes[2].lastChild.focus()
+      if ((this.rows.length - 1) === $event.rowIndex) {
+        if ($event.columnIndex === 2 && $event.$event.key === 'Tab' || $event.columnIndex === 3 && $event.$event.key === 'Tab')
+        {
+          $event.$event.target.blur()
+          $event.$event.path[10].childNodes[2].lastChild.focus()
+        }
       }
     },
     rowSelected($event) {
-      if($event.rowData && $event.rowData.type === 'Cr') {
-        $event.rowData.debit = null;
-      } else if ($event.rowData && $event.rowData.type === 'Dr') {
-        $event.rowData.credit = null;
-      }
+      // if($event.rowData && $event.rowData.type === 'Cr') {
+      //   $event.rowData.debit = null;
+      // } else if ($event.rowData && $event.rowData.type === 'Dr') {
+      //   $event.rowData.credit = null;
+      // }
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {
@@ -258,17 +258,15 @@ export default {
       // }
 
     },
-    linkClicked($event) {
-    },
-    contextMenu($event) {
-    },
-    addNewRow(val, sum) {
+    addNewRow(typ = null, sum = null) {
+      let deb = typ == 'Dr' ? sum : null
+      let cred = typ == 'Cr' ? sum : null
       this.rows.push({
-          type: val,
+          type: typ,
           account: '',
           account_id: 0,
-          credit: val === 'Dr' ? sum : null,
-          debit: val === 'Cr' ? sum : null,
+          credit: cred,
+          debit: deb,
           total_debit: 0,
           total_credit: 0,
           balance: 0,
