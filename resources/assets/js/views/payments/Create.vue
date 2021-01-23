@@ -5,7 +5,7 @@
         <h3 class="page-title">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</h3>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/payments">{{ $tc('payments.payment', 2) }}</router-link></li>
+          <!-- <li class="breadcrumb-item"><router-link slot="item-title" to="/payments">{{ $tc('payments.payment', 2) }}</router-link></li> -->
           <li class="breadcrumb-item">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</li>
         </ol>
       </div>
