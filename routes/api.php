@@ -290,6 +290,16 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('payments', 'PaymentController');
 
+    // Receipts
+    //----------------------------------
+
+    Route::post('/receipts/delete', [
+        'as' => 'receipts.delete',
+        'uses' => 'ReceiptController@delete'
+    ]);
+
+    Route::resource('receipts', 'ReceiptController');
+
 
     // Settings
     //----------------------------------

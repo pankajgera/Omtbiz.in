@@ -34,7 +34,7 @@ class PaymentController extends Controller
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->applyFilters($request->only([
                 'search',
-                'payment_number',
+                // 'payment_number',
                 'payment_status',
                 'payment_mode',
                 'customer_id',
@@ -87,12 +87,12 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        $payment_number = explode("-", $request->payment_number);
-        $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
+        // $payment_number = explode("-", $request->payment_number);
+        // $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
 
-        Validator::make($number_attributes, [
-            'payment_number' => 'required|unique:payments,payment_number'
-        ])->validate();
+        // Validator::make($number_attributes, [
+        //     'payment_number' => 'required|unique:payments,payment_number'
+        // ])->validate();
 
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
 
@@ -208,7 +208,7 @@ class PaymentController extends Controller
 
         $payment = Payment::create([
             'payment_date' => $payment_date,
-            'payment_number' => $number_attributes['payment_number'],
+            //'payment_number' => $number_attributes['payment_number'],
             'payment_status' => $payment_status,
             'user_id' => $request->user_id,
             'company_id' => $company_id,
@@ -270,12 +270,12 @@ class PaymentController extends Controller
      */
     public function update(PaymentRequest $request, $id)
     {
-        $payment_number = explode("-", $request->payment_number);
-        $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
+        // $payment_number = explode("-", $request->payment_number);
+        // $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
 
-        Validator::make($number_attributes, [
-            'payment_number' => 'required|unique:payments,payment_number' . ',' . $id
-        ])->validate();
+        // Validator::make($number_attributes, [
+        //     'payment_number' => 'required|unique:payments,payment_number' . ',' . $id
+        // ])->validate();
 
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
 
@@ -305,7 +305,7 @@ class PaymentController extends Controller
         }
 
         $payment->payment_date = $payment_date;
-        $payment->payment_number = $number_attributes['payment_number'];
+        //$payment->payment_number = $number_attributes['payment_number'];
         $payment->payment_status = $request->payment_status;
         $payment->user_id = $request->user_id;
         $payment->invoice_id = $request->invoice_id;

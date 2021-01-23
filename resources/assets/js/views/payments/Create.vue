@@ -27,7 +27,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.payment_number') }}</label><span class="text-danger"> *</span>
                 <base-prefix-input
@@ -41,7 +41,7 @@
                   <span v-if="!$v.paymentNumAttribute.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="col-sm-6">
               <label class="form-label">{{ $t('payments.list') }}</label><span class="text-danger"> *</span>
               <base-select
@@ -339,7 +339,7 @@ export default {
         return true
       }
 
-      this.formData.payment_number = this.paymentPrefix + '-' + this.paymentNumAttribute
+      //this.formData.payment_number = this.paymentPrefix + '-' + this.paymentNumAttribute
       this.formData.list = this.formData.list.name
       this.formData.user_id = this.user.id
       if (this.isEdit) {
@@ -364,10 +364,10 @@ export default {
           window.toastr['error'](response.data.error)
         } catch (err) {
           this.isLoading = false
-          if (err.response.data.errors.payment_number) {
-            window.toastr['error'](err.response.data.errors.payment_number)
-            return true
-          }
+          // if (err.response.data.errors.payment_number) {
+          //   window.toastr['error'](err.response.data.errors.payment_number)
+          //   return true
+          // }
           window.toastr['error'](err.response.data.message)
         }
       } else {
@@ -391,10 +391,10 @@ export default {
           window.toastr['error'](response.data.error)
         } catch (err) {
           this.isLoading = false
-          if (err.response.data.errors.payment_number) {
-            window.toastr['error'](err.response.data.errors.payment_number)
-            return true
-          }
+          // if (err.response.data.errors.payment_number) {
+          //   window.toastr['error'](err.response.data.errors.payment_number)
+          //   return true
+          // }
           window.toastr['error'](err.response.data.message)
         }
       }

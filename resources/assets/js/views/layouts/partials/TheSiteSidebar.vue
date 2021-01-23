@@ -71,6 +71,12 @@ export default {
             meta: ['admin', 'accountant']
           },
           {
+            title: 'navigation.receipts',
+            icon: 'credit-card',
+            route: '/receipts/create',
+            meta: ['admin', 'accountant']
+          },
+          {
             title: 'navigation.reports',
             icon: 'signal',
             route: '/reports',
