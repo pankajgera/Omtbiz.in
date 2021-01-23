@@ -67,7 +67,7 @@ export default {
           {
             title: 'navigation.payments',
             icon: 'credit-card',
-            route: '/payments',
+            route: '/payments/create',
             meta: ['admin', 'accountant']
           },
           {
