@@ -163,18 +163,18 @@ export default {
       //return true
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
     },
-    // selectedTop () {
-    //   return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
-    // },
-    // selectedRight () {
-    //   return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
-    // },
-    // selectedBottom () {
-    //   return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
-    // },
-    // selectedLeft () {
-    //   return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
-    // },
+    selectedTop () {
+      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
+    },
+    selectedRight () {
+      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
+    },
+    selectedBottom () {
+      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
+    },
+    selectedLeft () {
+      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]
+    },
     editable () {
       if (this.disableInput) {
         return false
@@ -321,7 +321,6 @@ export default {
     setEditableValue ($event) {
       const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
       const value = cellValueParser(this.column, this.row, input, true)
-      console.log('value', value, input)
       if (!value) return
       this.editPending = false
       let valueChanged = true
@@ -335,7 +334,6 @@ export default {
       this.rowValue = value
       this.value = value
       const { row, column, rowIndex, columnIndex } = this
-      console.log('valueChanged', valueChanged)
       this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
     },
     leaved ($event) {
