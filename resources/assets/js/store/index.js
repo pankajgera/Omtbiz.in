@@ -17,6 +17,7 @@ import expense from './modules/expense'
 import invoice from './modules/invoice'
 import userProfile from './modules/settings/user-profile'
 import payment from './modules/payment'
+import receipt from './modules/receipt'
 import preferences from './modules/settings/preferences'
 import item from './modules/item'
 import bill from './modules/bill'
@@ -67,6 +68,7 @@ export default new Vuex.Store({
         userProfile,
         currency,
         payment,
+        receipt,
         preferences,
         general,
         taxType,

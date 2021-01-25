@@ -354,7 +354,7 @@ export default {
           let response = await this.updatePayment(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.updated_message'))
-            this.$router.push('/payments')
+            this.$router.push('/payments/create')
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -380,7 +380,7 @@ export default {
           let response = await this.addPayment(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.created_message'))
-            this.$router.push('/payments')
+            this.$router.push('/payments/create')
             this.isLoading = true
             return true
           }

@@ -52,7 +52,7 @@ import InvoiceView from './views/invoices/View.vue'
 import PaymentCreate from './views/payments/Create.vue'
 
 //Receipt
-import ReceiptCreate from './views/receipt/Create.vue'
+import ReceiptCreate from './views/receipts/Create.vue'
 
 // Estimates
 import EstimateIndex from './views/estimates/Index.vue'
