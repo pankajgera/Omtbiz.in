@@ -61,7 +61,6 @@ class ReceiptController extends Controller
         $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
         $receipt_num_auto_generate = CompanySetting::getSetting('receipt_auto_generate', $request->header('company'));
 
-
         $nextReceiptNumberAttribute = null;
         $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix);
 
