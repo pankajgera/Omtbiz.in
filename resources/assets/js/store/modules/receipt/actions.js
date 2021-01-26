@@ -13,7 +13,6 @@ export const fetchReceipts = ({ commit, dispatch, state }, params) => {
 }
 
 export const fetchCreateReceipt = ({ commit, dispatch }, page) => {
-  console.log(commit, dispatch, page)
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/receipts/create`).then((response) => {
       resolve(response)

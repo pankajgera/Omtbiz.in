@@ -68,13 +68,25 @@ class ReceiptController extends Controller
             $nextReceiptNumberAttribute = $nextReceiptNumber;
         }
 
+        $usersOfSundryDebitors = [];
+        $debitor = AccountMaster::where('name', 'Sundry Debtors')->first();
+        $ledgers = AccountLedger::where('account_master_id', $debitor->id)->get();
+
+        foreach ($ledgers as $each) {
+            $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();
+            foreach ($vouchers as $ee) {
+                $usersOfSundryDebitors[] = $ee->account;
+            }
+        }
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
                 ->get(),
             'nextReceiptNumberAttribute' => $nextReceiptNumberAttribute,
             'nextReceiptNumber' => $receipt_prefix . '-' . $nextReceiptNumber,
-            'receipt_prefix' => $receipt_prefix
+            'receipt_prefix' => $receipt_prefix,
+            'usersOfSundryDebitors' => array_unique($usersOfSundryDebitors, SORT_REGULAR),
         ]);
     }
 
@@ -86,32 +98,32 @@ class ReceiptController extends Controller
      */
     public function store(ReceiptRequest $request)
     {
-        // $receipt_number = explode("-", $request->receipt_number);
-        // $number_attributes['receipt_number'] = $receipt_number[0] . '-' . sprintf('%06d', intval($receipt_number[1]));
+        $receipt_number = explode("-", $request->receipt_number);
+        $number_attributes['receipt_number'] = $receipt_number[0] . '-' . sprintf('%06d', intval($receipt_number[1]));
 
-        // Validator::make($number_attributes, [
-        //     'receipt_number' => 'required|unique:receipts,receipt_number'
-        // ])->validate();
+        Validator::make($number_attributes, [
+            'receipt_number' => 'required|unique:receipts,receipt_number'
+        ])->validate();
 
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
-        // if ($request->has('invoice_id') && $request->invoice_id != null) {
-        //     $invoice = Invoice::find($request->invoice_id);
-        //     if ($invoice && $invoice->due_amount == $request->amount) {
-        //         $invoice->status = Invoice::STATUS_COMPLETED;
-        //         $invoice->paid_status = Invoice::STATUS_PAID;
-        //         $invoice->due_amount = 0;
-        //     } elseif ($invoice && $invoice->due_amount != $request->amount) {
-        //         $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
-        //         if ($invoice->due_amount < 0) {
-        //             return response()->json([
-        //                 'error' => 'invalid_amount'
-        //             ]);
-        //         }
-        //         $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-        //     }
-        //     $invoice->save();
-        // }
+        if ($request->has('invoice_id') && $request->invoice_id != null) {
+            $invoice = Invoice::find($request->invoice_id);
+            if ($invoice && $invoice->due_amount == $request->amount) {
+                $invoice->status = Invoice::STATUS_COMPLETED;
+                $invoice->paid_status = Invoice::STATUS_PAID;
+                $invoice->due_amount = 0;
+            } elseif ($invoice && $invoice->due_amount != $request->amount) {
+                $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
+                if ($invoice->due_amount < 0) {
+                    return response()->json([
+                        'error' => 'invalid_amount'
+                    ]);
+                }
+                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
+            }
+            $invoice->save();
+        }
 
         $receipt_status = 'Draft';
 
@@ -207,11 +219,11 @@ class ReceiptController extends Controller
 
         $receipt = Receipt::create([
             'receipt_date' => $receipt_date,
-            //'receipt_number' => $number_attributes['receipt_number'],
+            'receipt_number' => $number_attributes['receipt_number'],
             'receipt_status' => $receipt_status,
             'user_id' => $request->user_id,
             'company_id' => $company_id,
-            //'invoice_id' => $request->invoice_id,
+            'invoice_id' => $request->invoice_id,
             'receipt_mode' => $request->receipt_mode,
             'amount' => $request->amount,
             'notes' => $request->notes,

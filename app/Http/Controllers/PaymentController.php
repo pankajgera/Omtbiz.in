@@ -69,13 +69,25 @@ class PaymentController extends Controller
             $nextPaymentNumberAttribute = $nextPaymentNumber;
         }
 
+        $usersOfSundryCreditor = [];
+        $debitor = AccountMaster::where('name', 'Sundry Creditors')->first();
+        $ledgers = AccountLedger::where('account_master_id', $debitor->id)->get();
+
+        foreach ($ledgers as $each) {
+            $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();
+            foreach ($vouchers as $ee) {
+                $usersOfSundryCreditor[] = $ee->account;
+            }
+        }
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
                 ->get(),
             'nextPaymentNumberAttribute' => $nextPaymentNumberAttribute,
             'nextPaymentNumber' => $payment_prefix . '-' . $nextPaymentNumber,
-            'payment_prefix' => $payment_prefix
+            'payment_prefix' => $payment_prefix,
+            'usersOfSundryCreditor' => array_unique($usersOfSundryCreditor, SORT_REGULAR)
         ]);
     }
 

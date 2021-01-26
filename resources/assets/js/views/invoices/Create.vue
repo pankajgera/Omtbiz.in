@@ -13,7 +13,7 @@
       </div>
       <div class="row invoice-input-group">
         <div class="col-md-5 invoice-customer-container">
-          <div
+          <!-- <div
             v-if="selectedCustomer" class="show-customer">
             <div class="row px-2 mt-1">
               <div v-if="selectedCustomer.billing_address" class="col col-6">
@@ -71,9 +71,9 @@
               <label class="email">{{ selectedCustomer.name }}</label>
               <label class="action" @click="removeCustomer">{{ $t('general.remove') }}</label>
             </div>
-          </div>
+          </div> -->
 
-          <base-popup v-else :class="['add-customer', {'customer-required': $v.selectedCustomer.$error}]" >
+          <!-- <base-popup v-else :class="['add-customer', {'customer-required': $v.selectedCustomer.$error}]" >
             <div slot="activator" class="add-customer-action">
               <font-awesome-icon icon="user" class="customer-icon"/>
               <div>
@@ -84,7 +84,24 @@
               </div>
             </div>
             <customer-select-popup type="invoice" />
-          </base-popup>
+          </base-popup> -->
+
+          <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
+            <base-select
+              v-model="newInvoice.debtors"
+              :invalid="$v.newInvoice.debtors.$error"
+              :options="sundryDebtorsList"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :disabled="$route.name === 'invoices.edit'"
+              :placeholder="$t('receipts.select_a_list')"
+              label="name"
+              track-by="id"
+            />
+            <div v-if="$v.newInvoice.debtors.$error">
+              <span v-if="!$v.newInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            </div>
         </div>
         <div class="col invoice-input">
           <div class="row mb-3">
@@ -360,7 +377,8 @@ export default {
           id: Guid.raw(),
           taxes: [{...TaxStub, id: Guid.raw()}]
         }],
-        taxes: []
+        taxes: [],
+        debtors: '',
       },
       customers: [],
       inventoryList: [],
@@ -373,7 +391,8 @@ export default {
       maxDiscount: 0,
       invoicePrefix: null,
       invoiceNumAttribute: null,
-      role: this.$store.state.user.currentUser.role
+      role: this.$store.state.user.currentUser.role,
+      sundryDebtorsList: [] //List of Sundry Debitor name
     }
   },
   validations () {
@@ -393,11 +412,14 @@ export default {
         },
         reference_number: {
           maxLength: maxLength(255)
+        },
+        debtors: {
+          required
         }
       },
-      selectedCustomer: {
-        required
-      },
+      // selectedCustomer: {
+      //   required
+      // },
       invoiceNumAttribute: {
         required,
         numeric
@@ -587,6 +609,12 @@ export default {
         this.inventoryList = response.data.inventory
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
+        Object.values(response.data.sundryDebtorsList).map((each, key) => {
+          this.sundryDebtorsList.push({
+            'name': each,
+            'id': key
+          });
+        });
       }
       this.initLoading = false
     },

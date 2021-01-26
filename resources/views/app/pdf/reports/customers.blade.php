@@ -232,7 +232,7 @@
                 </td>
                 <td class="tax-total-cell">
                     <p class="" style="float:right; padding:0px; margin: 0px">
-                        ₹ {!! $totalAmount !!} {!! $ledger->type !!}
+                        ₹ {!! $totalAmount !!} {!! $ledgerType !!}
                     </p>
                 </td>
             </tr>
