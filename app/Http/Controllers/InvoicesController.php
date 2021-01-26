@@ -12,6 +12,8 @@ use Crater\Http\Requests;
 use Crater\Invoice;
 use Crater\InvoiceItem;
 use Carbon\Carbon;
+use Crater\AccountLedger;
+use Crater\AccountMaster;
 use Crater\Inventory;
 use Crater\Item;
 use Crater\Mail\invoicePdf;
@@ -23,6 +25,7 @@ use PDF;
 use Validator;
 use Crater\TaxType;
 use Crater\Tax;
+use Crater\Voucher;
 use Exception;
 
 class InvoicesController extends Controller
@@ -83,6 +86,17 @@ class InvoicesController extends Controller
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
         }
 
+        $sundryDebtorsList = [];
+        $debitor = AccountMaster::where('name', 'Sundry Debtors')->first();
+        $ledgers = AccountLedger::where('account_master_id', $debitor->id)->get();
+
+        foreach ($ledgers as $each) {
+            $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();
+            foreach ($vouchers as $ee) {
+                $sundryDebtorsList[] = $ee->account;
+            }
+        }
+
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
@@ -91,7 +105,8 @@ class InvoicesController extends Controller
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
-            'invoice_prefix' => $invoice_prefix
+            'invoice_prefix' => $invoice_prefix,
+            'sundryDebtorsList' => array_unique($sundryDebtorsList, SORT_REGULAR)
         ]);
     }
 

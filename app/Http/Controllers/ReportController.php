@@ -322,21 +322,24 @@ class ReportController extends Controller
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
         $balance = $ledger->debit - $ledger->credit;
         $opening_balance = $ledger->accountMaster->opening_balance;
-        if ($ledger->debit > $ledger->credit) {
+        $calc_balance = $opening_balance > $balance ? $opening_balance - $balance :
+            ($opening_balance > 0 ? $balance - $opening_balance : abs($balance));
+        if ($vouchers_debit_sum > $vouchers_credit_sum) {
             $ledger->update([
                 'type' => 'Dr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
-                'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
+                'balance' => $calc_balance,
             ]);
-        } elseif ($ledger->debit < $ledger->credit) {
+        } elseif ($vouchers_debit_sum < $vouchers_credit_sum) {
             $ledger->update([
                 'type' => 'Cr',
                 'credit' => $vouchers_credit_sum,
                 'debit' => $vouchers_debit_sum,
-                'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
+                'balance' => $calc_balance,
             ]);
         }
+        $ledgerType = $ledger->type === 'Cr' ? 'Dr' : 'Cr';
         $totalAmount = $ledger->balance;
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
@@ -359,7 +362,7 @@ class ReportController extends Controller
             ->get();
 
         view()->share([
-            'ledger' => $ledger,
+            'ledgerType' => $ledgerType,
             'opening_balance' => $opening_balance,
             'opening_balance_type' => $ledger->accountMaster->type,
             'related_vouchers' => $related_vouchers,

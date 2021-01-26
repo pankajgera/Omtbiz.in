@@ -501,7 +501,7 @@
     },
     "payments": {
         "title": "Payments",
-        "list": "List",
+        "list": "Party name",
         "payments_list": "Payments List",
         "record_payment": "Record Payment",
         "customer": "Customer",
@@ -533,7 +533,7 @@
     },
     "receipts": {
         "title": "Receipts",
-        "list": "List",
+        "list": "Party name",
         "receipts_list": "Receipts List",
         "record_receipt": "Record Receipt",
         "customer": "Customer",

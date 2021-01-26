@@ -47,7 +47,7 @@
               <base-select
                 v-model="formData.list"
                 :invalid="$v.formData.list.$error"
-                :options="listArr"
+                :options="partyNameList"
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
@@ -173,7 +173,7 @@ export default {
       isSettingInitialData: true,
       receiptNumAttribute: null,
       receiptPrefix: '',
-      listArr: [{id: 1, name: 'Sundry Creditor'}]
+      partyNameList: []
     }
   },
   validations () {
@@ -299,7 +299,12 @@ export default {
         // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreateReceipt()
-        console.log('response', response)
+        Object.values(response.data.usersOfSundryDebitors).map((each, key) => {
+          this.partyNameList.push({
+            'name': each,
+            'id': key
+          });
+        });
         //this.customerList = response.data.customers
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
