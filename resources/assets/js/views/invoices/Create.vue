@@ -435,8 +435,11 @@ export default {
     ]),
     ...mapGetters('invoice', [
       'getTemplateId',
-      'selectedCustomer'
+      //'selectedCustomer'
     ]),
+    ...mapGetters('user', {
+      user: 'currentUser'
+    }),
     currency () {
       return this.selectedCurrency
     },
@@ -518,13 +521,13 @@ export default {
     }
   },
   watch: {
-    selectedCustomer (newVal) {
-      if (newVal && newVal.currency) {
-        this.selectedCurrency = newVal.currency
-      } else {
-        this.selectedCurrency = this.defaultCurrency
-      }
-    },
+    // selectedCustomer (newVal) {
+    //   if (newVal && newVal.currency) {
+    //     this.selectedCurrency = newVal.currency
+    //   } else {
+    //     this.selectedCurrency = this.defaultCurrency
+    //   }
+    // },
     subtotal (newValue) {
       if (this.newInvoice.discount_type === 'percentage') {
         this.newInvoice.discount_val = (this.newInvoice.discount * newValue) / 100
@@ -534,7 +537,7 @@ export default {
   created () {
     this.loadData()
     this.fetchInitialInventory()
-    this.resetSelectedCustomer()
+    //this.resetSelectedCustomer()
     window.hub.$on('newTax', this.onSelectTax)
   },
   methods: {
@@ -545,8 +548,8 @@ export default {
       'addInvoice',
       'fetchCreateInvoice',
       'fetchInvoice',
-      'resetSelectedCustomer',
-      'selectCustomer',
+      //'resetSelectedCustomer',
+      //'selectCustomer',
       'updateInvoice'
     ]),
     ...mapActions('inventory', [
@@ -582,7 +585,7 @@ export default {
         let response = await this.fetchInvoice(this.$route.params.id)
 
         if (response.data) {
-          this.selectCustomer(response.data.invoice.user_id)
+          //this.selectCustomer(response.data.invoice.user_id)
           this.newInvoice = response.data.invoice
           this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date, 'DD-MM-YYYY').format('DD-MM-YYYY')
           //this.newInvoice.due_date = moment(response.data.invoice.due_date, 'DD-MM-YYYY').toString()
@@ -618,9 +621,9 @@ export default {
       }
       this.initLoading = false
     },
-    removeCustomer () {
-      this.resetSelectedCustomer()
-    },
+    // removeCustomer () {
+    //   this.resetSelectedCustomer()
+    // },
     openTemplateModal () {
       this.openModal({
         'title': this.$t('general.choose_template'),
@@ -652,13 +655,13 @@ export default {
         sub_total: this.subtotal,
         total: this.total,
         tax: this.totalTax,
-        user_id: null,
+        user_id: this.user.id,
         invoice_template_id: this.getTemplateId
       }
 
-      if (this.selectedCustomer != null) {
-        data.user_id = this.selectedCustomer.id
-      }
+      // if (this.selectedCustomer != null) {
+      //   data.user_id = this.selectedCustomer.id
+      // }
 
       if (this.$route.name === 'invoices.edit') {
         this.submitUpdate(data)
@@ -733,7 +736,7 @@ export default {
     },
     checkValid () {
       this.$v.newInvoice.$touch()
-      this.$v.selectedCustomer.$touch()
+      //this.$v.selectedCustomer.$touch()
 
       window.hub.$emit('checkInventory')
       let isValid = true
@@ -742,7 +745,10 @@ export default {
           isValid = false
         }
       })
-      if (!this.$v.selectedCustomer.$invalid && this.$v.newInvoice.$invalid === false && isValid === true) {
+      // if (!this.$v.selectedCustomer.$invalid && this.$v.newInvoice.$invalid === false && isValid === true) {
+      //   return true
+      // }
+      if (this.$v.newInvoice.$invalid === false && isValid === true) {
         return true
       }
       return false

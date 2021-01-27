@@ -384,7 +384,7 @@ class ReportController extends Controller
 
     public function getLedgersInReport(Request $request)
     {
-        $ledgers = AccountLedger::get();
+        $ledgers = AccountLedger::where('company_id', $request->header('company'))->get();
         return response()->json([
             'ledgers' => $ledgers,
         ]);
