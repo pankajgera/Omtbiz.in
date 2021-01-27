@@ -130,7 +130,6 @@ export default {
       set: function(value) {
         this.ledger = value;
         // let legder_id = this.ledgersArr.find(i => i.account === value).id
-        // console.log('legder_id', legder_id,value)
         // if (legder_id) {
         //   this.onChangeLedgers(legder_id)
         // }

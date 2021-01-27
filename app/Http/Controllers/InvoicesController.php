@@ -87,8 +87,7 @@ class InvoicesController extends Controller
         }
 
         $sundryDebtorsList = [];
-        $debitor = AccountMaster::where('name', 'Sundry Debtors')->first();
-        $ledgers = AccountLedger::where('account_master_id', $debitor->id)->get();
+        $ledgers = AccountLedger::where('company_id', $request->header('company'))->get();
 
         foreach ($ledgers as $each) {
             $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();

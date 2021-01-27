@@ -158,7 +158,7 @@ export default {
   data () {
     return {
       formData: {
-        // user_id: null,
+        user_id: null,
         payment_number: null,
         payment_date: null,
         amount: 0,
