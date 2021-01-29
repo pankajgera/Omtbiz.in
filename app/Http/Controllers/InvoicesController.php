@@ -256,8 +256,8 @@ class InvoicesController extends Controller
     public function edit(Request $request, $id)
     {
         $invoice = Invoice::with([
-            'items',
-            'items.taxes',
+            'inventories',
+            'inventories.taxes',
             'user',
             'invoiceTemplate',
             'taxes.taxType'

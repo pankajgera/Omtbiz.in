@@ -350,6 +350,7 @@ export default {
           let response = await this.updateReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.updated_message'))
+            this.$router.push('/receipts/create')
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -375,6 +376,7 @@ export default {
           let response = await this.addReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.created_message'))
+            this.$router.push('/receipts/create')
             this.isLoading = true
             return true
           }
