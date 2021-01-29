@@ -27,7 +27,7 @@ class ExpiringStorage {
 
     const expires = new Date(currentTime + lifeTimeInMinutes * 60000)
 
-    if (localStorage) {
+    if (localStorage && key) {
       localStorage.setItem(key, JSON.stringify({ value, expires }))
       localStorage.setInventory(key, JSON.stringify({ value, expires }))
     }

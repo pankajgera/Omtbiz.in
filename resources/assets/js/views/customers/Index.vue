@@ -168,11 +168,11 @@
           show="phone"
         />
         <table-column
-          :label="$t('customers.amount_due')"
+          :label="$t('customers.due_amount')"
           show="due_amount"
         >
           <template slot-scope="row">
-            <span> {{ $t('customers.amount_due') }} </span>
+            <span> {{ $t('customers.due_amount') }} </span>
             <div v-html="$utils.formatMoney(row.due_amount, row.currency)"/>
           </template>
         </table-column>

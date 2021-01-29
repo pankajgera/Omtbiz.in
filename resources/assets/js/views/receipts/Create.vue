@@ -160,7 +160,7 @@ export default {
       money: {
         decimal: '.',
         thousands: ',',
-        prefix: '$ ',
+        prefix: '₹ ',
         precision: 2,
         masked: false
       },
@@ -280,9 +280,10 @@ export default {
       'fetchReceipt'
     ]),
     invoiceWithAmount ({ invoice_number, due_amount }) {
-      return `${invoice_number} (${this.$utils.formatGraphMoney(due_amount, this.customer.currency)})`
+      return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
     },
     async loadData () {
+      this.fetchCustomerInvoices()
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
         //this.customerList = response.data.customers
@@ -296,7 +297,6 @@ export default {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
           this.invoice = response.data.receipt.invoice
         }
-        // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreateReceipt()
         Object.values(response.data.usersOfSundryDebitors).map((each, key) => {
@@ -319,11 +319,11 @@ export default {
     },
     async setReceiptAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)
-      this.formData.amount = data.data.invoice.due_amount
-      this.maxPayableAmount = data.data.invoice.due_amount
+      this.formData.amount = parseFloat(data.data.invoice.due_amount/100).toFixed(2)
+      this.maxPayableAmount = parseFloat(data.data.invoice.due_amount/100).toFixed(2)
     },
-    async fetchCustomerInvoices (userID) {
-      let response = await axios.get(`/api/invoices/unpaid/${userID}`)
+    async fetchCustomerInvoices () {
+      let response = await axios.get(`/api/invoices/unpaid/`)
       if (response.data) {
         this.invoiceList = response.data.invoices
       }
@@ -350,7 +350,7 @@ export default {
           let response = await this.updateReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.updated_message'))
-            this.$router.push('/receipts')
+            this.$router.push('/receipts/create')
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -376,7 +376,7 @@ export default {
           let response = await this.addReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.created_message'))
-            this.$router.push('/receipts')
+            this.$router.push('/receipts/create')
             this.isLoading = true
             return true
           }
