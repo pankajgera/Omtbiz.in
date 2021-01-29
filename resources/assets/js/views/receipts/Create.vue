@@ -299,12 +299,7 @@ export default {
         }
       } else {
         let response = await this.fetchCreateReceipt()
-        Object.values(response.data.usersOfSundryDebitors).map((each, key) => {
-          this.partyNameList.push({
-            'name': each,
-            'id': key
-          });
-        });
+        this.partyNameList = response.data.usersOfSundryDebitors;
         //this.customerList = response.data.customers
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
@@ -351,6 +346,7 @@ export default {
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.updated_message'))
             this.$router.push('/receipts/create')
+            this.isLoading = false
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -377,7 +373,7 @@ export default {
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.created_message'))
             this.$router.push('/receipts/create')
-            this.isLoading = true
+            this.isLoading = false
             return true
           }
           if (response.data.error === 'invalid_amount') {

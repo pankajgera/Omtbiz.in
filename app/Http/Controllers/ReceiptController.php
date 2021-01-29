@@ -68,16 +68,7 @@ class ReceiptController extends Controller
             $nextReceiptNumberAttribute = $nextReceiptNumber;
         }
 
-        $usersOfSundryDebitors = [];
-        $debitor = AccountMaster::where('name', 'Sundry Debtors')->first();
-        $ledgers = AccountLedger::where('account_master_id', $debitor->id)->get();
-
-        foreach ($ledgers as $each) {
-            $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();
-            foreach ($vouchers as $ee) {
-                $usersOfSundryDebitors[] = $ee->account;
-            }
-        }
+        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('name')->get();
 
         return response()->json([
             'customers' => User::where('role', 'customer')
@@ -86,7 +77,7 @@ class ReceiptController extends Controller
             'nextReceiptNumberAttribute' => $nextReceiptNumberAttribute,
             'nextReceiptNumber' => $receipt_prefix . '-' . $nextReceiptNumber,
             'receipt_prefix' => $receipt_prefix,
-            'usersOfSundryDebitors' => array_unique($usersOfSundryDebitors, SORT_REGULAR),
+            'usersOfSundryDebitors' => $usersOfSundryDebitors,
         ]);
     }
 

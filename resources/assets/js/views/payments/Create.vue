@@ -309,12 +309,7 @@ export default {
         // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreatePayment()
-        Object.values(response.data.usersOfSundryCreditor).map((each, key) => {
-          this.partyNameList.push({
-            'name': each,
-            'id': key
-          });
-        }); //Users in sundry creditor
+        this.partyNameList = response.data.usersOfSundryCreditor
         //this.customerList = response.data.customers
         this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix
@@ -361,6 +356,7 @@ export default {
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.updated_message'))
             this.$router.push('/payments/create')
+            this.isLoading = false
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -387,7 +383,7 @@ export default {
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.created_message'))
             this.$router.push('/payments/create')
-            this.isLoading = true
+            this.isLoading = false
             return true
           }
           if (response.data.error === 'invalid_amount') {
