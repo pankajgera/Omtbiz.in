@@ -177,9 +177,9 @@
                 <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'PARTIALLY_PAID')? row.status : row.status.replace('_', ' ') }}</span>
               </template>
             </table-column>
-            <table-column :label="$t('dashboard.recent_invoices_card.amount_due')" show="due_amount" sort-as="due_amount">
+            <table-column :label="$t('dashboard.recent_invoices_card.due_amount')" show="due_amount" sort-as="due_amount">
               <template slot-scope="row">
-                <span>{{ $t('dashboard.recent_invoices_card.amount_due') }}</span>
+                <span>{{ $t('dashboard.recent_invoices_card.due_amount') }}</span>
                 <div v-html="$utils.formatMoney(row.due_amount, row.user.currency)"/>
               </template>
             </table-column>
@@ -259,9 +259,9 @@
                 <span :class="'est-status-'+row.status.toLowerCase()">{{ row.status }}</span>
               </template>
             </table-column>
-            <table-column :label="$t('dashboard.recent_estimate_card.amount_due')" show="total" sort-as="total">
+            <table-column :label="$t('dashboard.recent_estimate_card.due_amount')" show="total" sort-as="total">
               <template slot-scope="row">
-                <span>{{ $t('dashboard.recent_estimate_card.amount_due') }}</span>
+                <span>{{ $t('dashboard.recent_estimate_card.due_amount') }}</span>
                 <div v-html="$utils.formatMoney(row.total, row.user.currency)"/>
               </template>
             </table-column>

@@ -513,10 +513,10 @@ class InvoicesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCustomersUnpaidInvoices(Request $request, $id)
+    public function getCustomersUnpaidInvoices(Request $request)
     {
         $invoices = Invoice::where('paid_status', '<>', Invoice::STATUS_PAID)
-            ->where('user_id', $id)->where('due_amount', '>', 0)
+            ->where('due_amount', '>', 0)
             ->whereCompany($request->header('company'))
             ->get();
 

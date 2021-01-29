@@ -247,7 +247,7 @@ class PaymentTest extends TestCase
             'user_id' => $user->id
         ]);
 
-        $response = $this->json('GET', 'api/invoices/unpaid/'.$user->id);
+        $response = $this->json('GET', 'api/invoices/unpaid/');
 
         $response->assertOk();
     }

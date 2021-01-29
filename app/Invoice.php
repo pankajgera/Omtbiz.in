@@ -92,7 +92,7 @@ class Invoice extends Model
         return sprintf('%06d', intval($number) + 1);
     }
 
-    public function inventories()
+    public function items()
     {
         return $this->hasMany('Crater\InvoiceItem');
     }

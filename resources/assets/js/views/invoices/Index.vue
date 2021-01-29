@@ -218,12 +218,12 @@
           show="invoice_number"
         />
         <table-column
-          :label="$t('invoices.amount_due')"
+          :label="$t('invoices.due_amount')"
           sort-as="due_amount"
         >
           <template slot-scope="row">
-            <span>{{ $t('invoices.amount_due') }}</span>
-            <div v-html="$utils.formatMoney(row.due_amount, row.user.currency)"/>
+            <span>{{ $t('invoices.due_amount') }}</span>
+             	₹ {{ (row.due_amount/100).toFixed(2) }}
           </template>
         </table-column>
         <table-column
@@ -285,7 +285,7 @@ export default {
   data () {
     return {
       showFilters: false,
-      currency: null,
+      //currency: null,
       status: [
         {
           label: 'Status',
@@ -455,7 +455,7 @@ export default {
       let response = await this.fetchInvoices(data)
       this.isRequestOngoing = false
 
-      this.currency = response.data.currency
+      //this.currency = response.data.currency
 
       return {
         data: response.data.invoices.data,

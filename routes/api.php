@@ -203,7 +203,7 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InvoicesController@markAsSent'
     ]);
 
-    Route::get('/invoices/unpaid/{id}', [
+    Route::get('/invoices/unpaid', [
         'as' => 'bootstrap',
         'uses' => 'InvoicesController@getCustomersUnpaidInvoices'
     ]);
