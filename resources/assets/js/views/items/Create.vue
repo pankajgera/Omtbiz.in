@@ -30,32 +30,6 @@
                   </span>
                 </div>
               </div>
-              <!-- <div class="form-group">
-                <label>{{ $t('items.price') }}</label><span class="text-danger"> *</span>
-                <div class="base-input">
-                  <money
-                    :class="{'invalid' : $v.formData.price.$error}"
-                    v-model="price"
-                    v-bind="defaultCurrencyForInput"
-                    class="input-field"
-                  />
-                </div>
-                <div v-if="$v.formData.price.$error">
-                  <span v-if="!$v.formData.price.required" class="text-danger">{{ $t('validation.required') }} </span>
-                  <span v-if="!$v.formData.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
-                  <span v-if="!$v.formData.price.minValue" class="text-danger">{{ $t('validation.price_minvalue') }}</span>
-                </div>
-              </div> -->
-              <!-- <div class="form-group">
-                <label>{{ $t('items.unit') }}</label>
-                <base-input
-                  v-model.trim="formData.unit"
-                  focus
-                  type="text"
-                  name="unit"
-                  @input="$v.formData.unit.$touch()"
-                />
-              </div> -->
               <div class="form-group">
                 <label>{{ $t('items.bill_ty') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -161,9 +135,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('currency', [
-      'defaultCurrencyForInput'
-    ]),
     price: {
       get: function () {
         return this.formData.price / 100

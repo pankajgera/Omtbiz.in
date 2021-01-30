@@ -24,14 +24,12 @@
         <div class="form-group row">
           <label class="col-sm-4 col-form-label input-label">{{ $t('items.price') }}<span class="required">*</span></label>
           <div class="col-sm-7">
-            <div class="base-input">
-              <money
-                :class="{'invalid' : $v.formData.price.$error}"
-                v-model="price"
-                v-bind="defaultCurrencyForInput"
-                class="input-field"
+            <base-input
+                v-model.trim="price"
+                :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                type="text"
+                name="price"
               />
-            </div>
             <div v-if="$v.formData.price.$error">
               <span v-if="!$v.formData.price.required" class="text-danger">{{ $tc('validation.required') }}</span>
               <span v-if="!$v.formData.price.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
@@ -127,9 +125,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('currency', [
-      'defaultCurrencyForInput'
-    ]),
     price: {
       get: function () {
         return this.formData.price / 100

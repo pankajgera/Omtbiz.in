@@ -21,16 +21,6 @@
               </base-button>
             </a>
           </div>
-          <div class="col-xs-2">
-            <base-button
-              :loading="isLoading"
-              icon="save"
-              color="theme"
-              type="submit"
-            >
-              {{ isEdit ? $t('expenses.update_expense') : $t('expenses.save_expense') }}
-            </base-button>
-          </div>
         </div>
       </div>
       <div class="row">
@@ -88,14 +78,12 @@
                 </div>
                 <div class="form-group col-sm-6">
                   <label>{{ $t('expenses.amount') }}</label> <span class="text-danger"> * </span>
-                  <div class="base-input">
-                    <money
-                      :class="{'invalid' : $v.formData.amount.$error}"
-                      v-model="amount"
-                      v-bind="defaultCurrencyForInput"
-                      class="input-field"
+                  <base-input
+                      v-model.trim="amount"
+                      :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
+                      type="text"
+                      name="amount"
                     />
-                  </div>
                   <div v-if="$v.formData.amount.$error">
                     <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }} </span>
                     <span v-if="!$v.formData.amount.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
@@ -136,6 +124,16 @@
                     </base-button>
                   </div>
                 </div>
+              </div>
+              <div class="col-xs-2">
+                <base-button
+                  :loading="isLoading"
+                  icon="save"
+                  color="theme"
+                  type="submit"
+                >
+                  {{ isEdit ? $t('expenses.update_expense') : $t('expenses.save_expense') }}
+                </base-button>
               </div>
             </div>
           </div>
@@ -207,9 +205,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('currency', [
-      'defaultCurrencyForInput'
-    ]),
     amount: {
       get: function () {
         return this.formData.amount / 100
