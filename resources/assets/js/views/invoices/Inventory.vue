@@ -48,14 +48,12 @@
             <td class="text-left">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
-                  <div class="base-input">
-                    <money
-                      v-model="price"
-                      v-bind="customerCurrency"
-                      class="input-field"
-                      @input="$v.inventory.price.$touch()"
-                    />
-                  </div>
+                   <base-input
+                    v-model.trim="price"
+                    :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                    type="text"
+                    name="price"
+                  />
                   <div v-if="$v.inventory.price.$error">
                     <span v-if="!$v.inventory.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
                   </div>
@@ -206,22 +204,6 @@ export default {
     ...mapGetters('modal', [
       'modalActive'
     ]),
-    ...mapGetters('currency', [
-      'defaultCurrencyForInput'
-    ]),
-    customerCurrency () {
-      if (this.currency) {
-        return {
-          decimal: this.currency.decimal_separator,
-          thousands: this.currency.thousand_separator,
-          prefix: this.currency.symbol + ' ',
-          precision: this.currency.precision,
-          masked: false
-        }
-      } else {
-        return this.defaultCurrenctForInput
-      }
-    },
     subtotal () {
       return this.inventory.price * this.inventory.quantity
     },

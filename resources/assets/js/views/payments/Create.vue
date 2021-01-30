@@ -27,21 +27,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label class="form-label">{{ $t('payments.payment_number') }}</label><span class="text-danger"> *</span>
-                <base-prefix-input
-                  :invalid="$v.paymentNumAttribute.$error"
-                  v-model.trim="paymentNumAttribute"
-                  :prefix="paymentPrefix"
-                  @input="$v.paymentNumAttribute.$touch()"
-                />
-                <div v-if="$v.paymentNumAttribute.$error">
-                  <span v-if="!$v.paymentNumAttribute.required" class="text-danger">{{ $tc('validation.required') }}</span>
-                  <span v-if="!$v.paymentNumAttribute.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
-                </div>
-              </div>
-            </div> -->
             <div class="col-sm-6">
               <label class="form-label">{{ $t('payments.list') }}</label><span class="text-danger"> *</span>
               <base-select
@@ -60,33 +45,15 @@
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label class="form-label">{{ $t('payments.invoice') }}</label>
-                <base-select
-                  v-model="invoice"
-                  :options="invoiceList"
-                  :searchable="true"
-                  :show-labels="false"
-                  :allow-empty="false"
-                  :disabled="isEdit"
-                  :placeholder="$t('invoices.select_invoice')"
-                  :custom-label="invoiceWithAmount"
-                  track-by="invoice_number"
-                />
-              </div>
-            </div> -->
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.amount') }}</label><span class="text-danger"> *</span>
-                <div class="base-input">
-                  <money
-                    :class="{'invalid' : $v.formData.amount.$error}"
-                    v-model="amount"
-                    v-bind="customerCurrency"
-                    class="input-field"
+                 <base-input
+                    v-model.trim="amount"
+                    :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
+                    type="text"
+                    name="amount"
                   />
-                </div>
                 <div v-if="$v.formData.amount.$error">
                   <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
                   <span v-if="!$v.formData.amount.between && $v.formData.amount.numeric && amount <= 0" class="text-danger">{{ $t('validation.payment_greater_than_zero') }}</span>
@@ -233,19 +200,6 @@ export default {
       }
       return false
     },
-    customerCurrency () {
-      if (this.customer && this.customer.currency) {
-        return {
-          decimal: this.customer.currency.decimal_separator,
-          thousands: this.customer.currency.thousand_separator,
-          prefix: this.customer.currency.symbol + ' ',
-          precision: this.customer.currency.precision,
-          masked: false
-        }
-      } else {
-        return this.defaultCurrencyForInput
-      }
-    }
   },
   watch: {
     // customer (newValue) {

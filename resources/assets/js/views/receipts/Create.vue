@@ -79,14 +79,12 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.amount') }}</label><span class="text-danger"> *</span>
-                <div class="base-input">
-                  <money
-                    :class="{'invalid' : $v.formData.amount.$error}"
-                    v-model="amount"
-                    v-bind="customerCurrency"
-                    class="input-field"
+                 <base-input
+                    v-model.trim="amount"
+                    :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
+                    type="text"
+                    name="amount"
                   />
-                </div>
                 <div v-if="$v.formData.amount.$error">
                   <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
                   <span v-if="!$v.formData.amount.between && $v.formData.amount.numeric && amount <= 0" class="text-danger">{{ $t('validation.receipt_greater_than_zero') }}</span>
@@ -223,19 +221,6 @@ export default {
       }
       return false
     },
-    customerCurrency () {
-      if (this.customer && this.customer.currency) {
-        return {
-          decimal: this.customer.currency.decimal_separator,
-          thousands: this.customer.currency.thousand_separator,
-          prefix: this.customer.currency.symbol + ' ',
-          precision: this.customer.currency.precision,
-          masked: false
-        }
-      } else {
-        return this.defaultCurrencyForInput
-      }
-    }
   },
   watch: {
     // customer (newValue) {
