@@ -37,6 +37,7 @@ import voucher from './modules/voucher'
 import group from './modules/group'
 import CustomersReport from './modules/reports/customers'
 import states from './modules/states'
+import banks from './modules/banks'
 
 Vue.use(Vuex)
 
@@ -83,6 +84,7 @@ export default new Vuex.Store({
         voucher,
         group,
         CustomersReport,
-        states
+        states,
+        banks,
     }
 })

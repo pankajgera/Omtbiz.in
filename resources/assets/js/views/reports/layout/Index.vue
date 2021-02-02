@@ -45,6 +45,9 @@
           <li class="tab">
             <router-link class="tab-link" to="/reports/customers">{{ $t('reports.customers.customers') }}</router-link>
           </li>
+          <li class="tab">
+            <router-link class="tab-link" to="/reports/banks">{{ $t('reports.banks.banks') }}</router-link>
+          </li>
         </ul>
       </div>
     </div>
