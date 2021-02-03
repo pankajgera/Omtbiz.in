@@ -399,57 +399,60 @@ class ReportController extends Controller
     }
 
     /**
-     * Customer report
+     * Banks Report
      */
     public function banksReport($hash, Request $request)
     {
-        $masters = AccountMaster::where('name_en', 'LIKE', '%Bank%')->get();
-        $ledgers = AccountLedger::whereIn('account_master_id', $masters)->get();
+        $related_vouchers = [];
+        $masters = AccountMaster::where('groups', 'LIKE', '%Bank%')->get();
+        foreach($masters as $master) {
+            array_push($related_vouchers, Voucher::where('account_master_id', $master->id)->get()->toArray());
+        }
 
-        // $company = Company::where('unique_hash', $hash)->first();
+        $company = Company::where('unique_hash', $hash)->first();
         // $vouchers_by_ledger = Voucher::where('account_ledger_id', $request->ledger_id)->get();
         // $ledger = AccountLedger::findOrFail($request->ledger_id);
-        $all_voucher_ids = Voucher::where('account_ledger_id', $request->ledger_id)->whereNotNull('related_voucher')->get();
-        $each_ids = null;
-        foreach ($all_voucher_ids as $each) {
-            if ($each_ids) {
-                $each_ids = $each_ids . ', ' . $each->related_voucher;
-            } else {
-                $each_ids = $each->related_voucher;
-            }
-        }
-        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
-            ->where('account_ledger_id', '!=', $request->ledger_id)
-            ->orderBy('id')
-            ->get();
+        //$all_voucher_ids = Voucher::where('account_ledger_id', $request->ledger_id)->whereNotNull('related_voucher')->get();
+        // $each_ids = null;
+        // foreach ($all_voucher_ids as $each) {
+        //     if ($each_ids) {
+        //         $each_ids = $each_ids . ', ' . $each->related_voucher;
+        //     } else {
+        //         $each_ids = $each->related_voucher;
+        //     }
+        // }
+        //$unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        // $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+        //     ->where('account_ledger_id', '!=', $request->ledger_id)
+        //     ->orderBy('id')
+        //     ->get();
         $totalAmount = 0;
-        foreach ($related_vouchers as $each) {
-            $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
-        }
-        $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
-        $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
-        $balance = $ledger->debit - $ledger->credit;
-        $opening_balance = $ledger->accountMaster->opening_balance;
-        $calc_balance = $opening_balance > $balance ? $opening_balance - $balance :
-            ($opening_balance > 0 ? $balance - $opening_balance : abs($balance));
-        if ($vouchers_debit_sum > $vouchers_credit_sum) {
-            $ledger->update([
-                'type' => 'Dr',
-                'credit' => $vouchers_credit_sum,
-                'debit' => $vouchers_debit_sum,
-                'balance' => $calc_balance,
-            ]);
-        } elseif ($vouchers_debit_sum < $vouchers_credit_sum) {
-            $ledger->update([
-                'type' => 'Cr',
-                'credit' => $vouchers_credit_sum,
-                'debit' => $vouchers_debit_sum,
-                'balance' => $calc_balance,
-            ]);
-        }
-        $ledgerType = $ledger->type === 'Cr' ? 'Dr' : 'Cr';
-        $totalAmount = $ledger->balance;
+        // foreach ($related_vouchers as $each) {
+        //     $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+        // }
+        // $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
+        // $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+        // $balance = $ledger->debit - $ledger->credit;
+        // $opening_balance = $ledger->accountMaster->opening_balance;
+        // $calc_balance = $opening_balance > $balance ? $opening_balance - $balance :
+        //     ($opening_balance > 0 ? $balance - $opening_balance : abs($balance));
+        // if ($vouchers_debit_sum > $vouchers_credit_sum) {
+        //     $ledger->update([
+        //         'type' => 'Dr',
+        //         'credit' => $vouchers_credit_sum,
+        //         'debit' => $vouchers_debit_sum,
+        //         'balance' => $calc_balance,
+        //     ]);
+        // } elseif ($vouchers_debit_sum < $vouchers_credit_sum) {
+        //     $ledger->update([
+        //         'type' => 'Cr',
+        //         'credit' => $vouchers_credit_sum,
+        //         'debit' => $vouchers_debit_sum,
+        //         'balance' => $calc_balance,
+        //     ]);
+        // }
+        // $ledgerType = $ledger->type === 'Cr' ? 'Dr' : 'Cr';
+        // $totalAmount = $ledger->balance;
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
         $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date)->format($dateFormat);
@@ -471,9 +474,6 @@ class ReportController extends Controller
             ->get();
 
         view()->share([
-            'ledgerType' => $ledgerType,
-            'opening_balance' => $opening_balance,
-            'opening_balance_type' => $ledger->accountMaster->type,
             'related_vouchers' => $related_vouchers,
             'totalAmount' => $totalAmount,
             'colorSettings' => $colorSettings,
@@ -482,7 +482,7 @@ class ReportController extends Controller
             'to_date' => $to_date
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.customers');
+        $pdf = PDF::loadView('app.pdf.reports.banks');
 
         if ($request->has('download')) {
             return $pdf->download();

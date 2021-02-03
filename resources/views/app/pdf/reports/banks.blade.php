@@ -222,7 +222,7 @@
                 </td>
                 <td class="tax-total-cell">
                     <p class="" style="float:right; padding:0px; margin: 0px">
-                        ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
+                        {{--  ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}  --}}
                     </p>
                 </td>
             </tr>
@@ -232,7 +232,7 @@
                 </td>
                 <td class="tax-total-cell">
                     <p class="" style="float:right; padding:0px; margin: 0px">
-                        ₹ {!! $totalAmount !!} {!! $ledgerType !!}
+                        {{--  ₹ {!! $totalAmount !!} {!! $ledgerType !!}  --}}
                     </p>
                 </td>
             </tr>
