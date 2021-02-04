@@ -14,7 +14,7 @@ export const defaultCurrencyForInput = (state) => {
   return {
     decimal: '.',
     thousands: ',',
-    prefix: '$ ',
+    prefix: '₹ ',
     precision: 2,
     masked: false
   }

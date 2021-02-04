@@ -50,11 +50,7 @@
                 :options="partyNameList"
                 :searchable="true"
                 :show-labels="false"
-                :allow-empty="false"
-                :disabled="isEdit"
                 :placeholder="$t('receipts.select_a_list')"
-                label="name"
-                track-by="id"
               />
               <div v-if="$v.formData.list.$error">
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -100,9 +96,12 @@
                   :options="getReceiptMode"
                   :searchable="true"
                   :show-labels="false"
-                  :class="{'invalid' : $v.formData.amount.$error}"
+                  :class="{'invalid' : $v.formData.receipt_mode.$error}"
                   :placeholder="$t('receipts.select_receipt_mode')"
                 />
+                <div v-if="$v.formData.receipt_mode.$error">
+                  <span v-if="!$v.formData.receipt_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                </div>
               </div>
             </div>
             <div class="col-sm-6 ">
@@ -149,7 +148,7 @@ export default {
         // user_id: null,
         receipt_number: null,
         receipt_date: null,
-        amount: 0,
+        amount: null,
         receipt_mode: null,
         invoice_id: null,
         notes: null,
@@ -284,7 +283,7 @@ export default {
         }
       } else {
         let response = await this.fetchCreateReceipt()
-        this.partyNameList = response.data.usersOfSundryDebitors;
+        this.partyNameList = response.data.usersOfSundryDebitors.map(each => each.name)
         //this.customerList = response.data.customers
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
@@ -316,7 +315,6 @@ export default {
       }
 
       this.formData.receipt_number = this.receiptPrefix + '-' + this.receiptNumAttribute
-      this.formData.list = this.formData.list.name
       this.formData.user_id = this.user.id
       if (this.isEdit) {
         let data = {
@@ -330,8 +328,9 @@ export default {
           let response = await this.updateReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.updated_message'))
-            this.$router.push('/receipts/create')
-            this.isLoading = false
+            setTimeout(() => {
+              window.location.reload()
+            }, 2000)
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -345,7 +344,7 @@ export default {
             window.toastr['error'](err.response.data.errors.receipt_number)
             return true
           }
-          window.toastr['error'](err.response.data.message)
+          window.toastr['error'](err)
         }
       } else {
         let data = {
@@ -357,8 +356,9 @@ export default {
           let response = await this.addReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.created_message'))
-            this.$router.push('/receipts/create')
-            this.isLoading = false
+            setTimeout(() => {
+              window.location.reload()
+            }, 2000)
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -372,7 +372,7 @@ export default {
             window.toastr['error'](err.response.data.errors.receipt_number)
             return true
           }
-          window.toastr['error'](err.response.data.message)
+          window.toastr['error'](err)
         }
       }
     }

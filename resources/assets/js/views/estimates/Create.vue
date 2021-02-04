@@ -649,7 +649,7 @@ export default {
           window.toastr['error'](err.response.data.errors.estimate_number)
           return true
         }
-        window.toastr['error'](err.response.data.message)
+        window.toastr['error'](err)
       })
     },
     submitUpdate (data) {
@@ -666,7 +666,7 @@ export default {
           window.toastr['error'](err.response.data.errors.estimate_number)
           return true
         }
-        window.toastr['error'](err.response.data.message)
+        window.toastr['error'](err)
       })
     },
     checkItemsData (index, isValid) {

@@ -189,7 +189,7 @@ export default {
       money: {
         decimal: '.',
         thousands: ',',
-        prefix: '$ ',
+        prefix: '₹ ',
         precision: 2,
         masked: false
       },
