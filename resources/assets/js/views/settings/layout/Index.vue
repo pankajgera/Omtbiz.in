@@ -3,7 +3,7 @@
     <div class="page-header">
       <h3 class="page-title">{{ $tc('settings.setting',1) }}</h3>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/settings/user-profile">{{ $tc('settings.setting', 2) }}</router-link></li>
       </ol>
     </div>

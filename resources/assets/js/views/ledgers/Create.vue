@@ -3,7 +3,7 @@
     <div class="page-header">
       <h3 class="page-title">{{ isEdit ? $t('ledgers.edit_ledger') : $t('ledgers.new_ledger') }}</h3>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/ledgers">{{ $tc('ledgers.ledgers_list',2) }}</router-link></li>
         <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('ledgers.edit_ledger') : $t('ledgers.new_ledger') }}</a></li>
       </ol>
