@@ -4,7 +4,7 @@
       <div class="page-header">
         <h3 class="page-title">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
           <!-- <li class="breadcrumb-item"><router-link slot="item-title" to="/payments">{{ $tc('payments.payment', 2) }}</router-link></li> -->
           <li class="breadcrumb-item">{{ isEdit ? $t('payments.edit_payment') : $t('payments.new_payment') }}</li>
         </ol>
@@ -31,15 +31,11 @@
               <label class="form-label">{{ $t('payments.list') }}</label><span class="text-danger"> *</span>
               <base-select
                 v-model="formData.list"
-                :invalid="$v.formData.list.$error"
+                :class="{'invalid' : $v.formData.list.$error}"
                 :options="partyNameList"
                 :searchable="true"
                 :show-labels="false"
-                :allow-empty="false"
-                :disabled="isEdit"
                 :placeholder="$t('payments.select_a_list')"
-                label="name"
-                track-by="id"
               />
               <div v-if="$v.formData.list.$error">
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -69,9 +65,12 @@
                   :options="getPaymentMode"
                   :searchable="true"
                   :show-labels="false"
-                  :class="{'invalid' : $v.formData.amount.$error}"
+                  :class="{'invalid' : $v.formData.payment_mode.$error}"
                   :placeholder="$t('payments.select_payment_mode')"
                 />
+                <div v-if="$v.formData.payment_mode.$error">
+                  <span v-if="!$v.formData.payment_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                </div>
               </div>
             </div>
             <div class="col-sm-6 ">
@@ -128,7 +127,7 @@ export default {
         user_id: null,
         payment_number: null,
         payment_date: null,
-        amount: 0,
+        amount: null,
         payment_mode: null,
         // invoice_id: null,
         notes: null,
@@ -137,7 +136,7 @@ export default {
       money: {
         decimal: '.',
         thousands: ',',
-        prefix: '$ ',
+        prefix: '₹ ',
         precision: 2,
         masked: false
       },
@@ -148,7 +147,7 @@ export default {
       isLoading: false,
       maxPayableAmount: Number.MAX_SAFE_INTEGER,
       isSettingInitialData: true,
-      paymentNumAttribute: null,
+      //paymentNumAttribute: null,
       paymentPrefix: '',
       partyNameList: []
     }
@@ -170,10 +169,10 @@ export default {
           between: between(1, this.maxPayableAmount + 1)
         },
       },
-      paymentNumAttribute: {
-        required,
-        numeric
-      }
+      // paymentNumAttribute: {
+      //   required,
+      //   numeric
+      // }
     }
   },
   computed: {
@@ -255,7 +254,7 @@ export default {
         this.formData.payment_date = moment(response.data.payment.payment_date, 'YYYY-MM-DD').toString()
         this.formData.amount = parseFloat(response.data.payment.amount)
         this.paymentPrefix = response.data.payment_prefix
-        this.paymentNumAttribute = response.data.nextPaymentNumber
+        //this.paymentNumAttribute = response.data.nextPaymentNumber
         if (response.data.payment.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
@@ -263,9 +262,9 @@ export default {
         // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreatePayment()
-        this.partyNameList = response.data.usersOfSundryCreditor
+        this.partyNameList = response.data.usersOfSundryCreditor.map(each => each.name)
         //this.customerList = response.data.customers
-        this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
+        //this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix
         this.formData.payment_date = moment(new Date()).toString()
       }
@@ -295,7 +294,6 @@ export default {
       }
 
       //this.formData.payment_number = this.paymentPrefix + '-' + this.paymentNumAttribute
-      this.formData.list = this.formData.list.name
       this.formData.user_id = this.user.id
       if (this.isEdit) {
         let data = {
@@ -309,8 +307,9 @@ export default {
           let response = await this.updatePayment(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.updated_message'))
-            this.$router.push('/payments/create')
-            this.isLoading = false
+            setTimeout(() => {
+              window.location.reload()
+            }, 2000)
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -320,11 +319,7 @@ export default {
           window.toastr['error'](response.data.error)
         } catch (err) {
           this.isLoading = false
-          // if (err.response.data.errors.payment_number) {
-          //   window.toastr['error'](err.response.data.errors.payment_number)
-          //   return true
-          // }
-          window.toastr['error'](err.response.data.message)
+          window.toastr['error'](err)
         }
       } else {
         let data = {
@@ -336,8 +331,9 @@ export default {
           let response = await this.addPayment(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('payments.created_message'))
-            this.$router.push('/payments/create')
-            this.isLoading = false
+            setTimeout(() => {
+              window.location.reload()
+            }, 2000)
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -347,11 +343,7 @@ export default {
           window.toastr['error'](response.data.error)
         } catch (err) {
           this.isLoading = false
-          // if (err.response.data.errors.payment_number) {
-          //   window.toastr['error'](err.response.data.errors.payment_number)
-          //   return true
-          // }
-          window.toastr['error'](err.response.data.message)
+          window.toastr['error'](err)
         }
       }
     }

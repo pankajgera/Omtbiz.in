@@ -6,7 +6,7 @@
       </h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <router-link slot="item-title" to="/">{{
+          <router-link slot="item-title" to="/invoices">{{
             $t("general.home")
           }}</router-link>
         </li>
