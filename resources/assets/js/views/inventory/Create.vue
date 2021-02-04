@@ -3,7 +3,7 @@
     <div class="page-header">
       <h3 class="page-title">{{ isEdit ? $t('inventory.edit_inventory') : $t('inventory.new_inventory') }}</h3>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/inventory">{{ $tc('inventory.inventory',2) }}</router-link></li>
         <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('inventory.edit_inventory') : $t('inventory.new_inventory') }}</a></li>
       </ol>

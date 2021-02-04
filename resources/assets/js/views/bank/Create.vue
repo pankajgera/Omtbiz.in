@@ -3,7 +3,7 @@
     <div class="page-header">
       <h3 class="page-title">{{ isEdit ? $t('banks.edit_bank') : $t('banks.new_bank') }}</h3>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/">{{ $t('general.home') }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/banks">{{ $tc('banks.banks',2) }}</router-link></li>
         <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('banks.edit_bank') : $t('banks.new_bank') }}</a></li>
       </ol>

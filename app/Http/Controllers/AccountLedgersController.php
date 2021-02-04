@@ -67,7 +67,6 @@ class AccountLedgersController extends Controller
             ->orderBy('id')
             ->get();
 
-            \Log::info('related_vouchers', [$related_vouchers, $request->header('company'), $unique_ids, $id]);
         //Update balance according to 'debit' or 'credit'
         $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
         $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');

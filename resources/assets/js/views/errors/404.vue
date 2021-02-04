@@ -6,7 +6,7 @@
         <h5>{{ $t('general.you_got_lost') }}</h5>
         <router-link
           class="btn btn-lg bg-yellow text-white"
-          to="/">
+          to="/invoices">
           <font-awesome-icon icon="arrow-left" class="icon text-white mr-2"/> {{ $t('general.go_home') }}
         </router-link>
       </div>
