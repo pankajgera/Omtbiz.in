@@ -50,7 +50,6 @@ class AccountLedgersController extends Controller
      */
     public function display(Request $request, $id)
     {
-        $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
         $ledger = AccountLedger::findOrFail($id);
         $all_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')->get();
         $each_ids = null;
@@ -63,12 +62,14 @@ class AccountLedgersController extends Controller
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
         $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
-            ->where('account_ledger_id', '!=', $id)
+            ->where('account', '!=', $ledger->account)
             ->whereCompany($request->header('company'))
             ->orderBy('id')
             ->get();
 
+            \Log::info('related_vouchers', [$related_vouchers, $request->header('company'), $unique_ids, $id]);
         //Update balance according to 'debit' or 'credit'
+        $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
         $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
         $balance = $ledger->debit - $ledger->credit;
