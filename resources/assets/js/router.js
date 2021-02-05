@@ -70,7 +70,7 @@ import ProfitLossReport from './views/reports/ProfitLossReport'
 import TaxReport from './views/reports/TaxReport.vue'
 import CustomersReport from './views/reports/CustomersReport.vue'
 import ReportLayout from './views/reports/layout/Index.vue'
-
+import BanksReport from './views/reports/BanksReport.vue'
 
 // Users
 import UserIndex from './views/users/Index.vue'
@@ -455,6 +455,11 @@ const routes = [
                     {
                       path: 'customers',
                       component: CustomersReport,
+                      meta: ['admin']
+                    },
+                    {
+                      path: 'banks',
+                      component: BanksReport,
                       meta: ['admin']
                     }
                 ]

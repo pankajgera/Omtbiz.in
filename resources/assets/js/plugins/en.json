@@ -690,6 +690,15 @@
             "from_date": "From Date",
             "date_range": "Select Date Range",
             "ledgers": "Select Ledgers"
+        },
+        "banks": {
+            "banks": "Banks",
+            "category": "Category",
+            "date": "Date",
+            "amount": "Amount",
+            "to_date": "To Date",
+            "from_date": "From Date",
+            "date_range": "Select Date Range"
         }
     },
     "settings": {

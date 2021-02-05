@@ -470,4 +470,19 @@ Route::group(['middleware' => 'api'], function () {
 
     //Get ledgers for report
     Route::get('reports/ledgers', 'ReportController@getLedgersInReport');
+
+
+    // Banks
+    //----------------------------------
+    Route::post('/banks/delete', [
+        'as' => 'banks.delete',
+        'uses' => 'BanksController@delete'
+    ]);
+
+    Route::post('/banks/update', [
+        'as' => 'banks.update',
+        'uses' => 'BanksController@update'
+    ]);
+
+    Route::resource('banks', 'BanksController');
 });
