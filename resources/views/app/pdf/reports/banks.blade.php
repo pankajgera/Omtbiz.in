@@ -191,52 +191,59 @@
             </table>
             <div class="tax-table-container">
                 <table class="tax-table">
-                    @foreach ($related_vouchers as $each)
+                    @foreach ($related_vouchers as $key => $vouchers)
+                        <div style="margin: 20px 0;">
+                            @foreach($vouchers as $j => $each)
+                                @if(isset($each['id']))
+                                    <tr>
+                                        <td>
+                                            <p class="tax-title">
+                                                {{ \Carbon\Carbon::parse($each['date'], 'UTC')->isoFormat('DD/MM/YYYY') }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="tax-title">
+                                                {{ $each['account'] }}
+                                            </p>
+                                        </td>
+                                        <td>
+                                            <p class="tax-money">
+                                                ₹ {!! ($each['debit'] > 0 ? $each['debit'] : $each['credit']) !!}
+                                                {!! ($each['debit'] > 0 ? ' Dr' : ' Cr') !!}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            <table class="tax-total-table">
+                                <tr>
+                                    <td>
+                                        <p class="total-tax-title">OPENING BALANCE</p>
+                                    </td>
+                                    <td class="tax-total-cell">
+                                        <p class="" style="float:right; padding:0px; margin: 0px">
+                                            ₹ {!! $vouchers['opening_balance'] ? $vouchers['opening_balance'] : 0.00 !!} {!! $vouchers['opening_balance'] ? $vouchers['opening_balance'] : '' !!}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    @endforeach
+                    <table class="tax-total-table">
                         <tr>
                             <td>
-                                <p class="tax-title">
-                                    {{ \Carbon\Carbon::parse($each->date, 'UTC')->isoFormat('DD/MM/YYYY') }}
-                                </p>
+                                <p class="total-tax-title">CLOSING BALANCE</p>
                             </td>
-                            <td>
-                                <p class="tax-title">
-                                    {{ $each->account }}
-                                </p>
-                            </td>
-                            <td>
-                                <p class="tax-money">
-                                    ₹ {!! ($each->debit > 0 ? $each->debit : $each->credit) !!}
-                                    {!! ($each->debit > 0 ? ' Dr' : ' Cr') !!}
+                            <td class="tax-total-cell">
+                                <p class="" style="float:right; padding:0px; margin: 0px">
+                                    ₹ {!! $credit_debit_sum !!} {!! $credit_debit_type !!}
                                 </p>
                             </td>
                         </tr>
-                    @endforeach
+                    </table>
                 </table>
             </div>
         </div>
-
-        <table class="tax-total-table">
-            <tr>
-                <td>
-                    <p class="total-tax-title">OPENING BALANCE</p>
-                </td>
-                <td class="tax-total-cell">
-                    <p class="" style="float:right; padding:0px; margin: 0px">
-                        {{--  ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}  --}}
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p class="total-tax-title">CLOSING BALANCE</p>
-                </td>
-                <td class="tax-total-cell">
-                    <p class="" style="float:right; padding:0px; margin: 0px">
-                        {{--  ₹ {!! $totalAmount !!} {!! $ledgerType !!}  --}}
-                    </p>
-                </td>
-            </tr>
-        </table>
     </div>
 </body>
 </html>
