@@ -50,7 +50,7 @@
                 <div class="flex-fillbd-highlight">
                    <base-input
                     v-model.trim="price"
-                    :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                    :class="{'invalid' : $v.inventory.price.$error, 'input-field': true}"
                     type="text"
                     name="price"
                   />

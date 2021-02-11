@@ -403,9 +403,9 @@ class ReportController extends Controller
     public function banksReport($hash, Request $request)
     {
         $related_vouchers = [];
-        $related_masters = AccountMaster::where('groups', 'LIKE', '%Bank%')->get();
+        $related_masters = AccountMaster::where('groups', 'LIKE', 'Bank%')->get();
         foreach ($related_masters as $key => $master) {
-            $vouchers = Voucher::where('account_master_id', $master->id)->where('account', '!=', $master->name)->get();
+            $vouchers = Voucher::where('account_master_id', $master->id)->where('account', '!=', $master->groups)->get();
             if (0 < count($vouchers)) {
                 array_push($related_vouchers, $vouchers->toArray());
                 $related_vouchers[$key]['opening_balance'] = $master->opening_balance;
@@ -450,7 +450,6 @@ class ReportController extends Controller
             ->whereCompany($company->id)
             ->get();
 
-            \Log::info('related_vouchers', [$related_vouchers]);
         view()->share([
             'related_vouchers' => $related_vouchers,
             'credit_debit_sum' => $credit_debit_sum,
