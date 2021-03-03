@@ -1,14 +1,14 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Crater\Expense;
-use Crater\User;
-use Crater\Currency;
-use Crater\Company;
-use Crater\CompanySetting;
+use App\Models\Expense;
+use App\Models\User;
+use App\Models\Currency;
+use App\Models\Company;
+use App\Models\CompanySetting;
 use Illuminate\Http\Request;
-use Crater\ExpenseCategory;
-use Crater\Http\Requests\ExpenseRequest;
+use App\Models\ExpenseCategory;
+use App\Http\Requests\ExpenseRequest;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 
@@ -90,7 +90,7 @@ class ExpensesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Crater\Expense $expense
+     * @param  \App\Models\Expense $expense
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Expense $expense)
@@ -121,7 +121,7 @@ class ExpensesController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \Crater\Expense $expense
+     * @param  \App\Models\Expense $expense
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(ExpenseRequest $request, Expense $expense)
@@ -149,7 +149,7 @@ class ExpensesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Crater\Expense $expense
+     * @param  \App\Models\Expense $expense
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Expense $expense)
@@ -205,7 +205,7 @@ class ExpensesController extends Controller
      * Retrive details of an expense receipt from storage.
      * @param   int $id
      * @return  \Illuminate\Http\JsonResponse
-     */ 
+     */
     public function showReceipt($id)
     {
         $expense = Expense::find($id);
@@ -239,7 +239,7 @@ class ExpensesController extends Controller
      * @param   int $id
      * @param   strig $hash
      * @return  \Symfony\Component\HttpFoundation\BinaryFileResponse | \Illuminate\Http\JsonResponse
-     */    
+     */
     public function downloadReceipt($id, $hash)
     {
         $company = Company::where('unique_hash', $hash)->first();

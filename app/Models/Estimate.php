@@ -1,8 +1,8 @@
 <?php
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Crater\CompanySetting;
+use App\Models\CompanySetting;
 use Carbon\Carbon;
 
 class Estimate extends Model
@@ -84,12 +84,12 @@ class Estimate extends Model
 
     public function items()
     {
-        return $this->hasMany('Crater\EstimateItem');
+        return $this->hasMany('App\Models\EstimateItem');
     }
 
     public function user()
     {
-        return $this->belongsTo('Crater\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function taxes()
@@ -99,7 +99,7 @@ class Estimate extends Model
 
     public function estimateTemplate()
     {
-        return $this->belongsTo('Crater\EstimateTemplate');
+        return $this->belongsTo('App\Models\EstimateTemplate');
     }
 
     public function getEstimateNumAttribute()

@@ -2,11 +2,11 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Crater\Invoice;
-use Crater\User;
-use Crater\Tax;
-use Crater\InvoiceItem;
-use Crater\InvoiceTemplate;
+use App\Models\Invoice;
+use App\Models\User;
+use App\Models\Tax;
+use App\Models\InvoiceItem;
+use App\Models\InvoiceTemplate;
 use Faker\Generator as Faker;
 
 $factory->define(Invoice::class, function (Faker $faker) {

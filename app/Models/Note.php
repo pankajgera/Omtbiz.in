@@ -1,16 +1,18 @@
 <?php
 
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Inventory extends Model
+class Note extends Model
 {
     protected $fillable = [
         'name',
-        'quantity',
-        'price',
-        'unit',
+        'design_no',
+        'rate',
+        'average',
+        'per_price',
+        'note',
         'company_id'
     ];
 
@@ -19,19 +21,19 @@ class Inventory extends Model
         return $query->where('name', 'LIKE', '%' . $name . '%');
     }
 
-    public function scopeWhereQuantity($query, $quantity)
+    public function scopeWhereDesignNo($query, $design_no)
     {
-        return $query->where('quantity', 'LIKE', '%' . $quantity . '%');
+        return $query->where('design_no', 'LIKE', '%' . $design_no . '%');
     }
 
-    public function scopeWherePrice($query, $price)
+    public function scopeWhereRate($query, $rate)
     {
-        return $query->where('price', 'LIKE', '%' . $price . '%');
+        return $query->where('rate', 'LIKE', '%' . $rate . '%');
     }
 
-    public function scopeWhereUnit($query, $unit)
+    public function scopeWhereAverage($query, $average)
     {
-        return $query->where('unit', 'LIKE', '%' . $unit . '%');
+        return $query->where('average', 'LIKE', '%' . $average . '%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -52,16 +54,16 @@ class Inventory extends Model
             $query->whereName($filters->get('name'));
         }
 
-        if ($filters->get('quantity')) {
-            $query->whereQuantity($filters->get('quantity'));
+        if ($filters->get('design_no')) {
+            $query->whereDesignNo($filters->get('design_no'));
         }
 
-        if ($filters->get('price')) {
-            $query->wherePrice($filters->get('price'));
+        if ($filters->get('rate')) {
+            $query->whereRate($filters->get('rate'));
         }
 
-        if ($filters->get('unit')) {
-            $query->whereUnit($filters->get('unit'));
+        if ($filters->get('average')) {
+            $query->whereAverage($filters->get('average'));
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {
@@ -71,10 +73,10 @@ class Inventory extends Model
         }
     }
 
-    public static function deleteInventory($id)
+    public static function deleteNote($id)
     {
-        $inventory = Inventory::find($id);
-        $inventory->delete();
+        $note = Note::find($id);
+        $note->delete();
         return true;
     }
 }

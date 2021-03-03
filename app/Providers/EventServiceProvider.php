@@ -1,15 +1,15 @@
 <?php
-namespace Crater\Providers;
+namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Crater\Events\UpdateFinished;
-use Crater\Listeners\Updates\v1\Version110;
-use Crater\Listeners\Updates\v2\Version200;
-use Crater\Listeners\Updates\v2\Version201;
-use Crater\Listeners\Updates\v2\Version202;
-use Crater\Listeners\Updates\v2\Version210;
+use App\Events\UpdateFinished;
+use App\Listeners\Updates\v1\Version110;
+use App\Listeners\Updates\v2\Version200;
+use App\Listeners\Updates\v2\Version201;
+use App\Listeners\Updates\v2\Version202;
+use App\Listeners\Updates\v2\Version210;
 
 class EventServiceProvider extends ServiceProvider
 {

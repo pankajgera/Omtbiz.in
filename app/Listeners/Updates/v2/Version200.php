@@ -1,14 +1,14 @@
 <?php
 
-namespace Crater\Listeners\Updates\v2;
+namespace App\Listeners\Updates\v2;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Database\Schema\Blueprint;
-use Crater\Listeners\Updates\Listener;
-use Crater\Events\UpdateFinished;
-use Crater\Setting;
-use Crater\Address;
+use App\Listeners\Updates\Listener;
+use App\Models\Events\UpdateFinished;
+use App\Models\Setting;
+use App\Models\Address;
 
 class Version200 extends Listener
 {
@@ -58,14 +58,14 @@ class Version200 extends Listener
             $table->string('city')->nullable();
         });
 
-        $addresses = \Crater\Address::all();
+        $addresses = \App\Models\Address::all();
         foreach ($addresses as $add) {
-            $city = \Crater\City::find($add->city_id);
+            $city = \App\Models\City::find($add->city_id);
             if($city) {
                 $add->city = $city->name;
             }
 
-            $state = \Crater\State::find($add->state_id);
+            $state = \App\Models\State::find($add->state_id);
             if($state) {
                 $add->state = $state->name;
             }

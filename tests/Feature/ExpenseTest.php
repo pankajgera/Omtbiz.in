@@ -4,10 +4,10 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Crater\User;
-use Crater\Expense;
-use Crater\CompanySetting;
-use Crater\ExpenseCategory;
+use App\Models\User;
+use App\Models\Expense;
+use App\Models\CompanySetting;
+use App\Models\ExpenseCategory;
 use Laravel\Passport\Passport;
 use SettingsSeeder;
 

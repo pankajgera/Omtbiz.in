@@ -1,13 +1,13 @@
 <?php
 
-namespace Crater\Listeners\Updates\v2;
+namespace App\Listeners\Updates\v2;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-use Crater\Events\UpdateFinished;
-use Crater\Listeners\Updates\Listener;
-use Crater\Setting;
-use Crater\CompanySetting;
+use App\Models\Events\UpdateFinished;
+use App\Listeners\Updates\Listener;
+use App\Models\Setting;
+use App\Models\CompanySetting;
 
 class Version210 extends Listener
 {

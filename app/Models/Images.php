@@ -1,6 +1,6 @@
 <?php
 
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +18,6 @@ class Images extends Model
 
     public function item()
     {
-        return $this->belongsTo(\Crater\Item::class);
+        return $this->belongsTo(\App\Models\Item::class);
     }
 }

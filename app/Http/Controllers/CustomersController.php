@@ -1,17 +1,17 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Crater\Conversation;
-use Crater\Group;
-use Crater\Http\Requests;
-use Crater\Notifications\CustomerAdded;
-use Crater\User;
+use App\Models\Conversation;
+use App\Models\Group;
+use App\Http\Requests;
+use App\Notifications\CustomerAdded;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Crater\Currency;
-use Crater\CompanySetting;
-use Crater\Address;
+use App\Models\Currency;
+use App\Models\CompanySetting;
+use App\Models\Address;
 use Illuminate\Support\Facades\DB;
 
 class CustomersController extends Controller

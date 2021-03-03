@@ -1,17 +1,17 @@
 <?php
 
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Crater\Conversation;
+use App\Models\Conversation;
 use carbon\carbon;
-use Crater\MemberLoan;
-use Crater\Address;
-use Crater\Payment;
-use Crater\Company;
-use Crater\Notifications\MailResetPasswordNotification;
+use App\Models\MemberLoan;
+use App\Models\Address;
+use App\Models\Payment;
+use App\Models\Company;
+use App\Notifications\MailResetPasswordNotification;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Illuminate\Support\Facades\DB;

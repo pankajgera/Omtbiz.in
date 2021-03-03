@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Crater\EstimateTemplate;
+use App\Models\EstimateTemplate;
 use Faker\Generator as Faker;
 
 $factory->define(EstimateTemplate::class, function (Faker $faker) {

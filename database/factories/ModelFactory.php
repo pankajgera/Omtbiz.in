@@ -1,8 +1,8 @@
 <?php
 use Illuminate\Support\Facades\Hash;
-use Crater\Address;
-use Crater\User;
-use Crater\Currency;
+use App\Models\Address;
+use App\Models\User;
+use App\Models\Currency;
 /*
 |--------------------------------------------------------------------------
 | Model Factories

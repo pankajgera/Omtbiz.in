@@ -1,31 +1,31 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\CompanySetting;
-use Crater\Company;
+use App\Models\CompanySetting;
+use App\Models\Company;
 use Illuminate\Support\Collection;
-use Crater\Currency;
-use Crater\InvoiceTemplate;
-use Crater\Http\Requests;
-use Crater\Invoice;
-use Crater\InvoiceItem;
+use App\Models\Currency;
+use App\Models\InvoiceTemplate;
+use App\Http\Requests;
+use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Carbon\Carbon;
-use Crater\AccountLedger;
-use Crater\AccountMaster;
-use Crater\Inventory;
-use Crater\Item;
-use Crater\Mail\invoicePdf;
+use App\Models\AccountLedger;
+use App\Models\AccountMaster;
+use App\Models\Inventory;
+use App\Models\Item;
+use App\Models\invoicePdf;
 use function MongoDB\BSON\toJSON;
 use Illuminate\Support\Facades\Log;
-use Crater\User;
+use App\Models\User;
 use Mailgun\Mailgun;
 use PDF;
 use Validator;
-use Crater\TaxType;
-use Crater\Tax;
-use Crater\Voucher;
+use App\Models\TaxType;
+use App\Models\Tax;
+use App\Models\Voucher;
 use Exception;
 
 class InvoicesController extends Controller

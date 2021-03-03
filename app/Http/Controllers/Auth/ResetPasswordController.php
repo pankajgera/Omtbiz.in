@@ -1,7 +1,7 @@
 <?php
-namespace Crater\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use Crater\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

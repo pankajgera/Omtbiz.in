@@ -4,7 +4,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Crater\Country;
+use App\Models\Country;
 use SettingsSeeder;
 class LocationTest extends TestCase
 {

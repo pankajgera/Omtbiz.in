@@ -1,9 +1,9 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Setting;
+use App\Models\Setting;
 
 class SettingsController extends Controller
 {

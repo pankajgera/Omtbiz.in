@@ -4,8 +4,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use Crater\User;
-use Crater\Company;
+use App\Models\User;
+use App\Models\Company;
 use Laravel\Passport\Passport;
 use SettingsSeeder;
 

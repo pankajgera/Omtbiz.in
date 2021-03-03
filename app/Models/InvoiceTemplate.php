@@ -1,16 +1,16 @@
 <?php
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Crater\Estimate;
+use App\Models\Invoice;
 
-class EstimateTemplate extends Model
+class InvoiceTemplate extends Model
 {
     protected $fillable = ['path', 'view', 'name'];
 
-    public function estimates()
+    public function invoices()
     {
-        return $this->hasMany(Estimate::class);
+        return $this->hasMany(Invoice::class);
     }
 
     public function getPathAttribute($value)

@@ -1,5 +1,5 @@
 <?php
-namespace Crater\Space;
+namespace App\Space;
 
 use Carbon\Carbon;
 

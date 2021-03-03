@@ -1,21 +1,21 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\User;
-use Crater\Invoice;
-use Crater\Company;
-use Crater\InvoiceItem;
-use Crater\Expense;
-use Crater\CompanySetting;
-use Crater\Tax;
+use App\Models\User;
+use App\Models\Invoice;
+use App\Models\Company;
+use App\Models\InvoiceItem;
+use App\Models\Expense;
+use App\Models\CompanySetting;
+use App\Models\Tax;
 use PDF;
 use Carbon\Carbon;
-use Crater\AccountGroup;
-use Crater\AccountLedger;
-use Crater\AccountMaster;
-use Crater\Voucher;
+use App\Models\AccountGroup;
+use App\Models\AccountLedger;
+use App\Models\AccountMaster;
+use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Builder;
 
 class ReportController extends Controller

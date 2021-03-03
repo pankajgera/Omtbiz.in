@@ -1,13 +1,13 @@
 <?php
-namespace Crater\Space;
+namespace App\Space;
 
 use File;
 use ZipArchive;
 use Artisan;
 use GuzzleHttp\Exception\RequestException;
-use Crater\Space\SiteApi;
-use Crater\Events\UpdateFinished;
-use Crater\Setting;
+use App\Space\SiteApi;
+use App\Events\UpdateFinished;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class Updater

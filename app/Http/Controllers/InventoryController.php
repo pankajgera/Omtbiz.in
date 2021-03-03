@@ -1,9 +1,9 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Inventory;
+use App\Models\Inventory;
 use Exception;
 use Log;
 

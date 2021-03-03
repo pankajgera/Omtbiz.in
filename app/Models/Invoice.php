@@ -1,9 +1,9 @@
 <?php
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Crater\InvoiceTemplate;
-use Crater\Payment;
+use App\Models\InvoiceTemplate;
+use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -94,7 +94,7 @@ class Invoice extends Model
 
     public function inventories()
     {
-        return $this->hasMany('Crater\InvoiceItem');
+        return $this->hasMany('App\Models\InvoiceItem');
     }
 
     public function taxes()
@@ -109,7 +109,7 @@ class Invoice extends Model
 
     public function user()
     {
-        return $this->belongsTo('Crater\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function invoiceTemplate()

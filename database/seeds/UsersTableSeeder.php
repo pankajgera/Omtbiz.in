@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Crater\User;
-use Crater\Setting;
+use App\Models\User;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'email' => 'admin@craterapp.com',
+            'email' => 'admin@App\Modelsapp.com',
             'name' => 'Jane Doe',
             'role' => 'admin',
             'password' => Hash::make('crater@123')

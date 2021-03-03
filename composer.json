@@ -13,14 +13,14 @@
         "barryvdh/laravel-dompdf": "^0.8.1",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.5",
-        "laravel/framework": "^7.0",
+        "laravel/framework": "^8.0",
         "laravel/helpers": "^1.1",
         "laravel/passport": "^7.4.0",
         "laravel/socialite": "^4.2.0",
         "laravel/tinker": "^2.0",
-        "laravel/ui": "^2.0",
+        "laravel/ui": "^3.0",
         "lcobucci/jwt": "3.3.3",
         "league/flysystem-aws-s3-v3": "^1.0",
         "nyholm/psr7": "^1.4",
@@ -33,10 +33,10 @@
         "symfony/css-selector": "3.1.*",
         "symfony/dom-crawler": "3.1.*",
         "barryvdh/laravel-ide-helper": "^2.6",
-        "facade/ignition": "^2.0",
+        "facade/ignition": "^2.3.6",
         "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^4.1",
-        "phpunit/phpunit": "^8.5",
+        "nunomaduro/collision": "^5.0",
+        "phpunit/phpunit": "^9.0",
         "laravel/browser-kit-testing": "1.*"
     },
     "autoload": {
@@ -44,7 +44,7 @@
             "database"
         ],
         "psr-4": {
-            "Crater\\": "app/"
+            "App\\": "app/"
         },
         "files": [
             "app/Space/helpers.php"

@@ -1,8 +1,8 @@
 <?php
-namespace Crater\Http\Middleware;
+namespace App\Http\Middleware;
 
 use Closure;
-use Crater\CompanySetting;
+use App\Models\CompanySetting;
 
 class ConfigMiddleware
 {

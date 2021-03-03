@@ -1,22 +1,22 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Estimate;
-use Crater\EstimateItem;
-use Crater\EstimateTemplate;
+use App\Models\Estimate;
+use App\Models\EstimateItem;
+use App\Models\EstimateTemplate;
 use Carbon\Carbon;
-use Crater\Http\Requests\EstimatesRequest;
-use Crater\Invoice;
-use Crater\Currency;
-use Crater\User;
-use Crater\Item;
+use App\Http\Requests\EstimatesRequest;
+use App\Models\Invoice;
+use App\Models\Currency;
+use App\Models\User;
+use App\Models\Item;
 use Validator;
-use Crater\CompanySetting;
-use Crater\Company;
-use Crater\Mail\EstimatePdf;
-use Crater\TaxType;
-use Crater\Tax;
+use App\Models\CompanySetting;
+use App\Models\Company;
+use App\Mail\EstimatePdf;
+use App\Models\TaxType;
+use App\Models\Tax;
 
 class EstimatesController extends Controller
 {

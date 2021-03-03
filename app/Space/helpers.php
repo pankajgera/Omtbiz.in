@@ -1,6 +1,6 @@
 <?php
-use Crater\CompanySetting;
-use Crater\Currency;
+use App\Models\CompanySetting;
+use App\Models\Currency;
 
 /**
  * Set Active Path

@@ -1,8 +1,8 @@
 <?php
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Crater\Expense;
+use App\Models\Expense;
 use Carbon\Carbon;
 
 class ExpenseCategory extends Model

@@ -1,10 +1,10 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Space\Updater;
-use Crater\Space\SiteApi;
+use App\Models\Space\Updater;
+use App\Models\Space\SiteApi;
 
 class UpdateController extends Controller
 {
