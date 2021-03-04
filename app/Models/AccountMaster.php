@@ -8,7 +8,7 @@ class AccountMaster extends Model
 {
     protected $fillable = [
         'name',
-        'group',
+        'groups',
         'address',
         'country',
         'state',
@@ -21,9 +21,9 @@ class AccountMaster extends Model
         return $query->where('name', 'LIKE', '%' . $name . '%');
     }
 
-    public function scopeWhereGroup($query, $group)
+    public function scopeWhereGroups($query, $groups)
     {
-        return $query->where('group', 'LIKE', '%' . $group . '%');
+        return $query->where('groups', 'LIKE', '%' . $groups . '%');
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -39,8 +39,8 @@ class AccountMaster extends Model
             $query->whereName($filters->get('name'));
         }
 
-        if ($filters->get('group')) {
-            $query->whereDesignNo($filters->get('group'));
+        if ($filters->get('groups')) {
+            $query->whereGroups($filters->get('groups'));
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {

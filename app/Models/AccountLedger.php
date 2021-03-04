@@ -83,27 +83,27 @@ class AccountLedger extends Model
         $filters = collect($filters);
 
         if ($filters->get('date')) {
-            $query->whereName($filters->get('date'));
+            $query->whereDate($filters->get('date'));
         }
 
         if ($filters->get('type')) {
-            $query->whereDesignNo($filters->get('type'));
+            $query->whereType($filters->get('type'));
         }
 
         if ($filters->get('account')) {
-            $query->whereName($filters->get('account'));
+            $query->whereAccount($filters->get('account'));
         }
 
         if ($filters->get('debit')) {
-            $query->whereDesignNo($filters->get('debit'));
+            $query->whereDebit($filters->get('debit'));
         }
 
         if ($filters->get('credit')) {
-            $query->whereName($filters->get('credit'));
+            $query->whereCredit($filters->get('credit'));
         }
 
         if ($filters->get('balance')) {
-            $query->whereName($filters->get('balance'));
+            $query->whereBalance($filters->get('balance'));
         }
 
         if ($filters->get('from_date') && $filters->get('to_date')) {

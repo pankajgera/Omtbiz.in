@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use App\Models\User;
@@ -59,14 +60,14 @@ class Payment extends Model
     {
         // Get the last created order
         $payment = Payment::where('payment_number', 'LIKE', $value . '-%')
-                    ->orderBy('created_at', 'desc')
-                    ->first();
+            ->orderBy('created_at', 'desc')
+            ->first();
         if (!$payment) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$payment->payment_number);
+            $number = explode("-", $payment->payment_number);
             $number = $number[1];
         }
         // If we have ORD000001 in the database then we only want the number
@@ -79,9 +80,9 @@ class Payment extends Model
         return sprintf('%06d', intval($number) + 1);
     }
 
-    public function getPaymentPrefixAttribute ()
+    public function getPaymentPrefixAttribute()
     {
-        $prefix= explode("-",$this->payment_number)[0];
+        $prefix = explode("-", $this->payment_number)[0];
         return $prefix;
     }
 
@@ -112,21 +113,36 @@ class Payment extends Model
     {
         foreach (explode(' ', $search) as $term) {
             $query->whereHas('user', function ($query) use ($term) {
-                $query->where('name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('contact_name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('company_name', 'LIKE', '%'.$term.'%');
+                $query->where('name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('contact_name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('company_name', 'LIKE', '%' . $term . '%');
             });
         }
     }
 
     public function scopePaymentNumber($query, $paymentNumber)
     {
-        return $query->where('payments.payment_number', 'LIKE', '%'.$paymentNumber.'%');
+        return $query->where('payments.payment_number', 'LIKE', '%' . $paymentNumber . '%');
     }
 
     public function scopePaymentMode($query, $paymentMode)
     {
         return $query->where('payments.payment_mode', $paymentMode);
+    }
+
+    public function scopeWhereOrder($query, $orderByField, $orderBy)
+    {
+        $query->orderBy($orderByField, $orderBy);
+    }
+
+    public function scopeWhereCompany($query, $company_id)
+    {
+        $query->where('payments.company_id', $company_id);
+    }
+
+    public function scopeWhereCustomer($query, $customer_id)
+    {
+        $query->where('payments.user_id', $customer_id);
     }
 
     public function scopeApplyFilters($query, array $filters)
@@ -154,20 +170,5 @@ class Payment extends Model
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
         }
-    }
-
-    public function scopeWhereOrder($query, $orderByField, $orderBy)
-    {
-        $query->orderBy($orderByField, $orderBy);
-    }
-
-    public function scopeWhereCompany($query, $company_id)
-    {
-        $query->where('payments.company_id', $company_id);
-    }
-
-    public function scopeWhereCustomer($query, $customer_id)
-    {
-        $query->where('payments.user_id', $customer_id);
     }
 }
