@@ -275,16 +275,16 @@ class OnboardingController extends Controller
         }
 
         $colors = [
-            'primary_text_color' => '#5851D8',
+            'primary_text_color' => '#f54c4c',
             'heading_text_color' => '#595959',
             'section_heading_text_color' => '#040405',
             'border_color' => '#EAF1FB',
             'body_text_color' => '#595959',
             'footer_text_color' => '#595959',
-            'footer_total_color' => '#5851D8',
+            'footer_total_color' => '#f54c4c',
             'footer_bg_color' => '#F9FBFF',
             'date_text_color' => '#A5ACC1',
-            'invoice_primary_color' => '#5851D8',
+            'invoice_primary_color' => '#f54c4c',
             'invoice_column_heading' => '#55547A',
             'invoice_field_label' => '#55547A',
             'invoice_field_value' => '#040405',
