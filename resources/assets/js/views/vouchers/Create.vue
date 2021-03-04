@@ -212,8 +212,8 @@ export default {
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
       {
         let typeValue = '';
-        let credit_sum = this.rows.map(o => (o.credit)).reduce((a,c) => a + c)
-        let debit_sum = this.rows.map(o => (o.debit)).reduce((a,c) => a + c)
+        let credit_sum = this.rows.map(o => {return o.credit; }).reduce((a,c) => a + c)
+        let debit_sum = this.rows.map(o => { return o.debit; }).reduce((a,c) => a + c)
         if (0 < credit_sum && credit_sum > debit_sum || $event.columnIndex === 3 && credit_sum + $event.value > debit_sum) {
           this.addNewRow('Dr', $event.value)
         } else if (0 < debit_sum && credit_sum < debit_sum || $event.columnIndex === 2 && debit_sum + $event.value > credit_sum) {
@@ -234,11 +234,11 @@ export default {
       }
     },
     rowSelected($event) {
-      // if($event.rowData && $event.rowData.type === 'Cr') {
-      //   $event.rowData.debit = null;
-      // } else if ($event.rowData && $event.rowData.type === 'Dr') {
-      //   $event.rowData.credit = null;
-      // }
+      if($event.rowData && $event.rowData.type === 'Cr') {
+        $event.rowData.debit = null;
+      } else if ($event.rowData && $event.rowData.type === 'Dr') {
+        $event.rowData.credit = null;
+      }
 
       //Type of Voucher Column
       if ($event.colIndex === 0) {

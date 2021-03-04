@@ -48,7 +48,6 @@
             :disabled="disableInput"
             :value="value"
             @keyup.enter="setEditableValue"
-            @keydown.tab="setEditableValue"
             @focus="editPending = true"
             @blur="leaved" />
           </span>
@@ -231,7 +230,7 @@ export default {
   },
   watch: {
     cellEditing () {
-      if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex) {
+      if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex && !this.disableInput) {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
 
@@ -276,11 +275,11 @@ export default {
             }
         }
       }
-      if (this.column.field === 'credit' && !this.rowValue && !this.disableInput) {
+      if (this.row.type === 'Cr' && this.column.field === 'credit' && !this.rowValue && !this.disableInput) {
         this.rowValue = this.row.debit
         this.value = this.row.debit
       }
-      if (this.column.field === 'debit' && !this.rowValue && !this.disableInput) {
+      if (this.row.type === 'Dr' && this.column.field === 'debit' && !this.rowValue && !this.disableInput) {
         this.rowValue = this.row.credit
         this.value = this.row.credit
       }
@@ -320,7 +319,7 @@ export default {
     },
     setEditableValue ($event) {
       const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null
-      const value = cellValueParser(this.column, this.row, input, true)
+      let value = cellValueParser(this.column, this.row, input, true)
       if (!value) return
       this.editPending = false
       let valueChanged = true
@@ -331,10 +330,12 @@ export default {
       //     valueChanged = false
       //   }
       // }
-      this.rowValue = value
-      this.value = value
-      const { row, column, rowIndex, columnIndex } = this
-      this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
+      if (!this.disableInput) {
+        this.rowValue = value
+        this.value = value
+        const { row, column, rowIndex, columnIndex } = this
+        this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })
+      }
     },
     leaved ($event) {
       if (this.editPending) {
