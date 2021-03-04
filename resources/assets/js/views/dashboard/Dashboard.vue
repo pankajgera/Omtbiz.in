@@ -131,7 +131,7 @@
                 <div class="description">
                   <span class="title"> {{ $t('dashboard.chart_info.net_income') }} </span>
                   <br>
-                  <span class="total" style="color:#5851D8;">
+                  <span class="total" style="color:#f54c4c;">
                     <div v-html="$utils.formatMoney(getNetProfit, defaultCurrency)"/>
                   </span>
                 </div>

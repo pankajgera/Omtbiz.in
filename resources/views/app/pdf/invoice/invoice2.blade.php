@@ -28,7 +28,7 @@
             margin-top: 60px !important;
         }
         .header-table {
-            background: #817AE3;
+            background: #e37a7a;
             position: absolute;
             width: 100%;
             height: 141px;

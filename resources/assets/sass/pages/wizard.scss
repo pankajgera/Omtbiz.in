@@ -84,7 +84,7 @@
             background: $ls-color-gray--light;
 
             &.active {
-                border: 5px solid #5851d8;
+                border: 5px solid #f54c4c;
                 background: #ffffff;
                 border-radius: 50%;
                 height: 21px;
@@ -93,8 +93,8 @@
 
             &.completed {
                 padding: 0px;
-                background: #5851d8;
-                border: 5px solid #5851d8;
+                background: #f54c4c;
+                border: 5px solid #f54c4c;
                 border-radius: 50%;
                 height: 21px;
                 width: 21px;

@@ -34,7 +34,7 @@
             font-style: normal;
             font-weight: 600;
             font-size: 24px;
-            color: #5851D8;
+            color: #f54c4c;
             width: 100%;
             text-align: left;
             padding: 0px;
@@ -164,7 +164,7 @@
             font-weight: 500;
             font-size: 20px;
             line-height: 21px;
-            color: #5851D8;
+            color: #f54c4c;
         }
     </style>
 </head>
