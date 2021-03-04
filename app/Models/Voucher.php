@@ -64,19 +64,19 @@ class Voucher extends Model
         $filters = collect($filters);
 
         if ($filters->get('type')) {
-            $query->whereName($filters->get('type'));
+            $query->whereType($filters->get('type'));
         }
 
         if ($filters->get('account')) {
-            $query->whereDesignNo($filters->get('account'));
+            $query->whereAccount($filters->get('account'));
         }
 
         if ($filters->get('debit')) {
-            $query->whereName($filters->get('debit'));
+            $query->whereDebit($filters->get('debit'));
         }
 
         if ($filters->get('credit')) {
-            $query->whereDesignNo($filters->get('credit'));
+            $query->whereCredit($filters->get('credit'));
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {

@@ -34,7 +34,6 @@ class ReceiptController extends Controller
             ->leftJoin('invoices', 'invoices.id', '=', 'receipts.invoice_id')
             ->applyFilters($request->only([
                 'search',
-                // 'receipt_number',
                 'receipt_status',
                 'receipt_mode',
                 'customer_id',
