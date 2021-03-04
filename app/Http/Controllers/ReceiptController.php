@@ -1,21 +1,21 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
-use Crater\CompanySetting;
-use Crater\Currency;
-use Crater\Invoice;
-use Crater\Receipt;
+use App\Models\CompanySetting;
+use App\Models\Currency;
+use App\Models\Invoice;
+use App\Models\Receipt;
 use Carbon\Carbon;
-use Crater\AccountLedger;
-use Crater\AccountMaster;
+use App\Models\AccountLedger;
+use App\Models\AccountMaster;
 
 use function MongoDB\BSON\toJSON;
-use Crater\User;
-use Crater\Http\Requests\ReceiptRequest;
-use Crater\Voucher;
+use App\Models\User;
+use App\Http\Requests\ReceiptRequest;
+use App\Models\Voucher;
 use Validator;
 
 class ReceiptController extends Controller

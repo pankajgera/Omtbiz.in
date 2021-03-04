@@ -1,12 +1,12 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Http\Requests;
-use Crater\Item;
-use Crater\TaxType;
-use Crater\Tax;
+use App\Http\Requests;
+use App\Models\Item;
+use App\Models\TaxType;
+use App\Models\Tax;
 
 class ItemsController extends Controller
 {
@@ -46,7 +46,7 @@ class ItemsController extends Controller
     /**
      * Create Item.
      *
-     * @param Crater\Http\Requests\ItemsRequest $request
+     * @param App\Http\Requests\ItemsRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -80,7 +80,7 @@ class ItemsController extends Controller
     /**
      * Update an existing Item.
      *
-     * @param Crater\Http\Requests\ItemsRequest $request
+     * @param App\Http\Requests\ItemsRequest $request
      * @param int                               $id
      *
      * @return \Illuminate\Http\JsonResponse

@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Crater\InvoiceTemplate;
+use App\Models\InvoiceTemplate;
 use Faker\Generator as Faker;
 
 $factory->define(InvoiceTemplate::class, function (Faker $faker) {

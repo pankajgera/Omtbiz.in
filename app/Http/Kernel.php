@@ -1,10 +1,10 @@
 <?php
-namespace Crater\Http;
+namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
-use Crater\Http\Middleware\AdminMiddleware;
-use Crater\Http\Middleware\AccountantMiddleware;
-use Crater\Http\Middleware\EmployeeMiddleware;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\AccountantMiddleware;
+use App\Http\Middleware\EmployeeMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -18,10 +18,10 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \Crater\Http\Middleware\TrimStrings::class,
+        \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \Crater\Http\Middleware\TrustProxies::class,
-        \Crater\Http\Middleware\ConfigMiddleware::class,
+        \App\Http\Middleware\TrustProxies::class,
+        \App\Http\Middleware\ConfigMiddleware::class,
     ];
 
     /**
@@ -31,11 +31,11 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \Crater\Http\Middleware\EncryptCookies::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Crater\Http\Middleware\VerifyCsrfToken::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -57,14 +57,14 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \Crater\Http\Middleware\RedirectIfAuthenticated::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'admin' => AdminMiddleware::class,
         'accountant' => AccountantMiddleware::class,
         'employee' => EmployeeMiddleware::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'install' => \Crater\Http\Middleware\InstallationMiddleware::class,
-        'redirect-if-installed' => \Crater\Http\Middleware\RedirectIfInstalled::class,
+        'install' => \App\Http\Middleware\InstallationMiddleware::class,
+        'redirect-if-installed' => \App\Http\Middleware\RedirectIfInstalled::class,
     ];
      /**
      * The priority-sorted list of middleware.

@@ -1,13 +1,13 @@
 <?php
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Crater\Invoice;
-use Crater\Tax;
+use App\Models\Invoice;
+use App\Models\Tax;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Crater\Inventory;
+use App\Models\Inventory;
 
 class InvoiceItem extends Model
 {

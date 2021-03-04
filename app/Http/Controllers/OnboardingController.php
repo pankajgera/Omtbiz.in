@@ -1,18 +1,18 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\User;
-use Crater\Company;
-use Crater\Address;
-use Crater\Http\Requests\ProfileRequest;
-use Crater\Http\Requests\CompanyRequest;
-use Crater\Http\Requests\CompanySettingRequest;
-use Crater\Space\DateFormatter;
-use Crater\Space\TimeZones;
-use Crater\Currency;
-use Crater\Setting;
-use Crater\CompanySetting;
+use App\Models\User;
+use App\Models\Company;
+use App\Models\Address;
+use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\CompanyRequest;
+use App\Http\Requests\CompanySettingRequest;
+use App\Space\DateFormatter;
+use App\Space\TimeZones;
+use App\Models\Currency;
+use App\Models\Setting;
+use App\Models\CompanySetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
 
@@ -83,7 +83,7 @@ class OnboardingController extends Controller
     /**
      * Setup Admin Profile.
      *
-     * @param  \Crater\Http\Requests\ProfileRequest $request
+     * @param  \App\Http\Requests\ProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function adminProfile(ProfileRequest $request)
@@ -146,7 +146,7 @@ class OnboardingController extends Controller
     /**
      * Setup Admin Company.
      *
-     * @param  \Crater\Http\Requests\CompanyRequest $request
+     * @param  \App\Http\Requests\CompanyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function adminCompany(CompanyRequest $request)
@@ -204,7 +204,7 @@ class OnboardingController extends Controller
     /**
      * Setup Company Settings.
      *
-     * @param  \Crater\Http\Requests\CompanySettingRequest $request
+     * @param  \App\Http\Requests\CompanySettingRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function companySettings(CompanySettingRequest $request)

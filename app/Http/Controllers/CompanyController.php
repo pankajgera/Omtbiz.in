@@ -1,29 +1,29 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\User;
-use Crater\Setting;
-use Crater\Company;
-use Crater\Address;
-use Crater\Http\Requests\SettingRequest;
-use Crater\Http\Requests\SettingKeyRequest;
-use Crater\Http\Requests\ProfileRequest;
-use Crater\Http\Requests\CompanyRequest;
-use Crater\Http\Requests\CompanySettingRequest;
-use Crater\Http\Requests\NotificationSettingsRequest;
-use Crater\Space\CurrencyFormatter;
-use Crater\Space\DateFormatter;
-use Crater\Space\TimeZones;
-use Crater\Currency;
-use Crater\CompanySetting;
+use App\Models\User;
+use App\Models\Setting;
+use App\Models\Company;
+use App\Models\Address;
+use App\Http\Requests\SettingRequest;
+use App\Http\Requests\SettingKeyRequest;
+use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\CompanyRequest;
+use App\Http\Requests\CompanySettingRequest;
+use App\Http\Requests\NotificationSettingsRequest;
+use App\Space\CurrencyFormatter;
+use App\Space\DateFormatter;
+use App\Space\TimeZones;
+use App\Models\Currency;
+use App\Models\CompanySetting;
 
 class CompanyController extends Controller
 {
     /**
      * Retrive the Admin account.
-     * @return \Crater\User
+     * @return \App\Models\User
      */
     public function getAdmin()
     {
@@ -34,7 +34,7 @@ class CompanyController extends Controller
      * Update the Admin profile.
      * Includes name, email and (or) password
      *
-     * @param  \Crater\Http\Requests\ProfileRequest $request
+     * @param  \App\Http\Requests\ProfileRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateAdminProfile(ProfileRequest $request)
@@ -87,7 +87,7 @@ class CompanyController extends Controller
 
     /**
      * Update Admin Company Details
-     * @param \Crater\Http\Requests\CompanyRequest $request
+     * @param \App\Http\Requests\CompanyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateAdminCompany(CompanyRequest $request)
@@ -170,7 +170,7 @@ class CompanyController extends Controller
 
     /**
      * Update General App Settings
-     * @param \Crater\Http\Requests\CompanySettingRequest $request
+     * @param \App\Http\Requests\CompanySettingRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateGeneralSettings(CompanySettingRequest $request)
@@ -247,7 +247,7 @@ class CompanyController extends Controller
 
     /**
      * Update a specific Company Setting
-     * @param \Crater\Http\Requests\SettingRequest $request
+     * @param \App\Http\Requests\SettingRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function updateSetting(SettingRequest $request)
@@ -261,7 +261,7 @@ class CompanyController extends Controller
 
     /**
      * Retrieve Specific Company Setting
-     * @param \Crater\Http\Requests\SettingKeyRequest $request
+     * @param \App\Http\Requests\SettingKeyRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getSetting(SettingKeyRequest $request)

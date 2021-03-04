@@ -1,9 +1,9 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Crater\TaxType;
-use Crater\User;
-use Crater\Http\Requests\TaxTypeRequest;
+use App\Models\TaxType;
+use App\Models\User;
+use App\Http\Requests\TaxTypeRequest;
 use Illuminate\Http\Request;
 
 class TaxTypeController extends Controller
@@ -60,7 +60,7 @@ class TaxTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Crater\TaxType  $taxType
+     * @param  \App\Models\TaxType  $taxType
      * @return \Illuminate\Http\Response
      */
     public function show(TaxType $taxType)
@@ -71,7 +71,7 @@ class TaxTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Crater\TaxType  $taxType
+     * @param  \App\Models\TaxType  $taxType
      * @return \Illuminate\Http\Response
      */
     public function edit(TaxType $taxType)
@@ -85,7 +85,7 @@ class TaxTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Crater\TaxType  $taxType
+     * @param  \App\Models\TaxType  $taxType
      * @return \Illuminate\Http\Response
      */
     public function update(TaxTypeRequest $request, TaxType $taxType)
@@ -107,7 +107,7 @@ class TaxTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Crater\TaxType  $taxType
+     * @param  \App\Models\TaxType  $taxType
      * @return \Illuminate\Http\Response
      */
     public function destroy(TaxType $taxType)

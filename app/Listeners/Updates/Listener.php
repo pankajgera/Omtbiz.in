@@ -1,6 +1,6 @@
 <?php
 
-namespace Crater\Listeners\Updates;
+namespace App\Listeners\Updates;
 
 class Listener
 {

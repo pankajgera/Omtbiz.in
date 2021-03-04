@@ -1,10 +1,10 @@
 <?php
 
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Crater\User;
-use Crater\Country;
+use App\Models\User;
+use App\Models\Country;
 
 class Address extends Model
 {

@@ -1,16 +1,16 @@
 <?php
-namespace Crater\Http\Controllers\Auth;
+namespace App\Http\Controllers\Auth;
 
-use Crater\Proxy\HttpKernelProxy;
+use App\Models\Proxy\HttpKernelProxy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Validator;
 use Hash;
-use Crater\User;
+use App\Models\User;
 use Auth;
-use Crater\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 
 class AccessTokensController extends Controller
 {

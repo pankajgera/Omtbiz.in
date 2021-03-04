@@ -1,36 +1,36 @@
 <?php
-namespace Crater;
+namespace App\Models;
 
-use Crater\User;
-use Crater\Invoice;
+use App\Models\User;
+use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Receipt extends Model
 {
-    const PAYMENT_MODE_CHECK = 'CHECK';
-    const PAYMENT_MODE_OTHER = 'OTHER';
-    const PAYMENT_MODE_CASH = 'CASH';
-    const PAYMENT_MODE_CREDIT_CARD = 'CREDIT_CARD';
-    const PAYMENT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
+    const RECEIPT_MODE_CHECK = 'CHECK';
+    const RECEIPT_MODE_OTHER = 'OTHER';
+    const RECEIPT_MODE_CASH = 'CASH';
+    const RECEIPT_MODE_CREDIT_CARD = 'CREDIT_CARD';
+    const RECEIPT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
 
-    protected $dates = ['created_at', 'updated_at', 'payment_date'];
+    protected $dates = ['created_at', 'updated_at', 'receipt_date'];
 
     protected $fillable = [
         'user_id',
         'invoice_id',
-        'payment_date',
+        'receipt_date',
         'company_id',
         'notes',
-        'payment_number',
-        'payment_status',
-        'payment_mode',
+        'receipt_number',
+        'receipt_status',
+        'receipt_mode',
         'amount'
     ];
 
     protected $appends = [
         'formattedCreatedAt',
-        'formattedPaymentDate'
+        'formattedReceiptDate'
     ];
 
 
@@ -49,24 +49,24 @@ class Payment extends Model
         }
     }
 
-    public function getPaymentNumAttribute()
+    public function getReceiptNumAttribute()
     {
-        $position = $this->strposX($this->payment_number, "-", 1) + 1;
-        return substr($this->payment_number, $position);
+        $position = $this->strposX($this->receipt_number, "-", 1) + 1;
+        return substr($this->receipt_number, $position);
     }
 
-    public static function getNextPaymentNumber($value)
+    public static function getNextReceiptNumber($value)
     {
         // Get the last created order
-        $payment = Payment::where('payment_number', 'LIKE', $value . '-%')
+        $receipt = Receipt::where('receipt_number', 'LIKE', $value . '-%')
                     ->orderBy('created_at', 'desc')
                     ->first();
-        if (!$payment) {
+        if (!$receipt) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$payment->payment_number);
+            $number = explode("-",$receipt->receipt_number);
             $number = $number[1];
         }
         // If we have ORD000001 in the database then we only want the number
@@ -79,9 +79,9 @@ class Payment extends Model
         return sprintf('%06d', intval($number) + 1);
     }
 
-    public function getPaymentPrefixAttribute ()
+    public function getReceiptPrefixAttribute ()
     {
-        $prefix= explode("-",$this->payment_number)[0];
+        $prefix= explode("-",$this->receipt_number)[0];
         return $prefix;
     }
 
@@ -102,10 +102,10 @@ class Payment extends Model
         return Carbon::parse($this->created_at)->format($dateFormat);
     }
 
-    public function getFormattedPaymentDateAttribute($value)
+    public function getFormattedReceiptDateAttribute($value)
     {
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);
-        return Carbon::parse($this->payment_date)->format($dateFormat);
+        return Carbon::parse($this->receipt_date)->format($dateFormat);
     }
 
     public function scopeWhereSearch($query, $search)
@@ -119,14 +119,14 @@ class Payment extends Model
         }
     }
 
-    public function scopePaymentNumber($query, $paymentNumber)
+    public function scopeReceiptNumber($query, $receiptNumber)
     {
-        return $query->where('payments.payment_number', 'LIKE', '%'.$paymentNumber.'%');
+        return $query->where('receipts.receipt_number', 'LIKE', '%'.$receiptNumber.'%');
     }
 
-    public function scopePaymentMode($query, $paymentMode)
+    public function scopeReceiptMode($query, $receiptMode)
     {
-        return $query->where('payments.payment_mode', $paymentMode);
+        return $query->where('receipts.receipt_mode', $receiptMode);
     }
 
     public function scopeApplyFilters($query, array $filters)
@@ -137,12 +137,12 @@ class Payment extends Model
             $query->whereSearch($filters->get('search'));
         }
 
-        if ($filters->get('payment_number')) {
-            $query->paymentNumber($filters->get('payment_number'));
+        if ($filters->get('receipt_number')) {
+            $query->receiptNumber($filters->get('receipt_number'));
         }
 
-        if ($filters->get('payment_mode')) {
-            $query->paymentMode($filters->get('payment_mode'));
+        if ($filters->get('receipt_mode')) {
+            $query->receiptMode($filters->get('receipt_mode'));
         }
 
         if ($filters->get('customer_id')) {
@@ -150,7 +150,7 @@ class Payment extends Model
         }
 
         if ($filters->get('orderByField') || $filters->get('orderBy')) {
-            $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'payment_number';
+            $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'receipt_number';
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
         }
@@ -163,11 +163,11 @@ class Payment extends Model
 
     public function scopeWhereCompany($query, $company_id)
     {
-        $query->where('payments.company_id', $company_id);
+        $query->where('receipts.company_id', $company_id);
     }
 
     public function scopeWhereCustomer($query, $customer_id)
     {
-        $query->where('payments.user_id', $customer_id);
+        $query->where('receipts.user_id', $customer_id);
     }
 }

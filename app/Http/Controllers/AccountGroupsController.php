@@ -1,8 +1,8 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Crater\AccountGroup;
+use App\Models\AccountGroup;
 use Exception;
 use Illuminate\Http\Request;
 use Log;

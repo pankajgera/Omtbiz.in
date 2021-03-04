@@ -1,8 +1,8 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Crater\Bank;
+use App\Models\Bank;
 use Exception;
 use Illuminate\Http\Request;
 use Log;

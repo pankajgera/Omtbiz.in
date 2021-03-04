@@ -1,17 +1,17 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Invoice;
+use App\Models\Invoice;
 use PDF;
-use Crater\CompanySetting;
-use Crater\Estimate;
-use Crater\User;
-use Crater\Company;
-use Crater\InvoiceTemplate;
-use Crater\EstimateTemplate;
-use Crater\Mail\EstimateViewed;
-use Crater\Mail\InvoiceViewed;
+use App\Models\CompanySetting;
+use App\Models\Estimate;
+use App\Models\User;
+use App\Models\Company;
+use App\Models\InvoiceTemplate;
+use App\Models\EstimateTemplate;
+use App\Mail\EstimateViewed;
+use App\Mail\InvoiceViewed;
 
 class FrontendController extends Controller
 {

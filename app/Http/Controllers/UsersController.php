@@ -1,24 +1,24 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Http\Requests;
-use Crater\User;
-use Crater\Currency;
-use Crater\Setting;
-use Crater\Item;
-use Crater\TaxType;
+use App\Http\Requests;
+use App\Models\User;
+use App\Models\Currency;
+use App\Models\Setting;
+use App\Models\Item;
+use App\Models\TaxType;
 use DB;
 use Carbon\Carbon;
 use Auth;
-use Crater\Company;
-use Crater\CompanySetting;
+use App\Models\Company;
+use App\Models\CompanySetting;
 use Exception;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Crater\Http\Requests\UserRequest;
+use App\Http\Requests\UserRequest;
 
 class UsersController extends Controller
 {

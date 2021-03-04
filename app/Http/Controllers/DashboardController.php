@@ -1,16 +1,16 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Crater\Estimate;
-use Crater\Http\Requests;
-use Crater\Invoice;
-use Crater\CompanySetting;
-use Crater\Expense;
-use Crater\Payment;
+use App\Models\Estimate;
+use App\Http\Requests;
+use App\Models\Invoice;
+use App\Models\CompanySetting;
+use App\Models\Expense;
+use App\Models\Payment;
 use Carbon\Carbon;
-use Crater\User;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller

@@ -1,8 +1,8 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
-use Crater\State;
+use App\Models\State;
 use Illuminate\Http\Request;
 
 class StatesController extends Controller

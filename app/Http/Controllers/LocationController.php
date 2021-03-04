@@ -1,8 +1,8 @@
 <?php
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Country;
+use App\Models\Country;
 
 class LocationController extends Controller
 {

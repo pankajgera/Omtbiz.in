@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Crater\InvoiceItem;
-use Crater\Item;
+use App\Models\InvoiceItem;
+use App\Models\Item;
 use Faker\Generator as Faker;
-use Crater\User;
+use App\Models\User;
 
 $factory->define(InvoiceItem::class, function (Faker $faker) {
     return [

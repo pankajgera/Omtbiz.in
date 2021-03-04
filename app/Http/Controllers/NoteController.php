@@ -1,9 +1,9 @@
 <?php
 
-namespace Crater\Http\Controllers;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Crater\Note;
+use App\Models\Note;
 use Exception;
 use Log;
 

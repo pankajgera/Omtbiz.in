@@ -1,6 +1,6 @@
 <?php
 
-namespace Crater;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -120,7 +120,7 @@ class Item extends Model
 
     public function images()
     {
-        return $this->belongsTo(\Crater\Images::class);
+        return $this->belongsTo(\App\Models\Images::class);
     }
 
     /** Upload image to s3 and add id to items
@@ -185,7 +185,7 @@ class Item extends Model
         $image->destroy();
 
         //make an entry in the database
-        $photo = new \Crater\Images();
+        $photo = new \App\Models\Images();
         $photo->item_id = $this->id;
         $photo->name = $fileName;
         $photo->image_path = $screenUrl;
