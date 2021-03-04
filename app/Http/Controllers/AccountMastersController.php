@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AccountGroup;
 use App\Models\AccountMaster;
+use App\Models\State;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -31,7 +32,7 @@ class AccountMastersController extends Controller
     public function edit(Request $request, $id)
     {
         $master = AccountMaster::find($id);
-
+        $master->state = State::where('name', $master->state)->first();
         return response()->json([
             'master' => $master,
         ]);
