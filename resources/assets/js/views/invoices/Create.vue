@@ -229,10 +229,10 @@
           <div v-if="$v.newInvoice.notes.$error">
             <span v-if="!$v.newInvoice.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
           </div>
-          <label class="mt-3 mb-1 d-block">{{ $t('invoices.invoice_template') }} <span class="text-danger"> * </span></label>
+          <!-- <label class="mt-3 mb-1 d-block">{{ $t('invoices.invoice_template') }} <span class="text-danger"> * </span></label>
           <base-button type="button" class="btn-template" icon="pencil-alt" right-icon @click="openTemplateModal" >
             <span class="mr-4"> {{ $t('invoices.template') }} {{ getTemplateId }} </span>
-          </base-button>
+          </base-button> -->
         </div>
 
         <div class="invoice-total">

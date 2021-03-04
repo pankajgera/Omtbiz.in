@@ -56,7 +56,7 @@ export default {
           {
             title: 'navigation.invoices',
             icon: 'file-alt',
-            route: '/invoices',
+            route: '/invoices/create',
             meta: ['admin', 'accountant']
           },
           // {
