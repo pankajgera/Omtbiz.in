@@ -18,7 +18,8 @@
         "inventory": "Inventory",
         "master": "Ledger",
         "ledger": "Display",
-        "voucher": "Create Voucher"
+        "voucher": "Create Voucher",
+        "dispatch": "Dispatch"
     },
     "general": {
         "view_pdf": "View PDF",
@@ -1009,6 +1010,36 @@
         "created_message": "Note created successfully",
         "updated_message": "Note updated successfully",
         "deleted_message": "Note deleted successfully | Notes deleted successfully"
+    },
+    "dispatch": {
+        "add_dispatch": "Add dispatch",
+        "edit_dispatch": "Edit dispatch",
+        "new_dispatch": "New dispatch",
+        "title": "Dispatch",
+        "date": "Date",
+        "name": "Name",
+        "unit": "Unit",
+        "description": "Description",
+        "added_on": "Added On",
+        "price": "Price",
+        "date_of_creation": "Date Of Creation",
+        "action": "Action",
+        "save_dispatch": "Save dispatch",
+        "update_dispatch": "Update dispatch",
+        "dispatch": "Dispatch",
+        "add_new_dispatch": "Add New dispatch",
+        "no_dispatch": "No dispatch yet!",
+        "list_of_dispatch": "This section will contain the list of dispatch.",
+        "select_a_unit": "select unit",
+        "design_no": "Design no.",
+        "rate": "Rate",
+        "average": "Average",
+        "per_price": "Per Price",
+        "dispatch_attached_message": "Cannot delete an dispatch which is already in use",
+        "confirm_delete": "You will not be able to recover this dispatch | You will not be able to recover these dispatch",
+        "created_message": "dispatch created successfully",
+        "updated_message": "dispatch updated successfully",
+        "deleted_message": "dispatch deleted successfully"
     },
     "inventory": {
         "add_inventory": "Add Inventory",

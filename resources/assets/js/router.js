@@ -115,6 +115,10 @@ import Wizard from './views/wizard/Index.vue'
 import BankIndex from './views/bank/Index.vue'
 import BankCreate from './views/bank/Create.vue'
 
+// Dispatch
+import DispatchIndex from './views/dispatch/Index.vue'
+import DispatchCreate from './views/dispatch/Create.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -500,6 +504,25 @@ const routes = [
                 path: 'bank/:id/edit',
                 name: 'bank.edit',
                 component: BankCreate,
+                meta: ['admin']
+            },
+
+            // Dispatch
+            {
+              path: 'dispatch',
+              component: DispatchIndex,
+              meta: ['admin']
+            },
+            {
+                path: 'dispatch/create',
+                name: 'dispatch.create',
+                component: DispatchCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'dispatch/:id/edit',
+                name: 'dispatch.edit',
+                component: DispatchCreate,
                 meta: ['admin']
             },
 
