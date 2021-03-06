@@ -99,12 +99,12 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' => $invoice_prefix . '-' . $nextInvoiceNumber,
+            'nextInvoiceNumber' =>  $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month . '-' . $nextInvoiceNumber,
             'inventory' => Inventory::all(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
-            'invoice_prefix' => $invoice_prefix,
+            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
             'sundryDebtorsList' => array_unique($sundryDebtorsList, SORT_REGULAR)
         ]);
     }
@@ -118,9 +118,9 @@ class InvoicesController extends Controller
     public function store(Requests\InvoicesRequest $request)
     {
         try {
-            $invoice_number = explode("-", $request->invoice_number);
-            $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
-
+            // $invoice_number = explode("-", $request->invoice_number);
+            // $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
+            $number_attributes['invoice_number'] = $request->invoice_number;
             Validator::make($number_attributes, [
                 'invoice_number' => 'required|unique:invoices,invoice_number'
             ])->validate();
@@ -219,7 +219,9 @@ class InvoicesController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
-            return false;
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
     }
 

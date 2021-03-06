@@ -143,6 +143,8 @@
                 :prefix="invoicePrefix"
                 icon="hashtag"
                 @input="$v.invoiceNumAttribute.$touch()"
+                :prefix-width="35"
+                :disabled="true"
               />
               <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
               <span v-show="!$v.invoiceNumAttribute.numeric" class="text-danger mt-1"> {{ $tc('validation.numbers_only') }}  </span>
@@ -673,14 +675,14 @@ export default {
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
-          this.$router.push('/invoices')
+          this.$router.push('/invoices/create')
         }
 
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-        if (err.response.data.errors.invoice_number) {
-          window.toastr['error'](err.response.data.errors.invoice_number)
+        if (err) {
+          window.toastr['error'](err)
           return true
         }
         console.log(err)
@@ -691,7 +693,7 @@ export default {
         this.isLoading = false
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
-          this.$router.push('/invoices')
+          this.$router.push('/invoices/create')
         }
 
         if (res.data.error === 'invalid_due_amount') {
@@ -699,8 +701,8 @@ export default {
         }
       }).catch((err) => {
         this.isLoading = false
-        if (err.response.data.errors.invoice_number) {
-          window.toastr['error'](err.response.data.errors.invoice_number)
+        if (err) {
+          window.toastr['error'](err)
           return true
         }
         console.log(err)
