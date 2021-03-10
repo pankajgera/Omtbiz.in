@@ -86,15 +86,7 @@ class InvoicesController extends Controller
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
         }
 
-        $sundryDebtorsList = [];
-        $ledgers = AccountLedger::where('company_id', $request->header('company'))->get();
-
-        foreach ($ledgers as $each) {
-            $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();
-            foreach ($vouchers as $ee) {
-                $sundryDebtorsList[] = $ee->account;
-            }
-        }
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
 
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
@@ -105,7 +97,7 @@ class InvoicesController extends Controller
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
             'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
-            'sundryDebtorsList' => array_unique($sundryDebtorsList, SORT_REGULAR)
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
@@ -525,5 +517,15 @@ class InvoicesController extends Controller
         return response()->json([
             'invoices' => $invoices
         ]);
+    }
+
+    /**
+     * Get reference number for invoice
+     * In invoice when ledger/master (Sundry debtor) is selected then
+     * reference number would be same for that Sundry debtor for whole day
+     */
+    public function referenceNumber(Request $request)
+    {
+
     }
 }

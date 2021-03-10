@@ -87,7 +87,7 @@
 
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
-              v-model="newInvoice.debtors"
+              v-model="setInvoiceDebtor"
               :invalid="$v.newInvoice.debtors.$error"
               :options="sundryDebtorsList"
               :searchable="true"
@@ -143,7 +143,7 @@
                 :prefix="invoicePrefix"
                 icon="hashtag"
                 @input="$v.invoiceNumAttribute.$touch()"
-                :prefix-width="35"
+                :prefix-width="55"
                 :disabled="true"
               />
               <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
@@ -478,7 +478,6 @@ export default {
         return 0
       })
     },
-
     totalCompoundTax () {
       return window._.sumBy(this.newInvoice.taxes, function (tax) {
         if (tax.compound_tax) {
@@ -517,8 +516,18 @@ export default {
           }
         })
       })
-
       return taxes
+    },
+    setInvoiceDebtor: {
+      cache: false,
+      get() {
+        return this.newInvoice.debtors
+      },
+      set(value) {
+        this.searchDebtorRefNumber(value);
+        console.log('call', value)
+        this.newInvoice.debtors = value
+      },
     }
   },
   watch: {
@@ -551,7 +560,8 @@ export default {
       'fetchInvoice',
       //'resetSelectedCustomer',
       //'selectCustomer',
-      'updateInvoice'
+      'updateInvoice',
+      'fetchReferenceNumber',
     ]),
     ...mapActions('inventory', [
       'fetchAllInventory'
@@ -613,12 +623,7 @@ export default {
         this.inventoryList = response.data.inventory
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
-        Object.values(response.data.sundryDebtorsList).map((each, key) => {
-          this.sundryDebtorsList.push({
-            'name': each,
-            'id': key
-          });
-        });
+        this.sundryDebtorsList = response.data.sundryDebtorsList;
       }
       this.initLoading = false
     },
@@ -753,6 +758,12 @@ export default {
         return true
       }
       return false
+    },
+    async searchDebtorRefNumber(data) {
+       let response = await this.fetchReferenceNumber(data)
+        if (response.data) {
+          console.log(response)
+        }
     }
   }
 }

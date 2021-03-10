@@ -112,6 +112,30 @@
                 />
               </div>
             </div>
+            <div class="col-sm-6">
+              <div class="col-sm-12 ">
+                <div class="form-group">
+                  <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
+                  <base-input
+                    v-model.trim="openingBalance"
+                    type="text"
+                    name="openingBalance"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 ">
+                <div class="form-group">
+                  <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
+                  <base-input
+                    v-model.trim="closingBalance"
+                    type="text"
+                    name="closingBalance"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
             <div class="col-sm-12">
               <div class="form-group collapse-button-container">
                 <base-button
@@ -170,7 +194,10 @@ export default {
       isSettingInitialData: true,
       receiptNumAttribute: null,
       receiptPrefix: '',
-      partyNameList: []
+      partyNameList: [],
+      sundryDebtorList: [],
+      openingBalance: 0,
+      closingBalance: 0,
     }
   },
   validations () {
@@ -276,7 +303,7 @@ export default {
         this.formData.receipt_date = moment(response.data.receipt.receipt_date, 'YYYY-MM-DD').toString()
         this.formData.amount = parseFloat(response.data.receipt.amount)
         this.receiptPrefix = response.data.receipt_prefix
-        this.receiptNumAttribute = response.data.nextReceiptNumber
+        this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
           this.invoice = response.data.receipt.invoice
@@ -284,7 +311,7 @@ export default {
       } else {
         let response = await this.fetchCreateReceipt()
         this.partyNameList = response.data.usersOfSundryDebitors.map(each => each.name)
-        //this.customerList = response.data.customers
+        this.sundryDebtorList = response.data.usersOfSundryDebitors
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
         this.formData.receipt_date = moment(new Date()).toString()
@@ -300,6 +327,9 @@ export default {
       let data = await this.fetchInvoice(id)
       this.formData.amount = parseFloat(data.data.invoice.due_amount/100).toFixed(2)
       this.maxPayableAmount = parseFloat(data.data.invoice.due_amount/100).toFixed(2)
+      let oBalance = this.sundryDebtorList.find(each => each.name === this.formData.list)
+      this.openingBalance = oBalance.opening_balance
+      this.closingBalance =  this.openingBalance - this.formData.amount
     },
     async fetchCustomerInvoices () {
       let response = await axios.get(`/api/invoices/unpaid/`)

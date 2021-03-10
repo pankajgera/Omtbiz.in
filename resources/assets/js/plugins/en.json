@@ -544,6 +544,8 @@
         "receipt_mode": "Receipt Mode",
         "invoice": "Invoice",
         "note": "Note",
+        "closing_balance": "Closing Balance",
+        "opening_balance": "Opening Balance",
         "select_a_list": "Select from list",
         "add_receipt": "Add Receipt",
         "new_receipt": "New Receipt",
