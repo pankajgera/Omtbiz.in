@@ -23,7 +23,7 @@ export const fetchCreateInvoice = ({ commit, dispatch, state }) => {
   })
 }
 
-export const fetchReferenceNumber = ({ commit, dispatch, state }) => {
+export const fetchReferenceNumber = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/invoices/reference`, data).then((response) => {
       resolve(response)

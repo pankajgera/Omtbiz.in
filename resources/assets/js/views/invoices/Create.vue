@@ -239,6 +239,12 @@
 
         <div class="invoice-total">
           <div class="section">
+            <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
+            <label class="">
+              <div v-html="newInvoice.inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)" />
+            </label>
+          </div>
+          <div class="section">
             <label class="invoice-label">{{ $t('invoices.sub_total') }}</label>
             <label class="invoice-amount">
               <div v-html="$utils.formatMoney(subtotal, currency)" />
@@ -524,8 +530,7 @@ export default {
         return this.newInvoice.debtors
       },
       set(value) {
-        this.searchDebtorRefNumber(value);
-        console.log('call', value)
+        this.searchDebtorRefNumber(value)
         this.newInvoice.debtors = value
       },
     }
@@ -760,9 +765,12 @@ export default {
       return false
     },
     async searchDebtorRefNumber(data) {
+       this.newInvoice.reference_number = null;
        let response = await this.fetchReferenceNumber(data)
-        if (response.data) {
-          console.log(response)
+        if (response.data && response.data.invoice) {
+          this.newInvoice.reference_number = response.data.invoice.reference_number
+        } else {
+          this.newInvoice.reference_number = this.invoiceNumAttribute
         }
     }
   }

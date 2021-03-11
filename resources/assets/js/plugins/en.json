@@ -430,6 +430,7 @@
         "action": "Action",
         "notes": "Notes",
         "view": "View",
+        "quantity": "Quantity",
         "send_invoice": "Send Invoice",
         "invoice_template": "Invoice Template",
         "template": "Template",

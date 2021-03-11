@@ -114,7 +114,7 @@ class InvoicesController extends Controller
             // $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
             $number_attributes['invoice_number'] = $request->invoice_number;
             Validator::make($number_attributes, [
-                'invoice_number' => 'required|unique:invoices,invoice_number'
+                'invoice_number' => 'required'
             ])->validate();
 
             $invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
@@ -148,7 +148,8 @@ class InvoicesController extends Controller
                 'discount_per_item' => $discount_per_item,
                 'tax' => $request->tax,
                 'notes' => $request->notes,
-                'unique_hash' => str_random(60)
+                'unique_hash' => str_random(60),
+                'account_master_id' => $request->debtors['id'],
             ]);
 
             $invoiceInventories = $request->inventory;
@@ -526,6 +527,12 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
+        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now()->toDateString())
+            ->where('account_master_id', $request->id)
+            ->orderBy('id', 'asc')->first();
 
+        return response()->json([
+            'invoice' => $find_today_first_invoice
+        ]);
     }
 }

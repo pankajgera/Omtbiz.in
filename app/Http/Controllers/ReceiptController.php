@@ -67,7 +67,7 @@ class ReceiptController extends Controller
             $nextReceiptNumberAttribute = $nextReceiptNumber;
         }
 
-        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('name', 'opening_balance')->get();
+        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
 
         return response()->json([
             'customers' => User::where('role', 'customer')
@@ -121,12 +121,16 @@ class ReceiptController extends Controller
             $receipt_status = 'Done';
         }
         $voucher_ids = [];
+        $voucher_1 = null;
+        $voucher_2 = null;
         $company_id = (int) $request->header('company');
+        $account_master_id = (int) $request->list['id'];
+        $cash_account_id = AccountMaster::where('name', 'Cash')->first();
+        $bank_account_id = AccountMaster::where('name', 'Bank')->first();
 
         if ($request->receipt_mode !== 'Cash') {
-            $account_master = AccountMaster::where('name', 'Bank')->first();
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master->id,
+                'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
                 'company_id' => $company_id,
             ], [
@@ -137,9 +141,10 @@ class ReceiptController extends Controller
                 'credit' => $request->amount,
                 'balance' => $request->amount,
             ]);
+
             $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master->id,
-                'account' => $request->list,
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
                 'debit' => $request->amount,
                 'credit' => 0,
                 'account_ledger_id' => $account_ledger->id,
@@ -149,7 +154,7 @@ class ReceiptController extends Controller
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $account_master->id,
+                'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
                 'debit' => 0,
                 'credit' => $request->amount,
@@ -160,10 +165,9 @@ class ReceiptController extends Controller
                 'company_id' => $company_id
             ]);
         } else {
-            $account_master = AccountMaster::where('name', 'Cash')->first();
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master->id,
-                'account' => $request->list,
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
@@ -174,8 +178,8 @@ class ReceiptController extends Controller
                 'balance' => $request->amount,
             ]);
             $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master->id,
-                'account' => $request->list,
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
                 'debit' => $request->amount,
                 'credit' => 0,
                 'account_ledger_id' => $account_ledger->id,
@@ -185,7 +189,7 @@ class ReceiptController extends Controller
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $account_master->id,
+                'account_master_id' => $cash_account_id,
                 'account' => 'Cash',
                 'debit' => 0,
                 'credit' => $request->amount,
@@ -196,6 +200,7 @@ class ReceiptController extends Controller
                 'company_id' => $company_id
             ]);
         }
+
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
         if ($account_ledger->bill_no) {
@@ -227,6 +232,7 @@ class ReceiptController extends Controller
             'receipt_mode' => $request->receipt_mode,
             'amount' => $request->amount,
             'notes' => $request->notes,
+            'account_master_id' => $account_master_id
         ]);
 
         return response()->json([

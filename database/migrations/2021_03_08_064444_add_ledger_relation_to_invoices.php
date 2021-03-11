@@ -17,5 +17,15 @@ class AddLedgerRelationToInvoices extends Migration
             $table->integer('account_master_id')->unsigned()->nullable();
             $table->foreign('account_master_id')->references('id')->on('account_masters')->onDelete('cascade');
         });
+
+        Schema::table('receipts', function (Blueprint $table) {
+            $table->integer('account_master_id')->unsigned()->nullable();
+            $table->foreign('account_master_id')->references('id')->on('account_masters')->onDelete('cascade');
+        });
+
+        Schema::table('payments', function (Blueprint $table) {
+            $table->integer('account_master_id')->unsigned()->nullable();
+            $table->foreign('account_master_id')->references('id')->on('account_masters')->onDelete('cascade');
+        });
     }
 }

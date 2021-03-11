@@ -58,7 +58,8 @@ class Invoice extends Model
         'notes',
         'unique_hash',
         'sent',
-        'viewed'
+        'viewed',
+        'account_master_id',
     ];
 
     protected $appends = [
@@ -70,8 +71,7 @@ class Invoice extends Model
     public static function getNextInvoiceNumber($value)
     {
         // Get the last created order
-        $lastOrder = Invoice::where('invoice_number', 'LIKE', $value . '-%')
-            ->orderBy('created_at', 'desc')
+        $lastOrder = Invoice::orderBy('created_at', 'desc')
             ->first();
 
 
@@ -81,7 +81,7 @@ class Invoice extends Model
             $number = 0;
         } else {
             $number = explode("-", $lastOrder->invoice_number);
-            $number = $number[1];
+            $number = $number[3];
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001
