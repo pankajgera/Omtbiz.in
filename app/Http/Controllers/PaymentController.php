@@ -69,7 +69,7 @@ class PaymentController extends Controller
             $nextPaymentNumberAttribute = $nextPaymentNumber;
         }
 
-        $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('name')->get();
+        $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name')->get();
 
         return response()->json([
             'customers' => User::where('role', 'customer')
@@ -124,11 +124,13 @@ class PaymentController extends Controller
         }
         $voucher_ids = [];
         $company_id = (int) $request->header('company');
+        $account_master_id = (int) $request->list['id'];
+        $cash_account_id = AccountMaster::where('name', 'Cash')->first();
+        $bank_account_id = AccountMaster::where('name', 'Bank')->first();
 
         if ($request->payment_mode !== 'Cash') {
-            $account_master = AccountMaster::where('name', 'Bank')->first();
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master->id,
+                'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
                 'company_id' => $company_id,
             ], [
@@ -140,8 +142,8 @@ class PaymentController extends Controller
                 'balance' => $request->amount,
             ]);
             $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master->id,
-                'account' => $request->list,
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
                 'debit' => $request->amount,
                 'credit' => 0,
                 'account_ledger_id' => $account_ledger->id,
@@ -151,7 +153,7 @@ class PaymentController extends Controller
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $account_master->id,
+                'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
                 'debit' => 0,
                 'credit' => $request->amount,
@@ -162,10 +164,9 @@ class PaymentController extends Controller
                 'company_id' => $company_id
             ]);
         } else {
-            $account_master = AccountMaster::where('name', 'Cash')->first();
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master->id,
-                'account' => $request->list,
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
@@ -176,8 +177,8 @@ class PaymentController extends Controller
                 'balance' => $request->amount,
             ]);
             $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master->id,
-                'account' => $request->list,
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
                 'debit' => $request->amount,
                 'credit' => 0,
                 'account_ledger_id' => $account_ledger->id,
@@ -187,7 +188,7 @@ class PaymentController extends Controller
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $account_master->id,
+                'account_master_id' => $cash_account_id,
                 'account' => 'Cash',
                 'debit' => 0,
                 'credit' => $request->amount,
@@ -229,6 +230,7 @@ class PaymentController extends Controller
             'payment_mode' => $request->payment_mode,
             'amount' => $request->amount,
             'notes' => $request->notes,
+            'account_master_id' => $account_master_id,
         ]);
 
         return response()->json([

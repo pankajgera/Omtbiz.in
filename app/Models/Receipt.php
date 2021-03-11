@@ -26,7 +26,8 @@ class Receipt extends Model
         'receipt_number',
         'receipt_status',
         'receipt_mode',
-        'amount'
+        'amount',
+        'account_master_id'
     ];
 
     protected $appends = [

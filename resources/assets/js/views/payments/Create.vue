@@ -32,10 +32,12 @@
               <base-select
                 v-model="formData.list"
                 :class="{'invalid' : $v.formData.list.$error}"
-                :options="partyNameList"
+                :options="sundryCreditorList"
                 :searchable="true"
                 :show-labels="false"
                 :placeholder="$t('payments.select_a_list')"
+                label="name"
+                track-by="id"
               />
               <div v-if="$v.formData.list.$error">
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -47,7 +49,7 @@
                  <base-input
                     v-model.trim="amount"
                     :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
-                    type="text"
+                    type="number"
                     name="amount"
                   />
                 <div v-if="$v.formData.amount.$error">
@@ -149,7 +151,7 @@ export default {
       isSettingInitialData: true,
       //paymentNumAttribute: null,
       paymentPrefix: '',
-      partyNameList: []
+      sundryCreditorList: []
     }
   },
   validations () {
@@ -190,7 +192,11 @@ export default {
         return this.formData.amount
       },
       set: function (newValue) {
-        this.formData.amount = newValue
+        if (0 > parseInt(newValue)) {
+          this.formData.amount = 0
+        } else {
+          this.formData.amount = newValue
+        }
       }
     },
     isEdit () {
@@ -262,7 +268,7 @@ export default {
         // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreatePayment()
-        this.partyNameList = response.data.usersOfSundryCreditor.map(each => each.name)
+        this.sundryCreditorList = response.data.usersOfSundryCreditor
         //this.customerList = response.data.customers
         //this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix

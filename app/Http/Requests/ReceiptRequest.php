@@ -26,6 +26,12 @@ class ReceiptRequest extends FormRequest
             'receipt_date' => 'required',
             'receipt_mode' => 'required',
             'amount' => 'required',
+            'list' => 'required',
+            'list.id' => 'required|integer',
+            'list.name' => 'required|string',
+            'receipt_number' => 'required',
+            'user_id' => 'required',
+            'invoice_id' => 'required',
         ];
 
         return $rules;

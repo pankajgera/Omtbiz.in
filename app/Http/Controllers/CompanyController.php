@@ -18,6 +18,7 @@ use App\Space\DateFormatter;
 use App\Space\TimeZones;
 use App\Models\Currency;
 use App\Models\CompanySetting;
+use Carbon\Carbon;
 
 class CompanyController extends Controller
 {
@@ -205,7 +206,7 @@ class CompanyController extends Controller
         $payment_auto_generate = CompanySetting::getSetting('payment_auto_generate', $request->header('company'));
 
         return  response()->json([
-            'invoice_prefix' => $invoice_prefix,
+            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
             'invoice_auto_generate' => $invoice_auto_generate,
             'estimate_prefix' => $estimate_prefix,
             'estimate_auto_generate' => $estimate_auto_generate,

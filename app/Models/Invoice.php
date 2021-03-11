@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -57,7 +58,8 @@ class Invoice extends Model
         'notes',
         'unique_hash',
         'sent',
-        'viewed'
+        'viewed',
+        'account_master_id',
     ];
 
     protected $appends = [
@@ -69,9 +71,8 @@ class Invoice extends Model
     public static function getNextInvoiceNumber($value)
     {
         // Get the last created order
-        $lastOrder = Invoice::where('invoice_number', 'LIKE', $value . '-%')
-                    ->orderBy('created_at', 'desc')
-                    ->first();
+        $lastOrder = Invoice::orderBy('created_at', 'desc')
+            ->first();
 
 
         if (!$lastOrder) {
@@ -79,8 +80,8 @@ class Invoice extends Model
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$lastOrder->invoice_number);
-            $number = $number[1];
+            $number = explode("-", $lastOrder->invoice_number);
+            $number = $number[3];
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001
@@ -89,7 +90,7 @@ class Invoice extends Model
         // the %06d part makes sure that there are always 6 numbers in the string.
         // so it adds the missing zero's when needed.
 
-        return sprintf('%06d', intval($number) + 1);
+        return  sprintf('%06d', intval($number) + 1);
     }
 
     public function inventories()
@@ -151,7 +152,8 @@ class Invoice extends Model
         return substr($this->invoice_number, $position);
     }
 
-    public function getInvoicePrefixAttribute () {
+    public function getInvoicePrefixAttribute()
+    {
         $prefix = explode("-", $this->invoice_number)[0];
         return $prefix;
     }
@@ -192,7 +194,7 @@ class Invoice extends Model
 
     public function scopeWhereInvoiceNumber($query, $invoiceNumber)
     {
-        return $query->where('invoices.invoice_number', 'LIKE', '%'.$invoiceNumber.'%');
+        return $query->where('invoices.invoice_number', 'LIKE', '%' . $invoiceNumber . '%');
     }
 
     public function scopeInvoicesBetween($query, $start, $end)
@@ -207,9 +209,9 @@ class Invoice extends Model
     {
         foreach (explode(' ', $search) as $term) {
             $query->whereHas('user', function ($query) use ($term) {
-                $query->where('name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('contact_name', 'LIKE', '%'.$term.'%')
-                    ->orWhere('company_name', 'LIKE', '%'.$term.'%');
+                $query->where('name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('contact_name', 'LIKE', '%' . $term . '%')
+                    ->orWhere('company_name', 'LIKE', '%' . $term . '%');
             });
         }
     }

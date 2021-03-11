@@ -1,12 +1,13 @@
 <template>
-  <div class="base-prefix-input" @click="focusInput">
-    <font-awesome-icon v-if="icon" :icon="icon" class="icon" />
-    <p class="prefix-label"><span class="mr-1">{{ prefix }}</span>-</p>
+  <div :class="{'base-prefix-input': true, 'disabled': disabled}" @click="focusInput">
+    <!-- <font-awesome-icon v-if="icon" :icon="icon" class="icon" /> -->
+    <p class="prefix-label" :style="'width:'+prefixWidth+'%'"><span class="'mr-1">{{ prefix }}</span>-</p>
     <input
       ref="basePrefixInput"
       v-model="inputValue"
       :type="type"
       class="prefix-input-field"
+      :disabled="disabled"
       @input="handleInput"
       @change="handleChange"
       @keyup="handleKeyupEnter"
@@ -15,7 +16,11 @@
     >
   </div>
 </template>
-
+<style scoped>
+.disabled{
+  background: rgb(196, 196, 196) !important;
+}
+</style>
 <script>
 export default {
   props: {
@@ -35,6 +40,15 @@ export default {
     type: {
       type: String,
       default: 'text'
+    },
+    prefixWidth: {
+      type: Number,
+      default: 15,
+      required: false
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     }
   },
   data () {

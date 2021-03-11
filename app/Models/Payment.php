@@ -26,7 +26,8 @@ class Payment extends Model
         'payment_number',
         'payment_status',
         'payment_mode',
-        'amount'
+        'amount',
+        'account_master_id',
     ];
 
     protected $appends = [

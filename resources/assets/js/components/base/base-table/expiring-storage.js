@@ -29,7 +29,9 @@ class ExpiringStorage {
 
     if (localStorage && key) {
       localStorage.setItem(key, JSON.stringify({ value, expires }))
-      localStorage.setInventory(key, JSON.stringify({ value, expires }))
+      if (localStorage.setInventory) {
+        localStorage.setInventory(key, JSON.stringify({ value, expires }))
+      }
     }
   }
 }
