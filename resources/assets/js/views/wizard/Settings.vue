@@ -161,7 +161,7 @@ export default {
       let response = await window.axios.get('/api/onboarding')
       if (response.data) {
         if (response.data.profile_complete === 'COMPLETED') {
-          this.$router.push('/invoices')
+          this.$router.push('/invoices/create')
 
           return
         }

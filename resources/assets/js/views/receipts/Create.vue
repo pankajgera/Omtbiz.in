@@ -47,10 +47,12 @@
               <base-select
                 v-model="formData.list"
                 :invalid="$v.formData.list.$error"
-                :options="partyNameList"
+                :options="sundryDebtorList"
                 :searchable="true"
                 :show-labels="false"
                 :placeholder="$t('receipts.select_a_list')"
+                label="name"
+                track-by="id"
               />
               <div v-if="$v.formData.list.$error">
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -78,7 +80,7 @@
                  <base-input
                     v-model.trim="amount"
                     :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
-                    type="text"
+                    type="number"
                     name="amount"
                   />
                 <div v-if="$v.formData.amount.$error">
@@ -110,6 +112,32 @@
                 <base-text-area
                   v-model="formData.notes"
                 />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="col-sm-12 ">
+                <div class="form-group">
+                  <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
+                  <base-prefix-input
+                    v-model.trim="openingBalance"
+                    :prefix="money.prefix"
+                    type="text"
+                    name="openingBalance"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 ">
+                <div class="form-group">
+                  <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
+                  <base-prefix-input
+                    v-model.trim="closingBalance"
+                    :prefix="money.prefix"
+                    type="text"
+                    name="closingBalance"
+                    disabled
+                  />
+                </div>
               </div>
             </div>
             <div class="col-sm-12">
@@ -170,7 +198,7 @@ export default {
       isSettingInitialData: true,
       receiptNumAttribute: null,
       receiptPrefix: '',
-      partyNameList: []
+      sundryDebtorList: [],
     }
   },
   validations () {
@@ -211,7 +239,11 @@ export default {
         return this.formData.amount
       },
       set: function (newValue) {
-        this.formData.amount = newValue
+        if (0 > parseInt(newValue)) {
+          this.formData.amount = 0
+        } else {
+          this.formData.amount = newValue
+        }
       }
     },
     isEdit () {
@@ -220,6 +252,19 @@ export default {
       }
       return false
     },
+    openingBalance() {
+      if (this.formData.list && this.formData.list.id) {
+        let balance = this.sundryDebtorList.find(each => each.id === this.formData.list.id);
+        return balance.opening_balance ? balance.opening_balance : 0
+      }
+      return 0
+    },
+    closingBalance() {
+      if (this.formData.amount) {
+        return this.openingBalance - this.formData.amount
+      }
+      return 0
+    }
   },
   watch: {
     // customer (newValue) {
@@ -276,15 +321,14 @@ export default {
         this.formData.receipt_date = moment(response.data.receipt.receipt_date, 'YYYY-MM-DD').toString()
         this.formData.amount = parseFloat(response.data.receipt.amount)
         this.receiptPrefix = response.data.receipt_prefix
-        this.receiptNumAttribute = response.data.nextReceiptNumber
+        this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
           this.invoice = response.data.receipt.invoice
         }
       } else {
         let response = await this.fetchCreateReceipt()
-        this.partyNameList = response.data.usersOfSundryDebitors.map(each => each.name)
-        //this.customerList = response.data.customers
+        this.sundryDebtorList = response.data.usersOfSundryDebitors
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
         this.formData.receipt_date = moment(new Date()).toString()

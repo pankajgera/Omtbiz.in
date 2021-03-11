@@ -87,7 +87,7 @@
 
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
-              v-model="newInvoice.debtors"
+              v-model="setInvoiceDebtor"
               :invalid="$v.newInvoice.debtors.$error"
               :options="sundryDebtorsList"
               :searchable="true"
@@ -143,6 +143,8 @@
                 :prefix="invoicePrefix"
                 icon="hashtag"
                 @input="$v.invoiceNumAttribute.$touch()"
+                :prefix-width="55"
+                :disabled="true"
               />
               <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
               <span v-show="!$v.invoiceNumAttribute.numeric" class="text-danger mt-1"> {{ $tc('validation.numbers_only') }}  </span>
@@ -236,6 +238,12 @@
         </div>
 
         <div class="invoice-total">
+          <div class="section">
+            <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
+            <label class="">
+              <div v-html="newInvoice.inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)" />
+            </label>
+          </div>
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.sub_total') }}</label>
             <label class="invoice-amount">
@@ -476,7 +484,6 @@ export default {
         return 0
       })
     },
-
     totalCompoundTax () {
       return window._.sumBy(this.newInvoice.taxes, function (tax) {
         if (tax.compound_tax) {
@@ -515,8 +522,17 @@ export default {
           }
         })
       })
-
       return taxes
+    },
+    setInvoiceDebtor: {
+      cache: false,
+      get() {
+        return this.newInvoice.debtors
+      },
+      set(value) {
+        this.searchDebtorRefNumber(value)
+        this.newInvoice.debtors = value
+      },
     }
   },
   watch: {
@@ -549,7 +565,8 @@ export default {
       'fetchInvoice',
       //'resetSelectedCustomer',
       //'selectCustomer',
-      'updateInvoice'
+      'updateInvoice',
+      'fetchReferenceNumber',
     ]),
     ...mapActions('inventory', [
       'fetchAllInventory'
@@ -611,12 +628,7 @@ export default {
         this.inventoryList = response.data.inventory
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
-        Object.values(response.data.sundryDebtorsList).map((each, key) => {
-          this.sundryDebtorsList.push({
-            'name': each,
-            'id': key
-          });
-        });
+        this.sundryDebtorsList = response.data.sundryDebtorsList;
       }
       this.initLoading = false
     },
@@ -673,14 +685,14 @@ export default {
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
-          this.$router.push('/invoices')
+          this.$router.push('/invoices/create')
         }
 
         this.isLoading = false
       }).catch((err) => {
         this.isLoading = false
-        if (err.response.data.errors.invoice_number) {
-          window.toastr['error'](err.response.data.errors.invoice_number)
+        if (err) {
+          window.toastr['error'](err)
           return true
         }
         console.log(err)
@@ -691,7 +703,7 @@ export default {
         this.isLoading = false
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
-          this.$router.push('/invoices')
+          this.$router.push('/invoices/create')
         }
 
         if (res.data.error === 'invalid_due_amount') {
@@ -699,8 +711,8 @@ export default {
         }
       }).catch((err) => {
         this.isLoading = false
-        if (err.response.data.errors.invoice_number) {
-          window.toastr['error'](err.response.data.errors.invoice_number)
+        if (err) {
+          window.toastr['error'](err)
           return true
         }
         console.log(err)
@@ -751,6 +763,15 @@ export default {
         return true
       }
       return false
+    },
+    async searchDebtorRefNumber(data) {
+       this.newInvoice.reference_number = null;
+       let response = await this.fetchReferenceNumber(data)
+        if (response.data && response.data.invoice) {
+          this.newInvoice.reference_number = response.data.invoice.reference_number
+        } else {
+          this.newInvoice.reference_number = this.invoiceNumAttribute
+        }
     }
   }
 }

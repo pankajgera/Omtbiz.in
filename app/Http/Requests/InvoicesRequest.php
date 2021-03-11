@@ -23,20 +23,25 @@ class InvoicesRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'invoice_date' => 'required',
-            //'due_date' => 'required',
-            'user_id' => 'required',
-            'discount' => 'required',
-            'discount_val' => 'required',
+            'debtors' => 'required',
+            'debtors.id' => 'required|integer',
+            'debtors.name' => 'required|string',
+            'discount' => 'integer|min:0',
+            'discount_type' => 'required',
+            'discount_val' => 'integer|min:0',
             'sub_total' => 'required',
             'total' => 'required',
-            'tax' => 'required',
+            'tax' => 'integer|min:0',
+            'taxes' => 'nullable|array',
+            'invoice_date' => 'required',
             'invoice_template_id' => 'required',
             'inventory' => 'required|array',
             'inventory.*' => 'required|max:255',
             'inventory.*.name' => 'required',
             'inventory.*.quantity' => 'required',
-            'inventory.*.price' => 'required'
+            'inventory.*.price' => 'required',
+            'notes' => 'nullable|string',
+            'user_id' => 'required|integer',
         ];
 
         return $rules;

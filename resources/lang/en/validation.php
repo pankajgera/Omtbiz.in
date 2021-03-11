@@ -85,6 +85,9 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
 
+    'receipt_greater_than_due_amount' => 'Receipt amount is greater than Due amount',
+    'receipt_greater_than_zero' => 'Receipt amount should be greater than 0',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

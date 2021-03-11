@@ -86,26 +86,18 @@ class InvoicesController extends Controller
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
         }
 
-        $sundryDebtorsList = [];
-        $ledgers = AccountLedger::where('company_id', $request->header('company'))->get();
-
-        foreach ($ledgers as $each) {
-            $vouchers = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $each->bill_no))->orderBy('id')->get();
-            foreach ($vouchers as $ee) {
-                $sundryDebtorsList[] = $ee->account;
-            }
-        }
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
 
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' => $invoice_prefix . '-' . $nextInvoiceNumber,
+            'nextInvoiceNumber' =>  $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month . '-' . $nextInvoiceNumber,
             'inventory' => Inventory::all(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
-            'invoice_prefix' => $invoice_prefix,
-            'sundryDebtorsList' => array_unique($sundryDebtorsList, SORT_REGULAR)
+            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
@@ -118,11 +110,11 @@ class InvoicesController extends Controller
     public function store(Requests\InvoicesRequest $request)
     {
         try {
-            $invoice_number = explode("-", $request->invoice_number);
-            $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
-
+            // $invoice_number = explode("-", $request->invoice_number);
+            // $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
+            $number_attributes['invoice_number'] = $request->invoice_number;
             Validator::make($number_attributes, [
-                'invoice_number' => 'required|unique:invoices,invoice_number'
+                'invoice_number' => 'required'
             ])->validate();
 
             $invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
@@ -156,7 +148,8 @@ class InvoicesController extends Controller
                 'discount_per_item' => $discount_per_item,
                 'tax' => $request->tax,
                 'notes' => $request->notes,
-                'unique_hash' => str_random(60)
+                'unique_hash' => str_random(60),
+                'account_master_id' => $request->debtors['id'],
             ]);
 
             $invoiceInventories = $request->inventory;
@@ -219,7 +212,9 @@ class InvoicesController extends Controller
             ]);
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
-            return false;
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
     }
 
@@ -522,6 +517,22 @@ class InvoicesController extends Controller
 
         return response()->json([
             'invoices' => $invoices
+        ]);
+    }
+
+    /**
+     * Get reference number for invoice
+     * In invoice when ledger/master (Sundry debtor) is selected then
+     * reference number would be same for that Sundry debtor for whole day
+     */
+    public function referenceNumber(Request $request)
+    {
+        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now()->toDateString())
+            ->where('account_master_id', $request->id)
+            ->orderBy('id', 'asc')->first();
+
+        return response()->json([
+            'invoice' => $find_today_first_invoice
         ]);
     }
 }
