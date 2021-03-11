@@ -216,6 +216,109 @@
       </table-column>
       </table-component>
     </div>
+    <div v-show="!showEmptyScreen" class="table-container">
+      <div class="table-actions mt-5">
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p>
+        <transition name="fade">
+          <v-dropdown v-if="selectedDispatch.length" :show-arrow="false">
+            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+              {{ $t('general.actions') }}
+            </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeMultipleDispatch">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </transition>
+      </div>
+
+      <div class="custom-control custom-checkbox">
+        <input
+          id="select-all"
+          v-model="selectAllFieldStatus"
+          type="checkbox"
+          class="custom-control-input"
+          @change="selectAllDispatch"
+        >
+        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+          <span class="select-all-label">{{ $t('general.select_all') }} </span>
+        </label>
+      </div>
+
+      <table-component
+        ref="table"
+        :data="fetchData"
+        :show-filter="false"
+        table-class="table"
+      >
+
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="no-click"
+        >
+          <template slot-scope="row">
+            <div class="custom-control custom-checkbox">
+              <input
+                :id="row.id"
+                v-model="selectField"
+                :value="row.id"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label :for="row.id" class="custom-control-label"/>
+            </div>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('dispatch.name')"
+          show="name"
+        />
+        <table-column
+          :label="$t('dispatch.design_no')"
+          show="design_no"
+        />
+        <table-column
+          :label="$t('dispatch.rate')"
+          show="rate"
+        />
+        <table-column
+          :label="$t('dispatch.average')"
+          show="average"
+        />
+        <table-column
+          :key="Math.random()"
+          :sortable="false"
+          :filterable="false"
+          cell-class="action-dropdown"
+        >
+        <template slot-scope="row">
+          <span> {{ $t('dispatch.action') }} </span>
+          <v-dropdown>
+            <a slot="activator" href="#">
+              <dot-icon />
+            </a>
+            <v-dropdown-item>
+
+              <router-link :to="{path: `dispatch/${row.id}/edit`}" class="dropdown-item">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                {{ $t('general.edit') }}
+              </router-link>
+
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeDispatch(row.id)">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </template>
+      </table-column>
+      </table-component>
+    </div>
   </div>
 </template>
 <style>

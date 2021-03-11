@@ -31,49 +31,35 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.inovice') }}</label>
-                <base-input
-                  v-model.trim="formData.inovice"
-                  focus
-                  type="text"
-                  name="inovice"
+                <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
+                <base-date-picker
+                  v-model="formData.date_time"
+                  :invalid="$v.formData.date_time.$error"
+                  :calendar-button="true"
+                  calendar-button-icon="calendar"
+                  @change="$v.formData.date_time.$touch()"
                 />
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.rate') }}</label>
+                <label class="control-label">{{ $t('dispatch.transport') }}</label>
                 <base-input
-                  v-model.trim="formData.rate"
+                  v-model.trim="formData.transport"
                   focus
                   type="text"
-                  name="rate"
+                  name="transport"
                 />
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.average') }}</label>
-                <base-input
-                  v-model.trim="formData.average"
-                  focus
-                  type="text"
-                  name="average"
-                />
-              </div>
-              <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.per_price') }}</label>
-                <base-input
-                  v-model.trim="formData.per_price"
-                  focus
-                  type="text"
-                  name="per_price"
-                />
-              </div>
-              <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.dispatch') }}</label>
-                <base-text-area
-                  v-model.trim="formData.dispatch"
-                  focus
-                  type="text"
-                  name="dispatch"
-                />
+                <label class="control-label">{{ $t('dispatch.status') }}</label><span class="text-danger"> *</span>
+                <base-select
+                    v-model="formData.status"
+                    :options="statusList"
+                    :show-labels="false"
+                    :placeholder="$t('dispatch.status')"
+                    :allow-empty="false"
+                    track-by="id"
+                    label="name"
+                  />
               </div>
 
               <div class="form-group">
@@ -111,12 +97,21 @@ export default {
       title: 'Add Dispatch',
       formData: {
         name: '',
-        inovice: '',
-        rate: '',
-        average: '',
-        per_price: '',
-        dispatch: ''
+        inovice_id: '',
+        date_time: '',
+        transport: '',
+        status: {},
       },
+      statusList: [
+        {
+          id: 1,
+          name: 'Draft',
+        },
+        {
+          id: 2,
+          name: 'Sent',
+        }
+      ]
     }
   },
   computed: {
@@ -138,6 +133,12 @@ export default {
         required,
         minLength: minLength(3)
       },
+      date_time: {
+        required,
+      },
+      status: {
+        required,
+      },
     }
   },
   methods: {
@@ -155,27 +156,40 @@ export default {
       if (this.$v.$invalid) {
         return false
       }
-      if (this.isEdit) {
-        this.isLoading = true
-        let response = await this.updateDispatch(this.formData)
-        if (response.data) {
-          this.isLoading = false
-          window.toastr['success'](this.$tc('dispatch.updated_message'))
-          this.$router.push('/dispatch')
-          return true
-        }
-        window.toastr['error'](response.data.error)
-      } else {
-        this.isLoading = true
-        let response = await this.addDispatch(this.formData)
 
-        if (response.data) {
-          window.toastr['success'](this.$tc('dispatch.created_message'))
-          this.$router.push('/dispatch')
-          this.isLoading = false
-          return true
+      if (this.isEdit) {
+        try {
+          this.isLoading = true
+          let response = await this.updateDispatch(this.formData)
+          if (response.data) {
+            this.isLoading = false
+            window.toastr['success'](this.$tc('dispatch.updated_message'))
+            this.$router.push('/dispatch')
+            return true
+          }
+        } catch (err) {
+          if (err) {
+            this.isLoading = false
+            window.toastr['error'](err)
+          }
         }
-        window.toastr['success'](response.data.success)
+      } else {
+        try {
+          this.isLoading = true
+          let response = await this.addDispatch(this.formData)
+
+          if (response.data) {
+            window.toastr['success'](this.$tc('dispatch.created_message'))
+            this.$router.push('/dispatch')
+            this.isLoading = false
+            return true
+          }
+        } catch (err) {
+          if (err) {
+            this.isLoading = false
+            window.toastr['error'](err)
+          }
+        }
       }
     },
   }
