@@ -490,4 +490,19 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::resource('banks', 'BanksController');
+
+
+    // Dispatch
+    //----------------------------------
+    Route::post('/dispatch/delete', [
+        'as' => 'dispatch.delete',
+        'uses' => 'DispatchController@delete'
+    ]);
+
+    Route::post('/dispatch/update', [
+        'as' => 'dispatch.update',
+        'uses' => 'DispatchController@update'
+    ]);
+
+    Route::resource('dispatch', 'DispatchController');
 });

@@ -59,6 +59,12 @@ export default {
             route: '/invoices/create',
             meta: ['admin', 'accountant']
           },
+          {
+            title: 'navigation.dispatch',
+            icon: 'file',
+            route: '/dispatch',
+            meta: ['admin']
+          },
           // {
           //   title: 'navigation.bills',
           //   icon: 'star',
