@@ -136,7 +136,7 @@ class InvoicesController extends Controller
                 'user_id' => $request->user_id,
                 'company_id' => $request->header('company'),
                 'invoice_template_id' => $request->invoice_template_id,
-                'status' => 'SENT',
+                'status' => 'DRAFT',
                 'paid_status' => Invoice::STATUS_UNPAID,
                 'sub_total' => $request->sub_total,
                 'discount' => $request->discount,
@@ -311,7 +311,7 @@ class InvoicesController extends Controller
             $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
         }
 
-        $invoice->status = 'SENT';
+        $invoice->status = $request->status;
         $invoice->invoice_date = $invoice_date;
         //$invoice->due_date = $due_date;
         $invoice->invoice_number =  $number_attributes['invoice_number'];

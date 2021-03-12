@@ -61,6 +61,20 @@
                     label="name"
                   />
               </div>
+              <div class="form-group">
+                <label class="form-label">{{ $t('receipts.invoice') }}</label>
+                <base-select
+                  v-model="invoice"
+                  :options="invoiceList"
+                  :searchable="true"
+                  :show-labels="false"
+                  :allow-empty="false"
+                  :disabled="isEdit"
+                  :placeholder="$t('invoices.select_invoice')"
+                  :custom-label="invoiceWithAmount"
+                  track-by="invoice_number"
+                />
+              </div>
 
               <div class="form-group">
                 <base-button
@@ -102,6 +116,8 @@ export default {
         transport: '',
         status: {},
       },
+      invoice: null,
+      invoiceList: [],
       statusList: [
         {
           id: 1,
@@ -110,8 +126,19 @@ export default {
         {
           id: 2,
           name: 'Sent',
+        },
+        {
+          id: 3,
+          name: 'Completed',
         }
       ]
+    }
+  },
+  watch: {
+    invoice (newValue) {
+      if (newValue) {
+        this.formData.invoice_id = newValue.id
+      }
     }
   },
   computed: {
@@ -147,9 +174,19 @@ export default {
       'fetchDispatch',
       'updateDispatch'
     ]),
+    invoiceWithAmount ({ invoice_number, due_amount }) {
+      return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
+    },
     async loadEditData () {
+      this.fetchCustomerInvoices()
       let response = await this.fetchDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
+    },
+    async fetchCustomerInvoices () {
+      let response = await axios.get(`/api/invoices/unpaid/`)
+      if (response.data) {
+        this.invoiceList = response.data.invoices
+      }
     },
     async submitDispatch () {
       this.$v.formData.$touch()
