@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
-use App\Models\Proxy\HttpKernelProxy;
+use App\Proxy\HttpKernelProxy;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
