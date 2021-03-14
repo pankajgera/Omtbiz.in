@@ -315,8 +315,12 @@ class ReportController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
+        $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
         $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
             ->where('account_ledger_id', '!=', $request->ledger_id)
+            ->whereDate('date', '>=', $from)
+            ->whereDate('date', '<=', $to)
             ->orderBy('id')
             ->get();
         $totalAmount = 0;
@@ -404,13 +408,21 @@ class ReportController extends Controller
     {
         $related_vouchers = [];
         $related_masters = AccountMaster::where('groups', 'LIKE', 'Bank%')->get();
+        $balance_array = [];
+        $master_ledger_type = [];
+        $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
+        $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
         foreach ($related_masters as $key => $master) {
-            $vouchers = Voucher::where('account_master_id', $master->id)->where('account', '!=', $master->groups)->get();
+            $vouchers = Voucher::where('account_master_id', $master->id)
+                ->where('account', '<>', $master->groups)
+                ->whereDate('date', '>=', $from)
+                ->whereDate('date', '<=', $to)
+                ->get();
             if (0 < count($vouchers)) {
                 array_push($related_vouchers, $vouchers->toArray());
-                $related_vouchers[$key]['opening_balance'] = $master->opening_balance;
-                $related_vouchers[$key]['type'] = $master->type;
             }
+            array_push($balance_array, $master->opening_balance);
+            array_push($master_ledger_type, $master->type);
         }
 
         $vouchers_debit_sum = [];
@@ -450,8 +462,14 @@ class ReportController extends Controller
             ->whereCompany($company->id)
             ->get();
 
+        $type_array = array_count_values($master_ledger_type);
+        arsort($type_array);
+        $type_occurence = key($type_array);
+
         view()->share([
             'related_vouchers' => $related_vouchers,
+            'opening_balance' => array_sum($balance_array),
+            'master_type' => $type_occurence,
             'credit_debit_sum' => $credit_debit_sum,
             'credit_debit_type' => $debit_sum > $credit_sum ? 'Dr' : 'Cr',
             'colorSettings' => $colorSettings,
