@@ -189,6 +189,18 @@
                     </td>
                 </tr>
             </table>
+            <table>
+                <tr>
+                    <td>
+                        <p class="total-tax-title">OPENING BALANCE</p>
+                    </td>
+                    <td class="tax-total-cell">
+                        <p class="" style="float:right; padding:0px; margin: 0px">
+                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
+                        </p>
+                    </td>
+                </tr>
+            </table>
             <div class="tax-table-container">
                 <table class="tax-table">
                     @foreach ($related_vouchers as $each)
@@ -216,16 +228,6 @@
         </div>
 
         <table class="tax-total-table">
-            <tr>
-                <td>
-                    <p class="total-tax-title">OPENING BALANCE</p>
-                </td>
-                <td class="tax-total-cell">
-                    <p class="" style="float:right; padding:0px; margin: 0px">
-                        ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
-                    </p>
-                </td>
-            </tr>
             <tr>
                 <td>
                     <p class="total-tax-title">CLOSING BALANCE</p>
