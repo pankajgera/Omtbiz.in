@@ -504,5 +504,10 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'DispatchController@update'
     ]);
 
+    Route::get('/dispatch/invoices', [
+        'as' => 'bootstrap',
+        'uses' => 'DispatchController@getInvoices'
+    ]);
+
     Route::resource('dispatch', 'DispatchController');
 });
