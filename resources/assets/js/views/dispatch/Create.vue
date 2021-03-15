@@ -153,6 +153,7 @@ export default {
     if (this.isEdit) {
       this.loadEditData()
     }
+    this.fetchInvoices()
   },
   validations: {
     formData: {
@@ -178,12 +179,11 @@ export default {
       return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
     },
     async loadEditData () {
-      this.fetchCustomerInvoices()
       let response = await this.fetchDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
     },
-    async fetchCustomerInvoices () {
-      let response = await axios.get(`/api/invoices/unpaid/`)
+    async fetchInvoices () {
+      let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
       }

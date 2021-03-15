@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Dispatch;
+use App\Models\Invoice;
 use Exception;
 use Log;
 
@@ -69,7 +70,7 @@ class DispatchController extends Controller
     /**
      * Update an existing Dispatch.
      *
-     * @param int                               $id
+     * @param int $id
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -143,6 +144,25 @@ class DispatchController extends Controller
 
         return response()->json([
             'dispatch' => $dispatch,
+        ]);
+    }
+
+
+    /**
+     * Retrive a specified user's unpaid invoices from storage.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getInvoices(Request $request)
+    {
+        $invoices = Invoice::where('paid_status', '<>', Invoice::STATUS_PAID)
+            ->whereCompany($request->header('company'))
+            ->get();
+
+        return response()->json([
+            'invoices' => $invoices
         ]);
     }
 }
