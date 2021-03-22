@@ -80,7 +80,7 @@ export const sendEmail = ({ commit, dispatch, state }, data) => {
 
 export const addInvoice = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.post('/api/invoices', data).then((response) => {
+    window.axios.post('/api/invoices/create', data).then((response) => {
       commit(types.ADD_INVOICE, response.data)
       resolve(response)
     }).catch((err) => {

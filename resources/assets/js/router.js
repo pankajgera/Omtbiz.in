@@ -648,16 +648,16 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
         switch (role) {
             case 'admin':
-                return next('/invoices')
+                return next('/invoices/create')
                 break;
             case 'accountant':
-                return next('/invoices')
+                return next('/invoices/create')
                 break;
             case 'employee':
                 return next('/items')
                 break;
             default:
-                return next('/invoices')
+                return next('/invoices/create')
         }
     }
 
@@ -671,16 +671,16 @@ router.beforeEach((to, from, next) => {
         } else {
             switch (role) {
                 case 'admin':
-                    return next('/invoices')
+                    return next('/invoices/create')
                     break;
                 case 'accountant':
-                    return next('/invoices')
+                    return next('/invoices/create')
                     break;
                 case 'employee':
                     return next('/items')
                     break;
                 default:
-                    return next('/invoices')
+                    return next('/invoices/create')
             }
         }
     }
