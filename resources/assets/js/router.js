@@ -658,6 +658,7 @@ router.beforeEach((to, from, next) => {
                 break;
             default:
                 return next('/invoices/create')
+                break;
         }
     }
 
@@ -668,7 +669,7 @@ router.beforeEach((to, from, next) => {
             next()
         } else if (to.meta.includes('employee') && role === 'employee') {
             next()
-        } else {
+        } else if (role && role !== 'undefined') {
             switch (role) {
                 case 'admin':
                     return next('/invoices/create')
@@ -681,6 +682,7 @@ router.beforeEach((to, from, next) => {
                     break;
                 default:
                     return next('/invoices/create')
+                    break;
             }
         }
     }

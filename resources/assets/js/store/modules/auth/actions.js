@@ -16,7 +16,7 @@ export const login = ({ commit, dispatch, state }, data) => {
             Ls.set('role', response.data.role)
             commit('user/' + userTypes.RESET_CURRENT_USER, null, { root: true })
             commit(rootTypes.UPDATE_APP_LOADING_STATUS, false, { root: true })
-
+            console.log(response)
             commit(types.AUTH_SUCCESS, token)
             window.toastr['success']('Login Successful')
             resolve(response)
@@ -30,6 +30,7 @@ export const login = ({ commit, dispatch, state }, data) => {
 
             commit(types.AUTH_ERROR, err.response)
             Ls.remove('auth.token')
+            Ls.remove('role')
             reject(err)
         })
     })
