@@ -16,7 +16,7 @@ use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\Item;
-use App\Models\invoicePdf;
+use App\Mail\invoicePdf;
 use function MongoDB\BSON\toJSON;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
