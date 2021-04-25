@@ -7,7 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Log;
 
-class BankController extends Controller
+class BanksController extends Controller
 {
     public function index(Request $request)
     {
