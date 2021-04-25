@@ -75,16 +75,12 @@ export default {
 
   props: {
     data: { default: () => [], type: [Array, Function] },
-
     showFilter: { type: Boolean, default: true },
     showCaption: { type: Boolean, default: true },
-
     sortBy: { default: '', type: String },
     sortOrder: { default: '', type: String },
-
     cacheKey: { default: null },
     cacheLifetime: { default: 5 },
-
     tableClass: { default: () => settings.tableClass },
     theadClass: { default: () => settings.theadClass },
     tbodyClass: { default: () => settings.tbodyClass },

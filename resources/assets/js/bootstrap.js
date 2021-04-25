@@ -67,12 +67,11 @@ window.axios.defaults.headers.common = {
 window.axios.interceptors.request.use(function(config) {
     // Do something before request is sent
     const AUTH_TOKEN = Ls.get('auth.token')
-    const companyId = Ls.get('selectedCompany')
-
     if (AUTH_TOKEN) {
         config.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`
     }
 
+    const companyId = Ls.get('selectedCompany')
     if (companyId) {
         config.headers.common['company'] = companyId
     }

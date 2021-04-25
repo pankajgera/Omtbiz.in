@@ -15,8 +15,8 @@ export const updateCurrentDispatch = ({ commit, dispatch, state }, data) => {
 export const fetchDispatch = ({ commit, dispatch, state }, params) => {
     return new Promise((resolve, reject) => {
         window.axios.get(`/api/dispatch`, { params }).then((response) => {
-            commit(types.BOOTSTRAP_DISPATCH, response.data.dispatch.data)
-            commit(types.SET_TOTAL_DISPATCH, response.data.dispatch.total)
+            // commit(types.BOOTSTRAP_DISPATCH, response.data.dispatch.data)
+            commit(types.SET_TOTAL_DISPATCH, response.data.dispatch_total)
             resolve(response)
         }).catch((err) => {
             reject(err)

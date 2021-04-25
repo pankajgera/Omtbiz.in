@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dispatch;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Exception;
 use Log;
 
@@ -14,19 +15,32 @@ class DispatchController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 20;
 
-        $dispatch = Dispatch::applyFilters($request->only([
-                'name',
-                'date_time',
-                'transport',
-                'orderByField',
-                'orderBy',
-            ]))
+        $dispatch_inprogress = Dispatch::where('status', '!=', 'Completed')->applyFilters($request->only([
+            'name',
+            'date_time',
+            'transport',
+            'orderByField',
+            'orderBy',
+        ]))
+            ->whereCompany($request->header('company'))
+            ->latest()
+            ->paginate($limit);
+
+        $dispatch_completed = Dispatch::where('status', 'Completed')->applyFilters($request->only([
+            'name',
+            'date_time',
+            'transport',
+            'orderByField',
+            'orderBy',
+        ]))
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
         return response()->json([
-            'dispatch' => $dispatch,
+            'dispatch_inprogress' => $dispatch_inprogress,
+            'dispatch_completed' => $dispatch_completed,
+            'dispatch_total' =>  Dispatch::count(),
         ]);
     }
 
@@ -50,7 +64,7 @@ class DispatchController extends Controller
             $dispatch = new Dispatch();
             $dispatch->name = $request->name;
             $dispatch->invoice_id = $request->invoice_id;
-            $dispatch->date_time = $request->date_time;
+            $dispatch->date_time = Carbon::createFromFormat('Y-m-d H:i:s', $request->date_time, 'Asia/Kolkata');
             $dispatch->transport = $request->transport;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');

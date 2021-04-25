@@ -162,12 +162,10 @@ export default {
       if (response.data) {
         if (response.data.profile_complete === 'COMPLETED') {
           this.$router.push('/invoices/create')
-
           return
         }
 
         let dbStep = parseInt(response.data.profile_complete)
-
         if (dbStep) {
           this.step = dbStep + 1
         }
@@ -187,13 +185,10 @@ export default {
     },
     async next () {
       this.$v.settingData.$touch()
-
       if (this.$v.settingData.$invalid) {
         return true
       }
-
       this.loading = true
-
       let data = {
         currency: this.settingData.currency.id,
         time_zone: this.settingData.timeZone.value,
