@@ -182,6 +182,11 @@ Route::group(['middleware' => 'api'], function () {
     // Invoices
     //-------------------------------------------------
 
+    Route::post('/invoices/create-invoice', [
+        'as' => 'invoices.create-invoice',
+        'uses' => 'InvoicesController@store'
+    ]);
+
     Route::post('/invoices/delete', [
         'as' => 'invoices.delete',
         'uses' => 'InvoicesController@delete'

@@ -689,6 +689,9 @@ export default {
         }
 
         this.isLoading = false
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
       }).catch((err) => {
         this.isLoading = false
         if (err) {
