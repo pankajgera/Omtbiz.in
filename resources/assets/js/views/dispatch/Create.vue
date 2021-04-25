@@ -34,7 +34,6 @@
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
                   v-model="formData.date_time"
-                  :invalid="$v.formData.date_time.$error"
                   :calendar-button="true"
                   calendar-button-icon="calendar"
                   @change="$v.formData.date_time.$touch()"
@@ -99,6 +98,7 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
 
 export default {
@@ -136,7 +136,7 @@ export default {
   },
   watch: {
     invoice (newValue) {
-      if (newValue) {
+      if (newValue && newValue.length) {
         this.formData.invoice_id = newValue.id
       }
     }
@@ -147,13 +147,16 @@ export default {
         return true
       }
       return false
+    },
+    formatDate() {
+      return moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss');
     }
   },
   created () {
+    this.fetchInvoices()
     if (this.isEdit) {
       this.loadEditData()
     }
-    this.fetchInvoices()
   },
   validations: {
     formData: {
@@ -172,6 +175,7 @@ export default {
   methods: {
     ...mapActions('dispatch', [
       'addDispatch',
+      'editDispatch',
       'fetchDispatch',
       'updateDispatch'
     ]),
@@ -179,13 +183,15 @@ export default {
       return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
     },
     async loadEditData () {
-      let response = await this.fetchDispatch(this.$route.params.id)
+      let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
+      this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)
     },
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
+        this.invoice = this.invoiceList.filter(each => each.id === this.formData.invoice_id)
       }
     },
     async submitDispatch () {

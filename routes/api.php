@@ -16,7 +16,6 @@
 //----------------------------------
 
 Route::group(['prefix' => 'auth'], function () {
-
     Route::post('login', 'Auth\AccessTokensController@store');
     Route::get('logout', 'Auth\AccessTokensController@destroy');
     Route::post('refresh_token', 'Auth\AccessTokensController@update');

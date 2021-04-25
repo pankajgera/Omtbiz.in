@@ -118,10 +118,10 @@ export default {
         let role = Ls.get('role');
         switch (role) {
             case 'admin':
-                return this.$router.push('/invoices')
+                return this.$router.push('/invoices/create')
                 break;
             case 'accountant':
-                return this.$router.push('/invoices')
+                return this.$router.push('/invoices/create')
                 break;
             case 'employee':
                 return this.$router.push('/items')

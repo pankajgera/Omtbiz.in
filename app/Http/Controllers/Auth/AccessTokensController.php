@@ -32,6 +32,7 @@ class AccessTokensController extends Controller
 	{
 		$this->middleware('api')->except(['store', 'update']);
 		$this->proxy = $proxy;
+        $this->middleware('guest', ['except' => ['logout']]);
 	}
 
 	/**
@@ -91,7 +92,7 @@ class AccessTokensController extends Controller
 		]);
 
 		if ($response->isSuccessful()) {
-			return $this->sendSuccessResponse($response);
+			return $this->sendSuccessResponse($response, Auth::user());
 		}
 
 		return response($response->getContent(), $response->getStatusCode());

@@ -27,8 +27,10 @@ class UsersController extends Controller
      */
     public function getBootstrap(Request $request)
     {
+        if (!Auth::check()) {
+            return redirect()->guest('login');
+        }
         $user = Auth::user();
-
         $company = $request->header('company') ?? 1;
 
         $customers = User::with('billingAddress', 'shippingAddress')

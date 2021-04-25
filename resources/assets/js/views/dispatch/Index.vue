@@ -61,29 +61,29 @@
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('dispatch.design_no') }} </label>
+            <label class="form-label"> {{ $tc('dispatch.date_time') }} </label>
             <base-input
-              v-model="filters.design_no"
+              v-model="filters.date_time"
               type="text"
-              name="design_no"
+              name="date_time"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('dispatch.rate') }} </label>
+            <label class="form-label"> {{ $tc('dispatch.status') }} </label>
             <base-input
-              v-model="filters.rate"
+              v-model="filters.status"
               type="text"
-              name="rate"
+              name="status"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('dispatch.average') }} </label>
+            <label class="form-label"> {{ $tc('dispatch.transport') }} </label>
             <base-input
-              v-model="filters.average"
+              v-model="filters.transport"
               type="text"
-              name="average"
+              name="transport"
               autocomplete="off"
             />
           </div>
@@ -115,7 +115,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p>
+        <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <transition name="fade">
           <v-dropdown v-if="selectedDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -146,7 +146,7 @@
 
       <table-component
         ref="table"
-        :data="fetchData"
+        :data="inProgressData"
         :show-filter="false"
         table-class="table"
       >
@@ -174,16 +174,16 @@
           show="name"
         />
         <table-column
-          :label="$t('dispatch.design_no')"
-          show="design_no"
+          :label="$t('dispatch.date_time')"
+          show="date_time"
         />
         <table-column
-          :label="$t('dispatch.rate')"
-          show="rate"
+          :label="$t('dispatch.status')"
+          show="status"
         />
         <table-column
-          :label="$t('dispatch.average')"
-          show="average"
+          :label="$t('dispatch.transport')"
+          show="transport"
         />
         <table-column
           :key="Math.random()"
@@ -218,7 +218,7 @@
     </div>
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p>
+        <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <transition name="fade">
           <v-dropdown v-if="selectedDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -249,7 +249,7 @@
 
       <table-component
         ref="table"
-        :data="fetchData"
+        :data="completedData"
         :show-filter="false"
         table-class="table"
       >
@@ -277,16 +277,16 @@
           show="name"
         />
         <table-column
-          :label="$t('dispatch.design_no')"
-          show="design_no"
+          :label="$t('dispatch.date_time')"
+          show="date_time"
         />
         <table-column
-          :label="$t('dispatch.rate')"
-          show="rate"
+          :label="$t('dispatch.status')"
+          show="status"
         />
         <table-column
-          :label="$t('dispatch.average')"
-          show="average"
+          :label="$t('dispatch.transport')"
+          show="transport"
         />
         <table-column
           :key="Math.random()"
@@ -350,11 +350,11 @@ export default {
       filtersApplied: false,
       filters: {
         name: '',
-        design_no: '',
-        rate: '',
-        average: ''
+        date_time: '',
+        status: '',
+        transport: ''
       },
-      index: null
+      index: null,
     }
   },
   computed: {
@@ -410,12 +410,12 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
-    async fetchData ({ page, filter, sort }) {
+    async inProgressData ({ page, filter, sort }) {
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
-        rate: this.filters.rate !== null ? this.filters.rate : '',
-        average: this.filters.average !== null ? this.filters.average : '',
-        design_no: this.filters.design_no !== null ? this.filters.design_no : '',
+        status: this.filters.status !== null ? this.filters.status : '',
+        transport: this.filters.transport !== null ? this.filters.transport : '',
+        date_time: this.filters.date_time !== null ? this.filters.date_time : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -426,10 +426,33 @@ export default {
       this.isRequestOngoing = false
 
       return {
-        data: response.data.dispatch.data,
+        data: response.data.dispatch_inprogress.data,
         pagination: {
-          totalPages: response.data.dispatch.last_page,
-          currentPage: page
+          totalPages: response.data.dispatch_inprogress.last_page,
+          currentPage: response.data.dispatch_inprogress.current_page,
+        }
+      }
+    },
+    async completedData ({ page, filter, sort }) {
+      let data = {
+        name: this.filters.name !== null ? this.filters.name : '',
+        status: this.filters.status !== null ? this.filters.status : '',
+        transport: this.filters.transport !== null ? this.filters.transport : '',
+        date_time: this.filters.date_time !== null ? this.filters.date_time : '',
+        orderByField: sort.fieldName || 'created_at',
+        orderBy: sort.order || 'desc',
+        page
+      }
+
+      this.isRequestOngoing = true
+      let response = await this.fetchDispatch(data)
+      this.isRequestOngoing = false
+
+      return {
+        data: response.data.dispatch_completed.data,
+        pagination: {
+          totalPages: response.data.dispatch_completed.last_page,
+          currentPage: response.data.dispatch_completed.current_page,
         }
       }
     },
@@ -440,9 +463,9 @@ export default {
     clearFilter () {
       this.filters = {
         name: '',
-        design_no: '',
-        rate: '',
-        average: ''
+        date_time: '',
+        status: '',
+        transport: ''
       }
 
       this.$nextTick(() => {

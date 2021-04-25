@@ -11,9 +11,9 @@ export default {
         state.currentDispatch = dispatch
     },
 
-    [types.BOOTSTRAP_DISPATCH](state, dispatch) {
-        state.dispatch = dispatch
-    },
+    // [types.BOOTSTRAP_DISPATCH](state, dispatch) {
+    //     state.dispatch = dispatch
+    // },
     [types.SET_TOTAL_DISPATCH](state, totalDispatch) {
         state.totalDispatch = totalDispatch
     },
