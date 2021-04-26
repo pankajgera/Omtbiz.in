@@ -5,27 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CompanySetting;
 use App\Models\Company;
-use Illuminate\Support\Collection;
-use App\Models\Currency;
 use App\Models\InvoiceTemplate;
 use App\Http\Requests;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use Carbon\Carbon;
-use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\Item;
-use App\Models\invoicePdf;
-use function MongoDB\BSON\toJSON;
+use App\Mail\invoicePdf;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
-use Mailgun\Mailgun;
-use PDF;
 use Validator;
-use App\Models\TaxType;
 use App\Models\Tax;
-use App\Models\Voucher;
 use Exception;
 
 class InvoicesController extends Controller

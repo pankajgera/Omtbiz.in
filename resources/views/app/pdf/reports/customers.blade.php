@@ -174,7 +174,7 @@
                 <tr>
                     <td>
                         <p class="heading-text">
-                            {{ $company->name }}
+                            {{ $ledger->account }}
                         </p>
                     </td>
                     <td>
@@ -196,7 +196,7 @@
                     </td>
                     <td class="tax-total-cell">
                         <p class="" style="float:right; padding:0px; margin: 0px">
-                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
+                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $ledger->accountMaster->type : '' !!}
                         </p>
                     </td>
                 </tr>
@@ -225,20 +225,19 @@
                     @endforeach
                 </table>
             </div>
+            <table class="tax-total-table">
+                <tr>
+                    <td>
+                        <p class="total-tax-title">CLOSING BALANCE</p>
+                    </td>
+                    <td class="tax-total-cell">
+                        <p class="" style="float:right; padding:0px; margin: 0px">
+                            ₹ {!! $totalAmount !!} {!! $ledgerType !!}
+                        </p>
+                    </td>
+                </tr>
+            </table>
         </div>
-
-        <table class="tax-total-table">
-            <tr>
-                <td>
-                    <p class="total-tax-title">CLOSING BALANCE</p>
-                </td>
-                <td class="tax-total-cell">
-                    <p class="" style="float:right; padding:0px; margin: 0px">
-                        ₹ {!! $totalAmount !!} {!! $ledgerType !!}
-                    </p>
-                </td>
-            </tr>
-        </table>
     </div>
 </body>
 </html>
