@@ -44,6 +44,7 @@
           <input
             :type="inputType"
             ref="input"
+            :key="value"
             :placeholder="placeholder"
             :disabled="disableInput"
             :value="value"
@@ -112,6 +113,14 @@ export default {
     if (this.column.field === 'account') {
       this.rowValue = this.row.account
       this.value = this.row.account
+    }
+    if (this.column.field === 'credit' && this.row.credit) {
+      this.rowValue = this.row.credit
+      this.value = this.row.credit
+    }
+    if (this.column.field === 'debit' && this.row.debit) {
+      this.rowValue = this.row.debit
+      this.value = this.row.debit
     }
     // if (this.$refs.select && this.column.field === 'type') {
     //   this.$refs.select.$refs.search.focus()
