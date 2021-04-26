@@ -303,7 +303,6 @@ class ReportController extends Controller
     public function customersReport($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
-        $vouchers_by_ledger = Voucher::where('account_ledger_id', $request->ledger_id)->get();
         $ledger = AccountLedger::findOrFail($request->ledger_id);
         $all_voucher_ids = Voucher::where('account_ledger_id', $request->ledger_id)->whereNotNull('related_voucher')->get();
         $each_ids = null;
@@ -327,8 +326,8 @@ class ReportController extends Controller
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
         }
-        $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
-        $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+        $vouchers_debit_sum = $related_vouchers->sum('debit');
+        $vouchers_credit_sum = $related_vouchers->sum('credit');
         $balance = $ledger->debit > $ledger->credit ? $ledger->debit - $ledger->credit : $ledger->credit - $ledger->debit;
         $opening_balance = $ledger->accountMaster->opening_balance;
         $calc_balance = $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance));
@@ -347,7 +346,7 @@ class ReportController extends Controller
                 'balance' => $calc_balance,
             ]);
         }
-        $ledgerType = $ledger->type === 'Cr' ? 'Dr' : 'Cr';
+        $ledgerType = $vouchers_debit_sum > $vouchers_credit_sum ? 'Dr' : 'Cr';
         $totalAmount = $ledger->balance;
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
@@ -372,7 +371,7 @@ class ReportController extends Controller
         view()->share([
             'ledgerType' => $ledgerType,
             'opening_balance' => $opening_balance,
-            'opening_balance_type' => $ledger->accountMaster->type,
+            'ledger' => $ledger,
             'related_vouchers' => $related_vouchers,
             'totalAmount' => $totalAmount,
             'colorSettings' => $colorSettings,

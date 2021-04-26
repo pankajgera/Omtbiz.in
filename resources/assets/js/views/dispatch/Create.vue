@@ -34,6 +34,7 @@
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
                   v-model="formData.date_time"
+                  :invalid="$v.formData.date_time.$error"
                   :calendar-button="true"
                   calendar-button-icon="calendar"
                   @change="$v.formData.date_time.$touch()"
@@ -53,6 +54,7 @@
                 <base-select
                     v-model="formData.status"
                     :options="statusList"
+                    :invalid="$v.formData.status.$error"
                     :show-labels="false"
                     :placeholder="$t('dispatch.status')"
                     :allow-empty="false"
@@ -60,7 +62,7 @@
                     label="name"
                   />
               </div>
-              <div class="form-group">
+              <div class="form-group" v-if="invoiceList.length">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
                   v-model="invoice"
@@ -111,7 +113,7 @@ export default {
       title: 'Add Dispatch',
       formData: {
         name: '',
-        inovice_id: '',
+        invoice_id: '',
         date_time: '',
         transport: '',
         status: {},
@@ -136,7 +138,7 @@ export default {
   },
   watch: {
     invoice (newValue) {
-      if (newValue && newValue.length) {
+      if (newValue && Object.keys(newValue)) {
         this.formData.invoice_id = newValue.id
       }
     }
@@ -191,7 +193,7 @@ export default {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
-        this.invoice = this.invoiceList.filter(each => each.id === this.formData.invoice_id)
+        this.invoice = this.invoiceList.filter(each => each.id === this.formData.invoice_id)[0]
       }
     },
     async submitDispatch () {

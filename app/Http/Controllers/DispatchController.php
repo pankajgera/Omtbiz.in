@@ -61,10 +61,12 @@ class DispatchController extends Controller
     public function store(Request $request)
     {
         try {
+            $date = Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', $request->date_time);
+            $date->setTimeZone('Asia/Kolkata');
             $dispatch = new Dispatch();
             $dispatch->name = $request->name;
             $dispatch->invoice_id = $request->invoice_id;
-            $dispatch->date_time = Carbon::createFromFormat('Y-m-d H:i:s', $request->date_time, 'Asia/Kolkata');
+            $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');
@@ -74,7 +76,7 @@ class DispatchController extends Controller
                 'dispatch' => $dispatch,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving dispatch', [$e->getMessage()]);
+            Log::error('Error while saving dispatch', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);
@@ -91,10 +93,12 @@ class DispatchController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $date = Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', $request->date_time);
+            $date->setTimeZone('Asia/Kolkata');
             $dispatch = Dispatch::find($id);
             $dispatch->name = $request->name;
             $dispatch->invoice_id = $request->invoice_id;
-            $dispatch->date_time = $request->date_time;
+            $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');

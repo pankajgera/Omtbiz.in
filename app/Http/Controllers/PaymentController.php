@@ -126,11 +126,10 @@ class PaymentController extends Controller
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->list['id'];
         $cash_account_id = AccountMaster::where('name', 'Cash')->first();
-        $bank_account_id = AccountMaster::where('name', 'Bank')->first();
-
+        $bank_account = AccountMaster::where('name', 'Bank')->first();
         if ($request->payment_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $bank_account_id,
+                'account_master_id' => $bank_account->id,
                 'account' => 'Bank',
                 'company_id' => $company_id,
             ], [
@@ -153,7 +152,7 @@ class PaymentController extends Controller
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $bank_account_id,
+                'account_master_id' => $bank_account->id,
                 'account' => 'Bank',
                 'debit' => 0,
                 'credit' => $request->amount,

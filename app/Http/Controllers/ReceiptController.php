@@ -67,7 +67,7 @@ class ReceiptController extends Controller
             $nextReceiptNumberAttribute = $nextReceiptNumber;
         }
 
-        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
         return response()->json([
             'customers' => User::where('role', 'customer')

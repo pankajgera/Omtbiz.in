@@ -43,22 +43,6 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
-              <base-select
-                v-model="formData.list"
-                :invalid="$v.formData.list.$error"
-                :options="sundryDebtorList"
-                :searchable="true"
-                :show-labels="false"
-                :placeholder="$t('receipts.select_a_list')"
-                label="name"
-                track-by="id"
-              />
-              <div v-if="$v.formData.list.$error">
-                <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
-              </div>
-            </div>
-            <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
@@ -72,6 +56,22 @@
                   :custom-label="invoiceWithAmount"
                   track-by="invoice_number"
                 />
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
+              <base-select
+                v-model="formData.list"
+                :invalid="$v.formData.list.$error"
+                :options="sundryDebtorList"
+                :searchable="true"
+                :show-labels="false"
+                :placeholder="$t('receipts.select_a_list')"
+                label="name"
+                track-by="id"
+              />
+              <div v-if="$v.formData.list.$error">
+                <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
             <div class="col-sm-6">
@@ -120,8 +120,8 @@
                   <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
                   <base-prefix-input
                     v-model.trim="openingBalance"
-                    :prefix="money.prefix"
-                    type="text"
+                    :prefix="openingBalanceType ? openingBalanceType + ' - ' + money.prefix : money.prefix"
+                    type="number"
                     name="openingBalance"
                     disabled
                   />
@@ -132,8 +132,8 @@
                   <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
                   <base-prefix-input
                     v-model.trim="closingBalance"
-                    :prefix="money.prefix"
-                    type="text"
+                    :prefix="closingBalanceType ? closingBalanceType + ' - ' + money.prefix : money.prefix"
+                    type="number"
                     name="closingBalance"
                     disabled
                   />
@@ -199,6 +199,7 @@ export default {
       receiptNumAttribute: null,
       receiptPrefix: '',
       sundryDebtorList: [],
+      closingBalanceType: ''
     }
   },
   validations () {
@@ -259,12 +260,35 @@ export default {
       }
       return 0
     },
-    closingBalance() {
-      if (this.formData.amount) {
-        return this.openingBalance - this.formData.amount
+    openingBalanceType() {
+      if (this.formData.list && this.formData.list.id) {
+        let typeObj = this.sundryDebtorList.find(each => each.id === this.formData.list.id);
+        return typeObj.type;
       }
       return 0
-    }
+    },
+    closingBalance() {
+      if (this.formData.amount) {
+        if (parseInt(this.openingBalance) >= parseInt(this.formData.amount)) {
+          let openAmount = this.openingBalance - this.formData.amount;
+          if (this.openingBalance > openAmount) {
+            this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
+          } else {
+            this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
+          }
+          return openAmount
+        } else {
+          let closeAmount = this.formData.amount - this.openingBalance;
+          if (this.openingBalance > closeAmount) {
+            this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
+          } else {
+            this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
+          }
+          return closeAmount
+        }
+      }
+      return 0
+    },
   },
   watch: {
     // customer (newValue) {
