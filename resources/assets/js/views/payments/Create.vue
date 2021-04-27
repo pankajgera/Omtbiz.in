@@ -83,6 +83,32 @@
                 />
               </div>
             </div>
+            <div class="col-sm-6">
+              <div class="col-sm-12 ">
+                <div class="form-group">
+                  <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
+                  <base-prefix-input
+                    v-model.trim="openingBalance"
+                    :prefix="openingBalanceType ? openingBalanceType + ' - ' + money.prefix : money.prefix"
+                    type="number"
+                    name="openingBalance"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-sm-12 ">
+                <div class="form-group">
+                  <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
+                  <base-prefix-input
+                    v-model.trim="closingBalance"
+                    :prefix="closingBalanceType ? closingBalanceType + ' - ' + money.prefix : money.prefix"
+                    type="number"
+                    name="closingBalance"
+                    disabled
+                  />
+                </div>
+              </div>
+            </div>
             <div class="col-sm-12">
               <div class="form-group collapse-button-container">
                 <base-button
@@ -151,7 +177,8 @@ export default {
       isSettingInitialData: true,
       //paymentNumAttribute: null,
       paymentPrefix: '',
-      sundryCreditorList: []
+      sundryCreditorList: [],
+      closingBalanceType: ''
     }
   },
   validations () {
@@ -205,30 +232,42 @@ export default {
       }
       return false
     },
-  },
-  watch: {
-    // customer (newValue) {
-    //   this.formData.user_id = newValue.id
-    //   if (!this.isEdit) {
-    //     if (this.isSettingInitialData) {
-    //       this.isSettingInitialData = false
-    //     } else {
-    //       this.invoice = null
-    //       this.formData.invoice_id = null
-    //     }
-    //     this.formData.amount = 0
-    //     this.invoiceList = []
-    //     this.fetchCustomerInvoices(newValue.id)
-    //   }
-    // },
-    // invoice (newValue) {
-    //   if (newValue) {
-    //     this.formData.invoice_id = newValue.id
-    //     if (!this.isEdit) {
-    //       this.setPaymentAmountByInvoiceData(newValue.id)
-    //     }
-    //   }
-    // }
+    openingBalance() {
+      if (this.formData.list && this.formData.list.id) {
+        let balance = this.sundryCreditorList.find(each => each.id === this.formData.list.id);
+        return balance.opening_balance ? balance.opening_balance : 0
+      }
+      return 0
+    },
+    openingBalanceType() {
+      if (this.formData.list && this.formData.list.id) {
+        let typeObj = this.sundryCreditorList.find(each => each.id === this.formData.list.id);
+        return typeObj.type;
+      }
+      return 0
+    },
+    closingBalance() {
+      if (this.formData.amount) {
+        if (parseInt(this.openingBalance) >= parseInt(this.formData.amount)) {
+          let openAmount = this.openingBalance - this.formData.amount;
+          if (this.openingBalance > openAmount) {
+            this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
+          } else {
+            this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
+          }
+          return openAmount
+        } else {
+          let closeAmount = this.formData.amount - this.openingBalance;
+          if (this.openingBalance > closeAmount) {
+            this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
+          } else {
+            this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
+          }
+          return closeAmount
+        }
+      }
+      return 0
+    },
   },
   async mounted () {
     this.$nextTick(() => {

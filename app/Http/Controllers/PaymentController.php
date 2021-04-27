@@ -69,7 +69,7 @@ class PaymentController extends Controller
             $nextPaymentNumberAttribute = $nextPaymentNumber;
         }
 
-        $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name')->get();
+        $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance', 'type')->get();
 
         return response()->json([
             'customers' => User::where('role', 'customer')
