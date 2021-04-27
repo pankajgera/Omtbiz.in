@@ -203,7 +203,6 @@ export default {
       if ($event.columnIndex === 0) {
 
       }
-
       // if($event.row.type === 'Cr') {
       //   $event.row.debit = 0;
       // } else if ($event.row.type === 'Dr') {
@@ -211,18 +210,26 @@ export default {
       // }
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
       {
-        let typeValue = '';
-        let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c)
-        let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c)
-        if ($event.columnIndex === 3 && credit_sum + $event.value > debit_sum) {
-          this.addNewRow('Dr', credit_sum + $event.value)
-        } else if ($event.columnIndex === 2 && debit_sum + $event.value > credit_sum) {
-          this.addNewRow('Cr', debit_sum + $event.value)
-        }
-
-        $event.rowIndex = $event.rowIndex + 1
-        $event.columnIndex = 0
-        $event.$event.target.blur()
+        this.$nextTick(() => {
+          let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c)
+          let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c)
+          let calc_total = credit_sum > debit_sum ? credit_sum - debit_sum : debit_sum - credit_sum
+          let calc_type = credit_sum > debit_sum ? 'Dr' : 'Cr'
+          if (calc_total !== 0 && calc_type === 'Dr' && $event.value > 0) {
+            this.addNewRow('Dr', calc_total)
+            $event.rowIndex = $event.rowIndex + 1
+            $event.columnIndex = 0
+            $event.$event.target.blur()
+          } else if (calc_total !== 0 && calc_type === 'Cr' && $event.value > 0) {
+            this.addNewRow('Cr', calc_total)
+            $event.rowIndex = $event.rowIndex + 1
+            $event.columnIndex = 0
+            $event.$event.target.blur()
+          } else if (calc_total === 0) {
+            $event.$event.target.blur()
+            $event.$event.path[10].childNodes[2].lastChild.focus()
+          }
+        });
       }
 
       if ((this.rows.length - 1) === $event.rowIndex) {
