@@ -494,14 +494,14 @@ export default {
       }
       this.renderVisibleScroll()
     },
-    getFormattedRows () {
-      return this.rowData.map(row => {
-        return this.columnDefs.reduce((rowFormatted, column) => {
-          rowFormatted[column.field] = cellFormatter(row[column.field], column)
-          return rowFormatted
-        }, {})
-      })
-    },
+    // getFormattedRows () {
+    //   return this.rowData.map(row => {
+    //     return this.columnDefs.reduce((rowFormatted, column) => {
+    //       rowFormatted[column.field] = cellFormatter(row[column.field], column)
+    //       return rowFormatted
+    //     }, {})
+    //   })
+    // },
     startSelection (rowIndex, colIndex, e) {
       this.isSelecting = true
       this.selStartSelection = [rowIndex, colIndex]
