@@ -92,7 +92,7 @@ export default {
     rowDataKey: { type: String, required: true },
     enableFilters: { type: Boolean, default: true },
     pageCount: { type: Number, default: 0 },
-    itemHeight: { type: Number, default: 30 },
+    itemHeight: { type: Number, default: 40 },
     virtualScrollOffset: { type: Number, default: 3 },
     onlyBorder: { type: Boolean, default: true },
     masterOptions: { type: Array, default: [], required: false },

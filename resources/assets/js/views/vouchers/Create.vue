@@ -200,9 +200,7 @@ export default {
       }
     },
     cellUpdated($event) {
-      if ($event.columnIndex === 0) {
-
-      }
+      console.log('$event', $event)
       // if($event.row.type === 'Cr') {
       //   $event.row.debit = 0;
       // } else if ($event.row.type === 'Dr') {
