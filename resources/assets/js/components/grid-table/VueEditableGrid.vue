@@ -309,8 +309,8 @@ export default {
       }
       const maxrow = this.rowDataFiltered.length - 1
       const maxcol = this.columnDefs.length - 1
-      rowIndex = rowIndex < 0 ? 0 : rowIndex > maxrow ? maxrow : rowIndex
-      colIndex = colIndex < 0 ? 0 : colIndex > maxcol ? maxcol : colIndex
+      rowIndex = rowIndex < 0 ? 0 : rowIndex
+      colIndex = colIndex < 0 ? 0 : colIndex
       const shift = $event && $event.shiftKey
       if (shift) {
         const rowRange = [this.selStart[0], rowIndex]
@@ -321,7 +321,8 @@ export default {
         this.selEnd = [rowIndex, colIndex]
         this.selStart = [rowIndex, colIndex]
         //Check if last tab
-        if (colIndex === maxcol && !$event) {
+        console.log(rowIndex, colIndex, maxrow, maxcol, !$event)
+        if (colIndex > 1 && !$event) {
           this.selEnd = [rowIndex+1, 0]
           this.selStart = [rowIndex+1, 0]
         }

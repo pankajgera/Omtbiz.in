@@ -200,7 +200,6 @@ export default {
       }
     },
     cellUpdated($event) {
-      console.log('$event', $event)
       // if($event.row.type === 'Cr') {
       //   $event.row.debit = 0;
       // } else if ($event.row.type === 'Dr') {
@@ -221,6 +220,7 @@ export default {
           } else if (calc_total !== 0 && calc_type === 'Cr' && $event.value > 0) {
             this.addNewRow('Cr', calc_total)
             $event.rowIndex = $event.rowIndex + 1
+            $event.columnIndex = 0
             $event.columnIndex = 0
             $event.$event.target.blur()
           } else if (calc_total === 0) {
