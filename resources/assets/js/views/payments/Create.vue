@@ -178,7 +178,8 @@ export default {
       //paymentNumAttribute: null,
       paymentPrefix: '',
       sundryCreditorList: [],
-      closingBalanceType: ''
+      closingBalanceType: '',
+      ledgerBalance: [],
     }
   },
   validations () {
@@ -235,7 +236,9 @@ export default {
     openingBalance() {
       if (this.formData.list && this.formData.list.id) {
         let balance = this.sundryCreditorList.find(each => each.id === this.formData.list.id);
-        return balance.opening_balance ? balance.opening_balance : 0
+        let ledger = this.ledgerBalance.find(each => each.id === this.formData.list.id);
+        let total = balance.opening_balance + parseFloat(ledger.balance);
+        return total && total > 0 ? total : 0
       }
       return 0
     },
@@ -308,6 +311,7 @@ export default {
       } else {
         let response = await this.fetchCreatePayment()
         this.sundryCreditorList = response.data.usersOfSundryCreditor
+        this.ledgerBalance = response.data.ledger_balance
         //this.customerList = response.data.customers
         //this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix

@@ -16,6 +16,7 @@ use function MongoDB\BSON\toJSON;
 use App\Models\User;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Voucher;
+use stdClass;
 use Validator;
 
 class PaymentController extends Controller
@@ -71,6 +72,15 @@ class PaymentController extends Controller
 
         $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance', 'type')->get();
 
+        $ledger_balance = [];
+        foreach($usersOfSundryCreditor as $master) {
+            $calc_sum = AccountLedger::where('account_master_id', $master->id)->sum('balance');
+            $obj = new stdClass();
+            $obj->id = $master->id;
+            $obj->balance = $calc_sum;
+            array_push($ledger_balance, $obj);
+        }
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
@@ -79,6 +89,7 @@ class PaymentController extends Controller
             'nextPaymentNumber' => $payment_prefix . '-' . $nextPaymentNumber,
             'payment_prefix' => $payment_prefix,
             'usersOfSundryCreditor' => $usersOfSundryCreditor,
+            'ledger_balance' => $ledger_balance,
         ]);
     }
 

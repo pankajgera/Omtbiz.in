@@ -16,6 +16,7 @@ use function MongoDB\BSON\toJSON;
 use App\Models\User;
 use App\Http\Requests\ReceiptRequest;
 use App\Models\Voucher;
+use stdClass;
 use Validator;
 
 class ReceiptController extends Controller
@@ -69,6 +70,14 @@ class ReceiptController extends Controller
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
+        $ledger_balance = [];
+        foreach($usersOfSundryDebitors as $master) {
+            $calc_sum = AccountLedger::where('account_master_id', $master->id)->sum('balance');
+            $obj = new stdClass();
+            $obj->id = $master->id;
+            $obj->balance = $calc_sum;
+            array_push($ledger_balance, $obj);
+        }
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
@@ -77,6 +86,7 @@ class ReceiptController extends Controller
             'nextReceiptNumber' => $receipt_prefix . '-' . $nextReceiptNumber,
             'receipt_prefix' => $receipt_prefix,
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
+            'ledger_balance' => $ledger_balance,
         ]);
     }
 
