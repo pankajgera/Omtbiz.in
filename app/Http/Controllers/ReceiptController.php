@@ -135,8 +135,8 @@ class ReceiptController extends Controller
         $voucher_2 = null;
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->list['id'];
-        $cash_account_id = AccountMaster::where('name', 'Cash')->first();
-        $bank_account_id = AccountMaster::where('name', 'Bank')->first();
+        $cash_account_id = AccountMaster::where('name', 'Cash')->first()->id;
+        $bank_account_id = AccountMaster::where('name', 'Bank')->first()->id;
 
         if ($request->receipt_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([

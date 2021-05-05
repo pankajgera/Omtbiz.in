@@ -565,7 +565,9 @@
         "created_message": "Receipt created successfully",
         "updated_message": "Receipt updated successfully",
         "deleted_message": "Receipt deleted successfully | Receipts deleted successfully",
-        "invalid_amount_message": "Receipt amount is invalid"
+        "invalid_amount_message": "Receipt amount is invalid",
+        "receipt_greater_than_due_amount": "Receipt amount is greater than Due amount",
+        "receipt_greater_than_zero": "Receipt amount should be greater than 0"
     },
     "expenses": {
         "title": "Expenses",
