@@ -6,7 +6,7 @@
           <label class="report-label">{{ $t('reports.customers.ledgers') }}</label>
           <base-select
             v-model="selectedLedger"
-            :options="ledgersArr.map(i => i.account)"
+            :options="ledgersArr.map(i => {return i.account + ' (Group: ' + i.account_master.groups + ')'})"
             :allow-empty="false"
             :show-labels="false"
             @input="getReports"

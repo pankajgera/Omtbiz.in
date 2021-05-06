@@ -394,7 +394,7 @@ class ReportController extends Controller
      */
     public function getLedgersInReport(Request $request)
     {
-        $ledgers = AccountLedger::where('company_id', $request->header('company'))->get();
+        $ledgers = AccountLedger::with(['accountMaster'])->where('company_id', $request->header('company'))->get();
         return response()->json([
             'ledgers' => $ledgers,
         ]);
@@ -406,22 +406,31 @@ class ReportController extends Controller
     public function banksReport($hash, Request $request)
     {
         $related_vouchers = [];
-        $related_masters = AccountMaster::where('groups', 'LIKE', 'Bank%')->get();
+        $related_masters = AccountMaster::where('name', 'LIKE', 'Bank')->get();
         $balance_array = [];
         $master_ledger_type = [];
         $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
+
         foreach ($related_masters as $key => $master) {
             $vouchers = Voucher::where('account_master_id', $master->id)
-                ->where('account', '<>', $master->groups)
+                ->where('account', '<>', $master->name)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)
                 ->get();
             if (0 < count($vouchers)) {
                 array_push($related_vouchers, $vouchers->toArray());
             }
-            array_push($balance_array, $master->opening_balance);
             array_push($master_ledger_type, $master->type);
+
+            $calc_sum = AccountLedger::where('account_master_id', $master->id)
+                ->where('account', '<>', $master->name)
+                ->whereDate('date', '>=', $from)
+                ->whereDate('date', '<=', $to)
+                ->sum('balance');
+
+            $current_balance = $master->opening_balance + floatval($calc_sum);
+            array_push($balance_array, $current_balance);
         }
 
         $vouchers_debit_sum = [];
