@@ -667,7 +667,7 @@ export default {
         total: this.total,
         tax: this.totalTax,
         user_id: this.user.id,
-        invoice_template_id: this.getTemplateId
+        invoice_template_id: this.getTemplateId,
       }
 
       // if (this.selectedCustomer != null) {

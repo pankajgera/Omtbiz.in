@@ -64,7 +64,7 @@ class AccountLedgersController extends Controller
         $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
             ->where('account', '!=', $ledger->account)
             ->whereCompany($request->header('company'))
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->get();
 
         //Update balance according to 'debit' or 'credit'

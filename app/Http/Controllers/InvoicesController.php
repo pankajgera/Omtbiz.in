@@ -14,10 +14,12 @@ use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\Item;
 use App\Mail\invoicePdf;
+use App\Models\AccountLedger;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
 use App\Models\Tax;
+use App\Models\Voucher;
 use Exception;
 
 class InvoicesController extends Controller
@@ -144,6 +146,25 @@ class InvoicesController extends Controller
                 'account_master_id' => $request->debtors['id'],
             ]);
 
+            //Add journal entry
+            //It will be "Sales" type
+            $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
+            $company_id = (int) $request->header('company');
+            $account_master_id = (int) $request->debtors['id'];
+            $total_amount = (int) ($request->total / 100);
+            $account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $sale_account_id,
+                'account' => 'Sales',
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'bill_no' => null,
+                'type' => 'Cr',
+                'debit' => 0,
+                'credit' => $total_amount,
+                'balance' => $total_amount,
+            ]);
+
             $invoiceInventories = $request->inventory;
 
             foreach ($invoiceInventories as $invoiceInventory) {
@@ -157,7 +178,55 @@ class InvoicesController extends Controller
                         }
                     }
                 }
+                $amount = (int) ($invoiceInventory['total'] / 100);
+
+                //It will add voucher for sales from invoice
+                $voucher_1 = Voucher::create([
+                    'account_master_id' => $account_master_id,
+                    'account' => $request->debtors['name'],
+                    'debit' => $amount,
+                    'credit' => 0,
+                    'account_ledger_id' => $account_ledger->id,
+                    'date' => Carbon::now()->toDateTimeString(),
+                    'related_voucher' => null,
+                    'type' => 'Dr',
+                    'company_id' => $company_id
+                ]);
+                $voucher_2 = Voucher::create([
+                    'account_master_id' => $sale_account_id,
+                    'account' => 'Sales',
+                    'debit' => 0,
+                    'credit' => $amount,
+                    'account_ledger_id' => $account_ledger->id,
+                    'date' => Carbon::now()->toDateTimeString(),
+                    'related_voucher' => null,
+                    'type' => 'Cr',
+                    'company_id' => $company_id
+                ]);
+
+                //Now update vouchers id to ledger-bill-no and related_voucher
+                $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+                $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+                if ($account_ledger->bill_no) {
+                    $account_ledger->update([
+                        'credit' => $account_ledger->credit + $amount,
+                        'balance' => $account_ledger->balance + $amount,
+                        'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
+                    ]);
+                } else {
+                    $account_ledger->update([
+                        'bill_no' => $voucher_ids,
+                    ]);
+                }
+                foreach ($voucher as $key => $each) {
+                    if ($key < substr_count($voucher_ids, ',') + 1) {
+                        $each->update([
+                            'related_voucher' => $voucher_ids,
+                        ]);
+                    }
+                }
             }
+
 
             if ($request->has('taxes')) {
                 foreach ($request->taxes as $tax) {
