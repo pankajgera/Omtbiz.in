@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Models\User;
 use App\Models\Currency;
-use App\Models\Setting;
 use App\Models\Item;
 use App\Models\TaxType;
 use DB;
-use Carbon\Carbon;
 use Auth;
 use App\Models\Company;
 use App\Models\CompanySetting;
 use Exception;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Session;
 
 class UsersController extends Controller
 {
@@ -28,6 +25,7 @@ class UsersController extends Controller
     public function getBootstrap(Request $request)
     {
         if (!Auth::check()) {
+            Session::flush();
             return redirect()->guest('login');
         }
         $user = Auth::user();

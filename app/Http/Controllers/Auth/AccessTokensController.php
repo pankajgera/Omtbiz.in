@@ -11,6 +11,7 @@ use Hash;
 use App\Models\User;
 use Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
 
 class AccessTokensController extends Controller
 {
@@ -117,7 +118,7 @@ class AccessTokensController extends Controller
     public function destroy(Request $request)
     {
         $accessToken = Auth::user()->token();
-
+        Session::flush();
         \DB::table('oauth_refresh_tokens')
                 ->where('access_token_id', $accessToken->id)
                 ->update([
