@@ -164,6 +164,7 @@ class InvoicesController extends Controller
                 'credit' => $total_amount,
                 'balance' => $total_amount,
             ]);
+            $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
 
             $invoiceInventories = $request->inventory;
 
@@ -186,7 +187,7 @@ class InvoicesController extends Controller
                     'account' => $request->debtors['name'],
                     'debit' => $amount,
                     'credit' => 0,
-                    'account_ledger_id' => $account_ledger->id,
+                    'account_ledger_id' => $dr_account_ledger->id,
                     'date' => Carbon::now()->toDateTimeString(),
                     'related_voucher' => null,
                     'type' => 'Dr',

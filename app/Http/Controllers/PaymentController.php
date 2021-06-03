@@ -138,6 +138,7 @@ class PaymentController extends Controller
         $account_master_id = (int) $request->list['id'];
         $cash_account_id = AccountMaster::where('name', 'Cash')->first();
         $bank_account = AccountMaster::where('name', 'Bank')->first();
+        $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
         if ($request->payment_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $bank_account->id,
@@ -156,7 +157,7 @@ class PaymentController extends Controller
                 'account' => $request->list['name'],
                 'debit' => $request->amount,
                 'credit' => 0,
-                'account_ledger_id' => $account_ledger->id,
+                'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Dr',
@@ -191,7 +192,7 @@ class PaymentController extends Controller
                 'account' => $request->list['name'],
                 'debit' => $request->amount,
                 'credit' => 0,
-                'account_ledger_id' => $account_ledger->id,
+                'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Dr',
