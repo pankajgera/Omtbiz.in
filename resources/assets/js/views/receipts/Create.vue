@@ -85,8 +85,8 @@
                   />
                 <div v-if="$v.formData.amount.$error">
                   <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
-                  <span v-if="!$v.formData.amount.between && $v.formData.amount.numeric && amount <= 0" class="text-danger">{{ $t('validation.receipt_greater_than_zero') }}</span>
-                  <span v-if="!$v.formData.amount.between && amount > 0" class="text-danger">{{ $t('receipts.receipt_greater_than_due_amount') }}</span>
+                  <!-- <span v-if="!$v.formData.amount.between && $v.formData.amount.numeric && amount <= 0" class="text-danger">{{ $t('validation.receipt_greater_than_zero') }}</span> -->
+                  <!-- <span v-if="!$v.formData.amount.between && amount > 0" class="text-danger">{{ $t('receipts.receipt_greater_than_due_amount') }}</span> -->
                 </div>
               </div>
             </div>
@@ -217,7 +217,7 @@ export default {
         },
         amount: {
           required,
-          between: between(1, this.maxPayableAmount + 1)
+          // between: between(1, this.maxPayableAmount + 1)
         },
       },
       receiptNumAttribute: {

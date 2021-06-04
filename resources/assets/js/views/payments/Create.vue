@@ -346,6 +346,8 @@ export default {
 
       //this.formData.payment_number = this.paymentPrefix + '-' + this.paymentNumAttribute
       this.formData.user_id = this.user.id
+      this.formData.closing_balance_type = this.closingBalanceType
+      this.formData.closing_balance = this.closingBalance
       if (this.isEdit) {
         let data = {
           editData: {
