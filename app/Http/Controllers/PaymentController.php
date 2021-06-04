@@ -73,7 +73,7 @@ class PaymentController extends Controller
         $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance', 'type')->get();
 
         $ledger_balance = [];
-        foreach($usersOfSundryCreditor as $master) {
+        foreach ($usersOfSundryCreditor as $master) {
             $calc_sum = AccountLedger::where('account_master_id', $master->id)->sum('balance');
             $obj = new stdClass();
             $obj->id = $master->id;
@@ -136,9 +136,28 @@ class PaymentController extends Controller
         $voucher_ids = [];
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->list['id'];
-        $cash_account_id = AccountMaster::where('name', 'Cash')->first();
+        $cash_account = AccountMaster::where('name', 'Cash')->first();
         $bank_account = AccountMaster::where('name', 'Bank')->first();
         $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
+        AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
+        if (!isset($dr_account_ledger)) {
+            $dr_account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'bill_no' => null,
+                'debit' => $request->amount,
+                'type' => 'Dr',
+                'credit' => 0,
+            ]);
+            $dr_account_ledger->update([
+                'balance' => $request->closing_balance,
+                'type' => $request->closing_balance_type,
+            ]);
+        }
+
         if ($request->payment_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $bank_account->id,
@@ -176,8 +195,8 @@ class PaymentController extends Controller
             ]);
         } else {
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
+                'account_master_id' => $cash_account->id,
+                'account' => 'Cash',
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
@@ -199,7 +218,7 @@ class PaymentController extends Controller
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $cash_account_id,
+                'account_master_id' => $cash_account->id,
                 'account' => 'Cash',
                 'debit' => 0,
                 'credit' => $request->amount,
@@ -212,14 +231,24 @@ class PaymentController extends Controller
         }
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+
+        $balance_dr = $dr_account_ledger->debit - $dr_account_ledger->credit;
+        $opening_balance_dr = $dr_account_ledger->accountMaster->opening_balance;
+
         if ($account_ledger->bill_no) {
             $account_ledger->update([
                 'credit' => $account_ledger->credit + (int)$request->amount,
-                'balance' => $account_ledger->balance + (int)$request->amount,
                 'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
+            ]);
+            $dr_account_ledger->update([
+                'credit' => $dr_account_ledger->credit + (int)$request->amount,
+                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
             ]);
         } else {
             $account_ledger->update([
+                'bill_no' => $voucher_ids,
+            ]);
+            $dr_account_ledger->update([
                 'bill_no' => $voucher_ids,
             ]);
         }

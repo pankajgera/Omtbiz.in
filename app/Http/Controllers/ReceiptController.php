@@ -138,6 +138,20 @@ class ReceiptController extends Controller
         $cash_account_id = AccountMaster::where('name', 'Cash')->first()->id;
         $bank_account_id = AccountMaster::where('name', 'Bank')->first()->id;
         $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
+        if (!isset($dr_account_ledger)) {
+            $dr_account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->list['name'],
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'bill_no' => null,
+                'debit' => $request->amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $request->amount,
+            ]);
+        }
         if ($request->receipt_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $bank_account_id,
@@ -176,8 +190,8 @@ class ReceiptController extends Controller
             ]);
         } else {
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
+                'account_master_id' => $cash_account_id,
+                'account' => 'Cash',
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
@@ -219,8 +233,16 @@ class ReceiptController extends Controller
                 'balance' => $account_ledger->balance + (int)$request->amount,
                 'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
             ]);
+            $dr_account_ledger->update([
+                'credit' => $dr_account_ledger->credit + (int)$request->amount,
+                'balance' => $dr_account_ledger->balance + (int)$request->amount,
+                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
+            ]);
         } else {
             $account_ledger->update([
+                'bill_no' => $voucher_ids,
+            ]);
+            $dr_account_ledger->update([
                 'bill_no' => $voucher_ids,
             ]);
         }

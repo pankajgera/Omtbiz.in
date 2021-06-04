@@ -56,4 +56,19 @@ class AccountMaster extends Model
         $master->delete();
         return true;
     }
+
+    /**
+     * Update account master opening balance
+     *
+     * @param $id
+     * @param $balance
+     */
+    public static function updateOpeningBalance($id, $balance)
+    {
+        $master = self::find($id);
+        $master->update([
+            'opening_balance' => $balance
+        ]);
+        return true;
+    }
 }
