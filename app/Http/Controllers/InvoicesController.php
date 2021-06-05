@@ -164,21 +164,20 @@ class InvoicesController extends Controller
                 'credit' => $total_amount,
                 'balance' => $total_amount,
             ]);
-            $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
-            if (!isset($dr_account_ledger)) {
-                $dr_account_ledger = AccountLedger::firstOrCreate([
-                    'account_master_id' => $account_master_id,
-                    'account' => $request->debtors['name'],
-                    'company_id' => $company_id,
-                ], [
-                    'date' => Carbon::now()->toDateTimeString(),
-                    'bill_no' => null,
-                    'debit' => $request->amount,
-                    'type' => 'Dr',
-                    'credit' => 0,
-                    'balance' => $request->amount,
-                ]);
-            }
+            $dr_account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'bill_no' => null,
+                'debit' => $request->amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $request->amount,
+            ]);
+            AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
+
             $invoiceInventories = $request->inventory;
 
             //Now for each inventory item create journal entry

@@ -80,7 +80,7 @@
                  <base-input
                     v-model.trim="amount"
                     :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
-                    type="number"
+                    type="text"
                     name="amount"
                   />
                 <div v-if="$v.formData.amount.$error">
@@ -261,7 +261,8 @@ export default {
         let open = parseFloat(balance.opening_balance, 10);
         let close = parseFloat(ledger.balance, 10);
         let total = parseFloat(open + close).toFixed(2);
-        return total && total > 0 ? total : 0
+        //return total && total > 0 ? total : 0
+        return parseFloat(open).toFixed(2);
       }
       return 0
     },

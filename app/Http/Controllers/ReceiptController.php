@@ -115,11 +115,11 @@ class ReceiptController extends Controller
                 $invoice->due_amount = 0;
             } elseif ($invoice && $invoice->due_amount != $request->amount) {
                 $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
-                if ($invoice->due_amount < 0) {
-                    return response()->json([
-                        'error' => 'invalid_amount'
-                    ]);
-                }
+                // if ($invoice->due_amount < 0) {
+                //     return response()->json([
+                //         'error' => 'invalid_amount'
+                //     ]);
+                // }
                 $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
             }
             $invoice->save();
@@ -137,21 +137,20 @@ class ReceiptController extends Controller
         $account_master_id = (int) $request->list['id'];
         $cash_account_id = AccountMaster::where('name', 'Cash')->first()->id;
         $bank_account_id = AccountMaster::where('name', 'Bank')->first()->id;
-        $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
-        if (!isset($dr_account_ledger)) {
-            $dr_account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
-                'debit' => $request->amount,
-                'type' => 'Dr',
-                'credit' => 0,
-                'balance' => $request->amount,
-            ]);
-        }
+        $dr_account_ledger = AccountLedger::firstOrCreate([
+            'account_master_id' => $account_master_id,
+            'account' => $request->list['name'],
+            'company_id' => $company_id,
+        ], [
+            'date' => Carbon::now()->toDateTimeString(),
+            'bill_no' => null,
+            'debit' => $request->amount,
+            'type' => 'Dr',
+            'credit' => 0,
+            'balance' => $request->amount,
+        ]);
+        AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
+
         if ($request->receipt_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $bank_account_id,
