@@ -229,7 +229,7 @@ class InvoicesController extends Controller
                         'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
                     ]);
                     $dr_account_ledger->update([
-                        'credit' => $dr_account_ledger->credit + $amount,
+                        'debit' => $dr_account_ledger->debit + $amount,
                         'balance' => $dr_account_ledger->balance + $amount,
                         'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
                     ]);

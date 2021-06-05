@@ -234,7 +234,7 @@ class ReceiptController extends Controller
                 'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
             ]);
             $dr_account_ledger->update([
-                'credit' => $dr_account_ledger->credit + (int)$request->amount,
+                'credit' => $dr_account_ledger->debit + (int)$request->amount,
                 'balance' => $dr_account_ledger->balance + (int)$request->amount,
                 'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
             ]);

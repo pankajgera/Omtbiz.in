@@ -121,8 +121,38 @@ class AccountLedger extends Model
 
     public static function deleteAccountLedger($id)
     {
-        $master = self::find($id);
-        $master->delete();
+        $ledger = self::find($id);
+        $ledger->delete();
         return true;
+    }
+
+    /**
+     * need updation, not using it
+     */
+    public static function updateBalanceAndType($id, $amount, $type)
+    {
+        $ledger = self::find($id);
+        $calc_balance = $ledger->balance;
+        $calc_type = $ledger->type;
+        if ('Dr' === $type && 'Dr' === $calc_type) {
+            $calc_balance = $ledger->balance - $amount;
+            //If value is in -ve then change Dr to Cr
+            if (0 > $calc_balance) {
+                $calc_type = 'Cr';
+                $calc_balance = abs($calc_balance);
+            }
+        } else if ('Cr' === $type && 'Cr' === $calc_type) {
+            $calc_balance = $ledger->balance - $amount;
+            //If value is in -ve then change Dr to Cr
+            if (0 > $calc_balance) {
+                $calc_type = 'Dr';
+                $calc_balance = abs($calc_balance);
+            }
+        }
+
+        $ledger->update([
+            'balance' => $calc_balance,
+            'type' => $calc_type,
+        ]);
     }
 }
