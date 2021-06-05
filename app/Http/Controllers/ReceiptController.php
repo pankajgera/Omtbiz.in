@@ -115,11 +115,11 @@ class ReceiptController extends Controller
                 $invoice->due_amount = 0;
             } elseif ($invoice && $invoice->due_amount != $request->amount) {
                 $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
-                if ($invoice->due_amount < 0) {
-                    return response()->json([
-                        'error' => 'invalid_amount'
-                    ]);
-                }
+                // if ($invoice->due_amount < 0) {
+                //     return response()->json([
+                //         'error' => 'invalid_amount'
+                //     ]);
+                // }
                 $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
             }
             $invoice->save();
