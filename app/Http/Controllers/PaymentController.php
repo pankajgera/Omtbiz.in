@@ -138,25 +138,20 @@ class PaymentController extends Controller
         $account_master_id = (int) $request->list['id'];
         $cash_account = AccountMaster::where('name', 'Cash')->first();
         $bank_account = AccountMaster::where('name', 'Bank')->first();
-        $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)->first();
+
+        $dr_account_ledger = AccountLedger::firstOrCreate([
+            'account_master_id' => $account_master_id,
+            'account' => $request->list['name'],
+            'company_id' => $company_id,
+        ], [
+            'date' => Carbon::now()->toDateTimeString(),
+            'bill_no' => null,
+            'debit' => $request->amount,
+            'type' => 'Dr',
+            'credit' => 0,
+            'balance' => $request->amount,
+        ]);
         AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
-        if (!isset($dr_account_ledger)) {
-            $dr_account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
-                'debit' => $request->amount,
-                'type' => 'Dr',
-                'credit' => 0,
-            ]);
-            $dr_account_ledger->update([
-                'balance' => $request->closing_balance,
-                'type' => $request->closing_balance_type,
-            ]);
-        }
 
         if ($request->payment_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([
@@ -232,16 +227,16 @@ class PaymentController extends Controller
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
-        $balance_dr = $dr_account_ledger->debit - $dr_account_ledger->credit;
-        $opening_balance_dr = $dr_account_ledger->accountMaster->opening_balance;
-
+        //Only update for existing ledger else new one with bill_no
         if ($account_ledger->bill_no) {
             $account_ledger->update([
                 'credit' => $account_ledger->credit + (int)$request->amount,
+                'balance' => $account_ledger->balance + (int)$request->amount,
                 'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
             ]);
             $dr_account_ledger->update([
-                'credit' => $dr_account_ledger->credit + (int)$request->amount,
+                'debit' => $dr_account_ledger->debit + (int)$request->amount,
+                'balance' => $dr_account_ledger->balance + (int)$request->amount,
                 'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
             ]);
         } else {
