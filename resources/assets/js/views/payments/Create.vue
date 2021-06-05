@@ -238,7 +238,8 @@ export default {
         let balance = this.sundryCreditorList.find(each => each.id === this.formData.list.id);
         let ledger = this.ledgerBalance.find(each => each.id === this.formData.list.id);
         let total = parseFloat(parseFloat(balance.opening_balance) + parseFloat(ledger.balance)).toFixed(2);
-        return total && total > 0 ? total : 0
+        //return total && total > 0 ? total : 0
+        return parseFloat(balance.opening_balance).toFixed(2);
       }
       return 0
     },
@@ -255,7 +256,7 @@ export default {
         let amount = parseFloat(this.formData.amount);
         if (open >= amount) {
           let openAmount = parseFloat(open - amount).toFixed(2);
-          if (open > openAmount) {
+          if (open > amount) {
             this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
           } else {
             this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
@@ -263,7 +264,7 @@ export default {
           return openAmount
         } else {
           let closeAmount = parseFloat(amount - open).toFixed(2);
-          if (open > closeAmount) {
+          if (open > amount) {
             this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
           } else {
             this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'

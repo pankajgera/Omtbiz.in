@@ -278,7 +278,7 @@ export default {
         let amount = parseFloat(this.formData.amount);
         if (open >= amount) {
           let openAmount = parseFloat(open - amount).toFixed(2);
-          if (open > openAmount) {
+          if (open > amount) {
             this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
           } else {
             this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
@@ -286,7 +286,7 @@ export default {
           return openAmount
         } else {
           let closeAmount = parseFloat(amount - open).toFixed(2);
-          if (open > closeAmount) {
+          if (open > amount) {
             this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'
           } else {
             this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'
