@@ -1,5 +1,14 @@
 <template>
   <div class="invoice-create-page main-content">
+    <div class="page-header">
+      <div class="page-actions row">
+        <router-link slot="item-title" class="col-xs-2" to="/invoices">
+          <base-button size="large" icon="envelope" color="theme">
+            {{ $t('invoices.title') }}
+          </base-button>
+        </router-link>
+      </div>
+    </div>
     <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData">
       <div class="page-header">
         <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
@@ -103,7 +112,20 @@
             </div>
         </div>
         <div class="col invoice-input">
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
+            <div class="col collapse-input">
+              <label>{{ $t('invoices.due_date') }}<span class="text-danger"> * </span></label>
+              <base-date-picker
+                v-model="newInvoice.due_date"
+                :invalid="$v.newInvoice.due_date.$error"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+                @change="$v.newInvoice.due_date.$touch()"
+              />
+              <span v-if="$v.newInvoice.due_date.$error && !$v.newInvoice.due_date.required" class="text-danger mt-1"> {{ $t('validation.required') }}</span>
+            </div>
+          </div> -->
+          <div class="row">
             <div class="col collapse-input">
               <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
               <!-- <base-date-picker
@@ -116,25 +138,13 @@
                 v-model="newInvoice.invoice_date"
                 type="date"
                 data-date=""
-                data-date-format="DD-MM-YYYY"
+                data-date-format="DD/MM/YYYY"
                 class="base-prefix-input"
                 @change="$v.newInvoice.invoice_date.$touch()"
+                :disabled="isEdit"
               />
               <span v-if="$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
             </div>
-            <!-- <div class="col collapse-input">
-              <label>{{ $t('invoices.due_date') }}<span class="text-danger"> * </span></label>
-              <base-date-picker
-                v-model="newInvoice.due_date"
-                :invalid="$v.newInvoice.due_date.$error"
-                :calendar-button="true"
-                calendar-button-icon="calendar"
-                @change="$v.newInvoice.due_date.$touch()"
-              />
-              <span v-if="$v.newInvoice.due_date.$error && !$v.newInvoice.due_date.required" class="text-danger mt-1"> {{ $t('validation.required') }}</span>
-            </div> -->
-          </div>
-          <div class="row mt-4">
             <div class="col collapse-input">
               <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
               <base-prefix-input
@@ -147,7 +157,7 @@
                 :disabled="true"
               />
               <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
-              <span v-show="!$v.invoiceNumAttribute.numeric" class="text-danger mt-1"> {{ $tc('validation.numbers_only') }}  </span>
+              <!-- <span v-show="!$v.invoiceNumAttribute.numeric" class="text-danger mt-1"> {{ $tc('validation.numbers_only') }}  </span> -->
             </div>
             <div class="col collapse-input">
               <label>{{ $t('invoices.ref_number') }}</label>
@@ -156,6 +166,7 @@
                 :invalid="$v.newInvoice.reference_number.$error"
                 icon="hashtag"
                 @input="$v.newInvoice.reference_number.$touch()"
+                :disabled="isEdit"
               />
               <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
             </div>
@@ -199,9 +210,9 @@
             </th>
           </tr>
         </thead>
-        <draggable v-model="newInvoice.inventory" class="item-body" tag="tbody" handle=".handle">
+        <draggable v-model="newInvoice.inventories" class="item-body" tag="tbody" handle=".handle">
           <invoice-inventory
-            v-for="(each, index) in newInvoice.inventory"
+            v-for="(each, index) in newInvoice.inventories"
             :key="each.id"
             :index="index"
             :inventory-data="each"
@@ -241,7 +252,7 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
-              <div v-html="newInvoice.inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)" />
+              <div v-html="newInvoice.inventories.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)" />
             </label>
           </div>
           <div class="section">
@@ -250,12 +261,12 @@
               <div v-html="$utils.formatMoney(subtotal, currency)" />
             </label>
           </div>
-          <div v-for="tax in allTaxes" :key="tax.tax_type_id" class="section">
+          <!-- <div v-for="tax in allTaxes" :key="tax.tax_type_id" class="section">
             <label class="invoice-label">{{ tax.name }} - {{ tax.percent }}% </label>
             <label class="invoice-amount">
               <div v-html="$utils.formatMoney(tax.amount, currency)" />
             </label>
-          </div>
+          </div> -->
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
             <label class="invoice-label">{{ $t('invoices.discount') }}</label>
             <div
@@ -341,7 +352,12 @@
     <base-loader v-else />
   </div>
 </template>
-
+<style scoped>
+input.base-prefix-input:disabled {
+    background: rgba(59, 59, 59, 0.3) !important;
+    border-color: rgba(118, 118, 118, 0.3) !important;
+}
+</style>
 <script>
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
@@ -379,7 +395,7 @@ export default {
         discount_val: 0,
         discount: 0,
         reference_number: null,
-        inventory: [{
+        inventories: [{
           ...InvoiceStub,
           id: Guid.raw(),
           taxes: [{...TaxStub, id: Guid.raw()}]
@@ -399,7 +415,8 @@ export default {
       invoicePrefix: null,
       invoiceNumAttribute: null,
       role: this.$store.state.user.currentUser.role,
-      sundryDebtorsList: [] //List of Sundry Debitor name
+      sundryDebtorsList: [], //List of Sundry Debitor name
+      isEdit: false
     }
   },
   validations () {
@@ -428,8 +445,7 @@ export default {
       //   required
       // },
       invoiceNumAttribute: {
-        required,
-        numeric
+        required
       }
     }
   },
@@ -451,13 +467,16 @@ export default {
       return this.selectedCurrency
     },
     subtotalWithDiscount () {
-      return this.subtotal - this.newInvoice.discount_val
+      if (this.newInvoice.discount_val) {
+        return this.subtotal - this.newInvoice.discount_val
+      }
+      return this.subtotal
     },
     total () {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      return this.newInvoice.inventory.reduce(function (a, b) {
+      return this.newInvoice.inventories.reduce(function (a, b) {
         return a + b['total']
       }, 0)
     },
@@ -498,32 +517,32 @@ export default {
         return this.totalSimpleTax + this.totalCompoundTax
       }
 
-      return window._.sumBy(this.newInvoice.inventory, function (tax) {
+      return window._.sumBy(this.newInvoice.inventories, function (tax) {
         return tax.tax
       })
     },
-    allTaxes () {
-      let taxes = []
-      this.newInvoice.inventory.forEach((inventory) => {
-        inventory.taxes.forEach((tax) => {
-          let found = taxes.find((_tax) => {
-            return _tax.tax_type_id === tax.tax_type_id
-          })
+    // allTaxes () {
+    //   let taxes = []
+    //   this.inventoryList.forEach((inventory) => {
+    //     inventory.taxes.forEach((tax) => {
+    //       let found = taxes.find((_tax) => {
+    //         return _tax.tax_type_id === tax.tax_type_id
+    //       })
 
-          if (found) {
-            found.amount += tax.amount
-          } else if (tax.tax_type_id) {
-            taxes.push({
-              tax_type_id: tax.tax_type_id,
-              amount: tax.amount,
-              percent: tax.percent,
-              name: tax.name
-            })
-          }
-        })
-      })
-      return taxes
-    },
+    //       if (found) {
+    //         found.amount += tax.amount
+    //       } else if (tax.tax_type_id) {
+    //         taxes.push({
+    //           tax_type_id: tax.tax_type_id,
+    //           amount: tax.amount,
+    //           percent: tax.percent,
+    //           name: tax.name
+    //         })
+    //       }
+    //     })
+    //   })
+    //   return taxes
+    // },
     setInvoiceDebtor: {
       cache: false,
       get() {
@@ -599,18 +618,20 @@ export default {
       if (this.$route.name === 'invoices.edit') {
         this.initLoading = true
         let response = await this.fetchInvoice(this.$route.params.id)
-
+        this.isEdit = true
         if (response.data) {
           //this.selectCustomer(response.data.invoice.user_id)
           this.newInvoice = response.data.invoice
-          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date, 'DD-MM-YYYY').format('DD-MM-YYYY')
-          //this.newInvoice.due_date = moment(response.data.invoice.due_date, 'DD-MM-YYYY').toString()
+          this.inventoryList = response.data.invoice.inventories
+          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
+          //this.newInvoice.due_date = moment(response.data.invoice.due_date, 'YYYY-MM-DD').toString()
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
           this.invoiceTemplates = response.data.invoiceTemplates
           this.invoicePrefix = response.data.invoice_prefix
-          this.invoiceNumAttribute = response.data.nextInvoiceNumber
+          this.invoiceNumAttribute = response.data.invoiceNumber
+          this.newInvoice.debtors = response.data.sundryDebtorsList[0]
         }
         this.initLoading = false
         return
@@ -624,11 +645,11 @@ export default {
         this.selectedCurrency = this.defaultCurrency
         this.invoiceTemplates = response.data.invoiceTemplates
         this.newInvoice.invoice_date = response.data.invoice_today_date
-        //this.newInvoice.due_date = moment().add(7, 'days').format('DD-MM-YYYY')
-        this.inventoryList = response.data.inventory
+        //this.newInvoice.due_date = moment().add(7, 'days').format('YYYY-MM-DD')
+        this.inventoryList = response.data.inventories
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
-        this.sundryDebtorsList = response.data.sundryDebtorsList;
+        this.sundryDebtorsList = response.data.sundryDebtorsList
       }
       this.initLoading = false
     },
@@ -643,13 +664,13 @@ export default {
       })
     },
     addInventory () {
-      this.newInvoice.inventory.push({...InvoiceStub, id: Guid.raw(), taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.newInvoice.inventories.push({...InvoiceStub, id: Guid.raw(), taxes: [{...TaxStub, id: Guid.raw()}]})
     },
     removeInventory (index) {
-      this.newInvoice.inventory.splice(index, 1)
+      this.newInvoice.inventories.splice(index, 1)
     },
     updateInventory (data) {
-      Object.assign(this.newInvoice.inventory[data.index], {...data.inventory})
+      Object.assign(this.newInvoice.inventories[data.index], {...data.inventory})
     },
     submitInvoiceData () {
       if (!this.checkValid()) {
@@ -661,8 +682,8 @@ export default {
 
       let data = {
         ...this.newInvoice,
-        invoice_date: moment(this.newInvoice.invoice_date).format('DD-MM-YYYY'),
-        //due_date: moment(this.newInvoice.due_date).format('DD-MM-YYYY'),
+        invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
+        //due_date: moment(this.newInvoice.due_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
         tax: this.totalTax,
@@ -682,13 +703,13 @@ export default {
       this.submitSave(data)
     },
     submitSave (data) {
+      this.isLoading = true;
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
           this.$router.push('/invoices/create')
         }
 
-        this.isLoading = false
         setTimeout(() => {
           window.location.reload()
         }, 3000)
@@ -702,16 +723,21 @@ export default {
       })
     },
     submitUpdate (data) {
+      this.isLoading = true
       this.updateInvoice(data).then((res) => {
-        this.isLoading = false
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
-          this.$router.push('/invoices/create')
+          this.isLoading = false
+          setTimeout(() => {
+            window.location.reload()
+          }, 3000)
         }
 
         if (res.data.error === 'invalid_due_amount') {
+          this.isLoading = false
           window.toastr['error'](this.$t('invoices.invalid_due_amount_message'))
         }
+
       }).catch((err) => {
         this.isLoading = false
         if (err) {
@@ -722,7 +748,7 @@ export default {
       })
     },
     checkInventoryData (index, isValid) {
-      this.newInvoice.inventory[index].valid = isValid
+      this.newInvoice.inventories[index].valid = isValid
     },
     onSelectTax (selectedTax) {
       let amount = 0
@@ -754,7 +780,7 @@ export default {
 
       window.hub.$emit('checkInventory')
       let isValid = true
-      this.newInvoice.inventory.forEach((each) => {
+      this.newInvoice.inventories.forEach((each) => {
         if (!each.valid) {
           isValid = false
         }

@@ -86,7 +86,7 @@ class InvoicesController extends Controller
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month . '-' . $nextInvoiceNumber,
-            'inventory' => Inventory::all(),
+            'inventories' => Inventory::all(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
@@ -111,7 +111,7 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
-            $invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
+            $invoice_date = Carbon::parse($request->invoice_date)->format('d-m-Y');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::STATUS_DRAFT;
 
@@ -171,14 +171,16 @@ class InvoicesController extends Controller
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
                 'bill_no' => null,
-                'debit' => $request->amount,
+                'debit' => $total_amount,
                 'type' => 'Dr',
                 'credit' => 0,
-                'balance' => $request->amount,
+                'balance' => $total_amount,
             ]);
-            AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
+            $opening_balance = (int) $request->debtors['opening_balance'];
+            $calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
+            AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
-            $invoiceInventories = $request->inventory;
+            $invoiceInventories = $request->inventories;
 
             //Now for each inventory item create journal entry
             foreach ($invoiceInventories as $invoiceInventory) {
@@ -192,8 +194,8 @@ class InvoicesController extends Controller
                         }
                     }
                 }
-                $amount = (int) ($invoiceInventory['total'] / 100);
-
+                //Handle vouchers
+                $amount = (int) ($inventory['total'] / 100);
                 //It will add voucher for sales from invoice
                 $voucher_1 = Voucher::create([
                     'account_master_id' => $account_master_id,
@@ -204,7 +206,9 @@ class InvoicesController extends Controller
                     'date' => Carbon::now()->toDateTimeString(),
                     'related_voucher' => null,
                     'type' => 'Dr',
-                    'company_id' => $company_id
+                    'company_id' => $company_id,
+                    'invoice_id' => $invoice->id,
+                    'invoice_item_id' => $inventory['id'],
                 ]);
                 $voucher_2 = Voucher::create([
                     'account_master_id' => $sale_account_id,
@@ -215,7 +219,9 @@ class InvoicesController extends Controller
                     'date' => Carbon::now()->toDateTimeString(),
                     'related_voucher' => null,
                     'type' => 'Cr',
-                    'company_id' => $company_id
+                    'company_id' => $company_id,
+                    'invoice_id' => $invoice->id,
+                    'invoice_item_id' => $inventory['id'],
                 ]);
 
                 //Now update vouchers id to ledger-bill-no and related_voucher
@@ -310,8 +316,8 @@ class InvoicesController extends Controller
     public function show(Request $request, $id)
     {
         $invoice = Invoice::with([
-            'items',
-            'items.taxes',
+            'inventories',
+            // 'inventories.taxes',
             'user',
             'invoiceTemplate',
             'taxes.taxType'
@@ -340,15 +346,19 @@ class InvoicesController extends Controller
             'invoiceTemplate',
             'taxes.taxType'
         ])->find($id);
+        $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
+        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
 
         return response()->json([
-            'nextInvoiceNumber' => $invoice->getInvoiceNumAttribute(),
+            'invoiceNumber' =>  $invoice->reference_number,
             'invoice' => $invoice,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $invoice->tax_per_item,
             'discount_per_item' => $invoice->discount_per_item,
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
-            'invoice_prefix' => $invoice->getInvoicePrefixAttribute()
+            'invoice_prefix' => $invoice->getInvoicePrefixAttribute(),
+            'sundryDebtorsList' => $sundryDebtorsList,
+            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
         ]);
     }
 
@@ -361,14 +371,14 @@ class InvoicesController extends Controller
      */
     public function update(Requests\InvoicesRequest $request, $id)
     {
-        $invoice_number = explode("-", $request->invoice_number);
-        $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
+        // $invoice_number = explode("-", $request->invoice_number);
+        // $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
 
-        Validator::make($number_attributes, [
-            'invoice_number' => 'required|unique:invoices,invoice_number' . ',' . $id
-        ])->validate();
+        // Validator::make($number_attributes, [
+        //     'invoice_number' => 'required|unique:invoices,invoice_number' . ',' . $id
+        // ])->validate();
 
-        $invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
+        //$invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
         //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
 
         $invoice = Invoice::find($id);
@@ -395,12 +405,12 @@ class InvoicesController extends Controller
         }
 
         $invoice->status = $request->status;
-        $invoice->invoice_date = $invoice_date;
+        //$invoice->invoice_date = $invoice_date;
         //$invoice->due_date = $due_date;
-        $invoice->invoice_number =  $number_attributes['invoice_number'];
-        $invoice->reference_number = $request->reference_number;
-        $invoice->user_id = $request->user_id;
-        $invoice->invoice_template_id = $request->invoice_template_id;
+        //$invoice->invoice_number =  $number_attributes['invoice_number'];
+        //$invoice->reference_number = $request->reference_number;
+        //$invoice->user_id = $request->user_id;
+        //$invoice->invoice_template_id = $request->invoice_template_id;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->discount = $request->discount;
@@ -410,9 +420,10 @@ class InvoicesController extends Controller
         $invoice->notes = $request->notes;
         $invoice->save();
 
-        $oldItems = $invoice->items->toArray();
+        $invoiceItems = $request->inventories;
+        //Deleting old taxes and invoice_items
+        $oldItems = $invoice->inventories->toArray();
         $oldTaxes = $invoice->taxes->toArray();
-        $invoiceItems = $request->items;
 
         foreach ($oldItems as $oldItem) {
             InvoiceItem::destroy($oldItem['id']);
@@ -421,9 +432,44 @@ class InvoicesController extends Controller
         foreach ($oldTaxes as $oldTax) {
             Tax::destroy($oldTax['id']);
         }
+
+        //Add journal entry
+        //It will be "Sales" type
+        $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
+        $company_id = (int) $request->header('company');
+        $account_master_id = (int) $request->debtors['id'];
+        $total_amount = (int) ($request->total / 100);
+        $account_ledger = AccountLedger::firstOrCreate([
+            'account_master_id' => $sale_account_id,
+            'account' => 'Sales',
+            'company_id' => $company_id,
+        ], [
+            'date' => Carbon::now()->toDateTimeString(),
+            'bill_no' => null,
+            'type' => 'Cr',
+            'debit' => 0,
+            'credit' => $total_amount,
+            'balance' => $total_amount,
+        ]);
+        $dr_account_ledger = AccountLedger::firstOrCreate([
+            'account_master_id' => $account_master_id,
+            'account' => $request->debtors['name'],
+            'company_id' => $company_id,
+        ], [
+            'date' => Carbon::now()->toDateTimeString(),
+            'bill_no' => null,
+            'debit' => $total_amount,
+            'type' => 'Dr',
+            'credit' => 0,
+            'balance' => $total_amount,
+        ]);
+        $opening_balance = (int) $request->debtors['opening_balance'];
+        $calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
+        AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
+
         foreach ($invoiceItems as $invoiceItem) {
             $invoiceItem['company_id'] = $request->header('company');
-            $item = $invoice->items()->create($invoiceItem);
+            $item = $invoice->inventories()->create($invoiceItem);
 
             if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
                 foreach ($invoiceItem['taxes'] as $tax) {
@@ -431,6 +477,73 @@ class InvoicesController extends Controller
                     if (gettype($tax['amount']) !== "NULL") {
                         $item->taxes()->create($tax);
                     }
+                }
+            }
+
+            //Handle vouchers
+            $amount = (int) ($item['total'] / 100);
+            //It will add voucher for sales from invoice
+            $voucher_1 = Voucher::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'company_id' => $company_id,
+                'account_ledger_id' => $dr_account_ledger->id,
+                'type' => 'Dr',
+                'invoice_id' => $invoice->id,
+                'invoice_item_id' => $invoiceItem['id'],
+            ], [
+                'debit' => $amount,
+                'credit' => 0,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+            ]);
+            $voucher_2 = Voucher::firstOrCreate([
+                'account_master_id' => $sale_account_id,
+                'account' => 'Sales',
+                'company_id' => $company_id,
+                'account_ledger_id' => $account_ledger->id,
+                'invoice_id' => $invoice->id,
+                'invoice_item_id' => $invoiceItem['id'],
+            ], [
+                'debit' => 0,
+                'credit' => $amount,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Cr',
+            ]);
+
+            //Now update vouchers id to ledger-bill-no and related_voucher
+            $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            if ($account_ledger->bill_no) {
+                $account_ledger->update([
+                    'credit' => $account_ledger->credit + $amount,
+                    'balance' => $account_ledger->balance + $amount,
+                    'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
+                ]);
+                $dr_account_ledger->update([
+                    'debit' => $dr_account_ledger->debit + $amount,
+                    'balance' => $dr_account_ledger->balance + $amount,
+                    'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
+                ]);
+            } else {
+                $account_ledger->update([
+                    'bill_no' => $voucher_ids,
+                ]);
+                $dr_account_ledger->update([
+                    'bill_no' => $voucher_ids,
+                ]);
+            }
+            foreach ($voucher as $key => $each) {
+                $each->update([
+                    'invoice_item_id' => $item['id'],
+                    'debit' => $each->type === 'Dr' ? $amount : 0,
+                    'credit' => $each->type === 'Cr' ? $amount : 0,
+                ]);
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
                 }
             }
         }
@@ -445,7 +558,7 @@ class InvoicesController extends Controller
             }
         }
 
-        $invoice = Invoice::with(['items', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
+        $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
 
         return response()->json([
             'url' => url('/invoices/pdf/' . $invoice->unique_hash),

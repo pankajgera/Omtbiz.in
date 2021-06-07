@@ -20,6 +20,9 @@
 .disabled{
   background: rgb(196, 196, 196) !important;
 }
+.base-prefix-input p.prefix-label{
+  padding: 2px 2px 9px 10px !important;
+}
 </style>
 <script>
 export default {
