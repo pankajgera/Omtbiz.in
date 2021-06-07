@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -20,14 +21,17 @@ class FrontendController extends Controller
         return view('front.index');
     }
 
+    /**
+     * Get customer estimate pdf
+     */
     public function getCustomerEstimatePdf($id)
     {
         $estimate = Estimate::with(
-                'user',
-                'items',
-                'user.billingAddress',
-                'user.shippingAddress'
-            )
+            'user',
+            'items',
+            'user.billingAddress',
+            'user.shippingAddress'
+        )
             ->where('unique_hash', $id)
             ->first();
 
@@ -40,7 +44,7 @@ class FrontendController extends Controller
                 foreach ($item->taxes as $tax) {
                     if (!in_array($tax->name, $taxTypes)) {
                         array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name.' ('.$tax->percent.'%)');
+                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
                     }
                 }
             }
@@ -50,7 +54,7 @@ class FrontendController extends Controller
 
                 foreach ($estimate->items as $item) {
                     foreach ($item->taxes as $tax) {
-                        if($tax->name == $taxType) {
+                        if ($tax->name == $taxType) {
                             $total += $tax->amount;
                         }
                     }
@@ -66,7 +70,7 @@ class FrontendController extends Controller
 
         $logo = $company->getMedia('logo')->first();
 
-        if($logo) {
+        if ($logo) {
             $logo = $logo->getFullUrl();
         }
 
@@ -113,25 +117,26 @@ class FrontendController extends Controller
             'labels' => $labels,
             'taxes' => $taxes
         ]);
-        $pdf = PDF::loadView('app.pdf.estimate.'.$estimateTemplate->view);
+        $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view);
 
         return $pdf->stream();
     }
 
 
     /**
-    *
+     * Get customer invoice pdf
+     *
      * @return \Illuminate\Http\Response
      */
     public function getCustomerInvoicePdf($id)
     {
         $invoice = Invoice::with([
-                'items',
-                'items.taxes',
-                'user',
-                'invoiceTemplate',
-                'taxes'
-            ])
+            'inventories',
+            // 'items.taxes',
+            'user',
+            'invoiceTemplate',
+            'taxes'
+        ])
             ->where('unique_hash', $id)
             ->first();
 
@@ -140,11 +145,11 @@ class FrontendController extends Controller
         $labels = [];
 
         if ($invoice->tax_per_item === 'YES') {
-            foreach ($invoice->items as $item) {
+            foreach ($invoice->inventories as $item) {
                 foreach ($item->taxes as $tax) {
                     if (!in_array($tax->name, $labels)) {
                         array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name.' ('.$tax->percent.'%)');
+                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
                     }
                 }
             }
@@ -152,9 +157,9 @@ class FrontendController extends Controller
             foreach ($taxTypes as $taxType) {
                 $total = 0;
 
-                foreach ($invoice->items as $item) {
+                foreach ($invoice->inventories as $item) {
                     foreach ($item->taxes as $tax) {
-                        if($tax->name == $taxType) {
+                        if ($tax->name == $taxType) {
                             $total += $tax->amount;
                         }
                     }
@@ -169,7 +174,7 @@ class FrontendController extends Controller
         $company = Company::find($invoice->company_id);
         $logo = $company->getMedia('logo')->first();
 
-        if($logo) {
+        if ($logo) {
             $logo = $logo->getFullUrl();
         }
 
@@ -217,21 +222,24 @@ class FrontendController extends Controller
             'labels' => $labels,
             'taxes' => $taxes
         ]);
-        $pdf = PDF::loadView('app.pdf.invoice.'.$invoiceTemplate->view);
+        $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
 
         return $pdf->stream();
     }
 
+    /**
+     * Get estimate pdf
+     */
     public function getEstimatePdf($id)
     {
         $estimate = Estimate::with([
-                'items',
-                'items.taxes',
-                'user',
-                'estimateTemplate',
-                'taxes',
-                'taxes.taxType'
-            ])
+            'items',
+            'items.taxes',
+            'user',
+            'estimateTemplate',
+            'taxes',
+            'taxes.taxType'
+        ])
             ->where('unique_hash', $id)
             ->first();
 
@@ -244,7 +252,7 @@ class FrontendController extends Controller
                 foreach ($item->taxes as $tax) {
                     if (!in_array($tax->name, $taxTypes)) {
                         array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name.' ('.$tax->percent.'%)');
+                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
                     }
                 }
             }
@@ -254,7 +262,7 @@ class FrontendController extends Controller
 
                 foreach ($estimate->items as $item) {
                     foreach ($item->taxes as $tax) {
-                        if($tax->name == $taxType) {
+                        if ($tax->name == $taxType) {
                             $total += $tax->amount;
                         }
                     }
@@ -270,7 +278,7 @@ class FrontendController extends Controller
         $companyAddress = User::with(['addresses', 'addresses.country'])->find(1);
         $logo = $company->getMedia('logo')->first();
 
-        if($logo) {
+        if ($logo) {
             $logo = $logo->getFullUrl();
         }
 
@@ -295,20 +303,23 @@ class FrontendController extends Controller
             'labels' => $labels,
             'taxes' => $taxes
         ]);
-        $pdf = PDF::loadView('app.pdf.estimate.'.$estimateTemplate->view);
+        $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view);
 
         return $pdf->stream();
     }
 
+    /**
+     * Get invoice pdf
+     */
     public function getInvoicePdf($id)
     {
         $invoice = Invoice::with([
-                'items',
-                'items.taxes',
-                'user',
-                'invoiceTemplate',
-                'taxes'
-            ])
+            'inventories',
+            // 'items.taxes',
+            'user',
+            'invoiceTemplate',
+            'taxes'
+        ])
             ->where('unique_hash', $id)
             ->first();
 
@@ -317,11 +328,11 @@ class FrontendController extends Controller
         $labels = [];
 
         if ($invoice->tax_per_item === 'YES') {
-            foreach ($invoice->items as $item) {
+            foreach ($invoice->inventories as $item) {
                 foreach ($item->taxes as $tax) {
                     if (!in_array($tax->name, $taxTypes)) {
                         array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name.' ('.$tax->percent.'%)');
+                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
                     }
                 }
             }
@@ -329,9 +340,9 @@ class FrontendController extends Controller
             foreach ($taxTypes as $taxType) {
                 $total = 0;
 
-                foreach ($invoice->items as $item) {
+                foreach ($invoice->inventories as $item) {
                     foreach ($item->taxes as $tax) {
-                        if($tax->name == $taxType) {
+                        if ($tax->name == $taxType) {
                             $total += $tax->amount;
                         }
                     }
@@ -347,7 +358,7 @@ class FrontendController extends Controller
 
         $logo = $company->getMedia('logo')->first();
 
-        if($logo) {
+        if ($logo) {
             $logo = $logo->getFullUrl();
         }
 
@@ -372,7 +383,7 @@ class FrontendController extends Controller
             'labels' => $labels,
             'taxes' => $taxes
         ]);
-        $pdf = PDF::loadView('app.pdf.invoice.'.$invoiceTemplate->view);
+        $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
 
         return $pdf->stream();
     }
