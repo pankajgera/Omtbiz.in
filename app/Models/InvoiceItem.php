@@ -42,7 +42,7 @@ class InvoiceItem extends Model
 
     public function inventory()
     {
-        return $this->belongsTo(Inventory::class, 'id');
+        return $this->belongsTo(Inventory::class);
     }
 
     public function taxes()

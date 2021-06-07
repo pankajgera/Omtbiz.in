@@ -39,11 +39,11 @@ $factory->define(Invoice::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(Invoice::class, function ($invoice, $faker) {
-    $invoice->items()->save(factory(InvoiceItem::class)->make());
-    $invoice->items()->save(factory(InvoiceItem::class)->make());
+    $invoice->inventories()->save(factory(InvoiceItem::class)->make());
+    $invoice->inventories()->save(factory(InvoiceItem::class)->make());
 });
 
 $factory->afterCreating(Invoice::class, function ($invoice, $faker) {
     $invoice->taxes()->save(factory(Tax::class)->make());
-    $invoice->items()->save(factory(Tax::class)->make());
+    $invoice->inventories()->save(factory(Tax::class)->make());
 });
