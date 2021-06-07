@@ -131,7 +131,7 @@
             <div :class="'inv-status-'+invoice.status.toLowerCase()" class="inv-status">{{ invoice.status }}</div>
           </div>
           <div class="right">
-            <div class="inv-amount" v-html="$utils.formatMoney(invoice.due_amount, invoice.user.currency)" />
+            <div class="inv-amount" v-html="'₹ ' + (invoice.due_amount/100)" />
             <div class="inv-date">{{ invoice.formattedInvoiceDate }}</div>
           </div>
         </router-link>

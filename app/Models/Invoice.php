@@ -95,7 +95,7 @@ class Invoice extends Model
 
     public function inventories()
     {
-        return $this->hasMany('App\Models\InvoiceItem');
+        return $this->hasMany(InvoiceItem::class);
     }
 
     public function taxes()
@@ -110,7 +110,7 @@ class Invoice extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function invoiceTemplate()

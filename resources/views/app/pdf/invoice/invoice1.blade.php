@@ -403,10 +403,10 @@
                         <td class="textStyle1" style="text-align: left; color: #55547A">Invoice Date </td>
                         <td class="textStyle2"> &nbsp;{{$invoice->formattedInvoiceDate}}</td>
                     </tr>
-                    <tr>
+                    {{--  <tr>
                         <td class="textStyle1" style="text-align: left; color: #55547A">Due date</td>
                         <td class="textStyle2"> &nbsp;{{$invoice->formattedDueDate}}</td>
-                    </tr>
+                    </tr>  --}}
                 </table>
             </div>
             <div style="clear: both;"></div>
@@ -424,7 +424,7 @@
             </div>
             <div style="clear: both;"></div>
         </div>
-        <div style="position:relative">
+        <div style="width: 100%;">
             @include('app.pdf.invoice.partials.table')
         </div>
         @include('app.pdf.invoice.partials.notes')
