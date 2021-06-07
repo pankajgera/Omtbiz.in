@@ -61,13 +61,13 @@ class AccountMaster extends Model
      * Update account master opening balance
      *
      * @param $id
-     * @param $balance
+     * @param $closing_balance
      */
-    public static function updateOpeningBalance($id, $balance)
+    public static function updateOpeningBalance($id, $closing_balance)
     {
         $master = self::find($id);
         $master->update([
-            'opening_balance' => $balance
+            'opening_balance' => $closing_balance
         ]);
         return true;
     }
