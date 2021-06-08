@@ -133,11 +133,26 @@ class PaymentController extends Controller
         if ('admin' === Auth::user()->role) {
             $payment_status = 'Done';
         }
+
         $voucher_ids = [];
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->list['id'];
         $cash_account = AccountMaster::where('name', 'Cash')->first();
         $bank_account = AccountMaster::where('name', 'Bank')->first();
+
+        //Create Payment
+        $payment = Payment::create([
+            'payment_date' => $payment_date,
+            //'payment_number' => $number_attributes['payment_number'],
+            'payment_status' => $payment_status,
+            'user_id' => $request->user_id,
+            'company_id' => $company_id,
+            //'invoice_id' => $request->invoice_id,
+            'payment_mode' => $request->payment_mode,
+            'amount' => $request->amount,
+            'notes' => $request->notes,
+            'account_master_id' => $account_master_id,
+        ]);
 
         $dr_account_ledger = AccountLedger::firstOrCreate([
             'account_master_id' => $account_master_id,
@@ -254,19 +269,6 @@ class PaymentController extends Controller
                 ]);
             }
         }
-
-        $payment = Payment::create([
-            'payment_date' => $payment_date,
-            //'payment_number' => $number_attributes['payment_number'],
-            'payment_status' => $payment_status,
-            'user_id' => $request->user_id,
-            'company_id' => $company_id,
-            //'invoice_id' => $request->invoice_id,
-            'payment_mode' => $request->payment_mode,
-            'amount' => $request->amount,
-            'notes' => $request->notes,
-            'account_master_id' => $account_master_id,
-        ]);
 
         return response()->json([
             'payment' => $payment,
