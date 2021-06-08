@@ -66,8 +66,12 @@ class AccountMaster extends Model
     public static function updateOpeningBalance($id, $closing_balance)
     {
         $master = self::find($id);
+        $opening = (int) $master->opening_balance;
+        $closing = (int) $closing_balance ? (int) $closing_balance : 0.00;
+        $type = ($opening > $closing) ? ($master->type) : (('Cr' === $master->type) ? 'Dr' : 'Cr');
         $master->update([
-            'opening_balance' => $closing_balance
+            'type' => $type,
+            'opening_balance' => $closing,
         ]);
         return true;
     }

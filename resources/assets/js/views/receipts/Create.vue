@@ -393,6 +393,8 @@ export default {
 
       this.formData.receipt_number = this.receiptPrefix + '-' + this.receiptNumAttribute
       this.formData.user_id = this.user.id
+      this.formData.closing_balance_type = this.closingBalanceType
+      this.formData.closing_balance = this.closingBalance
       if (this.isEdit) {
         let data = {
           editData: {

@@ -137,6 +137,21 @@ class ReceiptController extends Controller
         $account_master_id = (int) $request->list['id'];
         $cash_account_id = AccountMaster::where('name', 'Cash')->first()->id;
         $bank_account_id = AccountMaster::where('name', 'Bank')->first()->id;
+
+        //Create receipt
+        $receipt = Receipt::create([
+            'receipt_date' => $receipt_date,
+            'receipt_number' => $number_attributes['receipt_number'],
+            'receipt_status' => $receipt_status,
+            'user_id' => $request->user_id,
+            'company_id' => $company_id,
+            'invoice_id' => $request->invoice_id,
+            'receipt_mode' => $request->receipt_mode,
+            'amount' => $request->amount,
+            'notes' => $request->notes,
+            'account_master_id' => $account_master_id
+        ]);
+
         $dr_account_ledger = AccountLedger::firstOrCreate([
             'account_master_id' => $account_master_id,
             'account' => $request->list['name'],
@@ -252,19 +267,6 @@ class ReceiptController extends Controller
                 ]);
             }
         }
-
-        $receipt = Receipt::create([
-            'receipt_date' => $receipt_date,
-            'receipt_number' => $number_attributes['receipt_number'],
-            'receipt_status' => $receipt_status,
-            'user_id' => $request->user_id,
-            'company_id' => $company_id,
-            'invoice_id' => $request->invoice_id,
-            'receipt_mode' => $request->receipt_mode,
-            'amount' => $request->amount,
-            'notes' => $request->notes,
-            'account_master_id' => $account_master_id
-        ]);
 
         return response()->json([
             'receipt' => $receipt,
