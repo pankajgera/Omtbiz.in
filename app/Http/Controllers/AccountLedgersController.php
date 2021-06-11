@@ -73,21 +73,12 @@ class AccountLedgersController extends Controller
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
         $balance = $ledger->debit - $ledger->credit;
         $opening_balance = $ledger->accountMaster->opening_balance;
-        if ($ledger->debit > $ledger->credit) {
-            $ledger->update([
-                'type' => 'Dr',
-                'credit' => $vouchers_credit_sum,
-                'debit' => $vouchers_debit_sum,
-                'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
-            ]);
-        } elseif ($ledger->debit < $ledger->credit) {
-            $ledger->update([
-                'type' => 'Cr',
-                'credit' => $vouchers_credit_sum,
-                'debit' => $vouchers_debit_sum,
-                'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
-            ]);
-        }
+        $ledger->update([
+            'type' => $ledger->debit > $ledger->credit ? 'Dr' : 'Cr',
+            'credit' => $vouchers_credit_sum,
+            'debit' => $vouchers_debit_sum,
+            'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
+        ]);
 
         //Extra's for vouchers collection
         foreach ($related_vouchers as $each) {
