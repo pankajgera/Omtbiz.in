@@ -31,7 +31,7 @@ class ReceiptRequest extends FormRequest
             'list.name' => 'required|string',
             'receipt_number' => 'required',
             'user_id' => 'required',
-            'invoice_id' => 'required',
+            'invoice_id' => 'nullable',
         ];
 
         return $rules;

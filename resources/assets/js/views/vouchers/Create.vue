@@ -245,10 +245,8 @@ export default {
     },
     rowSelected($event) {
       if($event.rowData && $event.rowData.type === 'Cr') {
-        $event.rowData.credit = $event.rowData.debit
         $event.rowData.debit = null;
       } else if ($event.rowData && $event.rowData.type === 'Dr') {
-        $event.rowData.debit = $event.rowData.credit;
         $event.rowData.credit = null;
       }
 

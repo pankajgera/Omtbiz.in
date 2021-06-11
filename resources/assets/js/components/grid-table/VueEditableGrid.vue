@@ -321,7 +321,6 @@ export default {
         this.selEnd = [rowIndex, colIndex]
         this.selStart = [rowIndex, colIndex]
         //Check if last tab
-        console.log(rowIndex, colIndex, maxrow, maxcol, !$event)
         if (colIndex > 1 && !$event) {
           this.selEnd = [rowIndex+1, 0]
           this.selStart = [rowIndex+1, 0]
