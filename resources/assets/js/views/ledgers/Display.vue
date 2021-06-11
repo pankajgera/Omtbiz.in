@@ -191,8 +191,8 @@ export default {
       this.displayArray = response.data.vouchers
       this.ledgerData = response.data.ledger
       this.masterData = response.data.account_master
-      this.currentTotalCredit = this.displayArray.map(o => parseFloat(o.credit)).reduce((a,c) => a + parseFloat(c))
-      this.currentTotalDebit = this.displayArray.map(o => parseFloat(o.debit)).reduce((a,c) => a + parseFloat(c))
+      this.currentTotalCredit = this.ledgerData.credit
+      this.currentTotalDebit = this.ledgerData.debit
     },
     getFormattedDate(date) {
       return moment(date).format('DD-MM-YYYY');
