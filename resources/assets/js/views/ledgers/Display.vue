@@ -94,30 +94,30 @@
             <p class="row">
               <span>Opening Balance:</span>
               <span class="ml-60">
-                {{ masterData.type === 'Cr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ 0.00'}}
+                {{ masterData.type === 'Dr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ 0.00'}}
               </span>
               <span class="ml-60">
-                {{ masterData.type === 'Dr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ 0.00'}}
+                {{ masterData.type === 'Cr' && masterData.opening_balance ? ' ₹ ' + masterData.opening_balance + ' ' + masterData.type : ' ₹ 0.00'}}
               </span>
             </p>
             <hr/>
             <p class="row">
               <span class="mr-30">Current Total:</span>
               <span class="ml-60">
-                {{ currentTotalCredit ? ' ₹ ' + currentTotalCredit + ' Cr' : ' ₹ 0.00'}}
+                {{ currentTotalDebit ? ' ₹ ' + currentTotalDebit + ' Dr' : ' ₹ 0.00'}}
               </span>
               <span class="ml-60">
-                {{ currentTotalDebit ? ' ₹ ' + currentTotalDebit + ' Dr' : ' ₹ 0.00'}}
+                {{ currentTotalCredit ? ' ₹ ' + currentTotalCredit + ' Cr' : ' ₹ 0.00'}}
               </span>
             </p>
             <hr/>
             <h6 class="row">
               <span class="mr-10">Closing Balance:</span>
               <span class="ml-60">
-                {{ ledgerData.type === 'Cr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Cr': ' ₹ 0.00'}}
+                {{ ledgerData.type === 'Dr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Dr': ' ₹ 0.00'}}
               </span>
               <span class="ml-60">
-                {{ ledgerData.type === 'Dr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Dr': ' ₹ 0.00'}}
+                {{ ledgerData.type === 'Cr' && ledgerData ? ' ₹ ' + ledgerData.balance + ' Cr': ' ₹ 0.00'}}
               </span>
             </h6>
           </div>
