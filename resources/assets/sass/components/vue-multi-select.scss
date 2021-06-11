@@ -264,7 +264,7 @@ fieldset[disabled] .multiselect {
     border-top: none;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    z-index: 50;
+    z-index: 9999;
     -webkit-overflow-scrolling: touch;
 }
 .multiselect__content {
@@ -274,6 +274,7 @@ fieldset[disabled] .multiselect {
     margin: 0;
     min-width: 100%;
     vertical-align: top;
+    z-index: 99999;
 }
 .multiselect--above .multiselect__content-wrapper {
     bottom: 100%;
