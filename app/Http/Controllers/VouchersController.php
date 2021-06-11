@@ -32,9 +32,11 @@ class VouchersController extends Controller
     public function edit(Request $request, $id)
     {
         $voucher = Voucher::where('related_voucher', 'like', '%' . $id . '%')->select([
+            'id',
             'type',
             'account',
             'account_master_id',
+            'account_ledger_id',
             'credit',
             'debit'
         ])->get();
@@ -69,10 +71,10 @@ class VouchersController extends Controller
                     $updateDebit = 0;
                     if ('Cr' === $each['type']) {
                         $updateCredit = $ledgerPresent->credit + $each['credit'];
-                        $ledgerPresent->update(['credit' => $updateCredit]);
+                        $ledgerPresent->update(['credit' => $updateCredit, 'balance' => $updateCredit]);
                     } else {
                         $updateDebit = $ledgerPresent->debit + $each['debit'];
-                        $ledgerPresent->update(['debit' => $updateDebit]);
+                        $ledgerPresent->update(['debit' => $updateDebit, 'balance' => $updateDebit]);
                     }
 
                     $ledger = $ledgerPresent;
@@ -89,18 +91,36 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                $voucher = Voucher::updateOrCreate([
-                    'account_ledger_id' => $ledger->id,
-                    'account_master_id' => $each['account_id'],
-                    'type' => $each['type'],
-                    'account' => $each['account'],
-                    'debit' => $each['debit'],
-                    'credit' => $each['credit'],
-                ], [
-                    'short_narration' => $each['short_narration'],
-                    'date' => Carbon::now()->toDateTimeString(),
-                    'company_id' => $request->header('company')
-                ]);
+                $voucher = null;
+                if ($each['is_edit']) {
+                    \Log::info('edit', [$each]);
+                    Voucher::where([
+                        'company_id' => $request->header('company'),
+                        'id' => $each['id'],
+                    ])->update([
+                        'account_ledger_id' => $each['account_ledger_id'],
+                        'account_master_id' => $each['account_id'],
+                        'type' => $each['type'],
+                        'account' => $each['account'],
+                        'debit' => $each['debit'] ?? 0,
+                        'credit' => $each['credit'] ?? 0,
+                        'short_narration' => $each['short_narration'],
+                        'date' => Carbon::now()->toDateTimeString(),
+                    ]);
+                    $voucher = Voucher::find($each['id']);
+                } else {
+                    $voucher = Voucher::create([
+                        'account_ledger_id' => $ledger->id,
+                        'account_master_id' => $each['account_id'],
+                        'type' => $each['type'],
+                        'account' => $each['account'],
+                        'debit' => $each['debit'] ?? 0,
+                        'credit' => $each['credit'] ?? 0,
+                        'short_narration' => $each['short_narration'],
+                        'date' => Carbon::now()->toDateTimeString(),
+                        'company_id' => $request->header('company')
+                    ]);
+                }
 
                 //Update voucher_id's in ledger->bill_no
                 $bill_no = 0;

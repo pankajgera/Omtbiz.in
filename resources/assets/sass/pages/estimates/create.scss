@@ -358,6 +358,7 @@
         .multiselect__content {
           max-height: 240px;
           overflow: auto;
+          z-index: 9999;
         }
     }
 

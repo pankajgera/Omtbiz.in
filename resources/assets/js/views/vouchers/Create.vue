@@ -127,6 +127,8 @@ export default {
       this.rows = []
       response.data.voucher.map(each => {
         let obj = {}
+        obj['id'] = each.id
+        obj['account_ledger_id'] = each.account_ledger_id
         obj['type'] = each.type
         obj['account'] = each.account,
         obj['account_id'] = each.account_master_id,
@@ -160,9 +162,10 @@ export default {
       }
     },
     async submitVoucher () {
-      this.rows = this.rows.filter(each => each['account'] !== '');
-      let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c);
-      let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c);
+      let rows = this.rows
+      rows = rows.filter(each => each['account'] !== '');
+      let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c);
+      let debit_sum = rows.map(o => o.debit).reduce((a,c) => a + c);
 
       let calc_balance = 0;
       if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {
@@ -175,16 +178,18 @@ export default {
           })
           return false
       }
-      this.rows.map(each => {
+
+      rows.map(each => {
         each['total_debit'] = debit_sum
         each['total_credit'] = credit_sum
         each['balance'] = calc_balance
         each['short_narration'] = this.short_narration
+        each['is_edit'] = this.isEdit
       });
 
       try {
         this.isLoading = true
-        let response = await this.addVoucher(this.rows)
+        let response = await this.addVoucher(rows)
 
         if (response.data) {
           window.toastr['success'](this.$tc('vouchers.created_message'))
@@ -205,11 +210,12 @@ export default {
       // } else if ($event.row.type === 'Dr') {
       //   $event.row.credit = 0;
       // }
+      let rows = this.rows
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
       {
         this.$nextTick(() => {
-          let credit_sum = this.rows.map(o => o.credit).reduce((a,c) => a + c)
-          let debit_sum = this.rows.map(o => o.debit).reduce((a,c) => a + c)
+          let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c)
+          let debit_sum = rows.map(o => o.debit).reduce((a,c) => a + c)
           let calc_total = credit_sum > debit_sum ? credit_sum - debit_sum : debit_sum - credit_sum
           let calc_type = credit_sum > debit_sum ? 'Dr' : 'Cr'
           if (calc_total !== 0 && calc_type === 'Dr' && $event.value > 0) {
@@ -221,7 +227,6 @@ export default {
             this.addNewRow('Cr', calc_total)
             $event.rowIndex = $event.rowIndex + 1
             $event.columnIndex = 0
-            $event.columnIndex = 0
             $event.$event.target.blur()
           } else if (calc_total === 0) {
             $event.$event.target.blur()
@@ -230,7 +235,7 @@ export default {
         });
       }
 
-      if ((this.rows.length - 1) === $event.rowIndex) {
+      if ((rows.length - 1) === $event.rowIndex) {
         if ($event.columnIndex === 2 && $event.$event.key === 'Tab' || $event.columnIndex === 3 && $event.$event.key === 'Tab')
         {
           $event.$event.target.blur()
@@ -240,8 +245,10 @@ export default {
     },
     rowSelected($event) {
       if($event.rowData && $event.rowData.type === 'Cr') {
+        $event.rowData.credit = $event.rowData.debit
         $event.rowData.debit = null;
       } else if ($event.rowData && $event.rowData.type === 'Dr') {
+        $event.rowData.debit = $event.rowData.credit;
         $event.rowData.credit = null;
       }
 

@@ -170,6 +170,14 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('ledgers.credit')"
+          show="credit"
+        >
+          <template slot-scope="row">
+            ₹ {{ row.credit }}
+          </template>
+        </table-column>
+        <table-column
           :label="$t('ledgers.account')"
           show="account"
         >
@@ -179,14 +187,7 @@
               </router-link>
           </template>
         </table-column>
-        <table-column
-          :label="$t('ledgers.credit')"
-          show="credit"
-        >
-          <template slot-scope="row">
-            ₹ {{ row.credit }}
-          </template>
-        </table-column>
+
         <table-column
           :label="$t('ledgers.debit')"
           show="debit"
