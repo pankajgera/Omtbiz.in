@@ -76,7 +76,6 @@ class VouchersController extends Controller
                         $updateDebit = $ledgerPresent->debit + $each['debit'];
                         $ledgerPresent->update(['debit' => $updateDebit, 'balance' => $updateDebit]);
                     }
-
                     $ledger = $ledgerPresent;
                 } else {
                     $ledger = AccountLedger::create([
