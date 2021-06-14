@@ -188,7 +188,7 @@ class ReceiptController extends Controller
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Cr',
+                'type' => 'Dr',
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
@@ -199,7 +199,7 @@ class ReceiptController extends Controller
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Dr',
+                'type' => 'Cr',
                 'company_id' => $company_id
             ]);
         } else {
@@ -223,7 +223,7 @@ class ReceiptController extends Controller
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Cr',
+                'type' => 'Dr',
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
@@ -234,7 +234,7 @@ class ReceiptController extends Controller
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Dr',
+                'type' => 'Cr',
                 'company_id' => $company_id
             ]);
         }
