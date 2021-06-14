@@ -235,11 +235,8 @@ export default {
     },
     openingBalance() {
       if (this.formData.list && this.formData.list.id) {
-        let balance = this.sundryCreditorList.find(each => each.id === this.formData.list.id);
         let ledger = this.ledgerBalance.find(each => each.id === this.formData.list.id);
-        let total = parseFloat(parseFloat(balance.opening_balance) + parseFloat(ledger.balance)).toFixed(2);
-        //return total && total > 0 ? total : 0
-        return parseFloat(balance.opening_balance).toFixed(2);
+        return parseFloat(ledger.balance).toFixed(2);
       }
       return 0
     },
