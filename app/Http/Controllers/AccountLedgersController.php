@@ -85,9 +85,8 @@ class AccountLedgersController extends Controller
 
         //Extra's for vouchers collection
         foreach ($related_vouchers as $each) {
-            $particulars = $each->account;
             $each['voucher_type'] = 'Journal';
-            $each['particulars'] = $particulars;
+            $each['particulars'] = $each->account;
         }
 
         return response()->json([
