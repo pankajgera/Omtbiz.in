@@ -178,7 +178,7 @@ class InvoicesController extends Controller
             ]);
             $opening_balance = (int) $request->debtors['opening_balance'];
             $calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
-            AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
+            //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
             $invoiceInventories = $request->inventories;
 
@@ -465,7 +465,7 @@ class InvoicesController extends Controller
         ]);
         $opening_balance = (int) $request->debtors['opening_balance'];
         $calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
-        AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
+        //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
         foreach ($invoiceItems as $invoiceItem) {
             $invoiceItem['company_id'] = $request->header('company');

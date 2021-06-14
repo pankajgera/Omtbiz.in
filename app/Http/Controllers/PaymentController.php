@@ -166,7 +166,7 @@ class PaymentController extends Controller
             'credit' => 0,
             'balance' => $request->amount,
         ]);
-        AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
+        //AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
 
         if ($request->payment_mode !== 'Cash') {
             $account_ledger = AccountLedger::firstOrCreate([

@@ -79,9 +79,9 @@ class AccountLedgersController extends Controller
             'debit' => $vouchers_debit_sum,
             'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
         ]);
-        if ($ledger->balance === $opening_balance) {
-            AccountMaster::updateOpeningBalance($ledger->accountMaster->id, $ledger->balance);
-        }
+        // if ($ledger->balance === $opening_balance) {
+        //     AccountMaster::updateOpeningBalance($ledger->accountMaster->id, $ledger->balance);
+        // }
 
         //Extra's for vouchers collection
         foreach ($related_vouchers as $each) {
