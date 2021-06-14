@@ -92,7 +92,6 @@ class VouchersController extends Controller
 
                 $voucher = null;
                 if ($each['is_edit']) {
-                    \Log::info('edit', [$each]);
                     Voucher::where([
                         'company_id' => $request->header('company'),
                         'id' => $each['id'],
