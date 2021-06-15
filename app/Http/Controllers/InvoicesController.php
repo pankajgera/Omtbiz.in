@@ -111,7 +111,7 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
-            $invoice_date = Carbon::parse($request->invoice_date)->format('d-m-Y');
+            $invoice_date = Carbon::createFromFormat($request->invoice_date, 'd/m/y')->format('d-m-Y');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::STATUS_DRAFT;
 
