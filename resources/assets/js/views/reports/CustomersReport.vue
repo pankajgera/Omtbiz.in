@@ -128,7 +128,7 @@ export default {
         return this.ledger
       },
       set: function(value) {
-        this.ledger = value;
+        this.ledger = (value.substring(0, value.indexOf('(Group:'))).trim();
         // let legder_id = this.ledgersArr.find(i => i.account === value).id
         // if (legder_id) {
         //   this.onChangeLedgers(legder_id)
@@ -247,12 +247,6 @@ export default {
       let response = await this.fetchLedgersReport()
       this.ledgersArr = response.data.ledgers
     },
-    // async onChangeLedgers (legder_id) {
-    //   if(/^\d+$/.test(legder_id)) {
-    //     let response = await this.fetchVouchersReport(legder_id)
-    //     this.vouchersListArr = response.data.vouchers
-    //   }
-    // }
   }
 }
 </script>

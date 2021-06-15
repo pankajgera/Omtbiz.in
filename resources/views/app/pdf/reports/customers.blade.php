@@ -189,7 +189,7 @@
                     </td>
                 </tr>
             </table>
-            <table>
+            <table class="tax-total-table">
                 <tr>
                     <td>
                         <p class="total-tax-title">OPENING BALANCE</p>
@@ -201,6 +201,7 @@
                     </td>
                 </tr>
             </table>
+            <br/>
             <div class="tax-table-container">
                 <table class="tax-table">
                     @foreach ($related_vouchers as $each)
@@ -225,6 +226,7 @@
                     @endforeach
                 </table>
             </div>
+            <br/>
             <table class="tax-total-table">
                 <tr>
                     <td>

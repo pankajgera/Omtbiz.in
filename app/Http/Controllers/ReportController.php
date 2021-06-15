@@ -413,10 +413,23 @@ class ReportController extends Controller
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
 
         foreach ($related_masters as $key => $master) {
-            $vouchers = Voucher::where('account_master_id', $master->id)
-                ->where('account', '<>', $master->name)
+            $all_voucher_ids = Voucher::where('account_master_id', $master->id)->whereNotNull('related_voucher')->get();
+            $each_ids = null;
+            foreach ($all_voucher_ids as $each) {
+                if ($each_ids) {
+                    $each_ids = $each_ids . ', ' . $each->related_voucher;
+                } else {
+                    $each_ids = $each->related_voucher;
+                }
+            }
+            $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+            $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
+            $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
+            $vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+                ->where('account_master_id', '!=', $master->id)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)
+                ->orderBy('id')
                 ->get();
             if (0 < count($vouchers)) {
                 array_push($related_vouchers, $vouchers->toArray());
@@ -447,7 +460,7 @@ class ReportController extends Controller
         }
         $debit_sum = array_sum($vouchers_debit_sum);
         $credit_sum = array_sum($vouchers_credit_sum);
-        $credit_debit_sum = $debit_sum + $credit_sum;
+        $credit_debit_sum = $debit_sum > $credit_sum ? $debit_sum - $credit_sum : $credit_sum - $debit_sum;
         $company = Company::where('unique_hash', $hash)->first();
 
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
