@@ -247,12 +247,6 @@ export default {
       let response = await this.fetchLedgersReport()
       this.ledgersArr = response.data.ledgers
     },
-    // async onChangeLedgers (legder_id) {
-    //   if(/^\d+$/.test(legder_id)) {
-    //     let response = await this.fetchVouchersReport(legder_id)
-    //     this.vouchersListArr = response.data.vouchers
-    //   }
-    // }
   }
 }
 </script>
