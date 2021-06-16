@@ -21,79 +21,6 @@
       </div>
       <div class="row invoice-input-group">
         <div class="col-md-5 invoice-customer-container">
-          <!-- <div
-            v-if="selectedCustomer" class="show-customer">
-            <div class="row px-2 mt-1">
-              <div v-if="selectedCustomer.billing_address" class="col col-6">
-                <div class="row address-menu">
-                  <label class="col-sm-4 px-2 title">{{ $t('general.bill_to') }}</label>
-                  <div class="col-sm p-0 px-2 content">
-                    <label v-if="selectedCustomer.billing_address.name">
-                      {{ selectedCustomer.billing_address.name }}
-                    </label>
-                    <label v-if="selectedCustomer.billing_address.address_street_1">
-                      {{ selectedCustomer.billing_address.address_street_1 }}
-                    </label>
-                    <label v-if="selectedCustomer.billing_address.address_street_2">
-                      {{ selectedCustomer.billing_address.address_street_2 }}
-                    </label>
-                    <label v-if="selectedCustomer.billing_address.city && selectedCustomer.billing_address.state">
-                      {{ selectedCustomer.billing_address.city }}, {{ selectedCustomer.billing_address.state }} {{ selectedCustomer.billing_address.zip }}
-                    </label>
-                    <label v-if="selectedCustomer.billing_address.country">
-                      {{ selectedCustomer.billing_address.country.name }}
-                    </label>
-                    <label v-if="selectedCustomer.billing_address.phone">
-                      {{ selectedCustomer.billing_address.phone }}
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div v-if="selectedCustomer.shipping_address" class="col col-6">
-                <div class="row address-menu">
-                  <label class="col-sm-4 px-2 title">{{ $t('general.ship_to') }}</label>
-                  <div class="col-sm p-0 px-2 content">
-                    <label v-if="selectedCustomer.shipping_address.name">
-                      {{ selectedCustomer.shipping_address.name }}
-                    </label>
-                    <label v-if="selectedCustomer.shipping_address.address_street_1">
-                      {{ selectedCustomer.shipping_address.address_street_1 }}
-                    </label>
-                    <label v-if="selectedCustomer.shipping_address.address_street_2">
-                      {{ selectedCustomer.shipping_address.address_street_2 }}
-                    </label>
-                    <label v-if="selectedCustomer.shipping_address.city && selectedCustomer.shipping_address">
-                      {{ selectedCustomer.shipping_address.city }}, {{ selectedCustomer.shipping_address.state }} {{ selectedCustomer.shipping_address.zip }}
-                    </label>
-                    <label v-if="selectedCustomer.shipping_address.country" class="country">
-                      {{ selectedCustomer.shipping_address.country.name }}
-                    </label>
-                    <label v-if="selectedCustomer.shipping_address.phone" class="phone">
-                      {{ selectedCustomer.shipping_address.phone }}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="customer-content mb-1">
-              <label class="email">{{ selectedCustomer.name }}</label>
-              <label class="action" @click="removeCustomer">{{ $t('general.remove') }}</label>
-            </div>
-          </div> -->
-
-          <!-- <base-popup v-else :class="['add-customer', {'customer-required': $v.selectedCustomer.$error}]" >
-            <div slot="activator" class="add-customer-action">
-              <font-awesome-icon icon="user" class="customer-icon"/>
-              <div>
-                <label>{{ $t('customers.new_customer') }} <span class="text-danger"> * </span></label>
-                <p v-if="$v.selectedCustomer.$error && !$v.selectedCustomer.required" class="text-danger">
-                  {{ $t('validation.required') }}
-                </p>
-              </div>
-            </div>
-            <customer-select-popup type="invoice" />
-          </base-popup> -->
-
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setInvoiceDebtor"
@@ -112,28 +39,9 @@
             </div>
         </div>
         <div class="col invoice-input">
-          <!-- <div class="row mb-3">
-            <div class="col collapse-input">
-              <label>{{ $t('invoices.due_date') }}<span class="text-danger"> * </span></label>
-              <base-date-picker
-                v-model="newInvoice.due_date"
-                :invalid="$v.newInvoice.due_date.$error"
-                :calendar-button="true"
-                calendar-button-icon="calendar"
-                @change="$v.newInvoice.due_date.$touch()"
-              />
-              <span v-if="$v.newInvoice.due_date.$error && !$v.newInvoice.due_date.required" class="text-danger mt-1"> {{ $t('validation.required') }}</span>
-            </div>
-          </div> -->
           <div class="row">
             <div class="col collapse-input">
               <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
-              <!-- <base-date-picker
-                v-model="newInvoice.invoice_date"
-                :calendar-button="true"
-                calendar-button-icon="calendar"
-                @change="$v.newInvoice.invoice_date.$touch()"
-              /> -->
               <input
                 v-model="newInvoice.invoice_date"
                 type="date"
@@ -157,7 +65,6 @@
                 :disabled="true"
               />
               <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
-              <!-- <span v-show="!$v.invoiceNumAttribute.numeric" class="text-danger mt-1"> {{ $tc('validation.numbers_only') }}  </span> -->
             </div>
             <div class="col collapse-input">
               <label>{{ $t('invoices.ref_number') }}</label>
@@ -242,10 +149,6 @@
           <div v-if="$v.newInvoice.notes.$error">
             <span v-if="!$v.newInvoice.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
           </div>
-          <!-- <label class="mt-3 mb-1 d-block">{{ $t('invoices.invoice_template') }} <span class="text-danger"> * </span></label>
-          <base-button type="button" class="btn-template" icon="pencil-alt" right-icon @click="openTemplateModal" >
-            <span class="mr-4"> {{ $t('invoices.template') }} {{ getTemplateId }} </span>
-          </base-button> -->
         </div>
 
         <div class="invoice-total">
@@ -258,15 +161,9 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.sub_total') }}</label>
             <label class="invoice-amount">
-              <div v-html="$utils.formatMoney(subtotal, currency)" />
+              ₹ {{ subtotal }}
             </label>
           </div>
-          <!-- <div v-for="tax in allTaxes" :key="tax.tax_type_id" class="section">
-            <label class="invoice-label">{{ tax.name }} - {{ tax.percent }}% </label>
-            <label class="invoice-amount">
-              <div v-html="$utils.formatMoney(tax.amount, currency)" />
-            </label>
-          </div> -->
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
             <label class="invoice-label">{{ $t('invoices.discount') }}</label>
             <div
@@ -329,7 +226,7 @@
           <div class="section border-top mt-3">
             <label class="invoice-label">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>
             <label class="invoice-amount total">
-              <div v-html="$utils.formatMoney(total, currency)" />
+              ₹ {{ total }}
             </label>
           </div>
         </div>
@@ -383,7 +280,6 @@ export default {
     return {
       newInvoice: {
         invoice_date: null,
-        //due_date: null,
         invoice_number: null,
         user_id: null,
         invoice_template_id: 1,
@@ -397,7 +293,6 @@ export default {
         reference_number: null,
         inventories: [{
           ...InvoiceStub,
-          id: Guid.raw(),
           taxes: [{...TaxStub, id: Guid.raw()}]
         }],
         taxes: [],
@@ -425,9 +320,6 @@ export default {
         invoice_date: {
           required
         },
-        // due_date: {
-        //   required
-        // },
         discount_val: {
           between: between(0, this.subtotal)
         },
@@ -441,18 +333,12 @@ export default {
           required
         }
       },
-      // selectedCustomer: {
-      //   required
-      // },
       invoiceNumAttribute: {
         required
       }
     }
   },
   computed: {
-    // ...mapGetters('general', [
-    //   'inventoryDiscount'
-    // ]),
     ...mapGetters('currency', [
       'defaultCurrency'
     ]),
@@ -486,9 +372,9 @@ export default {
       },
       set: function (newValue) {
         if (this.newInvoice.discount_type === 'percentage') {
-          this.newInvoice.discount_val = (this.subtotal * newValue) / 100
+          this.newInvoice.discount_val = (this.subtotal * newValue)
         } else {
-          this.newInvoice.discount_val = newValue * 100
+          this.newInvoice.discount_val = newValue
         }
 
         this.newInvoice.discount = newValue
@@ -521,28 +407,6 @@ export default {
         return tax.tax
       })
     },
-    // allTaxes () {
-    //   let taxes = []
-    //   this.inventoryList.forEach((inventory) => {
-    //     inventory.taxes.forEach((tax) => {
-    //       let found = taxes.find((_tax) => {
-    //         return _tax.tax_type_id === tax.tax_type_id
-    //       })
-
-    //       if (found) {
-    //         found.amount += tax.amount
-    //       } else if (tax.tax_type_id) {
-    //         taxes.push({
-    //           tax_type_id: tax.tax_type_id,
-    //           amount: tax.amount,
-    //           percent: tax.percent,
-    //           name: tax.name
-    //         })
-    //       }
-    //     })
-    //   })
-    //   return taxes
-    // },
     setInvoiceDebtor: {
       cache: false,
       get() {
@@ -555,23 +419,15 @@ export default {
     }
   },
   watch: {
-    // selectedCustomer (newVal) {
-    //   if (newVal && newVal.currency) {
-    //     this.selectedCurrency = newVal.currency
-    //   } else {
-    //     this.selectedCurrency = this.defaultCurrency
-    //   }
-    // },
     subtotal (newValue) {
       if (this.newInvoice.discount_type === 'percentage') {
-        this.newInvoice.discount_val = (this.newInvoice.discount * newValue) / 100
+        this.newInvoice.discount_val = (this.newInvoice.discount * newValue)
       }
     }
   },
   created () {
     this.loadData()
     this.fetchInitialInventory()
-    //this.resetSelectedCustomer()
     window.hub.$on('newTax', this.onSelectTax)
   },
   methods: {
@@ -582,8 +438,6 @@ export default {
       'addInvoice',
       'fetchCreateInvoice',
       'fetchInvoice',
-      //'resetSelectedCustomer',
-      //'selectCustomer',
       'updateInvoice',
       'fetchReferenceNumber',
     ]),
@@ -594,14 +448,14 @@ export default {
       if (this.newInvoice.discount_type === 'fixed') {
         return
       }
-      this.newInvoice.discount_val = this.newInvoice.discount * 100
+      this.newInvoice.discount_val = this.newInvoice.discount
       this.newInvoice.discount_type = 'fixed'
     },
     selectPercentage () {
       if (this.newInvoice.discount_type === 'percentage') {
         return
       }
-      this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount) / 100
+      this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount)
       this.newInvoice.discount_type = 'percentage'
     },
     updateTax (data) {
@@ -620,11 +474,9 @@ export default {
         let response = await this.fetchInvoice(this.$route.params.id)
         this.isEdit = true
         if (response.data) {
-          //this.selectCustomer(response.data.invoice.user_id)
           this.newInvoice = response.data.invoice
           this.inventoryList = response.data.invoice.inventories
           this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
-          //this.newInvoice.due_date = moment(response.data.invoice.due_date, 'YYYY-MM-DD').toString()
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
@@ -645,7 +497,6 @@ export default {
         this.selectedCurrency = this.defaultCurrency
         this.invoiceTemplates = response.data.invoiceTemplates
         this.newInvoice.invoice_date = response.data.invoice_today_date
-        //this.newInvoice.due_date = moment().add(7, 'days').format('YYYY-MM-DD')
         this.inventoryList = response.data.inventories
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
@@ -653,9 +504,6 @@ export default {
       }
       this.initLoading = false
     },
-    // removeCustomer () {
-    //   this.resetSelectedCustomer()
-    // },
     openTemplateModal () {
       this.openModal({
         'title': this.$t('general.choose_template'),
@@ -664,7 +512,7 @@ export default {
       })
     },
     addInventory () {
-      this.newInvoice.inventories.push({...InvoiceStub, id: Guid.raw(), taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.newInvoice.inventories.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
     },
     removeInventory (index) {
       this.newInvoice.inventories.splice(index, 1)
@@ -683,17 +531,12 @@ export default {
       let data = {
         ...this.newInvoice,
         invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
-        //due_date: moment(this.newInvoice.due_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
         tax: this.totalTax,
         user_id: this.user.id,
         invoice_template_id: this.getTemplateId,
       }
-
-      // if (this.selectedCustomer != null) {
-      //   data.user_id = this.selectedCustomer.id
-      // }
 
       if (this.$route.name === 'invoices.edit') {
         this.submitUpdate(data)
@@ -754,9 +597,9 @@ export default {
       let amount = 0
 
       if (selectedTax.compound_tax && this.subtotalWithDiscount) {
-        amount = ((this.subtotalWithDiscount + this.totalSimpleTax) * selectedTax.percent) / 100
+        amount = ((this.subtotalWithDiscount + this.totalSimpleTax) * selectedTax.percent)
       } else if (this.subtotalWithDiscount && selectedTax.percent) {
-        amount = (this.subtotalWithDiscount * selectedTax.percent) / 100
+        amount = (this.subtotalWithDiscount * selectedTax.percent)
       }
 
       this.newInvoice.taxes.push({
@@ -776,8 +619,6 @@ export default {
     },
     checkValid () {
       this.$v.newInvoice.$touch()
-      //this.$v.selectedCustomer.$touch()
-
       window.hub.$emit('checkInventory')
       let isValid = true
       this.newInvoice.inventories.forEach((each) => {
@@ -785,9 +626,6 @@ export default {
           isValid = false
         }
       })
-      // if (!this.$v.selectedCustomer.$invalid && this.$v.newInvoice.$invalid === false && isValid === true) {
-      //   return true
-      // }
       if (this.$v.newInvoice.$invalid === false && isValid === true) {
         return true
       }
