@@ -96,18 +96,16 @@
                     </v-dropdown-inventory>
                   </v-dropdown>
                 </div>
-                <!-- <div v-if="$v.inventory.discount.$error"> discount error </div> -->
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-left">
               <div class="item-amount">
                 <span>
-                  <div v-html="$utils.formatMoney(total, currency)" />
+                   ₹ {{ total }}
                 </span>
 
                 <div class="remove-icon-wrapper">
                   <font-awesome-icon
-                    v-if="index > 0"
                     class="remove-icon"
                     icon="trash-alt"
                     @click="removeInventory"
@@ -213,9 +211,9 @@ export default {
       },
       set: function (newValue) {
         if (this.inventory.discount_type === 'percentage') {
-          this.inventory.discount_val = (this.subtotal * newValue) / 100
+          this.inventory.discount_val = (this.subtotal * newValue)
         } else {
-          this.inventory.discount_val = newValue * 100
+          this.inventory.discount_val = newValue
         }
 
         this.inventory.discount = newValue
@@ -248,14 +246,14 @@ export default {
     price: {
       get: function () {
         if (parseFloat(this.inventory.price) > 0) {
-          return this.inventory.price / 100
+          return this.inventory.price
         }
 
         return this.inventory.price
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.inventory.price = newValue * 100
+          this.inventory.price = newValue
           this.maxDiscount = this.inventory.price
         } else {
           this.inventory.price = newValue
@@ -270,7 +268,7 @@ export default {
     },
     subtotal (newValue) {
       if (this.inventory.discount_type === 'percentage') {
-        this.inventory.discount_val = (this.inventory.discount * newValue) / 100
+        this.inventory.discount_val = (this.inventory.discount * newValue)
       }
     },
     modalActive (val) {
@@ -346,17 +344,13 @@ export default {
       this.inventory.price = inventory.price
       this.inventory.inventory_id = inventory.id
       this.inventory.description = inventory.description
-
-      // if (this.inventory.taxes.length) {
-      //   this.inventory.taxes = {...inventory.taxes}
-      // }
     },
     selectFixed () {
       if (this.inventory.discount_type === 'fixed') {
         return
       }
 
-      this.inventory.discount_val = this.inventory.discount * 100
+      this.inventory.discount_val = this.inventory.discount
       this.inventory.discount_type = 'fixed'
     },
     selectPercentage () {
@@ -364,7 +358,7 @@ export default {
         return
       }
 
-      this.inventory.discount_val = (this.subtotal * this.inventory.discount) / 100
+      this.inventory.discount_val = (this.subtotal * this.inventory.discount)
 
       this.inventory.discount_type = 'percentage'
     },

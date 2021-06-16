@@ -127,10 +127,10 @@ export default {
   computed: {
     price: {
       get: function () {
-        return this.formData.price / 100
+        return this.formData.price
       },
       set: function (newValue) {
-        this.formData.price = newValue * 100
+        this.formData.price = newValue
       }
     },
     ...mapGetters('modal', [

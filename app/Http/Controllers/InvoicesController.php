@@ -151,7 +151,7 @@ class InvoicesController extends Controller
             $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
             $company_id = (int) $request->header('company');
             $account_master_id = (int) $request->debtors['id'];
-            $total_amount = (int) ($request->total / 100);
+            $total_amount = (int) ($request->total);
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account_id,
                 'account' => 'Sales',
@@ -195,7 +195,7 @@ class InvoicesController extends Controller
                     }
                 }
                 //Handle vouchers
-                $amount = (int) ($inventory['total'] / 100);
+                $amount = (int) ($inventory['total']);
                 //It will add voucher for sales from invoice
                 $voucher_1 = Voucher::create([
                     'account_master_id' => $account_master_id,
@@ -438,7 +438,7 @@ class InvoicesController extends Controller
         $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->debtors['id'];
-        $total_amount = (int) ($request->total / 100);
+        $total_amount = (int) ($request->total);
         $account_ledger = AccountLedger::firstOrCreate([
             'account_master_id' => $sale_account_id,
             'account' => 'Sales',
@@ -481,7 +481,7 @@ class InvoicesController extends Controller
             }
 
             //Handle vouchers
-            $amount = (int) ($item['total'] / 100);
+            $amount = (int) ($item['total']);
             //It will add voucher for sales from invoice
             $voucher_1 = Voucher::firstOrCreate([
                 'account_master_id' => $account_master_id,

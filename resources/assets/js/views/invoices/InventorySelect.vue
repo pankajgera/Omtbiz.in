@@ -28,22 +28,6 @@
         </button>
       </div>
     </base-select>
-    <!-- <div class="item-description">
-      <base-text-area
-        v-autoresize
-        v-model="inventory.description"
-        :invalid-description="invalidDescription"
-        :placeholder="$t('invoices.inventory.type_inventory_description')"
-        type="text"
-        rows="1"
-        class="description-input"
-        @input="$emit('onDesriptionInput')"
-      />
-      <div v-if="invalidDescription">
-        <span class="text-danger">{{ $tc('validation.description_maxlength') }}</span>
-      </div>
-      <textarea type="text" v-autoresize rows="1" class="description-input" v-model="inventory.description" placeholder="Type Inventory Description (optional)" />
-    </div> -->
   </div>
 </template>
 <style>
