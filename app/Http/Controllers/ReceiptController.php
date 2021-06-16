@@ -183,23 +183,23 @@ class ReceiptController extends Controller
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
-                'debit' => $request->amount,
-                'credit' => 0,
+                'credit' => $request->amount,
+                'debit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Dr',
+                'type' => 'Cr',
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
-                'debit' => 0,
-                'credit' => $request->amount,
+                'credit' => 0,
+                'debit' => $request->amount,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Cr',
+                'type' => 'Dr',
                 'company_id' => $company_id
             ]);
         } else {
@@ -218,23 +218,23 @@ class ReceiptController extends Controller
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
-                'debit' => $request->amount,
-                'credit' => 0,
+                'credit' => $request->amount,
+                'debit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Dr',
+                'type' => 'Cr',
                 'company_id' => $company_id
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $cash_account_id,
                 'account' => 'Cash',
-                'debit' => 0,
-                'credit' => $request->amount,
+                'credit' => 0,
+                'debit' => $request->amount,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
-                'type' => 'Cr',
+                'type' => 'Dr',
                 'company_id' => $company_id
             ]);
         }
