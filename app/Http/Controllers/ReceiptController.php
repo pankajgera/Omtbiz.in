@@ -242,14 +242,16 @@ class ReceiptController extends Controller
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
         if ($account_ledger->bill_no) {
+            $calc_balance = $account_ledger->balance + (int)$request->amount;
             $account_ledger->update([
                 'credit' => $account_ledger->credit + (int)$request->amount,
-                'balance' => $account_ledger->balance + (int)$request->amount,
+                'balance' => $calc_balance,
                 'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
             ]);
+            $calc_dr_balance = $dr_account_ledger->balance + (int)$request->amount;
             $dr_account_ledger->update([
-                'credit' => $dr_account_ledger->debit + (int)$request->amount,
-                'balance' => $dr_account_ledger->balance + (int)$request->amount,
+                'debit' => $dr_account_ledger->debit + (int)$request->amount,
+                'balance' => $calc_dr_balance,
                 'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
             ]);
         } else {
