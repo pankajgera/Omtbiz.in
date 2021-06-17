@@ -47,12 +47,14 @@ export const addDispatch = ({ commit, dispatch, state }, data) => {
 
 export const updateDispatch = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
-        window.axios.put(`/api/dispatch/${data.id}`, data).then((response) => {
+      console.log(data)
+        window.axios.post(`/api/dispatch/${data.id}/update`, data).then((response) => {
             if (response.data.success) {
                 commit(types.UPDATE_DISPATCH, response.data)
             }
             resolve(response)
         }).catch((err) => {
+          console.log(err.response)
             reject(err)
         })
     })
