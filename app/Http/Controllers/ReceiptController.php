@@ -102,6 +102,7 @@ class ReceiptController extends Controller
     {
         $receipt_number = explode("-", $request->receipt_number);
         $number_attributes['receipt_number'] = $receipt_number[0] . '-' . sprintf('%06d', intval($receipt_number[1]));
+        $req_amount = (int)$request->amount;
 
         Validator::make($number_attributes, [
             'receipt_number' => 'required|unique:receipts,receipt_number'
@@ -111,12 +112,12 @@ class ReceiptController extends Controller
 
         if ($request->has('invoice_id') && $request->invoice_id != null) {
             $invoice = Invoice::find($request->invoice_id);
-            if ($invoice && $invoice->due_amount == $request->amount) {
+            if ($invoice && $invoice->due_amount == $req_amount) {
                 $invoice->status = Invoice::STATUS_COMPLETED;
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->due_amount = 0;
-            } elseif ($invoice && $invoice->due_amount != $request->amount) {
-                $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
+            } elseif ($invoice && $invoice->due_amount != $req_amount) {
+                $invoice->due_amount = (int)$invoice->due_amount - $req_amount;
                 // if ($invoice->due_amount < 0) {
                 //     return response()->json([
                 //         'error' => 'invalid_amount'
@@ -149,7 +150,7 @@ class ReceiptController extends Controller
             'company_id' => $company_id,
             'invoice_id' => $request->invoice_id,
             'receipt_mode' => $request->receipt_mode,
-            'amount' => $request->amount,
+            'amount' => $req_amount,
             'notes' => $request->notes,
             'account_master_id' => $account_master_id
         ]);
@@ -161,10 +162,10 @@ class ReceiptController extends Controller
         ], [
             'date' => Carbon::now()->toDateTimeString(),
             'bill_no' => null,
-            'debit' => $request->amount,
+            'debit' => $req_amount,
             'type' => 'Dr',
             'credit' => 0,
-            'balance' => $request->amount,
+            'balance' => $req_amount,
         ]);
         //AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
 
@@ -178,14 +179,14 @@ class ReceiptController extends Controller
                 'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
-                'credit' => $request->amount,
-                'balance' => $request->amount,
+                'credit' => $req_amount,
+                'balance' => $req_amount,
             ]);
 
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
-                'credit' => $request->amount,
+                'credit' => $req_amount,
                 'debit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
@@ -197,7 +198,7 @@ class ReceiptController extends Controller
                 'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
                 'credit' => 0,
-                'debit' => $request->amount,
+                'debit' => $req_amount,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
@@ -214,13 +215,13 @@ class ReceiptController extends Controller
                 'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
-                'credit' => $request->amount,
-                'balance' => $request->amount,
+                'credit' => $req_amount,
+                'balance' => $req_amount,
             ]);
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
-                'credit' => $request->amount,
+                'credit' => $req_amount,
                 'debit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
@@ -232,7 +233,7 @@ class ReceiptController extends Controller
                 'account_master_id' => $cash_account_id,
                 'account' => 'Cash',
                 'credit' => 0,
-                'debit' => $request->amount,
+                'debit' => $req_amount,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
@@ -244,14 +245,13 @@ class ReceiptController extends Controller
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
-        $req_amount = (int)$request->amount;
         //Update credit/debit and bill_no, which is vouchers ids
         $account_ledger->update([
-            'credit' => $account_ledger->credit + $req_amount,
+            'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
             'bill_no' => $account_ledger->bill_no ? $account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
         $dr_account_ledger->update([
-            'debit' => $dr_account_ledger->debit + $req_amount,
+            'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
             'bill_no' => $account_ledger->bill_no ? $dr_account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
 

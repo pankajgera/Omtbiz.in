@@ -110,6 +110,7 @@ class PaymentController extends Controller
         // ])->validate();
 
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
+        $req_amount = (int)$request->amount;
 
         // if ($request->has('invoice_id') && $request->invoice_id != null) {
         //     $invoice = Invoice::find($request->invoice_id);
@@ -150,7 +151,7 @@ class PaymentController extends Controller
             'company_id' => $company_id,
             //'invoice_id' => $request->invoice_id,
             'payment_mode' => $request->payment_mode,
-            'amount' => $request->amount,
+            'amount' => $req_amount,
             'notes' => $request->notes,
             'account_master_id' => $account_master_id,
         ]);
@@ -162,10 +163,10 @@ class PaymentController extends Controller
         ], [
             'date' => Carbon::now()->toDateTimeString(),
             'bill_no' => null,
-            'debit' => $request->amount,
+            'debit' => $req_amount,
             'type' => 'Dr',
             'credit' => 0,
-            'balance' => $request->amount,
+            'balance' => $req_amount,
         ]);
         //AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
 
@@ -179,13 +180,13 @@ class PaymentController extends Controller
                 'bill_no' => null,
                 'debit' => 0,
                 'type' => 'Cr',
-                'credit' => $request->amount,
-                'balance' => $request->amount,
+                'credit' => $req_amount,
+                'balance' => $req_amount,
             ]);
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
-                'debit' => $request->amount,
+                'debit' => $req_amount,
                 'credit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
@@ -197,7 +198,7 @@ class PaymentController extends Controller
                 'account_master_id' => $bank_account->id,
                 'account' => 'Bank',
                 'debit' => 0,
-                'credit' => $request->amount,
+                'credit' => $req_amount,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
@@ -214,13 +215,13 @@ class PaymentController extends Controller
                 'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
-                'credit' => $request->amount,
-                'balance' => $request->amount,
+                'credit' => $req_amount,
+                'balance' => $req_amount,
             ]);
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
-                'debit' => $request->amount,
+                'debit' => $req_amount,
                 'credit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
@@ -232,7 +233,7 @@ class PaymentController extends Controller
                 'account_master_id' => $cash_account->id,
                 'account' => 'Cash',
                 'debit' => 0,
-                'credit' => $request->amount,
+                'credit' => $req_amount,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
@@ -245,11 +246,11 @@ class PaymentController extends Controller
 
         //Only update for existing ledger else new one with bill_no
         $account_ledger->update([
-            'credit' => $account_ledger->credit + (int)$request->amount,
+            'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
             'bill_no' => $account_ledger->bill_no ? $account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
         $dr_account_ledger->update([
-            'debit' => $dr_account_ledger->debit + (int)$request->amount,
+            'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
             'bill_no' => $account_ledger->bill_no ? $dr_account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
         //Update ledger balance by calculating credit/debit
