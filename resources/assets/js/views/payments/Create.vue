@@ -179,7 +179,7 @@ export default {
       paymentPrefix: '',
       sundryCreditorList: [],
       closingBalanceType: '',
-      ledgerBalance: [],
+      accountLedger: [],
     }
   },
   validations () {
@@ -235,17 +235,17 @@ export default {
     },
     openingBalance() {
       if (this.formData.list && this.formData.list.id) {
-        let ledger = this.ledgerBalance.find(each => each.id === this.formData.list.id);
+        let ledger = this.accountLedger.find(each => each.id === this.formData.list.id);
         return parseFloat(ledger.balance).toFixed(2);
       }
       return 0
     },
     openingBalanceType() {
       if (this.formData.list && this.formData.list.id) {
-        let typeObj = this.sundryCreditorList.find(each => each.id === this.formData.list.id);
+        let typeObj = this.accountLedger.find(each => each.id === this.formData.list.id);
         return typeObj.type;
       }
-      return 0
+      return 'Cr';
     },
     closingBalance() {
       if (this.formData.amount) {
@@ -313,7 +313,7 @@ export default {
       } else {
         let response = await this.fetchCreatePayment()
         this.sundryCreditorList = response.data.usersOfSundryCreditor
-        this.ledgerBalance = response.data.ledger_balance
+        this.accountLedger = response.data.account_ledger
         //this.customerList = response.data.customers
         //this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix

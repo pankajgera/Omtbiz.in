@@ -200,7 +200,7 @@ export default {
       receiptPrefix: '',
       sundryDebtorList: [],
       closingBalanceType: '',
-      ledgerBalance: [],
+      accountLedger: [],
     }
   },
   validations () {
@@ -256,17 +256,17 @@ export default {
     },
     openingBalance() {
       if (this.formData.list && this.formData.list.id) {
-        let ledger = this.ledgerBalance.find(each => each.id === this.formData.list.id);
+        let ledger = this.accountLedger.find(each => each.id === this.formData.list.id);
         return parseFloat(ledger.balance).toFixed(2);
       }
       return 0
     },
     openingBalanceType() {
       if (this.formData.list && this.formData.list.id) {
-        let typeObj = this.sundryDebtorList.find(each => each.id === this.formData.list.id);
+        let typeObj = this.accountLedger.find(each => each.id === this.formData.list.id);
         return typeObj.type;
       }
-      return 0
+      return 'Cr';
     },
     closingBalance() {
       if (this.formData.amount) {
@@ -358,7 +358,7 @@ export default {
       } else {
         let response = await this.fetchCreateReceipt()
         this.sundryDebtorList = response.data.usersOfSundryDebitors
-        this.ledgerBalance = response.data.ledger_balance
+        this.accountLedger = response.data.account_ledger
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
         this.formData.receipt_date = moment(new Date()).toString()
