@@ -503,9 +503,9 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'DispatchController@delete'
     ]);
 
-    Route::post('/dispatch/update', [
+    Route::post('/dispatch/{id}/update', [
         'as' => 'dispatch.update',
-        'uses' => 'DispatchController@update'
+        'uses' => 'DispatchController@updateDispatch'
     ]);
 
     Route::get('/dispatch/invoices', [

@@ -188,6 +188,7 @@ export default {
       let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
       this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)
+      this.invoice = this.invoiceList.filter(each => each.id === this.formData.invoice_id)[0]
     },
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)

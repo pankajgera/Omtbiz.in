@@ -90,17 +90,17 @@ class DispatchController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function updateDispatch(Request $request, $id)
     {
         try {
-            $date = Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', $request->date_time);
+            $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = Dispatch::find($id);
             $dispatch->name = $request->name;
             $dispatch->invoice_id = $request->invoice_id;
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
-            $dispatch->status = $request->status['name'];
+            $dispatch->status = $request->status[0]['name'];
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
 
