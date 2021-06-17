@@ -72,13 +72,14 @@ class PaymentController extends Controller
 
         $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance', 'type')->get();
 
-        $ledger_balance = [];
+        $account_ledger = [];
         foreach ($usersOfSundryCreditor as $master) {
-            $calc_sum = AccountLedger::where('account_master_id', $master->id)->sum('balance');
+            $ledger = AccountLedger::where('account_master_id', $master->id)->first();
             $obj = new stdClass();
             $obj->id = $master->id;
-            $obj->balance = $calc_sum;
-            array_push($ledger_balance, $obj);
+            $obj->balance = isset($ledger) ? $ledger->balance : 0;
+            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+            array_push($account_ledger, $obj);
         }
 
         return response()->json([
@@ -89,7 +90,7 @@ class PaymentController extends Controller
             'nextPaymentNumber' => $payment_prefix . '-' . $nextPaymentNumber,
             'payment_prefix' => $payment_prefix,
             'usersOfSundryCreditor' => $usersOfSundryCreditor,
-            'ledger_balance' => $ledger_balance,
+            'account_ledger' => $account_ledger,
         ]);
     }
 
@@ -243,25 +244,23 @@ class PaymentController extends Controller
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
         //Only update for existing ledger else new one with bill_no
-        if ($account_ledger->bill_no) {
-            $account_ledger->update([
-                'credit' => $account_ledger->credit + (int)$request->amount,
-                'balance' => $account_ledger->balance + (int)$request->amount,
-                'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'debit' => $dr_account_ledger->debit + (int)$request->amount,
-                'balance' => $dr_account_ledger->balance + (int)$request->amount,
-                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-        } else {
-            $account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-        }
+        $account_ledger->update([
+            'credit' => $account_ledger->credit + (int)$request->amount,
+            'bill_no' => $account_ledger->bill_no ? $account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
+        ]);
+        $dr_account_ledger->update([
+            'debit' => $dr_account_ledger->debit + (int)$request->amount,
+            'bill_no' => $account_ledger->bill_no ? $dr_account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
+        ]);
+        //Update ledger balance by calculating credit/debit
+        $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;
+        $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ? $dr_account_ledger->credit - $dr_account_ledger->debit : $dr_account_ledger->debit - $dr_account_ledger->credit;
+        $account_ledger->update([
+            'balance' => $calc_cr_balance,
+        ]);
+        $dr_account_ledger->update([
+            'balance' => $calc_dr_balance,
+        ]);
         foreach ($voucher as $key => $each) {
             if ($key < substr_count($voucher_ids, ',') + 1) {
                 $each->update([

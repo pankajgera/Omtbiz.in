@@ -70,14 +70,16 @@ class ReceiptController extends Controller
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
-        $ledger_balance = [];
-        foreach($usersOfSundryDebitors as $master) {
-            $calc_sum = AccountLedger::where('account_master_id', $master->id)->sum('balance');
+        $account_ledger = [];
+        foreach ($usersOfSundryDebitors as $master) {
+            $ledger = AccountLedger::where('account_master_id', $master->id)->first();
             $obj = new stdClass();
             $obj->id = $master->id;
-            $obj->balance = $calc_sum;
-            array_push($ledger_balance, $obj);
+            $obj->balance = isset($ledger) ? $ledger->balance : 0;
+            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+            array_push($account_ledger, $obj);
         }
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
@@ -86,7 +88,7 @@ class ReceiptController extends Controller
             'nextReceiptNumber' => $receipt_prefix . '-' . $nextReceiptNumber,
             'receipt_prefix' => $receipt_prefix,
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
-            'ledger_balance' => $ledger_balance,
+            'account_ledger' => $account_ledger,
         ]);
     }
 
@@ -241,27 +243,27 @@ class ReceiptController extends Controller
 
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-        if ($account_ledger->bill_no) {
-            $calc_balance = $account_ledger->balance + (int)$request->amount;
-            $account_ledger->update([
-                'credit' => $account_ledger->credit + (int)$request->amount,
-                'balance' => $calc_balance,
-                'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-            $calc_dr_balance = $dr_account_ledger->balance + (int)$request->amount;
-            $dr_account_ledger->update([
-                'debit' => $dr_account_ledger->debit + (int)$request->amount,
-                'balance' => $calc_dr_balance,
-                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-        } else {
-            $account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-        }
+
+        $req_amount = (int)$request->amount;
+        //Update credit/debit and bill_no, which is vouchers ids
+        $account_ledger->update([
+            'credit' => $account_ledger->credit + $req_amount,
+            'bill_no' => $account_ledger->bill_no ? $account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
+        ]);
+        $dr_account_ledger->update([
+            'debit' => $dr_account_ledger->debit + $req_amount,
+            'bill_no' => $account_ledger->bill_no ? $dr_account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
+        ]);
+
+        //Update ledger balance by calculating credit/debit
+        $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;
+        $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ? $dr_account_ledger->credit - $dr_account_ledger->debit : $dr_account_ledger->debit - $dr_account_ledger->credit;
+        $account_ledger->update([
+            'balance' => $calc_cr_balance,
+        ]);
+        $dr_account_ledger->update([
+            'balance' => $calc_dr_balance,
+        ]);
         foreach ($voucher as $key => $each) {
             if ($key < substr_count($voucher_ids, ',') + 1) {
                 $each->update([
