@@ -278,7 +278,8 @@
         "confirm_delete": "You will not be able to recover this Display | You will not be able to recover these Displays",
         "created_message": "Display created successfully",
         "updated_message": "Display updated successfully",
-        "deleted_message": "Display deleted successfully | Displays deleted successfully"
+        "deleted_message": "Display deleted successfully | Displays deleted successfully",
+        "inventory_item_quantity": "Quantity"
     },
     "vouchers": {
         "title": "Vouchers",
