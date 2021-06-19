@@ -61,7 +61,7 @@ class AccountLedgersController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
             ->where('account', '!=', $ledger->account)
             ->whereCompany($request->header('company'))
             ->orderBy('id', 'desc')
