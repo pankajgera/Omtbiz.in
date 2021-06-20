@@ -95,6 +95,7 @@ import NotesCreate from './views/notes/Create.vue'
 // inventory
 import InventoryIndex from './views/inventory/Index.vue'
 import InventoryCreate from './views/inventory/Create.vue'
+import Inventory from './views/invoices/Inventory.vue'
 
 // Account Master
 import MastersIndex from './views/masters/Index.vue'
@@ -544,6 +545,12 @@ const routes = [
                 component: InventoryCreate,
                 meta: ['admin']
             },
+            {
+              path: 'inventory/price/:id',
+              name: 'inventory.price',
+              component: Inventory,
+              meta: ['admin']
+          },
 
             // User
             {
