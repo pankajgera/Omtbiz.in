@@ -89,6 +89,12 @@
         </div>
         <div class="row" style="float: right">
           <div class="col-sm-12" style="width: 500px">
+            <p class="row">
+              <span class="mr-30">Total Quantity:</span>
+              <span class="ml-60">
+                {{ totalQuantity }}
+              </span>
+            </p>
             <hr />
             <p class="row">
               <span>Opening Balance:</span>
@@ -208,6 +214,7 @@ export default {
       masterData: "",
       currentTotalCredit: 0,
       currentTotalDebit: 0,
+      totalQuantity: 0,
     };
   },
   created() {
@@ -222,6 +229,9 @@ export default {
       this.masterData = response.data.account_master;
       this.currentTotalCredit = this.ledgerData.credit;
       this.currentTotalDebit = this.ledgerData.debit;
+      this.totalQuantity = this.displayArray.filter(i => i.invoice)
+        .map(i => i.invoice.inventories[0].quantity)
+        .reduce((a, c) =>  a + c);
     },
     getFormattedDate(date) {
       return moment(date).format("DD-MM-YYYY");
