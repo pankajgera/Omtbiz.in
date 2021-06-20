@@ -255,6 +255,7 @@ export default {
         if (parseFloat(newValue) > 0) {
           this.inventory.price = newValue
           this.maxDiscount = this.inventory.price
+          this.setNewInventoryPrice(this.inventory);
         } else {
           this.inventory.price = newValue
         }
@@ -308,9 +309,15 @@ export default {
       if (!this.inventory.inventory_id && this.modalActive && this.isSelected) {
         this.onSelectInventory(val)
       }
-    })
+    });
+    this.setNewInventoryPrice = _.debounce((data) => {
+				this.updateNewInventoryPrice(data);
+			}, 600);
   },
   methods: {
+    ...mapActions('inventory', [
+      'updateInventoryPrice'
+    ]),
     updateTax (data) {
       this.$set(this.inventory.taxes, data.index, data.inventory)
 
@@ -381,12 +388,25 @@ export default {
     },
     validateInventory () {
       this.$v.inventory.$touch()
-
       if (this.inventory !== null) {
         this.$emit('inventoryValidate', this.index, !this.$v.$invalid)
       } else {
         this.$emit('inventoryValidate', this.index, false)
       }
+    },
+    updateNewInventoryPrice(data) {
+      this.updateInventoryPrice(data).then((res) => {
+        if (res.data) {
+          window.toastr['success'](this.$t('invoices.updated_inventory_price'))
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        if (err) {
+          window.toastr['error'](err)
+          return true
+        }
+        console.log(err)
+      })
     }
   }
 }

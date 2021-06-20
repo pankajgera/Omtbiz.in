@@ -455,6 +455,7 @@
         "no_matching_invoices": "There are no matching invoices!",
         "mark_as_sent_successfully": "Invoice marked as sent successfully",
         "send_invoice_successfully": "Invoice sent successfully",
+        "updated_inventory_price": "Inventory item wprice updated",
         "inventory": {
             "title": "Item Title",
             "description": "Description",

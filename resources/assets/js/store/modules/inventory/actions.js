@@ -103,3 +103,16 @@ export const selectInventory = ({ commit, dispatch, state }, data) => {
 export const resetSelectedInventory = ({ commit, dispatch, state }, data) => {
     commit(types.RESET_SELECTED_INVENTORY)
 }
+
+export const updateInventoryPrice = ({ commit, dispatch, state }, data) => {
+  return new Promise((resolve, reject) => {
+      window.axios.post(`/api/inventory/${data.inventory_id}/price`, data).then((response) => {
+          if (response.data.success) {
+              commit(types.UPDATE_INVENTORY, response.data)
+          }
+          resolve(response)
+      }).catch((err) => {
+          reject(err)
+      })
+  })
+}
