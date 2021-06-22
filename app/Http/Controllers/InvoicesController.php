@@ -194,6 +194,14 @@ class InvoicesController extends Controller
                         }
                     }
                 }
+
+                //Reset inventory quantity
+                $invent = Inventory::find($inventory['inventory_id']);
+                $quan = (int) ($inventory['quantity']);
+                $invent->update([
+                    'quantity' => $invent->quantity - $quan,
+                ]);
+
                 //Handle vouchers
                 $amount = (int) ($inventory['total']);
                 //It will add voucher for sales from invoice
@@ -479,6 +487,13 @@ class InvoicesController extends Controller
                     }
                 }
             }
+
+            //Reset inventory quantity
+            $invent = Inventory::find($item['inventory_id']);
+            $quan = (int) ($item['quantity']);
+            $invent->update([
+                'quantity' => $invent->quantity - $quan,
+            ]);
 
             //Handle vouchers
             $amount = (int) ($item['total']);
