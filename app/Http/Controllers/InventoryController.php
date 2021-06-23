@@ -158,7 +158,7 @@ class InventoryController extends Controller
     {
         try {
             $inventory = Inventory::find($id);
-            $inventory->price = $request->price;
+            $inventory->sale_price = $request->sale_price;
             $inventory->save();
 
             return response()->json([

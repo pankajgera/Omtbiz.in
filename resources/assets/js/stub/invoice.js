@@ -6,6 +6,7 @@ export default {
   description: null,
   quantity: 1,
   price: 0,
+  sale_price: 0,
   discount_type: 'fixed',
   discount_val: 0,
   discount: 0,

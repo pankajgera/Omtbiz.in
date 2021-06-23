@@ -6,6 +6,7 @@
           <col style="width: 40%;">
           <col style="width: 10%;">
           <col style="width: 15%;">
+          <col style="width: 15%;">
           <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
           <col style="width: 15%;">
         </colgroup>
@@ -53,9 +54,26 @@
                     :class="{'invalid' : $v.inventory.price.$error, 'input-field': true}"
                     type="text"
                     name="price"
+                    :disabled="true"
                   />
                   <div v-if="$v.inventory.price.$error">
                     <span v-if="!$v.inventory.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
+                  </div>
+                </div>
+
+              </div>
+            </td>
+            <td class="text-left">
+              <div class="d-flex flex-column">
+                <div class="flex-fillbd-highlight">
+                   <base-input
+                    v-model.trim="sale_price"
+                    :class="{'invalid' : $v.inventory.sale_price.$error, 'input-field': true}"
+                    type="text"
+                    name="sale_price"
+                  />
+                  <div v-if="$v.inventory.sale_price.$error">
+                    <span v-if="!$v.inventory.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
                   </div>
                 </div>
 
@@ -114,7 +132,7 @@
               </div>
             </td>
           </tr>
-          <tr v-if="taxPerInventory === 'YES'" class="tax-tr">
+          <!-- <tr v-if="taxPerInventory === 'YES'" class="tax-tr">
             <td />
             <td colspan="4">
               <tax
@@ -131,7 +149,7 @@
                 @remove="removeTax"
               />
             </td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </td>
@@ -203,7 +221,7 @@ export default {
       'modalActive'
     ]),
     subtotal () {
-      return this.inventory.price * this.inventory.quantity
+      return parseInt(this.inventory.sale_price) * this.inventory.quantity
     },
     discount: {
       get: function () {
@@ -245,19 +263,29 @@ export default {
     },
     price: {
       get: function () {
-        if (parseFloat(this.inventory.price) > 0) {
-          return this.inventory.price
-        }
-
         return this.inventory.price
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
           this.inventory.price = newValue
           this.maxDiscount = this.inventory.price
-          this.setNewInventoryPrice(this.inventory);
         } else {
           this.inventory.price = newValue
+        }
+      }
+    },
+    sale_price: {
+      get: function () {
+        return this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price
+      },
+      set: function (newValue) {
+        if (parseFloat(newValue) > 0) {
+          this.inventory.sale_price = newValue
+          this.maxDiscount = newValue
+          this.subtotal = newValue
+          this.setNewInventoryPrice(this.inventory);
+        } else {
+          this.inventory.sale_price = newValue
         }
       }
     }
@@ -294,6 +322,11 @@ export default {
           minValue: minValue(1),
           maxLength: maxLength(20)
         },
+        sale_price: {
+          required,
+          minValue: minValue(1),
+          maxLength: maxLength(20)
+        },
         discount_val: {
           between: between(0, this.maxDiscount)
         },
@@ -311,32 +344,32 @@ export default {
       }
     });
     this.setNewInventoryPrice = _.debounce((data) => {
-				this.updateNewInventoryPrice(data);
+				this.updateNewInventorySalePrice(data);
 			}, 600);
   },
   methods: {
     ...mapActions('inventory', [
       'updateInventoryPrice'
     ]),
-    updateTax (data) {
-      this.$set(this.inventory.taxes, data.index, data.inventory)
+    // updateTax (data) {
+    //   this.$set(this.inventory.taxes, data.index, data.inventory)
 
-      let lastTax = this.inventory.taxes[this.inventory.taxes.length - 1]
+    //   let lastTax = this.inventory.taxes[this.inventory.taxes.length - 1]
 
-      if (lastTax.tax_type_id !== 0) {
-        this.inventory.taxes.push({...TaxStub, id: Guid.raw()})
-      }
+    //   if (lastTax.tax_type_id !== 0) {
+    //     this.inventory.taxes.push({...TaxStub, id: Guid.raw()})
+    //   }
 
-      this.updateInventory()
-    },
-    removeTax (index) {
-      this.inventory.taxes.splice(index, 1)
+    //   this.updateInventory()
+    // },
+    // removeTax (index) {
+    //   this.inventory.taxes.splice(index, 1)
 
-      this.updateInventory()
-    },
-    taxWithPercentage ({ name, percent }) {
-      return `${name} (${percent}%)`
-    },
+    //   this.updateInventory()
+    // },
+    // taxWithPercentage ({ name, percent }) {
+    //   return `${name} (${percent}%)`
+    // },
     searchVal (val) {
       this.inventory.name = val
     },
@@ -349,6 +382,7 @@ export default {
     onSelectInventory (inventory) {
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price
+      this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
       this.inventory.inventory_id = inventory.id
       this.inventory.description = inventory.description
     },
@@ -394,7 +428,7 @@ export default {
         this.$emit('inventoryValidate', this.index, false)
       }
     },
-    updateNewInventoryPrice(data) {
+    updateNewInventorySalePrice(data) {
       this.updateInventoryPrice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.updated_inventory_price'))
