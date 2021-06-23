@@ -23,6 +23,18 @@
         </li>
       </ol>
       <div class="page-actions row">
+        <div class="col-xs-2 mr-2">
+          <base-button
+            :outline="true"
+            :icon="icon"
+            color="theme"
+            size="large"
+            right-icon
+            @click="toggleDayBook"
+          >
+            {{ $t('general.daybook') }}
+          </base-button>
+        </div>
         <div class="col-xs-2 mr-4">
           <base-button
             v-show="totalLedgers || filtersApplied"
@@ -258,6 +270,7 @@ export default {
     return {
       id: null,
       showFilters: false,
+      showDayBook: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
       filtersApplied: false,
@@ -369,6 +382,9 @@ export default {
       }
 
       this.showFilters = !this.showFilters
+    },
+    toggleDayBook() {
+      this.showDayBook = !this.showDayBook
     },
     async removeLedgers (id) {
       this.id = id

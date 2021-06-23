@@ -85,6 +85,7 @@
           <col style="width: 40%;">
           <col style="width: 10%;">
           <col style="width: 15%;">
+          <col style="width: 15%;">
           <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
           <col style="width: 15%;">
         </colgroup>
@@ -103,6 +104,11 @@
             <th class="text-left">
               <span class="column-heading">
                 {{ $t('invoices.inventory.price') }}
+              </span>
+            </th>
+            <th class="text-left">
+              <span class="column-heading">
+                {{ $t('invoices.inventory.sale_price') }}
               </span>
             </th>
             <th v-if="discountPerInventory === 'YES'" class="text-right">
