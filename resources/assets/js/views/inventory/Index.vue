@@ -172,7 +172,13 @@
         <table-column
           :label="$t('inventory.name')"
           show="name"
-        />
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `inventory/${row.id}/edit`}" class="dropdown-item">
+               {{ row.name }}
+              </router-link>
+          </template>
+        </table-column>
         <table-column
           :label="$t('inventory.unit')"
           show="unit"
