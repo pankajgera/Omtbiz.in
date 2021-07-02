@@ -3,7 +3,7 @@
     <div class="page-header">
       <div class="d-flex flex-row">
         <div>
-          <h3 class="page-title">{{ $tc('ledgers.title', 2) }}</h3>
+          <h3 class="page-title">{{ $tc('daybook.title', 2) }}</h3>
         </div>
       </div>
       <ol class="breadcrumb">
@@ -18,7 +18,7 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('ledgers.title', 2) }}
+            {{ $tc('daybook.title', 2) }}
           </router-link>
         </li>
       </ol>
@@ -37,7 +37,7 @@
         </div>
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalLedgers || filtersApplied"
+            v-show="totalDaybook || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -48,13 +48,13 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <!-- <router-link slot="item-title" class="col-xs-2" to="ledgers/create">
+        <!-- <router-link slot="item-title" class="col-xs-2" to="daybook/create">
           <base-button
             color="theme"
             icon="plus"
             size="large"
           >
-            {{ $t('ledgers.add_new_ledger') }}
+            {{ $t('daybook.add_new_ledger') }}
           </base-button>
         </router-link> -->
       </div>
@@ -64,7 +64,7 @@
       <div v-show="showFilters" class="filter-section">
         <div class="row">
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.account') }} </label>
+            <label class="form-label"> {{ $tc('daybook.account') }} </label>
             <base-input
               v-model="filters.account"
               type="text"
@@ -73,7 +73,7 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.credit') }} </label>
+            <label class="form-label"> {{ $tc('daybook.credit') }} </label>
             <base-input
               v-model="filters.credit"
               type="text"
@@ -82,7 +82,7 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.debit') }} </label>
+            <label class="form-label"> {{ $tc('daybook.debit') }} </label>
             <base-input
               v-model="filters.debit"
               type="text"
@@ -91,7 +91,7 @@
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.balance') }} </label>
+            <label class="form-label"> {{ $tc('daybook.balance') }} </label>
             <base-input
               v-model="filters.balance"
               type="text"
@@ -107,10 +107,10 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <satellite-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('ledgers.no_ledgers') }}</label>
+        <label class="col title">{{ $t('daybook.no_daybook') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('ledgers.list_of_ledgers') }}</label>
+        <label class="description col mt-1" align="center">{{ $t('daybook.list_of_daybook') }}</label>
       </div>
       <!-- <div class="btn-container">
         <base-button
@@ -118,16 +118,16 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('ledgers/create')"
+          @click="$router.push('daybook/create')"
         >
-          {{ $t('ledgers.add_new_ledger') }}
+          {{ $t('daybook.add_new_ledger') }}
         </base-button>
       </div> -->
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ ledgers.length }}</b> {{ $t('general.of') }} <b>{{ totalLedgers }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ daybook.length }}</b> {{ $t('general.of') }} <b>{{ totalDaybook }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedLedgers.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -182,17 +182,17 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.account')"
+          :label="$t('daybook.account')"
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `ledgers/${row.id}/display`}" class="dropdown-item">
+            <router-link :to="{path: `daybook/${row.id}/display`}" class="dropdown-item">
                {{ row.account }}
               </router-link>
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.credit')"
+          :label="$t('daybook.credit')"
           show="credit"
         >
           <template slot-scope="row">
@@ -200,7 +200,7 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.debit')"
+          :label="$t('daybook.debit')"
           show="debit"
         >
           <template slot-scope="row">
@@ -208,7 +208,7 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.balance')"
+          :label="$t('daybook.balance')"
           show="balance"
         >
           <template slot-scope="row">
@@ -222,13 +222,13 @@
           cell-class="action-dropdown"
         >
         <template slot-scope="row">
-          <span> {{ $t('ledgers.action') }} </span>
+          <span> {{ $t('daybook.action') }} </span>
           <v-dropdown>
             <a slot="activator" href="#">
               <dot-icon />
             </a>
             <v-dropdown-item>
-              <router-link :to="{path: `ledgers/${row.id}/display`}" class="dropdown-item">
+              <router-link :to="{path: `daybook/${row.id}/display`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.view') }}
               </router-link>
@@ -285,13 +285,13 @@ export default {
   },
   computed: {
     ...mapGetters('ledger', [
-      'ledgers',
+      'daybook',
       'selectedLedgers',
-      'totalLedgers',
+      'totalDaybook',
       'selectAllField'
     ]),
     showEmptyScreen () {
-      return !this.totalLedgers && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalDaybook && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -326,7 +326,7 @@ export default {
   },
   methods: {
     ...mapActions('ledger', [
-      'fetchLedgers',
+      'fetchDaybook',
       'selectAllLedgers',
       'selectLedger',
       'deleteLedger',
@@ -348,13 +348,13 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchLedgers(data)
+      let response = await this.fetchDaybook(data)
       this.isRequestOngoing = false
 
       return {
-        data: response.data.ledgers.data,
+        data: response.data.daybook.data,
         pagination: {
-          totalPages: response.data.ledgers.last_page,
+          totalPages: response.data.daybook.last_page,
           currentPage: page
         }
       }
@@ -384,13 +384,13 @@ export default {
       this.showFilters = !this.showFilters
     },
     toggleDayBook() {
-      window.location = '/ledgers/daybook'
+      this.showDayBook = !this.showDayBook
     },
     async removeLedgers (id) {
       this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('ledgers.confirm_delete'),
+        text: this.$tc('daybook.confirm_delete'),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
@@ -398,13 +398,13 @@ export default {
         if (willDelete) {
           let res = await this.deleteLedger(this.id)
           if (res.data.success) {
-            window.toastr['success'](this.$tc('ledgers.deleted_message', 1))
+            window.toastr['success'](this.$tc('daybook.deleted_message', 1))
             this.$refs.table.refresh()
             return true
           }
 
           if (res.data.error === 'ledger_attached') {
-            window.toastr['error'](this.$tc('ledgers.ledger_attached_message'), this.$t('general.action_failed'))
+            window.toastr['error'](this.$tc('daybook.ledger_attached_message'), this.$t('general.action_failed'))
             return true
           }
 
@@ -416,7 +416,7 @@ export default {
     async removeMultipleLedgers () {
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('ledgers.confirm_delete', 2),
+        text: this.$tc('daybook.confirm_delete', 2),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
@@ -424,7 +424,7 @@ export default {
         if (willDelete) {
           let res = await this.deleteMultipleLedgers()
           if (res.data.success) {
-            window.toastr['success'](this.$tc('ledgers.deleted_message', 2))
+            window.toastr['success'](this.$tc('daybook.deleted_message', 2))
             this.$refs.table.refresh()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)

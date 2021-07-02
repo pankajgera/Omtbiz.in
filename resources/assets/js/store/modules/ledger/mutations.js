@@ -5,8 +5,16 @@ export default {
     state.ledgers = ledgers
   },
 
+  [types.BOOTSTRAP_DAYBOOK] (state, daybook) {
+    state.daybook = daybook
+  },
+
   [types.SET_TOTAL_LEDGERS] (state, totalLedgers) {
     state.totalLedgers = totalLedgers
+  },
+
+  [types.SET_TOTAL_DAYBOOK] (state, totalDaybook) {
+    state.totalDaybook = totalDaybook
   },
 
   [types.ADD_LEDGER] (state, data) {

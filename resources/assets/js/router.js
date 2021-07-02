@@ -105,6 +105,7 @@ import MastersCreate from './views/masters/Create.vue'
 import LedgersIndex from './views/ledgers/Index.vue'
 import LedgersCreate from './views/ledgers/Create.vue'
 import LedgersDisplay from './views/ledgers/Display.vue'
+import LedgersDaybook from './views/ledgers/Daybook.vue'
 
 // Vouchers
 import VouchersIndex from './views/vouchers/Index.vue'
@@ -283,7 +284,13 @@ const routes = [
               name: 'ledgers.display',
               component: LedgersDisplay,
               meta: ['admin']
-          },
+            },
+            {
+              path: 'ledgers/daybook',
+              name: 'ledgers.daybook',
+              component: LedgersDaybook,
+              meta: ['admin']
+            },
 
             // Voucher
             {

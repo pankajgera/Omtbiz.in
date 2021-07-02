@@ -459,6 +459,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountLedgersController@display'
     ]);
 
+    Route::get('/ledgers/daybook', [
+        'as' => 'ledgers.daybook',
+        'uses' => 'AccountLedgersController@getDaybook'
+    ]);
+
     Route::resource('ledgers', 'AccountLedgersController');
 
     // Vouchers
