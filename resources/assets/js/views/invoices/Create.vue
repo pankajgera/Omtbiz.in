@@ -161,7 +161,7 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
-              <div v-html="newInvoice.inventories.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)" />
+              <div v-html="totalQuantity(newInvoice.inventories)" />
             </label>
           </div>
           <div class="section">
@@ -368,9 +368,13 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      return this.newInvoice.inventories.reduce(function (a, b) {
-        return a + b['total']
-      }, 0)
+      let inventory = this.newInvoice.inventories;
+      if (inventory.length) {
+        return inventory.reduce(function (a, b) {
+                return a + b['total']
+              }, 0)
+      }
+      return 0
     },
     discount: {
       get: function () {
@@ -382,7 +386,6 @@ export default {
         } else {
           this.newInvoice.discount_val = newValue
         }
-
         this.newInvoice.discount = newValue
       }
     },
@@ -391,7 +394,6 @@ export default {
         if (!tax.compound_tax) {
           return tax.amount
         }
-
         return 0
       })
     },
@@ -400,7 +402,6 @@ export default {
         if (tax.compound_tax) {
           return tax.amount
         }
-
         return 0
       })
     },
@@ -450,6 +451,12 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    totalQuantity(inventory){
+      if (inventory.length) {
+        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
+      }
+      return 0
+    },
     selectFixed () {
       if (this.newInvoice.discount_type === 'fixed') {
         return
@@ -530,7 +537,6 @@ export default {
       if (!this.checkValid()) {
         return false
       }
-
       this.isLoading = true
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
 
