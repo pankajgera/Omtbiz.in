@@ -123,10 +123,10 @@
             </th>
           </tr>
         </thead>
-        <draggable v-model="newInvoice.inventories" class="item-body" tag="tbody" handle=".handle">
+        <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
           <invoice-inventory
-            v-for="(each, index) in newInvoice.inventories"
-            :key="each.id"
+            v-for="(each, index) in inventoryBind"
+            :key="each.name"
             :index="index"
             :inventory-data="each"
             :currency="currency"
@@ -161,7 +161,7 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
-              <div v-html="totalQuantity(newInvoice.inventories)" />
+              <div v-html="totalQuantity(inventoryBind)" />
             </label>
           </div>
           <div class="section">
@@ -423,6 +423,9 @@ export default {
         this.searchDebtorRefNumber(value)
         this.newInvoice.debtors = value
       },
+    },
+    inventoryBind() {
+      return this.newInvoice.inventories
     }
   },
   watch: {
@@ -525,13 +528,17 @@ export default {
       })
     },
     addInventory () {
-      this.newInvoice.inventories.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.inventoryBind.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
     },
     removeInventory (index) {
-      this.newInvoice.inventories.splice(index, 1)
+      this.inventoryBind.splice(index, 1)
+      this.inventoryBind.filter(i => i).map((each, key) => {
+        each['index'] = key
+        this.updateInventory(each)
+      })
     },
     updateInventory (data) {
-      Object.assign(this.newInvoice.inventories[data.index], {...data.inventory})
+      Object.assign(this.inventoryBind[data.index], {...data.inventory})
     },
     submitInvoiceData () {
       if (!this.checkValid()) {
@@ -564,7 +571,6 @@ export default {
           window.toastr['success'](this.$t('invoices.created_message'))
           this.$router.push('/invoices/create')
         }
-
         setTimeout(() => {
           window.location.reload()
         }, 3000)
