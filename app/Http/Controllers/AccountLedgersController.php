@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
 
 class AccountLedgersController extends Controller
 {
+    /**
+     * Get all ledgers
+     */
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 20;
@@ -30,6 +34,32 @@ class AccountLedgersController extends Controller
 
         return response()->json([
             'ledgers' => $ledgers,
+        ]);
+    }
+
+    /**
+     * Get day book ledgers
+     */
+    public function getDaybook(Request $request)
+    {
+        $limit = $request->has('limit') ? $request->limit : 20;
+
+        $daybook = AccountLedger::applyFilters($request->only([
+            'date',
+            'account',
+            'debit',
+            'credit',
+            'balance',
+            'orderByField',
+            'orderBy',
+        ]))
+            ->whereCompany($request->header('company'))
+            ->where('updated_at', '>', Carbon::today())
+            ->where('updated_at', '<', Carbon::tomorrow())
+            ->paginate($limit);
+
+        return response()->json([
+            'daybook' => $daybook,
         ]);
     }
 

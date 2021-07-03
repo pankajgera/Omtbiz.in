@@ -26,7 +26,6 @@
         <div class="col-xs-2 mr-2">
           <base-button
             :outline="true"
-            :icon="icon"
             color="theme"
             size="large"
             right-icon
@@ -270,7 +269,6 @@ export default {
     return {
       id: null,
       showFilters: false,
-      showDayBook: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
       filtersApplied: false,
@@ -384,7 +382,7 @@ export default {
       this.showFilters = !this.showFilters
     },
     toggleDayBook() {
-      this.showDayBook = !this.showDayBook
+      window.location = '/ledgers/daybook'
     },
     async removeLedgers (id) {
       this.id = id
