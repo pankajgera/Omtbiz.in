@@ -1,25 +1,18 @@
 <template>
   <div class="item-selector">
-    <div v-if="inventory.inventory_id" class="selected-inventory">
-      {{ inventory.name }}
-      <span class="deselect-icon" @click="deselectInventory">
-        <font-awesome-icon icon="times-circle" />
-      </span>
-    </div>
     <base-select
-      v-else
       ref="baseSelect"
-      v-model="inventorySelect"
+      v-model="inventorySelected"
       :options="inventories"
-      :show-labels="false"
-      :preserve-search="true"
+      :show-labels="true"
+      :preserve-search="false"
       :initial-search="inventory.name"
       :invalid="invalid"
       :placeholder="$t('invoices.inventory.select_an_inventory')"
       label="name"
+      track-by="id"
       class="multi-select-inventory remove-extra"
       @value="onTextChange"
-      @select="(val) => $emit('select', val)"
     >
       <div slot="afterList">
         <button type="button" class="list-add-button" @click="openInventoryModal">
@@ -57,7 +50,7 @@ export default {
   },
   data () {
     return {
-      inventorySelect: null,
+      selectedInventory: null,
       loading: false
     }
   },
@@ -65,6 +58,16 @@ export default {
     ...mapGetters('inventory', [
       'inventories'
     ]),
+    inventorySelected: {
+      cache: false,
+      get() {
+        return this.selectedInventory
+      },
+      set(newVal) {
+        this.selectedInventory = newVal
+        this.$emit('select', newVal)
+      }
+    }
   },
   watch: {
     invalidDescription (newValue) {
@@ -89,16 +92,12 @@ export default {
         orderBy: '',
         page: 1
       }
-
       this.loading = true
-
       await this.fetchAllInventory(data)
-
       this.loading = false
     },
     onTextChange (val) {
       this.searchInventory(val)
-
       this.$emit('search', val)
     },
     openInventoryModal () {
@@ -109,7 +108,7 @@ export default {
       })
     },
     deselectInventory () {
-      this.inventorySelect = null
+      this.inventorySelected = null
       this.$emit('deselect')
     }
   }
