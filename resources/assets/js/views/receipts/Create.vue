@@ -43,22 +43,6 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="form-group">
-                <label class="form-label">{{ $t('receipts.invoice') }}</label>
-                <base-select
-                  v-model="invoice"
-                  :options="invoiceList"
-                  :searchable="true"
-                  :show-labels="false"
-                  :allow-empty="false"
-                  :disabled="isEdit"
-                  :placeholder="$t('invoices.select_invoice')"
-                  :custom-label="invoiceWithAmount"
-                  track-by="invoice_number"
-                />
-              </div>
-            </div>
-            <div class="col-sm-6">
               <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
               <base-select
                 v-model="formData.list"
@@ -72,6 +56,22 @@
               />
               <div v-if="$v.formData.list.$error">
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="form-label">{{ $t('receipts.invoice') }}</label>
+                <base-select
+                  v-model="invoice"
+                  :options="invoiceList"
+                  :searchable="true"
+                  :show-labels="false"
+                  :allow-empty="false"
+                  :disabled="isEdit || !formData.list"
+                  :placeholder="$t('invoices.select_invoice')"
+                  :custom-label="invoiceWithAmount"
+                  track-by="invoice_number"
+                />
               </div>
             </div>
             <div class="col-sm-6">
