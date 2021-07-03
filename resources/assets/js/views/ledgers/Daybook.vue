@@ -26,13 +26,12 @@
         <div class="col-xs-2 mr-2">
           <base-button
             :outline="true"
-            :icon="icon"
             color="theme"
             size="large"
             right-icon
-            @click="toggleDayBook"
+            @click="toggleLedgers"
           >
-            {{ $t('general.daybook') }}
+            {{ $t('general.to_display') }}
           </base-button>
         </div>
         <div class="col-xs-2 mr-4">
@@ -48,15 +47,6 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <!-- <router-link slot="item-title" class="col-xs-2" to="daybook/create">
-          <base-button
-            color="theme"
-            icon="plus"
-            size="large"
-          >
-            {{ $t('daybook.add_new_ledger') }}
-          </base-button>
-        </router-link> -->
       </div>
     </div>
 
@@ -112,17 +102,6 @@
       <div class="row">
         <label class="description col mt-1" align="center">{{ $t('daybook.list_of_daybook') }}</label>
       </div>
-      <!-- <div class="btn-container">
-        <base-button
-          :outline="true"
-          color="theme"
-          class="mt-3"
-          size="large"
-          @click="$router.push('daybook/create')"
-        >
-          {{ $t('daybook.add_new_ledger') }}
-        </base-button>
-      </div> -->
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
@@ -186,7 +165,7 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `daybook/${row.id}/display`}" class="dropdown-item">
+            <router-link :to="{path: `${row.id}/display`}" class="dropdown-item">
                {{ row.account }}
               </router-link>
           </template>
@@ -228,17 +207,17 @@
               <dot-icon />
             </a>
             <v-dropdown-item>
-              <router-link :to="{path: `daybook/${row.id}/display`}" class="dropdown-item">
+              <router-link :to="{path: `${row.id}/display`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.view') }}
               </router-link>
             </v-dropdown-item>
-            <v-dropdown-item>
+            <!-- <v-dropdown-item>
               <div class="dropdown-item" @click="removeLedgers(row.id)">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
-            </v-dropdown-item>
+            </v-dropdown-item> -->
           </v-dropdown>
         </template>
       </table-column>
@@ -270,7 +249,6 @@ export default {
     return {
       id: null,
       showFilters: false,
-      showDayBook: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
       filtersApplied: false,
@@ -383,8 +361,8 @@ export default {
 
       this.showFilters = !this.showFilters
     },
-    toggleDayBook() {
-      this.showDayBook = !this.showDayBook
+    toggleLedgers() {
+      window.location = '/ledgers'
     },
     async removeLedgers (id) {
       this.id = id

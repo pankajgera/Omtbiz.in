@@ -54,7 +54,8 @@ class AccountLedgersController extends Controller
             'orderBy',
         ]))
             ->whereCompany($request->header('company'))
-            ->where('created_at', Carbon::today())
+            ->where('updated_at', '>', Carbon::today())
+            ->where('updated_at', '<', Carbon::tomorrow())
             ->paginate($limit);
 
         return response()->json([

@@ -229,9 +229,11 @@ export default {
       this.masterData = response.data.account_master;
       this.currentTotalCredit = this.ledgerData.credit;
       this.currentTotalDebit = this.ledgerData.debit;
-      this.totalQuantity = this.displayArray.filter(i => i.invoice)
-        .map(i => i.invoice.inventories[0].quantity)
-        .reduce((a, c) =>  a + c);
+      let quan = this.displayArray.filter(i => i.invoice)
+        .map(i => i.invoice.inventories[0].quantity).filter(i => i);
+      if (quan.length) {
+        this.totalQuantity = quan.reduce((a, c) =>  a + c);
+      }
     },
     getFormattedDate(date) {
       return moment(date).format("DD-MM-YYYY");

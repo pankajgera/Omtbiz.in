@@ -79,7 +79,8 @@
         "select_city": "Select City",
         "street_1": "Street 1",
         "street_2": "Street 2",
-        "action_failed": "Action Failed"
+        "action_failed": "Action Failed",
+        "to_display": "To Display"
     },
     "dashboard": {
         "select_year": "Select year",
@@ -301,8 +302,8 @@
         "add_new_daybook": "Add New Day Book",
         "new_daybook": "New Day Book",
         "edit_daybook": "Edit Day Book",
-        "no_daybooks": "No daybooks yet!",
-        "list_of_daybooks": "This section will contain the list of daybooks.",
+        "no_daybook": "No daybooks yet!",
+        "list_of_daybook": "This section will contain the list of daybooks.",
         "select_a_unit": "select unit",
         "type": "Type",
         "account": "Account",
