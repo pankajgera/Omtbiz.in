@@ -132,24 +132,6 @@
               </div>
             </td>
           </tr>
-          <!-- <tr v-if="taxPerInventory === 'YES'" class="tax-tr">
-            <td />
-            <td colspan="4">
-              <tax
-                v-for="(tax, index) in inventory.taxes"
-                :key="tax.id"
-                :index="index"
-                :tax-data="tax"
-                :taxes="inventory.taxes"
-                :discounted-total="total"
-                :total-tax="totalSimpleTax"
-                :total="total"
-                :currency="currency"
-                @update="updateTax"
-                @remove="removeTax"
-              />
-            </td>
-          </tr> -->
         </tbody>
       </table>
     </td>
@@ -351,25 +333,6 @@ export default {
     ...mapActions('inventory', [
       'updateInventoryPrice'
     ]),
-    // updateTax (data) {
-    //   this.$set(this.inventory.taxes, data.index, data.inventory)
-
-    //   let lastTax = this.inventory.taxes[this.inventory.taxes.length - 1]
-
-    //   if (lastTax.tax_type_id !== 0) {
-    //     this.inventory.taxes.push({...TaxStub, id: Guid.raw()})
-    //   }
-
-    //   this.updateInventory()
-    // },
-    // removeTax (index) {
-    //   this.inventory.taxes.splice(index, 1)
-
-    //   this.updateInventory()
-    // },
-    // taxWithPercentage ({ name, percent }) {
-    //   return `${name} (${percent}%)`
-    // },
     searchVal (val) {
       this.inventory.name = val
     },

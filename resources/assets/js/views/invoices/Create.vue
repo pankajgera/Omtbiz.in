@@ -123,10 +123,10 @@
             </th>
           </tr>
         </thead>
-        <draggable v-model="newInvoice.inventories" class="item-body" tag="tbody" handle=".handle">
+        <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
           <invoice-inventory
-            v-for="(each, index) in newInvoice.inventories"
-            :key="each.id"
+            v-for="(each, index) in inventoryBind"
+            :key="each.name"
             :index="index"
             :inventory-data="each"
             :currency="currency"
@@ -161,7 +161,7 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
-              <div v-html="newInvoice.inventories.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)" />
+              <div v-html="totalQuantity(inventoryBind)" />
             </label>
           </div>
           <div class="section">
@@ -368,9 +368,13 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      return this.newInvoice.inventories.reduce(function (a, b) {
-        return a + b['total']
-      }, 0)
+      let inventory = this.newInvoice.inventories;
+      if (inventory.length) {
+        return inventory.reduce(function (a, b) {
+                return a + b['total']
+              }, 0)
+      }
+      return 0
     },
     discount: {
       get: function () {
@@ -382,7 +386,6 @@ export default {
         } else {
           this.newInvoice.discount_val = newValue
         }
-
         this.newInvoice.discount = newValue
       }
     },
@@ -391,7 +394,6 @@ export default {
         if (!tax.compound_tax) {
           return tax.amount
         }
-
         return 0
       })
     },
@@ -400,7 +402,6 @@ export default {
         if (tax.compound_tax) {
           return tax.amount
         }
-
         return 0
       })
     },
@@ -422,6 +423,9 @@ export default {
         this.searchDebtorRefNumber(value)
         this.newInvoice.debtors = value
       },
+    },
+    inventoryBind() {
+      return this.newInvoice.inventories
     }
   },
   watch: {
@@ -450,6 +454,12 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    totalQuantity(inventory){
+      if (inventory.length) {
+        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
+      }
+      return 0
+    },
     selectFixed () {
       if (this.newInvoice.discount_type === 'fixed') {
         return
@@ -518,19 +528,22 @@ export default {
       })
     },
     addInventory () {
-      this.newInvoice.inventories.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.inventoryBind.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
     },
     removeInventory (index) {
-      this.newInvoice.inventories.splice(index, 1)
+      this.inventoryBind.splice(index, 1)
+      this.inventoryBind.filter(i => i).map((each, key) => {
+        each['index'] = key
+        this.updateInventory(each)
+      })
     },
     updateInventory (data) {
-      Object.assign(this.newInvoice.inventories[data.index], {...data.inventory})
+      Object.assign(this.inventoryBind[data.index], {...data.inventory})
     },
     submitInvoiceData () {
       if (!this.checkValid()) {
         return false
       }
-
       this.isLoading = true
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
 
@@ -558,7 +571,6 @@ export default {
           window.toastr['success'](this.$t('invoices.created_message'))
           this.$router.push('/invoices/create')
         }
-
         setTimeout(() => {
           window.location.reload()
         }, 3000)
