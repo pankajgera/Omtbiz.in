@@ -63,7 +63,7 @@
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
                   v-model="invoice"
-                  :options="invoiceList"
+                  :options="invoiceList.filter(i => i.account_master_id === formData.list.id)"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="false"

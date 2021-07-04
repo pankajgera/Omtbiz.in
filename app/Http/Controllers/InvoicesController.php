@@ -146,6 +146,31 @@ class InvoicesController extends Controller
                 'account_master_id' => $request->debtors['id'],
             ]);
 
+            //Now for each inventory item create journal entry
+            $invoiceInventories = $request->inventories;
+            $inventory_id = null;
+            foreach ($invoiceInventories as $invoiceInventory) {
+                $invoiceInventory['company_id'] = $request->header('company');
+                $inventory = $invoice->inventories()->create($invoiceInventory);
+                $inventory_id = $inventory['id'];
+                if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
+                    foreach ($invoiceInventory['taxes'] as $tax) {
+                        $tax['company_id'] = $request->header('company');
+                        if (gettype($tax['amount']) !== "NULL") {
+                            $inventory->taxes()->create($tax);
+                        }
+                    }
+                }
+
+                //Reset inventory quantity
+                $invent = Inventory::find($inventory['inventory_id']);
+                $quan = (int) ($inventory['quantity']);
+                $invent->update([
+                    'quantity' => $invent->quantity - $quan,
+                ]);
+            }
+
+
             //Add journal entry
             //It will be "Sales" type
             $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
@@ -176,90 +201,67 @@ class InvoicesController extends Controller
                 'credit' => 0,
                 'balance' => $total_amount,
             ]);
-            $opening_balance = (int) $request->debtors['opening_balance'];
-            $calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
+            //$opening_balance = (int) $request->debtors['opening_balance'];
+            //$calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
             //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
-            $invoiceInventories = $request->inventories;
+            //Handle vouchers
+            //Add journal entry
+            //It will add voucher for sales from invoice
+            $voucher_1 = Voucher::create([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'debit' => $total_amount,
+                'credit' => 0,
+                'account_ledger_id' => $dr_account_ledger->id,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Dr',
+                'company_id' => $company_id,
+                'invoice_id' => $invoice->id,
+                'invoice_item_id' => $inventory_id,
+            ]);
+            $voucher_2 = Voucher::create([
+                'account_master_id' => $sale_account_id,
+                'account' => 'Sales',
+                'debit' => 0,
+                'credit' => $total_amount,
+                'account_ledger_id' => $account_ledger->id,
+                'date' => Carbon::now()->toDateTimeString(),
+                'related_voucher' => null,
+                'type' => 'Cr',
+                'company_id' => $company_id,
+                'invoice_id' => $invoice->id,
+                'invoice_item_id' => $inventory_id,
+            ]);
 
-            //Now for each inventory item create journal entry
-            foreach ($invoiceInventories as $invoiceInventory) {
-                $invoiceInventory['company_id'] = $request->header('company');
-                $inventory = $invoice->inventories()->create($invoiceInventory);
-                if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
-                    foreach ($invoiceInventory['taxes'] as $tax) {
-                        $tax['company_id'] = $request->header('company');
-                        if (gettype($tax['amount']) !== "NULL") {
-                            $inventory->taxes()->create($tax);
-                        }
-                    }
-                }
-
-                //Reset inventory quantity
-                $invent = Inventory::find($inventory['inventory_id']);
-                $quan = (int) ($inventory['quantity']);
-                $invent->update([
-                    'quantity' => $invent->quantity - $quan,
+            //Now update vouchers id to ledger-bill-no and related_voucher
+            $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            if ($account_ledger->bill_no) {
+                $account_ledger->update([
+                    'credit' => $account_ledger->credit + $total_amount,
+                    'balance' => $account_ledger->balance + $total_amount,
+                    'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
                 ]);
-
-                //Handle vouchers
-                $amount = (int) ($inventory['total']);
-                //It will add voucher for sales from invoice
-                $voucher_1 = Voucher::create([
-                    'account_master_id' => $account_master_id,
-                    'account' => $request->debtors['name'],
-                    'debit' => $amount,
-                    'credit' => 0,
-                    'account_ledger_id' => $dr_account_ledger->id,
-                    'date' => Carbon::now()->toDateTimeString(),
-                    'related_voucher' => null,
-                    'type' => 'Dr',
-                    'company_id' => $company_id,
-                    'invoice_id' => $invoice->id,
-                    'invoice_item_id' => $inventory['id'],
+                $dr_account_ledger->update([
+                    'debit' => $dr_account_ledger->debit + $total_amount,
+                    'balance' => $dr_account_ledger->balance + $total_amount,
+                    'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
                 ]);
-                $voucher_2 = Voucher::create([
-                    'account_master_id' => $sale_account_id,
-                    'account' => 'Sales',
-                    'debit' => 0,
-                    'credit' => $amount,
-                    'account_ledger_id' => $account_ledger->id,
-                    'date' => Carbon::now()->toDateTimeString(),
-                    'related_voucher' => null,
-                    'type' => 'Cr',
-                    'company_id' => $company_id,
-                    'invoice_id' => $invoice->id,
-                    'invoice_item_id' => $inventory['id'],
+            } else {
+                $account_ledger->update([
+                    'bill_no' => $voucher_ids,
                 ]);
-
-                //Now update vouchers id to ledger-bill-no and related_voucher
-                $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-                $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-                if ($account_ledger->bill_no) {
-                    $account_ledger->update([
-                        'credit' => $account_ledger->credit + $amount,
-                        'balance' => $account_ledger->balance + $amount,
-                        'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
+                $dr_account_ledger->update([
+                    'bill_no' => $voucher_ids,
+                ]);
+            }
+            foreach ($voucher as $key => $each) {
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
                     ]);
-                    $dr_account_ledger->update([
-                        'debit' => $dr_account_ledger->debit + $amount,
-                        'balance' => $dr_account_ledger->balance + $amount,
-                        'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-                    ]);
-                } else {
-                    $account_ledger->update([
-                        'bill_no' => $voucher_ids,
-                    ]);
-                    $dr_account_ledger->update([
-                        'bill_no' => $voucher_ids,
-                    ]);
-                }
-                foreach ($voucher as $key => $each) {
-                    if ($key < substr_count($voucher_ids, ',') + 1) {
-                        $each->update([
-                            'related_voucher' => $voucher_ids,
-                        ]);
-                    }
                 }
             }
 
@@ -471,8 +473,8 @@ class InvoicesController extends Controller
             'credit' => 0,
             'balance' => $total_amount,
         ]);
-        $opening_balance = (int) $request->debtors['opening_balance'];
-        $calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
+        //$opening_balance = (int) $request->debtors['opening_balance'];
+        //$calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
         //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
         foreach ($invoiceItems as $invoiceItem) {
