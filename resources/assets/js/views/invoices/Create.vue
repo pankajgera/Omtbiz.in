@@ -238,9 +238,9 @@
         </div>
       </div>
       <div class="page-actions row">
-          <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+          <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
-          </a>
+          </a> -->
           <base-button
             :loading="isLoading"
             :disabled="isLoading"
@@ -317,7 +317,9 @@ export default {
       invoiceNumAttribute: null,
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
-      isEdit: false
+      isEdit: false,
+      url: null,
+      siteURL: null,
     }
   },
   validations () {
@@ -564,16 +566,35 @@ export default {
 
       this.submitSave(data)
     },
+    async showInvoicePopup (invoice_id) {
+      swal({
+        title: this.$t('invoices.invoice_report_title'),
+        text: this.$t('invoices.invoice_report_text'),
+        icon: '/assets/icon/check-circle-solid.svg',
+        buttons: true,
+        dangerMode: false
+      }).then(async (success) => {
+        if (success) {
+          this.siteURL = `/reports/invoice/${invoice_id}`
+          this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+
+          window.open(this.url, '_blank')
+        } else {
+          this.isLoading = false
+          setTimeout(() => {
+            window.location.reload()
+          }, 3000)
+        }
+      })
+    },
     submitSave (data) {
       this.isLoading = true;
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
-          this.$router.push('/invoices/create')
+          //this.$router.push('/invoices/create')
+          this.showInvoicePopup(res.data.invoice.id)
         }
-        setTimeout(() => {
-          window.location.reload()
-        }, 3000)
       }).catch((err) => {
         this.isLoading = false
         if (err) {
