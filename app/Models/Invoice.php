@@ -118,6 +118,11 @@ class Invoice extends Model
         return $this->belongsTo(InvoiceTemplate::class);
     }
 
+    public function master()
+    {
+        return $this->belongsTo(AccountMaster::class, 'account_master_id');
+    }
+
     public function getPreviousStatus()
     {
         if ($this->due_date < Carbon::now()) {

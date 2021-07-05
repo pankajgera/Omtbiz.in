@@ -507,4 +507,44 @@ class ReportController extends Controller
 
         return $pdf->stream();
     }
+
+    /**
+     * Generate Invoice
+     */
+    public function invoiceReport(Request $request, $id)
+    {
+        $company = Company::findOrFail($request->company_id);
+        $colors = [
+            'primary_text_color',
+            'heading_text_color',
+            'section_heading_text_color',
+            'border_color',
+            'body_text_color',
+            'footer_text_color',
+            'footer_total_color',
+            'footer_bg_color',
+            'date_text_color'
+        ];
+        $colorSettings = CompanySetting::whereIn('option', $colors)
+            ->whereCompany($company->id)
+            ->get();
+
+
+        $invoice_i = InvoiceItem::where('invoice_id', $id);
+        $invoice_items = $invoice_i->get();
+
+        $invoiceWith = Invoice::with(['master'])->where('id', $id)->first();
+        view()->share([
+            'invoice' => $invoiceWith,
+            'total_quantity' => $invoice_i->sum('quantity'),
+            'total_amount' => $invoice_i->sum('sale_price'),
+            'invoice_items' => $invoice_items,
+            'colorSettings' => $colorSettings,
+            'company' => $company,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.reports.invoice');
+
+        return $pdf->download();
+    }
 }

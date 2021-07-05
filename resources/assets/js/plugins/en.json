@@ -22,6 +22,8 @@
         "dispatch": "Dispatch"
     },
     "general": {
+        "yes": "Yes",
+        "no": "No",
         "view_pdf": "View PDF",
         "download_pdf": "Download PDF",
         "save": "Save",
@@ -496,6 +498,8 @@
         "mark_as_sent_successfully": "Invoice marked as sent successfully",
         "send_invoice_successfully": "Invoice sent successfully",
         "updated_inventory_price": "Inventory item price updated",
+        "invoice_report_title": "Invoice",
+        "invoice_report_text": "Do you want to download invoice?",
         "inventory": {
             "title": "Item Title",
             "description": "Description",
