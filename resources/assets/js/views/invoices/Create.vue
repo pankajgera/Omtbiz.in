@@ -126,7 +126,7 @@
         <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
           <invoice-inventory
             v-for="(each, index) in inventoryBind"
-            :key="each.name"
+            :key="each.name+index"
             :index="index"
             :inventory-data="each"
             :currency="currency"
@@ -579,7 +579,6 @@ export default {
           this.url = `${this.siteURL}?company_id=${this.user.company_id}`
 
           window.open(this.url, '_blank')
-        } else {
           this.isLoading = false
           setTimeout(() => {
             window.location.reload()

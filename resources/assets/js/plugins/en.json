@@ -499,7 +499,7 @@
         "send_invoice_successfully": "Invoice sent successfully",
         "updated_inventory_price": "Inventory item price updated",
         "invoice_report_title": "Invoice",
-        "invoice_report_text": "Do you want to download invoice?",
+        "invoice_report_text": "Do you want to view invoice?",
         "inventory": {
             "title": "Item Title",
             "description": "Description",
