@@ -545,6 +545,6 @@ class ReportController extends Controller
 
         $pdf = PDF::loadView('app.pdf.reports.invoice');
 
-        return $pdf->download();
+        return $pdf->stream();
     }
 }
