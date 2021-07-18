@@ -53,6 +53,15 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
+          <div class="col-sm-2">
+            <label class="form-label"> {{ $tc('daybook.date') }} </label>
+            <base-input
+              v-model="filters.date"
+              type="text"
+              name="date"
+              autocomplete="off"
+            />
+          </div>
           <div class="col-sm-4">
             <label class="form-label"> {{ $tc('daybook.account') }} </label>
             <base-input
@@ -62,7 +71,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('daybook.credit') }} </label>
             <base-input
               v-model="filters.credit"
@@ -161,6 +170,14 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('daybook.date')"
+          show="date"
+        >
+          <template slot-scope="row">
+             {{ getFormattedDate(row.date) }}
+          </template>
+        </table-column>
+        <table-column
           :label="$t('daybook.account')"
           show="account"
         >
@@ -238,6 +255,7 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import moment from 'moment'
 
 export default {
   components: {
@@ -253,6 +271,7 @@ export default {
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
+        date: '',
         account: '',
         credit: '',
         debit: '',
@@ -311,11 +330,15 @@ export default {
       'deleteMultipleLedgers',
       'setSelectAllState'
     ]),
+    getFormattedDate(date) {
+      return moment(date).format('DD-MM-YYYY')
+    },
     refreshTable () {
       this.$refs.table.refresh()
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
+        date: this.filters.date !== null ? this.filters.date : '',
         account: this.filters.account !== null ? this.filters.account : '',
         credit: this.filters.credit !== null ? this.filters.credit : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
@@ -343,6 +366,7 @@ export default {
     },
     clearFilter () {
       this.filters = {
+        date: '',
         account: '',
         credit: '',
         debit: '',

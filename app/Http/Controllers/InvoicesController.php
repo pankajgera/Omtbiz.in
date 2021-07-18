@@ -220,6 +220,7 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
                 'invoice_id' => $invoice->id,
                 'invoice_item_id' => $inventory_id,
+                'voucher_type' => 'Sales',
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $sale_account_id,
@@ -233,6 +234,7 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
                 'invoice_id' => $invoice->id,
                 'invoice_item_id' => $inventory_id,
+                'voucher_type' => 'Sales',
             ]);
 
             //Now update vouchers id to ledger-bill-no and related_voucher
@@ -508,6 +510,7 @@ class InvoicesController extends Controller
                 'type' => 'Dr',
                 'invoice_id' => $invoice->id,
                 'invoice_item_id' => $invoiceItem['id'],
+                'voucher_type' => 'Sales',
             ], [
                 'debit' => $amount,
                 'credit' => 0,
@@ -521,6 +524,7 @@ class InvoicesController extends Controller
                 'account_ledger_id' => $account_ledger->id,
                 'invoice_id' => $invoice->id,
                 'invoice_item_id' => $invoiceItem['id'],
+                'voucher_type' => 'Sales',
             ], [
                 'debit' => 0,
                 'credit' => $amount,

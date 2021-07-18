@@ -116,7 +116,8 @@ class VouchersController extends Controller
                         'credit' => $each['credit'] ?? 0,
                         'short_narration' => $each['short_narration'],
                         'date' => Carbon::now()->toDateTimeString(),
-                        'company_id' => $request->header('company')
+                        'company_id' => $request->header('company'),
+                        'voucher_type' => 'Voucher',
                     ]);
                 }
 
