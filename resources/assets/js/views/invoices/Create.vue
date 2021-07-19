@@ -579,11 +579,11 @@ export default {
           this.url = `${this.siteURL}?company_id=${this.user.company_id}`
 
           window.open(this.url, '_blank')
-          this.isLoading = false
-          setTimeout(() => {
-            window.location.reload()
-          }, 3000)
         }
+        this.isLoading = false
+        setTimeout(() => {
+          window.location.reload()
+        }, 3000)
       })
     },
     submitSave (data) {

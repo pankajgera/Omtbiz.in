@@ -27,7 +27,7 @@ class AccountLedger extends Model
 
     public function vouchers()
     {
-        return $this->belongsToMany(Voucher::class);
+        return $this->hasMany(Voucher::class);
     }
 
     public function scopeWhereDate($query, $date)
