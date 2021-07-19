@@ -459,6 +459,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountLedgersController@display'
     ]);
 
+    Route::get('/ledgers/{id}/book', [
+        'as' => 'ledgers.book',
+        'uses' => 'AccountLedgersController@book'
+    ]);
+
     Route::get('/ledgers/daybook', [
         'as' => 'ledgers.daybook',
         'uses' => 'AccountLedgersController@getDaybook'
