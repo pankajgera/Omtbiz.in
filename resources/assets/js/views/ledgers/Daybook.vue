@@ -53,7 +53,16 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-2">
+            <label class="form-label"> {{ $tc('daybook.date') }} </label>
+            <base-input
+              v-model="filters.date"
+              type="text"
+              name="date"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('daybook.account') }} </label>
             <base-input
               v-model="filters.account"
@@ -62,30 +71,48 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('daybook.credit') }} </label>
+          <div class="col-sm-1">
+            <label class="form-label"> {{ $tc('daybook.voucher_type') }} </label>
             <base-input
-              v-model="filters.credit"
+              v-model="filters.voucher_type"
               type="text"
-              name="credit"
+              name="voucher_type"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-1">
+            <label class="form-label"> {{ $tc('daybook.voucher_count') }} </label>
+            <base-input
+              v-model="filters.voucher_count"
+              type="text"
+              name="voucher_count"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-2">
+            <label class="form-label"> {{ $tc('daybook.voucher_credit') }} </label>
+            <base-input
+              v-model="filters.voucher_credit"
+              type="text"
+              name="voucher_credit"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('daybook.debit') }} </label>
+            <label class="form-label"> {{ $tc('daybook.voucher_debit') }} </label>
             <base-input
-              v-model="filters.debit"
+              v-model="filters.voucher_debit"
               type="text"
-              name="debit"
+              name="voucher_debit"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('daybook.balance') }} </label>
+            <label class="form-label"> {{ $tc('daybook.voucher_balance') }} </label>
             <base-input
-              v-model="filters.balance"
+              v-model="filters.voucher_balance"
               type="text"
-              name="balance"
+              name="voucher_balance"
               autocomplete="off"
             />
           </div>
@@ -161,6 +188,14 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('daybook.date')"
+          show="date"
+        >
+          <template slot-scope="row">
+             {{ getFormattedDate(row.date) }}
+          </template>
+        </table-column>
+        <table-column
           :label="$t('daybook.account')"
           show="account"
         >
@@ -171,27 +206,43 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('daybook.credit')"
-          show="credit"
+          :label="$t('daybook.voucher_type')"
+          show="voucher_type"
         >
           <template slot-scope="row">
-            ₹ {{ row.credit }}
+             {{ row.voucher_type }}
           </template>
         </table-column>
         <table-column
-          :label="$t('daybook.debit')"
-          show="debit"
+          :label="$t('daybook.voucher_count')"
+          show="voucher_count"
         >
           <template slot-scope="row">
-            ₹ {{ row.debit }}
+             {{ row.voucher_count }}
           </template>
         </table-column>
         <table-column
-          :label="$t('daybook.balance')"
-          show="balance"
+          :label="$t('daybook.voucher_credit')"
+          show="voucher_credit"
         >
           <template slot-scope="row">
-            ₹ {{ row.balance }}
+            ₹ {{ row.voucher_credit }}
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('daybook.voucher_debit')"
+          show="voucher_debit"
+        >
+          <template slot-scope="row">
+            ₹ {{ row.voucher_debit }}
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('daybook.voucher_balance')"
+          show="voucher_balance"
+        >
+          <template slot-scope="row">
+            ₹ {{ row.voucher_balance }}
           </template>
         </table-column>
         <table-column
@@ -238,6 +289,7 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import moment from 'moment'
 
 export default {
   components: {
@@ -253,6 +305,7 @@ export default {
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
+        date: '',
         account: '',
         credit: '',
         debit: '',
@@ -311,11 +364,15 @@ export default {
       'deleteMultipleLedgers',
       'setSelectAllState'
     ]),
+    getFormattedDate(date) {
+      return moment(date).format('DD-MM-YYYY')
+    },
     refreshTable () {
       this.$refs.table.refresh()
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
+        date: this.filters.date !== null ? this.filters.date : '',
         account: this.filters.account !== null ? this.filters.account : '',
         credit: this.filters.credit !== null ? this.filters.credit : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
@@ -343,6 +400,7 @@ export default {
     },
     clearFilter () {
       this.filters = {
+        date: '',
         account: '',
         credit: '',
         debit: '',

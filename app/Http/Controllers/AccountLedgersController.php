@@ -58,6 +58,18 @@ class AccountLedgersController extends Controller
             ->where('updated_at', '<', Carbon::tomorrow())
             ->paginate($limit);
 
+        foreach ($daybook as $each) {
+            $voucher = Voucher::where('account_ledger_id', $each->id)
+                ->where('updated_at', '>', Carbon::today())
+                ->where('updated_at', '<', Carbon::tomorrow())->get();
+
+            $each['voucher'] = $voucher;
+            $each['voucher_type'] = $voucher[0]->voucher_type;
+            $each['voucher_count'] = $voucher->count();
+            $each['voucher_debit'] = $voucher->sum('debit');
+            $each['voucher_credit'] = $voucher->sum('credit');
+            $each['voucher_balance'] = $voucher->sum('debit') > $voucher->sum('credit') ? $voucher->sum('debit') - $voucher->sum('credit') : $voucher->sum('credit') - $voucher->sum('debit');
+        }
         return response()->json([
             'daybook' => $daybook,
         ]);

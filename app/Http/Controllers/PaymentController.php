@@ -192,7 +192,8 @@ class PaymentController extends Controller
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Dr',
-                'company_id' => $company_id
+                'company_id' => $company_id,
+                'voucher_type' => 'Payment',
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $bank_account->id,
@@ -203,7 +204,8 @@ class PaymentController extends Controller
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Cr',
-                'company_id' => $company_id
+                'company_id' => $company_id,
+                'voucher_type' => 'Payment',
             ]);
         } else {
             $account_ledger = AccountLedger::firstOrCreate([
@@ -227,7 +229,8 @@ class PaymentController extends Controller
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Dr',
-                'company_id' => $company_id
+                'company_id' => $company_id,
+                'voucher_type' => 'Payment',
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $cash_account->id,
@@ -238,7 +241,8 @@ class PaymentController extends Controller
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Cr',
-                'company_id' => $company_id
+                'company_id' => $company_id,
+                'voucher_type' => 'Payment',
             ]);
         }
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
