@@ -200,7 +200,7 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `${row.id}/display`}" class="dropdown-item">
+            <router-link :to="{path: `${row.id}/book`}" class="dropdown-item">
                {{ row.account }}
               </router-link>
           </template>
@@ -258,7 +258,7 @@
               <dot-icon />
             </a>
             <v-dropdown-item>
-              <router-link :to="{path: `${row.id}/display`}" class="dropdown-item">
+              <router-link :to="{path: `${row.id}/book`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.view') }}
               </router-link>

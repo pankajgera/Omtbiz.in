@@ -254,4 +254,59 @@ class AccountLedgersController extends Controller
             'ledgers' => $ledgers,
         ]);
     }
+
+
+    /**
+     * Get ledgers to book
+     */
+    public function book(Request $request, $id)
+    {
+        $ledger = AccountLedger::findOrFail($id);
+        $all_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')
+            ->where('updated_at', '>', Carbon::today())
+            ->where('updated_at', '<', Carbon::tomorrow())->get();
+
+        $each_ids = null;
+        foreach ($all_voucher_ids as $each) {
+            if ($each_ids) {
+                $each_ids = $each_ids . ', ' . $each->related_voucher;
+            } else {
+                $each_ids = $each->related_voucher;
+            }
+        }
+        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
+            ->whereCompany($request->header('company'))
+            ->orderBy('id', 'desc')
+            ->get();
+
+        //Update balance according to 'debit' or 'credit'
+        $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
+        $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
+        $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+        $balance = $ledger->debit - $ledger->credit;
+        $opening_balance = $ledger->accountMaster->opening_balance;
+        $ledger->update([
+            'type' => $ledger->debit > $ledger->credit ? 'Dr' : 'Cr',
+            'credit' => $vouchers_credit_sum,
+            'debit' => $vouchers_debit_sum,
+            'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
+        ]);
+        // if ($ledger->balance === $opening_balance) {
+        //     AccountMaster::updateOpeningBalance($ledger->accountMaster->id, $ledger->balance);
+        // }
+
+        //Extra's for vouchers collection
+        foreach ($related_vouchers as $each) {
+            $each['voucher_type'] = 'Journal';
+            $each['particulars'] = $each->account;
+        }
+
+        return response()->json([
+            'vouchers' => $related_vouchers,
+            'ledger' => $ledger,
+            'account_master' => AccountMaster::where('id', $ledger->account_master_id)->first(),
+        ]);
+    }
 }
