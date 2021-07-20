@@ -530,7 +530,7 @@ class ReportController extends Controller
             ->get();
 
 
-        $invoice_i = InvoiceItem::where('invoice_id', $id);
+        $invoice_i = InvoiceItem::with('inventory')->where('invoice_id', $id);
         $invoice_items = $invoice_i->get();
 
         $invoiceWith = Invoice::with(['master'])->where('id', $id)->first();
