@@ -566,6 +566,12 @@ export default {
 
       this.submitSave(data)
     },
+    reset() {
+      this.isLoading = false
+      setTimeout(() => {
+        window.location.reload()
+      }, 3000)
+    },
     async showInvoicePopup (invoice_id) {
       swal({
         title: this.$t('invoices.invoice_report_title'),
@@ -578,12 +584,16 @@ export default {
           this.siteURL = `/reports/invoice/${invoice_id}`
           this.url = `${this.siteURL}?company_id=${this.user.company_id}`
 
-          window.open(this.url, '_blank')
+          printJS({
+            printable: this.url,
+            type: 'pdf',
+            onPrintDialogClose: () => {
+              this.reset();
+            }
+          })
+        } else {
+          this.reset()
         }
-        this.isLoading = false
-        setTimeout(() => {
-          window.location.reload()
-        }, 3000)
       })
     },
     submitSave (data) {
