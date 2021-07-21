@@ -1,3 +1,90 @@
+<?php
+function numberTowords($num)
+{
+    $ones = [
+        0 => 'ZERO',
+        1 => 'ONE',
+        2 => 'TWO',
+        3 => 'THREE',
+        4 => 'FOUR',
+        5 => 'FIVE',
+        6 => 'SIX',
+        7 => 'SEVEN',
+        8 => 'EIGHT',
+        9 => 'NINE',
+        10 => 'TEN',
+        11 => 'ELEVEN',
+        12 => 'TWELVE',
+        13 => 'THIRTEEN',
+        14 => 'FOURTEEN',
+        15 => 'FIFTEEN',
+        16 => 'SIXTEEN',
+        17 => 'SEVENTEEN',
+        18 => 'EIGHTEEN',
+        19 => 'NINETEEN',
+        '014' => 'FOURTEEN',
+    ];
+    $tens = [
+        0 => 'ZERO',
+        1 => 'TEN',
+        2 => 'TWENTY',
+        3 => 'THIRTY',
+        4 => 'FORTY',
+        5 => 'FIFTY',
+        6 => 'SIXTY',
+        7 => 'SEVENTY',
+        8 => 'EIGHTY',
+        9 => 'NINETY',
+    ];
+    $hundreds = ['HUNDRED', 'THOUSAND', 'MILLION', 'BILLION', 'TRILLION', 'QUARDRILLION']; /*limit t quadrillion */
+    $num = number_format($num, 2, '.', ',');
+    $num_arr = explode('.', $num);
+    $wholenum = $num_arr[0];
+    $decnum = $num_arr[1];
+    $whole_arr = array_reverse(explode(',', $wholenum));
+    krsort($whole_arr, 1);
+    $rettxt = '';
+    foreach ($whole_arr as $key => $i) {
+        while (substr($i, 0, 1) == '0') {
+            $i = substr($i, 1, 5);
+        }
+        if ($i < 20) {
+            /* echo "getting:".$i; */
+            $rettxt .= $ones[$i];
+        } elseif ($i < 100) {
+            if (substr($i, 0, 1) != '0') {
+                $rettxt .= $tens[substr($i, 0, 1)];
+            }
+            if (substr($i, 1, 1) != '0') {
+                $rettxt .= ' ' . $ones[substr($i, 1, 1)];
+            }
+        } else {
+            if (substr($i, 0, 1) != '0') {
+                $rettxt .= $ones[substr($i, 0, 1)] . ' ' . $hundreds[0];
+            }
+            if (substr($i, 1, 1) != '0') {
+                $rettxt .= ' ' . $tens[substr($i, 1, 1)];
+            }
+            if (substr($i, 2, 1) != '0') {
+                $rettxt .= ' ' . $ones[substr($i, 2, 1)];
+            }
+        }
+        if ($key > 0) {
+            $rettxt .= ' ' . $hundreds[$key] . ' ';
+        }
+    }
+    if ($decnum > 0) {
+        $rettxt .= ' and ';
+        if ($decnum < 20) {
+            $rettxt .= $ones[$decnum];
+        } elseif ($decnum < 100) {
+            $rettxt .= $tens[substr($decnum, 0, 1)];
+            $rettxt .= ' ' . $ones[substr($decnum, 1, 1)];
+        }
+    }
+    return $rettxt . ' ONLY';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -114,9 +201,11 @@
             text-align: right;
             color: #595959;
         }
-        .border{
+
+        .border {
             border: 1px solid #a5a5a5 !important;
         }
+
         tr.td-border td {
             border-top: 1px solid #a5a5a5;
             border-bottom: 1px solid #a5a5a5;
@@ -124,6 +213,7 @@
 
         td {
             border-right: 1px solid #a5a5a5;
+            border-left: 1px solid #a5a5a5;
         }
 
         p {
@@ -196,9 +286,12 @@
                         </p>
                     </td>
                     <td class="border">
-                        <p class="total-title">Invoice Date <span style="float:right; font-size: 13px;">{{ $invoice->invoice_date }}</span></p>
-                        <p class="total-title">Invoice Number <span style="float:right; font-size: 13px;">{{ $invoice->invoice_number }}</span></p>
-                        <p class="total-title">Party Name <span style="float:right; font-size: 13px;">{{ $invoice->master->name }}</span></p>
+                        <p class="total-title">Invoice Date <span
+                                style="float:right; font-size: 13px;">{{ $invoice->invoice_date }}</span></p>
+                        <p class="total-title">Invoice Number <span
+                                style="float:right; font-size: 13px;">{{ $invoice->invoice_number }}</span></p>
+                        <p class="total-title">Party Name <span
+                                style="float:right; font-size: 13px;">{{ $invoice->master->name }}</span></p>
                     </td>
                 </tr>
             </table>
@@ -274,7 +367,7 @@
                     <td></td>
                     <td>
                         <p style="font-size: 13px;">
-                            {{ $total_quantity }}
+                            Total: {{ $total_quantity }}
                         </p>
                     </td>
                     <td></td>
@@ -286,6 +379,37 @@
                     </td>
                 </tr>
             </table>
+            <div>
+                <p style="font-size: 13px;">
+                    Amount Chargeable (in words)
+                    <br />
+                    {{ numberTowords($total_amount) }}
+                </p>
+            </div>
+            <div style="margin: 10px 0px; position: fixed; bottom: 180px">
+                <p style="font-size: 13px; bottom: 0">
+                    Remark: <br>
+                    {{ $invoice->notes }}
+                </p>
+                <table>
+                    <tr class="td-border">
+                        <td style="width: 50%">
+                            <p style="font-size: 13px;">
+                                <u> Declaration: </u> <br>
+                                We declare that this invoice shows the actual
+                                price of the goods described and that all
+                                particulars are true and correct
+                            </p>
+                        </td>
+                        <td style="width: 50%">
+                            <p style="font-size: 13px; float: right; bottom: 40px; right: 0; position: fixed">
+                                Authorised Signatory
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                <p style="font-size: 10px; bottom: 0px; margin: 0; padding: 0">This is a Computer Generated Invoice</p>
+            </div>
         </div>
     </div>
 </body>
