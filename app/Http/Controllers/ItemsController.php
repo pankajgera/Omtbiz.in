@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Models\Item;
 use App\Models\TaxType;
 use App\Models\Tax;
+use Exception;
 
 class ItemsController extends Controller
 {
@@ -52,6 +53,9 @@ class ItemsController extends Controller
      */
     public function store(Requests\ItemsRequest $request)
     {
+        if (!$request->price) {
+            throw new Exception('Price cannot be null');
+        }
         $item = new Item();
         $item->name = $request->name;
         $item->unit = $request->unit;
@@ -87,6 +91,9 @@ class ItemsController extends Controller
      */
     public function update(Requests\ItemsRequest $request, $id)
     {
+        if (!$request->price) {
+            throw new Exception('Price cannot be null');
+        }
         $item = Item::find($id);
         $item->name = $request->name;
         $item->unit = $request->unit;
