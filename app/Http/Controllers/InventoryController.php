@@ -54,6 +54,9 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
+        if (!$request->price) {
+            throw new Exception('Price cannot be null');
+        }
         try {
             $inventory = new Inventory();
             $inventory->name = $request->name;
@@ -80,6 +83,9 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!$request->price) {
+            throw new Exception('Price cannot be null');
+        }
         try {
             $inventory = Inventory::find($id);
             $inventory->name = $request->name;
