@@ -18,7 +18,6 @@ import VueExpandableImage from 'vue-expandable-image'
  * Global css plugins
  */
 import 'vue-tabs-component/docs/resources/tabs-component.css'
-
 Vue.use(Vuelidate)
 Vue.use(VueExpandableImage)
 
@@ -30,7 +29,6 @@ window._ = require('lodash')
      */
 
 window.Vue = require('vue')
-
 /**
  * Font Awesome
  */

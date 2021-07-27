@@ -3,6 +3,7 @@
  * include Vue and Vue Resource. This gives a great starting point for
  * building robust, powerful web applications using Vue and Laravel.
  */
+import Vue from 'vue'
 import router from './router.js'
 import Layout from './helpers/layout'
 import Plugin from './helpers/plugin'
