@@ -1,4 +1,5 @@
 const mix = require('laravel-mix')
+const path = require('path');
 
 mix.webpackConfig({
   resolve: {
@@ -17,8 +18,9 @@ mix.webpackConfig({
  |--------------------------------------------------------------------------
  */
 
-mix.js('resources/assets/js/app.js', 'public/assets/js/')
+mix.js('resources/assets/js/app.js', 'public/assets/js/').vue()
   .sass('resources/assets/sass/crater.scss', 'public/assets/css/')
+
 
 if (!mix.inProduction()) {
   mix.webpackConfig({

@@ -214,7 +214,6 @@ import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
 import DotIcon from '../../components/icon/DotIcon'
 import AstronautIcon from '../../components/icon/AstronautIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
-import { request } from 'http'
 
 export default {
   components: {

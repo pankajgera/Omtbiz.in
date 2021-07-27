@@ -8,7 +8,7 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": "^7.2",
+        "php": "^8.0",
         "aws/aws-sdk-php-laravel": "^3.4",
         "barryvdh/laravel-dompdf": "^0.8.1",
         "doctrine/dbal": "^2.10",
@@ -17,16 +17,16 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^8.0",
         "laravel/helpers": "^1.1",
-        "laravel/passport": "^7.4.0",
-        "laravel/socialite": "^4.2.0",
+        "laravel/passport": "^10.1",
+        "laravel/socialite": "^5.2.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
-        "lcobucci/jwt": "3.3.3",
+        "lcobucci/jwt": "^4.1",
         "league/flysystem-aws-s3-v3": "^1.0",
         "nyholm/psr7": "^1.4",
-        "spatie/laravel-medialibrary": "^7.0.0",
+        "spatie/laravel-medialibrary": "^9.6.4",
         "spatie/laravel-permission": "^3.0",
-        "symfony/psr-http-message-bridge": "^1.0"
+        "symfony/psr-http-message-bridge": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -72,7 +72,8 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "platform-check": false
     },
     "extra": {
         "laravel": {

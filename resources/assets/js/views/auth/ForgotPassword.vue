@@ -40,7 +40,6 @@
 
 <script type="text/babel">
 import { validationMixin } from 'vuelidate'
-import { async } from 'q'
 const { required, email } = require('vuelidate/lib/validators')
 
 export default {

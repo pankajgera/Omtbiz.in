@@ -219,7 +219,6 @@ import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
 import DotIcon from '../../components/icon/DotIcon'
 import AstronautIcon from '../../components/icon/AstronautIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
-import { request } from 'http'
 
 export default {
   components: {
@@ -353,7 +352,7 @@ export default {
             window.toastr['success'](this.$tc('customers.deleted_message'))
             this.refreshTable()
             return true
-          } else if (request.data.error) {
+          } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }
         }
