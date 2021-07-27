@@ -18,6 +18,7 @@ import InventoryModal from './modal/InventoryModal.vue'
 
 import {TableColumn, TableComponent} from './base-table/index'
 import GroupModal from './modal/GroupModal.vue'
+import Vue from 'vue'
 
 Vue.component('base-button', BaseButton)
 Vue.component('item-modal', ItemModal)

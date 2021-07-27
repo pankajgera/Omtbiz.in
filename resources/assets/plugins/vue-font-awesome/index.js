@@ -59,7 +59,7 @@ import {
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-window.Vue = require('vue')
+import Vue from 'vue'
 
 library.add(
   far,
