@@ -12,15 +12,15 @@ use App\Models\Address;
 use App\Models\Payment;
 use App\Models\Company;
 use App\Notifications\MailResetPasswordNotification;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Exception;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, Notifiable, HasMediaTrait;
+    use HasApiTokens, Notifiable, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
