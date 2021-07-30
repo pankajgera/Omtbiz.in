@@ -89,21 +89,21 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('daybook.voucher_credit') }} </label>
-            <base-input
-              v-model="filters.voucher_credit"
-              type="text"
-              name="voucher_credit"
-              autocomplete="off"
-            />
-          </div>
           <div class="col-sm-4">
             <label class="form-label"> {{ $tc('daybook.voucher_debit') }} </label>
             <base-input
               v-model="filters.voucher_debit"
               type="text"
               name="voucher_debit"
+              autocomplete="off"
+            />
+          </div>
+          <div class="col-sm-2">
+            <label class="form-label"> {{ $tc('daybook.voucher_credit') }} </label>
+            <base-input
+              v-model="filters.voucher_credit"
+              type="text"
+              name="voucher_credit"
               autocomplete="off"
             />
           </div>
@@ -222,14 +222,6 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('daybook.voucher_credit')"
-          show="voucher_credit"
-        >
-          <template slot-scope="row">
-            ₹ {{ row.voucher_credit }}
-          </template>
-        </table-column>
-        <table-column
           :label="$t('daybook.voucher_debit')"
           show="voucher_debit"
         >
@@ -237,6 +229,15 @@
             ₹ {{ row.voucher_debit }}
           </template>
         </table-column>
+        <table-column
+          :label="$t('daybook.voucher_credit')"
+          show="voucher_credit"
+        >
+          <template slot-scope="row">
+            ₹ {{ row.voucher_credit }}
+          </template>
+        </table-column>
+
         <table-column
           :label="$t('daybook.voucher_balance')"
           show="voucher_balance"
@@ -307,8 +308,8 @@ export default {
       filters: {
         date: '',
         account: '',
-        credit: '',
         debit: '',
+        credit: '',
         balance: ''
       },
       index: null
@@ -374,8 +375,8 @@ export default {
       let data = {
         date: this.filters.date !== null ? this.filters.date : '',
         account: this.filters.account !== null ? this.filters.account : '',
-        credit: this.filters.credit !== null ? this.filters.credit : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
+        credit: this.filters.credit !== null ? this.filters.credit : '',
         balance: this.filters.balance !== null ? this.filters.balance : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
@@ -402,8 +403,8 @@ export default {
       this.filters = {
         date: '',
         account: '',
-        credit: '',
         debit: '',
+        credit: '',
         balance: '',
       }
 
