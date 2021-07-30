@@ -45,7 +45,7 @@
             <div class="col-sm-6">
               <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
               <base-select
-                v-model="formData.list"
+                v-model="listBind"
                 :invalid="$v.formData.list.$error"
                 :options="sundryDebtorList"
                 :searchable="true"
@@ -63,7 +63,7 @@
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
                   v-model="invoice"
-                  :options="invoiceList.filter(i => i.account_master_id === formData.list.id)"
+                  :options="invoiceListFiltered"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="false"
@@ -193,6 +193,7 @@ export default {
       invoice: null,
       //customerList: [],
       invoiceList: [],
+      invoiceListFiltered: [],
       isLoading: false,
       maxPayableAmount: Number.MAX_SAFE_INTEGER,
       isSettingInitialData: true,
@@ -294,6 +295,16 @@ export default {
       }
       return 0
     },
+    listBind: {
+      cache:false,
+      get() {
+        return this.formData.list
+      },
+      set(val) {
+        this.invoiceListFiltered = this.invoiceList.filter(i => i.account_master_id === val.id)
+        this.formData.list = val
+      }
+    }
   },
   watch: {
     // customer (newValue) {
