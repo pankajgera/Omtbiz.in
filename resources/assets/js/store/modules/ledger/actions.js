@@ -12,18 +12,6 @@ export const fetchLedgers = ({ commit, dispatch, state }, params) => {
   })
 }
 
-export const fetchDaybook = ({ commit, dispatch, state }, params) => {
-  return new Promise((resolve, reject) => {
-    window.axios.get(`/api/vouchers/daybook`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_DAYBOOK, response.data.daybook.data)
-      commit(types.SET_TOTAL_DAYBOOK, response.data.total)
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
 export const fetchLedger = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/ledgers/${id}/edit`).then((response) => {

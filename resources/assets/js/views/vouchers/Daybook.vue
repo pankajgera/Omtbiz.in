@@ -133,7 +133,6 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ daybook.length }}</b> {{ $t('general.of') }} <b>{{ totalDaybook }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedLedgers.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -305,10 +304,12 @@ export default {
   },
   computed: {
     ...mapGetters('ledger', [
-      'daybook',
       'selectedLedgers',
-      'totalDaybook',
       'selectAllField'
+    ]),
+    ...mapGetters('voucher', [
+      'daybook',
+      'totalDaybook',
     ]),
     showEmptyScreen () {
       return !this.totalDaybook && !this.isRequestOngoing && !this.filtersApplied
@@ -346,12 +347,13 @@ export default {
   },
   methods: {
     ...mapActions('ledger', [
-      'fetchDaybook',
       'selectAllLedgers',
       'selectLedger',
       'deleteLedger',
-      'deleteMultipleLedgers',
       'setSelectAllState'
+    ]),
+    ...mapActions('voucher', [
+      'fetchDaybook',
     ]),
     getFormattedDate(date) {
       return moment(date).format('DD-MM-YYYY')
