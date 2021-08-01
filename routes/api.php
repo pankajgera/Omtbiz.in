@@ -459,15 +459,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountLedgersController@display'
     ]);
 
-    Route::get('/ledgers/{id}/book', [
-        'as' => 'ledgers.book',
-        'uses' => 'AccountLedgersController@book'
-    ]);
-
-    Route::get('/ledgers/daybook', [
-        'as' => 'ledgers.daybook',
-        'uses' => 'AccountLedgersController@getDaybook'
-    ]);
 
     Route::resource('ledgers', 'AccountLedgersController');
 
@@ -481,6 +472,16 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/vouchers/update', [
         'as' => 'vouchers.update',
         'uses' => 'VouchersController@update'
+    ]);
+
+    Route::get('/vouchers/{id}/book', [
+        'as' => 'vouchers.book',
+        'uses' => 'VouchersController@book'
+    ]);
+
+    Route::get('/vouchers/daybook', [
+        'as' => 'vouchers.daybook',
+        'uses' => 'VouchersController@getDaybook'
     ]);
 
     Route::resource('vouchers', 'VouchersController');

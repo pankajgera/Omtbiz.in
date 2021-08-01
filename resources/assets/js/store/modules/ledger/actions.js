@@ -14,9 +14,9 @@ export const fetchLedgers = ({ commit, dispatch, state }, params) => {
 
 export const fetchDaybook = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/ledgers/daybook`, {params}).then((response) => {
+    window.axios.get(`/api/vouchers/daybook`, {params}).then((response) => {
       commit(types.BOOTSTRAP_DAYBOOK, response.data.daybook.data)
-      commit(types.SET_TOTAL_DAYBOOK, response.data.daybook.total)
+      commit(types.SET_TOTAL_DAYBOOK, response.data.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -44,9 +44,9 @@ export const fetchLedgerDisplay = ({ commit, dispatch }, id) => {
   })
 }
 
-export const fetchLedgerBook = ({ commit, dispatch }, id) => {
+export const fetchVoucherBook = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/ledgers/${id}/book`).then((response) => {
+    window.axios.get(`/api/vouchers/${id}/book`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)

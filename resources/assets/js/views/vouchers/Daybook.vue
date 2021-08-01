@@ -139,12 +139,6 @@
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleLedgers">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
           </v-dropdown>
         </transition>
       </div>
@@ -264,12 +258,6 @@
                 {{ $t('general.view') }}
               </router-link>
             </v-dropdown-item>
-            <!-- <v-dropdown-item>
-              <div class="dropdown-item" @click="removeLedgers(row.id)">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item> -->
           </v-dropdown>
         </template>
       </table-column>
@@ -386,13 +374,9 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchDaybook(data)
       this.isRequestOngoing = false
-
+  console.log(response.data)
       return {
-        data: response.data.daybook.data,
-        pagination: {
-          totalPages: response.data.daybook.last_page,
-          currentPage: page
-        }
+        data: response.data.daybook,
       }
     },
     setFilters () {
@@ -422,52 +406,6 @@ export default {
     },
     toggleLedgers() {
       window.location = '/ledgers'
-    },
-    async removeLedgers (id) {
-      this.id = id
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$tc('daybook.confirm_delete'),
-        icon: '/assets/icon/trash-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let res = await this.deleteLedger(this.id)
-          if (res.data.success) {
-            window.toastr['success'](this.$tc('daybook.deleted_message', 1))
-            this.$refs.table.refresh()
-            return true
-          }
-
-          if (res.data.error === 'ledger_attached') {
-            window.toastr['error'](this.$tc('daybook.ledger_attached_message'), this.$t('general.action_failed'))
-            return true
-          }
-
-          window.toastr['error'](res.data.message)
-          return true
-        }
-      })
-    },
-    async removeMultipleLedgers () {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$tc('daybook.confirm_delete', 2),
-        icon: '/assets/icon/trash-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let res = await this.deleteMultipleLedgers()
-          if (res.data.success) {
-            window.toastr['success'](this.$tc('daybook.deleted_message', 2))
-            this.$refs.table.refresh()
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
-          }
-        }
-      })
     },
     setIndex(index) {
       this.index = index

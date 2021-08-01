@@ -105,12 +105,12 @@ import MastersCreate from './views/masters/Create.vue'
 import LedgersIndex from './views/ledgers/Index.vue'
 import LedgersCreate from './views/ledgers/Create.vue'
 import LedgersDisplay from './views/ledgers/Display.vue'
-import LedgersBook from './views/ledgers/Book.vue'
-import LedgersDaybook from './views/ledgers/Daybook.vue'
 
 // Vouchers
 import VouchersIndex from './views/vouchers/Index.vue'
 import VouchersCreate from './views/vouchers/Create.vue'
+import VouchersBook from './views/vouchers/Book.vue'
+import VouchersDaybook from './views/vouchers/Daybook.vue'
 
 import Wizard from './views/wizard/Index.vue'
 
@@ -286,18 +286,6 @@ const routes = [
               component: LedgersDisplay,
               meta: ['admin']
             },
-            {
-              path: 'ledgers/:id/book',
-              name: 'ledgers.book',
-              component: LedgersBook,
-              meta: ['admin']
-            },
-            {
-              path: 'ledgers/daybook',
-              name: 'ledgers.daybook',
-              component: LedgersDaybook,
-              meta: ['admin']
-            },
 
             // Voucher
             {
@@ -316,6 +304,18 @@ const routes = [
                 name: 'vouchers.edit',
                 component: VouchersCreate,
                 meta: ['admin']
+            },
+            {
+              path: 'vouchers/:id/book',
+              name: 'vouchers.book',
+              component: VouchersBook,
+              meta: ['admin']
+            },
+            {
+              path: 'vouchers/daybook',
+              name: 'vouchers.daybook',
+              component: VouchersDaybook,
+              meta: ['admin']
             },
 
             //Raw bill

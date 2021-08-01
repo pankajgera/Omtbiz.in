@@ -382,7 +382,7 @@ export default {
       this.showFilters = !this.showFilters
     },
     toggleDayBook() {
-      window.location = '/ledgers/daybook'
+      window.location = '/vouchers/daybook'
     },
     async removeLedgers (id) {
       this.id = id
