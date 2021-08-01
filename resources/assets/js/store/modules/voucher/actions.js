@@ -83,7 +83,7 @@ export const selectVoucher = ({ commit, dispatch, state }, data) => {
 export const fetchDaybook = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/vouchers/daybook`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_DAYBOOK, response.data.daybook.data)
+      commit(types.BOOTSTRAP_DAYBOOK, response.data.daybook)
       commit(types.SET_TOTAL_DAYBOOK, response.data.total)
       resolve(response)
     }).catch((err) => {

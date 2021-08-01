@@ -231,6 +231,7 @@ class VouchersController extends Controller
 
         return response()->json([
             'daybook' => $voucher,
+            'total' => $voucher->count(),
         ]);
     }
 

@@ -4,9 +4,7 @@ import * as getters from './getters'
 
 const initialState = {
   ledgers: [],
-  daybook: [],
   totalLedgers: 0,
-  totalDaybook: 0,
   selectAllField: false,
   selectedLedgers: []
 }

@@ -4,7 +4,9 @@ import * as getters from './getters'
 
 const initialState = {
   vouchers: [],
+  daybook: [],
   totalVouchers: 0,
+  totalDaybook: 0,
   selectAllField: false,
   selectedVouchers: []
 }
