@@ -578,7 +578,6 @@ export default {
         text: this.$t('invoices.invoice_report_text'),
         icon: '/assets/icon/check-circle-solid.svg',
         buttons: true,
-        reverseButtons: false,
         dangerMode: false
       }).then(async (success) => {
         if (success) {
