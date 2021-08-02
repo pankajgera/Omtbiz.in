@@ -31,21 +31,47 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('inventory.quantity') }}</label>
+                <label class="control-label">{{ $t('inventory.quantity') }}</label><span class="text-danger"> *</span>
                 <base-input
                   v-model.trim="formData.quantity"
                   focus
-                  type="text"
+                  :invalid="$v.formData.quantity.$error"
+                  type="number"
+                  min="0"
                   name="quantity"
                 />
+                <div v-if="$v.formData.quantity.$error">
+                  <span v-if="!$v.formData.quantity.required" class="text-danger">{{ $t('validation.required') }} </span>
+                  <span v-if="!$v.formData.quantity.minValue" class="text-danger">
+                    {{ $tc('validation.quantity_min_length', $v.formData.name.$params.minValue.min, { count: $v.formData.name.$params.minLength.min }) }}
+                  </span>
+                </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('inventory.price') }}</label>
+                <label class="control-label">{{ $t('inventory.price') }}</label><span class="text-danger"> *</span>
                 <base-input
                   v-model.trim="formData.price"
                   focus
-                  type="text"
+                  :invalid="$v.formData.price.$error"
+                  type="number"
+                  min="0"
                   name="price"
+                />
+                <div v-if="$v.formData.price.$error">
+                  <span v-if="!$v.formData.price.required" class="text-danger">{{ $t('validation.required') }} </span>
+                  <span v-if="!$v.formData.price.minValue" class="text-danger">
+                    {{ $tc('validation.price_min_length', $v.formData.name.$params.minValue.min, { count: $v.formData.name.$params.minLength.min }) }}
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">{{ $t('inventory.sale_price') }}</label>
+                <base-input
+                  v-model.trim="formData.sale_price"
+                  focus
+                  type="number"
+                  min="0"
+                  name="sale_price"
                 />
               </div>
               <div class="form-group">
@@ -101,6 +127,7 @@ export default {
         name: '',
         quantity: '',
         price: '',
+        sale_price: '',
         unit: 'pc',
       },
       unitOptions: ['pc', 'sqm']
@@ -124,6 +151,14 @@ export default {
       name: {
         required,
         minLength: minLength(3)
+      },
+      quantity: {
+        required,
+        minValue: 1
+      },
+      price: {
+        required,
+        minValue: 1
       },
     }
   },

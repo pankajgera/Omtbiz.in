@@ -62,6 +62,7 @@ class InventoryController extends Controller
             $inventory->name = $request->name;
             $inventory->quantity = $request->quantity;
             $inventory->price = $request->price;
+            $inventory->sale_price = $request->sale_price;
             $inventory->unit = $request->unit;
             $inventory->company_id = $request->header('company');
             $inventory->save();
@@ -91,6 +92,7 @@ class InventoryController extends Controller
             $inventory->name = $request->name;
             $inventory->quantity = $request->quantity;
             $inventory->price = $request->price;
+            $inventory->sale_price = $request->sale_price;
             $inventory->unit = $request->unit;
             $inventory->company_id = $request->header('company');
             $inventory->save();
