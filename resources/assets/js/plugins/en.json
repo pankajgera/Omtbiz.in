@@ -325,7 +325,7 @@
         "created_message": "Day Book created successfully",
         "updated_message": "Day Book updated successfully",
         "deleted_message": "Day Book deleted successfully | Day Books deleted successfully",
-        "inventory_item_quantity": "Quantity"
+        "inventory_item_quantity": "Item Quantity"
     },
     "vouchers": {
         "title": "Vouchers",

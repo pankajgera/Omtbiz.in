@@ -250,7 +250,6 @@ class VouchersController extends Controller
 
         //Extra's for vouchers collection
         foreach ($related_vouchers as $each) {
-            $each['voucher_type'] = 'Journal';
             $each['particulars'] = $each->account;
             if ($each->invoice_id) {
                 $each['invoice'] = Invoice::with(['inventories'])->where('id', $each->invoice_id)->first();

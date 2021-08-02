@@ -67,7 +67,7 @@
                 </template>
               </table-column>
               <table-column
-                :label="$t('ledgers.inventory_item_quantity')"
+                :label="$t('daybook.inventory_item_quantity')"
                 show="quantity"
               >
                 <template slot-scope="row">
