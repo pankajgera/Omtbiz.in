@@ -376,7 +376,7 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchDaybook(data)
       this.isRequestOngoing = false
-  console.log(response.data)
+
       return {
         data: response.data.daybook,
       }

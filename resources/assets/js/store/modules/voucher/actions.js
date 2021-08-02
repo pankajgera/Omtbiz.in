@@ -79,6 +79,15 @@ export const selectVoucher = ({ commit, dispatch, state }, data) => {
   }
 }
 
+export const fetchVoucherBook = ({ commit, dispatch }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/vouchers/${id}/book`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 
 export const fetchDaybook = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {

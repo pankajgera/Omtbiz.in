@@ -32,16 +32,6 @@ export const fetchLedgerDisplay = ({ commit, dispatch }, id) => {
   })
 }
 
-export const fetchVoucherBook = ({ commit, dispatch }, id) => {
-  return new Promise((resolve, reject) => {
-    window.axios.get(`/api/vouchers/${id}/book`).then((response) => {
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
 export const addLedger = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/ledgers', data).then((response) => {
