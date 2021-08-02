@@ -35,7 +35,6 @@
               <div class="col-sm-12">
                 <textarea
                   type="text"
-                  v-autoresize
                   autofocus
                   rows="2"
                   width="400"
