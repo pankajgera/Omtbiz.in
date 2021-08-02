@@ -17081,4 +17081,10 @@ fieldset[disabled] .multiselect {
   padding: 5px 10px;
 }
 
+.swal-footer {
+    text-align: center !important;
+}
+.swal-modal .swal-footer {
+    direction: rtl !important;
+}
 /*# sourceMappingURL=crater.css.map*/
