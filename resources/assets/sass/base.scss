@@ -137,3 +137,10 @@ code,
     background-color: $ls-color-primary !important;
     color: $white;
 }
+
+.swal-footer {
+    text-align: center !important;
+}
+.swal-modal .swal-footer {
+    direction: rtl !important;
+}

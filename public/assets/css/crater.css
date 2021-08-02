@@ -10763,6 +10763,14 @@ code,
   color: #fff;
 }
 
+.swal-footer {
+  text-align: center !important;
+}
+
+.swal-modal .swal-footer {
+  direction: rtl !important;
+}
+
 .site-header {
   background-color: #f54c4c;
   height: 60px;
@@ -17081,10 +17089,4 @@ fieldset[disabled] .multiselect {
   padding: 5px 10px;
 }
 
-.swal-footer {
-    text-align: center !important;
-}
-.swal-modal .swal-footer {
-    direction: rtl !important;
-}
 /*# sourceMappingURL=crater.css.map*/
