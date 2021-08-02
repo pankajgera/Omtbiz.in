@@ -78,3 +78,25 @@ export const selectVoucher = ({ commit, dispatch, state }, data) => {
     commit(types.SET_SELECT_ALL_STATE, false)
   }
 }
+
+export const fetchVoucherBook = ({ commit, dispatch }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/vouchers/${id}/book`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const fetchDaybook = ({ commit, dispatch, state }, params) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/vouchers/daybook`, {params}).then((response) => {
+      commit(types.BOOTSTRAP_DAYBOOK, response.data.daybook)
+      commit(types.SET_TOTAL_DAYBOOK, response.data.total)
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}

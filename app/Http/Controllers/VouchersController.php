@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
+use App\Models\Invoice;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -207,6 +208,56 @@ class VouchersController extends Controller
 
         return response()->json([
             'vouchers' => $vouchers,
+        ]);
+    }
+
+    /**
+     * Get day book ledgers
+     */
+    public function getDaybook(Request $request)
+    {
+        $day_voucher = Voucher::whereCompany($request->header('company'))
+            ->where('updated_at', '>', Carbon::today())
+            ->where('updated_at', '<', Carbon::tomorrow())
+            ->get();
+
+        $voucher = [];
+        foreach ($day_voucher as $key => $each) {
+            if (0 === $key % 2) {
+                $each['voucher_count'] = Voucher::whereRaw("find_in_set(" . $each->id . ",related_voucher)")->count();
+                $each['voucher_debit'] = $each->debit;
+                $each['voucher_credit'] = $each->credit;
+                $each['voucher_balance'] = $each->debit > $each->credit ? $each->debit - $each->credit : $each->credit - $each->debit;
+                array_push($voucher, $each);
+            }
+        }
+        return response()->json([
+            'daybook' => $voucher,
+            'total' => count($voucher),
+        ]);
+    }
+
+    /**
+     * Get ledgers to book
+     */
+    public function book(Request $request, $id)
+    {
+        $related_vouchers = Voucher::whereRaw("find_in_set(" . $id . ",related_voucher)")
+            ->whereCompany($request->header('company'))
+            ->where('updated_at', '>', Carbon::today())
+            ->where('updated_at', '<', Carbon::tomorrow())
+            ->get();
+
+        //Extra's for vouchers collection
+        foreach ($related_vouchers as $each) {
+            $each['particulars'] = $each->account;
+            if ($each->invoice_id) {
+                $each['invoice'] = Invoice::with(['inventories'])->where('id', $each->invoice_id)->first();
+            }
+        }
+
+        return response()->json([
+            'vouchers' => $related_vouchers,
         ]);
     }
 }

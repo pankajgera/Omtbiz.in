@@ -5,8 +5,16 @@ export default {
     state.vouchers = vouchers
   },
 
+  [types.BOOTSTRAP_DAYBOOK] (state, daybook) {
+    state.daybook = daybook
+  },
+
   [types.SET_TOTAL_VOUCHERS] (state, totalVouchers) {
     state.totalVouchers = totalVouchers
+  },
+
+  [types.SET_TOTAL_DAYBOOK] (state, totalDaybook) {
+    state.totalDaybook = totalDaybook
   },
 
   [types.ADD_VOUCHER] (state, data) {

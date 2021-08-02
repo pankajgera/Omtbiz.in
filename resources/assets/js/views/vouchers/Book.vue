@@ -67,7 +67,7 @@
                 </template>
               </table-column>
               <table-column
-                :label="$t('ledgers.inventory_item_quantity')"
+                :label="$t('daybook.inventory_item_quantity')"
                 show="quantity"
               >
                 <template slot-scope="row">
@@ -96,7 +96,7 @@
               </span>
             </p>
             <hr />
-            <p class="row">
+            <p class="row" v-if="masterData">
               <span>Opening Balance:</span>
               <span class="ml-60">
                 {{
@@ -120,7 +120,7 @@
               </span>
             </p>
             <hr />
-            <p class="row">
+            <!-- <p class="row">
               <span class="mr-30">Current Total:</span>
               <span class="ml-60">
                 {{
@@ -136,9 +136,9 @@
                     : " ₹ 0.00"
                 }}
               </span>
-            </p>
+            </p> -->
             <hr />
-            <h6 class="row">
+            <!-- <h6 class="row">
               <span class="mr-10">Closing Balance:</span>
               <span class="ml-60">
                 {{
@@ -154,7 +154,7 @@
                     : " ₹ 0.00"
                 }}
               </span>
-            </h6>
+            </h6> -->
           </div>
         </div>
       </div>
@@ -221,9 +221,9 @@ export default {
     this.loadEditData();
   },
   methods: {
-    ...mapActions("ledger", ["fetchLedgerBook"]),
+    ...mapActions("voucher", ["fetchVoucherBook"]),
     async loadEditData() {
-      let response = await this.fetchLedgerBook(this.$route.params.id);
+      let response = await this.fetchVoucherBook(this.$route.params.id);
       this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
       this.masterData = response.data.account_master;
