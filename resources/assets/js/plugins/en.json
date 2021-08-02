@@ -1110,7 +1110,7 @@
         "unit": "Unit",
         "description": "Description",
         "added_on": "Added On",
-        "price": "Price",
+        "price": "Cost Price",
         "sale_price": "Sale Price",
         "date_of_creation": "Date Of Creation",
         "action": "Action",
