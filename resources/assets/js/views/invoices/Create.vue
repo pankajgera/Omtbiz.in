@@ -126,6 +126,7 @@
         <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
           <invoice-inventory
             v-for="(each, index) in inventoryBind"
+            ref="invoiceInventory"
             :key="each.name+index"
             :index="index"
             :inventory-data="each"
@@ -138,10 +139,10 @@
           />
         </draggable>
       </table>
-      <div class="add-item-action" @click="addInventory">
+      <button class="add-item-action add-invoice-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
-      </div>
+      </button>
 
       <div class="invoice-foot">
         <div>
@@ -259,6 +260,12 @@
 input.base-prefix-input:disabled {
     background: rgba(59, 59, 59, 0.3) !important;
     border-color: rgba(118, 118, 118, 0.3) !important;
+}
+.add-invoice-item{
+  border: 0px
+}
+.add-invoice-item:focus {
+  border: 1px solid salmon
 }
 </style>
 <script>
@@ -531,6 +538,10 @@ export default {
     },
     addInventory () {
       this.inventoryBind.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.$nextTick(() => {
+        this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()
+        this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
+      })
     },
     removeInventory (index) {
       this.inventoryBind.splice(index, 1)
@@ -541,6 +552,15 @@ export default {
     },
     updateInventory (data) {
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
+      this.$nextTick(() => {
+        this.$refs.invoiceInventory[data.index].$el.focus()
+        if (data.updatingInput === 'sale_price') {
+          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()
+        } else {
+          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
+        }
+      })
+
     },
     submitInvoiceData () {
       if (!this.checkValid()) {

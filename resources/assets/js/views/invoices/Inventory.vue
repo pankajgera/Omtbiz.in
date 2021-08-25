@@ -35,11 +35,14 @@
             </td>
             <td class="text-right">
               <base-input
+                ref="inventoryQuantity"
+                :id="'inventoryQuantity'+index"
+                :key="'inventoryQuantity'+index"
+                :name="'inventoryQuantity'+index"
                 v-model="inventory.quantity"
                 :invalid="$v.inventory.quantity.$error"
                 type="text"
                 small
-                @keyup="updateInventory"
                 @input="$v.inventory.quantity.$touch()"
               />
               <div v-if="$v.inventory.quantity.$error">
@@ -67,10 +70,13 @@
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
+                    ref="inventoryPrice"
+                    :id="'inventoryPrice'+index"
+                    :key="'inventoryPrice'+index"
+                    :name="'inventoryPrice'+index"
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.inventory.sale_price.$error, 'input-field': true}"
                     type="text"
-                    name="sale_price"
                   />
                   <div v-if="$v.inventory.sale_price.$error">
                     <span v-if="!$v.inventory.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
@@ -192,7 +198,8 @@ export default {
         precision: 2,
         masked: false
       },
-      isSelected: false
+      isSelected: false,
+      updatingInput: ''
     }
   },
   computed: {
@@ -202,8 +209,14 @@ export default {
     ...mapGetters('modal', [
       'modalActive'
     ]),
-    subtotal () {
-      return parseInt(this.inventory.sale_price) * this.inventory.quantity
+    subtotal: {
+      cache: false,
+      get: function () {
+        return parseInt(this.inventory.sale_price) * this.inventory.quantity
+      },
+      set: function (newValue) {
+        return parseInt(this.inventory.sale_price) * this.inventory.quantity
+      }
     },
     discount: {
       get: function () {
@@ -217,6 +230,7 @@ export default {
         }
 
         this.inventory.discount = newValue
+        this.updatingInput = 'discount'
       }
     },
     total () {
@@ -254,6 +268,7 @@ export default {
         } else {
           this.inventory.price = newValue
         }
+        this.updatingInput = 'price'
       }
     },
     sale_price: {
@@ -269,6 +284,7 @@ export default {
         } else {
           this.inventory.sale_price = newValue
         }
+        this.updatingInput = 'sale_price'
       }
     }
   },
@@ -353,7 +369,6 @@ export default {
       if (this.inventory.discount_type === 'fixed') {
         return
       }
-
       this.inventory.discount_val = this.inventory.discount
       this.inventory.discount_type = 'fixed'
     },
@@ -361,14 +376,13 @@ export default {
       if (this.inventory.discount_type === 'percentage') {
         return
       }
-
       this.inventory.discount_val = (this.subtotal * this.inventory.discount)
-
       this.inventory.discount_type = 'percentage'
     },
     updateInventory () {
       this.$emit('update', {
         'index': this.index,
+        'updatingInput': this.updatingInput,
         'inventory': {
           ...this.inventory,
           total: this.total,
@@ -379,6 +393,7 @@ export default {
           taxes: [...this.inventory.taxes]
         }
       })
+      this.updatingInput = ''
     },
     removeInventory () {
       this.$emit('remove', this.index)
@@ -402,7 +417,6 @@ export default {
           window.toastr['error'](err)
           return true
         }
-        console.log(err)
       })
     }
   }

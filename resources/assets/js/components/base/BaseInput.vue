@@ -4,6 +4,7 @@
     <input
       ref="baseInput"
       v-model="inputValue"
+      :id="id"
       :type="toggleType"
       :disabled="disabled"
       :readonly="readOnly"
@@ -32,6 +33,10 @@
 <script>
 export default {
   props: {
+    id: {
+      type: String,
+      default: ''
+    },
     name: {
       type: String,
       default: ''
