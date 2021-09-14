@@ -10929,7 +10929,7 @@ code,
   vertical-align: -0.125em;
 }
 .sidebar-left .active {
-  background-color: #F9FBFF;
+  background-color: #a2f2ff !important;
   position: relative;
 }
 .sidebar-left .active::after {
@@ -13518,34 +13518,34 @@ fieldset[disabled] .multiselect {
   }
 }
 .multiselect .multiselect__option--highlight {
-  background: #f54c4c;
+  background: #a2f2ff !important;
   color: #040405;
   font-weight: normal !important;
 }
 .multiselect .multiselect__option--highlight.multiselect__option--selected {
-  background: #EBF1FA;
+  background: #a2f2ff !important;
   color: #040405;
   font-size: 1rem;
   font-weight: normal !important;
 }
 .multiselect .multiselect__option--highlight.multiselect__option--selected::after {
-  background: #040405;
+  background: #a2f2ff !important;
   color: #fff;
 }
 .multiselect .multiselect__option--highlight::after {
-  background: #040405;
+  background: #a2f2ff !important;
   color: #fff;
 }
 .multiselect .multiselect__option--selected {
   font-weight: normal !important;
-  background: #EBF1FA;
+  background: #a2f2ff !important;
 }
 .multiselect .multiselect__tags-wrap .multiselect__tag {
-  background: #f54c4c;
+  background: #a2f2ff !important;
   color: #040405;
 }
 .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon:hover {
-  background: #f54c4c;
+  background: #a2f2ff !important;
 }
 .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon::after {
   color: #040405;
@@ -13633,7 +13633,7 @@ fieldset[disabled] .multiselect {
   border: none;
 }
 .customer-select .list .list-item:hover {
-  background: #F9FBFF;
+  background: #86a2d6;
   cursor: pointer;
 }
 
