@@ -454,40 +454,40 @@ fieldset[disabled] .multiselect {
 
 .multiselect {
     .multiselect__option--highlight {
-        background: #a2f2ff !important;
+        background: #1eaec5 !important;
         color: $ls-color-black;
         font-weight: normal !important;
 
         &.multiselect__option--selected {
-            background: #a2f2ff !important;
+            background: #1eaec5 !important;
             color: $ls-color-black;
             font-size: 1rem;
             font-weight: normal !important;
 
             &::after {
-                background: #a2f2ff !important;
+                background: #1eaec5 !important;
                 color: $white;
             }
         }
 
         &::after {
-            background: #a2f2ff !important;
+            background: #1eaec5 !important;
             color: $white;
         }
     }
 
     .multiselect__option--selected {
         font-weight: normal !important;
-        background: #a2f2ff !important;
+        background: #1eaec5 !important;
     }
 
     .multiselect__tags-wrap .multiselect__tag {
-        background: #a2f2ff !important;
+        background: #1eaec5 !important;
         color: $ls-color-black;
 
         .multiselect__tag-icon {
             &:hover {
-                background: #a2f2ff !important;
+                background: #1eaec5 !important;
             }
 
             &::after {
