@@ -47,6 +47,7 @@ class DispatchController extends Controller
     public function edit(Request $request, $id)
     {
         $dispatch = Dispatch::find($id);
+        $dispatch['invoice_id'] = explode(', ', $dispatch->invoice_id);
 
         return response()->json([
             'dispatch' => $dispatch,
@@ -65,7 +66,7 @@ class DispatchController extends Controller
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = new Dispatch();
             $dispatch->name = $request->name;
-            $dispatch->invoice_id = $request->invoice_id;
+            $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
             $dispatch->status = $request->status['name'];
@@ -97,7 +98,7 @@ class DispatchController extends Controller
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = Dispatch::find($id);
             $dispatch->name = $request->name;
-            $dispatch->invoice_id = $request->invoice_id;
+            $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
             $dispatch->status = $request->status[0]['name'];

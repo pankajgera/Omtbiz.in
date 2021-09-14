@@ -62,18 +62,21 @@
                     label="name"
                   />
               </div>
-              <div class="form-group" v-if="invoiceList.length">
+              <div class="form-group" v-if="invoiceList && invoiceList.length">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
+                  :multiple="true"
                   v-model="invoice"
                   :options="invoiceList"
                   :searchable="true"
                   :show-labels="false"
-                  :allow-empty="false"
+                  :allow-empty="true"
                   :disabled="isEdit"
-                  :placeholder="$t('invoices.select_invoice')"
                   :custom-label="invoiceWithAmount"
                   track-by="invoice_number"
+                  class="multi-select-item"
+                  @select="addInvoice"
+                  @remove="removeInvoice"
                 />
               </div>
 
@@ -113,13 +116,13 @@ export default {
       title: 'Add Dispatch',
       formData: {
         name: '',
-        invoice_id: '',
+        invoice_id: [],
         date_time: '',
         transport: '',
         status: {},
       },
-      invoice: null,
-      invoiceList: [],
+      invoice: [],
+      invoiceList: null,
       statusList: [
         {
           id: 1,
@@ -134,13 +137,6 @@ export default {
           name: 'Completed',
         }
       ]
-    }
-  },
-  watch: {
-    invoice (newValue) {
-      if (newValue && Object.keys(newValue)) {
-        this.formData.invoice_id = newValue.id
-      }
     }
   },
   computed: {
@@ -181,6 +177,19 @@ export default {
       'fetchDispatch',
       'updateDispatch'
     ]),
+    addInvoice (value) {
+      if (value) {
+        this.formData.invoice_id.push(value.id)
+      }
+    },
+    removeInvoice (value) {
+      console.log(value)
+      let index = this.formData.invoice_id.findIndex(each => each === value.id)
+      console.log(index, this.formData.invoice_id)
+      if (index) {
+        this.formData.invoice_id.splice(index, 1)
+      }
+    },
     invoiceWithAmount ({ invoice_number, due_amount }) {
       return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
     },
@@ -188,13 +197,17 @@ export default {
       let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
       this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)
-      this.invoice = this.invoiceList.filter(each => each.id === this.formData.invoice_id)[0]
     },
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
-        this.invoice = this.invoiceList.filter(each => each.id === this.formData.invoice_id)[0]
+        this.formData.invoice_id.map(i => {
+          this.invoice.push(this.invoiceList.find(j => j.id === parseInt(i)))
+        })
+        if (this.isEdit) {
+          this.loadEditData()
+        }
       }
     },
     async submitDispatch () {
