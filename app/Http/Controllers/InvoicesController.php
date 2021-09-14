@@ -211,8 +211,8 @@ class InvoicesController extends Controller
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->debtors['name'],
-                'debit' => $total_amount,
-                'credit' => 0,
+                'debit' => 0,
+                'credit' => $total_amount,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
@@ -225,8 +225,8 @@ class InvoicesController extends Controller
             $voucher_2 = Voucher::create([
                 'account_master_id' => $sale_account_id,
                 'account' => 'Sales',
-                'debit' => 0,
-                'credit' => $total_amount,
+                'debit' => $total_amount,
+                'credit' => 0,
                 'account_ledger_id' => $account_ledger->id,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
@@ -512,8 +512,8 @@ class InvoicesController extends Controller
                 'invoice_item_id' => $invoiceItem['id'],
                 'voucher_type' => 'Sales',
             ], [
-                'debit' => $amount,
-                'credit' => 0,
+                'debit' => 0,
+                'credit' => $amount,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
             ]);
@@ -526,8 +526,8 @@ class InvoicesController extends Controller
                 'invoice_item_id' => $invoiceItem['id'],
                 'voucher_type' => 'Sales',
             ], [
-                'debit' => 0,
-                'credit' => $amount,
+                'debit' => $amount,
+                'credit' => 0,
                 'date' => Carbon::now()->toDateTimeString(),
                 'related_voucher' => null,
                 'type' => 'Cr',
