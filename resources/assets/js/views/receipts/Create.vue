@@ -349,7 +349,7 @@ export default {
       'fetchReceipt'
     ]),
     invoiceWithAmount ({ invoice_number, due_amount }) {
-      return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
+      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
     },
     async loadData () {
       this.fetchCustomerInvoices()
@@ -383,8 +383,8 @@ export default {
     },
     async setReceiptAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)
-      this.formData.amount = parseFloat(data.data.invoice.due_amount/100).toFixed(2)
-      this.maxPayableAmount = parseFloat(data.data.invoice.due_amount/100).toFixed(2)
+      this.formData.amount = parseFloat(data.data.invoice.due_amount).toFixed(2)
+      this.maxPayableAmount = parseFloat(data.data.invoice.due_amount).toFixed(2)
     },
     async fetchCustomerInvoices () {
       let response = await axios.get(`/api/invoices/unpaid/`)
