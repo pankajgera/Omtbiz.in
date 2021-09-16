@@ -191,7 +191,7 @@ export default {
       }
     },
     invoiceWithAmount ({ invoice_number, due_amount }) {
-      return `${invoice_number} (₹ ${parseFloat(due_amount/100).toFixed(2)})`
+      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
     },
     async loadEditData () {
       let response = await this.editDispatch(this.$route.params.id)
