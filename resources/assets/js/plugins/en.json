@@ -274,6 +274,7 @@
         "debit": "Debit",
         "credit": "Credit",
         "balance": "Balance",
+        "closing_balance": "Closing Balance",
         "short_narration": "Short Narration",
         "particulars": "Particulars",
         "voucher_type": "Voucher Type",
