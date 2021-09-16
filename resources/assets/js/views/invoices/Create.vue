@@ -590,7 +590,7 @@ export default {
       this.isLoading = false
       setTimeout(() => {
         window.location.reload()
-      }, 3000)
+      }, 1000)
     },
     async showInvoicePopup (invoice_id) {
       swal({
