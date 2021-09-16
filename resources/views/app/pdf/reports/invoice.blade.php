@@ -291,6 +291,8 @@ function numberTowords($num)
                                 style="float:right; font-size: 13px;">{{ $invoice->invoice_date }}</span></p>
                         <p class="total-title">Invoice Number <span
                                 style="float:right; font-size: 13px;">{{ $invoice->invoice_number }}</span></p>
+                        <p class="total-title">Reference Number <span
+                            style="float:right; font-size: 13px;">{{ $invoice->reference_number }}</span></p>
                         <p class="total-title">Party Name <span
                                 style="float:right; font-size: 13px;">{{ $invoice->master->name }}</span></p>
                     </td>
