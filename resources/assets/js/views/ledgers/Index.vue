@@ -71,7 +71,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
+          <!-- <div class="col-sm-4">
             <label class="form-label"> {{ $tc('ledgers.credit') }} </label>
             <base-input
               v-model="filters.credit"
@@ -88,7 +88,7 @@
               name="debit"
               autocomplete="off"
             />
-          </div>
+          </div> -->
           <div class="col-sm-4">
             <label class="form-label"> {{ $tc('ledgers.balance') }} </label>
             <base-input
@@ -190,7 +190,7 @@
               </router-link>
           </template>
         </table-column>
-        <table-column
+        <!-- <table-column
           :label="$t('ledgers.credit')"
           show="credit"
         >
@@ -205,9 +205,9 @@
           <template slot-scope="row">
             ₹ {{ row.debit }}
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
-          :label="$t('ledgers.balance')"
+          :label="$t('ledgers.closing_balance')"
           show="balance"
         >
           <template slot-scope="row">
