@@ -21,29 +21,6 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-body">
-            <p class="row header-open">
-              <span>Opening Balance:</span>
-              <span class="ml-60">
-                {{
-                  masterData.type === "Dr" && masterData.opening_balance
-                    ? " ₹ " +
-                      parseFloat(masterData.opening_balance).toFixed(2) +
-                      " " +
-                      masterData.type
-                    : " ₹ 0.00"
-                }}
-              </span>
-              <span class="ml-60">
-                {{
-                  masterData.type === "Cr" && masterData.opening_balance
-                    ? " ₹ " +
-                      parseFloat(masterData.opening_balance).toFixed(2) +
-                      " " +
-                      masterData.type
-                    : " ₹ 0.00"
-                }}
-              </span>
-            </p>
             <table-component
               ref="table"
               :data="displayArray"
@@ -120,8 +97,31 @@
         </div>
         <div class="row">
           <div class="col-sm-12" style="background: #fff; position: fixed; bottom: 0; padding: 0; right: 0; height: 100px">
+            <p class="row" style="float: right; margin: 0 11% 0 0">
+              <span>Opening Balance:</span>
+              <span class="ml-60">
+                {{
+                  masterData.type === "Dr" && masterData.opening_balance
+                    ? " ₹ " +
+                      parseFloat(masterData.opening_balance).toFixed(2) +
+                      " " +
+                      masterData.type
+                    : " ₹ 0.00"
+                }}
+              </span>
+              <span class="ml-60">
+                {{
+                  masterData.type === "Cr" && masterData.opening_balance
+                    ? " ₹ " +
+                      parseFloat(masterData.opening_balance).toFixed(2) +
+                      " " +
+                      masterData.type
+                    : " ₹ 0.00"
+                }}
+              </span>
+            </p>
             <br/>
-            <p class="row" style="float: right; margin: 0 8% 0 0">
+            <p class="row" style="float: right; margin: 0 11% 0 0">
               <span class="mr-30">Current Total:</span>
               <span class="ml-60">
                 {{
@@ -140,7 +140,7 @@
             </p>
             <br/>
             <hr />
-            <h6 class="row" style="float: right; margin: 0 8% 0 0">
+            <h6 class="row" style="float: right; margin: 0 11% 0 0">
               <span class="mr-10">Closing Balance:</span>
               <span class="ml-60">
                 {{
@@ -177,33 +177,21 @@
     margin-right: 10px;
   }
   @media (min-width: 1500px) and (max-width: 2400px) {
-    .header-open {
-      margin-left: 65%
-    }
     .footer-total {
       margin-left: 50%;
     }
   }
   @media (max-width: 1499px) {
-    .header-open {
-      margin-left: 60%
-    }
     .footer-total {
       margin-left: 47%;
     }
   }
   @media (max-width: 992px) {
-    .header-open {
-      margin-left: 60%
-    }
     .footer-total {
       margin-left: 47%;
     }
   }
   @media (max-width: 749px) {
-    .header-open {
-      margin-left: 50%
-    }
     .footer-total {
       margin-left: 37%;
     }
