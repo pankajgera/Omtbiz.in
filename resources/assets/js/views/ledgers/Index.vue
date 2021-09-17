@@ -141,7 +141,7 @@
           </v-dropdown>
         </transition>
       </div>
-
+      <div style="margin-left: 60%;padding-top: 40px;text-transform: uppercase;">{{$t('ledgers.closing_balance')}}</div>
       <div class="custom-control custom-checkbox">
         <input
           id="select-all"
@@ -154,7 +154,6 @@
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
-
       <table-component
         ref="table"
         :data="fetchData"
@@ -190,30 +189,30 @@
               </router-link>
           </template>
         </table-column>
-        <!-- <table-column
+        <table-column
           :label="$t('ledgers.credit')"
           show="credit"
         >
-          <template slot-scope="row">
-            ₹ {{ row.credit }}
+          <template slot-scope="row" v-if="row.type === 'Cr'">
+            ₹ {{ row.balance }}
           </template>
         </table-column>
         <table-column
           :label="$t('ledgers.debit')"
           show="debit"
         >
-          <template slot-scope="row">
-            ₹ {{ row.debit }}
+          <template slot-scope="row" v-if="row.type === 'Dr'">
+            ₹ {{ row.balance }}
           </template>
-        </table-column> -->
-        <table-column
+        </table-column>
+        <!-- <table-column
           :label="$t('ledgers.closing_balance')"
           show="balance"
         >
           <template slot-scope="row">
             ₹ {{ row.balance }}
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :key="Math.random()"
           :sortable="false"

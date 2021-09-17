@@ -17,10 +17,33 @@
         </li>
       </ol>
     </div>
-    <div class="row">
+    <div class="row" style="margin-bottom: 80px">
       <div class="col-sm-12">
         <div class="card">
           <div class="card-body">
+            <p class="row header-open">
+              <span>Opening Balance:</span>
+              <span class="ml-60">
+                {{
+                  masterData.type === "Dr" && masterData.opening_balance
+                    ? " ₹ " +
+                      parseFloat(masterData.opening_balance).toFixed(2) +
+                      " " +
+                      masterData.type
+                    : " ₹ 0.00"
+                }}
+              </span>
+              <span class="ml-60">
+                {{
+                  masterData.type === "Cr" && masterData.opening_balance
+                    ? " ₹ " +
+                      parseFloat(masterData.opening_balance).toFixed(2) +
+                      " " +
+                      masterData.type
+                    : " ₹ 0.00"
+                }}
+              </span>
+            </p>
             <table-component
               ref="table"
               :data="displayArray"
@@ -87,42 +110,18 @@
                 </template>
               </table-column>
             </table-component>
-          </div>
-        </div>
-        <div class="row" style="float: right">
-          <div class="col-sm-12" style="width: 500px">
-            <p class="row">
+            <p class="row footer-total">
               <span class="mr-30">Total Quantity:</span>
               <span class="ml-60">
                 {{ totalQuantity }}
               </span>
             </p>
-            <hr />
-            <p class="row">
-              <span>Opening Balance:</span>
-              <span class="ml-60">
-                {{
-                  masterData.type === "Dr" && masterData.opening_balance
-                    ? " ₹ " +
-                      parseFloat(masterData.opening_balance).toFixed(2) +
-                      " " +
-                      masterData.type
-                    : " ₹ 0.00"
-                }}
-              </span>
-              <span class="ml-60">
-                {{
-                  masterData.type === "Cr" && masterData.opening_balance
-                    ? " ₹ " +
-                      parseFloat(masterData.opening_balance).toFixed(2) +
-                      " " +
-                      masterData.type
-                    : " ₹ 0.00"
-                }}
-              </span>
-            </p>
-            <hr />
-            <p class="row">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12" style="background: #fff; position: fixed; bottom: 0; padding: 0; right: 0; height: 100px">
+            <br/>
+            <p class="row" style="float: right; margin: 0 8% 0 0">
               <span class="mr-30">Current Total:</span>
               <span class="ml-60">
                 {{
@@ -139,8 +138,9 @@
                 }}
               </span>
             </p>
+            <br/>
             <hr />
-            <h6 class="row">
+            <h6 class="row" style="float: right; margin: 0 8% 0 0">
               <span class="mr-10">Closing Balance:</span>
               <span class="ml-60">
                 {{
@@ -164,26 +164,58 @@
   </div>
 </template>
 <style scoped>
-.my-grid-class {
-  height: 400px;
-}
-.ml-60 {
-  margin-left: 60px;
-}
-.mr-30 {
-  margin-right: 30px;
-}
-.mr-10 {
-  margin-right: 10px;
-}
+  .my-grid-class {
+    height: 400px;
+  }
+  .ml-60 {
+    margin-left: 60px;
+  }
+  .mr-30 {
+    margin-right: 30px;
+  }
+  .mr-10 {
+    margin-right: 10px;
+  }
+  @media (min-width: 1500px) and (max-width: 2400px) {
+    .header-open {
+      margin-left: 65%
+    }
+    .footer-total {
+      margin-left: 50%;
+    }
+  }
+  @media (max-width: 1499px) {
+    .header-open {
+      margin-left: 60%
+    }
+    .footer-total {
+      margin-left: 47%;
+    }
+  }
+  @media (max-width: 992px) {
+    .header-open {
+      margin-left: 60%
+    }
+    .footer-total {
+      margin-left: 47%;
+    }
+  }
+  @media (max-width: 749px) {
+    .header-open {
+      margin-left: 50%
+    }
+    .footer-total {
+      margin-left: 37%;
+    }
+  }
 </style>
 <style>
-.table.display-ledger {
-  background: #f4f4ff;
-  margin: 30px 0px;
-  padding: 30px;
-  top: 15px;
-}
+  .table.display-ledger {
+    background: #f4f4ff;
+    margin: 30px 0px;
+    padding: 30px;
+    top: 15px;
+  }
 </style>
 <script>
 import { validationMixin } from "vuelidate";

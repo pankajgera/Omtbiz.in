@@ -75,17 +75,68 @@ class AccountLedgersController extends Controller
         $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
         $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
         $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
-        $balance = $ledger->debit - $ledger->credit;
         $opening_balance = $ledger->accountMaster->opening_balance;
+        $calc_balance = $ledger->balance;
+        $calc_type = $ledger->type;
+        $calc_total = 0;
+        if ($vouchers_debit_sum > $vouchers_credit_sum) {
+            $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
+            $calc_type = 'Dr';
+        } else {
+            $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
+            $calc_type = 'Cr';
+        }
+        if ('Dr' === $ledger->accountMaster->type) {
+            if ('Dr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance = $calc_total - $opening_balance;
+                    $calc_type = 'Cr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Dr';
+                }
+            }
+        } else {
+            if ('Cr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance  = $calc_total - $opening_balance;
+                    $calc_type = 'Dr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Cr';
+                }
+            }
+        }
+        // if ($opening_balance > $balance) {
+        //     if ($ledger->type === 'Dr' && $ledger->accountMaster->type === 'Dr') {
+        //         $calc_balance = $opening_balance + $balance;
+        //         $calc_type = 'Dr';
+        //     } else if ($ledger->type === 'Cr' && $ledger->accountMaster->type === 'Cr') {
+        //         $calc_balance = $opening_balance + $balance;
+        //         $calc_type = 'Cr';
+        //     } else {
+        //         $calc_balance = $opening_balance - $balance;
+        //         $calc_type = 'Dr';
+        //     }
+        // } else if ($opening_balance > 0 ) {
+        //     if ($ledger->type === 'Dr' && $ledger->accountMaster->type === 'Dr') {
+        //         $calc_balance = $balance + $opening_balance;
+        //     } else {
+        //         $calc_balance = $balance - $opening_balance;
+        //     }
+        // } else {
+        //     $calc_balance = abs($balance);
+        // }
         $ledger->update([
-            'type' => $ledger->debit > $ledger->credit ? 'Dr' : 'Cr',
+            'type' => $calc_type,
             'credit' => $vouchers_credit_sum,
             'debit' => $vouchers_debit_sum,
-            'balance' => $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance)),
+            'balance' => $calc_balance,
         ]);
-        // if ($ledger->balance === $opening_balance) {
-        //     AccountMaster::updateOpeningBalance($ledger->accountMaster->id, $ledger->balance);
-        // }
 
         //Extra's for vouchers collection
         foreach ($related_vouchers as $each) {
