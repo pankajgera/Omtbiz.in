@@ -393,7 +393,7 @@ class InvoicesController extends Controller
         //$invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
         //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
 
-        $invoice = Invoice::find($id);
+        $invoice = Invoice::findOrFail($id);
         $oldAmount = $invoice->total;
 
         if ($oldAmount != $request->total) {
@@ -433,6 +433,30 @@ class InvoicesController extends Controller
         $invoice->save();
 
         $invoiceItems = $request->inventories;
+        $newAddedItems = array_filter($invoiceItems, function ($v, $k) {
+            return $k === 'invoice_id' && $v === null;
+        }, ARRAY_FILTER_USE_BOTH);
+        $inventory_id = null;
+        foreach ($newAddedItems as $each) {
+            $each['company_id'] = $request->header('company');
+            $inventory = $invoice->inventories()->create($each);
+            $inventory_id = $inventory['id'];
+            if (array_key_exists('taxes', $each) && $each['taxes']) {
+                foreach ($each['taxes'] as $tax) {
+                    $tax['company_id'] = $request->header('company');
+                    if (gettype($tax['amount']) !== "NULL") {
+                        $inventory->taxes()->create($tax);
+                    }
+                }
+            }
+
+            //Reset inventory quantity
+            $invent = Inventory::find($inventory['inventory_id']);
+            $quan = (int) ($inventory['quantity']);
+            $invent->update([
+                'quantity' => $invent->quantity - $quan,
+            ]);
+        }
         //Deleting old taxes and invoice_items
         $oldItems = $invoice->inventories->toArray();
         $oldTaxes = $invoice->taxes->toArray();
@@ -509,7 +533,7 @@ class InvoicesController extends Controller
                 'account_ledger_id' => $dr_account_ledger->id,
                 'type' => 'Dr',
                 'invoice_id' => $invoice->id,
-                'invoice_item_id' => $invoiceItem['id'],
+                'invoice_item_id' => $invoiceItem['id'] ?? $inventory_id,
                 'voucher_type' => 'Sales',
             ], [
                 'debit' => $amount,
@@ -523,7 +547,7 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
                 'account_ledger_id' => $account_ledger->id,
                 'invoice_id' => $invoice->id,
-                'invoice_item_id' => $invoiceItem['id'],
+                'invoice_item_id' => $invoiceItem['id'] ?? $inventory_id,
                 'voucher_type' => 'Sales',
             ], [
                 'debit' => 0,
