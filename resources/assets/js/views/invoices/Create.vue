@@ -639,9 +639,7 @@ export default {
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
           this.isLoading = false
-          setTimeout(() => {
-            window.location.reload()
-          }, 3000)
+          this.showInvoicePopup(res.data.invoice.id)
         }
 
         if (res.data.error === 'invalid_due_amount') {
