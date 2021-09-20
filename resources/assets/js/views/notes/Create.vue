@@ -12,7 +12,7 @@
       <div class="col-sm-8">
         <div class="card">
           <form action="" @submit.prevent="submitNote">
-            <div class="card-body">
+            <div class="card-body" ref="to_print" id="to_print">
               <div class="form-group">
                 <label class="control-label">{{ $t('notes.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -78,6 +78,7 @@
 
               <div class="form-group">
                 <base-button
+                  id="submit-note"
                   :loading="isLoading"
                   :disabled="isLoading"
                   icon="save"
@@ -90,12 +91,27 @@
               </div>
             </div>
           </form>
+          <button type="button" class="btn btn-lg btn-default print_no mt-2" @click="printNote">Print</button>
         </div>
       </div>
     </div>
   </div>
 </template>
-
+<style scoped>
+.base-text-area.text-area-field {
+    width: 100%;
+    padding: 8px 13px;
+    text-align: left;
+    background: #FFFFFF;
+    border: 1px solid #EBF1FA;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -178,6 +194,17 @@ export default {
         window.toastr['success'](response.data.success)
       }
     },
+    printNote() {
+        var prtContent = this.$refs.to_print;
+        printJS({
+          printable: 'to_print',
+          type: 'html',
+          ignoreElements: ['submit-note'],
+          scanStyles: true,
+          targetStyles: ['*'],
+          style: '.base-text-area.text-area-field, .base-input .input-field { margin-bottom: 10px; width: 100%; padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #000;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 500;font-size: 14px;line-height: 21px;}'
+        })
+    }
   }
 }
 </script>

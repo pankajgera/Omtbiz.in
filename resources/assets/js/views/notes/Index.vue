@@ -172,7 +172,13 @@
         <table-column
           :label="$t('notes.name')"
           show="name"
-        />
+        >
+          <template slot-scope="row">
+             <router-link :to="{path: `notes/${row.id}/edit`}" >
+                {{ row.name }}
+              </router-link>
+          </template>
+        </table-column>
         <table-column
           :label="$t('notes.design_no')"
           show="design_no"
