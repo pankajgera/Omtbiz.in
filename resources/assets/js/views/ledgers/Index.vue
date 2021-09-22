@@ -190,14 +190,6 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('ledgers.credit')"
-          show="credit"
-        >
-          <template slot-scope="row" v-if="row.type === 'Cr'">
-            ₹ {{ row.balance }}
-          </template>
-        </table-column>
-        <table-column
           :label="$t('ledgers.debit')"
           show="debit"
         >
@@ -205,6 +197,15 @@
             ₹ {{ row.balance }}
           </template>
         </table-column>
+        <table-column
+          :label="$t('ledgers.credit')"
+          show="credit"
+        >
+          <template slot-scope="row" v-if="row.type === 'Cr'">
+            ₹ {{ row.balance }}
+          </template>
+        </table-column>
+
         <!-- <table-column
           :label="$t('ledgers.closing_balance')"
           show="balance"
