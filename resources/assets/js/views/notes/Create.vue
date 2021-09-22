@@ -12,7 +12,7 @@
       <div class="col-sm-8">
         <div class="card">
           <form action="" @submit.prevent="submitNote">
-            <div class="card-body" ref="to_print" id="to_print">
+            <div class="card-body" id="to_print">
               <div class="form-group">
                 <label class="control-label">{{ $t('notes.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -195,7 +195,6 @@ export default {
       }
     },
     printNote() {
-        var prtContent = this.$refs.to_print;
         printJS({
           printable: 'to_print',
           type: 'html',

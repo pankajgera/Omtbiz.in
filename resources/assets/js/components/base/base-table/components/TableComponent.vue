@@ -16,7 +16,7 @@
       <table :class="fullTableClass">
         <caption
           v-if="showCaption"
-          class="table-component__table__caption"
+          class="table-component__table__caption hide-print"
           role="alert"
           aria-live="polite"
         >{{ ariaCaption }}</caption>
@@ -55,7 +55,13 @@
     <pagination v-if="pagination && !loading" :pagination="pagination" @pageChange="pageChange" />
   </div>
 </template>
-
+<style scoped>
+  @media print {
+    .hide-print {
+      display: none !important;
+    }
+  }
+</style>
 <script>
 import Column from '../classes/Column'
 import expiringStorage from '../expiring-storage'
