@@ -23,6 +23,19 @@
         </li>
       </ol>
       <div class="page-actions row">
+        <div class="col-xs-2 mr-2">
+          <base-button
+            v-show="totalNotes"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="printNote"
+          >
+            Print
+          </base-button>
+        </div>
         <div class="col-xs-2 mr-4">
           <base-button
             v-show="totalNotes || filtersApplied"
@@ -146,6 +159,7 @@
 
       <table-component
         ref="table"
+        id="to_print"
         :data="fetchData"
         :show-filter="false"
         table-class="table"
@@ -157,7 +171,7 @@
           cell-class="no-click"
         >
           <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox" id="no-print-check">
               <input
                 :id="row.id"
                 v-model="selectField"
@@ -197,29 +211,29 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-        <template slot-scope="row">
-          <span> {{ $t('notes.action') }} </span>
-          <v-dropdown>
-            <a slot="activator" href="#">
-              <dot-icon />
-            </a>
-            <v-dropdown-item>
+          <template slot-scope="row">
+            <span id="no-print-option"> {{ $t('notes.action') }} </span>
+            <v-dropdown>
+              <a slot="activator" href="#">
+                <dot-icon />
+              </a>
+              <v-dropdown-item>
 
-              <router-link :to="{path: `notes/${row.id}/edit`}" class="dropdown-item">
-                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.edit') }}
-              </router-link>
+                <router-link :to="{path: `notes/${row.id}/edit`}" class="dropdown-item">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                  {{ $t('general.edit') }}
+                </router-link>
 
-            </v-dropdown-item>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeNotes(row.id)">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </template>
-      </table-column>
+              </v-dropdown-item>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeNotes(row.id)">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </template>
+        </table-column>
       </table-component>
     </div>
   </div>
@@ -403,6 +417,16 @@ export default {
     },
     setIndex(index) {
       this.index = index
+    },
+    printNote() {
+        printJS({
+          printable: 'to_print',
+          type: 'html',
+          ignoreElements: ['no-print-check', 'no-print-option'],
+          scanStyles: true,
+          targetStyles: ['*'],
+          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 5px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+        })
     }
   }
 }
