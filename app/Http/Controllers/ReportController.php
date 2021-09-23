@@ -326,27 +326,53 @@ class ReportController extends Controller
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
         }
+
         $vouchers_debit_sum = $related_vouchers->sum('debit');
         $vouchers_credit_sum = $related_vouchers->sum('credit');
-        $balance = $ledger->debit > $ledger->credit ? $ledger->debit - $ledger->credit : $ledger->credit - $ledger->debit;
         $opening_balance = $ledger->accountMaster->opening_balance;
-        $calc_balance = $opening_balance > $balance ? $opening_balance - $balance : ($opening_balance > 0 ? $balance - $opening_balance : abs($balance));
+        $calc_balance = $ledger->balance;
+        $calc_type = $ledger->type;
+        $calc_total = 0;
         if ($vouchers_debit_sum > $vouchers_credit_sum) {
-            $ledger->update([
-                'type' => 'Dr',
-                'credit' => $vouchers_credit_sum,
-                'debit' => $vouchers_debit_sum,
-                'balance' => $calc_balance,
-            ]);
-        } elseif ($vouchers_debit_sum < $vouchers_credit_sum) {
-            $ledger->update([
-                'type' => 'Cr',
-                'credit' => $vouchers_credit_sum,
-                'debit' => $vouchers_debit_sum,
-                'balance' => $calc_balance,
-            ]);
+            $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
+            $calc_type = 'Dr';
+        } else {
+            $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
+            $calc_type = 'Cr';
         }
-        $ledgerType = $vouchers_debit_sum > $vouchers_credit_sum ? 'Dr' : 'Cr';
+        if ('Dr' === $ledger->accountMaster->type) {
+            if ('Dr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance = $calc_total - $opening_balance;
+                    $calc_type = 'Cr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Dr';
+                }
+            }
+        } else {
+            if ('Cr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance  = $calc_total - $opening_balance;
+                    $calc_type = 'Dr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Cr';
+                }
+            }
+        }
+
+        $ledger->update([
+            'type' => $calc_type,
+            'credit' => $vouchers_credit_sum,
+            'debit' => $vouchers_debit_sum,
+            'balance' => $calc_balance,
+        ]);
+
         $totalAmount = $ledger->balance;
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
@@ -369,7 +395,7 @@ class ReportController extends Controller
             ->get();
 
         view()->share([
-            'ledgerType' => $ledgerType,
+            'ledgerType' => $calc_type,
             'opening_balance' => $opening_balance,
             'ledger' => $ledger,
             'related_vouchers' => $related_vouchers,
