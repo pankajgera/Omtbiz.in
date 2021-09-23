@@ -97,9 +97,9 @@
         </div>
         <div class="row">
           <div class="col-sm-12" style="background: #fff; position: fixed; bottom: 0; padding: 0; right: 0; height: 100px">
-            <p class="row" style="float: right; margin: 0 11% 0 0">
-              <span>Opening Balance:</span>
-              <span class="ml-60">
+            <p class="row" style="float: right; margin: 0 5% 0 0; width: 33%">
+              <span class="col-sm-4">Opening Balance:</span>
+              <span class="col-sm-4">
                 {{
                   masterData.type === "Dr" && masterData.opening_balance
                     ? " ₹ " +
@@ -109,7 +109,7 @@
                     : " ₹ 0.00"
                 }}
               </span>
-              <span class="ml-60">
+              <span class="col-sm-4">
                 {{
                   masterData.type === "Cr" && masterData.opening_balance
                     ? " ₹ " +
@@ -121,16 +121,16 @@
               </span>
             </p>
             <br/>
-            <p class="row" style="float: right; margin: 0 11% 0 0">
-              <span class="mr-30">Current Total:</span>
-              <span class="ml-60">
+            <p class="row" style="float: right; margin: 0 5% 0 0; width: 33%">
+              <span class="col-sm-4">Current Total:</span>
+              <span class="col-sm-4">
                 {{
                   currentTotalDebit
                     ? " ₹ " + parseFloat(currentTotalDebit).toFixed(2) + " Dr"
                     : " ₹ 0.00"
                 }}
               </span>
-              <span class="ml-60">
+              <span class="col-sm-4">
                 {{
                   currentTotalCredit
                     ? " ₹ " + parseFloat(currentTotalCredit).toFixed(2) + " Cr"
@@ -140,16 +140,16 @@
             </p>
             <br/>
             <hr />
-            <h6 class="row" style="float: right; margin: 0 11% 0 0">
-              <span class="mr-10">Closing Balance:</span>
-              <span class="ml-60">
+            <h6 class="row" style="float: right; margin: 0 5% 0 0; width: 33%">
+              <span class="col-sm-4">Closing Balance:</span>
+              <span class="col-sm-4">
                 {{
                   ledgerData.type === "Dr" && ledgerData
                     ? " ₹ " + parseFloat(ledgerData.balance).toFixed(2) + " Dr"
                     : " ₹ 0.00"
                 }}
               </span>
-              <span class="ml-60">
+              <span class="col-sm-4">
                 {{
                   ledgerData.type === "Cr" && ledgerData
                     ? " ₹ " + parseFloat(ledgerData.balance).toFixed(2) + " Cr"
