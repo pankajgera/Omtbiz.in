@@ -122,7 +122,7 @@
             </p>
             <br/>
             <p class="row" style="float: right; margin: 0 11% 0 0">
-              <span class="mr-30">Current Total:</span>
+              <span>Current Total:</span>
               <span class="ml-60">
                 {{
                   currentTotalDebit
@@ -141,7 +141,7 @@
             <br/>
             <hr />
             <h6 class="row" style="float: right; margin: 0 11% 0 0">
-              <span class="mr-10">Closing Balance:</span>
+              <span>Closing Balance:</span>
               <span class="ml-60">
                 {{
                   ledgerData.type === "Dr" && ledgerData
