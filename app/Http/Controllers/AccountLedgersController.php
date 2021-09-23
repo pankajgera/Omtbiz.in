@@ -111,26 +111,7 @@ class AccountLedgersController extends Controller
                 }
             }
         }
-        // if ($opening_balance > $balance) {
-        //     if ($ledger->type === 'Dr' && $ledger->accountMaster->type === 'Dr') {
-        //         $calc_balance = $opening_balance + $balance;
-        //         $calc_type = 'Dr';
-        //     } else if ($ledger->type === 'Cr' && $ledger->accountMaster->type === 'Cr') {
-        //         $calc_balance = $opening_balance + $balance;
-        //         $calc_type = 'Cr';
-        //     } else {
-        //         $calc_balance = $opening_balance - $balance;
-        //         $calc_type = 'Dr';
-        //     }
-        // } else if ($opening_balance > 0 ) {
-        //     if ($ledger->type === 'Dr' && $ledger->accountMaster->type === 'Dr') {
-        //         $calc_balance = $balance + $opening_balance;
-        //     } else {
-        //         $calc_balance = $balance - $opening_balance;
-        //     }
-        // } else {
-        //     $calc_balance = abs($balance);
-        // }
+
         $ledger->update([
             'type' => $calc_type,
             'credit' => $vouchers_credit_sum,
