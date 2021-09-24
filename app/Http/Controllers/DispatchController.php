@@ -56,7 +56,7 @@ class DispatchController extends Controller
 
     /**
      * Create Dispatch.
-     *     *
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
@@ -73,6 +73,9 @@ class DispatchController extends Controller
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
 
+            Invoice::where('id', $request->invoice_id)->update([
+                'paid_status' => 'DISPATCHED',
+            ]);
             return response()->json([
                 'dispatch' => $dispatch,
             ]);
@@ -176,7 +179,7 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
-        $invoices = Invoice::where('paid_status', '<>', Invoice::STATUS_PAID)
+        $invoices = Invoice::where('paid_status', 'UNPAID')
             ->whereCompany($request->header('company'))
             ->get();
 
