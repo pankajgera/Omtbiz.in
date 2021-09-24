@@ -13,6 +13,23 @@
         <div class="card">
           <form action="" @submit.prevent="submitDispatch">
             <div class="card-body">
+              <div class="form-group" v-if="invoiceList && invoiceList.length">
+                <label class="form-label">{{ $t('receipts.invoice') }}</label>
+                <base-select
+                  :multiple="true"
+                  v-model="invoice"
+                  :options="invoiceList"
+                  :searchable="true"
+                  :show-labels="false"
+                  :allow-empty="true"
+                  :disabled="isEdit"
+                  :custom-label="invoiceWithAmount"
+                  track-by="invoice_number"
+                  class="multi-select-item"
+                  @select="addInvoice"
+                  @remove="removeInvoice"
+                />
+              </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -61,23 +78,6 @@
                     track-by="id"
                     label="name"
                   />
-              </div>
-              <div class="form-group" v-if="invoiceList && invoiceList.length">
-                <label class="form-label">{{ $t('receipts.invoice') }}</label>
-                <base-select
-                  :multiple="true"
-                  v-model="invoice"
-                  :options="invoiceList"
-                  :searchable="true"
-                  :show-labels="false"
-                  :allow-empty="true"
-                  :disabled="isEdit"
-                  :custom-label="invoiceWithAmount"
-                  track-by="invoice_number"
-                  class="multi-select-item"
-                  @select="addInvoice"
-                  @remove="removeInvoice"
-                />
               </div>
 
               <div class="form-group">
@@ -131,10 +131,6 @@ export default {
         {
           id: 2,
           name: 'Sent',
-        },
-        {
-          id: 3,
-          name: 'Completed',
         }
       ]
     }
