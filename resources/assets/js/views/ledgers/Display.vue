@@ -97,7 +97,7 @@
         </div>
         <div class="row">
           <div class="col-sm-12" style="background: #fff; position: fixed; bottom: 0; padding: 0; right: 0; height: 100px">
-            <p class="row" style="float: right; margin: 0 5% 0 0; width: 33%">
+            <p class="row p-footer">
               <span class="col-sm-4">Opening Balance:</span>
               <span class="col-sm-4">
                 {{
@@ -121,7 +121,7 @@
               </span>
             </p>
             <br/>
-            <p class="row" style="float: right; margin: 0 5% 0 0; width: 33%">
+            <p class="row p-footer">
               <span class="col-sm-4">Current Total:</span>
               <span class="col-sm-4">
                 {{
@@ -140,7 +140,7 @@
             </p>
             <br/>
             <hr />
-            <h6 class="row" style="float: right; margin: 0 5% 0 0; width: 33%">
+            <h6 class="row p-footer">
               <span class="col-sm-4">Closing Balance:</span>
               <span class="col-sm-4">
                 {{
@@ -175,6 +175,9 @@
   }
   .mr-10 {
     margin-right: 10px;
+  }
+  .p-footer {
+    float: right; margin: 0 2% 0 0; width: 33.33%;
   }
   @media (min-width: 1500px) and (max-width: 2400px) {
     .footer-total {
