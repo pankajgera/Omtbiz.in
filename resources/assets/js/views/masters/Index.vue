@@ -200,8 +200,11 @@ body > .expandable-image.expanded {
   width: 100px;
 }
 .table .table-component__table__body td {
-    padding: 5px 15px !important;
+    padding: 0px 15px !important;
     height: 20px !important;
+}
+.table-component__table {
+  border-spacing: 0 5px !important;
 }
 </style>
 <script>
