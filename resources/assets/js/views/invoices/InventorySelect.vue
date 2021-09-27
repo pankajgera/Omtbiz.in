@@ -9,6 +9,7 @@
       :initial-search="inventory.name"
       :invalid="invalid"
       :placeholder="$t('invoices.inventory.select_an_inventory')"
+      :do-not-select-default="true"
       label="name"
       track-by="id"
       class="multi-select-inventory remove-extra"
