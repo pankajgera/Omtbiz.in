@@ -134,7 +134,7 @@
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
             @remove="removeInventory"
-            @update="updateInventory"
+            @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
           />
         </draggable>
@@ -448,6 +448,9 @@ export default {
     this.loadData()
     this.fetchInitialInventory()
     window.hub.$on('newTax', this.onSelectTax)
+    this.updateInventoryBounce = _.debounce((data) => {
+      this.updateInventory(data);
+    }, 1100);
   },
   methods: {
     ...mapActions('modal', [
@@ -551,6 +554,11 @@ export default {
       })
     },
     updateInventory (data) {
+      if (data.inventory && !data.inventory.inventory_id) {
+        window.toastr['error']('Inventory item does not exist or not selected')
+        return false
+      }
+      console.log('data', data, this.$refs.invoiceInventory)
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
       this.$nextTick(() => {
         this.$refs.invoiceInventory[data.index].$el.focus()

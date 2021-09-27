@@ -9,7 +9,7 @@
     @blur="searchable ? false : deactivate()"
     @keydown.self.down.prevent="pointerForward()"
     @keydown.self.up.prevent="pointerBackward()"
-    @keypress.enter.tab.stop.self="addPointerElement($event)"
+    @keypress.enter.tab.stop.self="addPointerElement($event, doNotSelectDefault)"
     @keyup.esc="deactivate()"
   >
     <slot :toggle="toggle" name="caret">
@@ -65,7 +65,7 @@
         @keyup.esc="deactivate()"
         @keydown.down.prevent="pointerForward()"
         @keydown.up.prevent="pointerBackward()"
-        @keypress.enter.prevent.stop.self="addPointerElement($event)"
+        @keypress.enter.prevent.stop.self="addPointerElement($event, doNotSelectDefault)"
         @keydown.delete.stop="removeLastElement()"
       >
       <span v-if="!multiple">
@@ -300,6 +300,10 @@ export default {
       default: 0
     },
     invalid: {
+      type: Boolean,
+      default: false
+    },
+    doNotSelectDefault: {
       type: Boolean,
       default: false
     }
