@@ -9,6 +9,9 @@ use Log;
 
 class InventoryController extends Controller
 {
+    /**
+     * Inventory index
+     */
     public function index(Request $request)
     {
         try {
@@ -34,13 +37,16 @@ class InventoryController extends Controller
         }
     }
 
+    /**
+     * Edit inventory
+     */
     public function edit(Request $request, $id)
     {
         try {
             $inventory = Inventory::find($id);
 
             return response()->json([
-                'inventory' => $inventory,
+                'inventory' => [$inventory],
             ]);
         } catch (Exception $e) {
             return $e->getMessage();

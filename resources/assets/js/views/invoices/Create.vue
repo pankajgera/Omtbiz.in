@@ -134,7 +134,7 @@
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
             @remove="removeInventory"
-            @update="updateInventory"
+            @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
           />
         </draggable>
@@ -448,6 +448,10 @@ export default {
     this.loadData()
     this.fetchInitialInventory()
     window.hub.$on('newTax', this.onSelectTax)
+
+    this.updateInventoryBounce = _.debounce((data) => {
+      this.updateInventory(data);
+    }, 2000);
   },
   methods: {
     ...mapActions('modal', [

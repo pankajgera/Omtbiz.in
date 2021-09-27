@@ -41,7 +41,7 @@
                 :name="'inventoryQuantity'+index"
                 v-model="inventory.quantity"
                 :invalid="$v.inventory.quantity.$error"
-                type="text"
+                type="number"
                 small
                 @input="$v.inventory.quantity.$touch()"
               />
@@ -312,7 +312,7 @@ export default {
         },
         quantity: {
           required,
-          minValue: minValue(1),
+          minValue: minValue(0),
           maxLength: maxLength(20)
         },
         price: {

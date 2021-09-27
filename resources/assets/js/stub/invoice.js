@@ -4,7 +4,7 @@ export default {
   name: '',
   title: '',
   description: null,
-  quantity: 1,
+  quantity: null,
   price: 0,
   sale_price: 0,
   discount_type: 'fixed',
