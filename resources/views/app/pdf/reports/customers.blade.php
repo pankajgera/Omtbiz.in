@@ -196,7 +196,7 @@
                     </td>
                     <td class="tax-total-cell">
                         <p class="" style="float:right; padding:0px; margin: 0px">
-                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $ledger->accountMaster->type : '' !!}
+                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
                         </p>
                     </td>
                 </tr>
