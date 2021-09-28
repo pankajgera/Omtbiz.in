@@ -14,6 +14,7 @@
       track-by="id"
       class="multi-select-inventory remove-extra"
       @value="onTextChange"
+      @endlist="showEndList"
     >
       <div slot="afterList">
         <button type="button" class="list-add-button" @click="openInventoryModal">
@@ -111,6 +112,9 @@ export default {
     deselectInventory () {
       this.inventorySelected = null
       this.$emit('deselect')
+    },
+    showEndList(val) {
+      this.$emit('endlist', true)
     }
   }
 }
