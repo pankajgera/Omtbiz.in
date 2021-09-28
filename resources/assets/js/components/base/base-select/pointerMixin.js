@@ -61,22 +61,11 @@ export default {
         { 'multiselect__option--group-selected': this.wholeGroupSelected(group) }
       ] : 'multiselect__option--disabled'
     },
-    addPointerElement ($event, doNotSelectDefault) {
-      let count = 0
-      let key = 'Enter'
-      // console.log(count, doNotSelectDefault, $event)
-      // if (doNotSelectDefault) {
-      //   count = count + 1;
-      //   if (count > 0) {
-      //     console.log('IN')
-      //   }
-      // } else {
-      //   /* istanbul ignore else */
-      //   if (this.filteredOptions.length > 0) {
-      //     this.select(this.filteredOptions[this.pointer], key)
-      //   }
-      // }
-
+    addPointerElement ({key = 'Enter'}, doNotSelectDefault) {
+      if (doNotSelectDefault && this.pointer === 0) {
+        this.$emit('endlist', true)
+        return
+      }
       /* istanbul ignore else */
       if (this.filteredOptions.length > 0) {
         this.select(this.filteredOptions[this.pointer], key)

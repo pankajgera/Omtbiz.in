@@ -30,6 +30,7 @@
                   @deselect="deselectInventory"
                   @onDesriptionInput="$v.inventory.description.$touch()"
                   @onSelectInventory="isSelected = true"
+                  @endlist="showEndList"
                 />
               </div>
             </td>
@@ -418,6 +419,9 @@ export default {
           return true
         }
       })
+    },
+    showEndList(val) {
+      this.$emit('endlist', true)
     }
   }
 }

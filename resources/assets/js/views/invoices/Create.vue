@@ -136,13 +136,17 @@
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
+            @endlist="showEndList"
           />
         </draggable>
       </table>
-      <button class="add-item-action add-invoice-item" @click="addInventory">
+      <button v-if="!showAddNewInventory" class="add-item-action add-invoice-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>
+      <p v-if="showEndOfList">
+        'End of List'
+      </p>
 
       <div class="invoice-foot">
         <div>
@@ -327,6 +331,8 @@ export default {
       isEdit: false,
       url: null,
       siteURL: null,
+      showAddNewInventory: false,
+      showEndOfList: false,
     }
   },
   validations () {
@@ -558,7 +564,6 @@ export default {
         window.toastr['error']('Inventory item does not exist or not selected')
         return false
       }
-      console.log('data', data, this.$refs.invoiceInventory)
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
       this.$nextTick(() => {
         this.$refs.invoiceInventory[data.index].$el.focus()
@@ -713,6 +718,10 @@ export default {
         } else {
           this.newInvoice.reference_number = this.invoiceNumAttribute
         }
+    },
+    showEndList(val) {
+      this.showAddNewInventory = val;
+      this.showEndOfList = val;
     }
   }
 }

@@ -373,6 +373,9 @@ export default {
           ? this.isOpen
           : true)
       )
+    },
+    showEndList(val) {
+      this.$emit('endlist', val)
     }
   }
 }
