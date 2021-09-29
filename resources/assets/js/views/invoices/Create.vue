@@ -140,13 +140,13 @@
           />
         </draggable>
       </table>
-      <button v-if="!showAddNewInventory" class="add-item-action add-invoice-item" @click="addInventory">
+      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>
-      <p v-if="showEndOfList">
-        'End of List'
-      </p>
+      <button v-if="showEndOfList" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
+        End Of List
+      </button>
 
       <div class="invoice-foot">
         <div>
@@ -331,7 +331,7 @@ export default {
       isEdit: false,
       url: null,
       siteURL: null,
-      showAddNewInventory: false,
+      showAddNewInventory: true,
       showEndOfList: false,
     }
   },
@@ -720,8 +720,13 @@ export default {
         }
     },
     showEndList(val) {
-      this.showAddNewInventory = val;
+      this.showAddNewInventory = !val;
       this.showEndOfList = val;
+      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);
+    },
+    removeEndOfList() {
+      this.showEndOfList = false;
+      this.showAddNewInventory = true;
     }
   }
 }
