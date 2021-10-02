@@ -365,6 +365,7 @@ export default {
       this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
       this.inventory.inventory_id = inventory.id
       this.inventory.description = inventory.description
+      this.updateInventory()
     },
     selectFixed () {
       if (this.inventory.discount_type === 'fixed') {
