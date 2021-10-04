@@ -15,6 +15,7 @@ use App\Models\Inventory;
 use App\Models\Item;
 use App\Mail\invoicePdf;
 use App\Models\AccountLedger;
+use App\Models\Dispatch;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
@@ -144,6 +145,20 @@ class InvoicesController extends Controller
                 'notes' => $request->notes,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
+            ]);
+
+            //Added dispatch bill
+            $dispatch = new Dispatch();
+            $dispatch->name = $request->reference_number;
+            $dispatch->invoice_id = $invoice->id;
+            $dispatch->date_time = Carbon::now('UTC');
+            $dispatch->transport = null;
+            $dispatch->status = 'Draft';
+            $dispatch->company_id = $request->header('company');
+            $dispatch->save();
+
+            $invoice->update([
+                'paid_status' => 'DISPATCHED',
             ]);
 
             //Now for each inventory item create journal entry

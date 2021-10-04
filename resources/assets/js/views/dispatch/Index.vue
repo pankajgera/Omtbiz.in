@@ -146,7 +146,7 @@
 
       <table-component
         ref="table"
-        :data="inProgressData"
+        :data="toBeDispatchedData"
         :show-filter="false"
         table-class="table"
       >
@@ -249,7 +249,7 @@
 
       <table-component
         ref="table"
-        :data="completedData"
+        :data="dipatchedCompletedData"
         :show-filter="false"
         table-class="table"
       >
@@ -400,7 +400,7 @@ export default {
   },
   methods: {
     ...mapActions('dispatch', [
-      'fetchDispatch',
+      'dipatchedData',
       'selectAllDispatch',
       'selectDispatch',
       'deleteDispatch',
@@ -410,7 +410,7 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
-    async inProgressData ({ page, filter, sort }) {
+    async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
         status: this.filters.status !== null ? this.filters.status : '',
@@ -422,7 +422,7 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchDispatch(data)
+      let response = await this.dipatchedData(data)
       this.isRequestOngoing = false
 
       return {
@@ -433,7 +433,7 @@ export default {
         }
       }
     },
-    async completedData ({ page, filter, sort }) {
+    async dipatchedCompletedData ({ page, filter, sort }) {
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
         status: this.filters.status !== null ? this.filters.status : '',
@@ -445,7 +445,7 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchDispatch(data)
+      let response = await this.dipatchedData(data)
       this.isRequestOngoing = false
 
       return {
