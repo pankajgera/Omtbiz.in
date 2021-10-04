@@ -15,7 +15,7 @@ class DispatchController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 20;
 
-        $dispatch_inprogress = Dispatch::where('status', '!=', 'Completed')->applyFilters($request->only([
+        $dispatch_inprogress = Dispatch::where('status', 'Draft')->applyFilters($request->only([
             'name',
             'date_time',
             'transport',

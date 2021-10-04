@@ -170,7 +170,7 @@ export default {
     ...mapActions('dispatch', [
       'addDispatch',
       'editDispatch',
-      'fetchDispatch',
+      'dipatchedData',
       'updateDispatch'
     ]),
     addInvoice (value) {
