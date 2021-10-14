@@ -12091,7 +12091,7 @@ code,
 .table thead th {
   border: 0;
   position: relative;
-  top: 20px;
+  top: 15px;
 }
 .table .table-component__table__body {
   position: relative;
@@ -12303,7 +12303,7 @@ table.full-width {
 .selectall {
   position: absolute;
   cursor: pointer;
-  top: 35px;
+  top: 25px;
   left: 35px;
   z-index: 10;
 }

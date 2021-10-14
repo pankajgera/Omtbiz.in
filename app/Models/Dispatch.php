@@ -62,10 +62,35 @@ class Dispatch extends Model
         }
     }
 
+    /**
+     * Delete selected dispatch item
+     *
+     * @param Dispatch $id
+     * @return bool
+     */
     public static function deleteDispatch($id)
     {
         $dispatch = Dispatch::find($id);
         $dispatch->delete();
+        return true;
+    }
+
+    /**
+     * Move dispatch to draft or completed
+     *
+     * @param Dispatch $id
+     * @return bool
+     */
+    public static function moveDispatch($id)
+    {
+        $dispatch = Dispatch::find($id);
+        $status = 'Completed';
+        if ('Completed' === $dispatch->status) {
+            $status = 'Draft';
+        }
+        $dispatch->update([
+            'status' => $status
+        ]);
         return true;
     }
 }

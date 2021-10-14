@@ -116,11 +116,18 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
+        <h4>To Be Dispatch</h4>
         <transition name="fade">
-          <v-dropdown v-if="selectedDispatch.length" :show-arrow="false">
+          <v-dropdown v-if="selectedToBeDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="multipleDispatch('draft')">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                {{ $t('general.dispatch') }}
+              </div>
+            </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleDispatch">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -133,19 +140,19 @@
 
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
-          v-model="selectAllFieldStatus"
+          id="select-to-be-all"
+          v-model="selectAllToBeFieldStatus"
           type="checkbox"
           class="custom-control-input"
-          @change="selectAllDispatch"
-        >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
+          @change="selectAllToBeDispatch"
+        />
+        <label v-show="!isRequestOngoing" for="select-to-be-all" class="custom-control-label selectall">
+          <!-- <span class="select-to-be-all-label">{{ $t('general.select_all') }} </span> -->
         </label>
       </div>
 
       <table-component
-        ref="table"
+        ref="toBeTableDispatch"
         :data="toBeDispatchedData"
         :show-filter="false"
         table-class="table"
@@ -160,7 +167,7 @@
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
-                v-model="selectField"
+                v-model="selectToBeField"
                 :value="row.id"
                 type="checkbox"
                 class="custom-control-input"
@@ -219,11 +226,18 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
+        <h4>Dispatched</h4>
         <transition name="fade">
           <v-dropdown v-if="selectedDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="multipleDispatch('sent')">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                {{ $t('general.dispatch') }}
+              </div>
+            </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleDispatch">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -248,7 +262,7 @@
       </div>
 
       <table-component
-        ref="table"
+        ref="tableDispatch"
         :data="dipatchedCompletedData"
         :show-filter="false"
         table-class="table"
@@ -360,9 +374,12 @@ export default {
   computed: {
     ...mapGetters('dispatch', [
       'dispatch',
+      'toBeDispatch',
       'selectedDispatch',
+      'selectedToBeDispatch',
       'totalDispatch',
-      'selectAllField'
+      'selectAllField',
+      'selectAllToBeField'
     ]),
     showEmptyScreen () {
       return !this.totalDispatch && !this.isRequestOngoing && !this.filtersApplied
@@ -378,12 +395,28 @@ export default {
         this.selectDispatch(val)
       }
     },
+    selectToBeField: {
+      get: function () {
+        return this.selectedToBeDispatch
+      },
+      set: function (val) {
+        this.selectToBeDispatch(val)
+      }
+    },
     selectAllFieldStatus: {
       get: function () {
         return this.selectAllField
       },
       set: function (val) {
         this.setSelectAllState(val)
+      }
+    },
+    selectAllToBeFieldStatus: {
+      get: function () {
+        return this.selectAllToBeField
+      },
+      set: function (val) {
+        this.setSelectAllToBeState(val)
       }
     }
   },
@@ -398,17 +431,28 @@ export default {
       this.selectAllDispatch()
     }
   },
+  destroyedToBe () {
+    if (this.selectAllToBeField) {
+      this.selectAllToBeDispatch()
+    }
+  },
   methods: {
     ...mapActions('dispatch', [
       'dipatchedData',
       'selectAllDispatch',
+      'selectAllToBeDispatch',
       'selectDispatch',
+      'selectToBeDispatch',
       'deleteDispatch',
       'deleteMultipleDispatch',
-      'setSelectAllState'
+      'setSelectAllState',
+      'setSelectAllToBeState',
+      'moveMultipleDispatch',
+      'moveMultipleToBeDispatch',
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      this.$refs.tableDispatch.refresh()
+      this.$refs.toBeTableDispatch.refresh()
     },
     async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
@@ -493,7 +537,7 @@ export default {
           let res = await this.deleteDispatch(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 1))
-            this.$refs.table.refresh()
+            this.$refs.tableDispatch.refresh()
             return true
           }
 
@@ -514,7 +558,30 @@ export default {
           let res = await this.deleteMultipleDispatch()
           if (res.data.success) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 2))
-            this.$refs.table.refresh()
+            this.$refs.toBeTableDispatch.refresh()
+          } else if (res.data.error) {
+            window.toastr['error'](res.data.message)
+          }
+        }
+      })
+    },
+    async multipleDispatch (type) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$tc('dispatch.confirm_dispatch', 2),
+        icon: '/assets/icon/paper-plane-solid.svg',
+        buttons: true,
+        dangerMode: false
+      }).then(async (willSend) => {
+        if (willSend) {
+          let res = type === 'draft' ? await this.moveMultipleToBeDispatch() : await this.moveMultipleDispatch()
+          if (res.data.success) {
+            window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+            if (type === 'draft') {
+              this.$refs.toBeTableDispatch.refresh()
+            } else {
+              this.$refs.tableDispatch.refresh()
+            }
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }

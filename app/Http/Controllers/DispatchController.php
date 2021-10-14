@@ -169,6 +169,34 @@ class DispatchController extends Controller
         ]);
     }
 
+    /**
+     * Delete a list of existing Dispatch.
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function multiple(Request $request)
+    {
+        $dispatch = [];
+        foreach ($request->id as $id) {
+            $dispatch = Dispatch::moveDispatch($id);
+            if (!$dispatch) {
+                array_push($dispatch, $id);
+            }
+        }
+
+        if (empty($dispatch)) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+
+        return response()->json([
+            'dispatch' => $dispatch,
+        ]);
+    }
+
 
     /**
      * Retrive a specified user's unpaid invoices from storage.

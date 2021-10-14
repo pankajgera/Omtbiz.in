@@ -5,9 +5,12 @@ import * as getters from './getters'
 const initialState = {
   currentDispatch: null,
   dispatch: [],
+  toBeDispatch: [],
   totalDispatch: 0,
   selectAllField: false,
-  selectedDispatch: []
+  selectAllToBeField: false,
+  selectedDispatch: [],
+  selectedToBeDispatch: [],
 }
 
 export default {

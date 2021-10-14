@@ -11,9 +11,12 @@ export default {
         state.currentDispatch = dispatch
     },
 
-    // [types.BOOTSTRAP_DISPATCH](state, dispatch) {
-    //     state.dispatch = dispatch
-    // },
+    [types.BOOTSTRAP_DISPATCH](state, dispatch) {
+        state.dispatch = dispatch
+    },
+    [types.BOOTSTRAP_TO_BE_DISPATCH](state, dispatch) {
+        state.toBeDispatch = dispatch
+    },
     [types.SET_TOTAL_DISPATCH](state, totalDispatch) {
         state.totalDispatch = totalDispatch
     },
@@ -28,6 +31,8 @@ export default {
         let index = state.dispatch.findIndex(dispatch => dispatch.id === id)
         state.dispatch.splice(index, 1)
     },
+
+    //Dispatched
     [types.DELETE_MULTIPLE_DISPATCH](state, selectedDispatch) {
         selectedDispatch.forEach((dispatch) => {
             let index = state.dispatch.findIndex(_cust => _cust.id === dispatch.id)
@@ -43,5 +48,24 @@ export default {
     },
     [types.SET_SELECT_ALL_STATE](state, data) {
         state.selectAllField = data
-    }
+    },
+
+    //To Be Dispatched
+    [types.DELETE_MULTIPLE_TO_BE_DISPATCH](state, selectedToBEDispatch) {
+        selectedToBEDispatch.forEach((dispatch) => {
+            let index = state.toBeDispatch.findIndex(_cust => _cust.id === dispatch.id)
+            state.toBeDispatch.splice(index, 1)
+        })
+        state.selectedDispatch = []
+    },
+
+    [types.SET_SELECTED_TO_BE_DISPATCH](state, data) {
+      state.selectedToBeDispatch = data
+    },
+    [types.RESET_SELECTED_TO_BE_DISPATCH](state, data) {
+        state.selectedToBeDispatch = null
+    },
+    [types.SET_TO_BE_SELECT_ALL_STATE](state, data) {
+        state.selectAllToBeField = data
+    },
 }
