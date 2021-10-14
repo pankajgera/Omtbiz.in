@@ -80,6 +80,10 @@ export const deleteMultipleNotes = ({ commit, dispatch, state }, id) => {
     })
 }
 
+export const setSelectAllState = ({ commit, dispatch, state }, data) => {
+  commit(types.SET_SELECT_ALL_STATE, data)
+}
+
 export const selectAllNotes = ({ commit, dispatch, state }) => {
     if (state.selectedNotes.length === state.notes.length) {
         commit(types.SET_SELECTED_NOTES, [])

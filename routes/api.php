@@ -516,6 +516,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'DispatchController@delete'
     ]);
 
+    Route::post('/dispatch/multiple', [
+        'as' => 'dispatch.multiple',
+        'uses' => 'DispatchController@multiple'
+    ]);
+
     Route::post('/dispatch/{id}/update', [
         'as' => 'dispatch.update',
         'uses' => 'DispatchController@updateDispatch'

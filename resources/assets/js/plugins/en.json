@@ -28,6 +28,8 @@
         "download_pdf": "Download PDF",
         "save": "Save",
         "daybook": "Day Book",
+        "dispatch": "Dispatch",
+        "undispatch": "Undispatch",
         "cancel": "Cancel",
         "update": "Update",
         "download": "Download",
@@ -1087,6 +1089,7 @@
         "date_time": "Date",
         "update_dispatch": "Update dispatch",
         "dispatch": "Dispatch",
+        "confirm_dispatch": "Dispatch all selected items",
         "add_new_dispatch": "Add New dispatch",
         "no_dispatch": "No dispatch yet!",
         "list_of_dispatch": "This section will contain the list of dispatch.",
@@ -1099,7 +1102,8 @@
         "confirm_delete": "You will not be able to recover this dispatch | You will not be able to recover these dispatch",
         "created_message": "dispatch created successfully",
         "updated_message": "dispatch updated successfully",
-        "deleted_message": "dispatch deleted successfully"
+        "deleted_message": "dispatch deleted successfully",
+        "multiple_dispatch_message": "Selected dispatch moved"
     },
     "inventory": {
         "add_inventory": "Add Inventory",
