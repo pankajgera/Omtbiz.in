@@ -1090,6 +1090,7 @@
         "update_dispatch": "Update dispatch",
         "dispatch": "Dispatch",
         "confirm_dispatch": "Dispatch all selected items",
+        "confirm_to_be_dispatch": "Undispatch all selected items",
         "add_new_dispatch": "Add New dispatch",
         "no_dispatch": "No dispatch yet!",
         "list_of_dispatch": "This section will contain the list of dispatch.",
