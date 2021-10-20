@@ -540,6 +540,12 @@ const routes = [
                 component: DispatchCreate,
                 meta: ['admin']
             },
+            {
+                path: 'dispatch/:id/to-be-edit',
+                name: 'dispatch.tobeedit',
+                component: DispatchCreate,
+                meta: ['admin']
+            },
 
              // Inventroy
             {

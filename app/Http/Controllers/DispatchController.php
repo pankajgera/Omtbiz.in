@@ -44,6 +44,12 @@ class DispatchController extends Controller
         ]);
     }
 
+    /**
+     * Edit Dispatch
+     *
+     * @param Request $request
+     * @return void
+     */
     public function edit(Request $request, $id)
     {
         $dispatch = Dispatch::find($id);
@@ -51,6 +57,27 @@ class DispatchController extends Controller
 
         return response()->json([
             'dispatch' => $dispatch,
+        ]);
+    }
+
+    /**
+     * Edit To Be Dispatch
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function tobeEdit(Request $request)
+    {
+        $to_be_dispatch_ids = array_unique(explode(',', $request->getContent()));
+        $tobeDispatch = [];
+        foreach($to_be_dispatch_ids as $id) {
+            $dispatch = Dispatch::find($id);
+            $dispatch['invoice_id'] = explode(', ', $dispatch->invoice_id);
+            array_push($tobeDispatch, $dispatch);
+        }
+
+        return response()->json([
+            'dispatch' => $tobeDispatch,
         ]);
     }
 

@@ -235,7 +235,7 @@
             <v-dropdown-item>
               <div class="dropdown-item" @click="multipleDispatch('sent')">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.dispatch') }}
+                {{ $t('general.undispatch') }}
               </div>
             </v-dropdown-item>
             <v-dropdown-item>
@@ -566,9 +566,13 @@ export default {
       })
     },
     async multipleDispatch (type) {
+      let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);
+      if (type === 'draft') {
+        modal_text = this.$tc('dispatch.confirm_dispatch', 2);
+      }
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('dispatch.confirm_dispatch', 2),
+        text: modal_text,
         icon: '/assets/icon/paper-plane-solid.svg',
         buttons: true,
         dangerMode: false
