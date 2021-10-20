@@ -132,7 +132,8 @@ export default {
           id: 2,
           name: 'Sent',
         }
-      ]
+      ],
+      isToBeDispatch: this.$store.state.dispatch.selectedToBeDispatch
     }
   },
   computed: {
@@ -148,6 +149,9 @@ export default {
   },
   created () {
     this.fetchInvoices()
+    if (this.isToBeDispatch.length) {
+      this.loadIsToBeDispatch()
+    }
     if (this.isEdit) {
       this.loadEditData()
     }
@@ -170,6 +174,7 @@ export default {
     ...mapActions('dispatch', [
       'addDispatch',
       'editDispatch',
+      'editToBeDispatch',
       'dipatchedData',
       'updateDispatch'
     ]),
@@ -193,6 +198,10 @@ export default {
       let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
       this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)
+    },
+    async loadIsToBeDispatch() {
+      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())
+      console.log('sas', response)
     },
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)

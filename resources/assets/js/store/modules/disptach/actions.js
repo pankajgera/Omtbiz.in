@@ -35,6 +35,16 @@ export const editDispatch = ({ commit, dispatch }, id) => {
     })
 }
 
+export const editToBeDispatch = ({ commit, dispatch }, data) => {
+  return new Promise((resolve, reject) => {
+      window.axios.post(`/api/dispatch/to-be-edit`, data).then((response) => {
+          resolve(response)
+      }).catch((err) => {
+          reject(err)
+      })
+  })
+}
+
 export const addDispatch = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
         window.axios.post('/api/dispatch', data).then((response) => {
