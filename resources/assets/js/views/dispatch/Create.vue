@@ -120,9 +120,11 @@ export default {
         date_time: '',
         transport: '',
         status: {},
+        all_selected_dispatch: []
       },
       invoice: [],
       invoiceList: null,
+      assignToBeDispatch: false,
       statusList: [
         {
           id: 1,
@@ -138,7 +140,7 @@ export default {
   },
   computed: {
     isEdit () {
-      if (this.$route.name === 'dispatch.edit') {
+      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {
         return true
       }
       return false
@@ -149,12 +151,6 @@ export default {
   },
   created () {
     this.fetchInvoices()
-    if (this.isToBeDispatch.length) {
-      this.loadIsToBeDispatch()
-    }
-    if (this.isEdit) {
-      this.loadEditData()
-    }
   },
   validations: {
     formData: {
@@ -176,7 +172,8 @@ export default {
       'editDispatch',
       'editToBeDispatch',
       'dipatchedData',
-      'updateDispatch'
+      'updateDispatch',
+      'updateToBeDispatch'
     ]),
     addInvoice (value) {
       if (value) {
@@ -184,9 +181,7 @@ export default {
       }
     },
     removeInvoice (value) {
-      console.log(value)
       let index = this.formData.invoice_id.findIndex(each => each === value.id)
-      console.log(index, this.formData.invoice_id)
       if (index) {
         this.formData.invoice_id.splice(index, 1)
       }
@@ -194,24 +189,39 @@ export default {
     invoiceWithAmount ({ invoice_number, due_amount }) {
       return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
     },
+    loadInvoice() {
+      this.invoice = []
+      this.formData.invoice_id.map(i => {
+        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));
+        this.invoice.push(findFromList)
+      })
+    },
     async loadEditData () {
       let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
-      this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)
+      this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)[0]
+      this.loadInvoice()
     },
     async loadIsToBeDispatch() {
       let response = await this.editToBeDispatch(this.isToBeDispatch.toString())
-      console.log('sas', response)
+      this.formData = response.data.dispatch[0]
+      let invoiceId = []
+      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))
+      this.formData.invoice_id = invoiceId
+      this.loadInvoice()
+      this.assignToBeDispatch = true
+      this.formData['all_selected_dispatch'] = [];
+      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))
     },
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
-        this.formData.invoice_id.map(i => {
-          this.invoice.push(this.invoiceList.find(j => j.id === parseInt(i)))
-        })
         if (this.isEdit) {
           this.loadEditData()
+        }
+        if (this.isToBeDispatch.length) {
+          this.loadIsToBeDispatch()
         }
       }
     },
@@ -221,38 +231,32 @@ export default {
         return false
       }
 
-      if (this.isEdit) {
-        try {
-          this.isLoading = true
-          let response = await this.updateDispatch(this.formData)
-          if (response.data) {
-            this.isLoading = false
-            window.toastr['success'](this.$tc('dispatch.updated_message'))
-            this.$router.push('/dispatch')
-            return true
+      try {
+        this.isLoading = true
+        let response = null;
+        if (this.isEdit) {
+          if (this.assignToBeDispatch) {
+            response = await this.updateToBeDispatch(this.formData)
+          } else {
+            response = await this.updateDispatch(this.formData)
           }
-        } catch (err) {
-          if (err) {
-            this.isLoading = false
-            window.toastr['error'](err)
-          }
+        } else {
+          response = await this.addDispatch(this.formData)
         }
-      } else {
-        try {
-          this.isLoading = true
-          let response = await this.addDispatch(this.formData)
-
-          if (response.data) {
+        if (response.data) {
+          this.isLoading = false
+          if (this.isEdit) {
+            window.toastr['success'](this.$tc('dispatch.updated_message'))
+          } else {
             window.toastr['success'](this.$tc('dispatch.created_message'))
-            this.$router.push('/dispatch')
-            this.isLoading = false
-            return true
           }
-        } catch (err) {
-          if (err) {
-            this.isLoading = false
-            window.toastr['error'](err)
-          }
+          this.$router.push('/dispatch')
+          return true
+        }
+      } catch (err) {
+        if (err) {
+          this.isLoading = false
+          window.toastr['error'](err)
         }
       }
     },

@@ -327,7 +327,7 @@ class InvoicesController extends Controller
                 'invoice' => $invoice
             ]);
         } catch (Exception $e) {
-            Log::error('Error while storing invoice ', [$e]);
+            Log::error('Error while storing invoice ', [$e->getMessage()]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);

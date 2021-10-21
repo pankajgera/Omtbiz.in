@@ -100,14 +100,17 @@ class DispatchController extends Controller
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
 
-            Invoice::where('id', $request->invoice_id)->update([
-                'paid_status' => 'DISPATCHED',
-            ]);
+            $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+            foreach($invoices as $each) {
+                $each->update([
+                    'paid_status' => 'DISPATCHED',
+                ]);
+            }
             return response()->json([
                 'dispatch' => $dispatch,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving dispatch', [$e]);
+            Log::error('Error while saving dispatch', [$e->getMessage()]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);
@@ -131,12 +134,47 @@ class DispatchController extends Controller
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
-            $dispatch->status = $request->status[0]['name'];
+            $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
 
             return response()->json([
                 'dispatch' => $dispatch,
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while updating dispatch', [$e->getMessage()]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    /**
+     * Update an existing To Be Dispatch.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateToBeDispatch(Request $request)
+    {
+        $all_selected_dispatch = Dispatch::whereIn('id', $request->all_selected_dispatch)->get();
+        try {
+            foreach($all_selected_dispatch as $each) {
+                $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date_time);
+                $date->setTimeZone('Asia/Kolkata');
+                \Log::info('sa', [$each->id]);
+                $each->update([
+                    'name' => $request->name,
+                    'invoice_id' => implode(', ', $request->invoice_id),
+                    'date_time' => $date,
+                    'transport' => $request->transport,
+                    'status' => $request->status['name'],
+                ]);
+            }
+
+            return response()->json([
+                'dispatch' => $all_selected_dispatch,
             ]);
         } catch (Exception $e) {
             Log::error('Error while updating dispatch', [$e->getMessage()]);
@@ -234,7 +272,7 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
-        $invoices = Invoice::where('paid_status', 'UNPAID')
+        $invoices = Invoice::where('status', '!=', 'COMPLETED')
             ->whereCompany($request->header('company'))
             ->get();
 

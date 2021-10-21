@@ -526,6 +526,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'DispatchController@updateDispatch'
     ]);
 
+    Route::post('/dispatch/update-to-be', [
+        'as' => 'dispatch.updatetobe',
+        'uses' => 'DispatchController@updateToBeDispatch'
+    ]);
+
     Route::post('/dispatch/to-be-edit', [
         'as' => 'dispatch.tobeedit',
         'uses' => 'DispatchController@tobeEdit'
