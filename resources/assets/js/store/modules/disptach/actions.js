@@ -70,6 +70,20 @@ export const updateDispatch = ({ commit, dispatch, state }, data) => {
     })
 }
 
+export const updateToBeDispatch = ({ commit, dispatch, state }, data) => {
+  return new Promise((resolve, reject) => {
+      window.axios.post(`/api/dispatch/update-to-be`, data).then((response) => {
+          if (response.data.success) {
+              commit(types.UPDATE_DISPATCH, response.data)
+          }
+          resolve(response)
+      }).catch((err) => {
+        console.log(err.response)
+          reject(err)
+      })
+  })
+}
+
 export const deleteDispatch = ({ commit, dispatch, state }, id) => {
     return new Promise((resolve, reject) => {
         window.axios.delete(`/api/dispatch/${id}`).then((response) => {
