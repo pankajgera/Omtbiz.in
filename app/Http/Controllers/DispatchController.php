@@ -163,7 +163,6 @@ class DispatchController extends Controller
             foreach($all_selected_dispatch as $each) {
                 $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date_time);
                 $date->setTimeZone('Asia/Kolkata');
-                \Log::info('sa', [$each->id]);
                 $each->update([
                     'name' => $request->name,
                     'invoice_id' => implode(', ', $request->invoice_id),
