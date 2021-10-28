@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       selectedInventory: null,
-      loading: false
+      loading: false,
     }
   },
   computed: {

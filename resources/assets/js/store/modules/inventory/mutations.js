@@ -12,6 +12,17 @@ export default {
     },
     [types.BOOTSTRAP_INVENTORIES](state, inventories) {
       state.inventories = inventories
+      state.inventories.unshift({
+        company_id: 1,
+        created_at: "",
+        id: 0,
+        name: "",
+        price: "",
+        quantity: "",
+        sale_price: 0,
+        unit: "pc",
+        updated_at: "",
+      })
     },
     [types.SET_TOTAL_INVENTORIES](state, totalInventories) {
       state.totalInventories = totalInventories

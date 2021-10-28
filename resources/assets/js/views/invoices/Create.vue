@@ -560,7 +560,6 @@ export default {
       })
     },
     updateInventory (data) {
-      console.log(data)
       if (data.inventory && !data.inventory.inventory_id) {
         window.toastr['error']('Inventory item does not exist or not selected')
         return false
