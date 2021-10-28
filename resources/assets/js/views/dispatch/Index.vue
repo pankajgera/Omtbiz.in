@@ -177,6 +177,10 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('dispatch.invoice_id')"
+          show="invoice_id"
+        />
+        <table-column
           :label="$t('dispatch.name')"
           show="name"
         />
@@ -184,10 +188,10 @@
           :label="$t('dispatch.date_time')"
           show="date_time"
         />
-        <table-column
+        <!-- <table-column
           :label="$t('dispatch.status')"
           show="status"
-        />
+        /> -->
         <table-column
           :label="$t('dispatch.transport')"
           show="transport"
@@ -287,6 +291,10 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('dispatch.invoice_id')"
+          show="invoice_id"
+        />
+        <table-column
           :label="$t('dispatch.name')"
           show="name"
         />
@@ -294,10 +302,10 @@
           :label="$t('dispatch.date_time')"
           show="date_time"
         />
-        <table-column
+        <!-- <table-column
           :label="$t('dispatch.status')"
           show="status"
-        />
+        /> -->
         <table-column
           :label="$t('dispatch.transport')"
           show="transport"
@@ -365,7 +373,7 @@ export default {
       filters: {
         name: '',
         date_time: '',
-        status: '',
+        // status: '',
         transport: ''
       },
       index: null,
