@@ -179,7 +179,11 @@
         <table-column
           :label="$t('dispatch.invoice_id')"
           show="invoice_id"
-        />
+        >
+          <template slot-scope="row">
+            {{ row.id }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('dispatch.name')"
           show="name"
@@ -293,7 +297,11 @@
         <table-column
           :label="$t('dispatch.invoice_id')"
           show="invoice_id"
-        />
+        >
+          <template slot-scope="row">
+            {{ row.id }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('dispatch.name')"
           show="name"
