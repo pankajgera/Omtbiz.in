@@ -177,17 +177,23 @@
           </template>
         </table-column>
         <table-column
+          :key="Math.random()"
           :label="$t('dispatch.invoice_id')"
-          show="invoice_id"
         >
           <template slot-scope="row">
-            {{ row.id }}
+            <span> {{ $t('dispatch.invoice_id') }} </span>
+            <span v-if="row.invoices.length">{{ row.invoices.map(i => i.invoice_number) }}</span>
           </template>
         </table-column>
         <table-column
+          :key="Math.random()"
           :label="$t('dispatch.name')"
-          show="name"
-        />
+        >
+          <template slot-scope="row">
+            <span> {{ $t('dispatch.name') }} </span>
+            <span v-if="row.master">{{ row.master.name }}</span>
+          </template>
+        </table-column>
         <table-column
           :label="$t('dispatch.date_time')"
           show="date_time"
@@ -275,7 +281,6 @@
         :show-filter="false"
         table-class="table"
       >
-
         <table-column
           :sortable="false"
           :filterable="false"
@@ -294,18 +299,24 @@
             </div>
           </template>
         </table-column>
-        <table-column
+       <table-column
+          :key="Math.random()"
           :label="$t('dispatch.invoice_id')"
-          show="invoice_id"
         >
           <template slot-scope="row">
-            {{ row.id }}
+            <span> {{ $t('dispatch.invoice_id') }} </span>
+            <span v-if="row.invoices.length">{{ row.invoices.map(i => i.invoice_number) }}</span>
           </template>
         </table-column>
         <table-column
+          :key="Math.random()"
           :label="$t('dispatch.name')"
-          show="name"
-        />
+        >
+          <template slot-scope="row">
+            <span> {{ $t('dispatch.name') }} </span>
+            <span v-if="row.master">{{ row.master.name }}</span>
+          </template>
+        </table-column>
         <table-column
           :label="$t('dispatch.date_time')"
           show="date_time"

@@ -8,6 +8,7 @@ class Dispatch extends Model
 {
     protected $fillable = [
         'name',
+        'invoice_id',
         'date_time',
         'transport',
         'status',
