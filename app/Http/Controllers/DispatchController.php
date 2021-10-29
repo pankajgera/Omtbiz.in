@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountMaster;
 use Illuminate\Http\Request;
 use App\Models\Dispatch;
 use App\Models\Invoice;
@@ -26,6 +27,13 @@ class DispatchController extends Controller
             ->latest()
             ->paginate($limit);
 
+        foreach ($dispatch_inprogress as $inprogress) {
+            $inprogress['invoices'] =  Invoice::whereIn('id', explode(',', $inprogress['invoice_id']))->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            foreach ($inprogress['invoices'] as $each) {
+                $inprogress['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
+            }
+        }
+
         $dispatch_completed = Dispatch::where('status', 'Completed')->applyFilters($request->only([
             'name',
             'date_time',
@@ -37,6 +45,12 @@ class DispatchController extends Controller
             ->latest()
             ->paginate($limit);
 
+        foreach ($dispatch_completed as $processed) {
+            $processed['invoices'] =  Invoice::whereIn('id', explode(',', $processed['invoice_id']))->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            foreach ($processed['invoices'] as $each) {
+                $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
+            }
+        }
         return response()->json([
             'dispatch_inprogress' => $dispatch_inprogress,
             'dispatch_completed' => $dispatch_completed,
@@ -70,7 +84,7 @@ class DispatchController extends Controller
     {
         $to_be_dispatch_ids = array_unique(explode(',', $request->getContent()));
         $tobeDispatch = [];
-        foreach($to_be_dispatch_ids as $id) {
+        foreach ($to_be_dispatch_ids as $id) {
             $dispatch = Dispatch::find($id);
             $dispatch['invoice_id'] = explode(', ', $dispatch->invoice_id);
             array_push($tobeDispatch, $dispatch);
@@ -101,7 +115,7 @@ class DispatchController extends Controller
             $dispatch->save();
 
             $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
-            foreach($invoices as $each) {
+            foreach ($invoices as $each) {
                 $each->update([
                     'paid_status' => 'DISPATCHED',
                 ]);
@@ -160,7 +174,7 @@ class DispatchController extends Controller
     {
         $all_selected_dispatch = Dispatch::whereIn('id', $request->all_selected_dispatch)->get();
         try {
-            foreach($all_selected_dispatch as $each) {
+            foreach ($all_selected_dispatch as $each) {
                 $date = Carbon::createFromFormat('Y-m-d H:i:s', $request->date_time);
                 $date->setTimeZone('Asia/Kolkata');
                 $each->update([
