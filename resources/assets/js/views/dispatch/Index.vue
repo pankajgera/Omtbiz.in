@@ -182,7 +182,7 @@
         >
           <template slot-scope="row">
             <span> {{ $t('dispatch.invoice_id') }} </span>
-            <span v-if="row.invoices.length">{{ row.invoices.map(i => i.invoice_number) }}</span>
+            <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
           </template>
         </table-column>
         <table-column
@@ -305,7 +305,7 @@
         >
           <template slot-scope="row">
             <span> {{ $t('dispatch.invoice_id') }} </span>
-            <span v-if="row.invoices.length">{{ row.invoices.map(i => i.invoice_number) }}</span>
+            <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
           </template>
         </table-column>
         <table-column
