@@ -166,18 +166,17 @@
           <template slot-scope="row">
             <div class="custom-control custom-checkbox">
               <input
-                :id="row.id"
+                :id="'to_be_' + row.id"
                 v-model="selectToBeField"
                 :value="row.id"
                 type="checkbox"
                 class="custom-control-input"
               >
-              <label :for="row.id" class="custom-control-label"/>
+              <label :for="'to_be_' + row.id" class="custom-control-label"/>
             </div>
           </template>
         </table-column>
         <table-column
-          :key="Math.random()"
           :label="$t('dispatch.invoice_id')"
         >
           <template slot-scope="row">
@@ -186,7 +185,6 @@
           </template>
         </table-column>
         <table-column
-          :key="Math.random()"
           :label="$t('dispatch.name')"
         >
           <template slot-scope="row">
@@ -207,7 +205,6 @@
           show="transport"
         />
         <table-column
-          :key="Math.random()"
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"
@@ -300,7 +297,6 @@
           </template>
         </table-column>
        <table-column
-          :key="Math.random()"
           :label="$t('dispatch.invoice_id')"
         >
           <template slot-scope="row">
@@ -309,7 +305,6 @@
           </template>
         </table-column>
         <table-column
-          :key="Math.random()"
           :label="$t('dispatch.name')"
         >
           <template slot-scope="row">
@@ -330,7 +325,6 @@
           show="transport"
         />
         <table-column
-          :key="Math.random()"
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"
@@ -457,8 +451,6 @@ export default {
     if (this.selectAllField) {
       this.selectAllDispatch()
     }
-  },
-  destroyedToBe () {
     if (this.selectAllToBeField) {
       this.selectAllToBeDispatch()
     }
@@ -583,7 +575,7 @@ export default {
       }).then(async (willDelete) => {
         if (willDelete) {
           let res = await this.deleteMultipleDispatch()
-          if (res.data.success) {
+          if (res.data.dispatch) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 2))
             this.$refs.toBeTableDispatch.refresh()
           } else if (res.data.error) {
@@ -606,13 +598,9 @@ export default {
       }).then(async (willSend) => {
         if (willSend) {
           let res = type === 'draft' ? await this.moveMultipleToBeDispatch() : await this.moveMultipleDispatch()
-          if (res.data.success) {
+          if (res.data.dispatch) {
             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
-            if (type === 'draft') {
-              this.$refs.toBeTableDispatch.refresh()
-            } else {
-              this.$refs.tableDispatch.refresh()
-            }
+              window.location.reload()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }

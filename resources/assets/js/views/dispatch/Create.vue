@@ -135,7 +135,7 @@ export default {
           name: 'Sent',
         }
       ],
-      isToBeDispatch: this.$store.state.dispatch.selectedToBeDispatch
+      isToBeDispatch: []
     }
   },
   computed: {
@@ -151,6 +151,11 @@ export default {
   },
   created () {
     this.fetchInvoices()
+  },
+  destroyed() {
+    if (this.selectAllToBeField) {
+      this.selectAllToBeDispatch()
+    }
   },
   validations: {
     formData: {
@@ -173,7 +178,8 @@ export default {
       'editToBeDispatch',
       'dipatchedData',
       'updateDispatch',
-      'updateToBeDispatch'
+      'updateToBeDispatch',
+      'selectAllToBeDispatch'
     ]),
     addInvoice (value) {
       if (value) {
@@ -220,6 +226,7 @@ export default {
         if (this.isEdit) {
           this.loadEditData()
         }
+        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch
         if (this.isToBeDispatch.length) {
           this.loadIsToBeDispatch()
         }

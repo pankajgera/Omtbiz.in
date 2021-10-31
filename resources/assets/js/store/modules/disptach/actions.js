@@ -176,7 +176,7 @@ export const selectAllToBeDispatch = ({ commit, dispatch, state }) => {
 
 export const selectToBeDispatch = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECTED_TO_BE_DISPATCH, data)
-  if (state.selectedToBeDispatch.length === state.dispatch.length) {
+  if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
       commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
   } else {
       commit(types.SET_TO_BE_SELECT_ALL_STATE, false)
