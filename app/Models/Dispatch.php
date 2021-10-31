@@ -85,8 +85,8 @@ class Dispatch extends Model
     public static function moveDispatch($id)
     {
         $dispatch = Dispatch::find($id);
-        $status = 'Completed';
-        if ('Completed' === $dispatch->status) {
+        $status = 'Sent';
+        if ('Sent' === $dispatch->status) {
             $status = 'Draft';
         }
         $dispatch->update([

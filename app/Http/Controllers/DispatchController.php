@@ -34,7 +34,7 @@ class DispatchController extends Controller
             }
         }
 
-        $dispatch_completed = Dispatch::where('status', 'Completed')->applyFilters($request->only([
+        $dispatch_completed = Dispatch::where('status', 'Sent')->applyFilters($request->only([
             'name',
             'date_time',
             'transport',

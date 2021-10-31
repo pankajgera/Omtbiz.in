@@ -14,8 +14,8 @@ export default {
     [types.BOOTSTRAP_BANKS](state, banks) {
         state.banks = banks
     },
-    [types.SET_TOTAL_BANKS](state, totalNotes) {
-        state.totalNotes = totalNotes
+    [types.SET_TOTAL_BANKS](state, totalBanks) {
+        state.totalBanks = totalBanks
     },
     [types.ADD_BANK](state, data) {
         state.banks.push(data.bank)
@@ -28,15 +28,15 @@ export default {
         let index = state.banks.findIndex(bank => bank.id === id)
         state.banks.splice(index, 1)
     },
-    [types.DELETE_MULTIPLE_BANKS](state, selectedNotes) {
-        selectedNotes.forEach((bank) => {
+    [types.DELETE_MULTIPLE_BANKS](state, selectedBanks) {
+        selectedBanks.forEach((bank) => {
             let index = state.banks.findIndex(_cust => _cust.id === bank.id)
             state.banks.splice(index, 1)
         })
-        state.selectedNotes = []
+        state.selectedBanks = []
     },
     [types.SET_SELECTED_BANKS](state, data) {
-        state.selectedNotes = data
+        state.selectedBanks = data
     },
     [types.RESET_SELECTED_BANK](state, data) {
         state.selectedNote = null

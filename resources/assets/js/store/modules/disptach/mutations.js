@@ -56,7 +56,7 @@ export default {
             let index = state.toBeDispatch.findIndex(_cust => _cust.id === dispatch.id)
             state.toBeDispatch.splice(index, 1)
         })
-        state.selectedDispatch = []
+        state.selectedToBEDispatch = []
     },
 
     [types.SET_SELECTED_TO_BE_DISPATCH](state, data) {
