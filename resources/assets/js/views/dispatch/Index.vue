@@ -122,12 +122,12 @@
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
-            <v-dropdown-item>
+            <!-- <v-dropdown-item>
               <div class="dropdown-item" @click="multipleDispatch('draft')">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.dispatch') }}
               </div>
-            </v-dropdown-item>
+            </v-dropdown-item> -->
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleDispatch">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
