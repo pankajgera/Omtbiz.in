@@ -119,7 +119,10 @@ export default {
         invoice_id: [],
         date_time: '',
         transport: '',
-        status: {},
+        status: {
+          id: 2,
+          name: 'Sent',
+        },
         all_selected_dispatch: []
       },
       invoice: [],
@@ -146,16 +149,18 @@ export default {
       return false
     },
     formatDate() {
-      return moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss');
+      if (this.formData.date_time) {
+        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')
+      }
+      return moment().format('DD-MM-YYYY HH:mm:ss');
     }
   },
   created () {
     this.fetchInvoices()
   },
   destroyed() {
-    if (this.selectAllToBeField) {
-      this.selectAllToBeDispatch()
-    }
+    this.resetSelectedDispatch()
+    this.resetSelectedToBeDispatch()
   },
   validations: {
     formData: {
@@ -179,7 +184,8 @@ export default {
       'dipatchedData',
       'updateDispatch',
       'updateToBeDispatch',
-      'selectAllToBeDispatch'
+      'resetSelectedDispatch',
+      'resetSelectedToBeDispatch'
     ]),
     addInvoice (value) {
       if (value) {
@@ -211,6 +217,7 @@ export default {
     async loadIsToBeDispatch() {
       let response = await this.editToBeDispatch(this.isToBeDispatch.toString())
       this.formData = response.data.dispatch[0]
+      this.formData.status = this.statusList[1]
       let invoiceId = []
       response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))
       this.formData.invoice_id = invoiceId

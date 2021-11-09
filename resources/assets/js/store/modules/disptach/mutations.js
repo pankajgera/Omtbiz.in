@@ -44,26 +44,27 @@ export default {
         state.selectedDispatch = data
     },
     [types.RESET_SELECTED_DISPATCH](state, data) {
-        state.selectedDispatch = null
+        state.selectedDispatch = []
     },
     [types.SET_SELECT_ALL_STATE](state, data) {
         state.selectAllField = data
     },
 
     //To Be Dispatched
-    [types.DELETE_MULTIPLE_TO_BE_DISPATCH](state, selectedToBEDispatch) {
-        selectedToBEDispatch.forEach((dispatch) => {
+    [types.DELETE_MULTIPLE_TO_BE_DISPATCH](state, selectedToBeDispatch) {
+        selectedToBeDispatch.forEach((dispatch) => {
             let index = state.toBeDispatch.findIndex(_cust => _cust.id === dispatch.id)
             state.toBeDispatch.splice(index, 1)
         })
-        state.selectedToBEDispatch = []
+        state.selectedToBeDispatch = []
     },
 
     [types.SET_SELECTED_TO_BE_DISPATCH](state, data) {
       state.selectedToBeDispatch = data
     },
     [types.RESET_SELECTED_TO_BE_DISPATCH](state, data) {
-        state.selectedToBeDispatch = null
+        state.selectedToBeDispatch = []
+        state.selectAllToBeField = false
     },
     [types.SET_TO_BE_SELECT_ALL_STATE](state, data) {
         state.selectAllToBeField = data
