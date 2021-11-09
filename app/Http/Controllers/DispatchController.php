@@ -103,7 +103,11 @@ class DispatchController extends Controller
     public function store(Request $request)
     {
         try {
-            $date = Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', $request->date_time);
+            $date_format = 'Y-m-d\TH:i:s.v\Z';
+            if (strpos($request->date_time, ' ') !== false) {
+                $date_format = 'Y-m-d H:i:s';
+            }
+            $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = new Dispatch();
             $dispatch->name = $request->name;
@@ -141,7 +145,11 @@ class DispatchController extends Controller
     public function updateDispatch(Request $request, $id)
     {
         try {
-            $date = Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', $request->date_time);
+            $date_format = 'Y-m-d\TH:i:s.v\Z';
+            if (strpos($request->date_time, ' ') !== false) {
+                $date_format = 'Y-m-d H:i:s';
+            }
+            $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = Dispatch::find($id);
             $dispatch->name = $request->name;
@@ -175,7 +183,11 @@ class DispatchController extends Controller
         $all_selected_dispatch = Dispatch::whereIn('id', $request->all_selected_dispatch)->get();
         try {
             foreach ($all_selected_dispatch as $each) {
-                $date = Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', $request->date_time);
+                $date_format = 'Y-m-d\TH:i:s.v\Z';
+                if (strpos($request->date_time, ' ') !== false) {
+                    $date_format = 'Y-m-d H:i:s';
+                }
+                $date = Carbon::createFromFormat($date_format, $request->date_time);
                 $date->setTimeZone('Asia/Kolkata');
                 $each->update([
                     'name' => $request->name,
