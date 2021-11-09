@@ -118,7 +118,7 @@
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>To Be Dispatch</h4>
         <transition name="fade">
-          <v-dropdown v-if="selectedToBeDispatch.length" :show-arrow="false">
+          <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -239,7 +239,7 @@
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>Dispatched</h4>
         <transition name="fade">
-          <v-dropdown v-if="selectedDispatch.length" :show-arrow="false">
+          <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -336,12 +336,10 @@
               <dot-icon />
             </a>
             <v-dropdown-item>
-
               <router-link :to="{path: `dispatch/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}
               </router-link>
-
             </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeDispatch(row.id)">

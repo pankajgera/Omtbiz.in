@@ -164,14 +164,17 @@ export const setSelectAllToBeState = ({ commit, dispatch, state }, data) => {
 }
 
 export const selectAllToBeDispatch = ({ commit, dispatch, state }) => {
-  if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
-      commit(types.SET_SELECTED_TO_BE_DISPATCH, [])
-      commit(types.SET_TO_BE_SELECT_ALL_STATE, false)
-  } else {
-      let allToBeDispatchIds = state.toBeDispatch.map(cust => cust.id)
-      commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
-      commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
-  }
+  // if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
+  //     commit(types.SET_SELECTED_TO_BE_DISPATCH, [])
+  //     commit(types.SET_TO_BE_SELECT_ALL_STATE, false)
+  // } else {
+  //     let allToBeDispatchIds = state.toBeDispatch.map(i => i.id)
+  //     commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
+  //     commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
+  // }
+    let allToBeDispatchIds = state.toBeDispatch.map(i => i.id)
+    commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
+    commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
 }
 
 export const selectToBeDispatch = ({ commit, dispatch, state }, data) => {
@@ -184,7 +187,7 @@ export const selectToBeDispatch = ({ commit, dispatch, state }, data) => {
 }
 
 export const resetSelectedToBeDispatch = ({ commit, dispatch, state }, data) => {
-  commit(types.RESET_SELECTED_DISPATCH)
+  commit(types.RESET_SELECTED_TO_BE_DISPATCH)
 }
 
 
