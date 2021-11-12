@@ -58,6 +58,33 @@
                 />
               </div>
               <div class="form-group">
+                <label class="control-label">{{ $t('dispatch.time') }}</label><span class="text-danger"> *</span>
+                <div class="base-date-input">
+
+                  <vue-timepicker
+                    v-model="formData.time"
+                    format="hh:mm A"
+                    @change="$v.formData.time.$touch()">
+                    <template v-slot:icon>
+                      <span class="vdp-datepicker__calendar-button input-group-prepend">
+                        <span>
+                          <font-awesome-icon :icon="['fas', 'clock']"/>
+                        </span>
+                      </span>
+                    </template>
+                  </vue-timepicker>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label">{{ $t('dispatch.person') }}</label>
+                <base-input
+                  v-model.trim="formData.person"
+                  focus
+                  type="text"
+                  name="person"
+                />
+              </div>
+               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.transport') }}</label>
                 <base-input
                   v-model.trim="formData.transport"
@@ -99,14 +126,34 @@
     </div>
   </div>
 </template>
-
+<style>
+.vue__time-picker {
+  width: 100%;
+}
+.base-date-input .vue__time-picker input.display-time {
+  width: 100%;
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #EBF1FA;
+  box-sizing: border-box;
+  border-radius: 5px ;
+  display: inline-block;
+  padding: 0px 6px 0px 40px ;
+  font-size: 1rem;
+  line-height: 1.4;
+  cursor: pointer;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
+import VueTimepicker from 'vue2-timepicker'
+import 'vue2-timepicker/dist/VueTimepicker.css'
 
 export default {
+  components: { VueTimepicker },
   mixins: {
     validationMixin
   },
@@ -119,6 +166,8 @@ export default {
         invoice_id: [],
         date_time: '',
         transport: '',
+        person: '',
+        time: '',
         status: {
           id: 2,
           name: 'Sent',
@@ -169,6 +218,9 @@ export default {
         minLength: minLength(3)
       },
       date_time: {
+        required,
+      },
+      time: {
         required,
       },
       status: {
