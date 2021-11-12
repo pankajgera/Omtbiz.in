@@ -114,6 +114,8 @@ class DispatchController extends Controller
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
+            $dispatch->person = $request->person;
+            $dispatch->time = $request->time;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
@@ -156,6 +158,8 @@ class DispatchController extends Controller
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
+            $dispatch->person = $request->person;
+            $dispatch->time = $request->time;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
@@ -194,6 +198,8 @@ class DispatchController extends Controller
                     'invoice_id' => implode(', ', $request->invoice_id),
                     'date_time' => $date,
                     'transport' => $request->transport,
+                    'person' => $request->person,
+                    'time' => $request->time,
                     'status' => $request->status['name'],
                 ]);
             }
