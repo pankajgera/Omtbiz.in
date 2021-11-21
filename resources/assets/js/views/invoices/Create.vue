@@ -569,7 +569,8 @@ export default {
         this.$refs.invoiceInventory[data.index].$el.focus()
         if (data.updatingInput === 'sale_price') {
           this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()
-        } else {
+        }
+        if (data.updatingInput === 'quantity') {
           this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
         }
       })
