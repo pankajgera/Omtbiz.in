@@ -365,6 +365,7 @@ export default {
       this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
       this.inventory.inventory_id = inventory.id
       this.inventory.description = inventory.description
+      this.updatingInput = 'quantity'
       this.updateInventory()
     },
     selectFixed () {
@@ -395,7 +396,6 @@ export default {
           taxes: [...this.inventory.taxes]
         }
       })
-      this.updatingInput = ''
     },
     removeInventory () {
       this.$emit('remove', this.index)
