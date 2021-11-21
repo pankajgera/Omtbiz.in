@@ -26,6 +26,7 @@
               v-model="setInvoiceDebtor"
               :invalid="$v.newInvoice.debtors.$error"
               :options="sundryDebtorsList"
+              :required="'required'"
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"

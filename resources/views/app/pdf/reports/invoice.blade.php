@@ -112,7 +112,7 @@ function numberTowords($num)
         .heading-date-range {
             font-style: normal;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             color: #A5ACC1;
             width: 100%;
             text-align: right;
@@ -122,7 +122,7 @@ function numberTowords($num)
         .sub-heading-text {
             font-style: normal;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
             /* line-height: 21px; */
             color: #595959;
             padding: 0px;
@@ -134,7 +134,7 @@ function numberTowords($num)
             padding-left: 3px;
             font-style: normal;
             font-weight: normal;
-            font-size: 16px;
+            font-size: 12px;
             line-height: 21px;
             color: #040405;
         }
@@ -143,7 +143,7 @@ function numberTowords($num)
             padding-left: 3px;
             font-style: normal;
             font-weight: normal;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 21px;
             color: #040405;
         }
@@ -202,7 +202,7 @@ function numberTowords($num)
             text-align: right;
             font-style: normal;
             font-weight: 500;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 21px;
             text-align: right;
             color: #040405;
@@ -219,9 +219,14 @@ function numberTowords($num)
             text-align: left;
             font-style: normal;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 21px;
             color: #595959;
+        }
+        .row-item td p {
+            line-height: 1px;
+            marign: 0 5px !important;
+            padding: 0 5px !important;
         }
         header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 125px; }
         @page {
@@ -242,13 +247,13 @@ function numberTowords($num)
                 </td>
                 <td class="border">
                     <p class="total-title">Invoice Date <span
-                            style="float:right; font-size: 13px;">{{ $invoice->invoice_date }}</span></p>
+                            style="float:right; font-size: 12px;">{{ $invoice->invoice_date }}</span></p>
                     <p class="total-title">Invoice Number <span
-                            style="float:right; font-size: 13px;">{{ $invoice->invoice_number }}</span></p>
+                            style="float:right; font-size: 12px;">{{ $invoice->invoice_number }}</span></p>
                     <p class="total-title">Reference Number <span
-                        style="float:right; font-size: 13px;">{{ $invoice->reference_number }}</span></p>
+                        style="float:right; font-size: 12px;">{{ $invoice->reference_number }}</span></p>
                     <p class="total-title">Party Name <span
-                            style="float:right; font-size: 13px;">{{ $invoice->master->name }}</span></p>
+                            style="float:right; font-size: 12px;">{{ $invoice->master->name }}</span></p>
                 </td>
             </tr>
         </table>
@@ -261,32 +266,32 @@ function numberTowords($num)
                         <table class="table">
                             <tr class="td-border">
                                 <td>
-                                    <p>
+                                    <p style="font-size: 14px; font-weight: bold">
                                         S.No.
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p style="font-size: 14px; font-weight: bold">
                                         Description
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p style="font-size: 14px; font-weight: bold">
                                         Quantity
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p style="font-size: 14px; font-weight: bold">
                                         Rate
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p style="font-size: 14px; font-weight: bold">
                                         Per
                                     </p>
                                 </td>
                                 <td>
-                                    <p>
+                                    <p style="font-size: 14px; font-weight: bold">
                                         Amount
                                     </p>
                                 </td>
@@ -294,32 +299,32 @@ function numberTowords($num)
                             @foreach ($invoice_items as $key => $item)
                                 <tr class="row-item">
                                     <td>
-                                        <p style="font-size: 13px;">
+                                        <p style="font-size: 12px;">
                                             {{ $key + 1 }}
                                         </p>
                                     </td>
                                     <td>
-                                        <p style="font-size: 13px;">
+                                        <p style="font-size: 12px;">
                                             {{ $item->name }}
                                         </p>
                                     </td>
                                     <td>
-                                        <p style="font-size: 13px;">
+                                        <p style="font-size: 12px;">
                                             {{ $item->quantity }} {{ $item->inventory->unit }}
                                         </p>
                                     </td>
                                     <td>
-                                        <p style="font-size: 13px;">
+                                        <p style="font-size: 12px;">
                                             ₹ {{ $item->sale_price }}
                                         </p>
                                     </td>
                                     <td>
-                                        <p style="font-size: 13px;">
+                                        <p style="font-size: 12px;">
                                             {{ $item->inventory->unit }}
                                         </p>
                                     </td>
                                     <td>
-                                        <p style="font-size: 13px;">
+                                        <p style="font-size: 12px;">
                                             ₹ {{ $item->total }}
                                         </p>
                                     </td>
@@ -329,14 +334,14 @@ function numberTowords($num)
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <p style="font-size: 13px;">
+                                    <p style="font-size: 12px;">
                                         Total: {{ $total_quantity }}
                                     </p>
                                 </td>
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <p style="font-size: 13px;">
+                                    <p style="font-size: 12px;">
                                         {{ 'Rs ' . $total_amount }}
                                     </p>
                                 </td>
@@ -349,21 +354,21 @@ function numberTowords($num)
     </div>
     <footer>
         <div>
-            <p style="font-size: 13px;">
+            <p style="font-size: 12px;">
                 Amount Chargeable (in words)
                 <br />
                 {{ numberTowords($total_amount) }}
             </p>
         </div>
         <div style="margin: 10px 0px; position: fixed; bottom: 180px">
-            <p style="font-size: 13px; bottom: 0">
+            <p style="font-size: 12px; bottom: 0">
                 Remark: <br>
                 {{ $invoice->notes }}
             </p>
             <table>
                 <tr class="td-border">
                     <td style="width: 50%">
-                        <p style="font-size: 13px;">
+                        <p style="font-size: 12px;">
                             <u> Declaration: </u> <br>
                             We declare that this invoice shows the actual
                             price of the goods described and that all
@@ -371,7 +376,7 @@ function numberTowords($num)
                         </p>
                     </td>
                     <td style="width: 50%">
-                        <p style="font-size: 13px; float: right; bottom: 40px; right: 0; position: fixed">
+                        <p style="font-size: 12px; float: right; bottom: 40px; right: 0; position: fixed">
                             Authorised Signatory
                         </p>
                     </td>

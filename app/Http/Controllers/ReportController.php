@@ -581,7 +581,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Generate Invoice
+     * Generate Invoice Report
      */
     public function invoiceReport(Request $request, $id)
     {
@@ -609,7 +609,7 @@ class ReportController extends Controller
         view()->share([
             'invoice' => $invoiceWith,
             'total_quantity' => $invoice_i->sum('quantity'),
-            'total_amount' => $invoice_i->sum('sale_price'),
+            'total_amount' => $invoiceWith->sub_total,
             'invoice_items' => $invoice_items,
             'colorSettings' => $colorSettings,
             'company' => $company,
