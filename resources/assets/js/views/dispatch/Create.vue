@@ -30,7 +30,7 @@
                   @remove="removeInvoice"
                 />
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.name') }}</label><span class="text-danger"> *</span>
                 <base-input
                   v-model.trim="formData.name"
@@ -46,7 +46,7 @@
                     {{ $tc('validation.name_min_length', $v.formData.name.$params.minLength.min, { count: $v.formData.name.$params.minLength.min }) }}
                   </span>
                 </div>
-              </div>
+              </div> -->
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
@@ -93,7 +93,7 @@
                   name="transport"
                 />
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.status') }}</label><span class="text-danger"> *</span>
                 <base-select
                     v-model="formData.status"
@@ -105,7 +105,7 @@
                     track-by="id"
                     label="name"
                   />
-              </div>
+              </div> -->
 
               <div class="form-group">
                 <base-button
@@ -151,6 +151,7 @@ import moment from 'moment'
 const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
 import VueTimepicker from 'vue2-timepicker'
 import 'vue2-timepicker/dist/VueTimepicker.css'
+import getTime from 'date-fns/fp/getTime/index'
 
 export default {
   components: { VueTimepicker },
@@ -164,7 +165,7 @@ export default {
       formData: {
         name: '',
         invoice_id: [],
-        date_time: '',
+        date_time: new Date(),
         transport: '',
         person: '',
         time: '',
@@ -177,16 +178,16 @@ export default {
       invoice: [],
       invoiceList: null,
       assignToBeDispatch: false,
-      statusList: [
-        {
-          id: 1,
-          name: 'Draft',
-        },
-        {
-          id: 2,
-          name: 'Sent',
-        }
-      ],
+      // statusList: [
+      //   {
+      //     id: 1,
+      //     name: 'Draft',
+      //   },
+      //   {
+      //     id: 2,
+      //     name: 'Sent',
+      //   }
+      // ],
       isToBeDispatch: []
     }
   },
@@ -207,25 +208,32 @@ export default {
   created () {
     this.fetchInvoices()
   },
+  mounted() {
+    let current = new Date();
+    this.formData.time = current.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  },
   destroyed() {
     this.resetSelectedDispatch()
     this.resetSelectedToBeDispatch()
   },
   validations: {
     formData: {
-      name: {
-        required,
-        minLength: minLength(3)
-      },
+      // name: {
+      //   required,
+      //   minLength: minLength(3)
+      // },
       date_time: {
         required,
       },
       time: {
         required,
       },
-      status: {
-        required,
-      },
+      // status: {
+      //   required,
+      // },
     }
   },
   methods: {
@@ -250,8 +258,9 @@ export default {
         this.formData.invoice_id.splice(index, 1)
       }
     },
-    invoiceWithAmount ({ invoice_number, due_amount }) {
-      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
+    invoiceWithAmount ({ invoice_number, due_amount, master}) {
+      let count = this.invoice.filter(i => i.account_master_id === master.id).length
+      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) - ${count}`
     },
     loadInvoice() {
       this.invoice = []
@@ -263,13 +272,13 @@ export default {
     async loadEditData () {
       let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
-      this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)[0]
+      //this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)[0]
       this.loadInvoice()
     },
     async loadIsToBeDispatch() {
       let response = await this.editToBeDispatch(this.isToBeDispatch.toString())
       this.formData = response.data.dispatch[0]
-      this.formData.status = this.statusList[1]
+      //this.formData.status = this.statusList[1]
       let invoiceId = []
       response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))
       this.formData.invoice_id = invoiceId

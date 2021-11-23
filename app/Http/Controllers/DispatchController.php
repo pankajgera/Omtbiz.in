@@ -110,7 +110,7 @@ class DispatchController extends Controller
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = new Dispatch();
-            $dispatch->name = $request->name;
+            //$dispatch->name = $request->name;
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
@@ -154,7 +154,7 @@ class DispatchController extends Controller
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = Dispatch::find($id);
-            $dispatch->name = $request->name;
+            //$dispatch->name = $request->name;
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
@@ -194,7 +194,7 @@ class DispatchController extends Controller
                 $date = Carbon::createFromFormat($date_format, $request->date_time);
                 $date->setTimeZone('Asia/Kolkata');
                 $each->update([
-                    'name' => $request->name,
+                    //'name' => $request->name,
                     'invoice_id' => implode(', ', $request->invoice_id),
                     'date_time' => $date,
                     'transport' => $request->transport,
@@ -303,7 +303,7 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
-        $invoices = Invoice::where('status', '!=', 'COMPLETED')
+        $invoices = Invoice::with('master')->where('status', '!=', 'COMPLETED')
             ->whereCompany($request->header('company'))
             ->get();
 
