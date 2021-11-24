@@ -207,13 +207,6 @@ export default {
   created () {
     this.fetchInvoices()
   },
-  mounted() {
-    let current = new Date();
-    this.formData.time = current.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  },
   destroyed() {
     this.resetSelectedDispatch()
     this.resetSelectedToBeDispatch()
@@ -267,17 +260,28 @@ export default {
         let findFromList = this.invoiceList.find(j => j.id === parseInt(i));
         this.invoice.push(findFromList)
       })
+      let current = new Date();
+      this.formData.time = current.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     },
     async loadEditData () {
       let response = await this.editDispatch(this.$route.params.id)
       this.formData = response.data.dispatch
-      //this.formData.status = this.statusList.filter(each => each.name === response.data.dispatch.status)[0]
+      this.formData.status = {
+          id: 2,
+          name: 'Sent',
+        };
       this.loadInvoice()
     },
     async loadIsToBeDispatch() {
       let response = await this.editToBeDispatch(this.isToBeDispatch.toString())
       this.formData = response.data.dispatch[0]
-      //this.formData.status = this.statusList[1]
+      this.formData.status = {
+          id: 2,
+          name: 'Sent',
+        };
       let invoiceId = []
       response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))
       this.formData.invoice_id = invoiceId
@@ -324,6 +328,7 @@ export default {
     },
     async submitDispatch () {
       this.$v.formData.$touch()
+      console.log(this.$v.$invalid)
       if (this.$v.$invalid) {
         return false
       }
