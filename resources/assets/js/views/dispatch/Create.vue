@@ -12,7 +12,7 @@
       <div class="col-sm-8">
         <div class="card">
           <form action="" @submit.prevent="submitDispatch">
-            <div class="card-body">
+            <div class="card-body" id="to_print">
               <div class="form-group" v-if="invoiceList && invoiceList.length">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
@@ -60,7 +60,6 @@
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.time') }}</label><span class="text-danger"> *</span>
                 <div class="base-date-input">
-
                   <vue-timepicker
                     v-model="formData.time"
                     format="hh:mm A"
@@ -68,7 +67,7 @@
                     <template v-slot:icon>
                       <span class="vdp-datepicker__calendar-button input-group-prepend">
                         <span>
-                          <font-awesome-icon :icon="['fas', 'clock']"/>
+                          <font-awesome-icon id="time-icon" :icon="['fas', 'clock']"/>
                         </span>
                       </span>
                     </template>
@@ -106,9 +105,9 @@
                     label="name"
                   />
               </div> -->
-
               <div class="form-group">
                 <base-button
+                  id="submit-dispatch"
                   :loading="isLoading"
                   :disabled="isLoading"
                   icon="save"
@@ -300,6 +299,29 @@ export default {
         }
       }
     },
+    async showDispatchPopup (invoice_id) {
+      swal({
+        title: this.$t('dispatch.invoice_report_title'),
+        text: this.$t('dispatch.invoice_report_text'),
+        icon: '/assets/icon/check-circle-solid.svg',
+        buttons: true,
+        dangerMode: false
+      }).then(async (success) => {
+        if (success) {
+          printJS({
+            printable: 'to_print',
+            type: 'html',
+            ignoreElements: ['submit-dispatch', 'time-icon', 'select-date-icon'],
+            scanStyles: true,
+            targetStyles: ['*'],
+            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px;}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;}'
+          })
+        } else {
+          this.resetSelectedDispatch()
+          this.resetSelectedToBeDispatch()
+        }
+      })
+    },
     async submitDispatch () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
@@ -325,8 +347,9 @@ export default {
           } else {
             window.toastr['success'](this.$tc('dispatch.created_message'))
           }
-          this.$router.push('/dispatch')
-          return true
+          this.showDispatchPopup(response.data.dispatch.id)
+          //this.$router.push('/dispatch')
+          //return true
         }
       } catch (err) {
         if (err) {

@@ -3,7 +3,7 @@
     <!-- Calendar Button -->
     <span v-if="calendarButton" class="vdp-datepicker__calendar-button" :class="{'input-group-prepend' : bootstrapStyling}" @click="showCalendar" v-bind:style="{'cursor:not-allowed;' : disabled}">
       <span :class="{'input-group-text' : bootstrapStyling}">
-        <font-awesome-icon :icon="calendarButtonIcon"/>
+        <font-awesome-icon id="select-date-icon" :icon="calendarButtonIcon"/>
       </span>
     </span>
     <!-- Input -->

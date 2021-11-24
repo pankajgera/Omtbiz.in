@@ -1102,6 +1102,8 @@
         "average": "Average",
         "per_price": "Per Price",
         "invoice_id": "Invoice Number",
+        "invoice_report_title": "Dispatch",
+        "invoice_report_text": "Do you want to print this dispatch?",
         "dispatch_attached_message": "Cannot delete an dispatch which is already in use",
         "confirm_delete": "You will not be able to recover this dispatch | You will not be able to recover these dispatch",
         "created_message": "dispatch created successfully",
