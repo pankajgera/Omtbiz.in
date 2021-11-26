@@ -1109,7 +1109,8 @@
         "created_message": "dispatch created successfully",
         "updated_message": "dispatch updated successfully",
         "deleted_message": "dispatch deleted successfully",
-        "multiple_dispatch_message": "Selected dispatch moved"
+        "multiple_dispatch_message": "Selected dispatch moved",
+        "print_dispatch": "Print"
     },
     "inventory": {
         "add_inventory": "Add Inventory",
