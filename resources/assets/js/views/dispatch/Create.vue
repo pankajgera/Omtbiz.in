@@ -118,6 +118,20 @@
                   {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}
                 </base-button>
               </div>
+              <div class="form-group" v-if="isEdit">
+                <base-button
+                  id="print-dispatch"
+                  :loading="isLoading"
+                  :disabled="isLoading"
+                  icon="print"
+                  color="theme"
+                  type="button"
+                  class="collapse-button"
+                  @click="printDispatch"
+                >
+                  {{ $t('dispatch.print_dispatch') }}
+                </base-button>
+              </div>
             </div>
           </form>
         </div>
@@ -252,7 +266,7 @@ export default {
     },
     invoiceWithAmount ({ invoice_number, due_amount, master}) {
       let count = this.invoice.filter(i => i.account_master_id === master.id).length
-      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) - ${count}`
+      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
     },
     loadInvoice() {
       this.invoice = []
@@ -265,6 +279,16 @@ export default {
         hour: "2-digit",
         minute: "2-digit",
       });
+    },
+    printDispatch() {
+      return printJS({
+            printable: 'to_print',
+            type: 'html',
+            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon'],
+            scanStyles: true,
+            targetStyles: ['*'],
+            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px;}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;}'
+          })
     },
     async loadEditData () {
       let response = await this.editDispatch(this.$route.params.id)
@@ -312,14 +336,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          printJS({
-            printable: 'to_print',
-            type: 'html',
-            ignoreElements: ['submit-dispatch', 'time-icon', 'select-date-icon'],
-            scanStyles: true,
-            targetStyles: ['*'],
-            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px;}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;}'
-          })
+          this.printDispatch()
         } else {
           this.resetSelectedDispatch()
           this.resetSelectedToBeDispatch()

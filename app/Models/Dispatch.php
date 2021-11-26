@@ -85,12 +85,24 @@ class Dispatch extends Model
     public static function moveDispatch($id)
     {
         $dispatch = Dispatch::find($id);
-        $status = 'Sent';
         if ('Sent' === $dispatch->status) {
-            $status = 'Draft';
+            $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
+            foreach($invoices as $each) {
+                $dis = new Dispatch();
+                $dis->invoice_id = $each->id;
+                $dis->date_time = $dispatch->date_time;
+                $dis->time = $dispatch->time;
+                $dis->status = 'Draft';
+                $dis->transport = $dispatch->transport;
+                $dis->person = $dispatch->person;
+                $dis->company_id = $dispatch->company_id;
+                $dis->save();
+            }
+            $dispatch->delete();
+            return true;
         }
         $dispatch->update([
-            'status' => $status
+            'status' => 'Sent',
         ]);
         return true;
     }

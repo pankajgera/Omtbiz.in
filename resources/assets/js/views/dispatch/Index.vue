@@ -179,10 +179,12 @@
         <table-column
           :label="$t('dispatch.invoice_id')"
         >
-          <template slot-scope="row">
-            <span> {{ $t('dispatch.invoice_id') }} </span>
-            <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
-          </template>
+        <template slot-scope="row">
+            <router-link :to="{path: `dispatch/${row.id}/edit`}" >
+              <span> {{ $t('dispatch.invoice_id') }} </span>
+          <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
+          </router-link>
+        </template>
         </table-column>
         <table-column
           :label="$t('dispatch.name')"
@@ -300,16 +302,18 @@
           :label="$t('dispatch.invoice_id')"
         >
           <template slot-scope="row">
-            <span> {{ $t('dispatch.invoice_id') }} </span>
-            <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
+              <router-link :to="{path: `dispatch/${row.id}/edit`}" >
+                <span> {{ $t('dispatch.invoice_id') }} </span>
+                <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
+            </router-link>
           </template>
         </table-column>
         <table-column
           :label="$t('dispatch.name')"
         >
           <template slot-scope="row">
-            <span> {{ $t('dispatch.name') }} </span>
-            <span v-if="row.master">{{ row.master.name }}</span>
+              <span> {{ $t('dispatch.name') }} </span>
+              <span v-if="row.master">{{ row.master.name }}</span>
           </template>
         </table-column>
         <table-column
