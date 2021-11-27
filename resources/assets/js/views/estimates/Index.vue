@@ -1,5 +1,5 @@
 <template>
-  <div class="invoice-index-page invoices main-content">
+  <div class="estimate-index-page invoices main-content">
     <div class="page-header">
       <h3 class="page-title"> {{ $t('estimates.title') }}</h3>
       <ol class="breadcrumb">
@@ -14,14 +14,14 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('estimates.invoice', 2) }}
+            {{ $tc('estimates.estimate', 2) }}
           </router-link>
         </li>
       </ol>
       <div class="page-actions row">
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalInvoices || filtersApplied"
+            v-show="totalEstimates || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             size="large"
@@ -86,7 +86,7 @@
               />
             </div>
           </div>
-          <div class="filter-invoice">
+          <div class="filter-estimate">
             <label>{{ $t('estimates.invoice_number') }}</label>
             <base-input
               v-model="filters.invoice_number"
@@ -120,7 +120,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalInvoices }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p>
 
         <!-- Tabs -->
         <ul class="tabs">
@@ -140,7 +140,7 @@
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleInvoices">
+              <div class="dropdown-item" @click="removeMultipleEstimates">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -154,7 +154,7 @@
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
-          @change="selectAllInvoices"
+          @change="selectAllEstimates"
         >
         <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
@@ -188,7 +188,7 @@
         <table-column
           :label="$t('estimates.date')"
           sort-as="invoice_date"
-          show="formattedInvoiceDate"
+          show="formattedEstimateDate"
         />
         <table-column
           :label="$t('estimates.customer')"
@@ -248,19 +248,19 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendInvoice(row.id)" v-if="role === 'admin'">
+                <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
                   {{ $t('estimates.send_invoice') }}
                 </a>
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="markInvoiceAsSent(row.id)" v-if="role === 'admin'">
+                <a class="dropdown-item" href="#/" @click="markEstimateAsSent(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
                   {{ $t('estimates.mark_as_sent') }}
                 </a>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin'">
+                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -323,7 +323,7 @@ export default {
 
   computed: {
     showEmptyScreen () {
-      return !this.totalInvoices && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalEstimates && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -331,18 +331,18 @@ export default {
     ...mapGetters('customer', [
       'customers'
     ]),
-    ...mapGetters('invoice', [
-      'selectedInvoices',
-      'totalInvoices',
+    ...mapGetters('estimate', [
+      'selectedEstimates',
+      'totalEstimates',
       'invoices',
       'selectAllField'
     ]),
     selectField: {
       get: function () {
-        return this.selectedInvoices
+        return this.selectedEstimates
       },
       set: function (val) {
-        this.selectInvoice(val)
+        this.selectEstimate(val)
       }
     },
     selectAllFieldStatus: {
@@ -365,18 +365,18 @@ export default {
   },
   destroyed () {
     if (this.selectAllField) {
-      this.selectAllInvoices()
+      this.selectAllEstimates()
     }
   },
   methods: {
-    ...mapActions('invoice', [
-      'fetchInvoices',
+    ...mapActions('estimate', [
+      'fetchEstimates',
       'getRecord',
-      'selectInvoice',
-      'resetSelectedInvoices',
-      'selectAllInvoices',
-      'deleteInvoice',
-      'deleteMultipleInvoices',
+      'selectEstimate',
+      'resetSelectedEstimates',
+      'selectAllEstimates',
+      'deleteEstimate',
+      'deleteMultipleEstimates',
       'sendEmail',
       'markAsSent',
       'setSelectAllState'
@@ -384,7 +384,7 @@ export default {
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    async sendInvoice (id) {
+    async sendEstimate (id) {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$t('estimates.confirm_send'),
@@ -410,7 +410,7 @@ export default {
         }
       })
     },
-    async markInvoiceAsSent (id) {
+    async markEstimateAsSent (id) {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$t('estimates.invoice_mark_as_sent'),
@@ -452,7 +452,7 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchInvoices(data)
+      let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
 
       //this.currency = response.data.currency
@@ -468,7 +468,7 @@ export default {
     },
     setFilters () {
       this.filtersApplied = true
-      this.resetSelectedInvoices()
+      this.resetSelectedEstimates()
       this.refreshTable()
     },
     clearFilter () {
@@ -498,7 +498,7 @@ export default {
     onSelectCustomer (customer) {
       this.filters.customer = customer
     },
-    async removeInvoice (id) {
+    async removeEstimate (id) {
       this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
@@ -508,7 +508,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let res = await this.deleteInvoice(this.id)
+          let res = await this.deleteEstimate(this.id)
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('estimates.deleted_message'))
@@ -527,10 +527,10 @@ export default {
 
         this.$refs.table.refresh()
         this.filtersApplied = false
-        this.resetSelectedInvoices()
+        this.resetSelectedEstimates()
       })
     },
-    async removeMultipleInvoices () {
+    async removeMultipleEstimates () {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('estimates.confirm_delete', 2),
@@ -539,7 +539,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let res = await this.deleteMultipleInvoices()
+          let res = await this.deleteMultipleEstimates()
           if (res.data.error === 'payment_attached') {
             window.toastr['error'](this.$t('estimates.payment_attached_message'), this.$t('general.action_failed'))
             return true
@@ -547,7 +547,7 @@ export default {
           if (res.data) {
             this.$refs.table.refresh()
             this.filtersApplied = false
-            this.resetSelectedInvoices()
+            this.resetSelectedEstimates()
             window.toastr['success'](this.$tc('estimates.deleted_message', 2))
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
