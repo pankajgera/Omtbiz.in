@@ -1,7 +1,7 @@
 <template>
-  <div class="estimate-index-page estimates main-content">
+  <div class="invoice-index-page invoices main-content">
     <div class="page-header">
-      <h3 class="page-title">{{ $t('estimates.title') }}</h3>
+      <h3 class="page-title"> {{ $t('estimates.title') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
           <router-link
@@ -14,14 +14,14 @@
           <router-link
             slot="item-title"
             to="#">
-            {{ $tc('estimates.estimate', 2) }}
+            {{ $tc('estimates.invoice', 2) }}
           </router-link>
         </li>
       </ol>
       <div class="page-actions row">
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalEstimates || filtersApplied"
+            v-show="totalInvoices || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             size="large"
@@ -32,12 +32,10 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="estimates/create">
-          <base-button
-            size="large"
-            icon="plus"
-            color="theme" >
-            {{ $t('estimates.new_estimate') }}</base-button>
+        <router-link slot="item-title" class="col-xs-2" to="/invoices/create">
+          <base-button size="large" icon="plus" color="theme">
+            {{ $t('estimates.new_invoice') }}
+          </base-button>
         </router-link>
       </div>
     </div>
@@ -53,17 +51,22 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <div class="filter-status">
+          <!-- <div class="filter-status">
             <label>{{ $t('estimates.status') }}</label>
             <base-select
               v-model="filters.status"
               :options="status"
+              :group-select="false"
               :searchable="true"
               :show-labels="false"
               :placeholder="$t('general.select_a_status')"
+              group-values="options"
+              group-label="label"
+              track-by="name"
+              label="name"
               @remove="clearStatusSearch()"
             />
-          </div>
+          </div> -->
           <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
@@ -83,23 +86,24 @@
               />
             </div>
           </div>
-          <div class="filter-estimate">
-            <label>{{ $t('estimates.estimate_number') }}</label>
+          <div class="filter-invoice">
+            <label>{{ $t('estimates.invoice_number') }}</label>
             <base-input
-              v-model="filters.estimate_number"
+              v-model="filters.invoice_number"
               icon="hashtag"/>
           </div>
         </div>
         <label class="clear-filter" @click="clearFilter">{{ $t('general.clear_all') }}</label>
       </div>
     </transition>
+
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <moon-walker-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('estimates.no_estimates') }}</label>
+        <label class="col title">{{ $t('estimates.no_invoices') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('estimates.list_of_estimates') }}</label>
+        <label class="description col mt-1" align="center">{{ $t('estimates.list_of_invoices') }}</label>
       </div>
       <div class="btn-container">
         <base-button
@@ -107,36 +111,36 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('estimates/create')"
+          @click="$router.push('invoices/create')"
         >
-          {{ $t('estimates.add_new_estimate') }}
+          {{ $t('estimates.new_invoice') }}
         </base-button>
       </div>
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalInvoices }}</b></p>
 
         <!-- Tabs -->
         <ul class="tabs">
-          <li class="tab" @click="getStatus('DRAFT')">
-            <a :class="['tab-link', {'a-active': filters.status === 'DRAFT'}]" href="#">{{ $t('general.draft') }}</a>
+          <li class="tab" @click="getStatus('UNPAID')">
+            <a :class="['tab-link', {'a-active': filters.status.value === 'UNPAID'}]" href="#" >{{ $t('general.due') }}</a>
           </li>
-          <li class="tab" @click="getStatus('SENT')">
-            <a :class="['tab-link', {'a-active': filters.status === 'SENT'}]" href="#" >{{ $t('general.sent') }}</a>
+          <li class="tab" @click="getStatus('DRAFT')">
+            <a :class="['tab-link', {'a-active': filters.status.value === 'DRAFT'}]" href="#">{{ $t('general.draft') }}</a>
           </li>
           <li class="tab" @click="getStatus('')">
-            <a :class="['tab-link', {'a-active': filters.status === '' || filters.status !== 'DRAFT' && filters.status !== 'SENT'}]" href="#">{{ $t('general.all') }}</a>
+            <a :class="['tab-link', {'a-active': filters.status.value === '' || filters.status.value === null || filters.status.value !== 'DRAFT' && filters.status.value !== 'UNPAID'}]" href="#">{{ $t('general.all') }}</a>
           </li>
         </ul>
         <transition name="fade">
-          <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
+          <v-dropdown v-if="selectedestimates.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleEstimates">
+              <div class="dropdown-item" @click="removeMultipleInvoices">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -144,15 +148,13 @@
           </v-dropdown>
         </transition>
       </div>
-
       <div class="custom-control custom-checkbox">
         <input
           id="select-all"
           v-model="selectAllFieldStatus"
-          :disabled="estimates.length <= 0"
           type="checkbox"
           class="custom-control-input"
-          @change="selectAllEstimates"
+          @change="selectAllInvoices"
         >
         <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
@@ -179,100 +181,89 @@
                 type="checkbox"
                 class="custom-control-input"
               >
-              <label :for="row.id" class="custom-control-label" />
+              <label :for="row.id" class="custom-control-label"/>
             </div>
           </template>
         </table-column>
         <table-column
           :label="$t('estimates.date')"
-          sort-as="estimate_date"
-          show="formattedEstimateDate" />
+          sort-as="invoice_date"
+          show="formattedInvoiceDate"
+        />
         <table-column
           :label="$t('estimates.customer')"
-          sort-as="name"
-          show="name" />
+          width="20%"
+          show="name"
+        />
         <!-- <table-column
-          :label="$t('estimates.expiry_date')"
-          sort-as="expiry_date"
-          show="formattedExpiryDate" /> -->
-        <table-column
           :label="$t('estimates.status')"
-          show="status" >
+          sort-as="status"
+        >
           <template slot-scope="row" >
             <span> {{ $t('estimates.status') }}</span>
-            <span :class="'est-status-'+row.status.toLowerCase()">{{ row.status }}</span>
+            <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'PARTIALLY_PAID')? row.status : row.status.replace('_', ' ') }}</span>
+          </template>
+        </table-column> -->
+        <table-column
+          :label="$t('estimates.paid_status')"
+          sort-as="paid_status"
+        >
+          <template slot-scope="row">
+            <span>{{ $t('estimates.paid_status') }}</span>
+            <span :class="'inv-status-'+row.paid_status.toLowerCase()">{{ (row.paid_status != 'PARTIALLY_PAID')? row.paid_status : row.paid_status.replace('_', ' ') }}</span>
           </template>
         </table-column>
         <table-column
-          :label="$tc('estimates.estimate', 1)"
-          show="estimate_number"/>
+          :label="$t('estimates.number')"
+          show="invoice_number"
+        />
         <table-column
-          :label="$t('invoices.total')"
-          sort-as="total"
+          :label="$t('estimates.due_amount')"
+          sort-as="due_amount"
         >
           <template slot-scope="row">
-            <span> {{ $t('estimates.total') }}</span>
-            <div v-html="$utils.formatMoney(row.total, row.user.currency)" />
+            <span>{{ $t('estimates.due_amount') }}</span>
+             	₹ {{ (row.due_amount/100).toFixed(2) }}
           </template>
         </table-column>
         <table-column
           :sortable="false"
           :filterable="false"
-          cell-class="action-dropdown"
+          cell-class="action-dropdown no-click"
         >
           <template slot-scope="row">
-            <span> {{ $t('estimates.action') }} </span>
+            <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
               <a slot="activator" href="#">
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="removeEstimate(row.id)">
-                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                  {{ $t('general.delete') }}
-                </div>
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
+                <router-link :to="{path: `invoices/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
-                  {{ $t('general.view') }}
+                  {{ $t('estimates.view') }}
                 </router-link>
               </v-dropdown-item>
-              <v-dropdown-item>
-                <a class="dropdown-item" href="#/" @click="convertInToinvoice(row.id)">
-                  <font-awesome-icon icon="file-alt" class="dropdown-item-icon" />
-                  {{ $t('estimates.convert_to_invoice') }}
+              <v-dropdown-item v-if="row.status == 'DRAFT'">
+                <a class="dropdown-item" href="#/" @click="sendInvoice(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
+                  {{ $t('estimates.send_invoice') }}
                 </a>
               </v-dropdown-item>
-              <v-dropdown-item v-if="row.status !== 'SENT'">
-                <a class="dropdown-item" href="#/" @click.self="onMarkAsSent(row.id)">
+              <v-dropdown-item v-if="row.status == 'DRAFT'">
+                <a class="dropdown-item" href="#/" @click="markInvoiceAsSent(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
                   {{ $t('estimates.mark_as_sent') }}
                 </a>
               </v-dropdown-item>
-              <v-dropdown-item v-if="row.status !== 'SENT'">
-                <a class="dropdown-item" href="#/" @click.self="sendEstimate(row.id)">
-                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('estimates.send_estimate') }}
-                </a>
-              </v-dropdown-item>
-              <v-dropdown-item v-if="row.status !== 'ACCEPTED'">
-                <a class="dropdown-item" href="#/" @click.self="onMarkAsAccepted(row.id)">
-                  <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
-                  {{ $t('estimates.mark_as_accepted') }}
-                </a>
-              </v-dropdown-item>
-              <v-dropdown-item v-if="row.status !== 'REJECTED'">
-                <a class="dropdown-item" href="#/" @click.self="onMarkAsRejected(row.id)">
-                  <font-awesome-icon icon="times-circle" class="dropdown-item-icon" />
-                  {{ $t('estimates.mark_as_rejected') }}
-                </a>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
               </v-dropdown-item>
             </v-dropdown>
           </template>
@@ -281,11 +272,10 @@
     </div>
   </div>
 </template>
+
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'
-import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
-import ObservatoryIcon from '../../components/icon/ObservatoryIcon'
 import moment from 'moment'
 
 export default {
@@ -295,24 +285,45 @@ export default {
   data () {
     return {
       showFilters: false,
-      currency: null,
-      status: ['DRAFT', 'SENT', 'VIEWED', 'EXPIRED', 'ACCEPTED', 'REJECTED'],
+      //currency: null,
+      status: [
+        {
+          label: 'Status',
+          isDisable: true,
+          options: [
+            { name: 'DRAFT', value: 'DRAFT' },
+            { name: 'DUE', value: 'UNPAID' },
+            { name: 'SENT', value: 'SENT' },
+            { name: 'VIEWED', value: 'VIEWED' },
+            { name: 'OVERDUE', value: 'OVERDUE' },
+            { name: 'COMPLETED', value: 'COMPLETED' }
+          ]
+        },
+        {
+          label: 'Paid Status',
+          options: [
+            { name: 'UNPAID', value: 'UNPAID' },
+            { name: 'PAID', value: 'PAID' },
+            { name: 'PARTIALLY PAID', value: 'PARTIALLY_PAID' }
+          ]
+        }
+      ],
       filtersApplied: false,
       isRequestOngoing: true,
       filters: {
         customer: '',
-        status: 'DRAFT',
+        status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
         to_date: '',
-        estimate_number: ''
-      }
+        invoice_number: ''
+      },
+      role: this.$store.state.user.currentUser.role
     }
   },
 
   computed: {
-    focus,
     showEmptyScreen () {
-      return !this.totalEstimates && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalInvoices && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -320,18 +331,18 @@ export default {
     ...mapGetters('customer', [
       'customers'
     ]),
-    ...mapGetters('estimate', [
-      'selectedEstimates',
-      'totalEstimates',
-      'estimates',
+    ...mapGetters('invoice', [
+      'selectedInvoices',
+      'totalInvoices',
+      'invoices',
       'selectAllField'
     ]),
     selectField: {
       get: function () {
-        return this.selectedEstimates
+        return this.selectedInvoices
       },
       set: function (val) {
-        this.selectEstimate(val)
+        this.selectInvoice(val)
       }
     },
     selectAllFieldStatus: {
@@ -354,51 +365,97 @@ export default {
   },
   destroyed () {
     if (this.selectAllField) {
-      this.selectAllEstimates()
+      this.selectAllInvoices()
     }
   },
   methods: {
-    ...mapActions('estimate', [
-      'fetchEstimates',
-      'resetSelectedEstimates',
+    ...mapActions('invoice', [
+      'fetchInvoices',
       'getRecord',
-      'selectEstimate',
-      'selectAllEstimates',
-      'deleteEstimate',
-      'deleteMultipleEstimates',
+      'selectInvoice',
+      'resetSelectedInvoices',
+      'selectAllInvoices',
+      'deleteInvoice',
+      'deleteMultipleInvoices',
+      'sendEmail',
       'markAsSent',
-      'convertToInvoice',
-      'setSelectAllState',
-      'markAsAccepted',
-      'markAsRejected',
-      'sendEmail'
+      'setSelectAllState'
     ]),
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    refreshTable () {
-      this.$refs.table.refresh()
+    async sendInvoice (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('estimates.confirm_send'),
+        icon: '/assets/icon/paper-plane-solid.svg',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          const data = {
+            id: id
+          }
+          let response = await this.sendEmail(data)
+          this.refreshTable()
+          if (response.data.success) {
+            window.toastr['success'](this.$tc('estimates.send_invoice_successfully'))
+            return true
+          }
+          if (response.data.error === 'user_email_does_not_exist') {
+            window.toastr['error'](this.$tc('estimates.user_email_does_not_exist'))
+            return false
+          }
+          window.toastr['error'](this.$tc('estimates.something_went_wrong'))
+        }
+      })
+    },
+    async markInvoiceAsSent (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('estimates.invoice_mark_as_sent'),
+        icon: '/assets/icon/check-circle-solid.svg',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          const data = {
+            id: id
+          }
+          let response = await this.markAsSent(data)
+          this.refreshTable()
+          if (response.data) {
+            window.toastr['success'](this.$tc('estimates.mark_as_sent_successfully'))
+          }
+        }
+      })
     },
     getStatus (val) {
-      this.filters.status = val
+      this.filters.status = {
+        name: val,
+        value: val
+      }
+    },
+    refreshTable () {
+      this.$refs.table.refresh()
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
-        status: this.filters.status,
+        status: this.filters.status.value,
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
-        estimate_number: this.filters.estimate_number,
+        invoice_number: this.filters.invoice_number,
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchEstimates(data)
+      let response = await this.fetchInvoices(data)
       this.isRequestOngoing = false
 
-      this.currency = response.data.currency
+      //this.currency = response.data.currency
 
       return {
         data: response.data.estimates.data,
@@ -409,66 +466,21 @@ export default {
         }
       }
     },
-    async onMarkAsAccepted (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_mark_as_accepted'),
-        icon: '/assets/icon/check-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (markedAsRejected) => {
-        if (markedAsRejected) {
-          const data = {
-            id: id
-          }
-          let response = await this.markAsAccepted(data)
-          this.refreshTable()
-          if (response.data) {
-            this.filters.status = ''
-            this.$refs.table.refresh()
-            window.toastr['success'](this.$tc('estimates.marked_as_accepted_message'))
-          }
-        }
-      })
-    },
-    async onMarkAsRejected (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_mark_as_rejected'),
-        icon: '/assets/icon/times-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (markedAsRejected) => {
-        if (markedAsRejected) {
-          const data = {
-            id: id
-          }
-          let response = await this.markAsRejected(data)
-          this.refreshTable()
-          if (response.data) {
-            this.filters.status = ''
-            this.$refs.table.refresh()
-            window.toastr['success'](this.$tc('estimates.marked_as_rejected_message'))
-          }
-        }
-      })
-    },
     setFilters () {
       this.filtersApplied = true
-      this.resetSelectedEstimates()
-      this.$refs.table.refresh()
+      this.resetSelectedInvoices()
+      this.refreshTable()
     },
     clearFilter () {
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
-
       this.filters = {
         customer: '',
         status: '',
         from_date: '',
         to_date: '',
-        estimate_number: ''
+        invoice_number: ''
       }
 
       this.$nextTick(() => {
@@ -486,61 +498,56 @@ export default {
     onSelectCustomer (customer) {
       this.filters.customer = customer
     },
-    async removeEstimate (id) {
+    async removeInvoice (id) {
       this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('estimates.confirm_delete', 1),
+        text: this.$tc('estimates.confirm_delete'),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let res = await this.deleteEstimate(this.id)
+      }).then(async (value) => {
+        if (value) {
+          let res = await this.deleteInvoice(this.id)
+
           if (res.data.success) {
+            window.toastr['success'](this.$tc('estimates.deleted_message'))
             this.$refs.table.refresh()
-            this.filtersApplied = false
-            this.resetSelectedEstimates()
-            window.toastr['success'](this.$tc('estimates.deleted_message', 1))
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
+            return true
           }
+
+          if (res.data.error === 'payment_attached') {
+            window.toastr['error'](this.$t('estimates.payment_attached_message'), this.$t('general.action_failed'))
+            return true
+          }
+
+          window.toastr['error'](res.data.error)
+          return true
         }
+
+        this.$refs.table.refresh()
+        this.filtersApplied = false
+        this.resetSelectedInvoices()
       })
     },
-    async convertInToinvoice (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_conversion'),
-        icon: '/assets/icon/file-alt-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (willConvertInToinvoice) => {
-        if (willConvertInToinvoice) {
-          let res = await this.convertToInvoice(id)
-          if (res.data) {
-            window.toastr['success'](this.$t('estimates.conversion_message'))
-            this.$router.push(`invoices/${res.data.invoice.id}/edit`)
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
-          }
-        }
-      })
-    },
-    async removeMultipleEstimates () {
+    async removeMultipleInvoices () {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('estimates.confirm_delete', 2),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let res = await this.deleteMultipleEstimates()
-          if (res.data.success) {
+      }).then(async (value) => {
+        if (value) {
+          let res = await this.deleteMultipleInvoices()
+          if (res.data.error === 'payment_attached') {
+            window.toastr['error'](this.$t('estimates.payment_attached_message'), this.$t('general.action_failed'))
+            return true
+          }
+          if (res.data) {
             this.$refs.table.refresh()
-            this.resetSelectedEstimates()
             this.filtersApplied = false
+            this.resetSelectedInvoices()
             window.toastr['success'](this.$tc('estimates.deleted_message', 2))
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
@@ -555,52 +562,6 @@ export default {
     async clearStatusSearch (removedOption, id) {
       this.filters.status = ''
       this.refreshTable()
-    },
-    async onMarkAsSent (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_mark_as_sent'),
-        icon: '/assets/icon/check-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (willMarkAsSent) => {
-        if (willMarkAsSent) {
-          const data = {
-            id: id
-          }
-          let response = await this.markAsSent(data)
-          this.refreshTable()
-          if (response.data) {
-            window.toastr['success'](this.$tc('estimates.mark_as_sent_successfully'))
-          }
-        }
-      })
-    },
-    async sendEstimate (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_send_estimate'),
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (willSendEstimate) => {
-        if (willSendEstimate) {
-          const data = {
-            id: id
-          }
-          let response = await this.sendEmail(data)
-          this.refreshTable()
-          if (response.data.success) {
-            window.toastr['success'](this.$tc('estimates.send_estimate_successfully'))
-            return true
-          }
-          if (response.data.error === 'user_email_does_not_exist') {
-            window.toastr['error'](this.$tc('estimates.user_email_does_not_exist'))
-            return true
-          }
-          window.toastr['error'](this.$tc('estimates.something_went_wrong'))
-        }
-      })
     }
   }
 }
