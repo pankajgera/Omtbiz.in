@@ -125,12 +125,12 @@ export default {
           // },
         ],
         [
-          {
-            title: "navigation.estimates",
-            icon: "file",
-            route: "/estimates",
-            meta: ["admin"],
-          },
+          // {
+          //   title: "navigation.estimates",
+          //   icon: "file",
+          //   route: "/estimates",
+          //   meta: ["admin"],
+          // },
           // {
           //   title: "navigation.expenses",
           //   icon: "space-shuttle",
