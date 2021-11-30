@@ -220,6 +220,11 @@ export default {
   },
   created () {
     this.fetchInvoices()
+    let current = new Date();
+    this.formData.time = current.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   },
   destroyed() {
     this.resetSelectedDispatch()
@@ -282,6 +287,9 @@ export default {
     },
     printDispatch() {
       return printJS({
+            onPrintDialogClose: () => {
+              this.$router.push('/dispatch')
+            },
             printable: 'to_print',
             type: 'html',
             ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon'],
@@ -340,12 +348,12 @@ export default {
         } else {
           this.resetSelectedDispatch()
           this.resetSelectedToBeDispatch()
+          this.$router.push('/dispatch')
         }
       })
     },
     async submitDispatch () {
       this.$v.formData.$touch()
-      console.log(this.$v.$invalid)
       if (this.$v.$invalid) {
         return false
       }

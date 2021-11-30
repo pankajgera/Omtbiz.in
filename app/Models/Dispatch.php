@@ -73,6 +73,8 @@ class Dispatch extends Model
     {
         $dispatch = Dispatch::find($id);
         $dispatch->delete();
+        //Delete item (bill-ty) if exists in "items" table
+        Item::where('dispatch_id', $dispatch->id)->delete();
         return true;
     }
 
@@ -85,9 +87,9 @@ class Dispatch extends Model
     public static function moveDispatch($id)
     {
         $dispatch = Dispatch::find($id);
+        $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
         if ('Sent' === $dispatch->status) {
-            $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
-            foreach($invoices as $each) {
+            foreach ($invoices as $each) {
                 $dis = new Dispatch();
                 $dis->invoice_id = $each->id;
                 $dis->date_time = $dispatch->date_time;
@@ -99,11 +101,35 @@ class Dispatch extends Model
                 $dis->save();
             }
             $dispatch->delete();
+            //Delete item (bill-ty) if exists in "items" table
+            Item::where('dispatch_id', $dispatch->id)->delete();
             return true;
         }
+        self::addDispatchBillTy($dispatch, $invoices->sum('total'));
         $dispatch->update([
             'status' => 'Sent',
         ]);
         return true;
+    }
+
+    /**
+     * Dipatched invoices will create bill-ty
+     *
+     * @param mixed $dispatch_ids
+     * @param int $invoice_total_amount
+     * @param int $company_id
+     *
+     * @return void
+     */
+    public static function addDispatchBillTy($dispatch_ids, $invoice_total_amount, $company_id)
+    {
+        $item = new Item();
+        $item->name = 'dispatched';
+        $item->unit = 'pc';
+        $item->description = '';
+        $item->company_id = $company_id;
+        $item->price = $invoice_total_amount;
+        $item->dispatch_id = $dispatch_ids;
+        $item->save();
     }
 }
