@@ -55,7 +55,8 @@ import {
   faSyncAlt,
   faRocket,
   faCamera,
-  faClock
+  faClock,
+  faCircle
 } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -121,7 +122,8 @@ library.add(
   faSyncAlt,
   faRocket,
   faCamera,
-  faClock
+  faClock,
+  faCircle
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
