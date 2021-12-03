@@ -218,12 +218,16 @@
               <dot-icon />
             </a>
             <v-dropdown-item>
-
+              <div @click="singleDispatch(row.id)" class="dropdown-item">
+                <font-awesome-icon :icon="['fas', 'circle']" class="dropdown-item-icon" />
+                {{ $t('general.dispatch') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
               <router-link :to="{path: `dispatch/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}
               </router-link>
-
             </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeDispatch(row.id)">
@@ -460,6 +464,7 @@ export default {
   methods: {
     ...mapActions('dispatch', [
       'dipatchedData',
+      'updateDispatch',
       'selectAllDispatch',
       'selectAllToBeDispatch',
       'selectDispatch',
@@ -608,6 +613,22 @@ export default {
           }
         }
       })
+    },
+    async singleDispatch (id) {
+      let data = this.toBeDispatch.find(i => i.id === id);
+      data.invoice_id = data.invoices.map(i => i.id.toString())
+      data.status = {
+          id: 2,
+          name: 'Sent',
+      }
+      if (data) {
+        let res = await this.updateDispatch(data);
+        if (res.data.dispatch) {
+          window.location.reload()
+        } else if (res.data.error) {
+          window.toastr['error'](res.data.message)
+        }
+      }
     },
     setIndex(index) {
       this.index = index
