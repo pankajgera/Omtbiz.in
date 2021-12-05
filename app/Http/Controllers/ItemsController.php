@@ -15,19 +15,31 @@ class ItemsController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $items = Item::applyFilters($request->only([
-                'search',
-                'price',
-                'unit',
-                'orderByField',
-                'orderBy',
-            ]))->with('images')
+        $items = Item::where('name', 'dispatched')->applyFilters($request->only([
+            'search',
+            'price',
+            'unit',
+            'orderByField',
+            'orderBy',
+        ]))->with('images')
+            ->whereCompany($request->header('company'))
+            ->latest()
+            ->paginate($limit);
+
+        $itemsToBe = Item::where('name', '!=', 'dispatched')->applyFilters($request->only([
+            'search',
+            'price',
+            'unit',
+            'orderByField',
+            'orderBy',
+        ]))->with('images')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
         return response()->json([
             'items' => $items,
+            'itemsToBe' => $itemsToBe,
             'taxTypes' => TaxType::latest()->get(),
         ]);
     }
