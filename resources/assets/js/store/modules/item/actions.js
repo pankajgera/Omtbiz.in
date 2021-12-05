@@ -3,8 +3,9 @@ import * as types from './mutation-types'
 export const fetchItems = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/items`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_ITEMS, response.data.items.data)
+      commit(types.BOOTSTRAP_ITEMS, response.data.items.data, response.data.itemsToBe.total)
       commit(types.SET_TOTAL_ITEMS, response.data.items.total)
+      commit(types.SET_TOTAL_ITEMS_TO_BE, response.data.itemsToBe.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -70,6 +71,9 @@ export const deleteMultipleItems = ({ commit, dispatch, state }, id) => {
 export const setSelectAllState = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECT_ALL_STATE, data)
 }
+export const setSelectAllStateToBe = ({ commit, dispatch, state }, data) => {
+  commit(types.SET_SELECT_ALL_STATE_TO_BE, data)
+}
 
 export const selectAllItems = ({ commit, dispatch, state }) => {
   if (state.selectedItems.length === state.items.length) {
@@ -79,6 +83,16 @@ export const selectAllItems = ({ commit, dispatch, state }) => {
     let allItemIds = state.items.map(item => item.id)
     commit(types.SET_SELECTED_ITEMS, allItemIds)
     commit(types.SET_SELECT_ALL_STATE, true)
+  }
+}
+export const selectAllItemsToBe = ({ commit, dispatch, state }) => {
+  if (state.selectedItemsToBe.length === state.items.length) {
+    commit(types.SET_SELECTED_ITEMS_TO_BE, [])
+    commit(types.SET_SELECT_ALL_STATE_TO_BE, false)
+  } else {
+    let allItemIdsToBe = state.items.map(item => item.id)
+    commit(types.SET_SELECTED_ITEMS_TO_BE, allItemIdsToBe)
+    commit(types.SET_SELECT_ALL_STATE_TO_BE, true)
   }
 }
 

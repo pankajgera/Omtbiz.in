@@ -4,9 +4,13 @@ import * as getters from './getters'
 
 const initialState = {
   items: [],
+  itemsTobe: [],
   totalItems: 0,
+  totalItemsToBe: 0,
   selectAllField: false,
-  selectedItems: []
+  selectAllFieldToBe: false,
+  selectedItems: [],
+  selectedItemsToBe: []
 }
 
 export default {

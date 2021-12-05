@@ -25,7 +25,7 @@
       <div class="page-actions row">
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalItems || filtersApplied"
+            v-show="filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -95,9 +95,8 @@
       </div>
     </div>
 
-    <div v-show="!showEmptyScreen" class="table-container">
+    <div class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ items.length }}</b> {{ $t('general.of') }} <b>{{ totalItems }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedItems.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -206,6 +205,119 @@
         </table-column>
       </table-component>
     </div>
+
+
+    <div class="table-container">
+      <div class="table-actions mt-5">
+        <transition name="fade">
+          <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
+            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+              {{ $t('general.actions') }}
+            </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeMultipleItems">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </transition>
+      </div>
+
+      <div class="custom-control custom-checkbox">
+        <input
+          id="select-all"
+          v-model="selectAllFieldStatusToBe"
+          type="checkbox"
+          class="custom-control-input"
+          @change="selectAllItemsToBe"
+        >
+        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+          <span class="select-all-label">{{ $t('general.select_all') }} </span>
+        </label>
+      </div>
+
+      <table-component
+        ref="table"
+        :data="fetchDataToBe"
+        :show-filter="false"
+        table-class="table"
+      >
+
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="no-click"
+        >
+          <template slot-scope="row">
+            <div class="custom-control custom-checkbox">
+              <input
+                :id="row.id"
+                v-model="selectField"
+                :value="row.id"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label :for="row.id" class="custom-control-label"/>
+            </div>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('items.name')"
+          show="name"
+        />
+        <table-column
+          :label="$t('items.bill_ty')"
+          show="bill_ty"
+        />
+        <table-column
+          :label="$t('items.added_on')"
+          sort-as="created_at"
+          show="formattedCreatedAt"
+        />
+        <table-column
+          label="Image"
+          show="images"
+        >
+          <template v-if="row.images" slot-scope="row">
+            <expandable-image
+              class="image"
+              :src="row.images.original_image_path"
+            ></expandable-image>
+          </template>
+        </table-column>
+        <table-column
+          :key="Math.random()"
+          :sortable="false"
+          :filterable="false"
+          cell-class="action-dropdown"
+        >
+          <template slot-scope="row">
+            <span> {{ $t('items.action') }} </span>
+            <v-dropdown>
+              <a slot="activator" href="#">
+                <dot-icon />
+              </a>
+              <v-dropdown-item>
+
+                <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                  {{ $t('general.edit') }}
+                </router-link>
+
+              </v-dropdown-item>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeItems(row.id)">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </template>
+        </table-column>
+      </table-component>
+    </div>
+
   </div>
 </template>
 <style>
@@ -247,8 +359,11 @@ export default {
   computed: {
     ...mapGetters('item', [
       'items',
+      'itemsToBe',
       'selectedItems',
+      'selectedItemsToBe',
       'totalItems',
+      'totalItemsToBe',
       'selectAllField'
     ]),
     ...mapGetters('currency', [
@@ -275,6 +390,14 @@ export default {
       set: function (val) {
         this.setSelectAllState(val)
       }
+    },
+    selectAllFieldStatusToBe: {
+      get: function () {
+        return this.selectAllFieldToBe
+      },
+      set: function (val) {
+        this.setSelectAllStateToBe(val)
+      }
     }
   },
   watch: {
@@ -287,15 +410,20 @@ export default {
     if (this.selectAllField) {
       this.selectAllItems()
     }
+    if (this.selectAllFieldToBe) {
+      this.selectAllItemsToBe()
+    }
   },
   methods: {
     ...mapActions('item', [
       'fetchItems',
       'selectAllItems',
+      'selectAllItemsToBe',
       'selectItem',
       'deleteItem',
       'deleteMultipleItems',
-      'setSelectAllState'
+      'setSelectAllState',
+      'setSelectAllStateToBe'
     ]),
     refreshTable () {
       this.$refs.table.refresh()
@@ -319,6 +447,29 @@ export default {
         data: response.data.items.data,
         pagination: {
           totalPages: response.data.items.last_page,
+          currentPage: page
+        }
+      }
+    },
+    async fetchDataToBe ({ page, filter, sort }) {
+      let data = {
+        search: this.filters.name !== null ? this.filters.name : '',
+        unit: this.filters.unit !== null ? this.filters.unit.name : '',
+        price: this.filters.price * 100,
+        bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
+        orderByField: sort.fieldName || 'created_at',
+        orderBy: sort.order || 'desc',
+        page
+      }
+
+      this.isRequestOngoing = true
+      let response = await this.fetchItems(data)
+      this.isRequestOngoing = false
+
+      return {
+        data: response.data.itemsToBe.data,
+        pagination: {
+          totalPages: response.data.itemsToBe.last_page,
           currentPage: page
         }
       }
