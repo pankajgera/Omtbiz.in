@@ -215,7 +215,7 @@
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleItems">
+              <div class="dropdown-item" @click="removeMultipleItemsToBe">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -226,19 +226,19 @@
 
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
+          id="select-all-to-be"
           v-model="selectAllFieldStatusToBe"
           type="checkbox"
           class="custom-control-input"
           @change="selectAllItemsToBe"
         >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+        <label v-show="!isRequestOngoing" for="select-all-to-be" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
 
       <table-component
-        ref="table"
+        ref="tableToBe"
         :data="fetchDataToBe"
         :show-filter="false"
         table-class="table"
@@ -253,7 +253,7 @@
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
-                v-model="selectField"
+                v-model="selectFieldTobe"
                 :value="row.id"
                 type="checkbox"
                 class="custom-control-input"
@@ -266,10 +266,10 @@
           :label="$t('items.name')"
           show="name"
         />
-        <table-column
+        <!-- <table-column
           :label="$t('items.bill_ty')"
           show="bill_ty"
-        />
+        /> -->
         <table-column
           :label="$t('items.added_on')"
           sort-as="created_at"
@@ -299,12 +299,10 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-
                 <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                   {{ $t('general.edit') }}
                 </router-link>
-
               </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeItems(row.id)">
@@ -383,6 +381,14 @@ export default {
         this.selectItem(val)
       }
     },
+    selectFieldTobe: {
+      get: function () {
+        return this.selectedItemsToBe
+      },
+      set: function (val) {
+        this.selectItemToBe(val)
+      }
+    },
     selectAllFieldStatus: {
       get: function () {
         return this.selectAllField
@@ -420,8 +426,10 @@ export default {
       'selectAllItems',
       'selectAllItemsToBe',
       'selectItem',
+      'selectItemToBe',
       'deleteItem',
       'deleteMultipleItems',
+      'deleteMultipleItemsToBe',
       'setSelectAllState',
       'setSelectAllStateToBe'
     ]),
@@ -535,6 +543,25 @@ export default {
       }).then(async (willDelete) => {
         if (willDelete) {
           let res = await this.deleteMultipleItems()
+          if (res.data.success) {
+            window.toastr['success'](this.$tc('items.deleted_message', 2))
+            this.$refs.table.refresh()
+          } else if (res.data.error) {
+            window.toastr['error'](res.data.message)
+          }
+        }
+      })
+    },
+    async removeMultipleItemsToBe () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$tc('items.confirm_delete', 2),
+        icon: '/assets/icon/trash-solid.svg',
+        buttons: true,
+        dangerMode: true
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          let res = await this.deleteMultipleItemsToBe()
           if (res.data.success) {
             window.toastr['success'](this.$tc('items.deleted_message', 2))
             this.$refs.table.refresh()

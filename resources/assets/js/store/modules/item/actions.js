@@ -67,6 +67,16 @@ export const deleteMultipleItems = ({ commit, dispatch, state }, id) => {
     })
   })
 }
+export const deleteMultipleItemsToBe = ({ commit, dispatch, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/items/delete`, {'id': state.selectedItemsToBe}).then((response) => {
+      commit(types.DELETE_MULTIPLE_ITEMS_TO_BE, state.selectedItemsToBe)
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 
 export const setSelectAllState = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECT_ALL_STATE, data)
@@ -102,5 +112,13 @@ export const selectItem = ({ commit, dispatch, state }, data) => {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)
+  }
+}
+export const selectItemToBe = ({ commit, dispatch, state }, data) => {
+  commit(types.SET_SELECTED_ITEMS_TO_BE, data)
+  if (state.selectedItemsToBe.length === state.itemsToBe.length) {
+    commit(types.SET_SELECT_ALL_STATE_TO_BE, true)
+  } else {
+    commit(types.SET_SELECT_ALL_STATE_TO_BE, false)
   }
 }
