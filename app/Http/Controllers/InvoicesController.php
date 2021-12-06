@@ -33,7 +33,7 @@ class InvoicesController extends Controller
     public function index(Request $request)
     {
         try {
-            $limit = $request->has('limit') ? $request->limit : 10;
+            $limit = $request->has('limit') ? $request->limit : 20;
 
             $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])
                 ->join('users', 'users.id', '=', 'invoices.user_id')
