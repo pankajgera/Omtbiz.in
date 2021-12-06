@@ -186,6 +186,16 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('invoices.number')"
+          show="invoice_number"
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item">
+               {{ row.invoice_number }}
+              </router-link>
+          </template>
+        </table-column>
+        <table-column
           :label="$t('invoices.date')"
           sort-as="invoice_date"
           show="formattedInvoiceDate"
@@ -213,10 +223,6 @@
             <span :class="'inv-status-'+row.paid_status.toLowerCase()">{{ (row.paid_status != 'PARTIALLY_PAID')? row.paid_status : row.paid_status.replace('_', ' ') }}</span>
           </template>
         </table-column>
-        <table-column
-          :label="$t('invoices.number')"
-          show="invoice_number"
-        />
         <table-column
           :label="$t('invoices.due_amount')"
           sort-as="due_amount"
@@ -311,11 +317,11 @@ export default {
       filtersApplied: false,
       isRequestOngoing: true,
       filters: {
+        invoice_number: '',
         customer: '',
         status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
-        to_date: '',
-        invoice_number: ''
+        to_date: ''
       },
       role: this.$store.state.user.currentUser.role
     }
@@ -441,11 +447,11 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
+        invoice_number: this.filters.invoice_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
         status: '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
-        invoice_number: this.filters.invoice_number,
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -476,11 +482,11 @@ export default {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
       this.filters = {
+        invoice_number: '',
         customer: '',
         status: '',
         from_date: '',
-        to_date: '',
-        invoice_number: ''
+        to_date: ''
       }
 
       this.$nextTick(() => {
