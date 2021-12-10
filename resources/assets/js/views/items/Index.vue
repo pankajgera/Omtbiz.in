@@ -153,7 +153,13 @@
         <table-column
           :label="$t('items.name')"
           show="name"
-        />
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+               {{ row.name }}
+              </router-link>
+          </template>
+        </table-column>
         <table-column
           :label="$t('items.bill_ty')"
           show="bill_ty"
@@ -265,7 +271,13 @@
         <table-column
           :label="$t('items.name')"
           show="name"
-        />
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+               {{ row.name }}
+              </router-link>
+          </template>
+        </table-column>
         <!-- <table-column
           :label="$t('items.bill_ty')"
           show="bill_ty"
