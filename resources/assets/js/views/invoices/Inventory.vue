@@ -25,6 +25,7 @@
                   :invalid="$v.inventory.name.$error"
                   :invalid-description="$v.inventory.description.$error"
                   :inventory="inventory"
+                  :is-disable="isDisable"
                   @search="searchVal"
                   @select="onSelectInventory"
                   @deselect="deselectInventory"
@@ -44,6 +45,7 @@
                 :invalid="$v.inventory.quantity.$error"
                 type="number"
                 small
+                :disabled="isDisable"
                 @input="$v.inventory.quantity.$touch()"
               />
               <div v-if="$v.inventory.quantity.$error">
@@ -77,6 +79,7 @@
                     :name="'inventoryPrice'+index"
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.inventory.sale_price.$error, 'input-field': true}"
+                    :disabled="isDisable"
                     type="text"
                   />
                   <div v-if="$v.inventory.sale_price.$error">
@@ -96,6 +99,7 @@
                     v-model="discount"
                     :invalid="$v.inventory.discount_val.$error"
                     input-class="item-discount"
+                    :disabled="isDisable"
                     @input="$v.inventory.discount_val.$touch()"
                   />
                   <v-dropdown :show-arrow="false" theme-light>
@@ -184,6 +188,11 @@ export default {
     discountPerInventory: {
       type: String,
       default: ''
+    },
+    isDisable: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   data () {
