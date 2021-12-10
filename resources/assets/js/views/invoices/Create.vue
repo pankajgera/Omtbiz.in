@@ -134,6 +134,7 @@
             :currency="currency"
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
+            :is-disable="$route.query.d === 'true'"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
@@ -141,7 +142,7 @@
           />
         </draggable>
       </table>
-      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" @click="addInventory">
+      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="$route.query.d === 'true'" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>

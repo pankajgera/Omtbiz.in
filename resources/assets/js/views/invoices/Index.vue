@@ -190,7 +190,7 @@
           show="invoice_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item">
+            <router-link :to="{path: `invoices/${row.id}/edit?d=true`}" class="dropdown-item">
                {{ row.invoice_number }}
               </router-link>
           </template>

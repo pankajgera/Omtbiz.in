@@ -10,6 +10,7 @@
       :invalid="invalid"
       :placeholder="$t('invoices.inventory.select_an_inventory')"
       :do-not-select-default="true"
+      :disabled="isDisable"
       label="name"
       track-by="id"
       class="multi-select-inventory remove-extra"
@@ -48,6 +49,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isDisable: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   data () {
