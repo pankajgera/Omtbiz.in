@@ -1,7 +1,7 @@
 import * as types from './mutation-types'
 import * as dashboardTypes from '../dashboard/mutation-types'
 
-export const fetchEstimates = ({ commit, dispatch, state }, params) => {
+export const fetchEstimates = ({ commit, estimates, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates`, {params}).then((response) => {
       commit(types.SET_ESTIMATES, response.data.estimates.data)
@@ -13,7 +13,7 @@ export const fetchEstimates = ({ commit, dispatch, state }, params) => {
   })
 }
 
-export const getRecord = ({ commit, dispatch, state }, record) => {
+export const getRecord = ({ commit, estimates, state }, record) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates/records?record=${record}`).then((response) => {
       resolve(response)
@@ -23,7 +23,7 @@ export const getRecord = ({ commit, dispatch, state }, record) => {
   })
 }
 
-export const fetchCreateEstimate = ({ commit, dispatch, state }) => {
+export const fetchCreateEstimate = ({ commit, estimates, state }) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates/create`).then((response) => {
       resolve(response)
@@ -33,7 +33,7 @@ export const fetchCreateEstimate = ({ commit, dispatch, state }) => {
   })
 }
 
-export const fetchEstimate = ({ commit, dispatch, state }, id) => {
+export const fetchEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates/${id}/edit`).then((response) => {
       commit(types.SET_TEMPLATE_ID, response.data.estimate.estimate_template_id)
@@ -44,7 +44,7 @@ export const fetchEstimate = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const fetchViewEstimate = ({ commit, dispatch, state }, id) => {
+export const fetchViewEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates/${id}`).then((response) => {
       resolve(response)
@@ -54,7 +54,7 @@ export const fetchViewEstimate = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const sendEmail = ({ commit, dispatch, state }, data) => {
+export const sendEmail = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/estimates/send`, data).then((response) => {
       if (response.data.success) {
@@ -68,7 +68,7 @@ export const sendEmail = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const addEstimate = ({ commit, dispatch, state }, data) => {
+export const addEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/estimates', data).then((response) => {
       commit(types.ADD_ESTIMATE, response.data.estimate)
@@ -80,7 +80,7 @@ export const addEstimate = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const deleteEstimate = ({ commit, dispatch, state }, id) => {
+export const deleteEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/estimates/${id}`).then((response) => {
       commit(types.DELETE_ESTIMATE, id)
@@ -92,7 +92,7 @@ export const deleteEstimate = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const deleteMultipleEstimates = ({ commit, dispatch, state }, id) => {
+export const deleteMultipleEstimates = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/estimates/delete`, {'id': state.selectedEstimates}).then((response) => {
       commit(types.DELETE_MULTIPLE_ESTIMATES, state.selectedEstimates)
@@ -103,7 +103,7 @@ export const deleteMultipleEstimates = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const updateEstimate = ({ commit, dispatch, state }, data) => {
+export const updateEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/estimates/${data.id}`, data).then((response) => {
       commit(types.UPDATE_ESTIMATE, response.data)
@@ -114,7 +114,7 @@ export const updateEstimate = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const markAsAccepted = ({ commit, dispatch, state }, data) => {
+export const markAsAccepted = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/estimates/accept`, data).then((response) => {
       commit('dashboard/' + dashboardTypes.UPDATE_ESTIMATE_STATUS, { id: data.id, status: 'ACCEPTED' }, { root: true })
@@ -125,7 +125,7 @@ export const markAsAccepted = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const markAsRejected = ({ commit, dispatch, state }, data) => {
+export const markAsRejected = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/estimates/reject`, data).then((response) => {
       commit('dashboard/' + dashboardTypes.UPDATE_ESTIMATE_STATUS, { id: data.id, status: 'REJECTED' }, { root: true })
@@ -136,7 +136,7 @@ export const markAsRejected = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const markAsSent = ({ commit, dispatch, state }, data) => {
+export const markAsSent = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/estimates/mark-as-sent`, data).then((response) => {
       commit(types.UPDATE_ESTIMATE_STATUS, {id: data.id, status: 'SENT'})
@@ -148,10 +148,10 @@ export const markAsSent = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const convertToInvoice = ({ commit, dispatch, state }, id) => {
+export const convertToEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/estimates/${id}/convert-to-invoice`).then((response) => {
-      // commit(types.UPDATE_INVOICE, response.data)
+    window.axios.post(`/api/estimates/${id}/convert-to-estimate`).then((response) => {
+      // commit(types.UPDATE_ESTIMATE, response.data)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -159,10 +159,10 @@ export const convertToInvoice = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const searchEstimate = ({ commit, dispatch, state }, data) => {
+export const searchEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates?${data}`).then((response) => {
-      // commit(types.UPDATE_INVOICE, response.data)
+      // commit(types.UPDATE_ESTIMATE, response.data)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -170,7 +170,7 @@ export const searchEstimate = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const selectEstimate = ({ commit, dispatch, state }, data) => {
+export const selectEstimate = ({ commit, estimates, state }, data) => {
   commit(types.SET_SELECTED_ESTIMATES, data)
   if (state.selectedEstimates.length === state.estimates.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
@@ -179,11 +179,11 @@ export const selectEstimate = ({ commit, dispatch, state }, data) => {
   }
 }
 
-export const setSelectAllState = ({ commit, dispatch, state }, data) => {
+export const setSelectAllState = ({ commit, estimates, state }, data) => {
   commit(types.SET_SELECT_ALL_STATE, data)
 }
 
-export const selectAllEstimates = ({ commit, dispatch, state }) => {
+export const selectAllEstimates = ({ commit, estimates, state }) => {
   if (state.selectedEstimates.length === state.estimates.length) {
     commit(types.SET_SELECTED_ESTIMATES, [])
     commit(types.SET_SELECT_ALL_STATE, false)
@@ -194,36 +194,36 @@ export const selectAllEstimates = ({ commit, dispatch, state }) => {
   }
 }
 
-export const resetSelectedEstimates = ({ commit, dispatch, state }) => {
+export const resetSelectedEstimates = ({ commit, estimates, state }) => {
   commit(types.RESET_SELECTED_ESTIMATES)
 }
 
-export const setCustomer = ({ commit, dispatch, state }, data) => {
+export const setCustomer = ({ commit, estimates, state }, data) => {
   commit(types.RESET_CUSTOMER)
   commit(types.SET_CUSTOMER, data)
 }
 
-export const setItem = ({ commit, dispatch, state }, data) => {
+export const setItem = ({ commit, estimates, state }, data) => {
   commit(types.RESET_ITEM)
   commit(types.SET_ITEM, data)
 }
 
-export const resetCustomer = ({ commit, dispatch, state }) => {
+export const resetCustomer = ({ commit, estimates, state }) => {
   commit(types.RESET_CUSTOMER)
 }
 
-export const resetItem = ({ commit, dispatch, state }) => {
+export const resetItem = ({ commit, estimates, state }) => {
   commit(types.RESET_ITEM)
 }
 
-export const setTemplate = ({ commit, dispatch, state }, data) => {
+export const setTemplate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     commit(types.SET_TEMPLATE_ID, data)
     resolve({})
   })
 }
 
-export const selectCustomer = ({ commit, dispatch, state }, id) => {
+export const selectCustomer = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/customers/${id}`).then((response) => {
       commit(types.RESET_SELECTED_CUSTOMER)
@@ -235,6 +235,6 @@ export const selectCustomer = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
+export const resetSelectedCustomer = ({ commit, estimates, state }, data) => {
   commit(types.RESET_SELECTED_CUSTOMER)
 }

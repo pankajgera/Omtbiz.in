@@ -1,8 +1,8 @@
 <template>
-  <div class="invoice-create-page main-content">
+  <div class="estimate-create-page main-content">
     <div class="page-header">
       <div class="page-actions row">
-        <router-link slot="item-title" class="col-xs-2" to="/invoices">
+        <router-link slot="item-title" class="col-xs-2" to="/estimates">
           <base-button size="large" icon="envelope" color="theme">
             {{ $t('estimates.title') }}
           </base-button>
@@ -11,16 +11,16 @@
     </div>
     <form v-if="!initLoading" action="" @submit.prevent="submitEstimateData">
       <div class="page-header">
-        <h3 v-if="$route.name === 'estimates.edit'" class="page-title">{{ $t('estimates.edit_invoice') }}</h3>
-        <h3 v-else class="page-title">{{ $t('estimates.new_invoice') }} </h3>
+        <h3 v-if="$route.name === 'estimates.edit'" class="page-title">{{ $t('estimates.edit_estimate') }}</h3>
+        <h3 v-else class="page-title">{{ $t('estimates.new_estimate') }} </h3>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $tc('estimates.invoice', 2) }}</router-link></li>
-          <li v-if="$route.name === 'estimates.edit'" class="breadcrumb-item">{{ $t('estimates.edit_invoice') }}</li>
-          <li v-else class="breadcrumb-item">{{ $t('estimates.new_invoice') }}</li>
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/estimates">{{ $tc('estimates.estimate', 2) }}</router-link></li>
+          <li v-if="$route.name === 'estimates.edit'" class="breadcrumb-item">{{ $t('estimates.edit_estimate') }}</li>
+          <li v-else class="breadcrumb-item">{{ $t('estimates.new_estimate') }}</li>
         </ol>
       </div>
-      <div class="row invoice-input-group">
-        <div class="col-md-5 invoice-customer-container">
+      <div class="row estimate-input-group">
+        <div class="col-md-5 estimate-customer-container">
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setEstimateDebtor"
@@ -39,33 +39,33 @@
               <span v-if="!$v.newEstimate.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
         </div>
-        <div class="col invoice-input">
+        <div class="col estimate-input">
           <div class="row">
             <div class="col collapse-input">
-              <label>{{ $tc('estimates.invoice',1) }} {{ $t('estimates.date') }}<span class="text-danger"> * </span></label>
+              <label>{{ $tc('estimates.estimate',1) }} {{ $t('estimates.date') }}<span class="text-danger"> * </span></label>
               <input
-                v-model="newEstimate.invoice_date"
+                v-model="newEstimate.estimate_date"
                 type="date"
                 data-date=""
                 data-date-format="DD/MM/YYYY"
                 class="base-prefix-input"
-                @change="$v.newEstimate.invoice_date.$touch()"
+                @change="$v.newEstimate.estimate_date.$touch()"
                 :disabled="isEdit"
               />
-              <span v-if="$v.newEstimate.invoice_date.$error && !$v.newEstimate.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+              <span v-if="$v.newEstimate.estimate_date.$error && !$v.newEstimate.estimate_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
             </div>
             <div class="col collapse-input">
-              <label>{{ $t('estimates.invoice_number') }}<span class="text-danger"> * </span></label>
+              <label>{{ $t('estimates.estimate_number') }}<span class="text-danger"> * </span></label>
               <base-prefix-input
-                v-model="invoiceNumAttribute"
-                :invalid="$v.invoiceNumAttribute.$error"
-                :prefix="invoicePrefix"
+                v-model="estimateNumAttribute"
+                :invalid="$v.estimateNumAttribute.$error"
+                :prefix="estimatePrefix"
                 icon="hashtag"
-                @input="$v.invoiceNumAttribute.$touch()"
+                @input="$v.estimateNumAttribute.$touch()"
                 :prefix-width="55"
                 :disabled="true"
               />
-              <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
+              <span v-show="$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
             </div>
             <div class="col collapse-input">
               <label>{{ $t('estimates.ref_number') }}</label>
@@ -125,9 +125,9 @@
           </tr>
         </thead>
         <!-- <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
-          <invoice-inventory
+          <estimate-inventory
             v-for="(each, index) in inventoryBind"
-            ref="invoiceInventory"
+            ref="estimateInventory"
             :key="each.name+index"
             :index="index"
             :inventory-data="each"
@@ -141,7 +141,7 @@
           />
         </draggable> -->
       </table>
-      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" @click="addInventory">
+      <button v-if="showAddNewInventory" class="add-item-action add-estimate-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('estimates.add_item') }}
       </button>
@@ -149,7 +149,7 @@
         End Of List
       </button>
 
-      <div class="invoice-foot">
+      <div class="estimate-foot">
         <div>
           <label>{{ $t('estimates.notes') }}</label>
           <base-text-area
@@ -163,21 +163,21 @@
           </div>
         </div>
 
-        <div class="invoice-total">
+        <div class="estimate-total">
           <div class="section">
-            <label class="invoice-label">{{ $t('estimates.quantity') }}</label>
+            <label class="estimate-label">{{ $t('estimates.quantity') }}</label>
             <label class="">
               <div v-html="totalQuantity(inventoryBind)" />
             </label>
           </div>
           <div class="section">
-            <label class="invoice-label">{{ $t('estimates.sub_total') }}</label>
-            <label class="invoice-amount">
+            <label class="estimate-label">{{ $t('estimates.sub_total') }}</label>
+            <label class="estimate-amount">
               ₹ {{ subtotal }}
             </label>
           </div>
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
-            <label class="invoice-label">{{ $t('estimates.discount') }}</label>
+            <label class="estimate-label">{{ $t('estimates.discount') }}</label>
             <div
               class="btn-group discount-drop-down"
               role="group"
@@ -221,15 +221,15 @@
           </base-popup>
 
           <div class="section border-top mt-3">
-            <label class="invoice-label">{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label>
-            <label class="invoice-amount total">
+            <label class="estimate-label">{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label>
+            <label class="estimate-amount total">
               ₹ {{ total }}
             </label>
           </div>
         </div>
       </div>
       <div class="page-actions row">
-          <!-- <a v-if="$route.name === 'estimates.edit'" :href="`/invoices/pdf/${newEstimate.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+          <!-- <a v-if="$route.name === 'estimates.edit'" :href="`/estimates/pdf/${newEstimate.unique_hash}`" target="_blank" class="mr-3 estimate-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
           <base-button
@@ -237,9 +237,9 @@
             :disabled="isLoading"
             icon="save"
             color="theme"
-            class="invoice-action-btn"
+            class="estimate-action-btn"
             type="submit">
-            {{ $t('estimates.save_invoice') }}
+            {{ $t('estimates.save_estimate') }}
           </base-button>
         </div>
     </form>
@@ -251,17 +251,17 @@ input.base-prefix-input:disabled {
     background: rgba(59, 59, 59, 0.3) !important;
     border-color: rgba(118, 118, 118, 0.3) !important;
 }
-.add-invoice-item{
+.add-estimate-item{
   border: 0px
 }
-.add-invoice-item:focus {
+.add-estimate-item:focus {
   border: 1px solid salmon
 }
 </style>
 <script>
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
-import EstimateStub from '../../stub/invoice'
+import EstimateStub from '../../stub/estimate'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
@@ -278,10 +278,10 @@ export default {
   data () {
     return {
       newEstimate: {
-        invoice_date: null,
-        invoice_number: null,
+        estimate_date: null,
+        estimate_number: null,
         user_id: null,
-        invoice_template_id: 1,
+        estimate_template_id: 1,
         sub_total: null,
         total: null,
         tax: null,
@@ -299,15 +299,15 @@ export default {
       },
       customers: [],
       inventoryList: [],
-      invoiceTemplates: [],
+      estimateTemplates: [],
       selectedCurrency: '',
       taxPerInventory: null,
       discountPerInventory: null,
       initLoading: false,
       isLoading: false,
       maxDiscount: 0,
-      invoicePrefix: null,
-      invoiceNumAttribute: null,
+      estimatePrefix: null,
+      estimateNumAttribute: null,
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
       isEdit: false,
@@ -320,7 +320,7 @@ export default {
   validations () {
     return {
       newEstimate: {
-        invoice_date: {
+        estimate_date: {
           required
         },
         discount_val: {
@@ -336,7 +336,7 @@ export default {
           required
         }
       },
-      invoiceNumAttribute: {
+      estimateNumAttribute: {
         required
       }
     }
@@ -345,7 +345,7 @@ export default {
     ...mapGetters('currency', [
       'defaultCurrency'
     ]),
-    ...mapGetters('invoice', [
+    ...mapGetters('estimate', [
       'getTemplateId',
       //'selectedCustomer'
     ]),
@@ -444,7 +444,7 @@ export default {
     ...mapActions('modal', [
       'openModal'
     ]),
-    ...mapActions('invoice', [
+    ...mapActions('estimate', [
       'addEstimate',
       'fetchCreateEstimate',
       'fetchEstimate',
@@ -490,15 +490,15 @@ export default {
         let response = await this.fetchEstimate(this.$route.params.id)
         this.isEdit = true
         if (response.data) {
-          this.newEstimate = response.data.invoice
-          this.inventoryList = response.data.invoice.inventories
-          this.newEstimate.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
+          this.newEstimate = response.data.estimate
+          this.inventoryList = response.data.estimate.inventories
+          this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
-          this.invoiceTemplates = response.data.invoiceTemplates
-          this.invoicePrefix = response.data.invoice_prefix
-          this.invoiceNumAttribute = response.data.invoiceNumber
+          this.estimateTemplates = response.data.estimateTemplates
+          this.estimatePrefix = response.data.estimate_prefix
+          this.estimateNumAttribute = response.data.estimateNumber
           this.newEstimate.debtors = response.data.sundryDebtorsList[0]
         }
         this.initLoading = false
@@ -511,11 +511,11 @@ export default {
         this.discountPerInventory = response.data.discount_per_inventory
         this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
-        this.invoiceTemplates = response.data.invoiceTemplates
-        this.newEstimate.invoice_date = response.data.invoice_today_date
+        this.estimateTemplates = response.data.estimateTemplates
+        this.newEstimate.estimate_date = response.data.estimate_today_date
         this.inventoryList = response.data.inventories
-        this.invoicePrefix = response.data.invoice_prefix
-        this.invoiceNumAttribute = response.data.nextEstimateNumberAttribute
+        this.estimatePrefix = response.data.estimate_prefix
+        this.estimateNumAttribute = response.data.nextEstimateNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
       }
       this.initLoading = false
@@ -524,14 +524,14 @@ export default {
       this.openModal({
         'title': this.$t('general.choose_template'),
         'componentName': 'EstimateTemplate',
-        'data': this.invoiceTemplates
+        'data': this.estimateTemplates
       })
     },
     addInventory () {
       this.inventoryBind.push({...EstimateStub, taxes: [{...TaxStub, id: Guid.raw()}]})
       this.$nextTick(() => {
-        this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()
-        this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
+        this.$refs.estimateInventory[this.inventoryBind.length-1].$el.focus()
+        this.$refs.estimateInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
       })
     },
     removeInventory (index) {
@@ -548,12 +548,12 @@ export default {
       }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
       this.$nextTick(() => {
-        this.$refs.invoiceInventory[data.index].$el.focus()
+        this.$refs.estimateInventory[data.index].$el.focus()
         if (data.updatingInput === 'sale_price') {
-          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()
+          this.$refs.estimateInventory[data.index].$children[3].$refs.baseInput.focus()
         }
         if (data.updatingInput === 'quantity') {
-          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
+          this.$refs.estimateInventory[data.index].$children[1].$refs.baseInput.focus()
         }
       })
 
@@ -563,16 +563,16 @@ export default {
         return false
       }
       this.isLoading = true
-      this.newEstimate.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
+      this.newEstimate.estimate_number = this.estimatePrefix + '-' + this.estimateNumAttribute
 
       let data = {
         ...this.newEstimate,
-        invoice_date: moment(this.newEstimate.invoice_date).format('DD/MM/YYYY'),
+        estimate_date: moment(this.newEstimate.estimate_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
         tax: this.totalTax,
         user_id: this.user.id,
-        invoice_template_id: this.getTemplateId,
+        estimate_template_id: this.getTemplateId,
       }
 
       if (this.$route.name === 'estimates.edit') {
@@ -588,16 +588,16 @@ export default {
         window.location.reload()
       }, 1000)
     },
-    async showEstimatePopup (invoice_id) {
+    async showEstimatePopup (estimate_id) {
       swal({
-        title: this.$t('estimates.invoice_report_title'),
-        text: this.$t('estimates.invoice_report_text'),
+        title: this.$t('estimates.estimate_report_title'),
+        text: this.$t('estimates.estimate_report_text'),
         icon: '/assets/icon/check-circle-solid.svg',
         buttons: true,
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.siteURL = `/reports/invoice/${invoice_id}`
+          this.siteURL = `/reports/estimate/${estimate_id}`
           this.url = `${this.siteURL}?company_id=${this.user.company_id}`
 
           printJS({
@@ -617,8 +617,8 @@ export default {
       this.addEstimate(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('estimates.created_message'))
-          //this.$router.push('/invoices/create')
-          this.showEstimatePopup(res.data.invoice.id)
+          //this.$router.push('/estimates/create')
+          this.showEstimatePopup(res.data.estimate.id)
         }
       }).catch((err) => {
         this.isLoading = false
@@ -635,7 +635,7 @@ export default {
         if (res.data.success) {
           window.toastr['success'](this.$t('estimates.updated_message'))
           this.isLoading = false
-          this.showEstimatePopup(res.data.invoice.id)
+          this.showEstimatePopup(res.data.estimate.id)
         }
 
         if (res.data.error === 'invalid_due_amount') {
@@ -696,10 +696,10 @@ export default {
     async searchDebtorRefNumber(data) {
        this.newEstimate.reference_number = null;
        let response = await this.fetchReferenceNumber(data)
-        if (response.data && response.data.invoice) {
-          this.newEstimate.reference_number = response.data.invoice.reference_number
+        if (response.data && response.data.estimate) {
+          this.newEstimate.reference_number = response.data.estimate.reference_number
         } else {
-          this.newEstimate.reference_number = this.invoiceNumAttribute
+          this.newEstimate.reference_number = this.estimateNumAttribute
         }
     },
     showEndList(val) {

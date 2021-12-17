@@ -39,6 +39,7 @@ import CustomersReport from './modules/reports/customers'
 import states from './modules/states'
 import banks from './modules/banks'
 import dispatch from './modules/disptach'
+import estimates from './modules/estimate'
 
 Vue.use(Vuex)
 
@@ -88,5 +89,6 @@ export default new Vuex.Store({
         states,
         banks,
         dispatch,
+        estimate,
     }
 })
