@@ -16,6 +16,7 @@ use Validator;
 use App\Models\CompanySetting;
 use App\Models\Company;
 use App\Mail\EstimatePdf;
+use App\Models\AccountMaster;
 use App\Models\TaxType;
 use App\Models\Tax;
 
@@ -62,7 +63,7 @@ class EstimatesController extends Controller
     }
 
     /**
-     * Create new estimate
+     * Create new estimate page data
      *
      * @param Request $request
      * @return Response
@@ -83,6 +84,8 @@ class EstimatesController extends Controller
         $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company'));
         $customers = User::where('role', 'customer')->get();
 
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+
         return response()->json([
             'customers' => $customers,
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
@@ -93,12 +96,13 @@ class EstimatesController extends Controller
             'discount_per_item' => $discount_per_item,
             'estimateTemplates' => EstimateTemplate::all(),
             'shareable_link' => '',
-            'estimate_prefix' => $estimate_prefix
+            'estimate_prefix' => $estimate_prefix,
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
     /**
-     * Update or Store estimate
+     * Create new estimate
      *
      * @param EstimatesRequest $request
      * @return Response
@@ -264,6 +268,7 @@ class EstimatesController extends Controller
             'taxes.taxType'
         ])->find($id);
         $customers = User::where('role', 'customer')->get();
+        $sundryDebtorsList = AccountMaster::where('id', $estimate->account_master_id)->select('id', 'name', 'opening_balance')->get();
 
         return response()->json([
             'customers' => $customers,
@@ -275,7 +280,8 @@ class EstimatesController extends Controller
             'tax_per_item' => $estimate->tax_per_item,
             'discount_per_item' => $estimate->discount_per_item,
             'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash),
-            'estimate_prefix' => $estimate->getEstimatePrefixAttribute()
+            'estimate_prefix' => $estimate->getEstimatePrefixAttribute(),
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
