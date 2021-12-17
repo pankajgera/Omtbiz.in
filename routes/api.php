@@ -259,6 +259,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'EstimatesController@estimateToInvoice'
     ]);
 
+    Route::post('/estimates/create-invoice', [
+        'as' => 'estimates.create-invoice',
+        'uses' => 'EstimatesController@store'
+    ]);
+
     Route::resource('estimates', 'EstimatesController');
 
 

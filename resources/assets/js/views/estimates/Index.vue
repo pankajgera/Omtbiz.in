@@ -1,5 +1,5 @@
 <template>
-  <div class="estimate-index-page invoices main-content">
+  <div class="estimate-index-page estimates main-content">
     <div class="page-header">
       <h3 class="page-title"> {{ $t('estimates.title') }}</h3>
       <ol class="breadcrumb">
@@ -32,9 +32,9 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="/invoices/create">
+        <router-link slot="item-title" class="col-xs-2" to="/estimates/create">
           <base-button size="large" icon="plus" color="theme">
-            {{ $t('estimates.new_invoice') }}
+            {{ $t('estimates.new_estimate') }}
           </base-button>
         </router-link>
       </div>
@@ -87,9 +87,9 @@
             </div>
           </div>
           <div class="filter-estimate">
-            <label>{{ $t('estimates.invoice_number') }}</label>
+            <label>{{ $t('estimates.estimate_number') }}</label>
             <base-input
-              v-model="filters.invoice_number"
+              v-model="filters.estimate_number"
               icon="hashtag"/>
           </div>
         </div>
@@ -100,10 +100,10 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <moon-walker-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('estimates.no_invoices') }}</label>
+        <label class="col title">{{ $t('estimates.no_estimates') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('estimates.list_of_invoices') }}</label>
+        <label class="description col mt-1" align="center">{{ $t('estimates.list_of_estimates') }}</label>
       </div>
       <div class="btn-container">
         <base-button
@@ -111,16 +111,16 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('invoices/create')"
+          @click="$router.push('estimates/create')"
         >
-          {{ $t('estimates.new_invoice') }}
+          {{ $t('estimates.new_estimate') }}
         </base-button>
       </div>
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p>
+        <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p> -->
 
         <!-- Tabs -->
         <ul class="tabs">
@@ -135,7 +135,7 @@
           </li>
         </ul>
         <transition name="fade">
-          <v-dropdown v-if="selectedestimates.length" :show-arrow="false">
+          <v-dropdown :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -187,7 +187,7 @@
         </table-column>
         <table-column
           :label="$t('estimates.date')"
-          sort-as="invoice_date"
+          sort-as="estimate_date"
           show="formattedEstimateDate"
         />
         <table-column
@@ -215,7 +215,7 @@
         </table-column>
         <table-column
           :label="$t('estimates.number')"
-          show="invoice_number"
+          show="estimate_number"
         />
         <table-column
           :label="$t('estimates.due_amount')"
@@ -238,11 +238,11 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-                <router-link :to="{path: `invoices/${row.id}/view`}" class="dropdown-item">
+                <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('estimates.view') }}
                 </router-link>
@@ -250,7 +250,7 @@
               <v-dropdown-item v-if="row.status == 'DRAFT'">
                 <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('estimates.send_invoice') }}
+                  {{ $t('estimates.send_estimate') }}
                 </a>
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
@@ -315,12 +315,11 @@ export default {
         status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
         to_date: '',
-        invoice_number: ''
+        estimate_number: ''
       },
       role: this.$store.state.user.currentUser.role
     }
   },
-
   computed: {
     showEmptyScreen () {
       return !this.totalEstimates && !this.isRequestOngoing && !this.filtersApplied
@@ -334,7 +333,7 @@ export default {
     ...mapGetters('estimate', [
       'selectedEstimates',
       'totalEstimates',
-      'invoices',
+      'estimates',
       'selectAllField'
     ]),
     selectField: {
@@ -399,7 +398,7 @@ export default {
           let response = await this.sendEmail(data)
           this.refreshTable()
           if (response.data.success) {
-            window.toastr['success'](this.$tc('estimates.send_invoice_successfully'))
+            window.toastr['success'](this.$tc('estimates.send_estimate_successfully'))
             return true
           }
           if (response.data.error === 'user_email_does_not_exist') {
@@ -413,7 +412,7 @@ export default {
     async markEstimateAsSent (id) {
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.invoice_mark_as_sent'),
+        text: this.$t('estimates.estimate_mark_as_sent'),
         icon: '/assets/icon/check-circle-solid.svg',
         buttons: true,
         dangerMode: true
@@ -445,7 +444,7 @@ export default {
         status: this.filters.status.value,
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
-        invoice_number: this.filters.invoice_number,
+        estimate_number: this.filters.estimate_number,
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -480,7 +479,7 @@ export default {
         status: '',
         from_date: '',
         to_date: '',
-        invoice_number: ''
+        estimate_number: ''
       }
 
       this.$nextTick(() => {

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -15,21 +16,28 @@ use Validator;
 use App\Models\CompanySetting;
 use App\Models\Company;
 use App\Mail\EstimatePdf;
+use App\Models\AccountMaster;
 use App\Models\TaxType;
 use App\Models\Tax;
 
 class EstimatesController extends Controller
 {
+    /**
+     * Index page
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
         $estimates = Estimate::with([
-                'items',
-                'user',
-                'estimateTemplate',
-                'taxes'
-            ])
+            'items',
+            'user',
+            'estimateTemplate',
+            'taxes'
+        ])
             ->join('users', 'users.id', '=', 'estimates.user_id')
             ->applyFilters($request->only([
                 'status',
@@ -54,6 +62,12 @@ class EstimatesController extends Controller
         return response()->json($siteData);
     }
 
+    /**
+     * Create new estimate page data
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function create(Request $request)
     {
         $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
@@ -70,24 +84,33 @@ class EstimatesController extends Controller
         $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company'));
         $customers = User::where('role', 'customer')->get();
 
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+
         return response()->json([
             'customers' => $customers,
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
-            'nextEstimateNumber' => $estimate_prefix.'-'.$nextEstimateNumber,
+            'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
             'taxes' => Tax::whereCompany($request->header('company'))->latest()->get(),
             'items' => Item::whereCompany($request->header('company'))->get(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
             'estimateTemplates' => EstimateTemplate::all(),
             'shareable_link' => '',
-            'estimate_prefix' => $estimate_prefix
+            'estimate_prefix' => $estimate_prefix,
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
+    /**
+     * Create new estimate
+     *
+     * @param EstimatesRequest $request
+     * @return Response
+     */
     public function store(EstimatesRequest $request)
     {
-        $estimate_number = explode("-",$request->estimate_number);
-        $number_attributes['estimate_number'] = $estimate_number[0].'-'.sprintf('%06d', intval($estimate_number[1]));
+        $estimate_number = explode("-", $request->estimate_number);
+        $number_attributes['estimate_number'] = $estimate_number[0] . '-' . sprintf('%06d', intval($estimate_number[1]));
 
         Validator::make($number_attributes, [
             'estimate_number' => 'required|unique:estimates,estimate_number'
@@ -197,10 +220,17 @@ class EstimatesController extends Controller
 
         return response()->json([
             'estimate' => $estimate,
-            'url' => url('/estimates/pdf/'.$estimate->unique_hash),
+            'url' => url('/estimates/pdf/' . $estimate->unique_hash),
         ]);
     }
 
+    /**
+     * Show single estimate
+     *
+     * @param Request $request
+     * @param  mixed $id
+     * @return Response
+     */
     public function show(Request $request, $id)
     {
         $estimate = Estimate::with([
@@ -214,13 +244,20 @@ class EstimatesController extends Controller
 
         $siteData = [
             'estimate' => $estimate,
-            'shareable_link' => url('/estimates/pdf/'.$estimate->unique_hash)
+            'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash)
         ];
 
         return response()->json($siteData);
     }
 
-    public function edit(Request $request,$id)
+    /**
+     * Edit single estimate
+     *
+     * @param Request $request
+     * @param  mixed $id
+     * @return Response
+     */
+    public function edit(Request $request, $id)
     {
         $estimate = Estimate::with([
             'items',
@@ -231,8 +268,9 @@ class EstimatesController extends Controller
             'taxes.taxType'
         ])->find($id);
         $customers = User::where('role', 'customer')->get();
+        $sundryDebtorsList = AccountMaster::where('id', $estimate->account_master_id)->select('id', 'name', 'opening_balance')->get();
 
-        return response()->json( [
+        return response()->json([
             'customers' => $customers,
             'nextEstimateNumber' => $estimate->getEstimateNumAttribute(),
             'taxes' => Tax::latest()->whereCompany($request->header('company'))->get(),
@@ -241,17 +279,25 @@ class EstimatesController extends Controller
             'estimateTemplates' => EstimateTemplate::all(),
             'tax_per_item' => $estimate->tax_per_item,
             'discount_per_item' => $estimate->discount_per_item,
-            'shareable_link' => url('/estimates/pdf/'.$estimate->unique_hash),
-            'estimate_prefix' => $estimate->getEstimatePrefixAttribute()
+            'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash),
+            'estimate_prefix' => $estimate->getEstimatePrefixAttribute(),
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
+    /**
+     * Update single estimate
+     *
+     * @param EstimatesRequest $request
+     * @param  mixed $id
+     * @return Response
+     */
     public function update(EstimatesRequest $request, $id)
     {
-        $estimate_number = explode("-",$request->estimate_number);
-        $number_attributes['estimate_number'] = $estimate_number[0].'-'.sprintf('%06d', intval($estimate_number[1]));
+        $estimate_number = explode("-", $request->estimate_number);
+        $number_attributes['estimate_number'] = $estimate_number[0] . '-' . sprintf('%06d', intval($estimate_number[1]));
         Validator::make($number_attributes, [
-            'estimate_number' => 'required|unique:estimates,estimate_number'.','.$id
+            'estimate_number' => 'required|unique:estimates,estimate_number' . ',' . $id
         ])->validate();
 
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
@@ -317,10 +363,16 @@ class EstimatesController extends Controller
 
         return response()->json([
             'estimate' => $estimate,
-            'url' => url('/estimates/pdf/'.$estimate->unique_hash),
+            'url' => url('/estimates/pdf/' . $estimate->unique_hash),
         ]);
     }
 
+    /**
+     * Delete single estimate
+     *
+     * @param  mixed $id
+     * @return Response
+     */
     public function destroy($id)
     {
         Estimate::deleteEstimate($id);
@@ -330,6 +382,12 @@ class EstimatesController extends Controller
         ]);
     }
 
+    /**
+     * Send estimate
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function sendEstimate(Request $request)
     {
         $estimate = Estimate::findOrFail($request->id);
@@ -369,6 +427,12 @@ class EstimatesController extends Controller
         ]);
     }
 
+    /**
+     * Mark estimate accepted
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function markEstimateAccepted(Request $request)
     {
         $estimate = Estimate::find($request->id);
@@ -380,6 +444,12 @@ class EstimatesController extends Controller
         ]);
     }
 
+    /**
+     * Mark estimate rejected
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function markEstimateRejected(Request $request)
     {
         $estimate = Estimate::find($request->id);
@@ -391,6 +461,12 @@ class EstimatesController extends Controller
         ]);
     }
 
+    /**
+     * Mark estimate sent
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function markEstimateSent(Request $request)
     {
         $estimate = Estimate::find($request->id);
@@ -402,30 +478,37 @@ class EstimatesController extends Controller
         ]);
     }
 
+    /**
+     * Estimate to invoice
+     *
+     * @param Request $request
+     * @param mixed $id
+     * @return Response
+     */
     public function estimateToInvoice(Request $request, $id)
     {
         $estimate = Estimate::with(['items', 'items.taxes', 'user', 'estimateTemplate', 'taxes'])->find($id);
         $invoice_date = Carbon::parse($estimate->estimate_date);
         $due_date = Carbon::parse($estimate->estimate_date)->addDays(7);
         $tax_per_item = CompanySetting::getSetting(
-                'tax_per_item',
-                $request->header('company')
-            ) ? CompanySetting::getSetting(
-                'tax_per_item',
-                $request->header('company')
-            ) : 'NO';
+            'tax_per_item',
+            $request->header('company')
+        ) ? CompanySetting::getSetting(
+            'tax_per_item',
+            $request->header('company')
+        ) : 'NO';
         $discount_per_item = CompanySetting::getSetting(
-                'discount_per_item',
-                $request->header('company')
-            ) ? CompanySetting::getSetting(
-                'discount_per_item',
-                $request->header('company')
-            ) : 'NO';
+            'discount_per_item',
+            $request->header('company')
+        ) ? CompanySetting::getSetting(
+            'discount_per_item',
+            $request->header('company')
+        ) : 'NO';
 
         $invoice = Invoice::create([
             'invoice_date' => $invoice_date,
             'due_date' => $due_date,
-            'invoice_number' => "INV-".Invoice::getNextInvoiceNumber(),
+            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber(),
             'reference_number' => $estimate->reference_number,
             'user_id' => $estimate->user_id,
             'company_id' => $request->header('company'),
@@ -482,6 +565,12 @@ class EstimatesController extends Controller
         ]);
     }
 
+    /**
+     * Delete estimate
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function delete(Request $request)
     {
         foreach ($request->id as $id) {
