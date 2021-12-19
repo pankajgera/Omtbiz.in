@@ -135,6 +135,7 @@
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
             :is-disable="$route.query.d === 'true'"
+            :type="'invoice'"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"

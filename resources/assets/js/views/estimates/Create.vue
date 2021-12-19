@@ -124,8 +124,8 @@
             </th>
           </tr>
         </thead>
-        <!-- <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
-          <estimate-inventory
+        <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
+          <invoice-inventory
             v-for="(each, index) in inventoryBind"
             ref="estimateInventory"
             :key="each.name+index"
@@ -134,12 +134,13 @@
             :currency="currency"
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
+            :type="'estimate'"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
             @endlist="showEndList"
           />
-        </draggable> -->
+        </draggable>
       </table>
       <button v-if="showAddNewInventory" class="add-item-action add-estimate-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
@@ -261,6 +262,7 @@ input.base-prefix-input:disabled {
 <script>
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
+import InvoiceInventory from '../invoices/Inventory'
 import EstimateStub from '../../stub/estimate'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
@@ -272,7 +274,8 @@ const { required, between, maxLength, numeric } = require('vuelidate/lib/validat
 export default {
   components: {
     MultiSelect,
-    draggable
+    draggable,
+    InvoiceInventory
   },
   mixins: [validationMixin],
   data () {

@@ -426,7 +426,21 @@
         "list_of_estimates": "This section will contain the list of estimates.",
         "mark_as_rejected": "Mark as rejected",
         "mark_as_accepted": "Mark as accepted",
-
+        "inventory": {
+            "title": "Item Title",
+            "description": "Description",
+            "quantity": "Quantity",
+            "price": "Cost Price",
+            "sale_price": "Sale Price",
+            "discount": "Discount",
+            "total": "Total",
+            "total_discount": "Total Discount",
+            "sub_total": "Sub Total",
+            "tax": "Tax",
+            "amount": "Amount",
+            "select_an_inventory": "Type or click to select an item",
+            "type_inventory_description": "Type Item Description (optional)"
+        },
         "marked_as_accepted_message": "Estimate marked as accepted",
         "marked_as_rejected_message": "Estimate marked as rejected",
         "confirm_delete": "You will not be able to recover this Estimate | You will not be able to recover these Estimates",
