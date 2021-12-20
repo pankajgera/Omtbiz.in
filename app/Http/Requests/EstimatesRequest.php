@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,7 +25,7 @@ class EstimatesRequest extends FormRequest
     {
         $rules = [
             'estimate_date' => 'required',
-            'expiry_date' => 'required',
+            'expiry_date' => 'nullable',
             'user_id' => 'required',
             'discount' => 'required',
             'discount_val' => 'required',
@@ -32,12 +33,14 @@ class EstimatesRequest extends FormRequest
             'total' => 'required',
             'tax' => 'required',
             'estimate_template_id' => 'required',
-            'items' => 'required|array',
-            'items.*.description' => 'max:255',
-            'items.*' => 'required|max:255',
-            'items.*.name' => 'required',
-            'items.*.quantity' => 'required',
-            'items.*.price' => 'required'
+            'inventories' => 'required|array',
+            'inventories.*.description' => 'max:255',
+            'inventories.*' => 'required|max:255',
+            'inventories.*.name' => 'required',
+            'inventories.*.quantity' => 'required',
+            'inventories.*.price' => 'required',
+            'notes' => 'nullable|string',
+            'user_id' => 'required|integer',
         ];
 
         return $rules;

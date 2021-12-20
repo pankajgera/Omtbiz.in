@@ -82,6 +82,11 @@ class Estimate extends Model
         return sprintf('%06d', intval($number) + 1);
     }
 
+    public function inventories()
+    {
+        return $this->hasMany(InvoiceItem::class)->where('type', 'estimate');
+    }
+
     public function items()
     {
         return $this->hasMany('App\Models\EstimateItem');

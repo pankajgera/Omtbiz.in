@@ -135,7 +135,7 @@
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
             :is-disable="$route.query.d === 'true'"
-            :type="'invoice'"
+            :inventory-type="'invoice'"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
@@ -620,7 +620,6 @@ export default {
         if (success) {
           this.siteURL = `/reports/invoice/${invoice_id}`
           this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-
           printJS({
             printable: this.url,
             type: 'pdf',

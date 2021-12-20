@@ -193,6 +193,10 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    inventoryType: {
+      type: String,
+      default: '',
     }
   },
   data () {
@@ -244,6 +248,7 @@ export default {
       }
     },
     total () {
+      console.log(this.subtotal, this.inventory.discount_val)
       return this.subtotal - this.inventory.discount_val
     },
     totalSimpleTax () {
@@ -290,7 +295,9 @@ export default {
           this.inventory.sale_price = newValue
           this.maxDiscount = newValue
           this.subtotal = newValue
-          this.setNewInventoryPrice(this.inventory);
+          if (this.inventoryType === 'invoice') {
+            this.setNewInventoryPrice(this.inventory);
+          }
         } else {
           this.inventory.sale_price = newValue
         }

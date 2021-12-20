@@ -134,7 +134,7 @@
             :currency="currency"
             :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
-            :type="'estimate'"
+            :inventory-type="'estimate'"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
@@ -177,49 +177,6 @@
               ₹ {{ subtotal }}
             </label>
           </div>
-          <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
-            <label class="estimate-label">{{ $t('estimates.discount') }}</label>
-            <div
-              class="btn-group discount-drop-down"
-              role="group"
-            >
-              <base-input
-                v-model="discount"
-                :invalid="$v.newEstimate.discount_val.$error"
-                input-class="item-discount"
-                @input="$v.newEstimate.discount_val.$touch()"
-              />
-              <v-dropdown :show-arrow="false">
-                <button
-                  slot="activator"
-                  type="button"
-                  class="btn item-dropdown dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {{ newEstimate.discount_type == 'fixed' ? currency.symbol : '%' }}
-                </button>
-                <v-dropdown-item>
-                  <a class="dropdown-item" href="#" @click.prevent="selectFixed">
-                    {{ $t('general.fixed') }}
-                  </a>
-                </v-dropdown-item>
-                <v-dropdown-item>
-                  <a class="dropdown-item" href="#" @click.prevent="selectPercentage">
-                    {{ $t('general.percentage') }}
-                  </a>
-                </v-dropdown-item>
-              </v-dropdown>
-            </div>
-          </div>
-
-          <base-popup v-if="taxPerInventory === 'NO' || taxPerInventory === null" ref="taxModal" class="tax-selector">
-            <div slot="activator" class="float-right">
-              + {{ $t('estimates.add_tax') }}
-            </div>
-            <tax-select-popup :taxes="newEstimate.taxes" @select="onSelectTax"/>
-          </base-popup>
 
           <div class="section border-top mt-3">
             <label class="estimate-label">{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label>
@@ -370,6 +327,7 @@ export default {
     subtotal () {
       let inventory = this.newEstimate.inventories;
       if (inventory.length) {
+        console.log(inventory)
         return inventory.reduce(function (a, b) {
                 return a + b['total']
               }, 0)
@@ -390,6 +348,7 @@ export default {
       }
     },
     totalSimpleTax () {
+      return 0;
       return window._.sumBy(this.newEstimate.taxes, function (tax) {
         if (!tax.compound_tax) {
           return tax.amount
@@ -398,6 +357,7 @@ export default {
       })
     },
     totalCompoundTax () {
+      return 0;
       return window._.sumBy(this.newEstimate.taxes, function (tax) {
         if (tax.compound_tax) {
           return tax.amount
@@ -406,6 +366,7 @@ export default {
       })
     },
     totalTax () {
+      return 0;
       if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
         return this.totalSimpleTax + this.totalCompoundTax
       }
@@ -438,7 +399,6 @@ export default {
   created () {
     this.loadData()
     this.fetchInitialInventory()
-    window.hub.$on('newTax', this.onSelectTax)
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
     }, 1100);
@@ -462,23 +422,6 @@ export default {
         return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
       }
       return 0
-    },
-    selectFixed () {
-      if (this.newEstimate.discount_type === 'fixed') {
-        return
-      }
-      this.newEstimate.discount_val = this.newEstimate.discount
-      this.newEstimate.discount_type = 'fixed'
-    },
-    selectPercentage () {
-      if (this.newEstimate.discount_type === 'percentage') {
-        return
-      }
-      this.newEstimate.discount_val = (this.subtotal * this.newEstimate.discount)
-      this.newEstimate.discount_type = 'percentage'
-    },
-    updateTax (data) {
-      Object.assign(this.newEstimate.taxes[data.index], {...data.inventory})
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
@@ -562,6 +505,7 @@ export default {
 
     },
     submitEstimateData () {
+      console.log(this.checkValid())
       if (!this.checkValid()) {
         return false
       }
@@ -621,7 +565,7 @@ export default {
         if (res.data) {
           window.toastr['success'](this.$t('estimates.created_message'))
           //this.$router.push('/estimates/create')
-          this.showEstimatePopup(res.data.estimate.id)
+          //this.showEstimatePopup(res.data.estimate.id)
         }
       }).catch((err) => {
         this.isLoading = false
@@ -638,7 +582,7 @@ export default {
         if (res.data.success) {
           window.toastr['success'](this.$t('estimates.updated_message'))
           this.isLoading = false
-          this.showEstimatePopup(res.data.estimate.id)
+          //this.showEstimatePopup(res.data.estimate.id)
         }
 
         if (res.data.error === 'invalid_due_amount') {
@@ -657,27 +601,6 @@ export default {
     },
     checkInventoryData (index, isValid) {
       this.newEstimate.inventories[index].valid = isValid
-    },
-    onSelectTax (selectedTax) {
-      let amount = 0
-
-      if (selectedTax.compound_tax && this.subtotalWithDiscount) {
-        amount = ((this.subtotalWithDiscount + this.totalSimpleTax) * selectedTax.percent)
-      } else if (this.subtotalWithDiscount && selectedTax.percent) {
-        amount = (this.subtotalWithDiscount * selectedTax.percent)
-      }
-
-      this.newEstimate.taxes.push({
-        ...TaxStub,
-        id: Guid.raw(),
-        name: selectedTax.name,
-        percent: selectedTax.percent,
-        compound_tax: selectedTax.compound_tax,
-        tax_type_id: selectedTax.id,
-        amount
-      })
-
-      this.$refs.taxModal.close()
     },
     removeEstimateTax (index) {
       this.newEstimate.taxes.splice(index, 1)

@@ -33,6 +33,16 @@ export const fetchCreateEstimate = ({ commit, estimates, state }) => {
   })
 }
 
+export const fetchReferenceNumber = ({ commit, dispatch, state }, data) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/invoices/reference`, data).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const fetchEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates/${id}/edit`).then((response) => {
