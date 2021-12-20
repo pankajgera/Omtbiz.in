@@ -215,12 +215,12 @@
           </template>
         </table-column> -->
         <table-column
-          :label="$t('invoices.paid_status')"
+          :label="$t('invoices.status')"
           sort-as="paid_status"
         >
           <template slot-scope="row">
             <span>{{ $t('invoices.paid_status') }}</span>
-            <span :class="'inv-status-'+row.paid_status.toLowerCase()">{{ (row.paid_status != 'PARTIALLY_PAID')? row.paid_status : row.paid_status.replace('_', ' ') }}</span>
+            <span :class="'inv-status-'+row.paid_status.toLowerCase()">{{ (row.paid_status != 'DISPATCHED') ? 'PAID' : row.paid_status }}</span>
           </template>
         </table-column>
         <table-column
@@ -228,8 +228,8 @@
           sort-as="due_amount"
         >
           <template slot-scope="row">
-            <span>{{ $t('invoices.due_amount') }}</span>
-             	₹ {{ (row.due_amount/100).toFixed(2) }}
+            <span>{{ $t('invoices.amount') }}</span>
+             	₹ {{ (row.due_amount).toFixed(2) }}
           </template>
         </table-column>
         <table-column

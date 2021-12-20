@@ -89,6 +89,7 @@ class ReportController extends Controller
         $company = Company::where('unique_hash', $hash)->first();
 
         $items = InvoiceItem::whereCompany($company->id)
+            ->where('type', 'invoice')
             ->applyInvoiceFilters($request->only(['from_date', 'to_date']))
             ->itemAttributes()
             ->get();
@@ -602,7 +603,7 @@ class ReportController extends Controller
             ->get();
 
 
-        $invoice_i = InvoiceItem::with('inventory')->where('invoice_id', $id);
+        $invoice_i = InvoiceItem::with('inventory')->where('type', 'invoice')->where('invoice_id', $id);
         $invoice_items = $invoice_i->get();
 
         $invoiceWith = Invoice::with(['master'])->where('id', $id)->first();

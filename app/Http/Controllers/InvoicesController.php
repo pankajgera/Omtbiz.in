@@ -166,6 +166,7 @@ class InvoicesController extends Controller
             $inventory_id = null;
             foreach ($invoiceInventories as $invoiceInventory) {
                 $invoiceInventory['company_id'] = $request->header('company');
+                $invoiceInventory['type'] = 'invoice';
                 $inventory = $invoice->inventories()->create($invoiceInventory);
                 $inventory_id = $inventory['id'];
                 if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
@@ -519,8 +520,9 @@ class InvoicesController extends Controller
         //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
         foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
             $item = $invoice->inventories()->create($invoiceItem);
+            $invoiceItem['company_id'] = $request->header('company');
+            $invoiceItem['type'] = 'invoice';
 
             if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
                 foreach ($invoiceItem['taxes'] as $tax) {

@@ -95,7 +95,7 @@ class Invoice extends Model
 
     public function inventories()
     {
-        return $this->hasMany(InvoiceItem::class);
+        return $this->hasMany(InvoiceItem::class)->where('type', 'invoice');
     }
 
     public function taxes()
