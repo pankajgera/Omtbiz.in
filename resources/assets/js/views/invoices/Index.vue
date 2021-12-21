@@ -224,12 +224,12 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('invoices.due_amount')"
-          sort-as="due_amount"
+          :label="$t('invoices.total')"
+          sort-as="total"
         >
           <template slot-scope="row">
             <span>{{ $t('invoices.amount') }}</span>
-             	₹ {{ (row.due_amount).toFixed(2) }}
+             	₹ {{ (row.total).toFixed(2) }}
           </template>
         </table-column>
         <table-column

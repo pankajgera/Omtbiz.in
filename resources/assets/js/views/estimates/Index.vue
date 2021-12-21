@@ -120,10 +120,10 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p> -->
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p>
 
         <!-- Tabs -->
-        <ul class="tabs">
+        <!-- <ul class="tabs">
           <li class="tab" @click="getStatus('UNPAID')">
             <a :class="['tab-link', {'a-active': filters.status.value === 'UNPAID'}]" href="#" >{{ $t('general.due') }}</a>
           </li>
@@ -133,9 +133,9 @@
           <li class="tab" @click="getStatus('')">
             <a :class="['tab-link', {'a-active': filters.status.value === '' || filters.status.value === null || filters.status.value !== 'DRAFT' && filters.status.value !== 'UNPAID'}]" href="#">{{ $t('general.all') }}</a>
           </li>
-        </ul>
+        </ul> -->
         <transition name="fade">
-          <v-dropdown :show-arrow="false">
+          <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -186,6 +186,16 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('estimates.number')"
+          show="estimate_number"
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `estimates/${row.id}/edit?d=true`}" class="dropdown-item">
+               {{ row.estimate_number }}
+              </router-link>
+          </template>
+        </table-column>
+        <table-column
           :label="$t('estimates.date')"
           sort-as="estimate_date"
           show="formattedEstimateDate"
@@ -205,25 +215,21 @@
           </template>
         </table-column> -->
         <table-column
-          :label="$t('estimates.paid_status')"
-          sort-as="paid_status"
+          :label="$t('estimates.status')"
+          sort-as="status"
         >
           <template slot-scope="row">
-            <span>{{ $t('estimates.paid_status') }}</span>
-            <span :class="'inv-status-'+row.paid_status.toLowerCase()">{{ (row.paid_status != 'PARTIALLY_PAID')? row.paid_status : row.paid_status.replace('_', ' ') }}</span>
+            <span>{{ $t('estimates.status') }}</span>
+            <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'DISPATCHED') ? 'PAID' : row.status }}</span>
           </template>
         </table-column>
         <table-column
-          :label="$t('estimates.number')"
-          show="estimate_number"
-        />
-        <table-column
-          :label="$t('estimates.due_amount')"
-          sort-as="due_amount"
+          :label="$t('estimates.total')"
+          sort-as="total"
         >
           <template slot-scope="row">
-            <span>{{ $t('estimates.due_amount') }}</span>
-             	₹ {{ (row.due_amount/100).toFixed(2) }}
+            <span>{{ $t('estimates.amount') }}</span>
+             	₹ {{ (row.total).toFixed(2) }}
           </template>
         </table-column>
         <table-column
@@ -311,15 +317,16 @@ export default {
       filtersApplied: false,
       isRequestOngoing: true,
       filters: {
+        estimate_number: '',
         customer: '',
         status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
-        to_date: '',
-        estimate_number: ''
+        to_date: ''
       },
       role: this.$store.state.user.currentUser.role
     }
   },
+
   computed: {
     showEmptyScreen () {
       return !this.totalEstimates && !this.isRequestOngoing && !this.filtersApplied
@@ -429,22 +436,22 @@ export default {
         }
       })
     },
-    getStatus (val) {
-      this.filters.status = {
-        name: val,
-        value: val
-      }
-    },
+    // getStatus (val) {
+    //   this.filters.status = {
+    //     name: val,
+    //     value: val
+    //   }
+    // },
     refreshTable () {
       this.$refs.table.refresh()
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
+        estimate_number: this.filters.estimate_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
-        status: this.filters.status.value,
+        status: '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
-        estimate_number: this.filters.estimate_number,
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -475,11 +482,11 @@ export default {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
       this.filters = {
+        estimate_number: '',
         customer: '',
         status: '',
         from_date: '',
-        to_date: '',
-        estimate_number: ''
+        to_date: ''
       }
 
       this.$nextTick(() => {
