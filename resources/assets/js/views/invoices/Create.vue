@@ -20,7 +20,22 @@
         </ol>
       </div>
       <div class="row invoice-input-group">
-        <div class="col-md-5 invoice-customer-container">
+        <div class="col-md-6 invoice-customer-container mb-2">
+          <label class="form-label">{{ $t('invoices.estimate-list') }}</label>
+            <base-select
+              v-model="setEstimate"
+              :options="estimateList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :disabled="$route.name === 'invoices.edit'"
+              :placeholder="$t('receipts.select_a_list')"
+              label="estimate_number"
+              track-by="id"
+            />
+        </div>
+        <div class="col-md-6 invoice-customer-container mb-2">
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setInvoiceDebtor"
@@ -317,6 +332,7 @@ export default {
         }],
         taxes: [],
         debtors: '',
+        estimate: '',
       },
       customers: [],
       inventoryList: [],
@@ -331,6 +347,7 @@ export default {
       invoiceNumAttribute: null,
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
+      estimateList: [], //List of estimates
       isEdit: false,
       url: null,
       siteURL: null,
@@ -442,6 +459,16 @@ export default {
         this.newInvoice.debtors = value
       },
     },
+    setEstimate: {
+      cache: false,
+      get() {
+        return this.newInvoice.estimate
+      },
+      set(value) {
+        this.newInvoice.estimate = value
+        this.getInvoiceFromEstimate()
+      }
+    },
     inventoryBind() {
       return this.newInvoice.inventories
     }
@@ -468,6 +495,7 @@ export default {
     ...mapActions('invoice', [
       'addInvoice',
       'fetchCreateInvoice',
+      'getInvoiceEstimate',
       'fetchInvoice',
       'updateInvoice',
       'fetchReferenceNumber',
@@ -521,6 +549,7 @@ export default {
           this.invoicePrefix = response.data.invoice_prefix
           this.invoiceNumAttribute = response.data.invoiceNumber
           this.newInvoice.debtors = response.data.sundryDebtorsList[0]
+          this.newInvoice.estimate = response.data.estimateList[0]
         }
         this.initLoading = false
         return
@@ -538,6 +567,7 @@ export default {
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
+        this.estimateList = response.data.estimateList
       }
       this.initLoading = false
     },
@@ -730,6 +760,38 @@ export default {
     removeEndOfList() {
       this.showEndOfList = false;
       this.showAddNewInventory = true;
+    },
+    async getInvoiceFromEstimate() {
+      let resp = await this.getInvoiceEstimate(this.newInvoice.estimate.id)
+      let invoice = resp.data.estimate
+      let inventory = invoice.items.map(i => {
+        i.sale_price = i.total
+        i.sub_total = i.total
+        return i
+      })
+
+      //set invoice data
+      this.newInvoice = {
+        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),
+        invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
+        user_id: invoice.user_id,
+        invoice_template_id: 1,
+        sub_total: invoice.sub_total,
+        total: invoice.total,
+        tax: invoice.tax,
+        notes: invoice.notes,
+        discount_type: 'fixed',
+        discount_val: 0,
+        discount: 0,
+        inventories: inventory,
+        taxes: [],
+        reference_number: null,
+        debtors: this.sundryDebtorsList.find(i => i.id === invoice.account_master_id),
+        estimate: this.newInvoice.estimate
+      };
+
+      //set reference number
+      this.searchDebtorRefNumber(invoice.account_master_id)
     }
   }
 }

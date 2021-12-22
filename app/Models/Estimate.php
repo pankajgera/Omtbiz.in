@@ -45,7 +45,8 @@ class Estimate extends Model
         'total',
         'tax',
         'notes',
-        'unique_hash'
+        'unique_hash',
+        'account_master_id'
     ];
 
     protected $casts = [

@@ -212,6 +212,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InvoicesController@getCustomersUnpaidInvoices'
     ]);
 
+    Route::get('/invoices/estimate/{estimate}', [
+        'as' => 'bootstrap',
+        'uses' => 'InvoicesController@getInvoiceEstimate'
+    ]);
+
     Route::post('/invoices/reference', [
         'as' => 'invoices.reference',
         'uses' => 'InvoicesController@referenceNumber'

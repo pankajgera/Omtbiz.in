@@ -17,7 +17,8 @@ class EstimateItem extends Model
         'discount_val',
         'tax',
         'total',
-        'discount'
+        'discount',
+        'inventory_id',
     ];
 
     protected $casts = [
@@ -37,6 +38,11 @@ class EstimateItem extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    public function inventory()
+    {
+        return $this->belongsTo(Inventory::class);
     }
 
     public function taxes()

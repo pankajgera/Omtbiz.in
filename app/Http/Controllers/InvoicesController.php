@@ -16,6 +16,7 @@ use App\Models\Item;
 use App\Mail\invoicePdf;
 use App\Models\AccountLedger;
 use App\Models\Dispatch;
+use App\Models\Estimate;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
@@ -82,6 +83,7 @@ class InvoicesController extends Controller
         }
 
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
 
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
@@ -93,6 +95,7 @@ class InvoicesController extends Controller
             'discount_per_item' => $discount_per_item,
             'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
             'sundryDebtorsList' => $sundryDebtorsList,
+            'estimateList' => $estimateList,
         ]);
     }
 
@@ -376,6 +379,7 @@ class InvoicesController extends Controller
         ])->find($id);
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+        $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
 
         return response()->json([
             'invoiceNumber' =>  $invoice->reference_number,
@@ -386,6 +390,7 @@ class InvoicesController extends Controller
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'invoice_prefix' => $invoice->getInvoicePrefixAttribute(),
             'sundryDebtorsList' => $sundryDebtorsList,
+            'estimateList' => $estimateList,
             'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
         ]);
     }
@@ -791,6 +796,21 @@ class InvoicesController extends Controller
 
         return response()->json([
             'invoice' => $find_today_first_invoice
+        ]);
+    }
+
+    /**
+     * Get invoice details from estimate
+     *
+     * @param Request $request
+     * @param Estimate $estimate
+     */
+    public function getInvoiceEstimate(Request $request, Estimate $estimate)
+    {
+        $data = Estimate::with('items')->where('id', $estimate->id)->first();
+
+        return response()->json([
+            'estimate' => $data
         ]);
     }
 }

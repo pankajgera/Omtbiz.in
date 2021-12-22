@@ -327,7 +327,6 @@ export default {
     subtotal () {
       let inventory = this.newEstimate.inventories;
       if (inventory.length) {
-        console.log(inventory)
         return inventory.reduce(function (a, b) {
                 return a + b['total']
               }, 0)
@@ -505,7 +504,6 @@ export default {
 
     },
     submitEstimateData () {
-      console.log(this.checkValid())
       if (!this.checkValid()) {
         return false
       }
@@ -566,6 +564,7 @@ export default {
           window.toastr['success'](this.$t('estimates.created_message'))
           //this.$router.push('/estimates/create')
           //this.showEstimatePopup(res.data.estimate.id)
+          this.reset()
         }
       }).catch((err) => {
         this.isLoading = false
@@ -573,6 +572,7 @@ export default {
           window.toastr['error'](err)
           return true
         }
+        this.reset()
         console.log(err)
       })
     },
