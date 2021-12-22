@@ -248,7 +248,6 @@ export default {
       }
     },
     total () {
-      console.log(this.subtotal, this.inventory.discount_val)
       return this.subtotal - this.inventory.discount_val
     },
     totalSimpleTax () {

@@ -157,7 +157,8 @@ class EstimatesController extends Controller
             'discount_per_item' => $discount_per_item,
             'tax' => $request->tax,
             'notes' => $request->notes,
-            'unique_hash' => str_random(60)
+            'unique_hash' => str_random(60),
+            'account_master_id' => $request->debtors['id'],
         ]);
 
         $estimateItems = $request->inventories;
@@ -165,6 +166,7 @@ class EstimatesController extends Controller
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
+            $estimateItem['price'] = $estimateItem['sale_price'];
             $item = $estimate->items()->create($estimateItem);
 
             if (array_key_exists('taxes', $estimateItem) && $estimateItem['taxes']) {
@@ -506,11 +508,12 @@ class EstimatesController extends Controller
             'discount_per_item',
             $request->header('company')
         ) : 'NO';
+        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
 
         $invoice = Invoice::create([
             'invoice_date' => $invoice_date,
             'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber(),
+            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix),
             'reference_number' => $estimate->reference_number,
             'user_id' => $estimate->user_id,
             'company_id' => $request->header('company'),
