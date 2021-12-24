@@ -121,7 +121,7 @@ export default {
         price: '0.00',
         unit: '0',
         image: '',
-        date: '',
+        date: new Date(),
         bill_ty: ''
       },
       money: {

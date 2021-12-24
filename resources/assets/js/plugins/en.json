@@ -176,9 +176,9 @@
         "deleted_message": "Customer deleted successfully | Customers deleted successfully"
     },
     "items": {
-        "add_bill": "Add Bill",
-        "edit_bill": "Edit Bill",
-        "new_bill": "New Bill",
+        "add_bill": "Add Bill-Ty",
+        "edit_bill": "Edit Bill-Ty",
+        "new_bill": "New Bill-Ty",
         "title": "Items",
         "date": "Date",
         "items_list": "Items List",
