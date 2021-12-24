@@ -117,6 +117,17 @@
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>To Be Dispatch</h4>
+        <base-button
+            v-show="toBeDispatchedData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="printToBeDispatch"
+          >
+            Print
+          </base-button>
         <transition name="fade">
           <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -152,6 +163,7 @@
       </div>
 
       <table-component
+        id="to_print_to_be_dispatch"
         ref="toBeTableDispatch"
         :data="toBeDispatchedData"
         :show-filter="false"
@@ -244,6 +256,17 @@
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>Dispatched</h4>
+          <base-button
+            v-show="dipatchedCompletedData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="printDispatched"
+          >
+            Print
+          </base-button>
         <transition name="fade">
           <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -279,6 +302,7 @@
       </div>
 
       <table-component
+        id="to_print_dispatched"
         ref="tableDispatch"
         :data="dipatchedCompletedData"
         :show-filter="false"
@@ -632,6 +656,26 @@ export default {
     },
     setIndex(index) {
       this.index = index
+    },
+    printToBeDispatch() {
+        printJS({
+          printable: 'to_print_to_be_dispatch',
+          type: 'html',
+          ignoreElements: ['no-print-check', 'no-print-option'],
+          scanStyles: true,
+          targetStyles: ['*'],
+          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+        })
+    },
+    printDispatched() {
+        printJS({
+          printable: 'to_print_dispatched',
+          type: 'html',
+          ignoreElements: ['no-print-check', 'no-print-option'],
+          scanStyles: true,
+          targetStyles: ['*'],
+          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+        })
     }
   }
 }
