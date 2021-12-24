@@ -83,7 +83,7 @@ class InvoicesController extends Controller
         }
 
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
-        $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
+        $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total', 'account_master_id')->get();
 
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),

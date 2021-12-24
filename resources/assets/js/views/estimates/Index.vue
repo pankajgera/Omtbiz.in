@@ -201,9 +201,14 @@
           show="formattedEstimateDate"
         />
         <table-column
-          :label="$t('estimates.customer')"
+          :label="$t('estimates.name')"
           width="20%"
-          show="name"
+          show="master.name"
+        />
+        <table-column
+          :label="$t('estimates.count')"
+          width="20%"
+          show="items.length"
         />
         <!-- <table-column
           :label="$t('estimates.status')"
@@ -214,7 +219,7 @@
             <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'PARTIALLY_PAID')? row.status : row.status.replace('_', ' ') }}</span>
           </template>
         </table-column> -->
-        <table-column
+        <!-- <table-column
           :label="$t('estimates.status')"
           sort-as="status"
         >
@@ -222,7 +227,7 @@
             <span>{{ $t('estimates.status') }}</span>
             <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'DISPATCHED') ? 'PAID' : row.status }}</span>
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :label="$t('estimates.total')"
           sort-as="total"

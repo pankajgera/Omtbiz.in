@@ -42,6 +42,12 @@ export default {
             meta: ["admin"],
           },
           {
+            title: "navigation.estimates",
+            icon: "file",
+            route: "/estimates",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.invoices",
             icon: "file-alt",
             route: "/invoices/create",
@@ -125,12 +131,6 @@ export default {
           // },
         ],
         [
-          {
-            title: "navigation.estimates",
-            icon: "file",
-            route: "/estimates",
-            meta: ["admin"],
-          },
           // {
           //   title: "navigation.expenses",
           //   icon: "space-shuttle",

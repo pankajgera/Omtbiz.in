@@ -67,7 +67,7 @@
               />
               <span v-show="$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
             </div>
-            <div class="col collapse-input">
+            <!-- <div class="col collapse-input">
               <label>{{ $t('estimates.ref_number') }}</label>
               <base-input
                 v-model="newEstimate.reference_number"
@@ -77,7 +77,7 @@
                 :disabled="isEdit"
               />
               <div v-if="$v.newEstimate.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -249,7 +249,7 @@ export default {
         discount_type: 'fixed',
         discount_val: 0,
         discount: 0,
-        reference_number: null,
+        //reference_number: null,
         inventories: [{
           ...EstimateStub,
           taxes: [{...TaxStub, id: Guid.raw()}]
@@ -289,9 +289,9 @@ export default {
         notes: {
           maxLength: maxLength(255)
         },
-        reference_number: {
-          maxLength: maxLength(255)
-        },
+        // reference_number: {
+        //   maxLength: maxLength(255)
+        // },
         debtors: {
           required
         }
@@ -325,8 +325,11 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      let inventory = this.newEstimate.inventories;
-      if (inventory.length) {
+      let inventory = this.newEstimate.inventories
+      if (this.$route.name === 'estimates.edit') {
+        inventory = this.newEstimate.items
+      }
+      if (inventory && inventory.length) {
         return inventory.reduce(function (a, b) {
                 return a + b['total']
               }, 0)
@@ -380,12 +383,16 @@ export default {
         return this.newEstimate.debtors
       },
       set(value) {
-        this.searchDebtorRefNumber(value)
+        //this.searchDebtorRefNumber(value)
         this.newEstimate.debtors = value
       },
     },
     inventoryBind() {
-      return this.newEstimate.inventories
+      let invent = this.newEstimate.inventories
+      if (this.$route.name === 'estimates.edit') {
+        invent = this.newEstimate.items
+      }
+      return invent
     }
   },
   watch: {
@@ -619,15 +626,15 @@ export default {
       }
       return false
     },
-    async searchDebtorRefNumber(data) {
-       this.newEstimate.reference_number = null;
-       let response = await this.fetchReferenceNumber(data)
-        if (response.data && response.data.estimate) {
-          this.newEstimate.reference_number = response.data.estimate.reference_number
-        } else {
-          this.newEstimate.reference_number = this.estimateNumAttribute
-        }
-    },
+    // async searchDebtorRefNumber(data) {
+    //    this.newEstimate.reference_number = null;
+    //    let response = await this.fetchReferenceNumber(data)
+    //     if (response.data && response.data.estimate) {
+    //       this.newEstimate.reference_number = response.data.estimate.reference_number
+    //     } else {
+    //       this.newEstimate.reference_number = this.estimateNumAttribute
+    //     }
+    // },
     showEndList(val) {
       this.showAddNewInventory = !val;
       this.showEndOfList = val;

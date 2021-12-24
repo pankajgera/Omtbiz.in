@@ -34,9 +34,7 @@ class EstimatesController extends Controller
 
         $estimates = Estimate::with([
             'items',
-            'user',
-            'estimateTemplate',
-            'taxes'
+            'master'
         ])
             ->join('users', 'users.id', '=', 'estimates.user_id')
             ->applyFilters($request->only([

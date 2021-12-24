@@ -361,6 +361,8 @@
     },
     "estimates": {
         "title": "Estimates",
+        "count": "Item count",
+        "name": "Name",
         "estimate": "Estimate | Estimates",
         "estimates_list": "Estimates List",
         "days": "{days} Days",
