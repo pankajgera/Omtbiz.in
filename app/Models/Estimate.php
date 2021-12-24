@@ -88,6 +88,11 @@ class Estimate extends Model
         return $this->hasMany(InvoiceItem::class)->where('type', 'estimate');
     }
 
+    public function master()
+    {
+        return $this->belongsTo(AccountMaster::class, 'account_master_id');
+    }
+
     public function items()
     {
         return $this->hasMany('App\Models\EstimateItem');

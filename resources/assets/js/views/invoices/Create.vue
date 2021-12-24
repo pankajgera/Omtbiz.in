@@ -567,7 +567,16 @@ export default {
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
-        this.estimateList = response.data.estimateList
+
+        response.data.estimateList.map(i => {
+          let obj = {}
+          let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
+          obj['id'] = i.id;
+          obj['total'] = i.total;
+          obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');
+
+          this.estimateList.push(obj)
+        })
       }
       this.initLoading = false
     },
