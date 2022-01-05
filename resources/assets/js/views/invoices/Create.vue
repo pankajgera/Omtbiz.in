@@ -293,14 +293,9 @@ input.base-prefix-input:disabled {
 }
 
 @media screen and (max-width:400px) {
-  .table{
-    background: red;
-
-  }
   .heading-1 {
     padding: 5px 180px;
   }
-
 }
 </style>
 <script>
