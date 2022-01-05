@@ -96,7 +96,8 @@
           </div>
         </div>
       </div>
-      <table class="item-table">
+      <div class="table-responsive">
+      <table class="table item-table">
         <colgroup>
           <col style="width: 40%;">
           <col style="width: 10%;">
@@ -108,7 +109,7 @@
         <thead class="item-table-header">
           <tr>
             <th class="text-left">
-              <span class="column-heading item-heading">
+              <span class="column-heading heading-1 item-heading">
                 {{ $tc('invoices.inventory.title',2) }}
               </span>
             </th>
@@ -158,6 +159,7 @@
           />
         </draggable>
       </table>
+      </div>
       <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="$route.query.d === 'true'" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
@@ -288,6 +290,17 @@ input.base-prefix-input:disabled {
 }
 .add-invoice-item:focus {
   border: 1px solid salmon
+}
+
+@media screen and (max-width:400px) {
+  .table{
+    background: red;
+
+  }
+  .heading-1 {
+    padding: 5px 180px;
+  }
+
 }
 </style>
 <script>
