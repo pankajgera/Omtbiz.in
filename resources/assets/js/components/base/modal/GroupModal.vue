@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="form-group row">
           <label class="col-sm-4 col-form-label input-label">
-            {{ $t('groups.name') }}<span class="required">*</span>
+            {{ $t('groups.name') }}<span class="text-danger required">*</span>
           </label>
           <div class="col-sm-7">
             <base-input
