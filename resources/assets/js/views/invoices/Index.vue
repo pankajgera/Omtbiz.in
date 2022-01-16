@@ -190,7 +190,7 @@
           show="invoice_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `invoices/${row.id}/edit?d=true`}" class="dropdown-item">
+            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}" class="dropdown-item">
                {{ row.invoice_number }}
               </router-link>
           </template>
@@ -278,7 +278,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'

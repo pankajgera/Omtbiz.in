@@ -1,5 +1,4 @@
 .table {
-
     th,
     td {
         color: $ls-color-black;
@@ -44,7 +43,7 @@
     thead th {
         border: 0;
         position: relative;
-        top: 15px;
+        top: 0px;
     }
 
     .table-component__table__body {

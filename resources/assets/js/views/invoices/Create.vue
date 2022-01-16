@@ -29,7 +29,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="$route.name === 'invoices.edit'"
+              :disabled="isDisabled"
               :placeholder="$t('receipts.select_a_list')"
               label="estimate_number"
               track-by="id"
@@ -45,7 +45,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="$route.name === 'invoices.edit'"
+              :disabled="isDisabled"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
               track-by="id"
@@ -54,46 +54,42 @@
               <span v-if="!$v.newInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
         </div>
-        <div class="col invoice-input">
-          <div class="row">
-            <div class="col collapse-input">
-              <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
-              <input
-                v-model="newInvoice.invoice_date"
-                type="date"
-                data-date=""
-                data-date-format="DD/MM/YYYY"
-                class="base-prefix-input"
-                @change="$v.newInvoice.invoice_date.$touch()"
-                :disabled="isEdit"
-              />
-              <span v-if="$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
-            </div>
-            <div class="col collapse-input">
-              <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
-              <base-prefix-input
-                v-model="invoiceNumAttribute"
-                :invalid="$v.invoiceNumAttribute.$error"
-                :prefix="invoicePrefix"
-                icon="hashtag"
-                @input="$v.invoiceNumAttribute.$touch()"
-                :prefix-width="55"
-                :disabled="true"
-              />
-              <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
-            </div>
-            <div class="col collapse-input">
-              <label>{{ $t('invoices.ref_number') }}</label>
-              <base-input
-                v-model="newInvoice.reference_number"
-                :invalid="$v.newInvoice.reference_number.$error"
-                icon="hashtag"
-                @input="$v.newInvoice.reference_number.$touch()"
-                :disabled="isEdit"
-              />
-              <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
-            </div>
-          </div>
+        <div class="col-md-4 col-sm-6 collapse-input">
+          <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
+          <input
+            v-model="newInvoice.invoice_date"
+            type="date"
+            data-date=""
+            data-date-format="DD/MM/YYYY"
+            class="base-prefix-input"
+            @change="$v.newInvoice.invoice_date.$touch()"
+            :disabled="isDisabled"
+          />
+          <span v-if="$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+        </div>
+        <div class="col-md-4 col-sm-6 collapse-input">
+          <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
+          <base-prefix-input
+            v-model="invoiceNumAttribute"
+            :invalid="$v.invoiceNumAttribute.$error"
+            :prefix="invoicePrefix"
+            icon="hashtag"
+            @input="$v.invoiceNumAttribute.$touch()"
+            :prefix-width="55"
+            :disabled="true"
+          />
+          <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
+        </div>
+        <div class="col-md-4 col-sm-6 collapse-input">
+          <label>{{ $t('invoices.ref_number') }}</label>
+          <base-input
+            v-model="newInvoice.reference_number"
+            :invalid="$v.newInvoice.reference_number.$error"
+            icon="hashtag"
+            @input="$v.newInvoice.reference_number.$touch()"
+            :disabled="isDisabled"
+          />
+          <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
         </div>
       </div>
       <div class="table-responsive">
@@ -160,7 +156,7 @@
         </draggable>
       </table>
       </div>
-      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="$route.query.d === 'true'" @click="addInventory">
+      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="isDisabled" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>
@@ -291,11 +287,15 @@ input.base-prefix-input:disabled {
 .add-invoice-item:focus {
   border: 1px solid salmon
 }
-
 @media screen and (max-width:400px) {
   .heading-1 {
     padding: 5px 180px;
   }
+}
+</style>
+<style>
+.table-responsive {
+  overflow-x: visible !important;
 }
 </style>
 <script>
@@ -356,7 +356,7 @@ export default {
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
       estimateList: [], //List of estimates
-      isEdit: false,
+      isDisabled: false,
       url: null,
       siteURL: null,
       showAddNewInventory: true,
@@ -545,7 +545,11 @@ export default {
       if (this.$route.name === 'invoices.edit') {
         this.initLoading = true
         let response = await this.fetchInvoice(this.$route.params.id)
-        this.isEdit = true
+        if (this.$route.query && this.$route.query.nondis === 'false') {
+          this.isDisabled = true
+        } else {
+          this.isDisabled = false
+        }
         if (response.data) {
           this.newInvoice = response.data.invoice
           this.inventoryList = response.data.invoice.inventories
