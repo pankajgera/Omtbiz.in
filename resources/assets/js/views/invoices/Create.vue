@@ -156,7 +156,7 @@
         </draggable>
       </table>
       </div>
-      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="$route.query.d === 'true'" @click="addInventory">
+      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="isDisabled" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>
