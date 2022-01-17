@@ -82,11 +82,11 @@ export const setSelectAllState = ({ commit, dispatch, state }, data) => {
 }
 
 export const selectAllMasters = ({ commit, dispatch, state }) => {
-  if (state.selectedMasters.length === state.master.length) {
+  if (state.selectedMasters.length === state.masters.length) {
     commit(types.SET_SELECTED_MASTERS, [])
     commit(types.SET_SELECT_ALL_STATE, false)
   } else {
-    let allMasterIds = state.master.map(master => master.id)
+    let allMasterIds = state.masters.map(master => master.id)
     commit(types.SET_SELECTED_MASTERS, allMasterIds)
     commit(types.SET_SELECT_ALL_STATE, true)
   }
@@ -94,7 +94,7 @@ export const selectAllMasters = ({ commit, dispatch, state }) => {
 
 export const selectMaster = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECTED_MASTERS, data)
-  if (state.selectedMasters.length === state.master.length) {
+  if (state.selectedMasters.length === state.masters.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)
