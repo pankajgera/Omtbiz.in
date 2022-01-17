@@ -3,7 +3,7 @@
     <form action="" @submit.prevent="next()">
       <p class="form-title">{{ $t('wizard.company_info') }}</p>
       <p class="form-desc">{{ $t('wizard.company_info_desc') }}</p>
-      <div class="row mb-4">
+      <!-- <div class="row mb-4">
         <div class="col-md-6">
           <label class="input-label">{{ $tc('settings.company_info.company_logo') }}</label>
           <div id="pick-avatar" class="image-upload-box">
@@ -27,7 +27,7 @@
           @changed="setFileObject"
           @error="handleUploadError"
         />
-      </div>
+      </div> -->
       <div class="row">
         <div class="col-md-6">
           <label class="form-label">{{ $t('wizard.company_name') }}</label><span class="text-danger"> *</span>

@@ -8,7 +8,7 @@
             {{ $t('settings.company_info.section_description') }}
           </p>
         </div>
-        <div class="row mb-4">
+        <!-- <div class="row mb-4">
           <div class="col-md-6">
             <label class="input-label">{{ $tc('settings.company_info.company_logo') }}</label>
             <div id="pick-avatar" class="image-upload-box">
@@ -32,7 +32,7 @@
             @changed="setFileObject"
             @error="handleUploadError"
           />
-        </div>
+        </div> -->
         <div class="row">
           <div class="col-md-6 mb-4">
             <label class="input-label">{{ $tc('settings.company_info.company_name') }}</label> <span class="text-danger"> * </span>

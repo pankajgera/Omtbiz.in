@@ -9,7 +9,7 @@
               {{ $t('settings.add-user.section_description') }}
             </p>
           </div>
-          <div class="row mb-4">
+          <!-- <div class="row mb-4">
             <div class="col-md-6">
               <label class="input-label">{{ $tc('settings.add-user.profile_picture') }}</label>
               <div id="pick-avatar" class="image-upload-box avatar-upload">
@@ -33,7 +33,7 @@
               @changed="setFileObject"
               @error="handleUploadError"
             />
-          </div>
+          </div> -->
           <div class="row">
             <div class="col-md-6 mb-4 form-group">
               <label class="input-label">{{ $tc('settings.add-user.name') }}</label>
