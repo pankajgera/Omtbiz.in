@@ -26,7 +26,7 @@
       </div>
     </a>
     <ul class="action-list">
-      <li>
+      <!-- <li>
         <v-dropdown :show-arrow="false" v-if="role === 'admin'">
           <a slot="activator" href="#">
             <font-awesome-icon icon="plus" />
@@ -41,13 +41,13 @@
               <font-awesome-icon class="dropdown-item-icon" icon="file" /> <span> {{ $t('estimates.new_estimate') }} </span>
             </router-link>
           </v-dropdown-item>
-          <!-- <v-dropdown-item>
+          <v-dropdown-item>
             <router-link class="dropdown-item" to="/customers/create">
               <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('customers.new_customer') }} </span>
             </router-link>
-          </v-dropdown-item> -->
+          </v-dropdown-item>
         </v-dropdown>
-      </li>
+      </li> -->
       <li>
         <v-dropdown :show-arrow="false">
           <a
