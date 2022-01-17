@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-3 mr-4">
           <base-button
             v-show="totalMasters || filtersApplied"
             :outline="true"
@@ -36,15 +36,17 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="masters/create">
-          <base-button
-            color="theme"
-            icon="plus"
-            size="large"
-          >
-            {{ $t('masters.add_account_master') }}
-          </base-button>
-        </router-link>
+        <div class="col-xs-3">
+          <router-link slot="item-title" to="masters/create">
+            <base-button
+              color="theme"
+              icon="plus"
+              size="large"
+            >
+              {{ $t('masters.add_account_master') }}
+            </base-button>
+          </router-link>
+        </div>
       </div>
     </div>
 
