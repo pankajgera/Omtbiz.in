@@ -81,67 +81,69 @@
           </div>
         </div>
       </div>
-      <table class="item-table">
-        <colgroup>
-          <col style="width: 40%;">
-          <col style="width: 10%;">
-          <col style="width: 15%;">
-          <col style="width: 15%;">
-          <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
-          <col style="width: 15%;">
-        </colgroup>
-        <thead class="item-table-header">
-          <tr>
-            <th class="text-left">
-              <span class="column-heading item-heading">
-                {{ $tc('estimates.inventory.title',2) }}
-              </span>
-            </th>
-            <th class="text-right">
-              <span class="column-heading">
-                {{ $t('estimates.inventory.quantity') }}
-              </span>
-            </th>
-            <th class="text-left">
-              <span class="column-heading">
-                {{ $t('estimates.inventory.price') }}
-              </span>
-            </th>
-            <th class="text-left">
-              <span class="column-heading">
-                {{ $t('estimates.inventory.sale_price') }}
-              </span>
-            </th>
-            <th v-if="discountPerInventory === 'YES'" class="text-right">
-              <span class="column-heading">
-                {{ $t('estimates.inventory.discount') }}
-              </span>
-            </th>
-            <th class="text-right">
-              <span class="column-heading amount-heading">
-                {{ $t('estimates.inventory.amount') }}
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
-          <invoice-inventory
-            v-for="(each, index) in inventoryBind"
-            ref="estimateInventory"
-            :key="each.name+index"
-            :index="index"
-            :inventory-data="each"
-            :currency="currency"
-            :tax-per-inventory="taxPerInventory"
-            :discount-per-inventory="discountPerInventory"
-            :inventory-type="'estimate'"
-            @remove="removeInventory"
-            @update="updateInventoryBounce"
-            @inventoryValidate="checkInventoryData"
-            @endlist="showEndList"
-          />
-        </draggable>
-      </table>
+      <div class="table-responsive">
+        <table class="table item-table">
+          <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
+            <col style="width: 15%;">
+          </colgroup>
+          <thead class="item-table-header">
+            <tr>
+              <th class="text-left">
+                <span class="column-heading heading-1 item-heading">
+                  {{ $tc('estimates.inventory.title',2) }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading">
+                  {{ $t('estimates.inventory.quantity') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('estimates.inventory.price') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('estimates.inventory.sale_price') }}
+                </span>
+              </th>
+              <th v-if="discountPerInventory === 'YES'" class="text-right">
+                <span class="column-heading">
+                  {{ $t('estimates.inventory.discount') }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading amount-heading">
+                  {{ $t('estimates.inventory.amount') }}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
+            <invoice-inventory
+              v-for="(each, index) in inventoryBind"
+              ref="estimateInventory"
+              :key="each.name+index"
+              :index="index"
+              :inventory-data="each"
+              :currency="currency"
+              :tax-per-inventory="taxPerInventory"
+              :discount-per-inventory="discountPerInventory"
+              :inventory-type="'estimate'"
+              @remove="removeInventory"
+              @update="updateInventoryBounce"
+              @inventoryValidate="checkInventoryData"
+              @endlist="showEndList"
+            />
+          </draggable>
+        </table>
+      </div>
       <button v-if="showAddNewInventory" class="add-item-action add-estimate-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('estimates.add_item') }}
@@ -214,6 +216,16 @@ input.base-prefix-input:disabled {
 }
 .add-estimate-item:focus {
   border: 1px solid salmon
+}
+@media screen and (max-width:400px) {
+  .heading-1 {
+    padding: 5px 180px;
+  }
+}
+</style>
+<style>
+.table-responsive {
+  overflow-x: visible !important;
 }
 </style>
 <script>
