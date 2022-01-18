@@ -411,7 +411,7 @@
         "mark_as_sent_successfully": "Estimate marked as sent successfully",
         "send_estimate_successfully": "Estimate sent successfully",
         "errors": {
-            "required": "Field is required"
+            "required": "Field is required."
         },
         "accepted": "Accepted",
         "sent": "Sent",
@@ -729,7 +729,7 @@
             "date_range": "Select Date Range"
         },
         "errors": {
-            "required": "Field is required"
+            "required": "Field is required."
         },
         "invoices": {
             "invoice": "Invoice",
@@ -1288,7 +1288,7 @@
     },
     "validation": {
         "invalid_url": "Invalid url (ex: http://www.omtbiz.com)",
-        "required": "Field is required",
+        "required": "Field is required.",
         "email_incorrect": "Incorrect Email.",
         "email_already_taken": "The email has already been taken.",
         "email_does_not_exist": "User with given email doesn't exist",
