@@ -62,6 +62,11 @@
     }
   }
 </style>
+<style>
+  td {
+    vertical-align: middle !important;
+  }
+</style>
 <script>
 import Column from '../classes/Column'
 import expiringStorage from '../expiring-storage'

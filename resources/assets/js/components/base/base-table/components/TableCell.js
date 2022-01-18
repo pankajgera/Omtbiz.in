@@ -18,7 +18,8 @@ export default {
     data.domProps.innerHTML = props.column.formatter(props.row.getValue(props.column.show), props.row.data)
 
     return createElement('td', [
-      createElement('span', props.responsiveLabel), data.domProps.innerHTML
+      createElement('span', props.responsiveLabel),
+      createElement('span', data.domProps.innerHTML)
     ])
   }
 }
