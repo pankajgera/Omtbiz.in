@@ -10671,7 +10671,7 @@ a {
 a:hover, a:focus {
   color: #355282;
   padding: 1px 4px;
-  border: 2px solid rgba(53, 53, 53, 0.5) !important;
+  border: 1px solid rgba(182, 182, 182, 0.5) !important;
   text-decoration: none;
   border-radius: 30px;
 }
@@ -13152,7 +13152,7 @@ fieldset[disabled] .multiselect {
 .multiselect__input,
 .multiselect__single {
   position: relative;
-  display: inline-block;
+  display: inline;
   min-height: 20px;
   line-height: 20px;
   border: none;
