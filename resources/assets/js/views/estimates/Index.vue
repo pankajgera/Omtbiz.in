@@ -54,7 +54,7 @@
           <!-- <div class="filter-status">
             <label>{{ $t('estimates.status') }}</label>
             <base-select
-              v-model="filters.status"
+              v-model.trim="filters.status"
               :options="status"
               :group-select="false"
               :searchable="true"
