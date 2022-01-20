@@ -10770,6 +10770,10 @@ code,
   height: 70px !important;
 }
 
+.custom-control-label {
+  cursor: pointer;
+}
+
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
   border-color: #f54c4c !important;
