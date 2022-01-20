@@ -123,8 +123,12 @@ export default {
     }
   },
   watch: {
-    'value' () {
-      this.inputValue = this.value
+    value () {
+      if ('number' === this.type) {
+        this.inputValue = this.value.replace('-', '')
+      } else {
+        this.inputValue = this.value
+      }
     },
     focus () {
       this.focusInput()
@@ -140,19 +144,29 @@ export default {
       }
     },
     handleInput (e) {
-      this.$emit('input', this.inputValue)
+      if (this.inputValue) {
+        this.$emit('input', this.inputValue)
+      }
     },
     handleChange (e) {
-      this.$emit('change', this.inputValue)
+      if (this.inputValue) {
+        this.$emit('change', this.inputValue)
+      }
     },
     handleKeyupEnter (e) {
-      this.$emit('keyup', this.inputValue)
+      if (this.inputValue) {
+        this.$emit('keyup', this.inputValue)
+      }
     },
     handleKeyDownEnter (e) {
-      this.$emit('keydown', e, this.inputValue)
+      if (this.inputValue) {
+        this.$emit('keydown', e, this.inputValue)
+      }
     },
     handleFocusOut (e) {
-      this.$emit('blur', this.inputValue)
+      if (this.inputValue) {
+        this.$emit('blur', this.inputValue)
+      }
     }
   }
 }
