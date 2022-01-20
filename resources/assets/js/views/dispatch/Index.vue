@@ -54,7 +54,7 @@
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('dispatch.name') }} </label>
             <base-input
-              v-model="filters.name"
+              v-model.trim="filters.name"
               type="text"
               name="name"
               autocomplete="off"
@@ -72,7 +72,7 @@
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('dispatch.status') }} </label>
             <base-input
-              v-model="filters.status"
+              v-model.trim="filters.status"
               type="text"
               name="status"
               autocomplete="off"

@@ -67,7 +67,7 @@
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('notes.name') }} </label>
             <base-input
-              v-model="filters.name"
+              v-model.trim="filters.name"
               type="text"
               name="name"
               autocomplete="off"

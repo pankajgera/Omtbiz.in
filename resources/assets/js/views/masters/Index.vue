@@ -56,7 +56,7 @@
           <div class="col-sm-4">
             <label class="form-label"> {{ $tc('masters.name') }} </label>
             <base-input
-              v-model="filters.name"
+              v-model.trim="filters.name"
               type="text"
               name="name"
               autocomplete="off"

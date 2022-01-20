@@ -8,7 +8,7 @@
             <base-input
               ref="name"
               :invalid="$v.formData.name.$error"
-              v-model="formData.name"
+              v-model.trim="formData.name"
               type="text"
               @input="$v.formData.name.$touch()"
             />
