@@ -62,6 +62,7 @@
                 <label class="input-label">{{ $tc('masters.state') }}</label><span class="text-danger"> * </span>
                 <base-select
                     v-model="stateBind"
+                    :invalid="$v.formData.state.$error"
                     :options="stateOptions"
                     :searchable="true"
                     :show-labels="false"
@@ -207,8 +208,10 @@ export default {
         minLength: minLength(3)
       },
       groups: {
+        required
       },
       state: {
+        required
       },
       address: {
         maxLength: maxLength(255)
