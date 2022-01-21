@@ -75,18 +75,27 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('masters.opening_balance') }}</label>
-                <base-input
-                  v-model.trim="formData.opening_balance"
-                  focus
-                  type="number"
-                  name="opening_balance"
-                  @input="formData.opening_balance"
-                />
-                <select v-model="formData.type">
-                  <option value="Cr">Cr</option>
-                  <option value="Dr">Dr</option>
-              </select>
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4 p-0">
+                      <label class="control-label">Type</label>
+                      <select class="select-class" v-model="formData.type">
+                        <option value="Cr">Cr</option>
+                        <option value="Dr">Dr</option>
+                      </select>
+                    </div>
+                    <div class="col-md-8 p-0">
+                      <label class="control-label">{{ $t('masters.opening_balance') }}</label>
+                      <base-input
+                        v-model.trim="formData.opening_balance"
+                        focus
+                        type="number"
+                        name="opening_balance"
+                        @input="formData.opening_balance"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
                <div class="form-group">
                 <base-button
@@ -108,6 +117,15 @@
   </div>
 </template>
 <style scoped>
+.select-class {
+  min-height: 40px;
+  display: block;
+  padding: 8px 40px 0 8px;
+  border-radius: 5px;
+  border: 1px solid #EBF1FA;
+  background: #fff;
+  font-size: 14px;
+}
 .base-input.select-input{
     width: 100%;
     height: 40px;
