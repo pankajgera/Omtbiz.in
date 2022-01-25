@@ -17,6 +17,7 @@
       :accept="fileInput==='image' ? 'image/*' : ''"
       :capture="fileInput==='image' ? 'camera' : ''"
       :min="type === 'number' ? 0 : null"
+      :maxlength="type === 'number' ? max : null"
       @input="handleInput"
       @change="handleChange"
       @keyup="handleKeyupEnter"
@@ -96,6 +97,10 @@ export default {
     showPassword: {
       type: Boolean,
       default: false
+    },
+    max: {
+      type: Number,
+      default: null
     }
   },
   data () {
@@ -124,8 +129,11 @@ export default {
   },
   watch: {
     value () {
-      if ('number' === this.type) {
+      if ('number' === this.type && this.value) {
         this.inputValue = this.value.replace('-', '')
+        if (this.max) {
+          this.inputValue = this.value.slice(0, this.max)
+        }
       } else {
         this.inputValue = this.value
       }
