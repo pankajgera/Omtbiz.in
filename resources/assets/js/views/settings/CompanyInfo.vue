@@ -53,6 +53,7 @@
               :name="'company-phone'"
               :type="'number'"
               :max="12"
+              :min="8"
               :placeholder="$t('settings.company_info.phone')"
             />
           </div>
@@ -145,7 +146,7 @@ import ImageBox from '../components/ImageBox.vue'
 import AvatarCropper from 'vue-avatar-cropper'
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
-const { required, email, maxLength, number } = require('vuelidate/lib/validators')
+const { required, email, maxLength, minLength, number } = require('vuelidate/lib/validators')
 
 export default {
   components: { AvatarCropper, IconUpload, ImageBox },
@@ -206,6 +207,7 @@ export default {
       },
       phone: {
         number,
+        minLength: minLength(8),
         maxLength: maxLength(12)
       },
       address_street_1: {
