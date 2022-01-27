@@ -102,6 +102,7 @@ export default {
       },
       defaultInput: {
         decimal: '.',
+        maxlength: 7,
         thousands: ',',
         prefix: '% ',
         precision: 2,
@@ -124,6 +125,7 @@ export default {
       },
       percent: {
         required,
+        maxLength: maxLength(4),
         between: between(0, 100)
       },
       description: {
@@ -131,21 +133,6 @@ export default {
       }
     }
   },
-  // watch: {
-  //   'modalDataID' (val) {
-  //     if (val) {
-  //       this.isEdit = true
-  //       this.setData()
-  //     } else {
-  //       this.isEdit = false
-  //     }
-  //   },
-  //   'modalActive' (val) {
-  //     if (!this.modalActive) {
-  //       this.resetFormData()
-  //     }
-  //   }
-  // },
   async mounted () {
     this.$refs.name.focus = true
     if (this.modalDataID) {
