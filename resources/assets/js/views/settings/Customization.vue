@@ -23,13 +23,11 @@
                 <base-input
                   v-model="invoices.invoice_prefix"
                   :invalid="$v.invoices.invoice_prefix.$error"
-                  class="prefix-input"
                   @input="$v.invoices.invoice_prefix.$touch()"
                   @keyup="changeToUppercase('INVOICES')"
                 />
                 <span v-show="!$v.invoices.invoice_prefix.required" class="text-danger mt-1">{{ $t('validation.required') }}</span>
                 <span v-if="!$v.invoices.invoice_prefix.maxLength" class="text-danger">{{ $t('validation.prefix_maxlength') }}</span>
-                <span v-if="!$v.invoices.invoice_prefix.alpha" class="text-danger">{{ $t('validation.characters_only') }}</span>
               </div>
             </div>
             <div class="row mb-3">
@@ -78,7 +76,6 @@
                 <base-input
                   v-model="estimates.estimate_prefix"
                   :invalid="$v.estimates.estimate_prefix.$error"
-                  class="prefix-input"
                   @input="$v.estimates.estimate_prefix.$touch()"
                   @keyup="changeToUppercase('ESTIMATES')"
                 />
@@ -133,7 +130,6 @@
                 <base-input
                   v-model="payments.payment_prefix"
                   :invalid="$v.payments.payment_prefix.$error"
-                  class="prefix-input"
                   @input="$v.payments.payment_prefix.$touch()"
                   @keyup="changeToUppercase('PAYMENTS')"
                 />
@@ -216,8 +212,7 @@ export default {
     invoices: {
       invoice_prefix: {
         required,
-        maxLength: maxLength(5),
-        alpha
+        maxLength: maxLength(12),
       }
     },
     estimates: {
