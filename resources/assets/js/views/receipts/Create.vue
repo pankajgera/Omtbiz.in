@@ -116,7 +116,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="col-sm-12 ">
+              <div class="col-sm-12 p-0">
                 <div class="form-group">
                   <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
                   <base-prefix-input
@@ -128,7 +128,7 @@
                   />
                 </div>
               </div>
-              <div class="col-sm-12 ">
+              <div class="col-sm-12 p-0">
                 <div class="form-group">
                   <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
                   <base-prefix-input
