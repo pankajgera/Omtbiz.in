@@ -4,11 +4,9 @@
       <div class="login-box">
         <div class="box-wrapper">
           <div class="logo-main">
-            <a href="/">
-              <img
+            <img
                 src="/assets/img/bill.png"
                 alt="Omtbiz Logo">
-            </a>
           </div>
           <router-view></router-view>
           <div class="page-copyright">
