@@ -22,7 +22,8 @@
 }
 .base-prefix-input p.prefix-label{
   padding: 10px !important;
-  width: 45% !important;
+  background: #e9e9e9;
+  height: 100%;
 }
 </style>
 <script>
@@ -47,7 +48,7 @@ export default {
     },
     prefixWidth: {
       type: Number,
-      default: 15,
+      default: 45,
       required: false
     },
     disabled: {
