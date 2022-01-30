@@ -81,7 +81,7 @@
                     v-model.trim="amount"
                     :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
                     type="number"
-                    max="15"
+                    :max="15"
                     name="amount"
                   />
                 <div v-if="$v.formData.amount.$error">
