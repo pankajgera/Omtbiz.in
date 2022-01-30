@@ -66,7 +66,6 @@
                 </div>
               </div>
               <div class="form-group">
-                <img :src="previewImage" class="uploading-image" style="width: 100px">
                 <input type="file" accept="image/*" name="image" @change="uploadImage">
               </div>
               <div class="form-group">
@@ -84,6 +83,9 @@
             </div>
           </form>
         </div>
+      </div>
+      <div class="col-sm-6" v-if="previewImage">
+        <img :src="previewImage" class="uploading-image" style="width: 100%; height: 90%">
       </div>
     </div>
   </div>
