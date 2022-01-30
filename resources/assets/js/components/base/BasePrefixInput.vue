@@ -21,7 +21,8 @@
   background: rgb(196, 196, 196) !important;
 }
 .base-prefix-input p.prefix-label{
-  padding: 2px 2px 9px 10px !important;
+  padding: 10px !important;
+  width: 45% !important;
 }
 </style>
 <script>
