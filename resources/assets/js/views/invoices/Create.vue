@@ -291,12 +291,14 @@ input.base-prefix-input:disabled {
   .heading-1 {
     padding: 5px 180px;
   }
+  .table-responsive {
+    overflow-x: auto !important;
+  }
+  .multiselect__content-wrapper {
+    overflow-x: visible !important;
+  }
 }
 </style>
-<style>
-.table-responsive {
-  overflow-x: visible !important;
-}
 </style>
 <script>
 import draggable from 'vuedraggable'
