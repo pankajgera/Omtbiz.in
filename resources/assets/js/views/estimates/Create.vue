@@ -217,6 +217,9 @@ input.base-prefix-input:disabled {
 .add-estimate-item:focus {
   border: 1px solid salmon
 }
+.table-responsive {
+  overflow-x: inherit ;
+}
 @media screen and (max-width:400px) {
   .heading-1 {
     padding: 5px 180px;
