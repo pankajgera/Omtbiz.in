@@ -206,7 +206,6 @@ export default {
         email
       },
       phone: {
-        number,
         minLength: minLength(8),
         maxLength: maxLength(12)
       },
@@ -244,7 +243,7 @@ export default {
       this.formData.address_street_1 = response.data.user.addresses[0].address_street_1
       this.formData.address_street_2 = response.data.user.addresses[0].address_street_2
       this.formData.zip = response.data.user.addresses[0].zip
-      this.formData.phone = response.data.user.addresses[0].phone
+      this.formData.phone = response.data.user.phone
       this.formData.state = response.data.user.addresses[0].state
       this.formData.city = response.data.user.addresses[0].city
       this.country = response.data.user.addresses[0].country

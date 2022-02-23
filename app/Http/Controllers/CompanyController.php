@@ -93,10 +93,14 @@ class CompanyController extends Controller
      */
     public function updateAdminCompany(CompanyRequest $request)
     {
-        $user = User::find(1);
+        $user = $request->user('api');
         $company = $user->company;
         $company->name = $request->name;
         $company->save();
+
+        $user->update([
+            'phone' => $request->phone,
+        ]);
 
         if ($request->has('logo')) {
             $company->clearMediaCollection('logo');
@@ -104,7 +108,7 @@ class CompanyController extends Controller
         }
 
         $fields = $request->only(['address_street_1', 'address_street_2', 'city', 'state', 'country_id', 'zip', 'phone']);
-        $address = Address::updateOrCreate(['user_id' => 1], $fields);
+        $address = Address::updateOrCreate(['user_id' => $user->id], $fields);
         $user = User::with(['addresses', 'addresses.country', 'company'])->find(1);
 
         return response()->json([
