@@ -33,7 +33,7 @@ export default {
   .dot-icon {
     display: flex;
     cursor: pointer;
-    padding: 8px 5px 5px 5px;
+    padding: 5px 5px 5px 5px;
     justify-content: flex-end;
   }
 
