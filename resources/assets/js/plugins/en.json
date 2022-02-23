@@ -247,7 +247,10 @@
     "groups": {
         "name": "Name",
         "add_new_group": "Add new Group",
-        "select_an_group": "Select an Group"
+        "select_an_group": "Select an Group",
+        "created_message": "Group created successfully",
+        "updated_message": "Group updated successfully",
+        "deleted_message": "Group deleted successfully | Groups deleted successfully"
     },
     "ledgers": {
         "title": "Display",

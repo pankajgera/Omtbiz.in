@@ -147,15 +147,13 @@ export default {
 
       if (response.data) {
         window.toastr['success'](this.$tc('groups.created_message'))
-        this.setGroup(response.data.group)
-        window.hub.$emit('newGroup', response.data.group)
+        //this.setGroup(response.data.group)
         this.isLoading = false
-        this.resetModalData()
-        this.resetFormData()
-        this.closeModal()
-        return true
+        this.closeGroupModal()
+        window.hub.$emit('newGroup', response.data.group)
+      } else {
+        window.toastr['error'](response.data.error)
       }
-      window.toastr['error'](response.data.error)
     },
     closeGroupModal () {
       this.resetFormData()
