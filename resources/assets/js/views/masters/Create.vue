@@ -81,7 +81,7 @@
                   <div class="row">
                     <div class="col-md-4 p-0">
                       <label class="control-label">Type</label>
-                      <select class="select-class" v-model="formData.type">
+                      <select class="select-class" style="width: 95%" v-model="formData.type">
                         <option value="Cr">Cr</option>
                         <option value="Dr">Dr</option>
                       </select>
