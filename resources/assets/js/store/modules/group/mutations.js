@@ -15,7 +15,6 @@ export default {
 
   [types.UPDATE_GROUP] (state, data) {
     let pos = state.groups.findIndex(group => group.id === data.group.id)
-
     state.groups[pos] = data.group
   },
 
@@ -29,7 +28,6 @@ export default {
       let index = state.groups.findIndex(_group => _group.id === group.id)
       state.groups.splice(index, 1)
     })
-
     state.selectedGroups = []
   },
 

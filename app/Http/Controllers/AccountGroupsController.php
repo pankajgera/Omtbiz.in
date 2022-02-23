@@ -15,6 +15,7 @@ class AccountGroupsController extends Controller
 
         return response()->json([
             'groups' => $groups,
+            'total' => $groups->count(),
         ]);
     }
 

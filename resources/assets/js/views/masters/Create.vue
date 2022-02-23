@@ -33,10 +33,11 @@
               <div class="form-group">
                 <label class="control-label">{{ $t('masters.groups') }}</label><span class="text-danger"> *</span>
                 <group-select
+                  :key="groupOptions.length"
                   ref="selectedGroup"
                   :invalid="$v.formData.groups.$error"
                   :group-options="groupOptions"
-                  :selected-group="groupOptions.find(each => each.name === this.formData.groups)"
+                  :selected-group="groupOptions.length ? groupOptions.find(each => each && each.name === this.formData.groups) : {}"
                   @search="searchVal"
                   @select="onSelectGroup"
                   @deselect="deselectGroup"
@@ -144,9 +145,9 @@
 </style>
 <script>
 import { validationMixin } from 'vuelidate'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import GroupSelect from './GroupSelect'
-const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
+const { required, minLength, maxLength } = require('vuelidate/lib/validators')
 
 export default {
   components: {
@@ -195,7 +196,7 @@ export default {
       this.loadEditData()
     }
     window.hub.$on('newGroup', (val) => {
-      if (!this.formData.group && this.modalActive && this.isSelected) {
+      if (!this.formData.group && this.isSelected) {
         this.onSelectGroup(val)
       }
     })
@@ -241,6 +242,7 @@ export default {
     async loadEditData () {
       let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
+      this.selectedGroup = this.formData.groups
     },
     async submitMaster () {
       this.$v.formData.$touch()
@@ -286,7 +288,9 @@ export default {
       this.formData.groups = val
     },
     onSelectGroup (obj) {
-      this.formData.groups = obj.name
+      this.loadGroups().then(() => {
+        this.formData.groups = obj.name
+      })
     },
     deselectGroup () {
       this.formData.groups = ''

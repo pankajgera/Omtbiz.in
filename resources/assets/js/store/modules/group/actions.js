@@ -3,8 +3,8 @@ import * as types from './mutation-types'
 export const fetchGroups = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/groups`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_GROUPS, response.data.groups.data)
-      commit(types.SET_TOTAL_GROUPS, response.data.groups.total)
+      commit(types.BOOTSTRAP_GROUPS, response.data.groups)
+      commit(types.SET_TOTAL_GROUPS, response.data.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -25,8 +25,7 @@ export const fetchGroup = ({ commit, dispatch }, id) => {
 export const addGroup = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/groups', data).then((response) => {
-      commit(types.ADD_GROUP, response.data)
-
+      commit(types.ADD_GROUP, response.data.group)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -37,7 +36,7 @@ export const addGroup = ({ commit, dispatch, state }, data) => {
 export const updateGroup = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/groups/${data.id}`, data).then((response) => {
-      commit(types.UPDATE_GROUP, response.data)
+      commit(types.UPDATE_GROUP, response.data.group)
       resolve(response)
     }).catch((err) => {
       reject(err)
