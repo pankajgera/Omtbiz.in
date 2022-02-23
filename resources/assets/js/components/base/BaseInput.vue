@@ -130,7 +130,7 @@ export default {
   watch: {
     value () {
       if ('number' === this.type && this.value) {
-        this.inputValue = this.value.replace('-', '')
+        this.inputValue = (this.value).toString().replace('-', '')
         if (this.max) {
           this.inputValue = this.value.slice(0, this.max)
         }

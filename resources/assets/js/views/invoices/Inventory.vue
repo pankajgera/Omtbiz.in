@@ -45,7 +45,7 @@
                 :invalid="$v.inventory.quantity.$error"
                 type="number"
                 small
-                :disabled="isDisable"
+                :disabled="isDisable || disabled"
                 @input="$v.inventory.quantity.$touch()"
               />
               <div v-if="$v.inventory.quantity.$error">
@@ -79,8 +79,8 @@
                     :name="'inventoryPrice'+index"
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.inventory.sale_price.$error, 'input-field': true}"
-                    :disabled="isDisable"
-                    type="text"
+                    :disabled="isDisable || disabled"
+                    type="number"
                   />
                   <div v-if="$v.inventory.sale_price.$error">
                     <span v-if="!$v.inventory.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
@@ -99,7 +99,7 @@
                     v-model="discount"
                     :invalid="$v.inventory.discount_val.$error"
                     input-class="item-discount"
-                    :disabled="isDisable"
+                    :disabled="isDisable || disabled"
                     @input="$v.inventory.discount_val.$touch()"
                   />
                   <v-dropdown :show-arrow="false" theme-light>
@@ -223,6 +223,9 @@ export default {
     ...mapGetters('modal', [
       'modalActive'
     ]),
+    disabled() {
+      return !this.inventory.inventory_id;
+    },
     subtotal: {
       cache: false,
       get: function () {
