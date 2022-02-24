@@ -18,7 +18,7 @@
 </template>
 <style scoped>
 .disabled{
-  background: rgb(196, 196, 196) !important;
+  background: rgb(235 241 250) !important;
 }
 .base-prefix-input p.prefix-label{
   padding: 10px !important;
