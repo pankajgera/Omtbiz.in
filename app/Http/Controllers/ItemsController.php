@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Models\Item;
 use App\Models\TaxType;
 use App\Models\Tax;
+use Carbon\Carbon;
 use Exception;
 
 class ItemsController extends Controller
@@ -68,15 +69,26 @@ class ItemsController extends Controller
         if (!$request->price) {
             throw new Exception('Price cannot be null');
         }
+        $date_format = 'Y-m-d\TH:i:s.v\Z';
+        if (strpos($request->date_time, ' ') !== false) {
+            $date_format = 'Y-m-d H:i:s';
+        }
+        $date = Carbon::createFromFormat($date_format, $request->date);
+
         $item = new Item();
         $item->name = $request->name;
+        $item->bill_ty = $request->bill_ty;
+        $item->date = $date;
         $item->unit = $request->unit;
         $item->description = $request->description;
         $item->company_id = $request->header('company');
         $item->price = $request->price;
         $item->save();
 
-        $image = $item->uploadImage($request->image);
+        $image = '';
+        if ($request->image) {
+            $image = $item->uploadImage($request->image);
+        }
 
         if ($request->has('taxes')) {
             foreach ($request->taxes as $tax) {
@@ -106,8 +118,16 @@ class ItemsController extends Controller
         if (!$request->price) {
             throw new Exception('Price cannot be null');
         }
+        $date_format = 'Y-m-d\TH:i:s.v\Z';
+        if (strpos($request->date_time, ' ') !== false) {
+            $date_format = 'Y-m-d H:i:s';
+        }
+        $date = Carbon::createFromFormat($date_format, $request->date);
+
         $item = Item::find($id);
         $item->name = $request->name;
+        $item->bill_ty = $request->bill_ty;
+        $item->date = $date;
         $item->unit = $request->unit;
         $item->description = $request->description;
         $item->price = $request->price;
