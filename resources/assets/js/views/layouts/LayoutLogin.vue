@@ -9,9 +9,6 @@
                 alt="Omtbiz Logo">
           </div>
           <router-view></router-view>
-          <div class="page-copyright">
-            <p>{{ $t('layout_login.copyright_crater') }}</p>
-          </div>
         </div>
       </div>
       <div class="content-box">
@@ -26,6 +23,9 @@
         </p>
 
         <div class="content-bottom"/>
+        <div class="page-copyright">
+            <p>{{ $t('layout_login.copyright_crater') }}</p>
+          </div>
       </div>
     </div>
   </div>
