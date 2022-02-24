@@ -21,7 +21,7 @@
           {{ $t('layout_login.crater_help') }}<br>
         </p>
 
-        <div class="content-bottom"/>
+        <!-- <div class="content-bottom"/> -->
         <div class="page-copyright">
             <p>{{ $t('layout_login.copyright_crater') }}</p>
           </div>
