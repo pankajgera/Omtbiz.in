@@ -19,7 +19,6 @@
 
         <p>
           {{ $t('layout_login.crater_help') }}<br>
-          {{ $t('layout_login.invoices_and_estimates') }}<br>
         </p>
 
         <div class="content-bottom"/>
