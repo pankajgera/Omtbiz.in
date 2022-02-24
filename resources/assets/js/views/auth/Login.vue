@@ -22,6 +22,11 @@
           {{ $tc('validation.email_incorrect') }}
         </span>
       </div>
+      <div v-if="isError">
+        <span class="text-danger">
+          {{ customError }}
+        </span>
+      </div>
     </div>
     <div class="form-group">
       <p class="input-label">{{ $t('login.password') }} <span class="text-danger"> * </span></p>
@@ -36,6 +41,11 @@
       <div v-if="$v.loginData.password.$error">
         <span v-if="!$v.loginData.password.required" class="text-danger">{{ $tc('validation.required') }}</span>
         <span v-if="!$v.loginData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.loginData.password.$params.minLength.min, {count: $v.loginData.password.$params.minLength.min}) }} </span>
+      </div>
+      <div v-if="isError">
+        <span class="text-danger">
+          {{ customError }}
+        </span>
       </div>
     </div>
     <div class="other-actions row">
@@ -87,7 +97,9 @@ export default {
         password: '',
         remember: ''
       },
-      submitted: false
+      submitted: false,
+      isError: false,
+      customError: '',
     }
   },
   validations: {
@@ -130,7 +142,11 @@ export default {
                 return this.$router.push('/')
         }
         this.isLoading = false
-      }).catch(() => {
+      }).catch((err) => {
+        if ('invalid_grant' === err.response.data.error) {
+          this.isError = true;
+          this.customError = err.response.data.message;
+        }
         this.isLoading = false
       })
     }
