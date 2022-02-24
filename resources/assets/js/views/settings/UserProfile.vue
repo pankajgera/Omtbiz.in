@@ -127,8 +127,8 @@ export default {
       formData: {
         name: null,
         email: null,
-        password: null,
-        confirm_password: null
+        password: '',
+        confirm_password: ''
       },
       isLoading: false,
       previewAvatar: null,
@@ -155,7 +155,7 @@ export default {
   },
   computed: {
     isRequired () {
-      if (this.formData.password === null || this.formData.password === undefined || this.formData.password === '') {
+      if (!this.formData.password) {
         return false
       }
       return true
