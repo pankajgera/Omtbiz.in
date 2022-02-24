@@ -1,43 +1,27 @@
 <template>
   <div class="invoice-index-page invoices main-content">
     <div class="page-header">
-      <h3 class="page-title"> {{ $t('invoices.title') }}</h3>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="dashboard">
-            {{ $t('general.home') }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="#">
-            {{ $tc('invoices.invoice', 2) }}
-          </router-link>
-        </li>
-      </ol>
-      <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
-          <base-button
-            v-show="totalInvoices || filtersApplied"
-            :outline="true"
-            :icon="filterIcon"
-            size="large"
-            color="theme"
-            right-icon
-            @click="toggleFilter"
-          >
-            {{ $t('general.filter') }}
-          </base-button>
-        </div>
-        <router-link slot="item-title" class="col-xs-2" to="/invoices/create">
-          <base-button size="large" icon="plus" color="theme">
-            {{ $t('invoices.new_invoice') }}
-          </base-button>
-        </router-link>
-      </div>
+       <Header :title="$t('invoices.title')" :breadCrumbLinks="breadCrumbLinks">
+          <div v-show="totalInvoices || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+            <base-button
+              :outline="true"
+              :icon="filterIcon"
+              size="large"
+              color="theme"
+              right-icon
+              @click="toggleFilter"
+            >
+              {{ $t('general.filter') }}
+            </base-button>
+          </div>
+          <div>
+            <router-link slot="item-title" to="/invoices/create">
+                <base-button size="large" icon="plus" color="theme">
+                  {{ $t('invoices.new_invoice') }}
+                </base-button>
+            </router-link>
+          </div>
+       </Header>
     </div>
 
     <transition name="fade">
@@ -291,6 +275,16 @@ export default {
     return {
       showFilters: false,
       //currency: null,
+    breadCrumbLinks:[
+      {
+        url:'dashboard',
+        title:this.$t('general.home'),
+      },
+      {
+        url:'#',
+        title:this.$tc('invoices.invoice', 2)
+      }
+    ],
       status: [
         {
           label: 'Status',
