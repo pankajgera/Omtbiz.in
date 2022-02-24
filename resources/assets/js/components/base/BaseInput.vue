@@ -152,29 +152,19 @@ export default {
       }
     },
     handleInput (e) {
-      if (this.inputValue) {
         this.$emit('input', this.inputValue)
-      }
     },
     handleChange (e) {
-      if (this.inputValue) {
         this.$emit('change', this.inputValue)
-      }
     },
     handleKeyupEnter (e) {
-      if (this.inputValue) {
         this.$emit('keyup', this.inputValue)
-      }
     },
     handleKeyDownEnter (e) {
-      if (this.inputValue) {
         this.$emit('keydown', e, this.inputValue)
-      }
     },
     handleFocusOut (e) {
-      if (this.inputValue) {
         this.$emit('blur', this.inputValue)
-      }
     }
   }
 }
