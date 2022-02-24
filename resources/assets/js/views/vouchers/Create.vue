@@ -32,13 +32,13 @@
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
-              <div class="col-sm-12">
+              <div class="col-sm-12 p-0">
                 <textarea
                   type="text"
                   autofocus
                   rows="2"
                   width="400"
-                  class="form-control description-input m-3"
+                  class="form-control description-input mb-3"
                   v-model="short_narration"
                   id="narration-voucher"
                   placeholder="Type Short Narration (optional)" />
