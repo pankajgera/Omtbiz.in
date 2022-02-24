@@ -59,7 +59,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6 mt-2">
+            <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.payment_mode') }}</label><span class="text-danger"> *</span>
                 <base-select
@@ -84,7 +84,7 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <div class="col-sm-12 ">
+              <div class="col-sm-12 p-0">
                 <div class="form-group">
                   <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
                   <base-prefix-input
@@ -96,7 +96,7 @@
                   />
                 </div>
               </div>
-              <div class="col-sm-12 ">
+              <div class="col-sm-12 p-0">
                 <div class="form-group">
                   <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
                   <base-prefix-input

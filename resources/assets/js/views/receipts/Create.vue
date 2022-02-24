@@ -91,7 +91,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-sm-6 mt-2">
+            <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.receipt_mode') }}</label><span class="text-danger"> *</span>
                 <base-select
