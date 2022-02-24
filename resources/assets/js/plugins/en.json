@@ -1286,8 +1286,7 @@
         "super_simple_invoicing": "Super Simple Invoicing",
         "for_freelancer": "for Freelancers &",
         "small_businesses": "Small Businesses ",
-        "crater_help": "",
-        "invoices_and_estimates": "invoices & estimates with ability to choose multiple templates."
+        "crater_help": ""
     },
     "validation": {
         "invalid_url": "Invalid url (ex: http://www.omtbiz.com)",
