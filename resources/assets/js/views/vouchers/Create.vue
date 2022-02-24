@@ -44,7 +44,7 @@
                   placeholder="Type Short Narration (optional)" />
               </div>
               <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button @click="validateSubmitVoucher()" class="btn btn-success">Save Voucher</button>
+              <button @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
             </div>
         </div>
       </div>

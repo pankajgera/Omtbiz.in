@@ -33,7 +33,7 @@
               </vue-editable-grid>
               <!--- Grid table end -->
               <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button @click="submitVoucher()" class="btn btn-success">Save Voucher</button>
+              <button @click="submitVoucher()" class="btn btn-primary">Save Voucher</button>
             </div>
         </div>
       </div>
@@ -47,8 +47,7 @@
 </style>
 <script>
 import { validationMixin } from 'vuelidate'
-import { mapActions, mapGetters } from 'vuex'
-const { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')
+import { mapActions } from 'vuex'
 // Vue editable grid component and styles
 import VueEditableGrid from '../../components/grid-table/VueEditableGrid'
 import '../../components/grid-table/VueEditableGrid.css'

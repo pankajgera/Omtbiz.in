@@ -45,12 +45,14 @@
             :type="inputType"
             ref="input"
             :key="value"
+            :min="0"
             :placeholder="placeholder"
             :disabled="disableInput"
             :value="value"
             @keyup.enter="setEditableValue"
             @focus="editPending = true"
-            @blur="leaved" />
+            @blur="leaved"
+          />
           </span>
       </span>
   </td>
@@ -81,7 +83,7 @@
 </style>
 <script>
 import { format } from 'date-fns'
-import { cellValueParser, sameDates } from './helpers'
+import { cellValueParser } from './helpers'
 import { cellFormatter } from './vue-filters.js'
 
 export default {
@@ -168,7 +170,6 @@ export default {
       }
     },
     selected () {
-      //return true
       return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]
     },
     selectedTop () {
@@ -187,7 +188,6 @@ export default {
       if (this.disableInput) {
         return false
       }
-      //return true
       return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex
     },
     invalid () {
@@ -332,13 +332,7 @@ export default {
       if (!value) return
       this.editPending = false
       let valueChanged = true
-      // if (value === this.rowValue) {
-      //   valueChanged = false
-      // } else if (value && (this.column.type === 'date' || this.column.type === 'datetime')) {
-      //   if (sameDates(value, this.rowValue)) {
-      //     valueChanged = false
-      //   }
-      // }
+
       if (!this.disableInput) {
         this.rowValue = value
         this.value = value
