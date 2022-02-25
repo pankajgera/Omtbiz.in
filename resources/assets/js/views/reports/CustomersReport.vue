@@ -5,6 +5,7 @@
         <div class="col-md-12 mb-3">
           <label class="report-label">{{ $t('reports.customers.ledgers') }}</label>
           <base-select
+            ref="selectedLedger"
             v-model="selectedLedger"
             :options="ledgersArr.map(i => {return i.account + ' (Group: ' + i.account_master.groups + ')'})"
             :allow-empty="false"
@@ -234,11 +235,7 @@ export default {
       if (!this.getReports()) {
         return false
       }
-      if (navigator.appVersion.indexOf('Mac') !== -1) {
-        this.url += '&download=true'
-      } else {
-        window.open(this.getReportUrl + '&download=true')
-      }
+      window.open(this.getReportUrl + '&download=true')
       setTimeout(() => {
         this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
       }, 200)
