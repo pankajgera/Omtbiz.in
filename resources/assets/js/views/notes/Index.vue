@@ -308,6 +308,11 @@ export default {
     filters: {
       handler: 'setFilters',
       deep: true
+    },
+    watch:{
+      selectField(val,oldVal){
+        console.log(val,oldVal,"values");
+      }
     }
   },
   destroyed () {
