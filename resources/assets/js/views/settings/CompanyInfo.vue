@@ -100,7 +100,7 @@
             />
           </div>
           <div class="col-md-6 mb-4">
-            <label class="input-label">{{ $tc('settings.company_info.address') }}</label>
+            <label class="input-label">{{ $tc('settings.company_info.address_1') }}</label>
             <base-text-area
               v-model="formData.address_street_1"
               :placeholder="$tc('general.street_1')"
@@ -111,6 +111,7 @@
             <div v-if="$v.formData.address_street_1.$error">
               <span v-if="!$v.formData.address_street_1.maxLength" class="text-danger">{{ $tc('validation.address_maxlength') }}</span>
             </div>
+            <label class="input-label mt-2">{{ $tc('settings.company_info.address_2') }}</label>
             <base-text-area
               v-model="formData.address_street_2"
               :placeholder="$tc('general.street_2')"
