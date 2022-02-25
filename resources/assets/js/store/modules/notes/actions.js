@@ -97,7 +97,7 @@ export const selectAllNotes = ({ commit, dispatch, state }) => {
 
 export const selectNote = ({ commit, dispatch, state }, data) => {
     commit(types.SET_SELECTED_NOTES, data)
-    if (state.selectedNote.length === state.notes.length) {
+    if (state.selectedNotes.length === state.notes.length) {
         commit(types.SET_SELECT_ALL_STATE, true)
     } else {
         commit(types.SET_SELECT_ALL_STATE, false)
