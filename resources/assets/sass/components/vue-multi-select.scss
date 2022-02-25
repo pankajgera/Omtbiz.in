@@ -146,6 +146,7 @@ fieldset[disabled] .multiselect {
 .multiselect__single {
     padding-left: 5px;
     margin-bottom: 8px;
+    text-transform: capitalize;
 }
 .multiselect__tags-wrap {
     display: inline;
@@ -298,7 +299,7 @@ fieldset[disabled] .multiselect {
     min-height: 40px;
     line-height: 16px;
     text-decoration: none;
-    text-transform: none;
+    text-transform: capitalize;
     vertical-align: middle;
     position: relative;
     cursor: pointer;
