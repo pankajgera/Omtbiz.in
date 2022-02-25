@@ -358,8 +358,14 @@ export default {
       }
     },
     setFilters () {
-      this.filtersApplied = true
-      this.refreshTable()
+      if (this.timer) {
+          clearTimeout(this.timer);
+          this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+				this.filtersApplied = true
+        this.refreshTable()
+			}, 1000);
     },
     clearFilter () {
       this.filters = {

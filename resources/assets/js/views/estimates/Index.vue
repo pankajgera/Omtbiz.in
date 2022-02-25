@@ -478,9 +478,15 @@ export default {
       }
     },
     setFilters () {
-      this.filtersApplied = true
-      this.resetSelectedEstimates()
-      this.refreshTable()
+      if (this.timer) {
+          clearTimeout(this.timer);
+          this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+				this.filtersApplied = true
+        this.resetSelectedEstimates()
+        this.refreshTable()
+			}, 1000);
     },
     clearFilter () {
       if (this.filters.customer) {
