@@ -75,7 +75,17 @@ export default {
   },
   methods: {
     onDownload () {
-      this.$refs.report.downloadReport()
+      if (this.$refs.report && this.$refs.report.$children[0] && this.$refs.report.$children[0].$el.children[1].innerText) {
+        this.$refs.report.downloadReport()
+      } else {
+        swal({
+          title: 'Missing ledger',
+          text: 'Please select a ledger first',
+          icon: '/assets/icon/times-circle-solid.svg',
+          buttons: true,
+          dangerMode: false
+        })
+      }
     }
   }
 
