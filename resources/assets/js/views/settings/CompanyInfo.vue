@@ -96,6 +96,8 @@
             <label class="input-label">{{ $tc('settings.company_info.zip') }}</label>
             <base-input
               v-model="formData.zip"
+              :type="'number'"
+              :max="10"
               :placeholder="$tc('settings.company_info.zip')"
             />
           </div>

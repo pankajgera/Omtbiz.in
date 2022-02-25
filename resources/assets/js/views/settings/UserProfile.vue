@@ -1,6 +1,6 @@
 <template>
   <div class="setting-main-container">
-    <form action="" @submit.prevent="updateUserData">
+    <form @submit.prevent="updateUserData">
       <div class="card setting-card">
         <div class="page-header">
           <h3 class="page-title">{{ $t('settings.account_settings.account_settings') }}</h3>
