@@ -1,31 +1,9 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-      <div class="d-flex flex-row">
-        <div>
-          <h3 class="page-title">{{ $tc('dispatch.dispatch', 2) }}</h3>
-        </div>
-      </div>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="dashboard">
-            {{ $t('general.home') }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="#">
-            {{ $tc('dispatch.dispatch', 2) }}
-          </router-link>
-        </li>
-      </ol>
-      <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+      <Header :title="$tc('dispatch.dispatch', 2)" :breadCrumbLinks="breadCrumbLinks">
+        <div v-show="totalDispatch || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
-            v-show="totalDispatch || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -36,7 +14,9 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="dispatch/create">
+        <div>
+
+        <router-link slot="item-title" to="dispatch/create">
           <base-button
             color="theme"
             icon="plus"
@@ -45,7 +25,8 @@
             {{ $t('dispatch.new_dispatch') }}
           </base-button>
         </router-link>
-      </div>
+        </div>
+       </Header>
     </div>
 
     <transition name="fade">
@@ -409,6 +390,16 @@ export default {
   data () {
     return {
       id: null,
+      breadCrumbLinks:[
+      {
+        url:'dashboard',
+        title:this.$t('general.home'),
+      },
+      {
+        url:'#',
+        title:this.$tc('dispatch.dispatch', 2)
+      }
+    ],
       showFilters: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
