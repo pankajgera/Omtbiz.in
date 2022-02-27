@@ -9,7 +9,7 @@
       </ol>
     </div>
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col col-12 col-md-12 col-lg-6">
         <div class="card">
           <form action="" @submit.prevent="submitItem">
             <div class="card-body">

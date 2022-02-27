@@ -1,31 +1,9 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-      <div class="d-flex flex-row">
-        <div>
-          <h3 class="page-title">{{ $tc('notes.notes', 2) }}</h3>
-        </div>
-      </div>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="dashboard">
-            {{ $t('general.home') }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="#">
-            {{ $tc('notes.notes', 2) }}
-          </router-link>
-        </li>
-      </ol>
-      <div class="page-actions row">
-        <div class="col-xs-2 mr-2">
+       <Header :title="$tc('notes.notes', 2)" :breadCrumbLinks="breadCrumbLinks">
+        <div v-show="totalNotes" class="mr-4 mb-3 mb-sm-0">
           <base-button
-            v-show="totalNotes"
             :outline="true"
             :icon="['fas', 'print']"
             color="theme"
@@ -36,9 +14,8 @@
             Print
           </base-button>
         </div>
-        <div class="col-xs-2 mr-4">
+        <div v-show="totalNotes || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
-            v-show="totalNotes || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -49,7 +26,8 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="notes/create">
+        <div>
+        <router-link slot="item-title" to="notes/create">
           <base-button
             color="theme"
             icon="plus"
@@ -58,7 +36,8 @@
             {{ $t('notes.new_note') }}
           </base-button>
         </router-link>
-      </div>
+        </div>
+       </Header>
     </div>
 
     <transition name="fade">
@@ -261,6 +240,16 @@ export default {
   data () {
     return {
       id: null,
+      breadCrumbLinks:[
+      {
+        url:'dashboard',
+        title:this.$t('general.home'),
+      },
+      {
+        url:'#',
+        title:this.$tc('notes.notes', 2)
+      }
+    ],
       showFilters: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
