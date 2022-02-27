@@ -57,7 +57,7 @@ class BanksController extends Controller
                 'bank' => $bank,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving bank', [$e->getMessage()]);
+            Log::error('Error while saving bank', [$e]);
         }
     }
 
@@ -83,7 +83,7 @@ class BanksController extends Controller
                 'bank' => $bank,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating bank', [$e->getMessage()]);
+            Log::error('Error while updating bank', [$e]);
         }
     }
 

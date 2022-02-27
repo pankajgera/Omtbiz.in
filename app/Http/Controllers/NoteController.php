@@ -63,7 +63,7 @@ class NoteController extends Controller
                 'note' => $note,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving note', [$e->getMessage()]);
+            Log::error('Error while saving note', [$e]);
         }
     }
 
@@ -93,7 +93,7 @@ class NoteController extends Controller
                 'note' => $note,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating note', [$e->getMessage()]);
+            Log::error('Error while updating note', [$e]);
         }
     }
 

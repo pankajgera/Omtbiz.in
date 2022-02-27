@@ -132,7 +132,7 @@ class DispatchController extends Controller
                 'dispatch' => $dispatch,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving dispatch', [$e->getMessage()]);
+            Log::error('Error while saving dispatch', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);
@@ -173,7 +173,7 @@ class DispatchController extends Controller
                 'dispatch' => $dispatch,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating dispatch', [$e->getMessage()]);
+            Log::error('Error while updating dispatch', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);
@@ -217,7 +217,7 @@ class DispatchController extends Controller
                 'dispatch' => $all_selected_dispatch,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating dispatch', [$e->getMessage()]);
+            Log::error('Error while updating dispatch', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);

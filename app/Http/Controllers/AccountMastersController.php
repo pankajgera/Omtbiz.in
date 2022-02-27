@@ -62,7 +62,7 @@ class AccountMastersController extends Controller
                 'master' => $master,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving account master', [$e->getMessage()]);
+            Log::error('Error while saving account master', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);
@@ -95,7 +95,7 @@ class AccountMastersController extends Controller
                 'master' => $master,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating account master', [$e->getMessage()]);
+            Log::error('Error while updating account master', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);

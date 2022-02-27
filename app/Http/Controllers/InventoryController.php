@@ -77,7 +77,7 @@ class InventoryController extends Controller
                 'inventory' => $inventory,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving inventory', [$e->getMessage()]);
+            Log::error('Error while saving inventory', [$e]);
         }
     }
 
@@ -107,7 +107,7 @@ class InventoryController extends Controller
                 'inventory' => $inventory,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating inventory', [$e->getMessage()]);
+            Log::error('Error while updating inventory', [$e]);
         }
     }
 
@@ -179,7 +179,7 @@ class InventoryController extends Controller
                 'inventory' => $inventory,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating inventory item price', [$e->getMessage()]);
+            Log::error('Error while updating inventory item price', [$e]);
         }
     }
 }

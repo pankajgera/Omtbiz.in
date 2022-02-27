@@ -159,7 +159,7 @@ class AccountLedgersController extends Controller
                 'ledger' => $ledger,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving account ledger', [$e->getMessage()]);
+            Log::error('Error while saving account ledger', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
             ], 400);
@@ -195,7 +195,7 @@ class AccountLedgersController extends Controller
                 'ledger' => $ledger,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating account ledger', [$e->getMessage()]);
+            Log::error('Error while updating account ledger', [$e]);
         }
     }
 
