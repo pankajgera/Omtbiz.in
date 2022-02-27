@@ -310,7 +310,7 @@ function numberTowords($num)
                                     </td>
                                     <td>
                                         <p style="font-size: 12px;">
-                                            {{ $item->quantity }} {{ $item->inventory->unit }}
+                                            {{ $item->quantity }} {{ $item->inventory ? $item->inventory->unit : '' }}
                                         </p>
                                     </td>
                                     <td>
@@ -320,7 +320,7 @@ function numberTowords($num)
                                     </td>
                                     <td>
                                         <p style="font-size: 12px;">
-                                            {{ $item->inventory->unit }}
+                                            {{ $item->inventory ? $item->inventory->unit : ''}}
                                         </p>
                                     </td>
                                     <td>
