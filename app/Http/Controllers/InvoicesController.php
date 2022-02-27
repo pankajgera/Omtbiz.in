@@ -59,7 +59,7 @@ class InvoicesController extends Controller
                 'invoiceTotalCount' => Invoice::count()
             ]);
         } catch (Exception $e) {
-            Log::error('Error while getting invoice index ', [$e->getMessage()]);
+            Log::error('Error while getting invoice index ', [$e]);
         }
     }
 

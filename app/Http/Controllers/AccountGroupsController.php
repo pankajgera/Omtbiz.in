@@ -46,7 +46,7 @@ class AccountGroupsController extends Controller
                 'group' => $group,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while saving account group', [$e->getMessage()]);
+            Log::error('Error while saving account group', [$e]);
         }
     }
 
@@ -70,7 +70,7 @@ class AccountGroupsController extends Controller
                 'group' => $group,
             ]);
         } catch (Exception $e) {
-            Log::error('Error while updating account group', [$e->getMessage()]);
+            Log::error('Error while updating account group', [$e]);
         }
     }
 
