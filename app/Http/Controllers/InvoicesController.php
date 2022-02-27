@@ -171,22 +171,26 @@ class InvoicesController extends Controller
                 $invoiceInventory['company_id'] = $request->header('company');
                 $invoiceInventory['type'] = 'invoice';
                 $inventory = $invoice->inventories()->create($invoiceInventory);
-                $inventory_id = $inventory['id'];
-                if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
-                    foreach ($invoiceInventory['taxes'] as $tax) {
-                        $tax['company_id'] = $request->header('company');
-                        if (gettype($tax['amount']) !== "NULL") {
-                            $inventory->taxes()->create($tax);
-                        }
-                    }
-                }
+
+                $inventory_id = $inventory->id;
+                // if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
+                //     foreach ($invoiceInventory['taxes'] as $tax) {
+                //         $tax['company_id'] = $request->header('company');
+                //         if (gettype($tax['amount']) !== "NULL") {
+                //             $inventory->taxes()->create($tax);
+                //         }
+                //     }
+                // }
 
                 //Reset inventory quantity
-                $invent = Inventory::find($inventory['inventory_id']);
-                $quan = (int) ($inventory['quantity']);
-                $invent->update([
-                    'quantity' => $invent->quantity - $quan,
-                ]);
+                $quan = (int) ($inventory->id);
+
+                $invent = Inventory::find($inventory->inventory_id);
+                if ($invent) {
+                    $invent->update([
+                        'quantity' => $invent->quantity - $quan,
+                    ]);
+                }
             }
 
 
@@ -462,22 +466,24 @@ class InvoicesController extends Controller
             $each['company_id'] = $request->header('company');
             $each['type'] = 'invoice';
             $inventory = $invoice->inventories()->create($each);
-            $inventory_id = $inventory['id'];
-            if (array_key_exists('taxes', $each) && $each['taxes']) {
-                foreach ($each['taxes'] as $tax) {
-                    $tax['company_id'] = $request->header('company');
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $inventory->taxes()->create($tax);
-                    }
-                }
-            }
+            $inventory_id = $inventory->id;
+            // if (array_key_exists('taxes', $each) && $each['taxes']) {
+            //     foreach ($each['taxes'] as $tax) {
+            //         $tax['company_id'] = $request->header('company');
+            //         if (gettype($tax['amount']) !== "NULL") {
+            //             $inventory->taxes()->create($tax);
+            //         }
+            //     }
+            // }
 
             //Reset inventory quantity
-            $invent = Inventory::find($inventory['inventory_id']);
-            $quan = (int) ($inventory['quantity']);
-            $invent->update([
-                'quantity' => $invent->quantity - $quan,
-            ]);
+            $invent = Inventory::find($inventory->inventory_id);
+            $quan = (int) ($inventory->quantity);
+            if ($invent) {
+                $invent->update([
+                    'quantity' => $invent->quantity - $quan,
+                ]);
+            }
         }
         //Deleting old taxes and invoice_items
         $oldItems = $invoice->inventories->toArray();
@@ -530,21 +536,23 @@ class InvoicesController extends Controller
             $invoiceItem['type'] = 'invoice';
             $item = $invoice->inventories()->create($invoiceItem);
 
-            if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
-                foreach ($invoiceItem['taxes'] as $tax) {
-                    $tax['company_id'] = $request->header('company');
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $item->taxes()->create($tax);
-                    }
-                }
-            }
+            // if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
+            //     foreach ($invoiceItem['taxes'] as $tax) {
+            //         $tax['company_id'] = $request->header('company');
+            //         if (gettype($tax['amount']) !== "NULL") {
+            //             $item->taxes()->create($tax);
+            //         }
+            //     }
+            // }
 
             //Reset inventory quantity
-            $invent = Inventory::find($item['inventory_id']);
-            $quan = (int) ($item['quantity']);
-            $invent->update([
-                'quantity' => $invent->quantity - $quan,
-            ]);
+            $invent = Inventory::find($item->inventory_id);
+            $quan = (int) ($item->quantity);
+            if ($invent) {
+                $invent->update([
+                    'quantity' => $invent->quantity - $quan,
+                ]);
+            }
 
             //Handle vouchers
             $amount = (int) ($item['total']);
