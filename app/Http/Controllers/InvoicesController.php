@@ -196,12 +196,23 @@ class InvoicesController extends Controller
 
             //Add journal entry
             //It will be "Sales" type
-            $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
+            $sale_account = AccountMaster::where('name', 'Sales')->first();
+            if (!$sale_account) {
+                $sale_account = AccountMaster::create([
+                    'name' => 'Sales',
+                    'groups' => 'Sales Accounts',
+                    'address' => '-',
+                    'country' => '-',
+                    'state' => '-',
+                    'opening_balance' => '0',
+                    'type' => 'Cr',
+                ]);
+            }
             $company_id = (int) $request->header('company');
             $account_master_id = (int) $request->debtors['id'];
             $total_amount = (int) ($request->total);
             $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $sale_account_id,
+                'account_master_id' => $sale_account->id,
                 'account' => 'Sales',
                 'company_id' => $company_id,
             ], [
@@ -246,7 +257,7 @@ class InvoicesController extends Controller
                 'voucher_type' => 'Sales',
             ]);
             $voucher_2 = Voucher::create([
-                'account_master_id' => $sale_account_id,
+                'account_master_id' => $sale_account->id,
                 'account' => 'Sales',
                 'debit' => 0,
                 'credit' => $total_amount,
