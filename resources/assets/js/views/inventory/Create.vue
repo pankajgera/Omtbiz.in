@@ -170,7 +170,7 @@ export default {
     ]),
     async loadEditData () {
       let response = await this.fetchInventory(this.$route.params.id)
-      this.formData = response.data.inventory
+      this.formData = response.data.inventory[0]
     },
     async submitInventory () {
       this.$v.formData.$touch()
