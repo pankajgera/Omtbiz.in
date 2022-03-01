@@ -21,7 +21,7 @@
       @input="handleInput"
       @change="handleChange"
       @keyup="handleKeyupEnter"
-      @keydown="handleKeyDownEnter"
+      @keydown.enter.prevent
       @blur="handleFocusOut"
     >
     <div v-if="showPassword && isAlignLeftIcon" style="cursor: pointer" @click="showPass = !showPass" >
@@ -159,9 +159,6 @@ export default {
     },
     handleKeyupEnter (e) {
         this.$emit('keyup', this.inputValue)
-    },
-    handleKeyDownEnter (e) {
-        this.$emit('keydown', e, this.inputValue)
     },
     handleFocusOut (e) {
         this.$emit('blur', this.inputValue)
