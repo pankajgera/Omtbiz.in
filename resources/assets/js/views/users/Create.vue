@@ -124,10 +124,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
 import MultiSelect from 'vue-multiselect'
 import { validationMixin } from 'vuelidate'
-import AddressStub from '../../stub/address'
 const { required, requiredIf, sameAs, minLength, email, url, maxLength } = require('vuelidate/lib/validators')
 
 export default {
