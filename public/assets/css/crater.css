@@ -11771,6 +11771,10 @@ input[type=number]::-webkit-outer-spin-button {
   box-shadow: 0 0 0 0.2rem #ffde0029;
 }
 
+.col-form-label {
+  padding-top: 0px !important;
+}
+
 .card {
   margin-bottom: 1.5rem;
   border: none;
