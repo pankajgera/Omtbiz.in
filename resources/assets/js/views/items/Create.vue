@@ -34,11 +34,15 @@
                 <label>{{ $t('items.bill_ty') }}</label><span class="text-danger"> *</span>
                 <base-input
                   v-model.trim="formData.bill_ty"
+                  :invalid="$v.formData.bill_ty.$error"
                   focus
                   type="text"
                   name="bill_ty"
                   @input="$v.formData.bill_ty.$touch()"
                 />
+                <div v-if="$v.formData.bill_ty.$error">
+                  <span v-if="!$v.formData.bill_ty.required" class="text-danger">{{ $t('validation.required') }}</span>
+                </div>
               </div>
               <div class="form-group">
                 <label for="date">{{ $t('items.date') }}</label><span class="text-danger"> *</span>
@@ -50,7 +54,7 @@
                   @change="$v.formData.date.$touch()"
                 />
                 <div v-if="$v.formData.date.$error">
-                  <span v-if="!$v.formData.date" class="text-danger">{{ $t('validation.required') }}</span>
+                  <span v-if="!$v.formData.date.required" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
               <div class="form-group">
