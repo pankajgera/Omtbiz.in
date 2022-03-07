@@ -88,11 +88,12 @@ export default {
       'user'
     ]),
     profilePicture () {
-      if (this.user && this.user.avatar !== null) {
-        return this.user.avatar
-      } else {
-        return '/images/default-avatar.jpg'
-      }
+      return '/images/default-avatar.jpg'
+      // if (this.user && this.user.avatar !== null) {
+      //   return this.user.avatar
+      // } else {
+      //   return '/images/default-avatar.jpg'
+      // }
     },
     role() {
       return this.$store.state.user.currentUser.role
