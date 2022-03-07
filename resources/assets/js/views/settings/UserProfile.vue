@@ -183,11 +183,11 @@ export default {
       let response = await this.loadData()
       this.formData.name = response.data.name
       this.formData.email = response.data.email
-      if (response.data.avatar) {
-        this.previewAvatar = response.data.avatar
-      } else {
-        this.previewAvatar = '/images/default-avatar.jpg'
-      }
+      // if (response.data.avatar) {
+      //   this.previewAvatar = response.data.avatar
+      // } else {
+      // }
+      this.previewAvatar = '/images/default-avatar.jpg'
     },
     async updateUserData () {
       this.$v.formData.$touch()
@@ -205,14 +205,14 @@ export default {
       let response = await this.editUser(data)
       if (response.data.success) {
         this.isLoading = false
-        if (this.fileObject && this.previewAvatar) {
-          let avatarData = new FormData()
-          avatarData.append('admin_avatar', JSON.stringify({
-            name: this.fileObject.name,
-            data: this.previewAvatar
-          }))
-          this.uploadAvatar(avatarData)
-        }
+        // if (this.fileObject && this.previewAvatar) {
+        //   let avatarData = new FormData()
+        //   avatarData.append('admin_avatar', JSON.stringify({
+        //     name: this.fileObject.name,
+        //     data: this.previewAvatar
+        //   }))
+        //   this.uploadAvatar(avatarData)
+        // }
         window.toastr['success'](this.$t('settings.account_settings.updated_message'))
         return true
       }
