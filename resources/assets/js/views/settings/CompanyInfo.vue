@@ -56,6 +56,10 @@
               :min="8"
               :placeholder="$t('settings.company_info.phone')"
             />
+            <div v-if="$v.formData.phone.$error">
+              <span v-if="!$v.formData.phone.minLength" class="text-danger">{{ $tc('validation.number_min', $v.formData.phone.$params.minLength.min, {min: $v.formData.phone.$params.minLength.min}) }}</span>
+              <span v-if="!$v.formData.phone.maxLength" class="text-danger">{{ $tc('validation.number_max', $v.formData.phone.$params.maxLength.max, {max: $v.formData.phone.$params.maxLength.max}) }}</span>
+            </div>
           </div>
           <div class="col-md-6 mb-4">
             <label class="input-label">{{ $tc('settings.company_info.country') }}</label><span class="text-danger"> * </span>

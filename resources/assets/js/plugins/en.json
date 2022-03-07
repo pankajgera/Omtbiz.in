@@ -1301,6 +1301,8 @@
         "name_min_length": "Name must have at least {count} letters.",
         "enter_valid_tax_rate": "Enter valid tax rate",
         "numbers_only": "Numbers Only.",
+        "number_min": "Minimum length should be {min}",
+        "number_max": "Maximum length should be {max}",
         "characters_only": "Characters Only.",
         "password_incorrect": "Passwords must be identical",
         "password_length": "Password must be {count} character long.",
