@@ -243,7 +243,7 @@ export default {
         this.rowValue = this.getEditableValue(this.row[this.column.field])
         this.value = this.getEditableValue(this.row[this.column.field])
 
-        Vue.nextTick(() => {
+        this.$nextTick(() => {
           const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search
           if (this.inputType === 'select') {
             input.focus()
