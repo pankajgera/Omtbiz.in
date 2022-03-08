@@ -13,16 +13,17 @@
         type="email"
         name="email"
         @input="$v.loginData.email.$touch()"
+        @change="isError=false"
       />
       <div v-if="$v.loginData.email.$error">
         <span v-if="!$v.loginData.email.required" class="text-danger">
           {{ $tc('validation.required') }}
         </span>
-        <span v-if="!$v.loginData.email.email" class="text-danger">
+        <span v-else-if="!$v.loginData.email.email" class="text-danger">
           {{ $tc('validation.email_incorrect') }}
         </span>
       </div>
-      <div v-if="isError">
+      <div v-else-if="isError">
         <span class="text-danger">
           {{ customError }}
         </span>
@@ -37,12 +38,13 @@
         name="password"
         show-password
         @input="$v.loginData.password.$touch()"
+        @change="isError=false"
       />
       <div v-if="$v.loginData.password.$error">
         <span v-if="!$v.loginData.password.required" class="text-danger">{{ $tc('validation.required') }}</span>
-        <span v-if="!$v.loginData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.loginData.password.$params.minLength.min, {count: $v.loginData.password.$params.minLength.min}) }} </span>
+        <span v-else-if="!$v.loginData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.loginData.password.$params.minLength.min, {count: $v.loginData.password.$params.minLength.min}) }} </span>
       </div>
-      <div v-if="isError">
+      <div v-else-if="isError">
         <span class="text-danger">
           {{ customError }}
         </span>
