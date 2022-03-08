@@ -23,6 +23,6 @@ export default {
     background: rgba(255,255,255,0.4);
     position: absolute;
     top: 7%;
-    left: 13%;
+    left: 10%;
 }
 </style>
