@@ -80,6 +80,7 @@
                 <label class="form-label">{{ $t('payments.note') }}</label>
                 <base-text-area
                   v-model="formData.notes"
+                  :rows="'5'"
                 />
               </div>
             </div>
