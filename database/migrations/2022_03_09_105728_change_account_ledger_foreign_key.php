@@ -14,7 +14,7 @@ class ChangeAccountLedgerForeignKey extends Migration
     public function up()
     {
         Schema::table('account_ledgers', function (Blueprint $table) {
-            $table->dropForeign(['account_masters_id']);
+            $table->dropForeign(['account_master_id']);
             $table->foreign('account_master_id')
                 ->references('id')
                 ->on('account_masters')
