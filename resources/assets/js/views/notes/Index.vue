@@ -1,7 +1,7 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-       <Header :title="$tc('notes.notes', 2)" :breadCrumbLinks="breadCrumbLinks">
+       <Header :title="$tc('notes.notes', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalNotes" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
@@ -27,15 +27,15 @@
           </base-button>
         </div>
         <div>
-        <router-link slot="item-title" to="notes/create">
-          <base-button
-            color="theme"
-            icon="plus"
-            size="large"
-          >
-            {{ $t('notes.new_note') }}
-          </base-button>
-        </router-link>
+          <router-link slot="item-title" to="notes/create">
+            <base-button
+              color="theme"
+              icon="plus"
+              size="large"
+            >
+              {{ $t('notes.new_note') }}
+            </base-button>
+          </router-link>
         </div>
        </Header>
     </div>
@@ -241,15 +241,15 @@ export default {
     return {
       id: null,
       breadCrumbLinks:[
-      {
-        url:'dashboard',
-        title:this.$t('general.home'),
-      },
-      {
-        url:'#',
-        title:this.$tc('notes.notes', 2)
-      }
-    ],
+        {
+          url:'dashboard',
+          title:this.$t('general.home'),
+        },
+        {
+          url:'#',
+          title:this.$tc('notes.notes', 2)
+        }
+      ],
       showFilters: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,

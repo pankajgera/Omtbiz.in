@@ -9,7 +9,7 @@
       mode="out-in">
       <router-view />
     </transition>
-    <site-footer/>
+    <!-- <site-footer/> -->
   </div>
   <div v-else class="template-container">
     <font-awesome-icon icon="spinner" class="fa-spin"/>

@@ -1,7 +1,7 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-       <Header :title="$tc('items.bill_ty', 2)" :breadCrumbLinks="breadCrumbLinks">
+       <Header :title="$tc('items.bill_ty', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
