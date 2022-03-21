@@ -208,6 +208,28 @@ body > .expandable-image.expanded {
 .table-component__table {
   border-spacing: 0 5px !important;
 }
+@media (max-width: 768px) {
+  .table-component .dropdown-group {
+    top: 4px;
+  }
+  .table .table-component__table__body td.no-click {
+    height: 25px !important;
+  }
+  .table .table-component__table__body td.action-dropdown {
+    height: 5px !important;
+  }
+  .table .table-component__table__body td {
+    height: 80px !important;
+  }
+  .table .table-component__table__body td span.dot {
+    position: relative;
+  }
+  .table .table-component__table__body td span {
+    position: relative;
+    overflow: auto;
+    display: block;
+  }
+}
 </style>
 <script>
 import { mapActions, mapGetters } from 'vuex'

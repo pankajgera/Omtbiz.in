@@ -1,7 +1,7 @@
 <template>
   <div class="invoice-index-page invoices main-content">
     <div class="page-header">
-       <Header :title="$t('invoices.title')" :breadCrumbLinks="breadCrumbLinks">
+       <Header :title="$t('invoices.title')" :bread-crumb-links="breadCrumbLinks">
           <div v-show="totalInvoices || filtersApplied" class="mr-4 mb-3 mb-sm-0">
             <base-button
               :outline="true"

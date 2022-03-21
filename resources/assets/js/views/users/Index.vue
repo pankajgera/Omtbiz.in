@@ -1,25 +1,8 @@
 <template>
   <div class="user-create main-content">
     <div class="page-header">
-      <h3 class="page-title">{{ $t('users.title') }}</h3>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="dashboard">
-            {{ $t('general.home') }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="#">
-            {{ $tc('users.user',2) }}
-          </router-link>
-        </li>
-      </ol>
-      <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+      <Header :title="$tc('users.title', 2)" :bread-crumb-links="breadCrumbLinks">
+        <div class="mr-4 mb-3 mb-sm-0">
           <base-button
             v-show="totalUsers || filtersApplied"
             :outline="true"
@@ -32,15 +15,17 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="users/create">
-          <base-button
-            size="large"
-            icon="plus"
-            color="theme">
-            {{ $t('users.new_user') }}
-          </base-button>
-        </router-link>
-      </div>
+        <div>
+          <router-link slot="item-title" class="" to="users/create">
+            <base-button
+              size="large"
+              icon="plus"
+              color="theme">
+              {{ $t('users.new_user') }}
+            </base-button>
+          </router-link>
+        </div>
+      </Header>
     </div>
 
     <transition name="fade">
@@ -233,7 +218,17 @@ export default {
         email: '',
         role: ''
       },
-      roles: []
+      roles: [],
+      breadCrumbLinks:[
+        {
+          url:'dashboard',
+          title:this.$t('general.home'),
+        },
+        {
+          url:'#',
+          title:this.$tc('user.user', 2)
+        }
+      ],
     }
   },
   mounted () {

@@ -10308,7 +10308,7 @@ button.toast-close-button {
   background-color: #fff;
 }
 .skin-crater .site-header .notification-dropdown .dropdown-header {
-  border-bottom: 1px solid #EBF1FA;
+  border-bottom: 1px solid #f9fbff;
   color: #f54c4c;
 }
 .skin-crater .site-header .dropdown-divider {
@@ -10322,7 +10322,7 @@ button.toast-close-button {
 }
 .skin-crater .sidebar-left {
   background-color: #fff;
-  border-right: 1px solid #EBF1FA;
+  border-right: 1px solid #f9fbff;
 }
 .skin-crater .side-nav {
   margin: 20px 0 0 0;
@@ -10336,7 +10336,7 @@ button.toast-close-button {
   font-size: 14px;
 }
 .skin-crater .side-nav .collapse-group .collapse-group-item a:hover {
-  background-color: #d7e3f5;
+  background-color: #e0eaff;
 }
 .skin-crater .side-nav .collapse-group .collapse-group-item.active > .collapse-item-title > a {
   color: #f54c4c;
@@ -10348,13 +10348,13 @@ button.toast-close-button {
   color: #f54c4c;
 }
 .skin-crater .side-nav .collapse-group .collapse-group-item .collapse-group-items {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 .skin-crater .side-nav .collapse-group .collapse-group-item .collapse-group-items .collapse-group-items {
-  background-color: #d7e3f5;
+  background-color: #e0eaff;
 }
 .skin-crater .side-nav .collapse-group .collapse-group-item .collapse-group-items .collapse-group-items .collapse-group-items {
-  background-color: #cadaf2;
+  background-color: #d0e0ff;
 }
 .skin-crater .side-nav .collapse-group .collapse-group-item .collapse-group-items a.active {
   color: #f54c4c;
@@ -10367,7 +10367,7 @@ button.toast-close-button {
   color: #040405;
 }
 .skin-crater .header-nav li a:hover {
-  background-color: #d7e3f5;
+  background-color: #e0eaff;
   color: #040405;
 }
 .skin-crater .header-nav li.active > a {
@@ -10384,7 +10384,7 @@ button.toast-close-button {
 }
 .skin-crater .header-nav li .dropdown-item.active:hover, .skin-crater .header-nav li .dropdown-item.active:focus, .skin-crater .header-nav li .dropdown-item.active:active {
   color: #f54c4c;
-  background-color: #d7e3f5;
+  background-color: #e0eaff;
 }
 .skin-crater .tabs-component.tabs-default .tabs-component-tab a {
   color: #040405;
@@ -10437,7 +10437,7 @@ button.toast-close-button {
   color: #040405;
 }
 .skin-crater .tabs-component.tabs-simple .tabs-component-panels {
-  border-top: 1px solid #EBF1FA !important;
+  border-top: 1px solid #f9fbff !important;
 }
 .skin-crater .tabs-component.tabs-simple-vertical .tabs-component-tabs {
   border-right: 1px solid #ddd;
@@ -10454,7 +10454,7 @@ button.toast-close-button {
   color: #f54c4c;
 }
 .skin-crater code, .skin-crater .code {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
   color: #f54c4c;
 }
 .skin-crater mark, .skin-crater .mark {
@@ -10492,7 +10492,7 @@ button.toast-close-button {
   color: #040405;
 }
 .skin-crater .dropdown-group .dropdown-activator a:hover {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 .skin-crater .dropdown-group.has-child.toggle-arrow.active > .dropdown-activator::after {
   border-color: #f54c4c transparent transparent;
@@ -10510,7 +10510,7 @@ button.toast-close-button {
   color: #f54c4c;
 }
 .skin-crater .dropdown-group .dropdown-container .dropdown-group-item .dropdown-item:hover {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 .skin-crater .dropdown-group .dropdown-container .dropdown-activator::before {
   border-color: #040405 transparent transparent;
@@ -10567,7 +10567,7 @@ button.toast-close-button {
   color: #040405;
 }
 .skin-crater .multiselect .multiselect__option--highlight.multiselect__option--selected {
-  background: #EBF1FA;
+  background: #f9fbff;
   color: #040405;
 }
 .skin-crater .multiselect .multiselect__option--highlight.multiselect__option--selected::after {
@@ -10634,7 +10634,7 @@ button.toast-close-button {
 @media (max-width: 480px) {
   .skin-crater .header-nav .dropdown-menu {
     border: 0 !important;
-    background-color: #EBF1FA !important;
+    background-color: #f9fbff !important;
   }
 }
 
@@ -10646,7 +10646,7 @@ body,
 }
 
 body {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
   font-family: "Poppins", sans-serif;
   color: #262630;
   overflow-x: hidden;
@@ -10722,7 +10722,7 @@ code,
 }
 
 .filter-section {
-  background: #EBF1FA;
+  background: #f9fbff;
   position: relative;
   z-index: 2;
   padding: 30px;
@@ -10743,7 +10743,7 @@ code,
   display: flex;
   width: 100%;
   padding: 13px 10px;
-  background: #EBF1FA;
+  background: #f9fbff;
   justify-content: center;
   border: none;
   outline: none;
@@ -11123,7 +11123,7 @@ code,
   width: 100%;
   height: 40px;
   background: #FFFFFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-sizing: border-box;
   border-radius: 5px;
   display: inline-block;
@@ -11210,7 +11210,7 @@ input[type=number] {
   padding: 8px 13px;
   text-align: left;
   background: #FFFFFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-sizing: border-box;
   border-radius: 5px;
   font-style: normal;
@@ -11252,7 +11252,7 @@ input[type=number] {
   border: 1px solid #FB7178 !important;
 }
 .base-input .input-field.disabled {
-  background: #EBF1FA !important;
+  background: #f9fbff !important;
   color: #A5ACC1 !important;
 }
 .base-input .input-field-left-icon {
@@ -11341,7 +11341,7 @@ input[type=number] {
   padding: 8px 13px;
   text-align: left;
   background: #FFFFFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-sizing: border-box;
   border-radius: 5px;
   font-style: normal;
@@ -11380,7 +11380,7 @@ input[type=number] {
   border: 1px solid #FB7178 !important;
 }
 .base-text-area.text-area-field.disabled {
-  background: #EBF1FA !important;
+  background: #f9fbff !important;
   color: #A5ACC1 !important;
 }
 .base-text-area.text-area-field-icon {
@@ -11511,7 +11511,7 @@ input[type=number] {
   padding: 2px 2px;
   flex-direction: row;
   background: #FFFFFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   border-radius: 5px;
 }
 .base-prefix-input .icon {
@@ -11570,7 +11570,7 @@ input[type=number] {
   background-color: #fff;
 }
 .btn-default:hover, .btn-default:active, .btn-default:focus {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 
 .btn-outline-default {
@@ -11578,7 +11578,7 @@ input[type=number] {
   background-color: #fff;
 }
 .btn-outline-default:hover, .btn-outline-default:active, .btn-outline-default:focus {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 
 .btn-theme {
@@ -11785,7 +11785,7 @@ input[type=number] {
 }
 .card .card-header {
   position: relative;
-  border-bottom: 1px solid #EBF1FA;
+  border-bottom: 1px solid #f9fbff;
 }
 .card .card-header::after {
   display: block;
@@ -12035,7 +12035,7 @@ input[type=number] {
   display: flex;
   align-items: center;
   list-style: none;
-  border-bottom: 2px solid #EBF1FA;
+  border-bottom: 2px solid #f9fbff;
 }
 
 .tab {
@@ -12317,7 +12317,7 @@ table.full-width {
   align-items: center;
   justify-content: space-between;
   list-style: none;
-  border-bottom: 2px solid #EBF1FA;
+  border-bottom: 2px solid #f9fbff;
   height: 40px;
   position: relative;
 }
@@ -12350,7 +12350,7 @@ table.full-width {
 }
 
 .table-component td > span:first-child {
-  background: #EBF1FA;
+  background: #f9fbff;
   color: #55547A;
   display: none;
   font-size: 10px;
@@ -12401,7 +12401,7 @@ table.full-width {
     position: relative;
     width: 50%;
     left: 0;
-    border: 1px solid #EBF1FA !important;
+    border: 1px solid #f9fbff !important;
   }
   .table-component td:not(:first-child) {
     text-align: center !important;
@@ -12941,7 +12941,7 @@ table.full-width {
   border-radius: 5px;
 }
 .dropdown-group .dropdown-container .dropdown-group-item .dropdown-item:hover {
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 .dropdown-group .dropdown-container .dropdown-group-item .dropdown-item.active {
   color: #f54c4c;
@@ -13231,7 +13231,7 @@ fieldset[disabled] .multiselect {
   display: block;
   padding: 8px 40px 0 8px;
   border-radius: 5px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   background: #fff;
   font-size: 14px;
 }
@@ -13296,7 +13296,7 @@ fieldset[disabled] .multiselect {
   margin: 0;
   text-decoration: none;
   border-radius: 5px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   cursor: pointer;
 }
 
@@ -13347,7 +13347,7 @@ fieldset[disabled] .multiselect {
   width: 100%;
   max-height: 240px;
   overflow: auto;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   border-top: none;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -13443,18 +13443,18 @@ fieldset[disabled] .multiselect {
 
 .multiselect--disabled .multiselect__current,
 .multiselect--disabled .multiselect__select {
-  background: #EBF1FA;
+  background: #f9fbff;
   color: #B9C1D1;
 }
 
 .multiselect--disabled .multiselect__tags {
-  background: #EBF1FA;
+  background: #f9fbff;
   color: #B9C1D1;
 }
 
 .multiselect--disabled .multiselect__input,
 .multiselect--disabled .multiselect__single {
-  background: #EBF1FA;
+  background: #f9fbff;
   color: #B9C1D1;
 }
 
@@ -13794,7 +13794,7 @@ fieldset[disabled] .multiselect {
   height: 110px;
   padding: 20px;
   background-color: transparent;
-  border: 2px dashed #EBF1FA;
+  border: 2px dashed #f9fbff;
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -13889,7 +13889,7 @@ fieldset[disabled] .multiselect {
   display: flex;
   justify-content: space-between;
   height: 70px;
-  border-bottom: 1px solid #EBF1FA;
+  border-bottom: 1px solid #f9fbff;
   padding: 30px 30px 20px 30px !important;
 }
 .base-modal .modal-header::before {
@@ -13987,7 +13987,7 @@ fieldset[disabled] .multiselect {
 }
 .template-modal .template-img {
   margin: 12px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
 }
 .template-modal .selected-template {
   border: 1px solid #f54c4c;
@@ -14180,7 +14180,7 @@ fieldset[disabled] .multiselect {
   display: flex !important;
 }
 .graph-body .chart-desc {
-  border-left: 1px solid #EBF1FA;
+  border-left: 1px solid #f9fbff;
   padding: 0;
 }
 .graph-body .stats {
@@ -14194,7 +14194,7 @@ fieldset[disabled] .multiselect {
   flex: 1;
 }
 .graph-body .stats .description:last-child {
-  border-top: 1px solid #EBF1FA;
+  border-top: 1px solid #f9fbff;
   padding-top: 30px;
 }
 .graph-body .stats .title {
@@ -14242,7 +14242,7 @@ fieldset[disabled] .multiselect {
 .dashbox-line-progress .progress {
   height: 0.5rem;
   margin-bottom: 0;
-  background-color: #EBF1FA;
+  background-color: #f9fbff;
 }
 .dashbox-line-progress .title {
   margin-bottom: 15px;
@@ -14300,7 +14300,7 @@ fieldset[disabled] .multiselect {
     flex-direction: row;
     flex-wrap: wrap;
     text-align: center;
-    border-top: 1px solid #EBF1FA;
+    border-top: 1px solid #f9fbff;
   }
   .graph-body .stats .total {
     padding-right: 0;
@@ -14311,7 +14311,7 @@ fieldset[disabled] .multiselect {
   .graph-body .stats .description:last-child {
     border-top: none;
     padding-top: 30px;
-    border-left: 1px solid #EBF1FA;
+    border-left: 1px solid #f9fbff;
   }
 }
 @media (max-width: 992px) {
@@ -14918,7 +14918,7 @@ fieldset[disabled] .multiselect {
   background: #FFFFFF;
   padding: 0 10px 0 10px;
   min-height: 170px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
 }
 .invoice-create-page .show-customer label {
   font-size: 14px;
@@ -14972,7 +14972,7 @@ fieldset[disabled] .multiselect {
   display: flex;
   justify-content: center;
   background: #ffffff;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   min-height: 170px;
   border-radius: 5px;
   padding: 64px 0;
@@ -14980,7 +14980,7 @@ fieldset[disabled] .multiselect {
 .invoice-create-page .add-customer .add-customer-action .customer-icon {
   display: flex;
   justify-content: center;
-  background: #EBF1FA;
+  background: #f9fbff;
   width: 40px;
   color: white;
   height: 40px;
@@ -15021,7 +15021,7 @@ fieldset[disabled] .multiselect {
   text-align: center;
 }
 .invoice-create-page .item-table .item-table-header {
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   background: white;
 }
 .invoice-create-page .item-table .item-table-header th {
@@ -15031,8 +15031,8 @@ fieldset[disabled] .multiselect {
   font-size: 15px;
   line-height: 21px;
   color: #55547A;
-  border-top: 1px solid #EBF1FA;
-  border-bottom: 1px solid #EBF1FA;
+  border-top: 1px solid #f9fbff;
+  border-bottom: 1px solid #f9fbff;
 }
 .invoice-create-page .item-table .item-table-header .item-heading {
   padding-left: 50px;
@@ -15042,11 +15042,11 @@ fieldset[disabled] .multiselect {
 }
 .invoice-create-page .item-table .item-table-header th:first-child {
   padding-left: 0 !important;
-  border-left: 1px solid #EBF1FA;
+  border-left: 1px solid #f9fbff;
 }
 .invoice-create-page .item-table .item-table-header th:last-child {
   padding-right: 0 !important;
-  border-right: 1px solid #EBF1FA;
+  border-right: 1px solid #f9fbff;
 }
 .invoice-create-page .item-table .item-body td:first-child {
   padding-left: 0 !important;
@@ -15056,7 +15056,7 @@ fieldset[disabled] .multiselect {
 }
 .invoice-create-page .item-table .item-body .item-row {
   background: #FFFFFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-sizing: border-box;
   border-radius: 0px 0px 5px 5px;
 }
@@ -15100,7 +15100,7 @@ fieldset[disabled] .multiselect {
   align-items: center;
   height: 40px;
   padding-left: 10px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   background: #F9FBFF;
   border-radius: 5px;
   position: relative;
@@ -15175,7 +15175,7 @@ fieldset[disabled] .multiselect {
 }
 .invoice-create-page .multi-select-item .multiselect__content-wrapper {
   overflow: hidden;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border-radius: 0px 0px 5px 5px;
 }
@@ -15191,11 +15191,11 @@ fieldset[disabled] .multiselect {
   padding: 13px 23px;
   width: 100%;
   font-size: 15px;
-  border-bottom: 1px solid #EBF1FA;
+  border-bottom: 1px solid #f9fbff;
   cursor: pointer;
 }
 .invoice-create-page .add-item-action:hover {
-  background: #EBF1FA;
+  background: #f9fbff;
 }
 .invoice-create-page .add-item-action .icon-fa {
   margin: 2px 11px 0 0;
@@ -15206,8 +15206,8 @@ fieldset[disabled] .multiselect {
   margin: 35px 0;
 }
 .invoice-create-page .invoice-foot .btn-template {
-  background: #EBF1FA;
-  border: 1px solid #EBF1FA;
+  background: #f9fbff;
+  border: 1px solid #f9fbff;
   color: #040405;
   font-size: 14px;
 }
@@ -15224,7 +15224,7 @@ fieldset[disabled] .multiselect {
   margin: 5px 0 0 0;
 }
 .invoice-create-page .invoice-foot .invoice-notes textarea {
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   border-radius: 5px;
   width: 100%;
   min-height: 100px;
@@ -15236,7 +15236,7 @@ fieldset[disabled] .multiselect {
   background: #ffffff;
   min-width: 390px;
   padding: 15px 20px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   border-radius: 5px;
 }
 .invoice-create-page .invoice-foot .invoice-total > label {
@@ -15276,7 +15276,7 @@ fieldset[disabled] .multiselect {
 .invoice-create-page .invoice-foot .invoice-total .border-top {
   margin: 0;
   padding-top: 7px;
-  border-top: 1px solid #EBF1FA;
+  border-top: 1px solid #f9fbff;
 }
 .invoice-create-page .invoice-foot .invoice-total .tax-selector {
   font-weight: 600;
@@ -15333,7 +15333,7 @@ fieldset[disabled] .multiselect {
 }
 .invoice-create-page .item-dropdown {
   display: flex;
-  border: 1px solid #EBF1FA !important;
+  border: 1px solid #f9fbff !important;
   background-color: #fff !important;
   border-radius: 0px 5px 5px 0px !important;
   justify-content: center;
@@ -15483,7 +15483,7 @@ fieldset[disabled] .multiselect {
 }
 .invoice-view-page .side-header .inv-button {
   background: #F9FBFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-sizing: border-box;
   color: #B9C1D1;
 }
@@ -15652,7 +15652,7 @@ fieldset[disabled] .multiselect {
   background: #FFFFFF;
   padding: 0 10px 0 10px;
   min-height: 170px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
 }
 .estimate-create-page .show-customer label {
   font-size: 14px;
@@ -15706,7 +15706,7 @@ fieldset[disabled] .multiselect {
   display: flex;
   justify-content: center;
   background: #ffffff;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   min-height: 170px;
   border-radius: 5px;
   padding: 64px 0;
@@ -15714,7 +15714,7 @@ fieldset[disabled] .multiselect {
 .estimate-create-page .add-customer .add-customer-action .customer-icon {
   display: flex;
   justify-content: center;
-  background: #EBF1FA;
+  background: #f9fbff;
   width: 40px;
   color: white;
   height: 40px;
@@ -15755,7 +15755,7 @@ fieldset[disabled] .multiselect {
   text-align: center;
 }
 .estimate-create-page .item-table .item-table-header {
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   background: white;
 }
 .estimate-create-page .item-table .item-table-header th {
@@ -15765,8 +15765,8 @@ fieldset[disabled] .multiselect {
   font-size: 15px;
   line-height: 21px;
   color: #55547A;
-  border-top: 1px solid #EBF1FA;
-  border-bottom: 1px solid #EBF1FA;
+  border-top: 1px solid #f9fbff;
+  border-bottom: 1px solid #f9fbff;
 }
 .estimate-create-page .item-table .item-table-header .item-heading {
   padding-left: 50px;
@@ -15776,11 +15776,11 @@ fieldset[disabled] .multiselect {
 }
 .estimate-create-page .item-table .item-table-header th:first-child {
   padding-left: 0 !important;
-  border-left: 1px solid #EBF1FA;
+  border-left: 1px solid #f9fbff;
 }
 .estimate-create-page .item-table .item-table-header th:last-child {
   padding-right: 0 !important;
-  border-right: 1px solid #EBF1FA;
+  border-right: 1px solid #f9fbff;
 }
 .estimate-create-page .item-table .item-body td:first-child {
   padding-left: 0 !important;
@@ -15790,7 +15790,7 @@ fieldset[disabled] .multiselect {
 }
 .estimate-create-page .item-table .item-body .item-row {
   background: #FFFFFF;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-sizing: border-box;
   border-radius: 0px 0px 5px 5px;
 }
@@ -15834,7 +15834,7 @@ fieldset[disabled] .multiselect {
   align-items: center;
   height: 40px;
   padding-left: 10px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   background: #F9FBFF;
   border-radius: 5px;
   position: relative;
@@ -15909,7 +15909,7 @@ fieldset[disabled] .multiselect {
 }
 .estimate-create-page .multi-select-item .multiselect__content-wrapper {
   overflow: hidden;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   border-radius: 0px 0px 5px 5px;
 }
@@ -15926,11 +15926,11 @@ fieldset[disabled] .multiselect {
   padding: 13px 23px;
   width: 100%;
   font-size: 15px;
-  border-bottom: 1px solid #EBF1FA;
+  border-bottom: 1px solid #f9fbff;
   cursor: pointer;
 }
 .estimate-create-page .add-item-action:hover {
-  background: #EBF1FA;
+  background: #f9fbff;
 }
 .estimate-create-page .add-item-action .icon-fa {
   margin: 2px 11px 0 0;
@@ -15941,8 +15941,8 @@ fieldset[disabled] .multiselect {
   margin: 35px 0;
 }
 .estimate-create-page .estimate-foot .btn-template {
-  background: #EBF1FA;
-  border: 1px solid #EBF1FA;
+  background: #f9fbff;
+  border: 1px solid #f9fbff;
   color: #040405;
   font-size: 14px;
 }
@@ -15959,7 +15959,7 @@ fieldset[disabled] .multiselect {
   margin: 5px 0 0 0;
 }
 .estimate-create-page .estimate-foot .estimate-notes textarea {
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   border-radius: 5px;
   width: 100%;
   min-height: 100px;
@@ -15971,7 +15971,7 @@ fieldset[disabled] .multiselect {
   background: #ffffff;
   min-width: 390px;
   padding: 15px 20px;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   border-radius: 5px;
 }
 .estimate-create-page .estimate-foot .estimate-total > label {
@@ -16011,7 +16011,7 @@ fieldset[disabled] .multiselect {
 .estimate-create-page .estimate-foot .estimate-total .border-top {
   margin: 0;
   padding-top: 7px;
-  border-top: 1px solid #EBF1FA;
+  border-top: 1px solid #f9fbff;
 }
 .estimate-create-page .estimate-foot .estimate-total .tax-selector {
   font-weight: 600;
@@ -16067,7 +16067,7 @@ fieldset[disabled] .multiselect {
 }
 .estimate-create-page .item-dropdown {
   display: flex;
-  border: 1px solid #EBF1FA !important;
+  border: 1px solid #f9fbff !important;
   background-color: #fff !important;
   border-radius: 0px 5px 5px 0px !important;
   justify-content: center;
@@ -16696,7 +16696,7 @@ fieldset[disabled] .multiselect {
   height: 120px;
 }
 .wizard .indicator-line {
-  border: 5px solid #EBF1FA;
+  border: 5px solid #f9fbff;
   border-radius: 5px;
   box-sizing: border-box;
   width: 520px;
@@ -16715,11 +16715,11 @@ fieldset[disabled] .multiselect {
 .wizard .indicator-line .steps {
   border-radius: 50%;
   float: left;
-  border: 5px solid #EBF1FA;
+  border: 5px solid #f9fbff;
   padding: 0px 5px;
   height: 21px;
   width: 21px;
-  background: #EBF1FA;
+  background: #f9fbff;
 }
 .wizard .indicator-line .steps.active {
   border: 5px solid #f54c4c;
@@ -16759,13 +16759,13 @@ fieldset[disabled] .multiselect {
   height: 50px;
   max-width: 300px;
   padding: 10px;
-  border: 4px solid #EBF1FA;
+  border: 4px solid #f9fbff;
 }
 .wizard .list-items {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
 }
 .wizard .list-items .left-item,
 .wizard .list-items .right-item {
@@ -16875,7 +16875,7 @@ fieldset[disabled] .multiselect {
   color: #55547A;
 }
 .customer-create .customer-card {
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
   padding: 10px;
 }
 .customer-create .same-address-checkbox-container {
@@ -16886,7 +16886,7 @@ fieldset[disabled] .multiselect {
 }
 .customer-create hr {
   margin-bottom: 1.8rem;
-  border: 1px solid #EBF1FA;
+  border: 1px solid #f9fbff;
 }
 .customer-create .header-button-container {
   display: block;
@@ -16927,7 +16927,7 @@ fieldset[disabled] .multiselect {
   }
   .customer-create hr {
     margin-bottom: 1.2rem;
-    border: 1px solid #EBF1FA;
+    border: 1px solid #f9fbff;
   }
   .customer-create .section-title {
     padding: 15px;
