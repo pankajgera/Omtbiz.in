@@ -183,9 +183,9 @@ class InvoicesController extends Controller
                 // }
 
                 //Reset inventory quantity
-                $quan = (int) ($inventory->id);
 
                 $invent = Inventory::find($inventory->inventory_id);
+                $quan = (int) ($inventory->quantity);
                 if ($invent) {
                     $invent->update([
                         'quantity' => $invent->quantity - $quan,
