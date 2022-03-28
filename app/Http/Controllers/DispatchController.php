@@ -275,7 +275,7 @@ class DispatchController extends Controller
     }
 
     /**
-     * Delete a list of existing Dispatch.
+     * Move a list of existing Dispatch.
      *
      * @param \Illuminate\Http\Request $request
      *
