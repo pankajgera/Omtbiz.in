@@ -182,4 +182,20 @@ class InventoryController extends Controller
             Log::error('Error while updating inventory item price', [$e]);
         }
     }
+
+    /**
+     * Check if same inventory name is present
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkName(Request $request)
+    {
+        $name_exists = Inventory::where('name', $request->name)->exists();
+
+        return response()->json([
+            'name_exists' => $name_exists,
+        ]);
+    }
 }
