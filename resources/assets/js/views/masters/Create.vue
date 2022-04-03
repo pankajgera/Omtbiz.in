@@ -69,6 +69,7 @@
                     :show-labels="false"
                     :allow-empty="false"
                     :placeholder="$tc('masters.select-state')"
+                    autocomplete="chrome-off"
                     track-by="code"
                     label="name"
                   />
