@@ -116,3 +116,14 @@ export const updateInventoryPrice = ({ commit, dispatch, state }, data) => {
       })
   })
 }
+
+export const checkInventoryName = ({ commit, dispatch, state }, data) => {
+  return new Promise((resolve, reject) => {
+    console.log(data)
+      window.axios.post(`/api/inventory/check-name`, data).then((response) => {
+          resolve(response)
+      }).catch((err) => {
+          reject(err)
+      })
+  })
+}
