@@ -318,8 +318,8 @@ export default {
       data.append('amount', (this.formData.amount))
       data.append('notes', this.formData.notes)
 
+      this.isLoading = true
       if (this.isEdit) {
-        this.isLoading = true
         data.append('_method', 'PUT')
         let response = await this.updateExpense({id: this.$route.params.id, editData: data})
         if (response.data.success) {
@@ -330,13 +330,11 @@ export default {
         }
         window.toastr['error'](response.data.error)
       } else {
-        this.isLoading = true
         let response = await this.addExpense(data)
         if (response.data.success) {
           window.toastr['success'](this.$t('expenses.created_message'))
           this.isLoading = false
           this.$router.push('/expenses')
-          this.isLoading = false
           return true
         }
         window.toastr['success'](response.data.success)

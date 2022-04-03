@@ -177,8 +177,8 @@ export default {
       if (this.$v.$invalid) {
         return false
       }
+      this.isLoading = true
       if (this.isEdit) {
-        this.isLoading = true
         let response = await this.updateInventory(this.formData)
         if (response.data) {
           this.isLoading = false
@@ -188,7 +188,6 @@ export default {
         }
         window.toastr['error'](response.data.error)
       } else {
-        this.isLoading = true
         let response = await this.addInventory(this.formData)
 
         if (response.data) {

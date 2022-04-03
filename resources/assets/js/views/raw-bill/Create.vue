@@ -186,8 +186,8 @@ export default {
       if (this.formData.unit) {
         this.formData.unit = this.formData.unit.name
       }
+      this.isLoading = true
       if (this.isEdit) {
-        this.isLoading = true
         let response = await this.updateBills(this.formData)
         if (response.data) {
           this.isLoading = false
@@ -197,7 +197,6 @@ export default {
         }
         window.toastr['error'](response.data.error)
       } else {
-        this.isLoading = true
         let response = await this.addBills(this.formData)
 
         if (response.data) {

@@ -660,9 +660,9 @@ export default {
       this.submitSave(data)
     },
     reset() {
-      this.isLoading = false
       setTimeout(() => {
         window.location.reload()
+        this.isLoading = false
       }, 1000)
     },
     async showInvoicePopup (invoice_id) {
@@ -689,7 +689,9 @@ export default {
       })
     },
     submitSave (data) {
-      this.isLoading = true;
+      if (this.isLoading) {
+        return false
+      }
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
@@ -706,7 +708,9 @@ export default {
       })
     },
     submitUpdate (data) {
-      this.isLoading = true
+      if (this.isLoading) {
+        return false
+      }
       this.updateInvoice(data).then((res) => {
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
