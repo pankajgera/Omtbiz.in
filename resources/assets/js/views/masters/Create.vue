@@ -251,9 +251,9 @@ export default {
         return false
       }
       this.formData.state = this.formData.state.name
+      this.isLoading = true
       if (this.isEdit) {
         try {
-          this.isLoading = true
           let response = await this.updateMaster(this.formData)
           if (response.data) {
             this.isLoading = false
@@ -269,7 +269,6 @@ export default {
         }
       } else {
         try {
-          this.isLoading = true
           let response = await this.addMaster(this.formData)
           if (response.data) {
             window.toastr['success'](this.$tc('masters.created_message'))

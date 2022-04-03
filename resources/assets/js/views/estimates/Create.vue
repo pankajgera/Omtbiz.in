@@ -530,7 +530,6 @@ export default {
       if (!this.checkValid()) {
         return false
       }
-      this.isLoading = true
       this.newEstimate.estimate_number = this.estimatePrefix + '-' + this.estimateNumAttribute
 
       let data = {
@@ -542,7 +541,6 @@ export default {
         user_id: this.user.id,
         estimate_template_id: this.getTemplateId,
       }
-
       if (this.$route.name === 'estimates.edit') {
         this.submitUpdate(data)
         return
@@ -551,10 +549,10 @@ export default {
       this.submitSave(data)
     },
     reset() {
-      this.isLoading = false
       setTimeout(() => {
         window.location.reload()
-      }, 1000)
+        this.isLoading = false
+      }, 500)
     },
     async showEstimatePopup (estimate_id) {
       swal({
@@ -581,7 +579,10 @@ export default {
       })
     },
     submitSave (data) {
-      this.isLoading = true;
+      if (this.isLoading) {
+        return false
+      }
+      this.isLoading = true
       this.addEstimate(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('estimates.created_message'))
@@ -596,11 +597,12 @@ export default {
           return true
         }
         this.reset()
-        console.log(err)
       })
     },
     submitUpdate (data) {
-      this.isLoading = true
+      if (this.isLoading) {
+        return false
+      }
       this.updateEstimate(data).then((res) => {
         if (res.data.success) {
           window.toastr['success'](this.$t('estimates.updated_message'))
@@ -619,7 +621,6 @@ export default {
           window.toastr['error'](err)
           return true
         }
-        console.log(err)
       })
     },
     checkInventoryData (index, isValid) {

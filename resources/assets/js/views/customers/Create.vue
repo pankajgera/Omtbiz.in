@@ -572,9 +572,7 @@ export default {
           }
         }
       } else {
-        this.isLoading = true
         if (this.currency) {
-          this.isLoading = true
           this.formData.currency_id = this.currency.id
         }
         try {

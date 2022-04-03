@@ -241,8 +241,8 @@ export default {
         return true
       }
 
+      this.isLoading = true
       if (this.isEdit) {
-        this.isLoading = true
         try {
           let response = await this.updateUser(this.formData)
           if (response.data.success) {
@@ -263,7 +263,6 @@ export default {
           }
         }
       } else { //Add new user
-        this.isLoading = true
         try {
           let response = await this.addUser(this.formData)
           if (response.data.success) {
