@@ -447,6 +447,8 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountMastersController@delete'
     ]);
 
+    Route::post('/master/check-name', 'AccountMastersController@checkName');
+
     Route::resource('masters', 'AccountMastersController');
 
     // Account Groups

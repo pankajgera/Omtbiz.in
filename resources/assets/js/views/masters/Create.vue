@@ -21,13 +21,14 @@
                   focus
                   type="text"
                   name="name"
-                  @input="$v.formData.name.$touch()"
+                  @input="onSearch"
                 />
-                <div v-if="$v.formData.name.$error">
+                <div v-if="$v.formData.name.$error || duplicateName">
                   <span v-if="!$v.formData.name.required" class="text-danger">{{ $t('validation.required') }} </span>
                   <span v-if="!$v.formData.name.minLength" class="text-danger">
                     {{ $tc('validation.name_min_length', $v.formData.name.$params.minLength.min, { count: $v.formData.name.$params.minLength.min }) }}
                   </span>
+                  <span v-if="duplicateName" class="text-danger">Name already exists.</span>
                 </div>
               </div>
               <div class="form-group">
@@ -172,7 +173,8 @@ export default {
       },
       groupOptions: [],
       selectedGroup: '',
-      stateOptions: []
+      stateOptions: [],
+      duplicateName: false,
     }
   },
   computed: {
@@ -202,6 +204,7 @@ export default {
       }
     })
     this.loadStates()
+    this.onSearch = _.debounce(this.checkName, 1000)
   },
   validations: {
     formData: {
@@ -224,7 +227,8 @@ export default {
     ...mapActions('master', [
       'addMaster',
       'fetchMaster',
-      'updateMaster'
+      'updateMaster',
+      'checkMasterName'
     ]),
     ...mapActions('group', [
       'fetchGroups'
@@ -245,9 +249,16 @@ export default {
       this.formData = response.data.master
       this.selectedGroup = this.formData.groups
     },
+    async checkName() {
+      let response = await this.checkMasterName(this.formData)
+      if (response.data.name_exists) {
+          this.duplicateName = true
+          window.toastr['error']('Name already exists')
+      }
+    },
     async submitMaster () {
       this.$v.formData.$touch()
-      if (this.$v.$invalid) {
+      if (this.$v.$invalid || this.duplicateName) {
         return false
       }
       this.formData.state = this.formData.state.name

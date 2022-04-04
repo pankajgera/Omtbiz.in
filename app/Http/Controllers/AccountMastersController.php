@@ -151,4 +151,20 @@ class AccountMastersController extends Controller
             'masters' => $masters,
         ]);
     }
+
+    /**
+     * Check if same master name is present
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function checkName(Request $request)
+    {
+        $name_exists = AccountMaster::where('name', $request->name)->exists();
+
+        return response()->json([
+            'name_exists' => $name_exists,
+        ]);
+    }
 }

@@ -100,3 +100,13 @@ export const selectMaster = ({ commit, dispatch, state }, data) => {
     commit(types.SET_SELECT_ALL_STATE, false)
   }
 }
+
+export const checkMasterName = ({ commit, dispatch, state }, data) => {
+  return new Promise((resolve, reject) => {
+      window.axios.post(`/api/master/check-name`, data).then((response) => {
+          resolve(response)
+      }).catch((err) => {
+          reject(err)
+      })
+  })
+}
