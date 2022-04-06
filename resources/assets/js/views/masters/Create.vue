@@ -32,6 +32,17 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="control-label">{{ $t('masters.mobile_number') }}</label>
+                <base-input
+                  v-model.trim="formData.mobile_number"
+                  focus
+                  :type="'number'"
+                  :max="12"
+                  :min="8"
+                  name="mobile_number"
+                />
+              </div>
+              <div class="form-group">
                 <label class="control-label">{{ $t('masters.groups') }}</label><span class="text-danger"> *</span>
                 <group-select
                   :key="groupOptions.length"
@@ -169,7 +180,8 @@ export default {
         country: 'IN',
         state: '',
         opening_balance: 0,
-        type: 'Cr'
+        type: 'Cr',
+        mobile_number: '',
       },
       groupOptions: [],
       selectedGroup: '',

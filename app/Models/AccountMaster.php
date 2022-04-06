@@ -13,7 +13,8 @@ class AccountMaster extends Model
         'country',
         'state',
         'opening_balance',
-        'type'
+        'type',
+        'mobile_number',
     ];
 
     public function scopeWhereName($query, $name)
