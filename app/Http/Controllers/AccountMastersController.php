@@ -50,6 +50,7 @@ class AccountMastersController extends Controller
         try {
             $master = new AccountMaster();
             $master->name = $request->name;
+            $master->mobile_number = $request->mobile;
             $master->groups = $request->groups;
             $master->address = $request->address;
             $master->country = $request->country;
@@ -97,6 +98,7 @@ class AccountMastersController extends Controller
         try {
             $master = AccountMaster::find($id);
             $master->name = $request->name;
+            $master->mobile_number = $request->mobile;
             $master->groups = $request->groups;
             $master->address = $request->address;
             $master->country = $request->country;

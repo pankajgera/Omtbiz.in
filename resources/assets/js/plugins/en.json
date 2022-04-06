@@ -215,6 +215,7 @@
         "masters_list": "Ledger List",
         "name": "Name",
         "unit": "Unit",
+        "mobile_number": "Mobile no.",
         "description": "Description",
         "added_on": "Added On",
         "price": "Price",
