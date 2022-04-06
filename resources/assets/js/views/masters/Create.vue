@@ -11,7 +11,7 @@
     <div class="row">
       <div class="col col-12 col-md-12 col-lg-6">
         <div class="card">
-          <form action="" @submit.prevent="submitMaster">
+          <form action="" @submit.prevent="submitMaster" autocomplete="off">
             <div class="card-body">
               <div class="form-group">
                 <label class="control-label">{{ $t('masters.name') }}</label><span class="text-danger"> *</span>
@@ -70,7 +70,7 @@
                     :show-labels="false"
                     :allow-empty="false"
                     :placeholder="$tc('masters.select-state')"
-                    autocomplete="chrome-off"
+                    autocomplete="off" aria-invalid="false" aria-haspopup="false" spellcheck="false"
                     track-by="code"
                     label="name"
                   />

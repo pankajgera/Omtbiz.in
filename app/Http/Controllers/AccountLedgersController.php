@@ -141,7 +141,6 @@ class AccountLedgersController extends Controller
     {
         try {
             $ledger = new AccountLedger();
-            $ledger->voucher_id = $request->voucher_id;
             $ledger->date = $request->date;
             $ledger->type = $request->type;
             $ledger->bill_no = $request->bill_no;
@@ -177,7 +176,6 @@ class AccountLedgersController extends Controller
     {
         try {
             $ledger = AccountLedger::find($id);
-            $ledger->voucher_id = $request->voucher_id;
             $ledger->date = $request->date;
             $ledger->type = $request->type;
             $ledger->bill_no = $request->bill_no;
