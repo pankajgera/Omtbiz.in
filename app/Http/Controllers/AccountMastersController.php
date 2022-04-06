@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\AccountGroup;
+use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\State;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -57,6 +59,20 @@ class AccountMastersController extends Controller
             $master->save();
 
             $master = AccountMaster::find($master->id);
+
+            //Now add ledger as well
+            $ledger = new AccountLedger();
+            $ledger->date = Carbon::now('Asia/Kolkata');
+            $ledger->type = $request->type;
+            $ledger->bill_no = null;
+            $ledger->account = $request->name;
+            $ledger->debit = 'Dr' === $request->type ? $request->opening_balance : 0;
+            $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
+            $ledger->balance = $request->opening_balance;
+            $ledger->short_narration = null;
+            $ledger->account_master_id = $master->id;
+            $ledger->company_id = $request->header('company');
+            $ledger->save();
 
             return response()->json([
                 'master' => $master,
