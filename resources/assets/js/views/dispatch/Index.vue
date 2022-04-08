@@ -614,6 +614,7 @@ export default {
       })
     },
     async multipleDispatch (type) {
+      let dataArray = this.toBeDispatch.filter((i, key) => i.id === this.selectedToBeDispatch[key]);
       let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);
       if (type === 'draft') {
         modal_text = this.$tc('dispatch.confirm_dispatch', 2);
@@ -626,13 +627,16 @@ export default {
         dangerMode: false
       }).then(async (willSend) => {
         if (willSend) {
-          let res = type === 'draft' ? await this.moveMultipleToBeDispatch() : await this.moveMultipleDispatch()
-          if (res.data.dispatch) {
-            window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
-              window.location.reload()
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
-          }
+          dataArray.map(i => {
+            window.open('/dispatch/' + i.id + '/edit', '_blank').focus();
+          })
+          // let res = type === 'draft' ? await this.moveMultipleToBeDispatch() : await this.moveMultipleDispatch()
+          // if (res.data.dispatch) {
+          //   window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+          //     window.location.reload()
+          // } else if (res.data.error) {
+          //   window.toastr['error'](res.data.message)
+          // }
         }
       })
     },
@@ -644,12 +648,13 @@ export default {
           name: 'Sent',
       }
       if (data) {
-        let res = await this.updateDispatch(data);
-        if (res.data.dispatch) {
-          window.location.reload()
-        } else if (res.data.error) {
-          window.toastr['error'](res.data.message)
-        }
+        window.open('/dispatch/' + id + '/edit', '_blank').focus();
+        // let res = await this.updateDispatch(data);
+        // if (res.data.dispatch) {
+        //   window.location.reload()
+        // } else if (res.data.error) {
+        //   window.toastr['error'](res.data.message)
+        // }
       }
     },
     setIndex(index) {
