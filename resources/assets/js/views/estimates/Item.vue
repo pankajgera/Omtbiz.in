@@ -344,6 +344,7 @@ export default {
       this.item.name = item.name
       this.item.price = item.price
       this.item.item_id = item.id
+      this.item.id = item.id
       this.item.description = item.description
 
       // if (this.item.taxes.length) {

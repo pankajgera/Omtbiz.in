@@ -476,6 +476,8 @@
         "days": "{days} Days",
         "months": "{months} Month",
         "years": "{years} Year",
+        "out_of_stock": "Out of stock",
+        "update_inventory_quantity": "Max quantity available is {max}, do you want to update the quantity.",
         "all": "All",
         "paid": "Paid",
         "unpaid": "Unpaid",
