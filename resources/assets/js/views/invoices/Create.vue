@@ -148,6 +148,7 @@
             :discount-per-inventory="discountPerInventory"
             :is-disable="$route.query.d === 'true'"
             :inventory-type="'invoice'"
+            :inventory-list="inventoryList"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
@@ -499,7 +500,7 @@ export default {
     window.hub.$on('newTax', this.onSelectTax)
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1100);
+    }, 500);
   },
   methods: {
     ...mapActions('modal', [
@@ -633,7 +634,6 @@ export default {
           this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
         }
       })
-
     },
     submitInvoiceData () {
       if (!this.checkValid()) {

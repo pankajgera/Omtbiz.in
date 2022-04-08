@@ -41,7 +41,7 @@
                 :id="'inventoryQuantity'+index"
                 :key="'inventoryQuantity'+index"
                 :name="'inventoryQuantity'+index"
-                v-model="inventory.quantity"
+                v-model="inventoryQuantityBind"
                 :invalid="$v.inventory.quantity.$error"
                 type="number"
                 small
@@ -197,6 +197,10 @@ export default {
     inventoryType: {
       type: String,
       default: '',
+    },
+    inventoryList: {
+      type: Array,
+      default: [],
     }
   },
   data () {
@@ -213,7 +217,7 @@ export default {
         masked: false
       },
       isSelected: false,
-      updatingInput: ''
+      updatingInput: '',
     }
   },
   computed: {
@@ -305,6 +309,29 @@ export default {
         }
         this.updatingInput = 'sale_price'
       }
+    },
+    inventoryQuantityBind: {
+      get: function() {
+        return this.inventory.quantity
+      },
+      set: function (newValue) {
+        let maxQuantity = parseInt(this.inventoryList.find(i => i.name === this.inventory.name).quantity);
+        if (maxQuantity < newValue) {
+          swal({
+            title: this.$t('invoices.out_of_stock'),
+            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantity}),
+            icon: '/assets/icon/check-circle-solid.svg',
+            buttons: true,
+            dangerMode: true
+          }).then(async (success) => {
+            if (success) {
+              window.open('/inventory/' + this.inventory.id + '/edit', '_blank').focus()
+            }
+          })
+        } else {
+          this.inventory.quantity = newValue
+        }
+      }
     }
   },
   watch: {
@@ -378,6 +405,7 @@ export default {
       })
     },
     onSelectInventory (inventory) {
+      this.inventory.id = inventory.id
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price
       this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price

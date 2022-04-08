@@ -1,6 +1,7 @@
 export default {
   invoice_id: null,
   item_id: null,
+  id: null,
   name: '',
   title: '',
   description: null,
