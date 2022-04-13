@@ -259,7 +259,7 @@
           </div>
         </div>
       </div>
-      <div class="page-actions row">
+      <div class="page-actions row" style="margin-left: 3px">
           <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
