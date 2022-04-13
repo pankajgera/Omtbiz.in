@@ -9,7 +9,7 @@
         </router-link>
       </div>
     </div>
-    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData">
+    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" style="width: 133%">
       <div class="page-header">
         <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
         <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }} </h3>
