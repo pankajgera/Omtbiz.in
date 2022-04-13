@@ -9,7 +9,7 @@
         </router-link>
       </div>
     </div>
-    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" style="width: 133%">
+    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width">
       <div class="page-header">
         <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
         <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }} </h3>
@@ -302,7 +302,11 @@ input.base-prefix-input:disabled {
     overflow-x: visible !important;
   }
 }
-</style>
+@media screen and (min-width: 768px) and (max-width: 1030px) {
+  .ipad-width {
+    width: 133%;
+  }
+}
 </style>
 <script>
 import draggable from 'vuedraggable'
