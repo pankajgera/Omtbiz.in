@@ -1,7 +1,7 @@
 <template>
   <div :class="{'base-prefix-input': true, 'disabled': disabled}" @click="focusInput">
     <!-- <font-awesome-icon v-if="icon" :icon="icon" class="icon" /> -->
-    <p class="prefix-label" :style="'width:'+prefixWidth+'%'"><span class="'mr-1">{{ prefix }}</span> </p>
+    <p class="prefix-label" :style="'width:'+prefixWidth+'%'"><span class="mr-1">{{ prefix }}</span> </p>
     <input
       ref="basePrefixInput"
       v-model="inputValue"
@@ -21,9 +21,13 @@
   background: rgb(235 241 250) !important;
 }
 .base-prefix-input p.prefix-label{
-  padding: 10px !important;
   background: #e9e9e9;
   height: 100%;
+}
+@media screen and (max-width: 1030px) {
+  .base-prefix-input p.prefix-label{
+    padding: 3px;
+  }
 }
 </style>
 <script>
