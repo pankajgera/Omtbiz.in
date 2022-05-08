@@ -17,6 +17,7 @@ use App\Models\CompanySetting;
 use App\Models\Company;
 use App\Mail\EstimatePdf;
 use App\Models\AccountMaster;
+use App\Models\Inventory;
 use App\Models\TaxType;
 use App\Models\Tax;
 
@@ -87,6 +88,7 @@ class EstimatesController extends Controller
         return response()->json([
             'estimate_today_date' => Carbon::now()->toDateString(),
             'customers' => $customers,
+            'inventories' => Inventory::all(),
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
             'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
             'taxes' => Tax::whereCompany($request->header('company'))->latest()->get(),
