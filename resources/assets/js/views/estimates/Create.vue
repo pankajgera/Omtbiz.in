@@ -136,6 +136,7 @@
               :tax-per-inventory="taxPerInventory"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'estimate'"
+              :inventory-list="inventoryList"
               @remove="removeInventory"
               @update="updateInventoryBounce"
               @inventoryValidate="checkInventoryData"

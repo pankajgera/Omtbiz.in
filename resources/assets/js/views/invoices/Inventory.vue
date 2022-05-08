@@ -199,8 +199,8 @@ export default {
       default: '',
     },
     inventoryList: {
-      type: Array,
-      default: [],
+      type: [Object, Array],
+      required: false,
     }
   },
   data () {
