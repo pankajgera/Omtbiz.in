@@ -1,27 +1,9 @@
 <template>
-  <div class="estimate-index-page estimates main-content">
+  <div class="items main-content">
     <div class="page-header">
-      <h3 class="page-title"> {{ $t('estimates.title') }}</h3>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="dashboard">
-            {{ $t('general.home') }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="#">
-            {{ $tc('estimates.estimate', 2) }}
-          </router-link>
-        </li>
-      </ol>
-      <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+      <Header :title="$tc('estimates.estimate', 2)" :bread-crumb-links="breadCrumbLinks">
+        <div v-show="totalEstimates || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
-            v-show="totalEstimates || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             size="large"
@@ -32,12 +14,17 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="/estimates/create">
-          <base-button size="large" icon="plus" color="theme">
-            {{ $t('estimates.new_estimate') }}
-          </base-button>
-        </router-link>
-      </div>
+        <div>
+          <router-link slot="item-title" to="/estimates/create">
+            <base-button
+              size="large"
+              icon="plus"
+              color="theme">
+              {{ $t('estimates.new_estimate') }}
+            </base-button>
+          </router-link>
+        </div>
+      </Header>
     </div>
 
     <transition name="fade">
@@ -288,14 +275,26 @@
 import { mapActions, mapGetters } from 'vuex'
 import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'
 import moment from 'moment'
+import BaseButton from '../../components/base/BaseButton'
 
 export default {
   components: {
-    'moon-walker-icon': MoonWalkerIcon
+    'moon-walker-icon': MoonWalkerIcon,
+    BaseButton,
   },
   data () {
     return {
       showFilters: false,
+      breadCrumbLinks:[
+        {
+          url:'dashboard',
+          title:this.$t('general.home'),
+        },
+        {
+          url:'#',
+          title:this.$tc('estimates.estimate', 2)
+        }
+      ],
       //currency: null,
       status: [
         {

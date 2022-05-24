@@ -392,15 +392,15 @@ export default {
     return {
       id: null,
       breadCrumbLinks:[
-      {
-        url:'dashboard',
-        title:this.$t('general.home'),
-      },
-      {
-        url:'#',
-        title:this.$tc('dispatch.dispatch', 2)
-      }
-    ],
+        {
+          url:'dashboard',
+          title:this.$t('general.home'),
+        },
+        {
+          url:'#',
+          title:this.$tc('dispatch.dispatch', 2)
+        }
+      ],
       showFilters: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
