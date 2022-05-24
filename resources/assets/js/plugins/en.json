@@ -468,7 +468,9 @@
             "amount": "Amount",
             "select_an_item": "Type or click to select an item",
             "type_item_description": "Type Item Description (optional)"
-        }
+        },
+        "quantity": "Quantity",
+        "view": "View"
     },
     "invoices": {
         "title": "Invoices",

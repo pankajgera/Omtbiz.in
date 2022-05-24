@@ -405,6 +405,7 @@ export default {
       })
     },
     onSelectInventory (inventory) {
+      console.log(inventory)
       this.inventory.id = inventory.id
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price
