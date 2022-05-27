@@ -133,13 +133,13 @@
 
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
+          id="select-all-inventory"
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
           @change="selectAllInventory"
         >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+        <label v-show="!isRequestOngoing" for="select-all-inventory" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
