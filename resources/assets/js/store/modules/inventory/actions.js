@@ -80,6 +80,10 @@ export const deleteMultipleInventory = ({ commit, dispatch, state }, id) => {
     })
 }
 
+export const setSelectAllState = ({ commit, dispatch, state }, data) => {
+  commit(types.SET_SELECT_ALL_STATE, data)
+}
+
 export const selectAllInventory = ({ commit, dispatch, state }) => {
     if (state.selectedInventory.length === state.inventory.length) {
         commit(types.SET_SELECTED_INVENTORY, [])

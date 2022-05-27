@@ -10,8 +10,8 @@ export default {
     [types.UPDATE_CURRENT_INVENTORY](state, inventory) {
         state.currentInventory = inventory
     },
-    [types.BOOTSTRAP_INVENTORIES](state, inventories) {
-      state.inventories = inventories
+    [types.BOOTSTRAP_INVENTORIES](state, inventory) {
+      state.inventory = inventory
       // state.inventories.unshift({
       //   company_id: 1,
       //   created_at: "",
