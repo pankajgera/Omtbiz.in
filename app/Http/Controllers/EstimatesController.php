@@ -88,7 +88,7 @@ class EstimatesController extends Controller
         return response()->json([
             'estimate_today_date' => Carbon::now()->toDateString(),
             'customers' => $customers,
-            'inventories' => Inventory::all(),
+            'inventories' => Inventory::where('quantity', '>', 0)->get(),
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
             'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
             'taxes' => Tax::whereCompany($request->header('company'))->latest()->get(),

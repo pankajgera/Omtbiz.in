@@ -89,7 +89,7 @@ class InvoicesController extends Controller
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month . '-' . $nextInvoiceNumber,
-            'inventories' => Inventory::all(),
+            'inventories' => Inventory::where('quantity', '>', 0)->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
