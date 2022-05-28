@@ -301,9 +301,6 @@ export default {
           this.inventory.sale_price = newValue
           this.maxDiscount = newValue
           this.subtotal = newValue
-          if (this.inventoryType === 'invoice') {
-            this.setNewInventoryPrice(this.inventory);
-          }
         } else {
           this.inventory.sale_price = newValue
         }
@@ -387,14 +384,8 @@ export default {
         this.onSelectInventory(val)
       }
     });
-    this.setNewInventoryPrice = _.debounce((data) => {
-				this.updateNewInventorySalePrice(data);
-			}, 600);
   },
   methods: {
-    ...mapActions('inventory', [
-      'updateInventoryPrice'
-    ]),
     searchVal (val) {
       this.inventory.name = val
     },
@@ -405,8 +396,7 @@ export default {
       })
     },
     onSelectInventory (inventory) {
-      console.log(inventory)
-      this.inventory.id = inventory.id
+      this.inventory.id = inventory.iwd
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price
       this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
@@ -454,19 +444,6 @@ export default {
       } else {
         this.$emit('inventoryValidate', this.index, false)
       }
-    },
-    updateNewInventorySalePrice(data) {
-      this.updateInventoryPrice(data).then((res) => {
-        if (res.data) {
-          window.toastr['success'](this.$t('invoices.updated_inventory_price'))
-        }
-      }).catch((err) => {
-        this.isLoading = false
-        if (err) {
-          window.toastr['error'](err)
-          return true
-        }
-      })
     },
     showEndList(val) {
       this.$emit('endlist', true)
