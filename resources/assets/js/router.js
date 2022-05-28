@@ -565,12 +565,6 @@ const routes = [
                 component: InventoryCreate,
                 meta: ['admin']
             },
-            {
-              path: 'inventory/price/:id',
-              name: 'inventory.price',
-              component: Inventory,
-              meta: ['admin']
-          },
 
             // User
             {

@@ -162,28 +162,6 @@ class InventoryController extends Controller
     }
 
     /**
-     * Update an existing Inventory Price.
-     *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updatePrice(Request $request, $id)
-    {
-        try {
-            $inventory = Inventory::find($id);
-            $inventory->sale_price = $request->sale_price;
-            $inventory->save();
-
-            return response()->json([
-                'inventory' => $inventory,
-            ]);
-        } catch (Exception $e) {
-            Log::error('Error while updating inventory item price', [$e]);
-        }
-    }
-
-    /**
      * Check if same inventory name is present
      *
      * @param int $id

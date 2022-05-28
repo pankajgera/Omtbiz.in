@@ -434,7 +434,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InventoryController@delete'
     ]);
 
-    Route::post('/inventory/{id}/price', 'InventoryController@updatePrice');
     Route::post('/inventory/check-name', 'InventoryController@checkName');
 
     Route::resource('inventory', 'InventoryController');
