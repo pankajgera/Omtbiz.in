@@ -12,6 +12,7 @@ export default {
     },
     [types.BOOTSTRAP_INVENTORIES](state, inventory) {
       state.inventory = inventory
+      state.inventories = inventory
       // state.inventories.unshift({
       //   company_id: 1,
       //   created_at: "",
