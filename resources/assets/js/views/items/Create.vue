@@ -14,6 +14,23 @@
           <form action="" @submit.prevent="submitItem">
             <div class="card-body">
               <div class="form-group">
+                <div class="form-group" v-if="dispatchList && dispatchList.length">
+                <label class="form-label">{{ $t('items.dispatch') }}</label>
+                <base-select
+                  :multiple="true"
+                  v-model="dispatch"
+                  :options="dispatchList"
+                  :searchable="true"
+                  :show-labels="false"
+                  :allow-empty="true"
+                  :disabled="isEdit"
+                  :custom-label="dispatchWithAmount"
+                  track-by="dispatch_number"
+                  class="multi-select-item"
+                  @select="addDispatch"
+                  @remove="removeDispatch"
+                />
+              </div>
                 <label class="control-label">{{ $t('items.name') }}</label><span class="text-danger"> *</span>
                 <base-input
                   v-model.trim="formData.name"
@@ -128,7 +145,8 @@ export default {
         unit: '0',
         image: '',
         date: new Date(),
-        bill_ty: ''
+        bill_ty: '',
+        dispatch_id: '',
       },
       money: {
         decimal: '.',
@@ -137,7 +155,9 @@ export default {
         precision: 2,
         masked: false
       },
-      previewImage: ''
+      previewImage: '',
+      dispatchList: null,
+      dispatch: [],
     }
   },
   computed: {
@@ -157,6 +177,7 @@ export default {
     }
   },
   created () {
+    this.fetchDispatch()
     if (this.isEdit) {
       this.loadEditData()
     }
@@ -193,6 +214,34 @@ export default {
       'fetchItem',
       'updateItem'
     ]),
+    async fetchDispatch () {
+      let response = await axios.get(`/api/items/dispatch`)
+      console.log(response)
+      if (response.data) {
+        this.dispatchList = response.data.dispatch
+        if (this.isEdit) {
+          this.loadEditData()
+        }
+        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch
+        if (this.isToBeDispatch.length) {
+          this.loadIsToBeDispatch()
+        }
+      }
+    },
+    dispatchWithAmount ({ name }) {
+      return `${name}`
+    },
+    addDispatch (value) {
+      if (value) {
+        this.formData.dispatch_id.push(value.id)
+      }
+    },
+    removeDispatch (value) {
+      let index = this.formData.dispatch_id.findIndex(each => each === value.id)
+      if (index) {
+        this.formData.dispatch_id.splice(index, 1)
+      }
+    },
     async loadEditData () {
       let response = await this.fetchItem(this.$route.params.id)
       this.formData = response.data.item
