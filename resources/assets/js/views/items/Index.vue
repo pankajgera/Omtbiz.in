@@ -107,7 +107,7 @@
 
       <table-component
         ref="table"
-        :data="fetchData"
+        :data="fetchDataToBe"
         :show-filter="false"
         table-class="table"
       >
@@ -131,13 +131,21 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('items.name')"
-          show="name"
+          :label="$t('items.party_name')"
+          show="party_name"
         >
           <template slot-scope="row">
             <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-               {{ row.name }}
+               {{ $t('items.need_to_be_dispatch') }}
               </router-link>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('items.invoice_number')"
+          show="invoice_number"
+        >
+          <template slot-scope="">
+               {{ $t('items.need_to_be_dispatch') }}
           </template>
         </table-column>
         <table-column
@@ -225,7 +233,7 @@
 
       <table-component
         ref="tableToBe"
-        :data="fetchDataToBe"
+        :data="fetchData"
         :show-filter="false"
         table-class="table"
       >
@@ -249,13 +257,21 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('items.name')"
-          show="name"
+          :label="$t('items.party_name')"
+          show="party_name"
         >
           <template slot-scope="row">
             <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-               {{ row.name }}
+               {{ row.dispatch.invoice.master.name }}
               </router-link>
+          </template>
+        </table-column>
+         <table-column
+          :label="$t('items.invoice_number')"
+          show="invoice_number"
+        >
+          <template slot-scope="row">
+               {{ row.dispatch.invoice.invoice_number }}
           </template>
         </table-column>
         <!-- <table-column
@@ -348,7 +364,8 @@ export default {
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
-        name: '',
+        party_name: '',
+        invoice_number: '',
         unit: '',
         price: '',
         bill_ty: ''

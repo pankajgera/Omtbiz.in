@@ -17,6 +17,7 @@ class Item extends Model
         'company_id',
         'description',
         'images_id',
+        'dispatch_id',
     ];
 
     protected $casts = [
@@ -29,7 +30,7 @@ class Item extends Model
 
     public function scopeWhereSearch($query, $search)
     {
-        return $query->where('name', 'LIKE', '%'.$search.'%');
+        return $query->where('name', 'LIKE', '%' . $search . '%');
     }
 
     public function scopeWherePrice($query, $price)
@@ -97,6 +98,11 @@ class Item extends Model
         return $this->hasMany(EstimateItem::class);
     }
 
+    public function dispatch()
+    {
+        return $this->belongsTo(Dispatch::class, 'dispatch_id');
+    }
+
     public static function deleteItem($id)
     {
         $item = Item::find($id);
@@ -131,18 +137,18 @@ class Item extends Model
     {
         //make an Intervention Image object
         $image = Image::make($request_image);
-        $fileName = str_random(30).'-'.time().'.jpg';
+        $fileName = str_random(30) . '-' . time() . '.jpg';
         Log::info('$fileName', [$fileName]);
         // store our uploaded file in our uploads folder
         // set our results to have our asset path
         $ds = DIRECTORY_SEPARATOR;
         $today = Carbon::now();
-        $timely_url = $today->year.$ds.$today->month.$ds.$today->day;
+        $timely_url = $today->year . $ds . $today->month . $ds . $today->day;
         $save_paths = [];
 
-        $save_paths['original'] = 'userUploads'.$ds.'originals'.$ds.$timely_url;
-        $save_paths['thumb'] = 'userUploads'.$ds.'thumbnails'.$ds.$timely_url;
-        $save_paths['screen'] = 'userUploads'.$ds.'screen'.$ds.$timely_url;
+        $save_paths['original'] = 'userUploads' . $ds . 'originals' . $ds . $timely_url;
+        $save_paths['thumb'] = 'userUploads' . $ds . 'thumbnails' . $ds . $timely_url;
+        $save_paths['screen'] = 'userUploads' . $ds . 'screen' . $ds . $timely_url;
 
         foreach ($save_paths as $path) {
             if (!is_dir($path)) {
@@ -155,7 +161,9 @@ class Item extends Model
         $save_to_s3_screen_original = $image->stream();
 
         //resize
-        $resized_image = $image->resize(null, 500, function ($constraint) {$constraint->aspectRatio(); });
+        $resized_image = $image->resize(null, 500, function ($constraint) {
+            $constraint->aspectRatio();
+        });
 
         //now save it
         $save_to_s3_screen = $resized_image->stream();
@@ -165,15 +173,15 @@ class Item extends Model
 
         $save_to_s3_thumb = $image->fit('181', '121')->stream();
 
-        Storage::disk('s3')->put($save_paths['original'].$ds.$fileName, $save_to_s3_screen_original->__toString());
-        Storage::disk('s3')->put($save_paths['screen'].$ds.'screen-'.$fileName, $save_to_s3_screen->__toString());
-        Storage::disk('s3')->put($save_paths['thumb'].$ds.'thumb-'.$fileName, $save_to_s3_thumb->__toString());
+        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, $save_to_s3_screen_original->__toString());
+        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, $save_to_s3_screen->__toString());
+        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, $save_to_s3_thumb->__toString());
 
         //get the data for response
         $url = url($save_paths['screen']);
-        $originalUrl = 'https://s3.ap-south-1.amazonaws.com/cdn.omtbiz.s3/'.$save_paths['original'].$ds.$fileName;
-        $thumbnailUrl = 'https://s3.ap-south-1.amazonaws.com/cdn.omtbiz.s3/'.$save_paths['thumb'].$ds.'thumb-'.$fileName;
-        $screenUrl = 'https://s3.ap-south-1.amazonaws.com/cdn.omtbiz.s3/'.$save_paths['screen'].$ds.'screen-'.$fileName;
+        $originalUrl = 'https://s3.ap-south-1.amazonaws.com/cdn.omtbiz.s3/' . $save_paths['original'] . $ds . $fileName;
+        $thumbnailUrl = 'https://s3.ap-south-1.amazonaws.com/cdn.omtbiz.s3/' . $save_paths['thumb'] . $ds . 'thumb-' . $fileName;
+        $screenUrl = 'https://s3.ap-south-1.amazonaws.com/cdn.omtbiz.s3/' . $save_paths['screen'] . $ds . 'screen-' . $fileName;
 
         //lets prepare the response
         $success = new \stdClass();

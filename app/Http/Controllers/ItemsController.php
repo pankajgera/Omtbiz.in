@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Models\Dispatch;
+use App\Models\Invoice;
 use App\Models\Item;
 use App\Models\TaxType;
 use App\Models\Tax;
@@ -16,24 +18,24 @@ class ItemsController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $items = Item::where('name', 'dispatched')->applyFilters($request->only([
+        $items = Item::whereNotNull('dispatch_id')->applyFilters($request->only([
             'search',
             'price',
             'unit',
             'orderByField',
             'orderBy',
-        ]))->with('images')
+        ]))->with('images', 'dispatch.invoice.master')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
 
-        $itemsToBe = Item::where('name', '!=', 'dispatched')->applyFilters($request->only([
+        $itemsToBe = Item::whereNull('dispatch_id')->applyFilters($request->only([
             'search',
             'price',
             'unit',
             'orderByField',
             'orderBy',
-        ]))->with('images')
+        ]))->with('images', 'dispatch')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
@@ -83,6 +85,7 @@ class ItemsController extends Controller
         $item->description = $request->description;
         $item->company_id = $request->header('company');
         $item->price = $request->price;
+        $item->dispatch_id = $request->dispatch_id;
         $item->save();
 
         $image = '';
@@ -131,6 +134,7 @@ class ItemsController extends Controller
         $item->unit = $request->unit;
         $item->description = $request->description;
         $item->price = $request->price;
+        $item->dispatch_id = $request->dispatch_id;
         $item->save();
 
         $oldTaxes = $item->taxes->toArray();
@@ -200,6 +204,23 @@ class ItemsController extends Controller
 
         return response()->json([
             'items' => $items,
+        ]);
+    }
+
+    /**
+     * Retrive a draft type dispatch
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getDispatch(Request $request)
+    {
+        $dispatch = Dispatch::where('status', 'Draft')
+            ->whereCompany($request->header('company'))
+            ->get();
+
+        return response()->json([
+            'dispatch' => $dispatch
         ]);
     }
 }

@@ -176,6 +176,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'ItemsController@delete'
     ]);
 
+    Route::get('/items/dispatch', [
+        'as' => 'items.dispatch',
+        'uses' => 'ItemsController@getDispatch'
+    ]);
+
     Route::resource('items', 'ItemsController');
 
 
