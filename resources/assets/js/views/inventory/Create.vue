@@ -23,12 +23,11 @@
                   name="name"
                   @input="onSearch"
                 />
-                <div v-if="$v.formData.name.$error || duplicateName">
+                <div v-if="$v.formData.name.$error">
                   <span v-if="!$v.formData.name.required" class="text-danger">{{ $t('validation.required') }} </span>
                   <span v-if="!$v.formData.name.minLength" class="text-danger">
                     {{ $tc('validation.name_min_length', $v.formData.name.$params.minLength.min, { count: $v.formData.name.$params.minLength.min }) }}
                   </span>
-                  <span v-if="duplicateName" class="text-danger">Name already exists.</span>
                 </div>
               </div>
               <div class="form-group">
@@ -132,7 +131,6 @@ export default {
         unit: 'pc',
       },
       unitOptions: ['pc', 'sqm'],
-      duplicateName: false,
     }
   },
   computed: {
@@ -147,7 +145,6 @@ export default {
     if (this.isEdit) {
       this.loadEditData()
     }
-    this.onSearch = _.debounce(this.checkName, 1000)
   },
   validations: {
     formData: {
@@ -170,22 +167,14 @@ export default {
       'addInventory',
       'fetchInventory',
       'updateInventory',
-      'checkInventoryName'
     ]),
     async loadEditData () {
       let response = await this.fetchInventory(this.$route.params.id)
       this.formData = response.data.inventory[0]
     },
-    async checkName() {
-      let response = await this.checkInventoryName(this.formData)
-      if (response.data.name_exists) {
-          this.duplicateName = true
-          window.toastr['error']('Name already exists')
-      }
-    },
     async submitInventory () {
       this.$v.formData.$touch()
-      if (this.$v.$invalid || this.duplicateName) {
+      if (this.$v.$invalid) {
         return false
       }
       this.isLoading = true
