@@ -70,7 +70,7 @@
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('inventory.price') }} </label>
+            <label class="form-label"> {{ $tc('inventory.avg_price') }} </label>
             <base-input
               v-model="filters.price"
               type="text"
@@ -184,7 +184,7 @@
           show="unit"
         />
         <table-column
-          :label="$t('inventory.price')"
+          :label="$t('inventory.avg_price')"
           show="price"
         />
         <table-column
@@ -330,7 +330,7 @@ export default {
       this.isRequestOngoing = false
 
       return {
-        data: response.data.inventories.data,
+        data: this.inventories, //from state, see mutation
         pagination: {
           totalPages: response.data.inventories.last_page,
           currentPage: page

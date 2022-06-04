@@ -12,7 +12,19 @@ export default {
     },
     [types.BOOTSTRAP_INVENTORIES](state, inventory) {
       state.inventory = inventory
-      state.inventories = inventory
+
+      let filterResponse = []
+      const inventories = inventory;
+      inventories.map((each) => {
+        const existing = filterResponse.map(ss => ss.name).indexOf(each.name)
+        if(-1 < existing) {
+          filterResponse[existing].quantity = parseInt(filterResponse[existing].quantity) + parseInt(each.quantity)
+          filterResponse[existing].price = (parseInt(filterResponse[existing].price) + parseInt(each.price))/2
+        } else {
+          filterResponse.push(each)
+        }
+      })
+      state.inventories = filterResponse
       // state.inventories.unshift({
       //   company_id: 1,
       //   created_at: "",
