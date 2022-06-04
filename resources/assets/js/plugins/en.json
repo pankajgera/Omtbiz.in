@@ -1143,6 +1143,7 @@
         "print_dispatch": "Print"
     },
     "inventory": {
+        "avg_price": "Average Price",
         "add_inventory": "Add Inventory",
         "edit_inventory": "Edit Inventory",
         "new_inventory": "New Inventory",
