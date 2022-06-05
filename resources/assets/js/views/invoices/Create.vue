@@ -643,7 +643,6 @@ export default {
       if (!this.checkValid()) {
         return false
       }
-      this.isLoading = true
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
 
       let data = {
@@ -696,6 +695,7 @@ export default {
       if (this.isLoading) {
         return false
       }
+      this.isLoading = true
       this.addInvoice(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('invoices.created_message'))
@@ -715,6 +715,7 @@ export default {
       if (this.isLoading) {
         return false
       }
+      this.isLoading = true
       this.updateInvoice(data).then((res) => {
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
@@ -773,9 +774,9 @@ export default {
         }
       })
       if (this.$v.newInvoice.$invalid === false && isValid === true) {
-        return true
+        isValid = true
       }
-      return false
+      return isValid
     },
     async searchDebtorRefNumber(data) {
        this.newInvoice.reference_number = null;
@@ -799,7 +800,7 @@ export default {
       let resp = await this.getInvoiceEstimate(this.newInvoice.estimate.id)
       let invoice = resp.data.estimate
       let inventory = invoice.items.map(i => {
-        i.sale_price = i.sale_price
+        i.sale_price = i.sale_price ? i.sale_price : i.price
         i.sub_total = i.total
         return i
       })

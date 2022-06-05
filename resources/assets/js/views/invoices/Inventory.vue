@@ -236,7 +236,7 @@ export default {
         return parseInt(this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price) * this.inventory.quantity
       },
       set: function (newValue) {
-        return parseInt(this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price) * this.inventory.quantity
+        return parseInt(newValue ? newValue : this.inventory.price) * this.inventory.quantity
       }
     },
     discount: {
