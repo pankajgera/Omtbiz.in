@@ -13,6 +13,7 @@ class EstimateItem extends Model
         'quantity',
         'company_id',
         'price',
+        'sale_price',
         'discount_type',
         'discount_val',
         'tax',

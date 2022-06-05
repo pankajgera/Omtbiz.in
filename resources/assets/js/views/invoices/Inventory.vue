@@ -209,21 +209,21 @@ export default {
       inventorySelect: null,
       inventory: {...this.inventoryData},
       maxDiscount: 0,
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '₹ ',
-        precision: 2,
-        masked: false
-      },
+      // money: {
+      //   decimal: '.',
+      //   thousands: ',',
+      //   prefix: '₹ ',
+      //   precision: 2,
+      //   masked: false
+      // },
       isSelected: false,
       updatingInput: '',
     }
   },
   computed: {
-    ...mapGetters('inventories', [
-      'inventories'
-    ]),
+    // ...mapGetters('inventories', [
+    //   'inventories'
+    // ]),
     ...mapGetters('modal', [
       'modalActive'
     ]),
@@ -233,10 +233,10 @@ export default {
     subtotal: {
       cache: false,
       get: function () {
-        return parseInt(this.inventory.sale_price) * this.inventory.quantity
+        return parseInt(this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price) * this.inventory.quantity
       },
       set: function (newValue) {
-        return parseInt(this.inventory.sale_price) * this.inventory.quantity
+        return parseInt(this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price) * this.inventory.quantity
       }
     },
     discount: {

@@ -92,7 +92,6 @@ class EstimatesController extends Controller
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
             'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
             'taxes' => Tax::whereCompany($request->header('company'))->latest()->get(),
-            'items' => Item::whereCompany($request->header('company'))->get(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
             'estimateTemplates' => EstimateTemplate::all(),
@@ -161,12 +160,13 @@ class EstimatesController extends Controller
             'account_master_id' => $request->debtors['id'],
         ]);
 
-        $estimateItems = $request->inventories;
+        $estimateItems = $request->items;
 
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
-            $estimateItem['price'] = $estimateItem['sale_price'];
+            $estimateItem['price'] = $estimateItem['price'];
+            $estimateItem['sale_price'] = $estimateItem['sale_price'];
             $item = $estimate->items()->create($estimateItem);
 
             if (array_key_exists('taxes', $estimateItem) && $estimateItem['taxes']) {
@@ -275,10 +275,10 @@ class EstimatesController extends Controller
 
         return response()->json([
             'customers' => $customers,
-            'nextEstimateNumber' => $estimate->getEstimateNumAttribute(),
+            'inventories' => Inventory::where('quantity', '>', 0)->get(),
+            'estimateNumber' => $estimate->getEstimateNumAttribute(),
             'taxes' => Tax::latest()->whereCompany($request->header('company'))->get(),
             'estimate' => $estimate,
-            'items' => Item::whereCompany($request->header('company'))->latest()->get(),
             'estimateTemplates' => EstimateTemplate::all(),
             'tax_per_item' => $estimate->tax_per_item,
             'discount_per_item' => $estimate->discount_per_item,
@@ -324,7 +324,7 @@ class EstimatesController extends Controller
 
         $oldItems = $estimate->items->toArray();
         $oldTaxes = $estimate->taxes->toArray();
-        $estimateItems = $request->inventories;
+        $estimateItems = $request->items;
 
         foreach ($oldItems as $oldItem) {
             EstimateItem::destroy($oldItem['id']);
@@ -337,6 +337,8 @@ class EstimatesController extends Controller
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
+            $estimateItem['price'] = $estimateItem['price'];
+            $estimateItem['sale_price'] = $estimateItem['sale_price'];
             $item = $estimate->items()->create($estimateItem);
 
             if (array_key_exists('taxes', $estimateItem) && $estimateItem['taxes']) {

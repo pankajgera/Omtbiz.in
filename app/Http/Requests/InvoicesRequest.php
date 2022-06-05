@@ -41,6 +41,7 @@ class InvoicesRequest extends FormRequest
             'inventories.*.name' => 'required',
             'inventories.*.quantity' => 'required',
             'inventories.*.price' => 'required',
+            'inventories.*.sale_price' => 'required',
             'notes' => 'nullable|string',
             'user_id' => 'required|integer',
         ];

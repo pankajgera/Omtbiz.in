@@ -267,7 +267,7 @@ export default {
         discount_val: 0,
         discount: 0,
         //reference_number: null,
-        inventories: [{
+        items: [{
           ...EstimateStub,
           taxes: [{...TaxStub, id: Guid.raw()}]
         }],
@@ -300,9 +300,9 @@ export default {
         estimate_date: {
           required
         },
-        discount_val: {
-          between: between(0, this.subtotal)
-        },
+        // discount_val: {
+        //   between: between(0, this.subtotal)
+        // },
         notes: {
           maxLength: maxLength(255)
         },
@@ -342,7 +342,7 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      let inventory = this.newEstimate.inventories
+      let inventory = this.newEstimate.items
       if (this.$route.name === 'estimates.edit') {
         inventory = this.newEstimate.items
       }
@@ -390,7 +390,7 @@ export default {
         return this.totalSimpleTax + this.totalCompoundTax
       }
 
-      return window._.sumBy(this.newEstimate.inventories, function (tax) {
+      return window._.sumBy(this.newEstimate.items, function (tax) {
         return tax.tax
       })
     },
@@ -405,7 +405,7 @@ export default {
       },
     },
     inventoryBind() {
-      let invent = this.newEstimate.inventories
+      let invent = this.newEstimate.items
       if (this.$route.name === 'estimates.edit') {
         invent = this.newEstimate.items
       }
@@ -460,7 +460,7 @@ export default {
         this.isEdit = true
         if (response.data) {
           this.newEstimate = response.data.estimate
-          this.inventoryList = response.data.estimate.inventories
+          this.inventoryList = response.data.inventories
           this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
@@ -625,7 +625,7 @@ export default {
       })
     },
     checkInventoryData (index, isValid) {
-      this.newEstimate.inventories[index].valid = isValid
+      this.newEstimate.items[index].valid = isValid
     },
     removeEstimateTax (index) {
       this.newEstimate.taxes.splice(index, 1)
@@ -634,15 +634,16 @@ export default {
       this.$v.newEstimate.$touch()
       window.hub.$emit('checkInventory')
       let isValid = true
-      this.newEstimate.inventories.forEach((each) => {
+      this.newEstimate.items.forEach((each) => {
         if (!each.valid) {
           isValid = false
         }
       })
+
       if (this.$v.newEstimate.$invalid === false && isValid === true) {
-        return true
+        isValid = true
       }
-      return false
+      return isValid
     },
     // async searchDebtorRefNumber(data) {
     //    this.newEstimate.reference_number = null;
