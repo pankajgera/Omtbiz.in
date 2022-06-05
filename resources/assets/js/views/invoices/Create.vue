@@ -799,7 +799,7 @@ export default {
       let resp = await this.getInvoiceEstimate(this.newInvoice.estimate.id)
       let invoice = resp.data.estimate
       let inventory = invoice.items.map(i => {
-        i.sale_price = i.total
+        i.sale_price = i.sale_price
         i.sub_total = i.total
         return i
       })
