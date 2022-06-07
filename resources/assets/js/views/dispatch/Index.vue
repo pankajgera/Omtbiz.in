@@ -586,6 +586,7 @@ export default {
           if (res.data.success) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 1))
             this.$refs.tableDispatch.refresh()
+            this.$refs.toBeTableDispatch.refresh()
             return true
           }
 
@@ -606,6 +607,7 @@ export default {
           let res = await this.deleteMultipleDispatch()
           if (res.data.dispatch) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 2))
+            this.$refs.tableDispatch.refresh()
             this.$refs.toBeTableDispatch.refresh()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
@@ -614,7 +616,7 @@ export default {
       })
     },
     async multipleDispatch (type) {
-      let dataArray = this.toBeDispatch.filter((i, key) => i.id === this.selectedToBeDispatch[key]);
+      let tobeDispatchArray = this.toBeDispatch.filter((i, key) => i.id === this.selectedToBeDispatch[key]);
       let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);
       if (type === 'draft') {
         modal_text = this.$tc('dispatch.confirm_dispatch', 2);
@@ -627,16 +629,21 @@ export default {
         dangerMode: false
       }).then(async (willSend) => {
         if (willSend) {
-          dataArray.map(i => {
-            window.open('/dispatch/' + i.id + '/edit', '_blank').focus();
-          })
-          // let res = type === 'draft' ? await this.moveMultipleToBeDispatch() : await this.moveMultipleDispatch()
-          // if (res.data.dispatch) {
-          //   window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
-          //     window.location.reload()
-          // } else if (res.data.error) {
-          //   window.toastr['error'](res.data.message)
-          // }
+          if ('sent' === type) {
+            let res = await this.moveMultipleDispatch()
+            if (res.data.dispatch) {
+              window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+              window.location.reload()
+            } else if (res.data.error) {
+              window.toastr['error'](res.data.message)
+            }
+          } else {
+            tobeDispatchArray.map(i => {
+              if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
+                window.open('/dispatch/' + i.id + '/edit', '_blank').focus();
+              }
+            })
+          }
         }
       })
     },
@@ -648,13 +655,16 @@ export default {
           name: 'Sent',
       }
       if (data) {
-        window.open('/dispatch/' + id + '/edit', '_blank').focus();
-        // let res = await this.updateDispatch(data);
-        // if (res.data.dispatch) {
-        //   window.location.reload()
-        // } else if (res.data.error) {
-        //   window.toastr['error'](res.data.message)
-        // }
+        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {
+          window.open('/dispatch/' + id + '/edit', '_blank').focus();
+        } else {
+          let res = await this.updateDispatch(data);
+          if (res.data.dispatch) {
+            window.location.reload()
+          } else if (res.data.error) {
+            window.toastr['error'](res.data.message)
+          }
+        }
       }
     },
     setIndex(index) {
