@@ -1136,9 +1136,9 @@
         "invoice_report_text": "Do you want to print this dispatch?",
         "dispatch_attached_message": "Cannot delete an dispatch which is already in use",
         "confirm_delete": "You will not be able to recover this dispatch | You will not be able to recover these dispatch",
-        "created_message": "dispatch created successfully",
-        "updated_message": "dispatch updated successfully",
-        "deleted_message": "dispatch deleted successfully",
+        "created_message": "Dispatch created successfully",
+        "updated_message": "Dispatch updated successfully",
+        "deleted_message": "Dispatch deleted successfully",
         "multiple_dispatch_message": "Selected dispatch moved",
         "print_dispatch": "Print"
     },
