@@ -138,8 +138,26 @@ class ReceiptController extends Controller
         $voucher_2 = null;
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->list['id'];
-        $cash_account_id = AccountMaster::where('name', 'Cash')->first()->id;
-        $bank_account_id = AccountMaster::where('name', 'Bank')->first()->id;
+        $cash_account_id = AccountMaster::firstOrCreate([
+            'name' => 'Cash',
+        ], [
+            'address' => null,
+            'groups' => 'Cash-in-Hand',
+            'country' => 'IN',
+            'state' => 'Rajasthan',
+            'opening_balance' => 0,
+            'type' => 'Cr',
+        ])->id;
+        $bank_account_id = AccountMaster::firstOrCreate([
+            'name' => 'Bank',
+        ], [
+            'address' => null,
+            'groups' => 'Bank Accounts',
+            'country' => 'IN',
+            'state' => 'Rajasthan',
+            'opening_balance' => 0,
+            'type' => 'Cr',
+        ])->id;
 
         //Create receipt
         $receipt = Receipt::create([
