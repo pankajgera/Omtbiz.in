@@ -228,7 +228,7 @@ function numberTowords($num)
             marign: 0 5px !important;
             padding: 0 5px !important;
         }
-        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 125px; }
+        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 150px; }
         @page {
             margin: 120px 20px 20px 20px;
           }
@@ -258,7 +258,7 @@ function numberTowords($num)
             </tr>
         </table>
     </header>
-    <div  style="">
+    <div style="margin-top: 40px;">
         <table>
             <tbody>
                 <div class="main-container">
