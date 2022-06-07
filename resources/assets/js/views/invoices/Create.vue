@@ -45,7 +45,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="isDisabled"
+              :disabled="isDisabled || estimateSelected"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
               track-by="id"
@@ -87,7 +87,7 @@
             :invalid="$v.newInvoice.reference_number.$error"
             icon="hashtag"
             @input="$v.newInvoice.reference_number.$touch()"
-            :disabled="isDisabled"
+            :disabled="estimateSelected"
           />
           <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
         </div>
@@ -371,6 +371,7 @@ export default {
       siteURL: null,
       showAddNewInventory: true,
       showEndOfList: false,
+      estimateSelected: false,
     }
   },
   validations () {
@@ -473,7 +474,7 @@ export default {
         return this.newInvoice.debtors
       },
       set(value) {
-        this.searchDebtorRefNumber(value)
+        this.searchDebtorRefNumber({'id': value})
         this.newInvoice.debtors = value
       },
     },
@@ -483,7 +484,7 @@ export default {
         return this.newInvoice.estimate
       },
       set(value) {
-        this.isDisabled = true
+        this.estimateSelected = true
         this.newInvoice.estimate = value
         this.getInvoiceFromEstimate()
       }
@@ -827,7 +828,7 @@ export default {
       };
 
       //set reference number
-      this.searchDebtorRefNumber(invoice.account_master_id)
+      this.searchDebtorRefNumber({'id': invoice.account_master_id})
     }
   }
 }

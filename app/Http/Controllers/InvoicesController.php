@@ -810,7 +810,7 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
-        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now()->toDateString())
+        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('UTC')->toDateString())
             ->where('account_master_id', $request->id)
             ->orderBy('id', 'asc')->first();
 
