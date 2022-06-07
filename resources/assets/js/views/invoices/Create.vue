@@ -483,6 +483,7 @@ export default {
         return this.newInvoice.estimate
       },
       set(value) {
+        this.isDisabled = true
         this.newInvoice.estimate = value
         this.getInvoiceFromEstimate()
       }
