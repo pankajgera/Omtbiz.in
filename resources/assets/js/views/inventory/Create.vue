@@ -103,6 +103,31 @@
         </div>
       </div>
     </div>
+    <div class="row" v-if="relatedInventories.length">
+      <div class="col col-12 col-md-12 col-lg-12">
+        <div class="card">
+          <h5 class="p-3">Related Inventory</h5>
+          <table class="p-3 m-3">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Cost Price</th>
+              <th>Sale Price</th>
+              <th>Unit</th>
+            </tr>
+            <tr v-for="(each, index) in relatedInventories" :key="index">
+              <td>{{each.id}}</td>
+              <td>{{each.name}}</td>
+              <td>{{each.quantity}}</td>
+              <td>{{each.price}}</td>
+              <td>{{each.sale_price}}</td>
+              <td>{{each.unit}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <style>
@@ -131,6 +156,7 @@ export default {
         unit: 'pc',
       },
       unitOptions: ['pc', 'sqm'],
+      relatedInventories: [],
     }
   },
   computed: {
@@ -171,6 +197,7 @@ export default {
     async loadEditData () {
       let response = await this.fetchInventory(this.$route.params.id)
       this.formData = response.data.inventory[0]
+      this.relatedInventories = response.data.related_inventories
     },
     async submitInventory () {
       this.$v.formData.$touch()
