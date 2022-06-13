@@ -84,7 +84,8 @@
         "street_1": "Street 1",
         "street_2": "Street 2",
         "action_failed": "Action Failed",
-        "to_display": "To Display"
+        "to_display": "To Display",
+        "increase-price": "Increase Price"
     },
     "dashboard": {
         "select_year": "Select year",
@@ -181,6 +182,7 @@
         "new_bill": "New Bill-Ty",
         "title": "Items",
         "date": "Date",
+        "sale_price": "Sale Price",
         "dispatch": "Dispatch",
         "party_name": "Party name",
         "invoice_number": "Invoice Number",
@@ -208,7 +210,8 @@
         "confirm_delete": "You will not be able to recover this Item | You will not be able to recover these Items",
         "created_message": "Item created successfully",
         "updated_message": "Item updated successfully",
-        "deleted_message": "Item deleted successfully | Items deleted successfully"
+        "deleted_message": "Item deleted successfully | Items deleted successfully",
+        "price_increase_message": "Item price increased successfully | Items price increased successfully"
     },
     "masters": {
         "add_account_master": "Add Ledger",

@@ -439,6 +439,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InventoryController@delete'
     ]);
 
+    Route::put('/inventory/increase-price', [
+        'as' => 'inventory.price',
+        'uses' => 'InventoryController@increasePrice'
+    ]);
+
     Route::resource('inventory', 'InventoryController');
 
 
