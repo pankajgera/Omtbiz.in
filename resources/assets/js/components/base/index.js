@@ -15,6 +15,7 @@ import CustomerSelectPopup from './popup/CustomerSelectPopup.vue'
 import TaxSelectPopup from './popup/TaxSelectPopup.vue'
 
 import InventoryModal from './modal/InventoryModal.vue'
+import IncreasePriceModal from './modal/IncreasePriceModal.vue'
 
 import {TableColumn, TableComponent} from './base-table/index'
 import GroupModal from './modal/GroupModal.vue'
@@ -41,4 +42,5 @@ Vue.component('customer-select-popup', CustomerSelectPopup)
 Vue.component('tax-select-popup', TaxSelectPopup)
 
 Vue.component('inventory-modal', InventoryModal)
+Vue.component('increase-price-modal', IncreasePriceModal)
 Vue.component('group-modal', GroupModal)

@@ -22,12 +22,14 @@ import InvoiceTemplate from './InvoiceTemplate'
 import CustomerModal from './CustomerModal'
 import CategoryModal from './CategoryModal'
 import InventoryModal from './InventoryModal'
+import IncreasePriceModal from './IncreasePriceModal'
 import GroupModal from './GroupModal'
 
 export default {
   components: {
     TaxTypeModal,
     InventoryModal,
+    IncreasePriceModal,
     EstimateTemplate,
     InvoiceTemplate,
     CustomerModal,

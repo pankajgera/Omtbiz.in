@@ -58,6 +58,19 @@ export const updateInventory = ({ commit, dispatch, state }, data) => {
     })
 }
 
+export const increaseInventoryPrice = ({ commit, dispatch, state }, data) => {
+  return new Promise((resolve, reject) => {
+      window.axios.put(`/api/inventory/increase-price`, data).then((response) => {
+          if (response.data.success) {
+              commit(types.UPDATE_INVENTORY, response.data)
+          }
+          resolve(response)
+      }).catch((err) => {
+          reject(err)
+      })
+  })
+}
+
 export const deleteInventory = ({ commit, dispatch, state }, id) => {
     return new Promise((resolve, reject) => {
         window.axios.delete(`/api/inventory/${id}`).then((response) => {

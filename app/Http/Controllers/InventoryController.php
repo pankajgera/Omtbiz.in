@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Inventory;
+use App\Models\Invoice;
 use Exception;
 use Log;
 
@@ -157,6 +158,28 @@ class InventoryController extends Controller
             ]);
         }
 
+        return response()->json([
+            'inventory' => $inventory,
+        ]);
+    }
+
+    /**
+     * Increase inventory price
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function increasePrice(Request $request)
+    {
+
+        $inventory = Inventory::whereIn('id', $request->selected_ids)->get();
+
+        foreach($inventory as $each) {
+            $each->update([
+                'price' => $request->price,
+                'sale_price' => $request->sale_price,
+            ]);
+        }
         return response()->json([
             'inventory' => $inventory,
         ]);

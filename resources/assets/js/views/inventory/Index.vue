@@ -122,6 +122,12 @@
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
+              <div class="dropdown-item" @click="openIncreasePriceModal">
+                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                {{ $t('general.increase-price') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleInventory">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
@@ -303,6 +309,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions('modal', [
+      'openModal'
+    ]),
     ...mapActions('inventory', [
       'fetchAllInventory',
       'selectAllInventory',
@@ -387,6 +396,14 @@ export default {
           window.toastr['error'](res.data.message)
           return true
         }
+      })
+    },
+    openIncreasePriceModal () {
+      //this.$emit('onIncreasePrice')
+      this.openModal({
+        'title': 'Increase Inventory Price',
+        'componentName': 'IncreasePriceModal',
+        'data': this.selectedInventory
       })
     },
     async removeMultipleInventory () {
