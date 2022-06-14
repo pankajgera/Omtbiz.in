@@ -307,7 +307,19 @@ class ReportController extends Controller
         $ledger = AccountLedger::findOrFail($request->ledger_id);
         $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
-        $related_vouchers = Voucher::where('account_ledger_id', $request->ledger_id)
+
+        $all_voucher_ids = Voucher::where('account_ledger_id', $request->ledger_id)->whereNotNull('related_voucher')->get();
+        $each_ids = null;
+        foreach ($all_voucher_ids as $each) {
+            if ($each_ids) {
+                $each_ids = $each_ids . ', ' . $each->related_voucher;
+            } else {
+                $each_ids = $each->related_voucher;
+            }
+        }
+        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
             ->orderBy('id')
