@@ -161,7 +161,7 @@ class InvoicesController extends Controller
             $dispatch->save();
 
             $invoice->update([
-                'paid_status' => 'DISPATCHED',
+                'paid_status' => 'TO BE DISPATCHED',
             ]);
 
             //Now for each inventory item create journal entry
