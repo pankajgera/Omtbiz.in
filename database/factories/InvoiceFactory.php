@@ -19,10 +19,10 @@ $factory->define(Invoice::class, function (Faker $faker) {
             return factory(User::class)->create(['role' => 'customer'])->id;
         },
         'invoice_template_id' => 1,
-        'status' => Invoice::STATUS_DRAFT,
+        'status' => Invoice::DISPATCH,
         'tax_per_item' => 'NO',
         'discount_per_item' => 'NO',
-        'paid_status' => Invoice::STATUS_UNPAID,
+        'paid_status' => Invoice::STATUS_PAID,
         'company_id' => User::find(1)->company_id,
         'sub_total' => $faker->randomDigitNotNull,
         'discount' => 0,

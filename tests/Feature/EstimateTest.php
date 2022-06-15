@@ -536,30 +536,6 @@ class EstimateTest extends TestCase
     }
 
     /** @test */
-    public function testEstimateMarkAsAccepted()
-    {
-        $estimate = factory(Estimate::class)->create([
-            'estimate_date' => '1988-07-18',
-            'expiry_date' => '1988-08-18',
-        ]);
-
-        $data = [
-            'id' => $estimate->id
-        ];
-
-        $response = $this->json('POST', 'api/estimates/accept', $data);
-
-        $response
-            ->assertOk()
-            ->assertJson([
-                'success' => true
-            ]);
-
-        $estimate2 = Estimate::find($estimate->id);
-        $this->assertEquals($estimate2->status, Estimate::STATUS_ACCEPTED);
-    }
-
-    /** @test */
     public function testEstimateMarkAsRejected()
     {
         $estimate = factory(Estimate::class)->create([

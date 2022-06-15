@@ -3,28 +3,6 @@
     <div class="page-header">
       <h3 class="page-title"> {{ invoice.invoice_number }}</h3>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-3">
-          <base-button
-            v-if="invoice.status === 'DRAFT'"
-            :loading="isMarkingAsSent"
-            :disabled="isMarkingAsSent"
-            :outline="true"
-            color="theme"
-            @click="onMarkAsSent"
-          >
-            {{ $t('invoices.mark_as_sent') }}
-          </base-button>
-        </div>
-        <base-button
-          v-if="invoice.status === 'DRAFT'"
-          :loading="isSendingEmail"
-          :disabled="isSendingEmail"
-          :outline="true"
-          color="theme"
-          @click="onSendInvoice"
-        >
-          {{ $t('invoices.send_invoice') }}
-        </base-button>
         <router-link v-if="invoice.status === 'SENT'" :to="`/payments/${$route.params.id}/create`">
           <base-button
             color="theme"
@@ -194,7 +172,6 @@ export default {
       'fetchInvoices',
       'getRecord',
       'searchInvoice',
-      'markAsSent',
       'sendEmail',
       'deleteInvoice',
       'selectInvoice',
@@ -242,48 +219,6 @@ export default {
       this.searchData.orderBy = 'asc'
       this.onSearch()
       return true
-    },
-    async onMarkAsSent () {
-      window.swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('invoices.invoice_mark_as_sent'),
-        icon: '/assets/icon/check-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          this.isMarkingAsSent = true
-          let response = await this.markAsSent({id: this.invoice.id})
-          this.isMarkingAsSent = false
-          if (response.data) {
-            window.toastr['success'](this.$tc('invoices.marked_as_sent_message'))
-          }
-        }
-      })
-    },
-    async onSendInvoice () {
-      window.swal({
-        title: this.$tc('general.are_you_sure'),
-        text: this.$tc('invoices.confirm_send_invoice'),
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          this.isSendingEmail = true
-          let response = await this.sendEmail({id: this.invoice.id})
-          this.isSendingEmail = false
-          if (response.data.success) {
-            window.toastr['success'](this.$tc('invoices.send_invoice_successfully'))
-            return true
-          }
-          if (response.data.error === 'user_email_does_not_exist') {
-            window.toastr['error'](this.$tc('invoices.user_email_does_not_exist'))
-            return false
-          }
-          window.toastr['error'](this.$tc('invoices.something_went_wrong'))
-        }
-      })
     },
     async removeInvoice (id) {
       this.selectInvoice([parseInt(id)])

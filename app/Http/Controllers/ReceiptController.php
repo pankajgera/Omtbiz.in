@@ -112,19 +112,9 @@ class ReceiptController extends Controller
 
         if ($request->has('invoice_id') && $request->invoice_id != null) {
             $invoice = Invoice::find($request->invoice_id);
-            if ($invoice && $invoice->due_amount == $req_amount) {
-                $invoice->status = Invoice::STATUS_COMPLETED;
-                $invoice->paid_status = Invoice::STATUS_PAID;
-                $invoice->due_amount = 0;
-            } elseif ($invoice && $invoice->due_amount != $req_amount) {
-                $invoice->due_amount = (int)$invoice->due_amount - $req_amount;
-                // if ($invoice->due_amount < 0) {
-                //     return response()->json([
-                //         'error' => 'invalid_amount'
-                //     ]);
-                // }
-                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-            }
+            $invoice->status = Invoice::DISPATCH;
+            $invoice->paid_status = Invoice::STATUS_PAID;
+            $invoice->due_amount = 0;
             $invoice->save();
         }
 
@@ -369,14 +359,8 @@ class ReceiptController extends Controller
                 ]);
             }
 
-            if ($invoice->due_amount == 0) {
-                $invoice->status = Invoice::STATUS_COMPLETED;
-                $invoice->paid_status = Invoice::STATUS_PAID;
-            } else {
-                $invoice->status = $invoice->getPreviousStatus();
-                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-            }
-
+            $invoice->status = Invoice::DISPATCH;
+            $invoice->paid_status = Invoice::STATUS_PAID;
             $invoice->save();
         }
 
@@ -409,14 +393,8 @@ class ReceiptController extends Controller
         if ($receipt->invoice_id != null) {
             $invoice = Invoice::find($receipt->invoice_id);
             $invoice->due_amount = ((int)$invoice->due_amount + (int)$receipt->amount);
-
-            if ($invoice->due_amount == $invoice->total) {
-                $invoice->paid_status = Invoice::STATUS_UNPAID;
-            } else {
-                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-            }
-
-            $invoice->status = $invoice->getPreviousStatus();
+            $invoice->paid_status = Invoice::STATUS_PAID;
+            $invoice->status = Invoice::TO_BE_DISPATCH;
             $invoice->save();
         }
 
@@ -435,14 +413,8 @@ class ReceiptController extends Controller
             if ($receipt->invoice_id != null) {
                 $invoice = Invoice::find($receipt->invoice_id);
                 $invoice->due_amount = ((int)$invoice->due_amount + (int)$receipt->amount);
-
-                if ($invoice->due_amount == $invoice->total) {
-                    $invoice->paid_status = Invoice::STATUS_UNPAID;
-                } else {
-                    $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-                }
-
-                $invoice->status = $invoice->getPreviousStatus();
+                $invoice->paid_status = Invoice::STATUS_PAID;
+                $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();
             }
 

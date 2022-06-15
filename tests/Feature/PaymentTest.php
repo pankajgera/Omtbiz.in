@@ -237,22 +237,6 @@ class PaymentTest extends TestCase
     }
 
     /** @test */
-    public function getUnpaidInvoicesOfUser()
-    {
-        $user = factory(User::class)->create();
-
-        $invoices = factory(Invoice::class, 2)->create([
-            'invoice_date' => '1988-07-18',
-            'due_date' => '1988-08-18',
-            'user_id' => $user->id
-        ]);
-
-        $response = $this->json('GET', 'api/invoices/unpaid/');
-
-        $response->assertOk();
-    }
-
-    /** @test */
     public function testDeleteMultiplePayments()
     {
         $payments = factory(Payment::class, 3)->create([

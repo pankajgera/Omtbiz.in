@@ -10,15 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
-    const STATUS_DRAFT = 'DRAFT';
-    const STATUS_SENT = 'SENT';
-    const STATUS_VIEWED = 'VIEWED';
-    const STATUS_OVERDUE = 'OVERDUE';
-    const STATUS_COMPLETED = 'COMPLETED';
-
-    const STATUS_UNPAID = 'UNPAID';
-    const STATUS_PARTIALLY_PAID = 'PARTIALLY_PAID';
     const STATUS_PAID = 'PAID';
+    const DISPATCH = 'DISPATCH';
+    const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
     protected $dates = [
         'created_at',
@@ -123,19 +117,6 @@ class Invoice extends Model
         return $this->belongsTo(AccountMaster::class, 'account_master_id');
     }
 
-    public function getPreviousStatus()
-    {
-        if ($this->due_date < Carbon::now()) {
-            return self::STATUS_OVERDUE;
-        } elseif ($this->viewed) {
-            return self::STATUS_VIEWED;
-        } elseif ($this->sent) {
-            return self::STATUS_SENT;
-        } else {
-            return self::STATUS_DRAFT;
-        }
-    }
-
     private function strposX($haystack, $needle, $number)
     {
         if ($number == '1') {
@@ -235,8 +216,6 @@ class Invoice extends Model
 
         if ($filters->get('status')) {
             if (
-                $filters->get('status') == self::STATUS_UNPAID ||
-                $filters->get('status') == self::STATUS_PARTIALLY_PAID ||
                 $filters->get('status') == self::STATUS_PAID
             ) {
                 $query->wherePaidStatus($filters->get('status'));

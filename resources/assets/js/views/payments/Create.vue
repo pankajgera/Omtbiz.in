@@ -310,7 +310,6 @@ export default {
           this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
         }
-        // this.fetchCustomerInvoices(this.customer.id)
       } else {
         let response = await this.fetchCreatePayment()
         this.sundryCreditorList = response.data.usersOfSundryCreditor
@@ -322,22 +321,11 @@ export default {
       }
       return true
     },
-    // async setInvoicePaymentData () {
-    //   let data = await this.fetchInvoice(this.$route.params.id)
-    //   this.customer = data.data.invoice.user
-    //   this.invoice = data.data.invoice
-    // },
     async setPaymentAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)
       this.formData.amount = data.data.invoice.due_amount
       this.maxPayableAmount = data.data.invoice.due_amount
     },
-    // async fetchCustomerInvoices (userID) {
-    //   let response = await axios.get(`/api/invoices/unpaid/${userID}`)
-    //   if (response.data) {
-    //     this.invoiceList = response.data.invoices
-    //   }
-    // },
     async submitPaymentData () {
       //this.$v.customer.$touch()
       this.$v.formData.$touch()

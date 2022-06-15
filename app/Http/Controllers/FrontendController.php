@@ -74,8 +74,8 @@ class FrontendController extends Controller
             $logo = $logo->getFullUrl();
         }
 
-        if ($estimate && ($estimate->status == Estimate::STATUS_SENT || $estimate->status == Estimate::STATUS_DRAFT)) {
-            $estimate->status = Estimate::STATUS_VIEWED;
+        if ($estimate) {
+            $estimate->status = Estimate::TO_BE_DISPATCH;
             $estimate->save();
             $notifyEstimateViewed = CompanySetting::getSetting(
                 'notify_estimate_viewed',
@@ -178,25 +178,22 @@ class FrontendController extends Controller
             $logo = $logo->getFullUrl();
         }
 
-        if ($invoice && ($invoice->status == Invoice::STATUS_SENT || $invoice->status == Invoice::STATUS_DRAFT)) {
-            $invoice->status = Invoice::STATUS_VIEWED;
-            $invoice->viewed = true;
-            $invoice->save();
+        if ($invoice) {
             $notifyInvoiceViewed = CompanySetting::getSetting(
                 'notify_invoice_viewed',
                 $invoice->company_id
             );
 
-            if ($notifyInvoiceViewed == 'YES') {
-                $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
-                $data['user'] = User::find($invoice->user_id)->toArray();
-                $notificationEmail = CompanySetting::getSetting(
-                    'notification_email',
-                    $invoice->company_id
-                );
+            // if ($notifyInvoiceViewed == 'YES') {
+            //     $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
+            //     $data['user'] = User::find($invoice->user_id)->toArray();
+            //     $notificationEmail = CompanySetting::getSetting(
+            //         'notification_email',
+            //         $invoice->company_id
+            //     );
 
-                \Mail::to($notificationEmail)->send(new InvoiceViewed($data));
-            }
+            //     \Mail::to($notificationEmail)->send(new InvoiceViewed($data));
+            // }
         }
 
         $companyAddress = User::with(['addresses', 'addresses.country'])->find(1);

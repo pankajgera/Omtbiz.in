@@ -197,26 +197,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InvoicesController@delete'
     ]);
 
-    Route::post('/invoices/send', [
-        'as' => 'invoices.send',
-        'uses' => 'InvoicesController@sendInvoice'
-    ]);
-
-    Route::post('/invoices/mark-as-paid', [
-        'as' => 'invoices.paid',
-        'uses' => 'InvoicesController@markAsPaid'
-    ]);
-
-    Route::post('/invoices/mark-as-sent', [
-        'as' => 'invoices.sent',
-        'uses' => 'InvoicesController@markAsSent'
-    ]);
-
-    Route::get('/invoices/unpaid', [
-        'as' => 'bootstrap',
-        'uses' => 'InvoicesController@getCustomersUnpaidInvoices'
-    ]);
-
     Route::get('/invoices/estimate/{estimate}', [
         'as' => 'bootstrap',
         'uses' => 'InvoicesController@getInvoiceEstimate'
@@ -247,11 +227,6 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/estimates/send', [
         'as' => 'estimates.send',
         'uses' => 'EstimatesController@sendEstimate'
-    ]);
-
-    Route::post('/estimates/mark-as-sent', [
-        'as' => 'estimates.send',
-        'uses' => 'EstimatesController@markEstimateSent'
     ]);
 
     Route::post('/estimates/accept', [
