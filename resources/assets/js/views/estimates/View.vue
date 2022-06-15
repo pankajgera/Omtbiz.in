@@ -3,30 +3,6 @@
     <div class="page-header">
       <h3 class="page-title"> {{ estimate.estimate_number }}</h3>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-3">
-          <base-button
-            v-if="estimate.status === 'DRAFT'"
-            :loading="isMarkAsSent"
-            :disabled="isMarkAsSent"
-            :outline="true"
-            color="theme"
-            @click="onMarkAsSent"
-          >
-            {{ $t('estimates.mark_as_sent') }}
-          </base-button>
-        </div>
-        <div class="col-xs-2">
-          <base-button
-            v-if="estimate.status === 'DRAFT'"
-            :loading="isSendingEmail"
-            :disabled="isSendingEmail"
-            :outline="true"
-            color="theme"
-            @click="onSendEstimate"
-          >
-            {{ $t('estimates.send_estimate') }}
-          </base-button>
-        </div>
         <v-dropdown :close-on-select="false" align="left" class="filter-container">
           <a slot="activator" href="#">
             <base-button color="theme">
@@ -123,7 +99,6 @@
           <div class="left">
             <div class="inv-name">{{ estimate.user.name }}</div>
             <div class="inv-number">{{ estimate.estimate_number }}</div>
-            <div :class="'est-status-'+estimate.status.toLowerCase()"class="inv-status">{{ estimate.status }}</div>
           </div>
           <div class="right">
             <div class="inv-amount" v-html="$utils.formatMoney(estimate.total, estimate.user.currency)" />
@@ -158,8 +133,6 @@ export default {
         orderByField: null,
         searchText: null
       },
-      status: ['DRAFT', 'SENT', 'VIEWED', 'EXPIRED', 'ACCEPTED', 'REJECTED'],
-      isMarkAsSent: false,
       isSendingEmail: false,
       isRequestOnGoing: false,
       isSearching: false
@@ -192,7 +165,6 @@ export default {
       'fetchEstimates',
       'getRecord',
       'searchEstimate',
-      'markAsSent',
       'sendEmail',
       'deleteEstimate',
       'selectEstimate',
@@ -240,24 +212,6 @@ export default {
       this.searchData.orderBy = 'asc'
       this.onSearched()
       return true
-    },
-    async onMarkAsSent () {
-      window.swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_mark_as_sent'),
-        icon: '/assets/icon/check-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          this.isMarkAsSent = true
-          let response = await this.markAsSent({id: this.estimate.id})
-          this.isMarkAsSent = false
-          if (response.data) {
-            window.toastr['success'](this.$tc('estimates.mark_as_sent_successfully'))
-          }
-        }
-      })
     },
     async onSendEstimate (id) {
       window.swal({

@@ -19,7 +19,7 @@ $factory->define(Estimate::class, function (Faker $faker) {
         'user_id' => function () {
             return factory(User::class)->create(['role' => 'customer'])->id;
         },
-        'status' => Estimate::STATUS_DRAFT,
+        'status' => Estimate::TO_BE_DISPATCH,
         'estimate_template_id' => 1,
         'sub_total' => $faker->randomDigitNotNull,
         'discount' => 0,

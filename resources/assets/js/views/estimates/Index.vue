@@ -251,12 +251,6 @@
                   {{ $t('estimates.send_estimate') }}
                 </a>
               </v-dropdown-item>
-              <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="markEstimateAsSent(row.id)" v-if="role === 'admin'">
-                  <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
-                  {{ $t('estimates.mark_as_sent') }}
-                </a>
-              </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -388,7 +382,6 @@ export default {
       'deleteEstimate',
       'deleteMultipleEstimates',
       'sendEmail',
-      'markAsSent',
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
@@ -420,32 +413,6 @@ export default {
         }
       })
     },
-    async markEstimateAsSent (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.estimate_mark_as_sent'),
-        icon: '/assets/icon/check-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          const data = {
-            id: id
-          }
-          let response = await this.markAsSent(data)
-          this.refreshTable()
-          if (response.data) {
-            window.toastr['success'](this.$tc('estimates.mark_as_sent_successfully'))
-          }
-        }
-      })
-    },
-    // getStatus (val) {
-    //   this.filters.status = {
-    //     name: val,
-    //     value: val
-    //   }
-    // },
     refreshTable () {
       this.$refs.table.refresh()
     },

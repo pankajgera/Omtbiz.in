@@ -117,14 +117,10 @@ class InvoicesController extends Controller
 
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('d-m-Y');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
-            $status = Invoice::STATUS_DRAFT;
+            $status = Invoice::TO_BE_DISPATCH;
 
             $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
             $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company')) ?? 'NO';
-
-            if ($request->has('invoiceSend')) {
-                $status = Invoice::STATUS_SENT;
-            }
 
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
@@ -134,8 +130,8 @@ class InvoicesController extends Controller
                 'user_id' => $request->user_id,
                 'company_id' => $request->header('company'),
                 'invoice_template_id' => $request->invoice_template_id,
-                'status' => 'DRAFT',
-                'paid_status' => Invoice::STATUS_UNPAID,
+                'status' => Invoice::TO_BE_DISPATCH,
+                'paid_status' => Invoice::STATUS_PAID,
                 'sub_total' => $request->sub_total,
                 'discount' => $request->discount,
                 'discount_type' => $request->discount_type,
@@ -419,16 +415,6 @@ class InvoicesController extends Controller
      */
     public function update(Requests\InvoicesRequest $request, $id)
     {
-        // $invoice_number = explode("-", $request->invoice_number);
-        // $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
-
-        // Validator::make($number_attributes, [
-        //     'invoice_number' => 'required|unique:invoices,invoice_number' . ',' . $id
-        // ])->validate();
-
-        //$invoice_date = Carbon::createFromFormat('d-m-Y', $request->invoice_date);
-        //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
-
         $invoice = Invoice::findOrFail($id);
         $oldAmount = $invoice->total;
 
@@ -441,24 +427,14 @@ class InvoicesController extends Controller
         $invoice->due_amount = ($invoice->due_amount + $oldAmount);
 
         if ($invoice->due_amount == 0 && $invoice->paid_status != Invoice::STATUS_PAID) {
-            //$invoice->status = Invoice::STATUS_COMPLETED;
             $invoice->paid_status = Invoice::STATUS_PAID;
-        } elseif ($invoice->due_amount < 0 && $invoice->paid_status != Invoice::STATUS_UNPAID) {
+        } elseif ($invoice->due_amount < 0) {
             return response()->json([
                 'error' => 'invalid_due_amount'
             ]);
-        } elseif ($invoice->due_amount != 0 && $invoice->paid_status == Invoice::STATUS_PAID) {
-            //$invoice->status = $invoice->getPreviousStatus();
-            $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
         }
 
         $invoice->status = $request->status;
-        //$invoice->invoice_date = $invoice_date;
-        //$invoice->due_date = $due_date;
-        //$invoice->invoice_number =  $number_attributes['invoice_number'];
-        //$invoice->reference_number = $request->reference_number;
-        //$invoice->user_id = $request->user_id;
-        //$invoice->invoice_template_id = $request->invoice_template_id;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->discount = $request->discount;
@@ -478,14 +454,6 @@ class InvoicesController extends Controller
             $each['type'] = 'invoice';
             $inventory = $invoice->inventories()->create($each);
             $inventory_id = $inventory->id;
-            // if (array_key_exists('taxes', $each) && $each['taxes']) {
-            //     foreach ($each['taxes'] as $tax) {
-            //         $tax['company_id'] = $request->header('company');
-            //         if (gettype($tax['amount']) !== "NULL") {
-            //             $inventory->taxes()->create($tax);
-            //         }
-            //     }
-            // }
 
             //Reset inventory quantity
             $invent = Inventory::find($inventory->inventory_id);
@@ -655,7 +623,7 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified inoice from storage.
      *
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
@@ -677,6 +645,12 @@ class InvoicesController extends Controller
         ]);
     }
 
+    /**
+     * Delete invoice
+     *
+     * @param Request $request
+     * @return void
+     */
     public function delete(Request $request)
     {
         foreach ($request->id as $id) {
@@ -731,52 +705,6 @@ class InvoicesController extends Controller
         }
 
         \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
-
-        if ($invoice->status == Invoice::STATUS_DRAFT) {
-            $invoice->status = Invoice::STATUS_SENT;
-            $invoice->sent = true;
-            $invoice->save();
-        }
-
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-
-    /**
-     * Mark a specific invoice as sent.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function markAsSent(Request $request)
-    {
-        $invoice = Invoice::findOrFail($request->id);
-        $invoice->status = Invoice::STATUS_SENT;
-        $invoice->sent = true;
-        $invoice->save();
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-
-    /**
-     * Mark a specific invoice as paid.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function markAsPaid(Request $request)
-    {
-        $invoice = Invoice::findOrFail($request->id);
-        $invoice->status = Invoice::STATUS_COMPLETED;
-        $invoice->paid_status = Invoice::STATUS_PAID;
-        $invoice->due_amount = 0;
-        $invoice->save();
 
         return response()->json([
             'success' => true

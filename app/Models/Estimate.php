@@ -7,12 +7,7 @@ use Carbon\Carbon;
 
 class Estimate extends Model
 {
-    const STATUS_DRAFT = 'DRAFT';
-    const STATUS_SENT = 'SENT';
-    const STATUS_VIEWED = 'VIEWED';
-    const STATUS_EXPIRED = 'EXPIRED';
-    const STATUS_ACCEPTED = 'ACCEPTED';
-    const STATUS_REJECTED = 'REJECTED';
+    const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
     protected $dates = [
         'created_at',

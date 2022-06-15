@@ -117,7 +117,7 @@ class EstimatesController extends Controller
         ])->validate();
 
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
-        $status = Estimate::STATUS_DRAFT;
+        $status = Estimate::TO_BE_DISPATCH;
         $tax_per_item = CompanySetting::getSetting(
             'tax_per_item',
             $request->header('company')
@@ -125,10 +125,6 @@ class EstimatesController extends Controller
             'tax_per_item',
             $request->header('company')
         ) : 'NO';
-
-        if ($request->has('estimateSend')) {
-            $status = Estimate::STATUS_SENT;
-        }
 
         $discount_per_item = CompanySetting::getSetting(
             'discount_per_item',
@@ -423,62 +419,6 @@ class EstimatesController extends Controller
 
         \Mail::to($email)->send(new EstimatePdf($data, $notificationEmail));
 
-        if ($estimate->status == Estimate::STATUS_DRAFT) {
-            $estimate->status = Estimate::STATUS_SENT;
-            $estimate->save();
-        }
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-    /**
-     * Mark estimate accepted
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function markEstimateAccepted(Request $request)
-    {
-        $estimate = Estimate::find($request->id);
-        $estimate->status = Estimate::STATUS_ACCEPTED;
-        $estimate->save();
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-    /**
-     * Mark estimate rejected
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function markEstimateRejected(Request $request)
-    {
-        $estimate = Estimate::find($request->id);
-        $estimate->status = Estimate::STATUS_REJECTED;
-        $estimate->save();
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-    /**
-     * Mark estimate sent
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function markEstimateSent(Request $request)
-    {
-        $estimate = Estimate::find($request->id);
-        $estimate->status = Estimate::STATUS_SENT;
-        $estimate->save();
-
         return response()->json([
             'success' => true
         ]);
@@ -520,8 +460,8 @@ class EstimatesController extends Controller
             'user_id' => $estimate->user_id,
             'company_id' => $request->header('company'),
             'invoice_template_id' => 1,
-            'status' => Invoice::STATUS_DRAFT,
-            'paid_status' => Invoice::STATUS_UNPAID,
+            'status' => Invoice::TO_BE_DISPATCH,
+            'paid_status' => Invoice::STATUS_PAID,
             'sub_total' => $estimate->sub_total,
             'discount' => $estimate->discount,
             'discount_type' => $estimate->discount_type,

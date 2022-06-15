@@ -372,7 +372,6 @@ export default {
       'deleteInvoice',
       'deleteMultipleInvoices',
       'sendEmail',
-      'markAsSent',
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
@@ -404,32 +403,6 @@ export default {
         }
       })
     },
-    async markInvoiceAsSent (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('invoices.invoice_mark_as_sent'),
-        icon: '/assets/icon/check-circle-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          const data = {
-            id: id
-          }
-          let response = await this.markAsSent(data)
-          this.refreshTable()
-          if (response.data) {
-            window.toastr['success'](this.$tc('invoices.mark_as_sent_successfully'))
-          }
-        }
-      })
-    },
-    // getStatus (val) {
-    //   this.filters.status = {
-    //     name: val,
-    //     value: val
-    //   }
-    // },
     refreshTable () {
       this.$refs.table.refresh()
     },

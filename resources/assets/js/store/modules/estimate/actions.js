@@ -124,40 +124,6 @@ export const updateEstimate = ({ commit, estimates, state }, data) => {
   })
 }
 
-export const markAsAccepted = ({ commit, estimates, state }, data) => {
-  return new Promise((resolve, reject) => {
-    window.axios.post(`/api/estimates/accept`, data).then((response) => {
-      commit('dashboard/' + dashboardTypes.UPDATE_ESTIMATE_STATUS, { id: data.id, status: 'ACCEPTED' }, { root: true })
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
-export const markAsRejected = ({ commit, estimates, state }, data) => {
-  return new Promise((resolve, reject) => {
-    window.axios.post(`/api/estimates/reject`, data).then((response) => {
-      commit('dashboard/' + dashboardTypes.UPDATE_ESTIMATE_STATUS, { id: data.id, status: 'REJECTED' }, { root: true })
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
-export const markAsSent = ({ commit, estimates, state }, data) => {
-  return new Promise((resolve, reject) => {
-    window.axios.post(`/api/estimates/mark-as-sent`, data).then((response) => {
-      commit(types.UPDATE_ESTIMATE_STATUS, {id: data.id, status: 'SENT'})
-      commit('dashboard/' + dashboardTypes.UPDATE_ESTIMATE_STATUS, { id: data.id, status: 'SENT' }, { root: true })
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
 export const convertToEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/estimates/${id}/convert-to-estimate`).then((response) => {

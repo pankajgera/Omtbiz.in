@@ -102,33 +102,8 @@ class PaymentController extends Controller
      */
     public function store(PaymentRequest $request)
     {
-        // $payment_number = explode("-", $request->payment_number);
-        // $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
-
-        // Validator::make($number_attributes, [
-        //     'payment_number' => 'required|unique:payments,payment_number'
-        // ])->validate();
-
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
         $req_amount = (int)$request->amount;
-
-        // if ($request->has('invoice_id') && $request->invoice_id != null) {
-        //     $invoice = Invoice::find($request->invoice_id);
-        //     if ($invoice && $invoice->due_amount == $request->amount) {
-        //         $invoice->status = Invoice::STATUS_COMPLETED;
-        //         $invoice->paid_status = Invoice::STATUS_PAID;
-        //         $invoice->due_amount = 0;
-        //     } elseif ($invoice && $invoice->due_amount != $request->amount) {
-        //         $invoice->due_amount = (int)$invoice->due_amount - (int)$request->amount;
-        //         if ($invoice->due_amount < 0) {
-        //             return response()->json([
-        //                 'error' => 'invalid_amount'
-        //             ]);
-        //         }
-        //         $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-        //     }
-        //     $invoice->save();
-        // }
 
         $payment_status = 'Draft';
 
@@ -326,13 +301,6 @@ class PaymentController extends Controller
      */
     public function update(PaymentRequest $request, $id)
     {
-        // $payment_number = explode("-", $request->payment_number);
-        // $number_attributes['payment_number'] = $payment_number[0] . '-' . sprintf('%06d', intval($payment_number[1]));
-
-        // Validator::make($number_attributes, [
-        //     'payment_number' => 'required|unique:payments,payment_number' . ',' . $id
-        // ])->validate();
-
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
 
         $payment = Payment::find($id);
@@ -349,14 +317,8 @@ class PaymentController extends Controller
                 ]);
             }
 
-            if ($invoice->due_amount == 0) {
-                $invoice->status = Invoice::STATUS_COMPLETED;
-                $invoice->paid_status = Invoice::STATUS_PAID;
-            } else {
-                $invoice->status = $invoice->getPreviousStatus();
-                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-            }
-
+            $invoice->status = Invoice::DISPATCH;
+            $invoice->paid_status = Invoice::STATUS_PAID;
             $invoice->save();
         }
 
@@ -389,14 +351,8 @@ class PaymentController extends Controller
         if ($payment->invoice_id != null) {
             $invoice = Invoice::find($payment->invoice_id);
             $invoice->due_amount = ((int)$invoice->due_amount + (int)$payment->amount);
-
-            if ($invoice->due_amount == $invoice->total) {
-                $invoice->paid_status = Invoice::STATUS_UNPAID;
-            } else {
-                $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-            }
-
-            $invoice->status = $invoice->getPreviousStatus();
+            $invoice->paid_status = Invoice::STATUS_PAID;
+            $invoice->status = Invoice::TO_BE_DISPATCH;
             $invoice->save();
         }
 
@@ -415,14 +371,8 @@ class PaymentController extends Controller
             if ($payment->invoice_id != null) {
                 $invoice = Invoice::find($payment->invoice_id);
                 $invoice->due_amount = ((int)$invoice->due_amount + (int)$payment->amount);
-
-                if ($invoice->due_amount == $invoice->total) {
-                    $invoice->paid_status = Invoice::STATUS_UNPAID;
-                } else {
-                    $invoice->paid_status = Invoice::STATUS_PARTIALLY_PAID;
-                }
-
-                $invoice->status = $invoice->getPreviousStatus();
+                $invoice->paid_status = Invoice::STATUS_PAID;
+                $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();
             }
 

@@ -571,54 +571,6 @@ class InvoiceTest extends TestCase
     }
 
     /** @test */
-    public function testInvoiceMarkAsPaid()
-    {
-        $invoice = factory(Invoice::class)->create([
-            'invoice_date' => '1988-07-18',
-            'due_date' => '1988-08-18',
-        ]);
-
-        $data = [
-            'id' => $invoice->id
-        ];
-
-        $response = $this->json('POST', 'api/invoices/mark-as-paid', $data);
-
-        $response
-            ->assertOk()
-            ->assertJson([
-                'success' => true
-            ]);
-
-        $invoice2 = Invoice::find($invoice->id);
-        $this->assertEquals($invoice2->status, Invoice::STATUS_PAID);
-    }
-
-    /** @test */
-    public function testInvoiceMarkAsSent()
-    {
-        $invoice = factory(Invoice::class)->create([
-            'invoice_date' => '1988-07-18',
-            'due_date' => '1988-08-18',
-        ]);
-
-        $data = [
-            'id' => $invoice->id
-        ];
-
-        $response = $this->json('POST', 'api/invoices/mark-as-sent', $data);
-
-        $response
-            ->assertOk()
-            ->assertJson([
-                'success' => true
-            ]);
-
-        $invoice2 = Invoice::find($invoice->id);
-        $this->assertEquals($invoice2->status, Invoice::STATUS_SENT);
-    }
-
-    /** @test */
     public function testSearchInvoices()
     {
         $filters = [

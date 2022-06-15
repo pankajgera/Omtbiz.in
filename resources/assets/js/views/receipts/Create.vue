@@ -309,20 +309,6 @@ export default {
     }
   },
   watch: {
-    // customer (newValue) {
-    //   this.formData.user_id = newValue.id
-    //   if (!this.isEdit) {
-    //     if (this.isSettingInitialData) {
-    //       this.isSettingInitialData = false
-    //     } else {
-    //       this.invoice = null
-    //       this.formData.invoice_id = null
-    //     }
-    //     this.formData.amount = 0
-    //     this.invoiceList = []
-    //     this.fetchCustomerInvoices(newValue.id)
-    //   }
-    // },
     invoice (newValue) {
       if (newValue) {
         this.formData.invoice_id = newValue.id
@@ -354,7 +340,6 @@ export default {
       return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
     },
     async loadData () {
-      this.fetchCustomerInvoices()
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
         //this.customerList = response.data.customers
@@ -387,12 +372,6 @@ export default {
       let data = await this.fetchInvoice(id)
       this.formData.amount = parseFloat(data.data.invoice.due_amount).toFixed(2)
       this.maxPayableAmount = parseFloat(data.data.invoice.due_amount).toFixed(2)
-    },
-    async fetchCustomerInvoices () {
-      let response = await axios.get(`/api/invoices/unpaid/`)
-      if (response.data) {
-        this.invoiceList = response.data.invoices
-      }
     },
     async submitReceiptData () {
       //this.$v.customer.$touch()
