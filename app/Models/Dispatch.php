@@ -15,11 +15,6 @@ class Dispatch extends Model
         'company_id'
     ];
 
-    public function invoice()
-    {
-        return $this->belongsTo(Invoice::class, 'invoice_id');
-    }
-
     public function scopeWhereName($query, $name)
     {
         return $query->where('name', 'LIKE', '%' . $name . '%');
@@ -72,30 +67,33 @@ class Dispatch extends Model
      * Delete selected dispatch item
      *
      * @param Dispatch $id
-     * @return bool
+     * @return void
      */
     public static function deleteDispatch($id)
     {
         $dispatch = Dispatch::find($id);
-        $dispatch->delete();
-        //Delete item (bill-ty) if exists in "items" table
-        Item::where('dispatch_id', $dispatch->id)->delete();
-        return true;
+        if (isset($dispatch)) {
+            $dispatch->delete();
+            //Delete item (bill-ty) if exists in "items" table
+            Item::where('dispatch_id', $dispatch->id)->delete();
+        }
     }
 
     /**
      * Move dispatch to draft or completed
      *
      * @param Dispatch $id
-     * @return bool
+     * @param  $company_id
+     * @return Dispatch $dispatch
      */
-    public static function moveDispatch($id)
+    public static function moveDispatch($id,  $company_id)
     {
         $dispatch = Dispatch::find($id);
         $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
         if ('Sent' === $dispatch->status) {
             foreach ($invoices as $each) {
                 $dis = new Dispatch();
+                $dis->name = null;
                 $dis->invoice_id = $each->id;
                 $dis->date_time = $dispatch->date_time;
                 $dis->time = $dispatch->time;
@@ -110,11 +108,22 @@ class Dispatch extends Model
             Item::where('dispatch_id', $dispatch->id)->delete();
             return true;
         }
-        self::addDispatchBillTy($dispatch, $invoices->sum('total'));
+        foreach ($invoices as $each) {
+            if (!$dispatch->name) {
+                $dispatch->update([
+                    'name' => $each->invoice_number,
+                ]);
+            } else {
+                $dispatch->update([
+                    'name' => $dispatch->name . ', ' . $each->invoice_number,
+                ]);
+            }
+        }
+        self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
         $dispatch->update([
             'status' => 'Sent',
         ]);
-        return true;
+        return $dispatch;
     }
 
     /**
@@ -129,7 +138,6 @@ class Dispatch extends Model
     public static function addDispatchBillTy($dispatch_ids, $invoice_total_amount, $company_id)
     {
         $item = new Item();
-        $item->name = 'dispatched';
         $item->unit = 'pc';
         $item->description = '';
         $item->company_id = $company_id;

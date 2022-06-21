@@ -122,7 +122,7 @@
               </div>
             </v-dropdown-item>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleDispatch">
+              <div class="dropdown-item" @click="removeMultipleDispatch('draft')">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -261,7 +261,7 @@
               </div>
             </v-dropdown-item>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleDispatch">
+              <div class="dropdown-item" @click="removeMultipleDispatch('sent')">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -573,7 +573,6 @@ export default {
       this.showFilters = !this.showFilters
     },
     async removeDispatch (id) {
-      this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('dispatch.confirm_delete'),
@@ -582,8 +581,8 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteDispatch(this.id)
-          if (res.data.success) {
+          let res = await this.deleteDispatch(id)
+          if (res.data.dispatch) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 1))
             this.$refs.tableDispatch.refresh()
             this.$refs.toBeTableDispatch.refresh()
@@ -595,7 +594,7 @@ export default {
         }
       })
     },
-    async removeMultipleDispatch () {
+    async removeMultipleDispatch (type) {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('dispatch.confirm_delete', 2),
@@ -604,7 +603,8 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteMultipleDispatch()
+          const ids = 'draft' === type ? this.selectedToBeDispatch : this.selectedDispatch;
+          let res = await this.deleteMultipleDispatch(ids)
           if (res.data.dispatch) {
             window.toastr['success'](this.$tc('dispatch.deleted_message', 2))
             this.$refs.tableDispatch.refresh()

@@ -110,7 +110,7 @@ class DispatchController extends Controller
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = new Dispatch();
-            //$dispatch->name = $request->name;
+            // $dispatch->name = $request->name;
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
@@ -120,9 +120,20 @@ class DispatchController extends Controller
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
 
-            $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+            $invoices = Invoice::whereIn('id', explode(',',  $request->invoice_id))->get();
             foreach ($invoices as $each) {
+                if (!$dispatch->name) {
+                    $dispatch->update([
+                        'name' => $dispatch->name . ', ' . $each->invoice_number,
+                    ]);
+                } else {
+                    $dispatch->update([
+                        'name' => $dispatch->name,
+                    ]);
+                }
+
                 $each->update([
+                    'dispatch_id' => $dispatch->id,
                     'paid_status' => 'DISPATCHED',
                 ]);
             }
@@ -156,7 +167,7 @@ class DispatchController extends Controller
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = Dispatch::find($id);
-            //$dispatch->name = $request->name;
+            $dispatch->name = null;
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
@@ -167,6 +178,17 @@ class DispatchController extends Controller
             $dispatch->save();
 
             $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+            foreach ($invoices as $each) {
+                if (!$dispatch->name) {
+                    $dispatch->update([
+                        'name' => $each->invoice_number,
+                    ]);
+                } else {
+                    $dispatch->update([
+                        'name' => $dispatch->name . ', ' . $each->invoice_number,
+                    ]);
+                }
+            }
             $dispatch->addDispatchBillTy($dispatch->id, $invoices->sum('total'), $request->header('company'));
 
             return response()->json([
@@ -209,7 +231,7 @@ class DispatchController extends Controller
                 ]);
             }
 
-            $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+            $invoices = Invoice::whereIn('id', explode(',', $request->invoice_id))->get();
             $ids = $all_selected_dispatch->pluck('id')->toArray();
             $each->addDispatchBillTy(implode(', ', $ids), $invoices->sum('total'), $request->header('company'));
 
@@ -233,18 +255,10 @@ class DispatchController extends Controller
      */
     public function destroy($id)
     {
-        $data = Dispatch::deleteDispatch($id);
-
-        if (!$data) {
-            return response()->json([
-                'error' => 'dispatch_attached',
-            ]);
-        }
-
-        return response()->json([
-            'success' => $data,
-        ]);
+        Dispatch::deleteDispatch($id);
+        return response()->json(['dispatch' => true]);
     }
+
 
     /**
      * Delete a list of existing Dispatch.
@@ -255,23 +269,11 @@ class DispatchController extends Controller
      */
     public function delete(Request $request)
     {
-        $dispatch = [];
         foreach ($request->id as $id) {
-            $dispatch = Dispatch::deleteDispatch($id);
-            if (!$dispatch) {
-                array_push($dispatch, $id);
-            }
+            Dispatch::deleteDispatch($id);
         }
 
-        if (empty($dispatch)) {
-            return response()->json([
-                'success' => true,
-            ]);
-        }
-
-        return response()->json([
-            'dispatch' => $dispatch,
-        ]);
+        return response()->json(['dispatch' => true]);
     }
 
     /**
@@ -283,23 +285,11 @@ class DispatchController extends Controller
      */
     public function multiple(Request $request)
     {
-        $dispatch = [];
         foreach ($request->id as $id) {
-            $dispatch = Dispatch::moveDispatch($id);
-            if (!$dispatch) {
-                array_push($dispatch, $id);
-            }
+            Dispatch::moveDispatch($id, $request->header('company'));
         }
 
-        if (empty($dispatch)) {
-            return response()->json([
-                'success' => true,
-            ]);
-        }
-
-        return response()->json([
-            'dispatch' => $dispatch,
-        ]);
+        return response()->json(204);
     }
 
 
