@@ -54,6 +54,7 @@ class Invoice extends Model
         'sent',
         'viewed',
         'account_master_id',
+        'dispatch_id',
     ];
 
     protected $appends = [

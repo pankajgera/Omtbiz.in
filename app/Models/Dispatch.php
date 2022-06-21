@@ -119,6 +119,7 @@ class Dispatch extends Model
                 ]);
             }
         }
+
         self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
         $dispatch->update([
             'status' => 'Sent',
@@ -135,14 +136,16 @@ class Dispatch extends Model
      *
      * @return void
      */
-    public static function addDispatchBillTy($dispatch_ids, $invoice_total_amount, $company_id)
+    public static function addDispatchBillTy($dispatch, $invoice_total_amount, $company_id)
     {
         $item = new Item();
+        $item->name = $dispatch->name;
         $item->unit = 'pc';
         $item->description = '';
         $item->company_id = $company_id;
         $item->price = $invoice_total_amount;
-        $item->dispatch_id = $dispatch_ids;
+        $item->dispatch_id = $dispatch->id;
+        $item->status = 'Draft';
         $item->save();
     }
 }
