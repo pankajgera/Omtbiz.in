@@ -148,7 +148,7 @@ class InvoicesController extends Controller
 
             //Added dispatch bill
             $dispatch = new Dispatch();
-            $dispatch->name = $request->reference_number;
+            $dispatch->name = $invoice->invoice_number;
             $dispatch->invoice_id = $invoice->id;
             $dispatch->date_time = Carbon::now('UTC');
             $dispatch->transport = null;
@@ -157,6 +157,7 @@ class InvoicesController extends Controller
             $dispatch->save();
 
             $invoice->update([
+                'dispatch_id' => $dispatch->id,
                 'paid_status' => 'TO_BE_DISPATCH',
             ]);
 
@@ -188,7 +189,6 @@ class InvoicesController extends Controller
                     ]);
                 }
             }
-
 
             //Add journal entry
             //It will be "Sales" type
@@ -337,10 +337,12 @@ class InvoicesController extends Controller
 
             $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
 
-            return response()->json([
-                'url' => url('/invoices/pdf/' . $invoice->unique_hash),
-                'invoice' => $invoice
-            ]);
+            if ($invoice) {
+                return response()->json([
+                    'url' => url('/invoices/pdf/' . $invoice->unique_hash),
+                    'invoice' => $invoice
+                ]);
+            }
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
@@ -363,7 +365,7 @@ class InvoicesController extends Controller
             'user',
             'invoiceTemplate',
             'taxes.taxType'
-        ])->find($id);
+        ])->firstOrFail($id);
 
         $siteData = [
             'invoice' => $invoice,

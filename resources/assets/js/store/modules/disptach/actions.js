@@ -96,10 +96,10 @@ export const deleteDispatch = ({ commit, dispatch, state }, id) => {
 }
 
 //Dispatched
-export const deleteMultipleDispatch = ({ commit, dispatch, state }, id) => {
+export const deleteMultipleDispatch = ({ commit, dispatch, state }, ids) => {
   return new Promise((resolve, reject) => {
-      window.axios.post(`/api/dispatch/delete`, { 'id': state.selectedDispatch }).then((response) => {
-          commit(types.DELETE_MULTIPLE_DISPATCH, state.selectedDispatch)
+      window.axios.post(`/api/dispatch/delete`, { 'id': ids }).then((response) => {
+          commit(types.DELETE_MULTIPLE_DISPATCH, ids)
           resolve(response)
       }).catch((err) => {
           reject(err)
@@ -148,10 +148,10 @@ export const moveMultipleDispatch = ({ commit, dispatch, state }, id) => {
 }
 
 //To be dispatch
-export const deleteMultipleToBeDispatch = ({ commit, dispatch, state }, id) => {
+export const deleteMultipleToBeDispatch = ({ commit, dispatch, state }, ids) => {
   return new Promise((resolve, reject) => {
-      window.axios.post(`/api/dispatch/delete`, { 'id': state.selectedToBeDispatch }).then((response) => {
-          commit(types.DELETE_MULTIPLE_DISPATCH, state.selectedDispatch)
+      window.axios.post(`/api/dispatch/delete`, { 'id': ids }).then((response) => {
+          commit(types.DELETE_MULTIPLE_TO_BE_DISPATCH, ids)
           resolve(response)
       }).catch((err) => {
           reject(err)
@@ -164,17 +164,17 @@ export const setSelectAllToBeState = ({ commit, dispatch, state }, data) => {
 }
 
 export const selectAllToBeDispatch = ({ commit, dispatch, state }) => {
-  // if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
-  //     commit(types.SET_SELECTED_TO_BE_DISPATCH, [])
-  //     commit(types.SET_TO_BE_SELECT_ALL_STATE, false)
-  // } else {
-  //     let allToBeDispatchIds = state.toBeDispatch.map(i => i.id)
-  //     commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
-  //     commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
-  // }
-    let allToBeDispatchIds = state.toBeDispatch.map(i => i.id)
-    commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
-    commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
+  if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
+      commit(types.SET_SELECTED_TO_BE_DISPATCH, [])
+      commit(types.SET_TO_BE_SELECT_ALL_STATE, false)
+  } else {
+      let allToBeDispatchIds = state.toBeDispatch.map(i => i.id)
+      commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
+      commit(types.SET_TO_BE_SELECT_ALL_STATE, true)
+  }
+    // let allToBeDispatchIds = state.toBeDispatch.map(i => i.id)
+    // commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
+    // commit(types.SET_TO_BE_SELECT_ALL_STATE, allToBeDispatchIds.length ? true : false)
 }
 
 export const selectToBeDispatch = ({ commit, dispatch, state }, data) => {
