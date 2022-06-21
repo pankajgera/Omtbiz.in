@@ -15564,7 +15564,6 @@ fieldset[disabled] .multiselect {
   border: none;
 }
 .invoice-index-page .table-actions .table-actions-button {
-  position: absolute;
   right: 0px;
   top: -15px;
 }
