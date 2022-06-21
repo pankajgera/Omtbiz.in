@@ -15,18 +15,17 @@
             <div class="card-body">
               <div class="form-group">
                 <div class="form-group" v-if="dispatchList && dispatchList.length">
-                <label class="form-label">{{ $t('items.dispatch') }}</label>
+                <label class="form-label">{{ $t('items.dispatch') }}</label><span class="text-danger"> *</span>
                 <base-select
-                  :multiple="true"
                   v-model="dispatch"
+                  :multiple="false"
                   :options="dispatchList"
                   :searchable="true"
                   :show-labels="false"
-                  :allow-empty="true"
+                  :allow-empty="false"
                   :disabled="isEdit"
                   :custom-label="dispatchWithAmount"
-                  track-by="dispatch_number"
-                  class="multi-select-item"
+                  track-by="id"
                   @select="addDispatch"
                   @remove="removeDispatch"
                 />
@@ -146,7 +145,7 @@ export default {
         image: '',
         date: new Date(),
         bill_ty: '',
-        dispatch_id: '',
+        dispatch_id: [],
       },
       money: {
         decimal: '.',
@@ -156,7 +155,8 @@ export default {
         masked: false
       },
       previewImage: '',
-      dispatchList: null,
+      dispatchList: [],
+      dispatchOrgList: [],
       dispatch: [],
     }
   },
@@ -184,6 +184,9 @@ export default {
   },
   validations: {
     formData: {
+      dispatch_id: {
+        required
+      },
       name: {
         required,
         minLength: minLength(3)
@@ -216,9 +219,15 @@ export default {
     ]),
     async fetchDispatch () {
       let response = await axios.get(`/api/items/dispatch`)
-      console.log(response)
       if (response.data) {
-        this.dispatchList = response.data.dispatch
+        let unique = response.data.dispatch.filter(function({name}) {
+            var key = `${name}`;
+            return !this.has(key) && this.add(key);
+        }, new Set);
+        //Only show unique dispatch but in backend save all with same name
+        //which is set with dispatchOrgList
+        this.dispatchList = unique
+        this.dispatchOrgList = response.data.dispatch
         if (this.isEdit) {
           this.loadEditData()
         }
@@ -233,7 +242,9 @@ export default {
     },
     addDispatch (value) {
       if (value) {
-        this.formData.dispatch_id.push(value.id)
+        this.dispatchOrgList.map(i => {
+          this.formData.dispatch_id.push(i.id)
+        })
       }
     },
     removeDispatch (value) {

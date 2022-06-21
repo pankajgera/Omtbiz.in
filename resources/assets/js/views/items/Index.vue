@@ -75,253 +75,255 @@
       </div>
     </div>
 
-    <div class="table-container">
-      <div class="table-actions mt-5">
-        <transition name="fade">
-          <v-dropdown v-if="selectedItems.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleItems">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
-      </div>
-
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all"
-          v-model="selectAllFieldStatus"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllItems"
-        >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
-      </div>
-
-      <table-component
-        ref="table"
-        :data="fetchDataToBe"
-        :show-filter="false"
-        table-class="table"
-      >
-
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
-              <input
-                :id="row.id"
-                v-model="selectField"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label"/>
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('items.party_name')"
-          show="party_name"
-        >
-          <template slot-scope="row">
-            <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-               {{ $t('items.need_to_be_dispatch') }}
-              </router-link>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('items.invoice_number')"
-          show="invoice_number"
-        >
-          <template slot-scope="">
-               {{ $t('items.need_to_be_dispatch') }}
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('items.bill_ty')"
-          show="bill_ty"
-        />
-        <table-column
-          :label="$t('items.added_on')"
-          sort-as="created_at"
-          show="formattedCreatedAt"
-        />
-        <table-column
-          label="Image"
-          show="images"
-        >
-          <template v-if="row.images" slot-scope="row">
-            <expandable-image
-              class="image"
-              :src="row.images.original_image_path"
-            ></expandable-image>
-          </template>
-        </table-column>
-        <table-column
-          :key="Math.random()"
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-          <template slot-scope="row">
-            <span> {{ $t('items.action') }} </span>
-            <v-dropdown>
-              <a slot="activator" href="#">
-                <dot-icon />
-              </a>
+    <div v-if="!showEmptyScreen">
+      <div class="table-container">
+        <div class="table-actions mt-5">
+          <transition name="fade">
+            <v-dropdown v-if="selectedItems.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
               <v-dropdown-item>
-
-                <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                  {{ $t('general.edit') }}
-                </router-link>
-
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="removeItems(row.id)">
+                <div class="dropdown-item" @click="removeMultipleItems">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
               </v-dropdown-item>
             </v-dropdown>
-          </template>
-        </table-column>
-      </table-component>
-    </div>
+          </transition>
+        </div>
 
+        <div class="custom-control custom-checkbox">
+          <input
+            id="select-all"
+            v-model="selectAllFieldStatus"
+            type="checkbox"
+            class="custom-control-input"
+            @change="selectAllItems"
+          >
+          <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+            <span class="select-all-label">{{ $t('general.select_all') }} </span>
+          </label>
+        </div>
 
-    <div class="table-container">
-      <div class="table-actions mt-5">
-        <transition name="fade">
-          <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleItemsToBe">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
+        <table-component
+          ref="table"
+          :data="fetchDataToBe"
+          :show-filter="false"
+          table-class="table"
+        >
+
+          <table-column
+            :sortable="false"
+            :filterable="false"
+            cell-class="no-click"
+          >
+            <template slot-scope="row">
+              <div class="custom-control custom-checkbox">
+                <input
+                  :id="row.id"
+                  v-model="selectField"
+                  :value="row.id"
+                  type="checkbox"
+                  class="custom-control-input"
+                >
+                <label :for="row.id" class="custom-control-label"/>
               </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
-      </div>
-
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all-to-be"
-          v-model="selectAllFieldStatusToBe"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllItemsToBe"
-        >
-        <label v-show="!isRequestOngoing" for="select-all-to-be" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
-      </div>
-
-      <table-component
-        ref="tableToBe"
-        :data="fetchData"
-        :show-filter="false"
-        table-class="table"
-      >
-
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
-              <input
-                :id="row.id"
-                v-model="selectFieldTobe"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label"/>
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('items.party_name')"
-          show="party_name"
-        >
-          <template slot-scope="row">
-            <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-               {{ row.dispatch.invoice.master.name }}
-              </router-link>
-          </template>
-        </table-column>
-         <table-column
-          :label="$t('items.invoice_number')"
-          show="invoice_number"
-        >
-          <template slot-scope="row">
-               {{ row.dispatch.invoice.invoice_number }}
-          </template>
-        </table-column>
-        <!-- <table-column
-          :label="$t('items.bill_ty')"
-          show="bill_ty"
-        /> -->
-        <table-column
-          :label="$t('items.added_on')"
-          sort-as="created_at"
-          show="formattedCreatedAt"
-        />
-        <table-column
-          label="Image"
-          show="images"
-        >
-          <template v-if="row.images" slot-scope="row">
-            <expandable-image
-              class="image"
-              :src="row.images.original_image_path"
-            ></expandable-image>
-          </template>
-        </table-column>
-        <table-column
-          :key="Math.random()"
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-          <template slot-scope="row">
-            <span> {{ $t('items.action') }} </span>
-            <v-dropdown>
-              <a slot="activator" href="#">
-                <dot-icon />
-              </a>
-              <v-dropdown-item>
-                <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                  {{ $t('general.edit') }}
+            </template>
+          </table-column>
+          <table-column
+            :label="$t('items.party_name')"
+            show="party_name"
+          >
+            <template slot-scope="row">
+              <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
                 </router-link>
-              </v-dropdown-item>
+            </template>
+          </table-column>
+          <table-column
+            :label="$t('items.invoice_number')"
+            show="invoice_number"
+          >
+            <template slot-scope="">
+                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+            </template>
+          </table-column>
+          <table-column
+            :label="$t('items.bill_ty')"
+            show="bill_ty"
+          />
+          <table-column
+            :label="$t('items.added_on')"
+            sort-as="created_at"
+            show="formattedCreatedAt"
+          />
+          <table-column
+            label="Image"
+            show="images"
+          >
+            <template v-if="row.images" slot-scope="row">
+              <expandable-image
+                class="image"
+                :src="row.images.original_image_path"
+              ></expandable-image>
+            </template>
+          </table-column>
+          <table-column
+            :key="Math.random()"
+            :sortable="false"
+            :filterable="false"
+            cell-class="action-dropdown"
+          >
+            <template slot-scope="row">
+              <span> {{ $t('items.action') }} </span>
+              <v-dropdown>
+                <a slot="activator" href="#">
+                  <dot-icon />
+                </a>
+                <v-dropdown-item>
+
+                  <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                    <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                    {{ $t('general.edit') }}
+                  </router-link>
+
+                </v-dropdown-item>
+                <v-dropdown-item>
+                  <div class="dropdown-item" @click="removeItems(row.id)">
+                    <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                    {{ $t('general.delete') }}
+                  </div>
+                </v-dropdown-item>
+              </v-dropdown>
+            </template>
+          </table-column>
+        </table-component>
+      </div>
+
+
+      <div class="table-container">
+        <div class="table-actions mt-5">
+          <transition name="fade">
+            <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeItems(row.id)">
+                <div class="dropdown-item" @click="removeMultipleItemsToBe">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
               </v-dropdown-item>
             </v-dropdown>
-          </template>
-        </table-column>
-      </table-component>
+          </transition>
+        </div>
+
+        <div class="custom-control custom-checkbox">
+          <input
+            id="select-all-to-be"
+            v-model="selectAllFieldStatusToBe"
+            type="checkbox"
+            class="custom-control-input"
+            @change="selectAllItemsToBe"
+          >
+          <label v-show="!isRequestOngoing" for="select-all-to-be" class="custom-control-label selectall">
+            <span class="select-all-label">{{ $t('general.select_all') }} </span>
+          </label>
+        </div>
+
+        <table-component
+          ref="tableToBe"
+          :data="fetchData"
+          :show-filter="false"
+          table-class="table"
+        >
+
+          <table-column
+            :sortable="false"
+            :filterable="false"
+            cell-class="no-click"
+          >
+            <template slot-scope="row">
+              <div class="custom-control custom-checkbox">
+                <input
+                  :id="row.id"
+                  v-model="selectFieldTobe"
+                  :value="row.id"
+                  type="checkbox"
+                  class="custom-control-input"
+                >
+                <label :for="row.id" class="custom-control-label"/>
+              </div>
+            </template>
+          </table-column>
+          <table-column
+            :label="$t('items.party_name')"
+            show="party_name"
+          >
+            <template slot-scope="row">
+              <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+              </router-link>
+            </template>
+          </table-column>
+          <table-column
+            :label="$t('items.invoice_number')"
+            show="invoice_number"
+          >
+            <template slot-scope="row">
+                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+            </template>
+          </table-column>
+          <!-- <table-column
+            :label="$t('items.bill_ty')"
+            show="bill_ty"
+          /> -->
+          <table-column
+            :label="$t('items.added_on')"
+            sort-as="created_at"
+            show="formattedCreatedAt"
+          />
+          <table-column
+            label="Image"
+            show="images"
+          >
+            <template v-if="row.images" slot-scope="row">
+              <expandable-image
+                class="image"
+                :src="row.images.original_image_path"
+              ></expandable-image>
+            </template>
+          </table-column>
+          <table-column
+            :key="Math.random()"
+            :sortable="false"
+            :filterable="false"
+            cell-class="action-dropdown"
+          >
+            <template slot-scope="row">
+              <span> {{ $t('items.action') }} </span>
+              <v-dropdown>
+                <a slot="activator" href="#">
+                  <dot-icon />
+                </a>
+                <v-dropdown-item>
+                  <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                    <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                    {{ $t('general.edit') }}
+                  </router-link>
+                </v-dropdown-item>
+                <v-dropdown-item>
+                  <div class="dropdown-item" @click="removeItems(row.id)">
+                    <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                    {{ $t('general.delete') }}
+                  </div>
+                </v-dropdown-item>
+              </v-dropdown>
+            </template>
+          </table-column>
+        </table-component>
+      </div>
     </div>
 
   </div>

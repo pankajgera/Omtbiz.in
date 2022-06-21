@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Models\AccountMaster;
 use App\Models\Dispatch;
 use App\Models\Invoice;
 use App\Models\Item;
@@ -14,6 +15,12 @@ use Exception;
 
 class ItemsController extends Controller
 {
+    /**
+     * Index page for billty
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 10;
@@ -24,10 +31,18 @@ class ItemsController extends Controller
             'unit',
             'orderByField',
             'orderBy',
-        ]))->with('images', 'dispatch.invoice.master')
+        ]))->with('images', 'dispatch')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
+
+        foreach ($items as $each) {
+            $master_ids = Invoice::whereIn('dispatch_id', explode(',', $each->dispatch_id))->get(['account_master_id']);
+            \Log::info('$master_ids', [$master_ids]);
+            $party_name = AccountMaster::whereIn('id', $master_ids);
+            \Log::info('$party_name', [$party_name]);
+            $each['party_name'] = $party_name;
+        }
 
         $itemsToBe = Item::whereNull('dispatch_id')->applyFilters($request->only([
             'search',
@@ -47,6 +62,13 @@ class ItemsController extends Controller
         ]);
     }
 
+    /**
+     * Edit billty
+     *
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function edit(Request $request, $id)
     {
         $item = Item::with('taxes')->find($id);
@@ -85,7 +107,7 @@ class ItemsController extends Controller
         $item->description = $request->description;
         $item->company_id = $request->header('company');
         $item->price = $request->price;
-        $item->dispatch_id = $request->dispatch_id;
+        $item->dispatch_id = implode(', ', $request->dispatch_id);
         $item->save();
 
         $image = '';
@@ -215,7 +237,7 @@ class ItemsController extends Controller
      */
     public function getDispatch(Request $request)
     {
-        $dispatch = Dispatch::where('status', 'Draft')
+        $dispatch = Dispatch::where('status', 'Sent')->whereNotNull('invoice_id')
             ->whereCompany($request->header('company'))
             ->get();
 
