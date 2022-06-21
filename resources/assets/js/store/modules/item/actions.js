@@ -3,7 +3,7 @@ import * as types from './mutation-types'
 export const fetchItems = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/items`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_ITEMS, response.data.items.data, response.data.itemsToBe.total)
+      commit(types.BOOTSTRAP_ITEMS, [response.data.items.data, response.data.itemsToBe.data])
       commit(types.SET_TOTAL_ITEMS, response.data.items.total)
       commit(types.SET_TOTAL_ITEMS_TO_BE, response.data.itemsToBe.total)
       resolve(response)
@@ -96,11 +96,11 @@ export const selectAllItems = ({ commit, dispatch, state }) => {
   }
 }
 export const selectAllItemsToBe = ({ commit, dispatch, state }) => {
-  if (state.selectedItemsToBe.length === state.items.length) {
+  if (state.selectedItemsToBe.length === state.itemsToBe.length) {
     commit(types.SET_SELECTED_ITEMS_TO_BE, [])
     commit(types.SET_SELECT_ALL_STATE_TO_BE, false)
   } else {
-    let allItemIdsToBe = state.items.map(item => item.id)
+    let allItemIdsToBe = state.itemsToBe.map(item => item.id)
     commit(types.SET_SELECTED_ITEMS_TO_BE, allItemIdsToBe)
     commit(types.SET_SELECT_ALL_STATE_TO_BE, true)
   }

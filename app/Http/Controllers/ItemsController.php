@@ -25,7 +25,7 @@ class ItemsController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $items = Item::whereNotNull('dispatch_id')->applyFilters($request->only([
+        $items = Item::where('status', 'Sent')->applyFilters($request->only([
             'search',
             'price',
             'unit',
@@ -37,14 +37,14 @@ class ItemsController extends Controller
             ->paginate($limit);
 
         foreach ($items as $each) {
-            $master_ids = Invoice::whereIn('dispatch_id', explode(',', $each->dispatch_id))->get(['account_master_id']);
-            \Log::info('$master_ids', [$master_ids]);
-            $party_name = AccountMaster::whereIn('id', $master_ids);
-            \Log::info('$party_name', [$party_name]);
-            $each['party_name'] = $party_name;
+            $master = Invoice::where('dispatch_id', $each->dispatch_id)->first();
+            $party_name = AccountMaster::where('id', $master->account_master_id)->first();
+            if (isset($party_name)) {
+                $each['party_name'] = $party_name->name;
+            }
         }
 
-        $itemsToBe = Item::whereNull('dispatch_id')->applyFilters($request->only([
+        $itemsToBe = Item::where('status', 'Draft')->applyFilters($request->only([
             'search',
             'price',
             'unit',
@@ -54,6 +54,14 @@ class ItemsController extends Controller
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
+
+        foreach ($itemsToBe as $each) {
+            $master = Invoice::where('dispatch_id', $each->dispatch_id)->first();
+            $party_name = AccountMaster::where('id', $master->account_master_id)->first();
+            if (isset($party_name)) {
+                $each['party_name'] = $party_name->name;
+            }
+        }
 
         return response()->json([
             'items' => $items,
@@ -107,6 +115,7 @@ class ItemsController extends Controller
         $item->description = $request->description;
         $item->company_id = $request->header('company');
         $item->price = $request->price;
+        $item->status = 'Draft';
         $item->dispatch_id = implode(', ', $request->dispatch_id);
         $item->save();
 

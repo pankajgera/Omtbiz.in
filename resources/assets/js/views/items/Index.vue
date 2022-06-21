@@ -77,14 +77,15 @@
 
     <div v-if="!showEmptyScreen">
       <div class="table-container">
+
         <div class="table-actions mt-5">
           <transition name="fade">
-            <v-dropdown v-if="selectedItems.length" :show-arrow="false">
+            <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
               <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
               </span>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeMultipleItems">
+                <div class="dropdown-item" @click="removeMultipleItemsToBe">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -95,17 +96,16 @@
 
         <div class="custom-control custom-checkbox">
           <input
-            id="select-all"
-            v-model="selectAllFieldStatus"
+            id="select-all-to-be"
+            v-model="selectAllFieldStatusToBe"
             type="checkbox"
             class="custom-control-input"
-            @change="selectAllItems"
+            @change="selectAllItemsToBe"
           >
-          <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+          <label v-show="!isRequestOngoing" for="select-all-to-be" class="custom-control-label selectall">
             <span class="select-all-label">{{ $t('general.select_all') }} </span>
           </label>
         </div>
-
         <table-component
           ref="table"
           :data="fetchDataToBe"
@@ -122,7 +122,7 @@
               <div class="custom-control custom-checkbox">
                 <input
                   :id="row.id"
-                  v-model="selectField"
+                  v-model="selectFieldToBe"
                   :value="row.id"
                   type="checkbox"
                   class="custom-control-input"
@@ -137,7 +137,7 @@
           >
             <template slot-scope="row">
               <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+                {{ row.party_name ? row.party_name : row.name }}
                 </router-link>
             </template>
           </table-column>
@@ -145,8 +145,8 @@
             :label="$t('items.invoice_number')"
             show="invoice_number"
           >
-            <template slot-scope="">
-                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+            <template slot-scope="row">
+                {{ row && row.dispatch ? row.dispatch.name : '' }}
             </template>
           </table-column>
           <table-column
@@ -203,14 +203,15 @@
 
 
       <div class="table-container">
+
         <div class="table-actions mt-5">
           <transition name="fade">
-            <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
+            <v-dropdown v-if="selectedItems.length" :show-arrow="false">
               <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
               </span>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeMultipleItemsToBe">
+                <div class="dropdown-item" @click="removeMultipleItems">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -221,13 +222,13 @@
 
         <div class="custom-control custom-checkbox">
           <input
-            id="select-all-to-be"
-            v-model="selectAllFieldStatusToBe"
+            id="select-all"
+            v-model="selectAllFieldStatus"
             type="checkbox"
             class="custom-control-input"
-            @change="selectAllItemsToBe"
+            @change="selectAllItems"
           >
-          <label v-show="!isRequestOngoing" for="select-all-to-be" class="custom-control-label selectall">
+          <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
             <span class="select-all-label">{{ $t('general.select_all') }} </span>
           </label>
         </div>
@@ -248,7 +249,7 @@
               <div class="custom-control custom-checkbox">
                 <input
                   :id="row.id"
-                  v-model="selectFieldTobe"
+                  v-model="selectField"
                   :value="row.id"
                   type="checkbox"
                   class="custom-control-input"
@@ -263,7 +264,7 @@
           >
             <template slot-scope="row">
               <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
-                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+                {{ row.party_name ? row.party_name : row.name }}
               </router-link>
             </template>
           </table-column>
@@ -272,7 +273,7 @@
             show="invoice_number"
           >
             <template slot-scope="row">
-                {{ row ? row.dispatch.name : $t('items.need_to_be_dispatch') }}
+                {{ row && row.dispatch ? row.dispatch.name : '' }}
             </template>
           </table-column>
           <!-- <table-column
@@ -352,15 +353,15 @@ export default {
     return {
       id: null,
       breadCrumbLinks:[
-      {
-        url:'dashboard',
-        title:this.$t('general.home'),
-      },
-      {
-        url:'#',
-        title:this.$tc('items.bill_ty', 2)
-      }
-    ],
+        {
+          url:'dashboard',
+          title:this.$t('general.home'),
+        },
+        {
+          url:'#',
+          title:this.$tc('items.bill_ty', 2)
+        }
+      ],
       showFilters: false,
       sortedBy: 'created_at',
       isRequestOngoing: true,
@@ -372,7 +373,7 @@ export default {
         price: '',
         bill_ty: ''
       },
-      index: null
+      index: null,
     }
   },
   computed: {
@@ -383,13 +384,14 @@ export default {
       'selectedItemsToBe',
       'totalItems',
       'totalItemsToBe',
-      'selectAllField'
+      'selectAllField',
+      'selectAllFieldToBe',
     ]),
     ...mapGetters('currency', [
       'defaultCurrency'
     ]),
     showEmptyScreen () {
-      return !this.totalItems && !this.isRequestOngoing && !this.filtersApplied
+      return !this.isRequestOngoing && !this.filtersApplied && (!(this.totalItems + this.totalItemsToBe))
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -402,7 +404,7 @@ export default {
         this.selectItem(val)
       }
     },
-    selectFieldTobe: {
+    selectFieldToBe: {
       get: function () {
         return this.selectedItemsToBe
       },
