@@ -1,9 +1,9 @@
 import * as types from './mutation-types'
 
 export default {
-  [types.BOOTSTRAP_ITEMS] (state, items, itemsToBe) {
-    state.items = items
-    state.itemsToBe = itemsToBe
+  [types.BOOTSTRAP_ITEMS] (state, itemsArray) {
+    state.items = itemsArray[0]
+    state.itemsToBe = itemsArray[1]
   },
 
   [types.SET_TOTAL_ITEMS] (state, totalItems) {

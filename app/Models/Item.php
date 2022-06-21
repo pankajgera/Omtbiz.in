@@ -18,6 +18,7 @@ class Item extends Model
         'description',
         'images_id',
         'dispatch_id',
+        'status',
     ];
 
     protected $casts = [
