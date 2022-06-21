@@ -105,19 +105,6 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ totalInvoices }}</b></p>
-
-        <!-- Tabs -->
-        <!-- <ul class="tabs">
-          <li class="tab" @click="getStatus('UNPAID')">
-            <a :class="['tab-link', {'a-active': filters.status.value === 'UNPAID'}]" href="#" >{{ $t('general.due') }}</a>
-          </li>
-          <li class="tab" @click="getStatus('DRAFT')">
-            <a :class="['tab-link', {'a-active': filters.status.value === 'DRAFT'}]" href="#">{{ $t('general.draft') }}</a>
-          </li>
-          <li class="tab" @click="getStatus('')">
-            <a :class="['tab-link', {'a-active': filters.status.value === '' || filters.status.value === null || filters.status.value !== 'DRAFT' && filters.status.value !== 'UNPAID'}]" href="#">{{ $t('general.all') }}</a>
-          </li>
-        </ul> -->
         <transition name="fade">
           <v-dropdown v-if="selectedInvoices.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
