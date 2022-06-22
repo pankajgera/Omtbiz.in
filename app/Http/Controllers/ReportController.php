@@ -20,6 +20,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 class ReportController extends Controller
 {
+    /**
+     * Customer sales report
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return PDF
+     */
     public function customersSalesReport($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
@@ -84,6 +91,13 @@ class ReportController extends Controller
         return $pdf->stream();
     }
 
+    /**
+     * Item sale report
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return PDF
+     */
     public function itemsSalesReport($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
@@ -135,6 +149,13 @@ class ReportController extends Controller
         return $pdf->stream();
     }
 
+    /**
+     * Expenses report
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return PDF
+     */
     public function expensesReport($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
@@ -186,7 +207,14 @@ class ReportController extends Controller
         return $pdf->stream();
     }
 
-    public function taxSummery($hash, Request $request)
+    /**
+     * Tax summary
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return void
+     */
+    public function taxSummary($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
 
@@ -239,6 +267,13 @@ class ReportController extends Controller
         return $pdf->stream();
     }
 
+    /**
+     * Profit loss report
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return PDF
+     */
     public function profitLossReport($hash, Request $request)
     {
         $company = Company::where('unique_hash', $hash)->first();
@@ -300,6 +335,10 @@ class ReportController extends Controller
 
     /**
      * Customer report
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return PDF
      */
     public function customersReport($hash, Request $request)
     {
@@ -475,7 +514,10 @@ class ReportController extends Controller
     }
 
     /**
-     * Ledgers in customer report
+     * Ledger in customer report
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getLedgersInReport(Request $request)
     {
@@ -486,7 +528,11 @@ class ReportController extends Controller
     }
 
     /**
-     * Banks Report
+     * Bank report
+     *
+     * @param string $hash
+     * @param Request $request
+     * @return PDF
      */
     public function banksReport($hash, Request $request)
     {
@@ -595,6 +641,10 @@ class ReportController extends Controller
 
     /**
      * Generate Invoice Report
+     *
+     * @param Request $request
+     * @param string|integer $id
+     * @return PDF
      */
     public function invoiceReport(Request $request, $id)
     {
