@@ -176,7 +176,7 @@ export default {
       return false
     }
   },
-  created () {
+  mounted() {
     this.fetchDispatch()
     if (this.isEdit) {
       this.loadEditData()
@@ -228,9 +228,6 @@ export default {
         //which is set with dispatchOrgList
         this.dispatchList = unique
         this.dispatchOrgList = response.data.dispatch
-        if (this.isEdit) {
-          this.loadEditData()
-        }
         this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch
         if (this.isToBeDispatch.length) {
           this.loadIsToBeDispatch()
@@ -258,6 +255,7 @@ export default {
       this.formData = response.data.item
       this.formData.unit = this.units.find(_unit => response.data.item.unit === _unit.name)
       this.fractional_price = response.data.item.price
+      this.dispatch = response.data.item.dispatch
     },
     async submitItem () {
       this.$v.formData.$touch()
