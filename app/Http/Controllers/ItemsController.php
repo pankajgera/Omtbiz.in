@@ -87,7 +87,7 @@ class ItemsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $item = Item::with('taxes')->find($id);
+        $item = Item::with(['taxes', 'dispatch'])->find($id);
 
         return response()->json([
             'item' => $item,
