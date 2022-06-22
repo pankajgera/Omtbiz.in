@@ -36,7 +36,7 @@ Route::group(['prefix' => 'reports'], function () {
     //----------------------------------
     Route::get('/tax-summary/{hash}', [
         'as' => 'get.tax.summary',
-        'uses' => 'ReportController@taxSummery'
+        'uses' => 'ReportController@taxSummary'
     ]);
 
 
