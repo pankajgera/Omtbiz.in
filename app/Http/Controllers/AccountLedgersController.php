@@ -55,7 +55,10 @@ class AccountLedgersController extends Controller
     public function display(Request $request, $id)
     {
         $ledger = AccountLedger::findOrFail($id);
-        $all_voucher_ids = Voucher::where('account_ledger_id', $id)->whereNotNull('related_voucher')->get();
+        $all_voucher_ids = Voucher::where('account_ledger_id', $id)
+            ->whereCompany($request->header('company'))
+            ->whereNotNull('related_voucher')
+            ->get();
         $each_ids = null;
         foreach ($all_voucher_ids as $each) {
             if ($each_ids) {
@@ -79,6 +82,7 @@ class AccountLedgersController extends Controller
         $calc_balance = $ledger->balance;
         $calc_type = $ledger->type;
         $calc_total = 0;
+
         if ($vouchers_debit_sum > $vouchers_credit_sum) {
             $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
             $calc_type = 'Dr';
