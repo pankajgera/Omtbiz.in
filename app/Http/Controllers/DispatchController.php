@@ -120,7 +120,7 @@ class DispatchController extends Controller
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
 
-            $invoices = Invoice::whereIn('id', explode(',',  $request->invoice_id))->get();
+            $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
             foreach ($invoices as $each) {
                 if (!$dispatch->name) {
                     $dispatch->update([
@@ -229,7 +229,7 @@ class DispatchController extends Controller
                     'time' => $request->time,
                     'status' => $request->status['name'],
                 ]);
-                $invoices = Invoice::whereIn('id', explode(',', $request->invoice_id))->get();
+                $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
                 $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'));
             }
             return response()->json([
