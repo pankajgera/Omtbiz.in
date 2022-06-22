@@ -38,9 +38,13 @@ class ItemsController extends Controller
 
         foreach ($items as $each) {
             $master = Invoice::where('dispatch_id', $each->dispatch_id)->first();
-            $party_name = AccountMaster::where('id', $master->account_master_id)->first();
-            if (isset($party_name)) {
-                $each['party_name'] = $party_name->name;
+            if (isset($master)) {
+                $party_name = AccountMaster::where('id', $master->account_master_id)->first();
+                if (isset($party_name)) {
+                    $each['party_name'] = $party_name->name;
+                }
+            } else {
+                $each['party_name'] = '';
             }
         }
 
@@ -57,9 +61,13 @@ class ItemsController extends Controller
 
         foreach ($itemsToBe as $each) {
             $master = Invoice::where('dispatch_id', $each->dispatch_id)->first();
-            $party_name = AccountMaster::where('id', $master->account_master_id)->first();
-            if (isset($party_name)) {
-                $each['party_name'] = $party_name->name;
+            if (isset($master)) {
+                $party_name = AccountMaster::where('id', $master->account_master_id)->first();
+                if (isset($party_name)) {
+                    $each['party_name'] = $party_name->name;
+                }
+            } else {
+                $each['party_name'] = '';
             }
         }
 
