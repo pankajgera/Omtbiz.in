@@ -369,13 +369,12 @@ class ReportController extends Controller
             ->orderBy('id')
             ->get();
 
-        $totalAmount = 0;
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
         }
 
-        $vouchers_debit_sum = $related_vouchers->sum('debit');
-        $vouchers_credit_sum = $related_vouchers->sum('credit');
+        $vouchers_debit_sum = $all_voucher_ids->sum('debit');
+        $vouchers_credit_sum = $all_voucher_ids->sum('credit');
 
         $vouchers_before_debit_sum = $vouchers_before_selected_from->sum('debit');
         $vouchers_before_credit_sum = $vouchers_before_selected_from->sum('credit');
