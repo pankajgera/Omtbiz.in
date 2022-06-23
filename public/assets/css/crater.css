@@ -10673,7 +10673,11 @@ a:hover, a:focus {
   padding: 1px 4px;
   border: 1px solid rgba(182, 182, 182, 0.5) !important;
   text-decoration: none;
-  border-radius: 30px;
+  border-radius: 10%/10%;
+  -webkit-border-radius: 10%/10%;
+  -moz-border-radius: 10%/10%;
+  -ms-border-radius: 10%/10%;
+  -o-border-radius: 10%/10%;
 }
 
 mark,
