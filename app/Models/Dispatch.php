@@ -102,6 +102,7 @@ class Dispatch extends Model
                 $dis->person = $dispatch->person;
                 $dis->company_id = $dispatch->company_id;
                 $dis->save();
+                self::addDispatchBillTy($dis, $invoices->sum('total'), $company_id);
             }
             $dispatch->delete();
             //Delete item (bill-ty) if exists in "items" table
@@ -120,10 +121,11 @@ class Dispatch extends Model
             }
         }
 
-        self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
         $dispatch->update([
             'status' => 'Sent',
         ]);
+
+        self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
         return $dispatch;
     }
 
@@ -145,7 +147,7 @@ class Dispatch extends Model
         $item->company_id = $company_id;
         $item->price = $invoice_total_amount;
         $item->dispatch_id = $dispatch->id;
-        $item->status = 'Draft';
+        $item->status = $dispatch->status;
         $item->save();
     }
 }

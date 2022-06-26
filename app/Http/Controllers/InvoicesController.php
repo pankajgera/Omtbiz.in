@@ -155,6 +155,8 @@ class InvoicesController extends Controller
             $dispatch->status = 'Draft';
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
+            //Add bill ty for dispatch
+            $dispatch->addDispatchBillTy($dispatch, $invoice->sum('total'), $request->header('company'));
 
             $invoice->update([
                 'dispatch_id' => $dispatch->id,
