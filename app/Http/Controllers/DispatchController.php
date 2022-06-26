@@ -6,6 +6,7 @@ use App\Models\AccountMaster;
 use Illuminate\Http\Request;
 use App\Models\Dispatch;
 use App\Models\Invoice;
+use App\Models\Item;
 use Carbon\Carbon;
 use Exception;
 use Log;
@@ -189,8 +190,10 @@ class DispatchController extends Controller
                     ]);
                 }
             }
-            $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
 
+            Item::whereIn('dispatch_id', [$dispatch->id])->update([
+                'status' => $dispatch->status,
+            ]);
             return response()->json([
                 'dispatch' => $dispatch,
             ]);
