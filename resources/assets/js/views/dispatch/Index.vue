@@ -616,7 +616,8 @@ export default {
       })
     },
     async multipleDispatch (type) {
-      let tobeDispatchArray = this.toBeDispatch.filter((i, key) => i.id === this.selectedToBeDispatch[key]);
+      let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));
+      let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));
       let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);
       if (type === 'draft') {
         modal_text = this.$tc('dispatch.confirm_dispatch', 2);
@@ -630,6 +631,13 @@ export default {
       }).then(async (willSend) => {
         if (willSend) {
           if ('sent' === type) {
+            let name = '';
+            dispatchArray.map(i => {
+              if (name && name !== i.master.name) {
+                 window.toastr['error']('To move multiple dispatch, party name should be same.')
+                 return
+              }
+            });
             let res = await this.moveMultipleDispatch()
             if (res.data.dispatch) {
               window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
@@ -638,7 +646,13 @@ export default {
               window.toastr['error'](res.data.message)
             }
           } else {
+            let name = '';
             tobeDispatchArray.map(i => {
+              if (name && name !== i.master.name) {
+                 window.toastr['error']('To move multiple dispatch, party name should be same.')
+                 return
+              }
+              name = i.master.name
               if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
                 window.open('/dispatch/' + i.id + '/edit', '_blank').focus();
               }
