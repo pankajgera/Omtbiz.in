@@ -322,7 +322,11 @@ export default {
             dangerMode: true
           }).then(async (success) => {
             if (success) {
-              window.open('/inventory/' + this.inventory.id + '/edit', '_blank').focus()
+              let id = this.inventory.id ? this.inventory.id : this.inventory.inventory_id;
+              this.inventory.quantity = null
+              window.open('/inventory/' + id + '/edit', '_blank').focus()
+            } else {
+              this.inventory.quantity = null
             }
           })
         } else {
