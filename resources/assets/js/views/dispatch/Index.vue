@@ -638,7 +638,7 @@ export default {
                  return
               }
             });
-            let res = await this.moveMultipleDispatch()
+            let res = await this.moveMultipleDispatch(this.selectedDispatch)
             if (res.data.dispatch) {
               window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
               window.location.reload()
@@ -655,8 +655,16 @@ export default {
               name = i.master.name
               if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
                 window.open('/dispatch/' + i.id + '/edit', '_blank').focus();
+                return
               }
             })
+            let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)
+            if (res.data.dispatch) {
+              window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+              window.location.reload()
+            } else if (res.data.error) {
+              window.toastr['error'](res.data.message)
+            }
           }
         }
       })

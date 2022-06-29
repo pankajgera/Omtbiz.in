@@ -18,6 +18,6 @@ class Images extends Model
 
     public function item()
     {
-        return $this->belongsTo(\App\Models\Item::class);
+        return $this->belongsTo(Item::class);
     }
 }

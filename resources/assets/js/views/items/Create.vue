@@ -86,7 +86,15 @@
                 </div>
               </div>
               <div class="form-group">
-                <input type="file" accept="image/*" name="image" @change="uploadImage">
+                <div class="fileUpload btn btn-default">
+                  <label class="upload mb-0">
+                    <input type="file" accept="image/*" name="image" @change="uploadImage">
+                      Upload Image
+                  </label>
+                </div>
+                <div v-if="formData.image">
+                  <a style="font-size: 12px" :href="formData.image" target="_blank">{{ formData.image }} </a>
+                </div>
               </div>
               <div class="form-group">
                 <base-button
@@ -110,7 +118,16 @@
     </div>
   </div>
 </template>
-
+<style scoped>
+input[type="file"]
+{
+  display: none;
+}
+.fileUpload input.upload
+{
+    display: inline-block;
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
@@ -256,6 +273,8 @@ export default {
       this.formData.unit = this.units.find(_unit => response.data.item.unit === _unit.name)
       this.fractional_price = response.data.item.price
       this.dispatch = response.data.item.dispatch
+      this.previewImage = response.data.item.images.original_image_path
+      this.formData.image = response.data.item.images.original_image_path
     },
     async submitItem () {
       this.$v.formData.$touch()

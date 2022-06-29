@@ -136,9 +136,9 @@ export const resetSelectedDispatch = ({ commit, dispatch, state }, data) => {
 }
 
 
-export const moveMultipleDispatch = ({ commit, dispatch, state }, id) => {
+export const moveMultipleDispatch = ({ commit, dispatch, state }, ids) => {
   return new Promise((resolve, reject) => {
-      window.axios.post(`/api/dispatch/multiple`, { 'id': state.selectedDispatch }).then((response) => {
+      window.axios.post(`/api/dispatch/multiple`, { 'id': ids }).then((response) => {
           //commit(types.MULTIPLE_DISPATCH, state.selectedDispatch)
           resolve(response)
       }).catch((err) => {

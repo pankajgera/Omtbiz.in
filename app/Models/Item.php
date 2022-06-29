@@ -127,7 +127,7 @@ class Item extends Model
 
     public function images()
     {
-        return $this->belongsTo(\App\Models\Images::class);
+        return $this->belongsTo(Images::class);
     }
 
     /** Upload image to s3 and add id to items
