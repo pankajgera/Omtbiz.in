@@ -138,7 +138,9 @@ class DispatchController extends Controller
                     'paid_status' => 'DISPATCHED',
                 ]);
             }
-            $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+            if ('Sent' === $dispatch->status) {
+                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+            }
 
             return response()->json([
                 'dispatch' => $dispatch,
@@ -190,10 +192,10 @@ class DispatchController extends Controller
                     ]);
                 }
             }
+            if ('Sent' === $dispatch->status) {
+                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+            }
 
-            Item::whereIn('dispatch_id', [$dispatch->id])->update([
-                'status' => $dispatch->status,
-            ]);
             return response()->json([
                 'dispatch' => $dispatch,
             ]);
@@ -233,7 +235,9 @@ class DispatchController extends Controller
                     'status' => $request->status['name'],
                 ]);
                 $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
-                $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'));
+                if ('Sent' === $each->status) {
+                    $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'));
+                }
             }
             return response()->json([
                 'dispatch' => $all_selected_dispatch,

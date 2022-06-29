@@ -108,8 +108,6 @@ class InvoicesController extends Controller
     public function store(Requests\InvoicesRequest $request)
     {
         try {
-            // $invoice_number = explode("-", $request->invoice_number);
-            // $number_attributes['invoice_number'] = $invoice_number[0] . '-' . sprintf('%06d', intval($invoice_number[1]));
             $number_attributes['invoice_number'] = $request->invoice_number;
             Validator::make($number_attributes, [
                 'invoice_number' => 'required'
@@ -155,8 +153,6 @@ class InvoicesController extends Controller
             $dispatch->status = 'Draft';
             $dispatch->company_id = $request->header('company');
             $dispatch->save();
-            //Add bill ty for dispatch
-            $dispatch->addDispatchBillTy($dispatch, $invoice->sum('total'), $request->header('company'));
 
             $invoice->update([
                 'dispatch_id' => $dispatch->id,
@@ -172,17 +168,7 @@ class InvoicesController extends Controller
                 $inventory = $invoice->inventories()->create($invoiceInventory);
 
                 $inventory_id = $inventory->id;
-                // if (array_key_exists('taxes', $invoiceInventory) && $invoiceInventory['taxes']) {
-                //     foreach ($invoiceInventory['taxes'] as $tax) {
-                //         $tax['company_id'] = $request->header('company');
-                //         if (gettype($tax['amount']) !== "NULL") {
-                //             $inventory->taxes()->create($tax);
-                //         }
-                //     }
-                // }
-
                 //Reset inventory quantity
-
                 $invent = Inventory::find($inventory->inventory_id);
                 $quan = (int) ($inventory->quantity);
                 if ($invent) {
@@ -233,9 +219,6 @@ class InvoicesController extends Controller
                 'credit' => 0,
                 'balance' => $total_amount,
             ]);
-            //$opening_balance = (int) $request->debtors['opening_balance'];
-            //$calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
-            //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
             //Handle vouchers
             //Add journal entry

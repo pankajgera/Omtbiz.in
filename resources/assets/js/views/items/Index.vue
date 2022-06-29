@@ -77,7 +77,6 @@
 
     <div v-if="!showEmptyScreen">
       <div class="table-container">
-
         <div class="table-actions mt-5">
           <transition name="fade">
             <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
@@ -201,9 +200,7 @@
         </table-component>
       </div>
 
-
       <div class="table-container">
-
         <div class="table-actions mt-5">
           <transition name="fade">
             <v-dropdown v-if="selectedItems.length" :show-arrow="false">

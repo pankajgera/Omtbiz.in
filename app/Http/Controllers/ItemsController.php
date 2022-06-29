@@ -87,7 +87,7 @@ class ItemsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $item = Item::with(['taxes', 'dispatch'])->find($id);
+        $item = Item::with(['taxes', 'dispatch', 'images'])->find($id);
 
         return response()->json([
             'item' => $item,
@@ -110,7 +110,7 @@ class ItemsController extends Controller
             throw new Exception('Price cannot be null');
         }
         $date_format = 'Y-m-d\TH:i:s.v\Z';
-        if (strpos($request->date_time, ' ') !== false) {
+        if (strpos($request->date, ' ') !== false) {
             $date_format = 'Y-m-d H:i:s';
         }
         $date = Carbon::createFromFormat($date_format, $request->date);
@@ -161,7 +161,7 @@ class ItemsController extends Controller
             throw new Exception('Price cannot be null');
         }
         $date_format = 'Y-m-d\TH:i:s.v\Z';
-        if (strpos($request->date_time, ' ') !== false) {
+        if (strpos($request->date, ' ') !== false) {
             $date_format = 'Y-m-d H:i:s';
         }
         $date = Carbon::createFromFormat($date_format, $request->date);
@@ -174,12 +174,18 @@ class ItemsController extends Controller
         $item->description = $request->description;
         $item->price = $request->price;
         $item->dispatch_id = $request->dispatch_id;
+        $item->status = 'Sent';
         $item->save();
 
         $oldTaxes = $item->taxes->toArray();
 
         foreach ($oldTaxes as $oldTax) {
             Tax::destroy($oldTax['id']);
+        }
+
+        $image = '';
+        if ($request->image) {
+            $image = $item->uploadImage($request->image);
         }
 
         if ($request->has('taxes')) {
@@ -193,6 +199,7 @@ class ItemsController extends Controller
 
         return response()->json([
             'item' => $item,
+            'image' => $image,
         ]);
     }
 

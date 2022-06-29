@@ -147,7 +147,17 @@ class Dispatch extends Model
         $item->company_id = $company_id;
         $item->price = $invoice_total_amount;
         $item->dispatch_id = $dispatch->id;
-        $item->status = $dispatch->status;
+        $item->status = 'Draft';
         $item->save();
+    }
+
+    /**
+     * Remove bill ty if dispatch is moved tobe
+     *
+     * @param Dispatch $dispatch
+     */
+    public function removeDispatchBillTy(Dispatch $dispatch)
+    {
+        Item::whereIn('dispatch_id', $dispatch->id)->delete();
     }
 }
