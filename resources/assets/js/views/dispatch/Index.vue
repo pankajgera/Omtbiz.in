@@ -639,31 +639,36 @@ export default {
               }
             });
             let res = await this.moveMultipleDispatch(this.selectedDispatch)
-            if (res.data.dispatch) {
+            if (res) {
               window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
               window.location.reload()
-            } else if (res.data.error) {
+            } else {
               window.toastr['error'](res.data.message)
             }
           } else {
             let name = '';
+            let allowMoving = true;
             tobeDispatchArray.map(i => {
               if (name && name !== i.master.name) {
                  window.toastr['error']('To move multiple dispatch, party name should be same.')
+                 allowMoving = false
                  return
               }
               name = i.master.name
               if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
-                window.open('/dispatch/' + i.id + '/edit', '_blank').focus();
+                window.open('/dispatch/' + i.id + '/edit', '_blank').focus()
+                allowMoving = false
                 return
               }
             })
-            let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)
-            if (res.data.dispatch) {
-              window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
-              window.location.reload()
-            } else if (res.data.error) {
-              window.toastr['error'](res.data.message)
+            if (allowMoving) {
+              let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)
+              if (res) {
+                window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+                window.location.reload()
+              } else {
+                window.toastr['error'](res.data.message)
+              }
             }
           }
         }
