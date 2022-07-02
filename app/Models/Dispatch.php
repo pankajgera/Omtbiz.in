@@ -91,22 +91,12 @@ class Dispatch extends Model
         $dispatch = Dispatch::find($id);
         $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
         if ('Sent' === $dispatch->status) {
-            foreach ($invoices as $each) {
-                $dis = new Dispatch();
-                $dis->name = null;
-                $dis->invoice_id = $each->id;
-                $dis->date_time = $dispatch->date_time;
-                $dis->time = $dispatch->time;
-                $dis->status = 'Draft';
-                $dis->transport = $dispatch->transport;
-                $dis->person = $dispatch->person;
-                $dis->company_id = $dispatch->company_id;
-                $dis->save();
-                self::addDispatchBillTy($dis, $invoices->sum('total'), $company_id);
-            }
-            $dispatch->delete();
-            //Delete item (bill-ty) if exists in "items" table
-            Item::where('dispatch_id', $dispatch->id)->delete();
+            $dispatch->update([
+                'status' => 'Draft',
+            ]);
+            Item::whereIn('dispatch_id', [$dispatch->id])->update([
+                'status' => 'Draft',
+            ]);
             return true;
         }
         foreach ($invoices as $each) {
