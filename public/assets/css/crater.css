@@ -1991,10 +1991,6 @@ pre code {
   color: #6c757d;
   opacity: 1;
 }
-.form-control:-ms-input-placeholder {
-  color: #6c757d;
-  opacity: 1;
-}
 .form-control::placeholder {
   color: #6c757d;
   opacity: 1;
@@ -2411,7 +2407,6 @@ textarea.form-control {
   vertical-align: middle;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
   background-color: transparent;
   border: 1px solid transparent;
@@ -7367,14 +7362,12 @@ button.bg-dark:focus {
 .user-select-auto {
   -webkit-user-select: auto !important;
      -moz-user-select: auto !important;
-      -ms-user-select: auto !important;
           user-select: auto !important;
 }
 
 .user-select-none {
   -webkit-user-select: none !important;
      -moz-user-select: none !important;
-      -ms-user-select: none !important;
           user-select: none !important;
 }
 
@@ -11233,14 +11226,6 @@ input[type=number] {
   line-height: 21px;
   color: #B9C1D1;
 }
-.base-input .input-field:-ms-input-placeholder {
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 21px;
-  color: #B9C1D1;
-}
 .base-input .input-field::placeholder {
   font-family: Poppins;
   font-style: normal;
@@ -11354,14 +11339,6 @@ input[type=number] {
   line-height: 21px;
 }
 .base-text-area.text-area-field::-moz-placeholder {
-  font-family: Poppins;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 21px;
-  color: #B9C1D1;
-}
-.base-text-area.text-area-field:-ms-input-placeholder {
   font-family: Poppins;
   font-style: normal;
   font-weight: 500;
@@ -12266,7 +12243,6 @@ input[type=number] {
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 
@@ -12332,7 +12308,6 @@ table.full-width {
   color: #e37a7a;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
           user-select: none;
 }
 .table-actions .table-actions-button::after {
@@ -12575,8 +12550,7 @@ table.full-width {
   pointer-events: none;
   -webkit-user-select: none;
   -moz-user-select: none;
-  -ms-user-select: none;
-      user-select: none;
+  user-select: none;
 }
 
 .pace-inactive {
@@ -13193,10 +13167,6 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__input::-moz-placeholder {
-  color: #B9C1D1;
-}
-
-.multiselect__input:-ms-input-placeholder {
   color: #B9C1D1;
 }
 
@@ -15313,12 +15283,6 @@ fieldset[disabled] .multiselect {
   font-size: 12px;
   color: #B9C1D1;
 }
-.invoice-create-page .item-row .item-description textarea:-ms-input-placeholder {
-  font-family: Poppins;
-  font-style: normal;
-  font-size: 12px;
-  color: #B9C1D1;
-}
 .invoice-create-page .item-row .item-description textarea::placeholder {
   font-family: Poppins;
   font-style: normal;
@@ -16041,12 +16005,6 @@ fieldset[disabled] .multiselect {
   color: #595959;
 }
 .estimate-create-page .item-row .item-description textarea::-moz-placeholder {
-  font-family: Poppins;
-  font-style: normal;
-  font-size: 12px;
-  color: #B9C1D1;
-}
-.estimate-create-page .item-row .item-description textarea:-ms-input-placeholder {
   font-family: Poppins;
   font-style: normal;
   font-size: 12px;
