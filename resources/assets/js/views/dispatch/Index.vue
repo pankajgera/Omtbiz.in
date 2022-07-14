@@ -652,13 +652,13 @@ export default {
               if (name && name !== i.master.name) {
                  window.toastr['error']('To move multiple dispatch, party name should be same.')
                  allowMoving = false
-                 return
+                 return true
               }
               name = i.master.name
               if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
                 window.open('/dispatch/' + i.id + '/edit', '_blank').focus()
                 allowMoving = false
-                return
+                return true
               }
             })
             if (allowMoving) {
