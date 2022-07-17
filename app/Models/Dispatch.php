@@ -82,41 +82,51 @@ class Dispatch extends Model
     /**
      * Move dispatch to draft or completed
      *
-     * @param Dispatch $id
+     * @param  $id
      * @param  $company_id
-     * @return Dispatch $dispatch
+     * @return Boolean
      */
     public static function moveDispatch($id,  $company_id)
     {
-        $dispatch = Dispatch::find($id);
-        $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
-        if ('Sent' === $dispatch->status) {
-            $dispatch->update([
-                'status' => 'Draft',
-            ]);
-            Item::whereIn('dispatch_id', [$dispatch->id])->update([
-                'status' => 'Draft',
-            ]);
-            return true;
-        }
-        foreach ($invoices as $each) {
-            if (!$dispatch->name) {
-                $dispatch->update([
-                    'name' => $each->invoice_number,
-                ]);
+        //Selected dispatch might have multiple invoices
+        $same_invoice_dispatch = Dispatch::whereIn('invoice_id', [Dispatch::where('id', $id)->value('invoice_id')])->get();
+        foreach ($same_invoice_dispatch as $dispatch) {
+            if (false === strpos($dispatch->invoice_id, ',')) {
+                $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
             } else {
-                $dispatch->update([
-                    'name' => $dispatch->name . ', ' . $each->invoice_number,
-                ]);
+                $invoices = Invoice::where('id', $dispatch->invoice_id)->get();
             }
+            if ('Sent' === $dispatch->status) {
+                $dispatch->update([
+                    'status' => 'Draft',
+                ]);
+                // Item::whereIn('dispatch_id', [$dispatch->id])->update([
+                //     'status' => 'Draft',
+                // ]);
+                self::removeDispatchBillTy($dispatch);
+                return true;
+            }
+            foreach ($invoices as $each) {
+                if (!$dispatch->name) {
+                    $dispatch->update([
+                        'name' => $each->invoice_number,
+                    ]);
+                } else {
+                    if (false === strpos($dispatch->name, $each->invoice_number)) {
+                        $dispatch->update([
+                            'name' => $dispatch->name . ', ' . $each->invoice_number,
+                        ]);
+                    }
+                }
+            }
+
+            $dispatch->update([
+                'status' => 'Sent',
+            ]);
+
+            self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
         }
-
-        $dispatch->update([
-            'status' => 'Sent',
-        ]);
-
-        self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
-        return $dispatch;
+        return true;
     }
 
     /**
@@ -146,8 +156,8 @@ class Dispatch extends Model
      *
      * @param Dispatch $dispatch
      */
-    public function removeDispatchBillTy(Dispatch $dispatch)
+    public static function removeDispatchBillTy(Dispatch $dispatch)
     {
-        Item::whereIn('dispatch_id', $dispatch->id)->delete();
+        Item::where('dispatch_id', $dispatch->id)->delete();
     }
 }
