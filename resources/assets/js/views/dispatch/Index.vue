@@ -648,7 +648,8 @@ export default {
           } else {
             let name = '';
             let allowMoving = true;
-            tobeDispatchArray.map(i => {
+            let showEdit = [];
+            tobeDispatchArray.some(i => {
               if (name && name !== i.master.name) {
                  window.toastr['error']('To move multiple dispatch, party name should be same.')
                  allowMoving = false
@@ -656,11 +657,15 @@ export default {
               }
               name = i.master.name
               if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
-                window.open('/dispatch/' + i.id + '/edit', '_blank').focus()
+                showEdit.push(i)
                 allowMoving = false
-                return true
               }
             })
+            if (showEdit.length) {
+              showEdit.map(i => {
+                window.open('/dispatch/' + i.id + '/edit', '_blank').focus()
+              })
+            }
             if (allowMoving) {
               let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)
               if (res) {
