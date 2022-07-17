@@ -43,6 +43,7 @@ class DispatchController extends Controller
             'orderBy',
         ]))
             ->whereCompany($request->header('company'))
+            ->groupBy('invoice_id')
             ->latest()
             ->paginate($limit);
 
