@@ -145,7 +145,7 @@
             show="invoice_number"
           >
             <template slot-scope="row">
-                {{ row && row.dispatch ? row.dispatch.name : '' }}
+                {{ row && row.dispatch ? row.dispatch.name : row.name }}
             </template>
           </table-column>
           <table-column
@@ -270,7 +270,7 @@
             show="invoice_number"
           >
             <template slot-scope="row">
-                {{ row && row.dispatch ? row.dispatch.name : '' }}
+                {{ row && row.dispatch ? row.dispatch.name : row.name }}
             </template>
           </table-column>
           <!-- <table-column

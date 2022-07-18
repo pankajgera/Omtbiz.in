@@ -143,7 +143,7 @@ class DispatchController extends Controller
                 ]);
             }
             if ('Sent' === $dispatch->status) {
-                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'), []);
             }
 
             return response()->json([
@@ -203,7 +203,7 @@ class DispatchController extends Controller
                     }
                 }
                 if ('Sent' === $dispatch->status) {
-                    $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+                    $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'), []);
                 } else {
                     $dispatch->removeDispatchBillTy($dispatch);
                 }
@@ -251,7 +251,7 @@ class DispatchController extends Controller
                 ]);
                 $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
                 if ('Sent' === $each->status) {
-                    $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'));
+                    $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'), []);
                 } else {
                     $each->removeDispatchBillTy($each);
                 }

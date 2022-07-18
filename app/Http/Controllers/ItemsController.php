@@ -46,6 +46,10 @@ class ItemsController extends Controller
             } else {
                 $each['party_name'] = '';
             }
+
+            if (false !== strpos($each->dispatch_id, ',')) {
+                $each['dispatch'] = Dispatch::whereIn('id', [$each->dispatch_id])->first();
+            }
         }
 
         $itemsToBe = Item::where('status', 'Draft')->applyFilters($request->only([
@@ -68,6 +72,10 @@ class ItemsController extends Controller
                 }
             } else {
                 $each['party_name'] = '';
+            }
+
+            if (false !== strpos($each->dispatch_id, ',')) {
+                $each['dispatch'] = Dispatch::whereIn('id', [$each->dispatch_id])->first();
             }
         }
 

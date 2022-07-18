@@ -100,11 +100,8 @@ class Dispatch extends Model
                 $dispatch->update([
                     'status' => 'Draft',
                 ]);
-                // Item::whereIn('dispatch_id', [$dispatch->id])->update([
-                //     'status' => 'Draft',
-                // ]);
                 self::removeDispatchBillTy($dispatch);
-                return true;
+                continue;
             }
             foreach ($invoices as $each) {
                 if (!$dispatch->name) {
@@ -123,8 +120,15 @@ class Dispatch extends Model
             $dispatch->update([
                 'status' => 'Sent',
             ]);
-
-            self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id);
+            //If invoice contain more than one,
+            //then don't add bill ty here
+            if (false === strpos($dispatch->invoice_id, ',')) {
+                self::addDispatchBillTy($dispatch, $invoices->sum('total'), $company_id, []);
+            }
+        }
+        //Add bill-ty for multiple dispatch (invoice)
+        if (false !== strpos($same_invoice_dispatch->first()->invoice_id, ',')) {
+            self::addDispatchBillTy($same_invoice_dispatch->first(), $invoices->sum('total'), $company_id, $same_invoice_dispatch->pluck('id')->toArray());
         }
         return true;
     }
@@ -132,13 +136,14 @@ class Dispatch extends Model
     /**
      * Dipatched invoices will create bill-ty
      *
-     * @param mixed $dispatch_ids
+     * @param mixed $dipatch
      * @param int $invoice_total_amount
      * @param int $company_id
+     * @param ?array $dispatch_ids
      *
      * @return void
      */
-    public static function addDispatchBillTy($dispatch, $invoice_total_amount, $company_id)
+    public static function addDispatchBillTy($dispatch, $invoice_total_amount, $company_id, ?array $dispatch_ids)
     {
         $item = new Item();
         $item->name = $dispatch->name;
@@ -146,7 +151,7 @@ class Dispatch extends Model
         $item->description = '';
         $item->company_id = $company_id;
         $item->price = $invoice_total_amount;
-        $item->dispatch_id = $dispatch->id;
+        $item->dispatch_id = $dispatch_ids ? implode(', ', $dispatch_ids) : $dispatch->id;
         $item->status = 'Draft';
         $item->save();
     }
