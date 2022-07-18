@@ -127,12 +127,14 @@ class DispatchController extends Controller
             foreach ($invoices as $each) {
                 if (!$dispatch->name) {
                     $dispatch->update([
-                        'name' => $dispatch->name . ', ' . $each->invoice_number,
-                    ]);
-                } else {
-                    $dispatch->update([
                         'name' => $dispatch->name,
                     ]);
+                } else {
+                    if (false === strpos($dispatch->name, $each->invoice_number)) {
+                        $dispatch->update([
+                            'name' => $dispatch->name . ', ' . $each->invoice_number,
+                        ]);
+                    }
                 }
 
                 $each->update([
@@ -141,7 +143,7 @@ class DispatchController extends Controller
                 ]);
             }
             if ('Sent' === $dispatch->status) {
-                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'), []);
             }
 
             return response()->json([
@@ -171,31 +173,40 @@ class DispatchController extends Controller
             }
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
-            $dispatch = Dispatch::find($id);
-            $dispatch->name = null;
-            $dispatch->invoice_id = implode(', ', $request->invoice_id);
-            $dispatch->date_time = $date;
-            $dispatch->transport = $request->transport;
-            $dispatch->person = $request->person;
-            $dispatch->time = $request->time;
-            $dispatch->status = $request->status['name'];
-            $dispatch->company_id = $request->header('company');
-            $dispatch->save();
 
-            $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
-            foreach ($invoices as $each) {
-                if (!$dispatch->name) {
-                    $dispatch->update([
-                        'name' => $each->invoice_number,
-                    ]);
-                } else {
-                    $dispatch->update([
-                        'name' => $dispatch->name . ', ' . $each->invoice_number,
-                    ]);
+            //Selected dispatch might have multiple invoices
+            $same_invoice_dispatch = Dispatch::whereIn('invoice_id', [Dispatch::where('id', $id)->value('invoice_id')])->get();
+
+            foreach ($same_invoice_dispatch as $dispatch) {
+                //$dispatch->name = null;
+                $dispatch->invoice_id = implode(', ', $request->invoice_id);
+                $dispatch->date_time = $date;
+                $dispatch->transport = $request->transport;
+                $dispatch->person = $request->person;
+                $dispatch->time = $request->time;
+                $dispatch->status = $request->status['name'];
+                $dispatch->company_id = $request->header('company');
+                $dispatch->save();
+
+                $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+                foreach ($invoices as $each) {
+                    if (!$dispatch->name) {
+                        $dispatch->update([
+                            'name' => $each->invoice_number,
+                        ]);
+                    } else {
+                        if (false === strpos($dispatch->name, $each->invoice_number)) {
+                            $dispatch->update([
+                                'name' => $dispatch->name . ', ' . $each->invoice_number,
+                            ]);
+                        }
+                    }
                 }
-            }
-            if ('Sent' === $dispatch->status) {
-                $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'));
+                if ('Sent' === $dispatch->status) {
+                    $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'), []);
+                } else {
+                    $dispatch->removeDispatchBillTy($dispatch);
+                }
             }
 
             return response()->json([
@@ -219,8 +230,10 @@ class DispatchController extends Controller
     public function updateToBeDispatch(Request $request)
     {
         $all_selected_dispatch = Dispatch::whereIn('id', $request->all_selected_dispatch)->get();
+        //Selected dispatch might have multiple invoices
+        $same_invoice_dispatch = Dispatch::whereIn('invoice_id', $all_selected_dispatch->pluck('invoice_id')->toArray())->get();
         try {
-            foreach ($all_selected_dispatch as $each) {
+            foreach ($same_invoice_dispatch as $each) {
                 $date_format = 'Y-m-d\TH:i:s.v\Z';
                 if (strpos($request->date_time, ' ') !== false) {
                     $date_format = 'Y-m-d H:i:s';
@@ -238,7 +251,9 @@ class DispatchController extends Controller
                 ]);
                 $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
                 if ('Sent' === $each->status) {
-                    $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'));
+                    $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'), []);
+                } else {
+                    $each->removeDispatchBillTy($each);
                 }
             }
             return response()->json([
