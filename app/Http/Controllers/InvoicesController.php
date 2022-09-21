@@ -83,7 +83,7 @@ class InvoicesController extends Controller
         }
 
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
-        $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total', 'account_master_id')->get();
+        $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
 
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
@@ -323,11 +323,20 @@ class InvoicesController extends Controller
             $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
 
             if ($invoice) {
+                //Update estimate
+                if ($request->estimate) {
+                    Estimate::where('id', $request->estimate['id'])->update([
+                        'status' => 'SENT',
+                        'reference_number' => $invoice->invoice_number,
+                    ]);
+                }
+
                 return response()->json([
                     'url' => url('/invoices/pdf/' . $invoice->unique_hash),
                     'invoice' => $invoice
                 ]);
             }
+
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
@@ -378,6 +387,10 @@ class InvoicesController extends Controller
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
+        $find_invoice_estimate = Estimate::where('reference_number', $invoice->invoice_number)->get();
+        if (0 < count($find_invoice_estimate)) {
+            $estimateList = $find_invoice_estimate;
+        }
 
         return response()->json([
             'invoiceNumber' =>  $invoice->reference_number,

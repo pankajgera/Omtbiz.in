@@ -21,7 +21,6 @@
                   focus
                   type="text"
                   name="name"
-                  @input="onSearch"
                 />
                 <div v-if="$v.formData.name.$error">
                   <span v-if="!$v.formData.name.required" class="text-danger">{{ $t('validation.required') }} </span>
