@@ -58,7 +58,7 @@
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
-            <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
@@ -73,7 +73,7 @@
                   track-by="invoice_number"
                 />
               </div>
-            </div>
+            </div> -->
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.amount') }}</label><span class="text-danger"> *</span>
@@ -180,7 +180,7 @@ export default {
         receipt_date: null,
         amount: null,
         receipt_mode: null,
-        invoice_id: null,
+        //invoice_id: null,
         notes: null,
         list: null,
       },
@@ -192,10 +192,10 @@ export default {
         masked: false
       },
       customer: null,
-      invoice: null,
+      //invoice: null,
       //customerList: [],
-      invoiceList: [],
-      invoiceListFiltered: [],
+      //invoiceList: [],
+      //invoiceListFiltered: [],
       isLoading: false,
       maxPayableAmount: Number.MAX_SAFE_INTEGER,
       isSettingInitialData: true,
@@ -303,20 +303,20 @@ export default {
         return this.formData.list
       },
       set(val) {
-        this.invoiceListFiltered = this.invoiceList.filter(i => i.account_master_id === val.id)
+        // this.invoiceListFiltered = this.invoiceList.filter(i => i.account_master_id === val.id)
         this.formData.list = val
       }
     }
   },
   watch: {
-    invoice (newValue) {
-      if (newValue) {
-        this.formData.invoice_id = newValue.id
-        if (!this.isEdit) {
-          this.setReceiptAmountByInvoiceData(newValue.id)
-        }
-      }
-    }
+    // invoice (newValue) {
+    //   if (newValue) {
+    //     this.formData.invoice_id = newValue.id
+    //     if (!this.isEdit) {
+    //       this.setReceiptAmountByInvoiceData(newValue.id)
+    //     }
+    //   }
+    // }
   },
   async mounted () {
     this.$nextTick(() => {
@@ -327,18 +327,18 @@ export default {
     })
   },
   methods: {
-    ...mapActions('invoice', [
-      'fetchInvoice'
-    ]),
+    // ...mapActions('invoice', [
+    //   'fetchInvoice'
+    // ]),
     ...mapActions('receipt', [
       'fetchCreateReceipt',
       'addReceipt',
       'updateReceipt',
       'fetchReceipt'
     ]),
-    invoiceWithAmount ({ invoice_number, due_amount }) {
-      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
-    },
+    // invoiceWithAmount ({ invoice_number, due_amount }) {
+    //   return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
+    // },
     async loadData () {
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
@@ -351,7 +351,7 @@ export default {
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
-          this.invoice = response.data.receipt.invoice
+          //this.invoice = response.data.receipt.invoice
         }
       } else {
         let response = await this.fetchCreateReceipt()
@@ -366,7 +366,7 @@ export default {
     async setInvoiceReceiptData () {
       let data = await this.fetchInvoice(this.$route.params.id)
       this.customer = data.data.invoice.user
-      this.invoice = data.data.invoice
+      //this.invoice = data.data.invoice
     },
     async setReceiptAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)

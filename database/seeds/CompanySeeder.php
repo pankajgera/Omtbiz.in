@@ -31,7 +31,9 @@ class CompanySeeder extends Seeder
         CompanySetting::create(['option' => 'invoice_auto_generate', 'value' => 'YES', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_prefix', 'value' => 'INV', 'company_id' => 1]);
         CompanySetting::create(['option' => 'estimate_prefix', 'value' => 'EST', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'receipt_prefix', 'value' => 'REC', 'company_id' => 1]);
         CompanySetting::create(['option' => 'estimate_auto_generate', 'value' => 'YES', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'receipt_auto_generate', 'value' => 'YES', 'company_id' => 1]);
         CompanySetting::create(['option' => 'payment_prefix', 'value' => 'PAY', 'company_id' => 1]);
         CompanySetting::create(['option' => 'payment_auto_generate', 'value' => 'YES', 'company_id' => 1]);
         CompanySetting::create(['option' => 'primary_text_color', 'value' => '#5851D8', 'company_id' => 1]);
