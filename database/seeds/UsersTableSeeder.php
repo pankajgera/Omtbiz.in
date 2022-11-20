@@ -19,8 +19,6 @@ class UsersTableSeeder extends Seeder
             'name' => 'testing',
             'role' => 'admin',
             'password' => Hash::make('testing@123'),
-            'company_id' => 1,
-            'company_name' => 'Local Company',
         ]);
 
         Setting::setSetting('profile_complete', 0);

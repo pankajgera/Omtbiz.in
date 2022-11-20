@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Address;
 use Illuminate\Database\Seeder;
 use App\Models\Company;
 use App\Models\CompanySetting;
+use App\Models\User;
 
 class CompanySeeder extends Seeder
 {
@@ -49,5 +51,15 @@ class CompanySeeder extends Seeder
         CompanySetting::create(['option' => 'invoice_description_text', 'value' => '#595959', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_border_color', 'value' => '#EAF1FB', 'company_id' => 1]);
 
+
+        User::where('id', 1)->update([
+            'company_id' => 1,
+            'company_name' => 'Local Company',
+        ]);
+
+        Address::where('id', 1)->update([
+            'country_id' => 101,
+            'company_id' => 1,
+        ]);
     }
 }

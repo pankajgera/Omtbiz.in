@@ -18,13 +18,11 @@ class AddressSeeder extends Seeder
             'address_street_2' => '',
             'city' => 'Jaipur',
             'state' => 'Rajasthan',
-            'country_id' => '101',
             'zip' => '302001',
+            'user_id' => 1,
             'phone' => '',
             'fax' => '',
             'type' => '',
-            'user_id' => '1',
-            'company_id' => 1,
         ]);
     }
 }
