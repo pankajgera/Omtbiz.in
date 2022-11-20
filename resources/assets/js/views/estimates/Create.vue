@@ -389,7 +389,6 @@ export default {
       if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
         return this.totalSimpleTax + this.totalCompoundTax
       }
-
       return window._.sumBy(this.newEstimate.items, function (tax) {
         return tax.tax
       })
@@ -553,7 +552,7 @@ export default {
       setTimeout(() => {
         window.location.reload()
         this.isLoading = false
-      }, 500)
+      }, 2000)
     },
     async showEstimatePopup (estimate_id) {
       swal({
@@ -591,7 +590,7 @@ export default {
           //this.showEstimatePopup(res.data.estimate.id)
           this.reset()
         }
-      }).catch((err) => {
+      }).catch((err) => {s
         this.isLoading = false
         if (err) {
           window.toastr['error'](err)
@@ -605,21 +604,22 @@ export default {
         return false
       }
       this.updateEstimate(data).then((res) => {
-        if (res.data.success) {
+        if (res.data && res.data.estimate && res.data.estimate.id) {
           window.toastr['success'](this.$t('estimates.updated_message'))
           this.isLoading = false
           //this.showEstimatePopup(res.data.estimate.id)
+          this.reset()
         }
-
         if (res.data.error === 'invalid_due_amount') {
           this.isLoading = false
-          window.toastr['error'](this.$t('estimates.invalid_due_amount_message'))
+           window.toastr['error'](this.$t('estimates.invalid_due_amount_message'))
+           this.reset()
         }
-
       }).catch((err) => {
         this.isLoading = false
         if (err) {
           window.toastr['error'](err)
+          this.reset()
           return true
         }
       })
