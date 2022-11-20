@@ -4970,15 +4970,6 @@ a.badge-dark:focus, a.badge-dark.focus {
   color: #171721;
 }
 
-@-webkit-keyframes progress-bar-stripes {
-  from {
-    background-position: 1rem 0;
-  }
-  to {
-    background-position: 0 0;
-  }
-}
-
 @keyframes progress-bar-stripes {
   from {
     background-position: 1rem 0;
@@ -5020,13 +5011,11 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .progress-bar-animated {
-  -webkit-animation: 1s linear infinite progress-bar-stripes;
-          animation: 1s linear infinite progress-bar-stripes;
+  animation: 1s linear infinite progress-bar-stripes;
 }
 @media (prefers-reduced-motion: reduce) {
   .progress-bar-animated {
-    -webkit-animation: none;
-            animation: none;
+    animation: none;
   }
 }
 
@@ -5472,7 +5461,6 @@ a.close.disabled {
 .modal-dialog-centered::before {
   display: block;
   height: calc(100vh - 1rem);
-  height: -webkit-min-content;
   height: -moz-min-content;
   height: min-content;
   content: "";
@@ -5583,7 +5571,6 @@ a.close.disabled {
   }
   .modal-dialog-centered::before {
     height: calc(100vh - 3.5rem);
-    height: -webkit-min-content;
     height: -moz-min-content;
     height: min-content;
   }
@@ -6030,12 +6017,6 @@ a.close.disabled {
   text-align: center;
 }
 
-@-webkit-keyframes spinner-border {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes spinner-border {
   to {
     transform: rotate(360deg);
@@ -6049,24 +6030,13 @@ a.close.disabled {
   border: 0.25em solid currentcolor;
   border-right-color: transparent;
   border-radius: 50%;
-  -webkit-animation: 0.75s linear infinite spinner-border;
-          animation: 0.75s linear infinite spinner-border;
+  animation: 0.75s linear infinite spinner-border;
 }
 
 .spinner-border-sm {
   width: 1rem;
   height: 1rem;
   border-width: 0.2em;
-}
-
-@-webkit-keyframes spinner-grow {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 @keyframes spinner-grow {
@@ -6086,8 +6056,7 @@ a.close.disabled {
   background-color: currentcolor;
   border-radius: 50%;
   opacity: 0;
-  -webkit-animation: 0.75s linear infinite spinner-grow;
-          animation: 0.75s linear infinite spinner-grow;
+  animation: 0.75s linear infinite spinner-grow;
 }
 
 .spinner-grow-sm {
@@ -6098,8 +6067,7 @@ a.close.disabled {
 @media (prefers-reduced-motion: reduce) {
   .spinner-border,
 .spinner-grow {
-    -webkit-animation-duration: 1.5s;
-            animation-duration: 1.5s;
+    animation-duration: 1.5s;
   }
 }
 .align-baseline {
@@ -10713,20 +10681,13 @@ code,
   color: #040405 !important;
 }
 
-@-webkit-keyframes spinner {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes spinner {
   to {
     transform: rotate(360deg);
   }
 }
 .fa-spinner {
-  -webkit-animation: spinner 1.5s linear infinite;
-          animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
 }
 
 .filter-section {
@@ -11422,20 +11383,6 @@ input[type=number] {
   width: 20px;
 }
 
-@-webkit-keyframes ball-scale-ripple-multiple {
-  0% {
-    transform: scale(0.1);
-    opacity: 1;
-  }
-  70% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 @keyframes ball-scale-ripple-multiple {
   0% {
     transform: scale(0.1);
@@ -11466,24 +11413,19 @@ input[type=number] {
   transform: translateY(-25px);
 }
 .ball-scale-ripple-multiple > div:nth-child(0) {
-  -webkit-animation-delay: -0.8s;
-          animation-delay: -0.8s;
+  animation-delay: -0.8s;
 }
 .ball-scale-ripple-multiple > div:nth-child(1) {
-  -webkit-animation-delay: -0.6s;
-          animation-delay: -0.6s;
+  animation-delay: -0.6s;
 }
 .ball-scale-ripple-multiple > div:nth-child(2) {
-  -webkit-animation-delay: -0.4s;
-          animation-delay: -0.4s;
+  animation-delay: -0.4s;
 }
 .ball-scale-ripple-multiple > div:nth-child(3) {
-  -webkit-animation-delay: -0.2s;
-          animation-delay: -0.2s;
+  animation-delay: -0.2s;
 }
 .ball-scale-ripple-multiple > div {
-  -webkit-animation-fill-mode: both;
-          animation-fill-mode: both;
+  animation-fill-mode: both;
   position: absolute;
   top: -2px;
   left: -26px;
@@ -11491,8 +11433,7 @@ input[type=number] {
   height: 50px;
   border-radius: 100%;
   border: 2px solid #e37a7a;
-  -webkit-animation: ball-scale-ripple-multiple 1.25s 0s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
-          animation: ball-scale-ripple-multiple 1.25s 0s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
+  animation: ball-scale-ripple-multiple 1.25s 0s infinite cubic-bezier(0.21, 0.53, 0.56, 0.8);
 }
 
 .base-prefix-input {
@@ -12601,17 +12542,7 @@ table.full-width {
   border-top-color: #f21c1c;
   border-left-color: #f21c1c;
   border-radius: 10px;
-  -webkit-animation: pace-spinner 400ms linear infinite;
   animation: pace-spinner 400ms linear infinite;
-}
-
-@-webkit-keyframes pace-spinner {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 @keyframes pace-spinner {
   0% {
@@ -13084,17 +13015,13 @@ fieldset[disabled] .multiselect {
 }
 
 .multiselect__spinner:before {
-  -webkit-animation: spinning 2.4s cubic-bezier(0.41, 0.26, 0.2, 0.62);
-          animation: spinning 2.4s cubic-bezier(0.41, 0.26, 0.2, 0.62);
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation: spinning 2.4s cubic-bezier(0.41, 0.26, 0.2, 0.62);
+  animation-iteration-count: infinite;
 }
 
 .multiselect__spinner:after {
-  -webkit-animation: spinning 2.4s cubic-bezier(0.51, 0.09, 0.21, 0.8);
-          animation: spinning 2.4s cubic-bezier(0.51, 0.09, 0.21, 0.8);
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation: spinning 2.4s cubic-bezier(0.51, 0.09, 0.21, 0.8);
+  animation-iteration-count: infinite;
 }
 
 .multiselect__loading-enter-active,
@@ -13528,15 +13455,6 @@ fieldset[disabled] .multiselect {
   left: 1px;
 }
 
-@-webkit-keyframes spinning {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(2turn);
-  }
-}
-
 @keyframes spinning {
   from {
     transform: rotate(0);
@@ -13791,8 +13709,7 @@ fieldset[disabled] .multiselect {
   max-height: 80%;
   position: absolute;
   opacity: 1;
-  -webkit-animation: fadeIn 2s ease;
-          animation: fadeIn 2s ease;
+  animation: fadeIn 2s ease;
 }
 .image-upload-box .upload-content {
   display: flex;
@@ -13841,14 +13758,6 @@ fieldset[disabled] .multiselect {
 }
 .avatar-upload .preview-logo {
   max-width: 80% !important;
-}
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
 }
 @keyframes fadeIn {
   0% {
