@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
             'email' => 'testing@gmail.com',
             'name' => 'testing',
             'role' => 'admin',
-            'password' => Hash::make('testing@123')
+            'password' => Hash::make('testing@123'),
         ]);
 
         Setting::setSetting('profile_complete', 0);
