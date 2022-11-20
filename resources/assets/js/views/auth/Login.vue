@@ -12,6 +12,7 @@
         focus
         type="email"
         name="email"
+        :id="'login-id'"
         @input="$v.loginData.email.$touch()"
         @change="isError=false"
       />
@@ -37,6 +38,7 @@
         type="password"
         name="password"
         show-password
+        :id="'login-password'"
         @input="$v.loginData.password.$touch()"
         @change="isError=false"
       />
