@@ -132,7 +132,6 @@ class FrontendController extends Controller
     {
         $invoice = Invoice::with([
             'inventories',
-            // 'items.taxes',
             'user',
             'invoiceTemplate',
             'taxes'
@@ -312,7 +311,6 @@ class FrontendController extends Controller
     {
         $invoice = Invoice::with([
             'inventories',
-            // 'items.taxes',
             'user',
             'invoiceTemplate',
             'taxes'
