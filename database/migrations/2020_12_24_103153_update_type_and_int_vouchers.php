@@ -15,9 +15,9 @@ class UpdateTypeAndIntVouchers extends Migration
     {
         Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
-        Schema::table('vouchers', function (Blueprint $table) {
-            $table->dropColumn('type');
-        });
+        // Schema::table('vouchers', function (Blueprint $table) {
+        //     $table->dropColumn('type');
+        // });
 
         Schema::table('vouchers', function (Blueprint $table) {
             $table->decimal('debit', 15, 2)->change();

@@ -20,7 +20,7 @@ class UpdateVouchersTable extends Migration
             $table->integer('account_ledger_id')->unsigned();
             $table->foreign('account_ledger_id')->references('id')->on('account_ledgers');
             $table->dateTime('date');
-            $table->enum('type', ['D','C'])->default('D');
+            //$table->enum('type', ['D','C'])->default('D');
             $table->string('debit_amount')->nullable()->change();
             $table->string('credit_amount')->nullable()->change();
             $table->string('short_narration')->nullable()->change();

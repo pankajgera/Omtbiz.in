@@ -14,17 +14,14 @@
 
 // Authentication & Password Reset
 //----------------------------------
-
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'Auth\AccessTokensController@store');
-    Route::get('logout', 'Auth\AccessTokensController@destroy');
     Route::post('refresh_token', 'Auth\AccessTokensController@update');
-
     // Send reset password mail
     Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail');
-
     // handle reset password form process
     Route::post('reset/password', 'Auth\ResetPasswordController@reset');
+    Route::get('logout', 'Auth\AccessTokensController@destroy');
 });
 
 Route::post('is-registered', [
