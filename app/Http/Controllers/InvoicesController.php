@@ -355,11 +355,10 @@ class InvoicesController extends Controller
     {
         $invoice = Invoice::with([
             'inventories',
-            // 'inventories.taxes',
             'user',
             'invoiceTemplate',
             'taxes.taxType'
-        ])->firstOrFail($id);
+        ])->findOrFail($id);
 
         $siteData = [
             'invoice' => $invoice,
