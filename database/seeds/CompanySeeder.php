@@ -52,6 +52,7 @@ class CompanySeeder extends Seeder
         CompanySetting::create(['option' => 'invoice_body_text', 'value' => '#040405', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_description_text', 'value' => '#595959', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_border_color', 'value' => '#EAF1FB', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'allow_negative_inventory', 'value' => 'NO', 'company_id' => 1]);
 
 
         User::where('id', 1)->update([

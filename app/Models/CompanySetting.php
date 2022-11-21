@@ -44,4 +44,15 @@ class CompanySetting extends Model
     {
         $query->where('company_id', $company_id);
     }
+
+    public static function getInventoryType($key, $company_id)
+    {
+        $setting = static::whereOption($key)->whereCompany($company_id)->first();
+
+        if ($setting) {
+            return $setting->value;
+        } else {
+            return null;
+        }
+    }
 }

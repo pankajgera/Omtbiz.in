@@ -278,6 +278,20 @@ class CompanyController extends Controller
         ]);
     }
 
+    /**
+     * Retrieve Inventory Type Specific Company Setting
+     * @param \App\Http\Requests\SettingKeyRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getInventoryType(SettingKeyRequest $request)
+    {
+        $setting = CompanySetting::getInventoryType($request->key, $request->header('company'));
+
+        return response()->json([
+            $request->key => $setting
+        ]);
+    }
+
 
     /**
      * Retrieve App Colors
