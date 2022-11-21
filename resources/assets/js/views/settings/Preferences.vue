@@ -111,7 +111,7 @@
       </form>
       <hr>
       <div class="page-header mt-3">
-        <h3 class="page-title">{{ $t('settings.preferences.discount_setting') }}</h3>
+        <!-- <h3 class="page-title">{{ $t('settings.preferences.discount_setting') }}</h3> -->
         <div class="flex-box">
           <div class="left">
             <base-switch
@@ -123,6 +123,20 @@
           <div class="right ml-15">
             <p class="box-title">  {{ $t('settings.preferences.discount_per_item') }} </p>
             <p class="box-desc">  {{ $t('settings.preferences.discount_setting_description') }} </p>
+          </div>
+        </div>
+        <div class="flex-box mt-3">
+          <div class="left">
+            <base-switch
+              v-model="allow_negative_inventory"
+              class="btn-switch"
+              @change="setInventory"
+            />
+          </div>
+          <div class="right ml-15">
+            <p class="box-title">  {{ $t('settings.preferences.allow_negative_inventory') }} </p>
+            <p class="box-desc">  {{ $t('settings.preferences.allow_negative_description1') }} </p>
+            <p class="box-desc">  {{ $t('settings.preferences.allow_negative_description2') }} </p>
           </div>
         </div>
       </div>
@@ -149,6 +163,7 @@ export default {
         fiscalYear: null
       },
       discount_per_item: null,
+      allow_negative_inventory: null,
       languages: [],
       currencies: [],
       timeZones: [],
@@ -178,6 +193,7 @@ export default {
   mounted () {
     this.setInitialData()
     this.getDiscountSettings()
+    this.getInventorySettings()
   },
   methods: {
     currencyNameWithCode ({name, code}) {
@@ -236,10 +252,28 @@ export default {
           this.discount_per_item = false
       }
     },
+    async getInventorySettings () {
+      let response = await axios.get('/api/settings/get-inventory-type?key=allow_negative_inventory')
+      if (response.data) {
+        response.data.allow_negative_inventory === 'YES' ?
+          this.allow_negative_inventory = true :
+          this.allow_negative_inventory = false
+      }
+    },
     async setDiscount () {
       let data = {
         key: 'discount_per_item',
         value: this.discount_per_item ? 'YES' : 'NO'
+      }
+      let response = await axios.put('/api/settings/update-setting', data)
+      if (response.data.success) {
+        window.toastr['success'](this.$t('general.setting_updated'))
+      }
+    },
+    async setInventory () {
+      let data = {
+        key: 'allow_negative_inventory',
+        value: this.allow_negative_inventory ? 'YES' : 'NO'
       }
       let response = await axios.put('/api/settings/update-setting', data)
       if (response.data.success) {

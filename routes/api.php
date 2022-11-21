@@ -352,6 +352,11 @@ Route::group(['middleware' => 'api'], function () {
             'uses' => 'CompanyController@getSetting'
         ]);
 
+        Route::get('/get-inventory-type', [
+            'as' => 'get.admin.setting',
+            'uses' => 'CompanyController@getInventoryType'
+        ]);
+
         Route::put('/update-setting', [
             'as' => 'admin.update.setting',
             'uses' => 'CompanyController@updateSetting'

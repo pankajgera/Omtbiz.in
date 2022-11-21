@@ -1005,7 +1005,10 @@
             "select_language": "select language",
             "select_time_zone": "select Time Zone",
             "select_date_formate": "select Date Formate",
-            "select_financial_year": "select financial year"
+            "select_financial_year": "select financial year",
+            "allow_negative_inventory": "Allow Negative Inventory",
+            "allow_negative_description1": "If 'Yes' is selected then app will allow Negative Inventory in Order, Estimate and in Invoice.",
+            "allow_negative_description2": "If 'No' is selected then app will not allow Negative Inventory in Order, Estimate and in Invoice. An error message will be shown - 'Stock is negative'"
         },
         "update_app": {
             "title": "Update App",
