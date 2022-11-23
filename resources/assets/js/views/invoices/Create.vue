@@ -149,6 +149,7 @@
             :is-disable="$route.query.d === 'true'"
             :inventory-type="'invoice'"
             :inventory-list="inventoryList"
+            :inventory-negative="inventoryNegative"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"
@@ -354,6 +355,7 @@ export default {
       },
       customers: [],
       inventoryList: [],
+      inventoryNegative: false,
       invoiceTemplates: [],
       selectedCurrency: '',
       taxPerInventory: null,
@@ -565,6 +567,7 @@ export default {
         if (response.data) {
           this.newInvoice = response.data.invoice
           this.inventoryList = response.data.invoice.inventories
+          this.inventoryNegative = response.data.inventory_negative
           this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
@@ -588,6 +591,7 @@ export default {
         this.invoiceTemplates = response.data.invoiceTemplates
         this.newInvoice.invoice_date = response.data.invoice_today_date
         this.inventoryList = response.data.inventories
+        this.inventoryNegative = response.data.inventory_negative
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
