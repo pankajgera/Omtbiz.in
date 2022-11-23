@@ -15,8 +15,10 @@
       track-by="id"
       class="multi-select-inventory remove-extra"
       @value="onTextChange"
-      @endlist="showEndList"
     >
+      <div slot="beforeList">
+        <li class="multiselect__option" @click="showEndList">{{ $t('general.end_of_list') }}</li>
+      </div>
       <div slot="afterList">
         <button type="button" class="list-add-button" @click="openInventoryModal">
           <font-awesome-icon class="icon" icon="cart-plus" />
