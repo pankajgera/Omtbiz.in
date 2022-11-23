@@ -201,6 +201,11 @@ export default {
     inventoryList: {
       type: [Object, Array],
       required: false,
+    },
+    inventoryNegative: {
+      type: Boolean,
+      default: false,
+      required: true,
     }
   },
   data () {
@@ -313,7 +318,7 @@ export default {
       },
       set: function (newValue) {
         let maxQuantity = parseInt(this.inventoryList.find(i => i.name === this.inventory.name).quantity);
-        if (maxQuantity < newValue) {
+        if (maxQuantity < newValue && !this.inventoryNegative) {
           swal({
             title: this.$t('invoices.out_of_stock'),
             text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantity}),

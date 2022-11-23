@@ -28,7 +28,7 @@ class InvoicesController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
@@ -74,7 +74,7 @@ class InvoicesController extends Controller
         $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company'));
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
-
+        $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
         $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix);
 
@@ -96,6 +96,7 @@ class InvoicesController extends Controller
             'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
+            'inventory_negative' => ('YES' === $inventory_negative),
         ]);
     }
 
@@ -337,6 +338,7 @@ class InvoicesController extends Controller
                 ]);
             }
 
+            return response()->json(204);
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
@@ -385,6 +387,7 @@ class InvoicesController extends Controller
         ])->find($id);
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+        $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
         $find_invoice_estimate = Estimate::where('reference_number', $invoice->invoice_number)->get();
         if (0 < count($find_invoice_estimate)) {
@@ -398,10 +401,10 @@ class InvoicesController extends Controller
             'tax_per_item' => $invoice->tax_per_item,
             'discount_per_item' => $invoice->discount_per_item,
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
-            'invoice_prefix' => $invoice->getInvoicePrefixAttribute(),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
             'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
+            'inventory_negative' => ('YES' === $inventory_negative),
         ]);
     }
 
@@ -648,7 +651,7 @@ class InvoicesController extends Controller
      * Delete invoice
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function delete(Request $request)
     {
@@ -657,7 +660,7 @@ class InvoicesController extends Controller
 
             if ($invoice->payments()->exists() && $invoice->payments()->count() > 0) {
                 return response()->json([
-                    'error' => 'payment_attached'
+                    'error' => 'payment_attached',
                 ]);
             }
         }

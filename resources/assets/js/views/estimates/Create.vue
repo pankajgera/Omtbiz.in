@@ -137,6 +137,7 @@
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'estimate'"
               :inventory-list="inventoryList"
+              :inventory-negative="inventoryNegative"
               @remove="removeInventory"
               @update="updateInventoryBounce"
               @inventoryValidate="checkInventoryData"
@@ -292,6 +293,7 @@ export default {
       siteURL: null,
       showAddNewInventory: true,
       showEndOfList: false,
+      inventoryNegative: false,
     }
   },
   validations () {
@@ -460,6 +462,7 @@ export default {
         if (response.data) {
           this.newEstimate = response.data.estimate
           this.inventoryList = response.data.inventories
+          this.inventoryNegative = response.data.inventory_negative
           this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
@@ -482,6 +485,7 @@ export default {
         this.estimateTemplates = response.data.estimateTemplates
         this.newEstimate.estimate_date = response.data.estimate_today_date
         this.inventoryList = response.data.inventories
+        this.inventoryNegative = response.data.inventory_negative
         this.estimatePrefix = response.data.estimate_prefix
         this.estimateNumAttribute = response.data.nextEstimateNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
