@@ -62,10 +62,10 @@ export default {
       ] : 'multiselect__option--disabled'
     },
     addPointerElement ({key = 'Enter'}, doNotSelectDefault) {
-      if (doNotSelectDefault && this.pointer === 0) {
-        this.$emit('endlist', true)
-        return
-      }
+      // if (doNotSelectDefault && this.pointer === 0) {
+      //   this.$emit('endlist', true)
+      //   return
+      // }
       /* istanbul ignore else */
       if (this.filteredOptions.length > 0) {
         this.select(this.filteredOptions[this.pointer], key)

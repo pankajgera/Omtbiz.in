@@ -85,7 +85,8 @@
         "street_2": "Street 2",
         "action_failed": "Action Failed",
         "to_display": "To Display",
-        "increase-price": "Increase Price"
+        "increase-price": "Increase Price",
+        "end_of_list": "End of list"
     },
     "dashboard": {
         "select_year": "Select year",
