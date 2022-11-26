@@ -12,7 +12,7 @@ class ExpenseCategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -23,21 +23,12 @@ class ExpenseCategoryController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        // return view('app.categories.create');
-    }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ExpenseCategoryRequest $request)
     {
@@ -57,7 +48,7 @@ class ExpenseCategoryController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\ExpenseCategory $ExpenseCategory
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(ExpenseCategory $ExpenseCategory)
     {
@@ -68,7 +59,7 @@ class ExpenseCategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\ExpensesCategory $ExpensesCategory
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit($id)
     {
@@ -84,7 +75,7 @@ class ExpenseCategoryController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \App\Models\ExpenseCategory $ExpenseCategory
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(ExpenseCategoryRequest $request, $id)
     {
@@ -103,7 +94,7 @@ class ExpenseCategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\ExpensesCategory $expensesCategory
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {

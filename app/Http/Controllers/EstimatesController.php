@@ -20,6 +20,7 @@ use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\TaxType;
 use App\Models\Tax;
+use Illuminate\Http\JsonResponse;
 
 class EstimatesController extends Controller
 {
@@ -27,7 +28,7 @@ class EstimatesController extends Controller
      * Index page
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -65,9 +66,9 @@ class EstimatesController extends Controller
      * Create new estimate page data
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
         $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
         $estimate_num_auto_generate = CompanySetting::getSetting('estimate_auto_generate', $request->header('company'));
@@ -88,7 +89,7 @@ class EstimatesController extends Controller
         return response()->json([
             'estimate_today_date' => Carbon::now()->toDateString(),
             'customers' => $customers,
-            'inventories' => Inventory::where('quantity', '>', 0)->get(),
+            'inventories' => Inventory::query()->get(),
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
             'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
             'taxes' => Tax::whereCompany($request->header('company'))->latest()->get(),
@@ -105,7 +106,7 @@ class EstimatesController extends Controller
      * Create new estimate
      *
      * @param EstimatesRequest $request
-     * @return Response
+     * @return JsonResponse
      */
     public function store(EstimatesRequest $request)
     {
@@ -228,7 +229,7 @@ class EstimatesController extends Controller
      *
      * @param Request $request
      * @param  mixed $id
-     * @return Response
+     * @return JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -254,7 +255,7 @@ class EstimatesController extends Controller
      *
      * @param Request $request
      * @param  mixed $id
-     * @return Response
+     * @return JsonResponse
      */
     public function edit(Request $request, $id)
     {
@@ -271,7 +272,7 @@ class EstimatesController extends Controller
 
         return response()->json([
             'customers' => $customers,
-            'inventories' => Inventory::where('quantity', '>', 0)->get(),
+            'inventories' => Inventory::query()->get(),
             'estimateNumber' => $estimate->getEstimateNumAttribute(),
             'taxes' => Tax::latest()->whereCompany($request->header('company'))->get(),
             'estimate' => $estimate,
@@ -289,7 +290,7 @@ class EstimatesController extends Controller
      *
      * @param EstimatesRequest $request
      * @param  mixed $id
-     * @return Response
+     * @return JsonResponse
      */
     public function update(EstimatesRequest $request, $id)
     {
@@ -373,7 +374,7 @@ class EstimatesController extends Controller
      * Delete single estimate
      *
      * @param  mixed $id
-     * @return Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
@@ -388,7 +389,7 @@ class EstimatesController extends Controller
      * Send estimate
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function sendEstimate(Request $request)
     {
@@ -429,7 +430,7 @@ class EstimatesController extends Controller
      *
      * @param Request $request
      * @param mixed $id
-     * @return Response
+     * @return JsonResponse
      */
     public function estimateToInvoice(Request $request, $id)
     {
@@ -516,7 +517,7 @@ class EstimatesController extends Controller
      * Delete estimate
      *
      * @param Request $request
-     * @return Response
+     * @return JsonResponse
      */
     public function delete(Request $request)
     {

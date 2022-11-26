@@ -3,7 +3,7 @@
     <base-select
       ref="baseSelect"
       v-model="inventorySelected"
-      :options="inventories"
+      :options="inventoriesOptions"
       :show-labels="true"
       :preserve-search="false"
       :initial-search="inventory.name"
@@ -16,9 +16,6 @@
       class="multi-select-inventory remove-extra"
       @value="onTextChange"
     >
-      <div slot="beforeList">
-        <li class="multiselect__option" @click="showEndList">{{ $t('general.end_of_list') }}</li>
-      </div>
       <div slot="afterList">
         <button type="button" class="list-add-button" @click="openInventoryModal">
           <font-awesome-icon class="icon" icon="cart-plus" />
@@ -68,14 +65,33 @@ export default {
     ...mapGetters('inventory', [
       'inventories'
     ]),
+    inventoriesOptions() {
+      //First array item to add "End of list" option
+      let array = [];
+      array.push({
+        company_id: 1,
+        id: 0,
+        name: "End of List",
+        price: "0",
+        quantity: "0",
+        sale_price: 0,
+        unit: "pc",
+      })
+      array.push(...this.inventories)
+      return array
+    },
     inventorySelected: {
       cache: false,
       get() {
         return this.selectedInventory
       },
       set(newVal) {
-        this.selectedInventory = newVal
-        this.$emit('select', newVal)
+        if (0 === newVal.id) {
+          this.$emit('endlist', true)
+        } else {
+          this.selectedInventory = newVal
+          this.$emit('select', newVal)
+        }
       }
     }
   },

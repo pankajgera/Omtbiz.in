@@ -113,7 +113,7 @@ class AccessTokensController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request)
     {
@@ -134,7 +134,7 @@ class AccessTokensController extends Controller
 	 * Create a new access token from a password grant client.
 	 *
 	 * @param \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function requestPasswordGrant(Request $request)
 	{
@@ -163,7 +163,7 @@ class AccessTokensController extends Controller
 	 * Return a successful response for requesting an api token.
 	 *
 	 * @param \Illuminate\Http\Response $response
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function sendSuccessResponse(Response $response, $user)
 	{

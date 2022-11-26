@@ -113,46 +113,10 @@ Route::get('/settings/app/version', [
 
 Route::group(['middleware' => 'api'], function () {
 
-    // Auto update routes
-    //----------------------------------
-    // Route::post('/update', [
-    //     'as' => 'auto.update',
-    //     'uses' => 'UpdateController@update'
-    // ]);
-
-    // Route::post('/update/finish', [
-    //     'as' => 'auto.update.finish',
-    //     'uses' => 'UpdateController@finishUpdate'
-    // ]);
-
-    // Route::get('/check/update', [
-    //     'as' => 'check.update',
-    //     'uses' => 'UpdateController@checkLatestVersion'
-    // ]);
-
     Route::get('/bootstrap', [
         'as' => 'bootstrap',
         'uses' => 'UsersController@getBootstrap'
     ]);
-
-    // Route::get('/bootstrap/accountant', [
-    //     'as' => 'bootstrap',
-    //     'uses' => 'UsersController@getBootstrapAccountant'
-    // ])->middleware(['accountant']);
-
-    // Route::get('/bootstrap/employee', [
-    //     'as' => 'bootstrap',
-    //     'uses' => 'UsersController@getBootstrapEmployee'
-    // ])->middleware(['employee']);
-
-    // Dashboard
-    //----------------------------------
-
-    // Route::get('/dashboard', [
-    //     'as' => 'dashboard',
-    //     'uses' => 'InvoicesController@index'
-    // ])->middleware('admin');
-
 
     // Customers
     //----------------------------------
