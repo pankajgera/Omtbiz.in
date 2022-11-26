@@ -42,6 +42,12 @@ export default {
             meta: ["admin"],
           },
           {
+            title: "navigation.orders",
+            icon: "plus",
+            route: "/orders",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.estimates",
             icon: "file",
             route: "/estimates",
