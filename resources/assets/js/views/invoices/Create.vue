@@ -631,7 +631,6 @@ export default {
     },
     updateInventory (data) {
       if (data.inventory && !data.inventory.inventory_id) {
-        window.toastr['error']('Inventory item does not exist or not selected')
         return false
       }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
