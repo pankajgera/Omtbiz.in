@@ -110,7 +110,7 @@
             <li
               v-for="(option, index) of filteredOptions"
               :key="index"
-              :id="id + '-' + index"
+              :id="option.id + '-' + index"
               :role="!(option && (option.$isLabel || option.$isDisabled)) ? 'option' : null"
               class="multiselect__element"
             >

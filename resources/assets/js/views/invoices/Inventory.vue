@@ -405,6 +405,9 @@ export default {
       })
     },
     onSelectInventory (inventory) {
+      if (!inventory || 0 === inventory.id) {
+        return;
+      }
       this.inventory.id = inventory.iwd
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price

@@ -66,21 +66,21 @@ export default {
       //   this.$emit('endlist', true)
       //   return
       // }
-      /* istanbul ignore else */
+      /* ignore else */
       if (this.filteredOptions.length > 0) {
         this.select(this.filteredOptions[this.pointer], key)
       }
       this.pointerReset()
     },
     pointerForward () {
-      /* istanbul ignore else */
+      /* ignore else */
       if (this.pointer < this.filteredOptions.length - 1) {
         this.pointer++
-        /* istanbul ignore next */
+        /* ignore next */
         if (this.$refs.list.scrollTop <= this.pointerPosition - (this.visibleElements - 1) * this.optionHeight) {
           this.$refs.list.scrollTop = this.pointerPosition - (this.visibleElements - 1) * this.optionHeight
         }
-        /* istanbul ignore else */
+        /* ignore else */
         if (
           this.filteredOptions[this.pointer] &&
           this.filteredOptions[this.pointer].$isLabel &&
@@ -92,18 +92,18 @@ export default {
     pointerBackward () {
       if (this.pointer > 0) {
         this.pointer--
-        /* istanbul ignore else */
+        /* ignore else */
         if (this.$refs.list.scrollTop >= this.pointerPosition) {
           this.$refs.list.scrollTop = this.pointerPosition
         }
-        /* istanbul ignore else */
+        /* ignore else */
         if (
           this.filteredOptions[this.pointer] &&
           this.filteredOptions[this.pointer].$isLabel &&
           !this.groupSelect
         ) this.pointerBackward()
       } else {
-        /* istanbul ignore else */
+        /* ignore else */
         if (
           this.filteredOptions[this.pointer] &&
           this.filteredOptions[0].$isLabel &&
@@ -113,16 +113,16 @@ export default {
       this.pointerDirty = true
     },
     pointerReset () {
-      /* istanbul ignore else */
+      /* ignore else */
       if (!this.closeOnSelect) return
       this.pointer = 0
-      /* istanbul ignore else */
+      /* ignore else */
       if (this.$refs.list) {
         this.$refs.list.scrollTop = 0
       }
     },
     pointerAdjust () {
-      /* istanbul ignore else */
+      /* ignore else */
       if (this.pointer >= this.filteredOptions.length - 1) {
         this.pointer = this.filteredOptions.length
           ? this.filteredOptions.length - 1
