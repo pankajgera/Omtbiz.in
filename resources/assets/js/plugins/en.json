@@ -19,7 +19,8 @@
         "master": "Ledger",
         "ledger": "Display",
         "voucher": "Create Voucher",
-        "dispatch": "Dispatch"
+        "dispatch": "Dispatch",
+        "orders": "Orders"
     },
     "general": {
         "yes": "Yes",
