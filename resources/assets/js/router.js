@@ -356,6 +356,32 @@ const routes = [
                 meta: ['admin']
             },
 
+            // Orders
+            {
+                path: 'orders',
+                name: 'orders.index',
+                component: OrderIndex,
+                meta: ['admin']
+            },
+            {
+                path: 'orders/create',
+                name: 'orders.create',
+                component: OrderCreate,
+                meta: ['admin']
+            },
+            {
+                path: 'orders/:id/view',
+                name: 'orders.view',
+                component: OrderView,
+                meta: ['admin']
+            },
+            {
+                path: 'orders/:id/edit',
+                name: 'orders.edit',
+                component: OrderCreate,
+                meta: ['admin']
+            },
+
             // Invoice
             {
                 path: 'invoices',
