@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
       <Header :title="$tc('orders.order', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalEstimates || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalOrders || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -107,7 +107,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ orders.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ orders.length }}</b> {{ $t('general.of') }} <b>{{ totalOrders }}</b></p>
 
         <!-- Tabs -->
         <!-- <ul class="tabs">
@@ -122,12 +122,12 @@
           </li>
         </ul> -->
         <transition name="fade">
-          <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
+          <v-dropdown v-if="selectedOrders.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleEstimates">
+              <div class="dropdown-item" @click="removeMultipleOrders">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -141,7 +141,7 @@
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
-          @change="selectAllEstimates"
+          @change="selectAllOrders"
         >
         <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
@@ -185,7 +185,7 @@
         <table-column
           :label="$t('orders.date')"
           sort-as="order_date"
-          show="formattedEstimateDate"
+          show="formattedOrderDate"
         />
         <table-column
           :label="$t('orders.name')"
@@ -197,24 +197,6 @@
           width="20%"
           show="items.length"
         />
-        <!-- <table-column
-          :label="$t('orders.status')"
-          sort-as="status"
-        >
-          <template slot-scope="row" >
-            <span> {{ $t('orders.status') }}</span>
-            <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'PARTIALLY_PAID')? row.status : row.status.replace('_', ' ') }}</span>
-          </template>
-        </table-column> -->
-        <!-- <table-column
-          :label="$t('orders.status')"
-          sort-as="status"
-        >
-          <template slot-scope="row">
-            <span>{{ $t('orders.status') }}</span>
-            <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'DISPATCHED') ? 'PAID' : row.status }}</span>
-          </template>
-        </table-column> -->
         <table-column
           :label="$t('orders.total')"
           sort-as="total"
@@ -246,13 +228,13 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
+                <a class="dropdown-item" href="#/" @click="sendOrder(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
                   {{ $t('orders.send_order') }}
                 </a>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
+                <div class="dropdown-item" @click="removeOrder(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -289,7 +271,6 @@ export default {
           title:this.$tc('orders.order', 2)
         }
       ],
-      //currency: null,
       status: [
         {
           label: 'Status',
@@ -327,7 +308,7 @@ export default {
 
   computed: {
     showEmptyScreen () {
-      return !this.totalEstimates && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalOrders && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -336,17 +317,17 @@ export default {
       'customers'
     ]),
     ...mapGetters('order', [
-      'selectedEstimates',
-      'totalEstimates',
+      'selectedOrders',
+      'totalOrders',
       'orders',
       'selectAllField'
     ]),
     selectField: {
       get: function () {
-        return this.selectedEstimates
+        return this.selectedOrders
       },
       set: function (val) {
-        this.selectEstimate(val)
+        this.selectOrder(val)
       }
     },
     selectAllFieldStatus: {
@@ -369,25 +350,25 @@ export default {
   },
   destroyed () {
     if (this.selectAllField) {
-      this.selectAllEstimates()
+      this.selectAllOrders()
     }
   },
   methods: {
     ...mapActions('order', [
-      'fetchEstimates',
+      'fetchOrders',
       'getRecord',
-      'selectEstimate',
-      'resetSelectedEstimates',
-      'selectAllEstimates',
-      'deleteEstimate',
-      'deleteMultipleEstimates',
+      'selectOrder',
+      'resetSelectedOrders',
+      'selectAllOrders',
+      'deleteOrder',
+      'deleteMultipleOrders',
       'sendEmail',
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    async sendEstimate (id) {
+    async sendOrder (id) {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$t('orders.confirm_send'),
@@ -429,7 +410,7 @@ export default {
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchEstimates(data)
+      let response = await this.fetchOrders(data)
       this.isRequestOngoing = false
 
       //this.currency = response.data.currency
@@ -450,7 +431,7 @@ export default {
       }
       this.timer = setTimeout(() => {
 				this.filtersApplied = true
-        this.resetSelectedEstimates()
+        this.resetSelectedOrders()
         this.refreshTable()
 			}, 1000);
     },
@@ -481,7 +462,7 @@ export default {
     onSelectCustomer (customer) {
       this.filters.customer = customer
     },
-    async removeEstimate (id) {
+    async removeOrder (id) {
       this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
@@ -491,7 +472,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let res = await this.deleteEstimate(this.id)
+          let res = await this.deleteOrder(this.id)
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('orders.deleted_message'))
@@ -510,10 +491,10 @@ export default {
 
         this.$refs.table.refresh()
         this.filtersApplied = false
-        this.resetSelectedEstimates()
+        this.resetSelectedOrders()
       })
     },
-    async removeMultipleEstimates () {
+    async removeMultipleOrders () {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$tc('orders.confirm_delete', 2),
@@ -522,7 +503,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let res = await this.deleteMultipleEstimates()
+          let res = await this.deleteMultipleOrders()
           if (res.data.error === 'payment_attached') {
             window.toastr['error'](this.$t('orders.payment_attached_message'), this.$t('general.action_failed'))
             return true
@@ -530,7 +511,7 @@ export default {
           if (res.data) {
             this.$refs.table.refresh()
             this.filtersApplied = false
-            this.resetSelectedEstimates()
+            this.resetSelectedOrders()
             window.toastr['success'](this.$tc('orders.deleted_message', 2))
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
