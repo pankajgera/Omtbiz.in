@@ -213,6 +213,41 @@ Route::group(['middleware' => 'api'], function () {
     Route::resource('estimates', 'EstimatesController');
 
 
+    // Orders
+    //-------------------------------------------------
+
+    Route::post('/orders/delete', [
+        'as' => 'orders.delete',
+        'uses' => 'OrdersController@delete'
+    ]);
+
+    Route::post('/orders/send', [
+        'as' => 'orders.send',
+        'uses' => 'OrdersController@sendOrder'
+    ]);
+
+    Route::post('/orders/accept', [
+        'as' => 'orders.mark.accepted',
+        'uses' => 'OrdersController@markOrderAccepted'
+    ]);
+
+    Route::post('/orders/reject', [
+        'as' => 'orders.mark.rejected',
+        'uses' => 'OrdersController@markOrderRejected'
+    ]);
+
+    Route::post('/orders/{id}/convert-to-invoice', [
+        'as' => 'order.to.invoice',
+        'uses' => 'OrdersController@orderToInvoice'
+    ]);
+
+    Route::post('/orders/create-invoice', [
+        'as' => 'orders.create-invoice',
+        'uses' => 'OrdersController@store'
+    ]);
+
+    Route::resource('orders', 'OrdersController');
+
     // Expenses
     //----------------------------------
 

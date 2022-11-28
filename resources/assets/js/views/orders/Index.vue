@@ -316,7 +316,7 @@ export default {
     ...mapGetters('customer', [
       'customers'
     ]),
-    ...mapGetters('order', [
+    ...mapGetters('orders', [
       'selectedOrders',
       'totalOrders',
       'orders',
@@ -354,7 +354,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('order', [
+    ...mapActions('orders', [
       'fetchOrders',
       'getRecord',
       'selectOrder',
