@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class OrdersRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        $rules = [
+            'order_date' => 'required',
+            'expiry_date' => 'nullable',
+            'user_id' => 'required|integer',
+            'sub_total' => 'required',
+            'total' => 'required',
+            'items' => 'required|array',
+            'items.*.description' => 'max:255',
+            'items.*' => 'required|max:255',
+            'items.*.name' => 'required',
+            'items.*.quantity' => 'required',
+            'items.*.price' => 'required',
+            'items.*.sale_price' => 'required',
+            'notes' => 'nullable|string',
+        ];
+
+        return $rules;
+    }
+}
