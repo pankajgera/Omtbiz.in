@@ -39,7 +39,7 @@ import CustomersReport from './modules/reports/customers'
 import states from './modules/states'
 import banks from './modules/banks'
 import dispatch from './modules/disptach'
-import estimates from './modules/estimate'
+import orders from './modules/orders'
 
 Vue.use(Vuex)
 
@@ -90,5 +90,6 @@ export default new Vuex.Store({
         banks,
         dispatch,
         estimate,
+        orders,
     }
 })

@@ -589,8 +589,6 @@ export default {
       this.addEstimate(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('estimates.created_message'))
-          //this.$router.push('/estimates/create')
-          //this.showEstimatePopup(res.data.estimate.id)
           this.reset()
         }
       }).catch((err) => {s
@@ -648,15 +646,6 @@ export default {
       }
       return isValid
     },
-    // async searchDebtorRefNumber(data) {
-    //    this.newEstimate.reference_number = null;
-    //    let response = await this.fetchReferenceNumber(data)
-    //     if (response.data && response.data.estimate) {
-    //       this.newEstimate.reference_number = response.data.estimate.reference_number
-    //     } else {
-    //       this.newEstimate.reference_number = this.estimateNumAttribute
-    //     }
-    // },
     showEndList(val) {
       this.showAddNewInventory = !val;
       this.showEndOfList = val;
