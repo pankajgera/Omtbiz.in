@@ -143,7 +143,7 @@ import Guid from 'guid'
 import { validationMixin } from 'vuelidate'
 import { mapGetters } from 'vuex'
 import TaxStub from '../../stub/tax'
-import EstimateStub from '../../stub/order'
+import OrderStub from '../../stub/order'
 import ItemSelect from './ItemSelect'
 import Tax from './Tax'
 const { required, minValue, between, maxLength } = require('vuelidate/lib/validators')
@@ -335,7 +335,7 @@ export default {
       this.item.name = val
     },
     deselectItem () {
-      this.item = {...EstimateStub, id: this.item.id, taxes: [{...TaxStub, id: Guid.raw()}]}
+      this.item = {...OrderStub, id: this.item.id, taxes: [{...TaxStub, id: Guid.raw()}]}
       this.$nextTick(() => {
         this.$refs.itemSelect.$refs.baseSelect.$refs.search.focus()
       })

@@ -45,7 +45,7 @@ export const fetchReferenceNumber = ({ commit, dispatch, state }, data) => {
 export const fetchOrder = ({ commit, orders, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/orders/${id}/edit`).then((response) => {
-      commit(types.SET_TEMPLATE_ID, response.data.order.order_template_id)
+      // commit(types.SET_TEMPLATE_ID, response.data.order.order_template_id)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -193,7 +193,7 @@ export const resetItem = ({ commit, orders, state }) => {
 
 export const setTemplate = ({ commit, orders, state }, data) => {
   return new Promise((resolve, reject) => {
-    commit(types.SET_TEMPLATE_ID, data)
+    // commit(types.SET_TEMPLATE_ID, data)
     resolve({})
   })
 }
