@@ -9,7 +9,7 @@
         </router-link>
       </div>
     </div>
-    <form v-if="!initLoading" action="" @submit.prevent="submitEstimateData">
+    <form v-if="!initLoading" action="" @submit.prevent="submitOrderData">
       <div class="page-header">
         <h3 v-if="$route.name === 'orders.edit'" class="page-title">{{ $t('orders.edit_order') }}</h3>
         <h3 v-else class="page-title">{{ $t('orders.new_order') }} </h3>
@@ -23,8 +23,8 @@
         <div class="col-md-5 order-customer-container">
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
-              v-model="setEstimateDebtor"
-              :invalid="$v.newEstimate.debtors.$error"
+              v-model="setOrderDebtor"
+              :invalid="$v.newOrder.debtors.$error"
               :options="sundryDebtorsList"
               :required="'required'"
               :searchable="true"
@@ -35,8 +35,8 @@
               label="name"
               track-by="id"
             />
-            <div v-if="$v.newEstimate.debtors.$error">
-              <span v-if="!$v.newEstimate.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            <div v-if="$v.newOrder.debtors.$error">
+              <span v-if="!$v.newOrder.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
         </div>
         <div class="col order-input">
@@ -44,15 +44,15 @@
             <div class="col collapse-input">
               <label>{{ $tc('orders.order',1) }} {{ $t('orders.date') }}<span class="text-danger"> * </span></label>
               <input
-                v-model="newEstimate.order_date"
+                v-model="newOrder.order_date"
                 type="date"
                 data-date=""
                 data-date-format="DD/MM/YYYY"
                 class="base-prefix-input"
-                @change="$v.newEstimate.order_date.$touch()"
+                @change="$v.newOrder.order_date.$touch()"
                 :disabled="isEdit"
               />
-              <span v-if="$v.newEstimate.order_date.$error && !$v.newEstimate.order_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+              <span v-if="$v.newOrder.order_date.$error && !$v.newOrder.order_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
             </div>
             <div class="col collapse-input">
               <label>{{ $t('orders.order_number') }}<span class="text-danger"> * </span></label>
@@ -67,17 +67,6 @@
               />
               <span v-show="$v.orderNumAttribute.$error && !$v.orderNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
             </div>
-            <!-- <div class="col collapse-input">
-              <label>{{ $t('orders.ref_number') }}</label>
-              <base-input
-                v-model="newEstimate.reference_number"
-                :invalid="$v.newEstimate.reference_number.$error"
-                icon="hashtag"
-                @input="$v.newEstimate.reference_number.$touch()"
-                :disabled="isEdit"
-              />
-              <div v-if="$v.newEstimate.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -135,7 +124,7 @@
               :currency="currency"
               :tax-per-inventory="taxPerInventory"
               :discount-per-inventory="discountPerInventory"
-              :inventory-type="'order'"
+              :inventory-type="'orders'"
               :inventory-list="inventoryList"
               :inventory-negative="inventoryNegative"
               @remove="removeInventory"
@@ -158,13 +147,13 @@
         <div>
           <label>{{ $t('orders.notes') }}</label>
           <base-text-area
-            v-model="newEstimate.notes"
+            v-model="newOrder.notes"
             rows="3"
             cols="50"
-            @input="$v.newEstimate.notes.$touch()"
+            @input="$v.newOrder.notes.$touch()"
           />
-          <div v-if="$v.newEstimate.notes.$error">
-            <span v-if="!$v.newEstimate.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
+          <div v-if="$v.newOrder.notes.$error">
+            <span v-if="!$v.newOrder.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
           </div>
         </div>
 
@@ -191,7 +180,7 @@
         </div>
       </div>
       <div class="page-actions row">
-          <!-- <a v-if="$route.name === 'orders.edit'" :href="`/orders/pdf/${newEstimate.unique_hash}`" target="_blank" class="mr-3 order-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+          <!-- <a v-if="$route.name === 'orders.edit'" :href="`/orders/pdf/${newOrder.unique_hash}`" target="_blank" class="mr-3 order-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
           <base-button
@@ -238,7 +227,7 @@ input.base-prefix-input:disabled {
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
 import InvoiceInventory from '../invoices/Inventory'
-import EstimateStub from '../../stub/order'
+import OrderStub from '../../stub/order'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
@@ -255,7 +244,7 @@ export default {
   mixins: [validationMixin],
   data () {
     return {
-      newEstimate: {
+      newOrder: {
         order_date: null,
         order_number: null,
         user_id: null,
@@ -269,7 +258,7 @@ export default {
         discount: 0,
         //reference_number: null,
         items: [{
-          ...EstimateStub,
+          ...OrderStub,
           taxes: [{...TaxStub, id: Guid.raw()}]
         }],
         taxes: [],
@@ -298,7 +287,7 @@ export default {
   },
   validations () {
     return {
-      newEstimate: {
+      newOrder: {
         order_date: {
           required
         },
@@ -324,7 +313,7 @@ export default {
     ...mapGetters('currency', [
       'defaultCurrency'
     ]),
-    ...mapGetters('order', [
+    ...mapGetters('orders', [
       'getTemplateId',
       //'selectedCustomer'
     ]),
@@ -335,8 +324,8 @@ export default {
       return this.selectedCurrency
     },
     subtotalWithDiscount () {
-      if (this.newEstimate.discount_val) {
-        return this.subtotal - this.newEstimate.discount_val
+      if (this.newOrder.discount_val) {
+        return this.subtotal - this.newOrder.discount_val
       }
       return this.subtotal
     },
@@ -344,9 +333,9 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      let inventory = this.newEstimate.items
+      let inventory = this.newOrder.items
       if (this.$route.name === 'orders.edit') {
-        inventory = this.newEstimate.items
+        inventory = this.newOrder.items
       }
       if (inventory && inventory.length) {
         return inventory.reduce(function (a, b) {
@@ -357,20 +346,20 @@ export default {
     },
     discount: {
       get: function () {
-        return this.newEstimate.discount
+        return this.newOrder.discount
       },
       set: function (newValue) {
-        if (this.newEstimate.discount_type === 'percentage') {
-          this.newEstimate.discount_val = (this.subtotal * newValue)
+        if (this.newOrder.discount_type === 'percentage') {
+          this.newOrder.discount_val = (this.subtotal * newValue)
         } else {
-          this.newEstimate.discount_val = newValue
+          this.newOrder.discount_val = newValue
         }
-        this.newEstimate.discount = newValue
+        this.newOrder.discount = newValue
       }
     },
     totalSimpleTax () {
       return 0;
-      return window._.sumBy(this.newEstimate.taxes, function (tax) {
+      return window._.sumBy(this.newOrder.taxes, function (tax) {
         if (!tax.compound_tax) {
           return tax.amount
         }
@@ -379,7 +368,7 @@ export default {
     },
     totalCompoundTax () {
       return 0;
-      return window._.sumBy(this.newEstimate.taxes, function (tax) {
+      return window._.sumBy(this.newOrder.taxes, function (tax) {
         if (tax.compound_tax) {
           return tax.amount
         }
@@ -391,32 +380,32 @@ export default {
       if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
         return this.totalSimpleTax + this.totalCompoundTax
       }
-      return window._.sumBy(this.newEstimate.items, function (tax) {
+      return window._.sumBy(this.newOrder.items, function (tax) {
         return tax.tax
       })
     },
-    setEstimateDebtor: {
+    setOrderDebtor: {
       cache: false,
       get() {
-        return this.newEstimate.debtors
+        return this.newOrder.debtors
       },
       set(value) {
         //this.searchDebtorRefNumber(value)
-        this.newEstimate.debtors = value
+        this.newOrder.debtors = value
       },
     },
     inventoryBind() {
-      let invent = this.newEstimate.items
+      let invent = this.newOrder.items
       if (this.$route.name === 'orders.edit') {
-        invent = this.newEstimate.items
+        invent = this.newOrder.items
       }
       return invent
     }
   },
   watch: {
     subtotal (newValue) {
-      if (this.newEstimate.discount_type === 'percentage') {
-        this.newEstimate.discount_val = (this.newEstimate.discount * newValue)
+      if (this.newOrder.discount_type === 'percentage') {
+        this.newOrder.discount_val = (this.newOrder.discount * newValue)
       }
     }
   },
@@ -431,11 +420,11 @@ export default {
     ...mapActions('modal', [
       'openModal'
     ]),
-    ...mapActions('order', [
-      'addEstimate',
-      'fetchCreateEstimate',
-      'fetchEstimate',
-      'updateEstimate',
+    ...mapActions('orders', [
+      'addOrder',
+      'fetchCreateOrder',
+      'fetchOrder',
+      'updateOrder',
       'fetchReferenceNumber',
     ]),
     ...mapActions('inventory', [
@@ -457,37 +446,37 @@ export default {
     async loadData () {
       if (this.$route.name === 'orders.edit') {
         this.initLoading = true
-        let response = await this.fetchEstimate(this.$route.params.id)
+        let response = await this.fetchOrder(this.$route.params.id)
         this.isEdit = true
         if (response.data) {
-          this.newEstimate = response.data.order
+          this.newOrder = response.data.order
           this.inventoryList = response.data.inventories
           this.inventoryNegative = response.data.inventory_negative
-          this.newEstimate.order_date = moment(response.data.order.order_date).format('YYYY-MM-DD')
+          this.newOrder.order_date = moment(response.data.order.order_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
           this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
           this.orderTemplates = response.data.orderTemplates
           this.orderPrefix = response.data.order_prefix
           this.orderNumAttribute = response.data.orderNumber
-          this.newEstimate.debtors = response.data.sundryDebtorsList[0]
+          this.newOrder.debtors = response.data.sundryDebtorsList[0]
         }
         this.initLoading = false
         return
       }
 
       this.initLoading = true
-      let response = await this.fetchCreateEstimate()
+      let response = await this.fetchCreateOrder()
       if (response.data) {
         this.discountPerInventory = response.data.discount_per_inventory
         this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
         this.orderTemplates = response.data.orderTemplates
-        this.newEstimate.order_date = response.data.order_today_date
+        this.newOrder.order_date = response.data.order_today_date
         this.inventoryList = response.data.inventories
         this.inventoryNegative = response.data.inventory_negative
         this.orderPrefix = response.data.order_prefix
-        this.orderNumAttribute = response.data.nextEstimateNumberAttribute
+        this.orderNumAttribute = response.data.nextOrderNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
       }
       this.initLoading = false
@@ -495,12 +484,12 @@ export default {
     openTemplateModal () {
       this.openModal({
         'title': this.$t('general.choose_template'),
-        'componentName': 'EstimateTemplate',
+        'componentName': 'OrderTemplate',
         'data': this.orderTemplates
       })
     },
     addInventory () {
-      this.inventoryBind.push({...EstimateStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.inventoryBind.push({...OrderStub, taxes: [{...TaxStub, id: Guid.raw()}]})
       this.$nextTick(() => {
         this.$refs.orderInventory[this.inventoryBind.length-1].$el.focus()
         this.$refs.orderInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
@@ -529,15 +518,15 @@ export default {
       })
 
     },
-    submitEstimateData () {
+    submitOrderData () {
       if (!this.checkValid()) {
         return false
       }
-      this.newEstimate.order_number = this.orderPrefix + '-' + this.orderNumAttribute
+      this.newOrder.order_number = this.orderPrefix + '-' + this.orderNumAttribute
 
       let data = {
-        ...this.newEstimate,
-        order_date: moment(this.newEstimate.order_date).format('DD/MM/YYYY'),
+        ...this.newOrder,
+        order_date: moment(this.newOrder.order_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
         tax: this.totalTax,
@@ -557,7 +546,7 @@ export default {
         this.isLoading = false
       }, 2000)
     },
-    async showEstimatePopup (order_id) {
+    async showOrderPopup (order_id) {
       swal({
         title: this.$t('orders.order_report_title'),
         text: this.$t('orders.order_report_text'),
@@ -586,11 +575,11 @@ export default {
         return false
       }
       this.isLoading = true
-      this.addEstimate(data).then((res) => {
+      this.addOrder(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('orders.created_message'))
           //this.$router.push('/orders/create')
-          //this.showEstimatePopup(res.data.order.id)
+          //this.showOrderPopup(res.data.order.id)
           this.reset()
         }
       }).catch((err) => {s
@@ -606,11 +595,11 @@ export default {
       if (this.isLoading) {
         return false
       }
-      this.updateEstimate(data).then((res) => {
+      this.updateOrder(data).then((res) => {
         if (res.data && res.data.order && res.data.order.id) {
           window.toastr['success'](this.$t('orders.updated_message'))
           this.isLoading = false
-          //this.showEstimatePopup(res.data.order.id)
+          //this.showOrderPopup(res.data.order.id)
           this.reset()
         }
         if (res.data.error === 'invalid_due_amount') {
@@ -628,33 +617,33 @@ export default {
       })
     },
     checkInventoryData (index, isValid) {
-      this.newEstimate.items[index].valid = isValid
+      this.newOrder.items[index].valid = isValid
     },
-    removeEstimateTax (index) {
-      this.newEstimate.taxes.splice(index, 1)
+    removeOrderTax (index) {
+      this.newOrder.taxes.splice(index, 1)
     },
     checkValid () {
-      this.$v.newEstimate.$touch()
+      this.$v.newOrder.$touch()
       window.hub.$emit('checkInventory')
       let isValid = true
-      this.newEstimate.items.forEach((each) => {
+      this.newOrder.items.forEach((each) => {
         if (!each.valid) {
           isValid = false
         }
       })
 
-      if (this.$v.newEstimate.$invalid === false && isValid === true) {
+      if (this.$v.newOrder.$invalid === false && isValid === true) {
         isValid = true
       }
       return isValid
     },
     // async searchDebtorRefNumber(data) {
-    //    this.newEstimate.reference_number = null;
+    //    this.newOrder.reference_number = null;
     //    let response = await this.fetchReferenceNumber(data)
     //     if (response.data && response.data.order) {
-    //       this.newEstimate.reference_number = response.data.order.reference_number
+    //       this.newOrder.reference_number = response.data.order.reference_number
     //     } else {
-    //       this.newEstimate.reference_number = this.orderNumAttribute
+    //       this.newOrder.reference_number = this.orderNumAttribute
     //     }
     // },
     showEndList(val) {

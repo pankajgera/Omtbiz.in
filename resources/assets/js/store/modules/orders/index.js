@@ -6,19 +6,15 @@ const initialState = {
   orders: [],
   orderTemplateId: 1,
   selectAllField: false,
-  selectedEstimates: [],
-  totalEstimates: 0,
+  selectedOrders: [],
+  totalOrders: 0,
   selectedCustomer: null
 }
 
 export default {
   namespaced: true,
-
   state: initialState,
-
   getters: getters,
-
   actions: actions,
-
   mutations: mutations
 }

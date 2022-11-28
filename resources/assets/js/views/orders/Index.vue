@@ -122,7 +122,7 @@
           </li>
         </ul> -->
         <transition name="fade">
-          <v-dropdown v-if="selectedOrders.length" :show-arrow="false">
+          <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -305,7 +305,6 @@ export default {
       role: this.$store.state.user.currentUser.role
     }
   },
-
   computed: {
     showEmptyScreen () {
       return !this.totalOrders && !this.isRequestOngoing && !this.filtersApplied
