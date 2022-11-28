@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Order;
 use Carbon\Carbon;
 use App\Http\Requests\OrdersRequest;
 use App\Models\Invoice;
@@ -15,6 +14,7 @@ use App\Mail\OrderPdf;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\OrderItems;
+use App\Models\Orders;
 use Illuminate\Http\JsonResponse;
 
 class OrdersController extends Controller
@@ -29,7 +29,7 @@ class OrdersController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $orders = Order::with([
+        $orders = Orders::with([
             'order_items',
             'master'
         ])
@@ -50,9 +50,9 @@ class OrdersController extends Controller
 
         $siteData = [
             'orders' => $orders,
-            'orderTotalCount' => Order::count()
+            'orderTotalCount' => Orders::count()
         ];
-
+dd($siteData);
         return response()->json($siteData);
     }
 
@@ -68,7 +68,7 @@ class OrdersController extends Controller
         $order_num_auto_generate = CompanySetting::getSetting('order_auto_generate', $request->header('company'));
 
         $nextOrderNumberAttribute = null;
-        $nextOrderNumber = Order::getNextOrderNumber($order_prefix);
+        $nextOrderNumber = Orders::getNextOrderNumber($order_prefix);
 
         if ($order_num_auto_generate == "YES") {
             $nextOrderNumberAttribute = $nextOrderNumber;
@@ -106,9 +106,9 @@ class OrdersController extends Controller
         ])->validate();
 
         $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
-        $status = Order::TO_BE_DISPATCH;
+        $status = Orders::TO_BE_DISPATCH;
 
-        $order = Order::create([
+        $order = Orders::create([
             'order_date' => $order_date,
             'expiry_date' => $order_date,
             'order_number' => $number_attributes['order_number'],
@@ -158,7 +158,7 @@ class OrdersController extends Controller
             \Mail::to($email)->send(new OrderPdf($data, $notificationEmail));
         }
 
-        $order = Order::with([
+        $order = Orders::with([
             'order_items',
             'user',
         ])->find($order->id);
@@ -178,7 +178,7 @@ class OrdersController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $order = Order::with([
+        $order = Orders::with([
             'order_items',
             'user',
         ])->find($id);
@@ -200,7 +200,7 @@ class OrdersController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $order = Order::with([
+        $order = Orders::with([
             'order_items',
             'user',
         ])->find($id);
@@ -227,7 +227,7 @@ class OrdersController extends Controller
      */
     public function update(OrdersRequest $request, $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Orders::findOrFail($id);
         $order->sub_total = $request->sub_total;
         $order->total = $request->total;
         $order->notes = $request->notes;
@@ -249,7 +249,7 @@ class OrdersController extends Controller
 
         }
 
-        $order = Order::with([
+        $order = Orders::with([
             'order_items',
             'user',
         ])->find($order->id);
@@ -268,7 +268,7 @@ class OrdersController extends Controller
      */
     public function destroy($id)
     {
-        Order::deleteOrder($id);
+        Orders::deleteOrder($id);
 
         return response()->json([
             'success' => true
@@ -283,7 +283,7 @@ class OrdersController extends Controller
      */
     public function sendOrder(Request $request)
     {
-        $order = Order::findOrFail($request->id);
+        $order = Orders::findOrFail($request->id);
 
         $data['order'] = $order->toArray();
         $userId = $data['order']['user_id'];
@@ -324,7 +324,7 @@ class OrdersController extends Controller
      */
     public function orderToInvoice(Request $request, $id)
     {
-        $order = Order::with(['order_items', 'user'])->find($id);
+        $order = Orders::with(['order_items', 'user'])->find($id);
         $invoice_date = Carbon::parse($order->order_date);
         $due_date = Carbon::parse($order->order_date)->addDays(7);
 
@@ -373,7 +373,7 @@ class OrdersController extends Controller
     public function delete(Request $request)
     {
         foreach ($request->id as $id) {
-            Order::deleteOrder($id);
+            Orders::deleteOrder($id);
         }
 
         return response()->json([

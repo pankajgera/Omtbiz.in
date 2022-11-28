@@ -5,8 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
 
-class Order extends Model
+class Orders extends Model
 {
+    protected $table = 'orders';
     const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
     protected $dates = [
@@ -45,7 +46,7 @@ class Order extends Model
     public static function getNextOrderNumber($value)
     {
          // Get the last created order
-         $lastOrder = Order::where('order_number', 'LIKE', $value . '-%')
+         $lastOrder = Orders::where('order_number', 'LIKE', $value . '-%')
                         ->orderBy('created_at', 'desc')
                         ->first();
 
@@ -206,7 +207,7 @@ class Order extends Model
 
     public static function deleteOrder($id)
     {
-        $order = Order::find($id);
+        $order = Orders::find($id);
 
         if ($order->items()->exists()) {
             $order->items()->delete();
