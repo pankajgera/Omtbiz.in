@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\OrderItem;
 use Carbon\Carbon;
 use App\Http\Requests\OrdersRequest;
 use App\Models\Invoice;
@@ -15,6 +14,7 @@ use App\Models\Company;
 use App\Mail\OrderPdf;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
+use App\Models\OrderItems;
 use Illuminate\Http\JsonResponse;
 
 class OrdersController extends Controller
@@ -30,13 +30,12 @@ class OrdersController extends Controller
         $limit = $request->has('limit') ? $request->limit : 10;
 
         $orders = Order::with([
-            'items',
+            'order_items',
             'master'
         ])
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->applyFilters($request->only([
                 'status',
-                'customer_id',
                 'order_number',
                 'from_date',
                 'to_date',
@@ -113,10 +112,8 @@ class OrdersController extends Controller
             'order_date' => $order_date,
             'expiry_date' => $order_date,
             'order_number' => $number_attributes['order_number'],
-            //'reference_number' => $request->reference_number,
             'user_id' => $request->user_id,
             'company_id' => $request->header('company'),
-            'order_template_id' => $request->order_template_id,
             'status' => $status,
             'sub_total' => $request->sub_total,
             'total' => $request->total,
@@ -162,7 +159,7 @@ class OrdersController extends Controller
         }
 
         $order = Order::with([
-            'items',
+            'order_items',
             'user',
         ])->find($order->id);
 
@@ -182,7 +179,7 @@ class OrdersController extends Controller
     public function show(Request $request, $id)
     {
         $order = Order::with([
-            'items',
+            'order_items',
             'user',
         ])->find($id);
 
@@ -204,7 +201,7 @@ class OrdersController extends Controller
     public function edit(Request $request, $id)
     {
         $order = Order::with([
-            'items',
+            'order_items',
             'user',
         ])->find($id);
         $customers = User::where('role', 'customer')->get();
@@ -240,7 +237,7 @@ class OrdersController extends Controller
         $orderItems = $request->items;
 
         foreach ($oldItems as $oldItem) {
-            OrderItem::destroy($oldItem['id']);
+            OrderItems::destroy($oldItem['id']);
         }
 
         foreach ($orderItems as $orderItem) {
@@ -253,7 +250,7 @@ class OrdersController extends Controller
         }
 
         $order = Order::with([
-            'items',
+            'order_items',
             'user',
         ])->find($order->id);
 
@@ -327,7 +324,7 @@ class OrdersController extends Controller
      */
     public function orderToInvoice(Request $request, $id)
     {
-        $order = Order::with(['items', 'user'])->find($id);
+        $order = Order::with(['order_items', 'user'])->find($id);
         $invoice_date = Carbon::parse($order->order_date);
         $due_date = Carbon::parse($order->order_date)->addDays(7);
 
@@ -340,7 +337,6 @@ class OrdersController extends Controller
             //'reference_number' => $order->reference_number,
             'user_id' => $order->user_id,
             'company_id' => $request->header('company'),
-            'invoice_template_id' => 1,
             'status' => Invoice::TO_BE_DISPATCH,
             'paid_status' => Invoice::STATUS_PAID,
             'sub_total' => $order->sub_total,
@@ -359,7 +355,7 @@ class OrdersController extends Controller
         }
 
         $invoice = Invoice::with([
-            'items',
+            'order_items',
             'user',
         ])->find($invoice->id);
 

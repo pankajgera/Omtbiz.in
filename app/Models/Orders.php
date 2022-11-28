@@ -29,10 +29,8 @@ class Order extends Model
         'user_id',
         'company_id',
         'reference_number',
-        'order_template_id',
         'status',
         'sub_total',
-        'tax_per_item',
         'total',
         'notes',
         'unique_hash',
@@ -41,7 +39,6 @@ class Order extends Model
 
     protected $casts = [
         'total' => 'integer',
-        'tax' => 'integer',
         'sub_total' => 'integer',
     ];
 
@@ -81,14 +78,14 @@ class Order extends Model
         return $this->belongsTo(AccountMaster::class, 'account_master_id');
     }
 
-    public function items()
+    public function orderItems()
     {
-        return $this->hasMany('App\Models\OrderItem');
+        return $this->hasMany(OrderItems::class);
     }
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function getOrderNumAttribute()

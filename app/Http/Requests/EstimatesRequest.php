@@ -26,7 +26,7 @@ class EstimatesRequest extends FormRequest
         $rules = [
             'estimate_date' => 'required',
             'expiry_date' => 'nullable',
-            'user_id' => 'required',
+            'user_id' => 'required|integer',
             'discount' => 'required',
             'discount_val' => 'required',
             'sub_total' => 'required',
@@ -41,7 +41,6 @@ class EstimatesRequest extends FormRequest
             'items.*.price' => 'required',
             'items.*.sale_price' => 'required',
             'notes' => 'nullable|string',
-            'user_id' => 'required|integer',
         ];
 
         return $rules;
