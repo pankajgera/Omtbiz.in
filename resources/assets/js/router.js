@@ -59,6 +59,12 @@ import EstimateIndex from './views/estimates/Index.vue'
 import EstimateCreate from './views/estimates/Create.vue'
 import EstimateView from './views/estimates/View.vue'
 
+// Orders
+import OrderIndex from './views/orders/Index.vue'
+import OrderCreate from './views/orders/Create.vue'
+import OrderView from './views/orders/View.vue'
+
+
 // Expenses
 import ExpensesIndex from './views/expenses/Index'
 import ExpenseCreate from './views/expenses/Create.vue'
