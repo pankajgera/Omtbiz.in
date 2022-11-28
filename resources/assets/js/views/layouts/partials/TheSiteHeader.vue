@@ -26,28 +26,6 @@
       </div>
     </a>
     <ul class="action-list">
-      <!-- <li>
-        <v-dropdown :show-arrow="false" v-if="role === 'admin'">
-          <a slot="activator" href="#">
-            <font-awesome-icon icon="plus" />
-          </a>
-          <v-dropdown-item>
-            <router-link class="dropdown-item" to="/invoices/create">
-              <font-awesome-icon icon="file-alt" class="dropdown-item-icon" /> <span> {{ $t('invoices.new_invoice') }} </span>
-            </router-link>
-          </v-dropdown-item>
-          <v-dropdown-item>
-            <router-link class="dropdown-item" to="/estimates/create">
-              <font-awesome-icon class="dropdown-item-icon" icon="file" /> <span> {{ $t('estimates.new_estimate') }} </span>
-            </router-link>
-          </v-dropdown-item>
-          <v-dropdown-item>
-            <router-link class="dropdown-item" to="/customers/create">
-              <font-awesome-icon class="dropdown-item-icon" icon="user" />  <span> {{ $t('customers.new_customer') }} </span>
-            </router-link>
-          </v-dropdown-item>
-        </v-dropdown>
-      </li> -->
       <li>
         <v-dropdown :show-arrow="false">
           <a
@@ -89,11 +67,6 @@ export default {
     ]),
     profilePicture () {
       return '/images/default-avatar.jpg'
-      // if (this.user && this.user.avatar !== null) {
-      //   return this.user.avatar
-      // } else {
-      //   return '/images/default-avatar.jpg'
-      // }
     },
     role() {
       return this.$store.state.user.currentUser.role
