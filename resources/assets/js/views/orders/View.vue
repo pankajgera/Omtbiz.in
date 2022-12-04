@@ -14,7 +14,7 @@
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
-            <div class="dropdown-item" @click="removeEstimate($route.params.id)">
+            <div class="dropdown-item" @click="removeOrder($route.params.id)">
               <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
               {{ $t('general.delete') }}
             </div>
@@ -102,7 +102,7 @@
           </div>
           <div class="right">
             <div class="inv-amount" v-html="$utils.formatMoney(order.total, order.user.currency)" />
-            <div class="inv-date">{{ order.formattedEstimateDate }}</div>
+            <div class="inv-date">{{ order.formattedOrderDate }}</div>
           </div>
         </router-link>
         <p v-if="!orders.length" class="no-result">
@@ -152,32 +152,32 @@ export default {
   },
   watch: {
     $route (to, from) {
-      this.loadEstimate()
+      this.loadOrder()
     }
   },
   created () {
-    this.loadEstimates()
-    this.loadEstimate()
+    this.loadOrders()
+    this.loadOrder()
     this.onSearched = _.debounce(this.onSearched, 500)
   },
   methods: {
     ...mapActions('order', [
-      'fetchEstimates',
+      'fetchOrders',
       'getRecord',
-      'searchEstimate',
+      'searchOrder',
       'sendEmail',
-      'deleteEstimate',
-      'selectEstimate',
-      'fetchViewEstimate'
+      'deleteOrder',
+      'selectOrder',
+      'fetchViewOrder'
     ]),
-    async loadEstimates () {
-      let response = await this.fetchEstimates()
+    async loadOrders () {
+      let response = await this.fetchOrders()
       if (response.data) {
         this.orders = response.data.orders.data
       }
     },
-    async loadEstimate () {
-      let response = await this.fetchViewEstimate(this.$route.params.id)
+    async loadOrder () {
+      let response = await this.fetchViewOrder(this.$route.params.id)
 
       if (response.data) {
         this.order = response.data.order
@@ -197,7 +197,7 @@ export default {
         data += `orderByField=${this.searchData.orderByField}`
       }
       this.isSearching = true
-      let response = await this.searchEstimate(data)
+      let response = await this.searchOrder(data)
       this.isSearching = false
       if (response.data) {
         this.orders = response.data.orders.data
@@ -213,7 +213,7 @@ export default {
       this.onSearched()
       return true
     },
-    async onSendEstimate (id) {
+    async onSendOrder (id) {
       window.swal({
         title: this.$t('general.are_you_sure'),
         text: this.$t('orders.confirm_send_order'),
@@ -237,7 +237,7 @@ export default {
         }
       })
     },
-    async removeEstimate (id) {
+    async removeOrder (id) {
       window.swal({
         title: 'Deleted',
         text: 'you will not be able to recover this order!',
@@ -246,7 +246,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let request = await this.deleteEstimate(id)
+          let request = await this.deleteOrder(id)
           if (request.data.success) {
             window.toastr['success'](this.$tc('orders.deleted_message', 1))
             this.$router.push('/orders')
