@@ -1,6 +1,5 @@
 export default {
   order_id: null,
-  item_id: null,
   name: '',
   title: '',
   description: null,

@@ -1,6 +1,6 @@
 <template>
   <div class="item-selector">
-    <div v-if="item.item_id" class="selected-item">
+    <div v-if="item.order_id" class="selected-item">
       {{ item.name }}
 
       <span class="deselect-icon" @click="deselectItem">

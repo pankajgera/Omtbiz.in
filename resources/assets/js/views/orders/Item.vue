@@ -306,7 +306,7 @@ export default {
   created () {
     window.hub.$on('checkItems', this.validateItem)
     window.hub.$on('newItem', (val) => {
-      if (!this.item.item_id && this.modalActive && this.isSelected) {
+      if (!this.item.order_id && this.modalActive && this.isSelected) {
         this.onSelectItem(val)
       }
     })
@@ -343,7 +343,7 @@ export default {
     onSelectItem (item) {
       this.item.name = item.name
       this.item.price = item.price
-      this.item.item_id = item.id
+      this.item.order_id = item.id
       this.item.id = item.id
       this.item.description = item.description
 
