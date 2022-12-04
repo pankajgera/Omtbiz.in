@@ -24,6 +24,8 @@
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setOrderDebtor"
+              label="name"
+              track-by="id"
               :invalid="$v.newOrder.debtors.$error"
               :options="sundryDebtorsList"
               :required="'required'"
@@ -32,8 +34,6 @@
               :allow-empty="false"
               :disabled="$route.name === 'orders.edit'"
               :placeholder="$t('receipts.select_a_list')"
-              label="name"
-              track-by="id"
             />
             <div v-if="$v.newOrder.debtors.$error">
               <span v-if="!$v.newOrder.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -73,12 +73,10 @@
       <div class="table-responsive">
         <table class="table item-table">
           <colgroup>
-            <col style="width: 40%;">
-            <col style="width: 10%;">
-            <col style="width: 15%;">
-            <col style="width: 15%;">
-            <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
-            <col style="width: 15%;">
+            <col style="width: 60%;">
+            <col style="width: 17%;">
+            <col style="width: 25%;">
+            <col style="width: 0%;">
           </colgroup>
           <thead class="item-table-header">
             <tr>
@@ -92,26 +90,8 @@
                   {{ $t('orders.inventory.quantity') }}
                 </span>
               </th>
-              <th class="text-left">
-                <span class="column-heading">
-                  {{ $t('orders.inventory.price') }}
-                </span>
-              </th>
-              <th class="text-left">
-                <span class="column-heading">
-                  {{ $t('orders.inventory.sale_price') }}
-                </span>
-              </th>
-              <th v-if="discountPerInventory === 'YES'" class="text-right">
-                <span class="column-heading">
-                  {{ $t('orders.inventory.discount') }}
-                </span>
-              </th>
-              <th class="text-right">
-                <span class="column-heading amount-heading">
-                  {{ $t('orders.inventory.amount') }}
-                </span>
-              </th>
+              <th class="text-left"></th>
+              <th class="text-left"></th>
             </tr>
           </thead>
           <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
@@ -164,7 +144,7 @@
               <div v-html="totalQuantity(inventoryBind)" />
             </label>
           </div>
-          <div class="section">
+          <!-- <div class="section">
             <label class="order-label">{{ $t('orders.sub_total') }}</label>
             <label class="order-amount">
               ₹ {{ subtotal }}
@@ -176,7 +156,7 @@
             <label class="order-amount total">
               ₹ {{ total }}
             </label>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="page-actions row">

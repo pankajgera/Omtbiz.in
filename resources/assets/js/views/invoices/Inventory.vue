@@ -6,9 +6,9 @@
           <col style="width: 40%;">
           <col style="width: 10%;">
           <col style="width: 15%;">
-          <col style="width: 15%;">
-          <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
-          <col style="width: 15%;">
+          <col style="width: 15%;" v-if="('orders' !== inventoryType)">
+          <col v-if="discountPerInventory === 'YES' && ('orders' !== inventoryType)" style="width: 15%;">
+          <col style="width: 15%;" v-if="('orders' !== inventoryType)">
         </colgroup>
         <tbody>
           <tr>
@@ -52,7 +52,7 @@
                 <span v-if="!$v.inventory.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
               </div>
             </td>
-            <td class="text-left">
+            <td class="text-left" v-if="('orders' !== inventoryType)">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
@@ -69,7 +69,7 @@
 
               </div>
             </td>
-            <td class="text-left">
+            <td class="text-left" v-if="('orders' !== inventoryType)">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
@@ -89,7 +89,7 @@
 
               </div>
             </td>
-            <td v-if="discountPerInventory === 'YES'" class="">
+            <td v-if="discountPerInventory === 'YES' && ('orders' !== inventoryType)">
               <div class="d-flex flex-column bd-highlight">
                 <div
                   class="btn-group flex-fill bd-highlight"
@@ -128,7 +128,7 @@
               </div>
             </td>
             <td class="text-left">
-              <div class="item-amount">
+              <div class="item-amount" v-if="('orders' !== inventoryType)">
                 <span>
                    ₹ {{ total }}
                 </span>
