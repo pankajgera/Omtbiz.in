@@ -209,8 +209,8 @@ class Orders extends Model
     {
         $order = Orders::find($id);
 
-        if ($order->items()->exists()) {
-            $order->items()->delete();
+        if ($order->orderItems()->exists()) {
+            $order->orderItems()->delete();
         }
 
         $order->delete();

@@ -122,14 +122,12 @@ class OrdersController extends Controller
             'account_master_id' => $request->debtors['id'],
         ]);
 
-        $orderItems = $request->items;
-
-        foreach ($orderItems as $orderItem) {
+        foreach ($request->orderItems as $orderItem) {
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
             $orderItem['price'] = $orderItem['price'];
             $orderItem['sale_price'] = $orderItem['sale_price'];
-            $item = $order->items()->create($orderItem);
+            $item = $order->orderItems()->create($orderItem);
         }
 
         if ($request->has('orderSend')) {
@@ -233,8 +231,8 @@ class OrdersController extends Controller
         $order->notes = $request->notes;
         $order->save();
 
-        $oldItems = $order->items->toArray();
-        $orderItems = $request->items;
+        $oldItems = $order->orderItems->toArray();
+        $orderItems = $request->orderItems;
 
         foreach ($oldItems as $oldItem) {
             OrderItems::destroy($oldItem['id']);
@@ -245,7 +243,7 @@ class OrdersController extends Controller
             $orderItem['type'] = 'order';
             $orderItem['price'] = $orderItem['price'];
             $orderItem['sale_price'] = $orderItem['sale_price'];
-            $item = $order->items()->create($orderItem);
+            $item = $order->orderItems()->create($orderItem);
 
         }
 
@@ -346,12 +344,12 @@ class OrdersController extends Controller
             'unique_hash' => str_random(60)
         ]);
 
-        $invoiceItems = $order->items->toArray();
+        $invoiceItems = $order->orderItems->toArray();
 
         foreach ($invoiceItems as $invoiceItem) {
             $invoiceItem['company_id'] = $request->header('company');
             $invoiceItem['name'] = $invoiceItem['name'];
-            $item = $invoice->items()->create($invoiceItem);
+            $item = $invoice->orderItems()->create($invoiceItem);
         }
 
         $invoice = Invoice::with([

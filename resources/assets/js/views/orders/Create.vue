@@ -237,7 +237,7 @@ export default {
         discount_val: 0,
         discount: 0,
         //reference_number: null,
-        items: [{
+        orderItems: [{
           ...OrderStub,
           taxes: [{...TaxStub, id: Guid.raw()}]
         }],
@@ -313,9 +313,9 @@ export default {
       return this.subtotalWithDiscount + this.totalTax
     },
     subtotal () {
-      let inventory = this.newOrder.items
+      let inventory = this.newOrder.orderItems
       if (this.$route.name === 'orders.edit') {
-        inventory = this.newOrder.items
+        inventory = this.newOrder.orderItems
       }
       if (inventory && inventory.length) {
         return inventory.reduce(function (a, b) {
@@ -360,7 +360,7 @@ export default {
       if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
         return this.totalSimpleTax + this.totalCompoundTax
       }
-      return window._.sumBy(this.newOrder.items, function (tax) {
+      return window._.sumBy(this.newOrder.orderItems, function (tax) {
         return tax.tax
       })
     },
@@ -375,9 +375,9 @@ export default {
       },
     },
     inventoryBind() {
-      let invent = this.newOrder.items
+      let invent = this.newOrder.orderItems
       if (this.$route.name === 'orders.edit') {
-        invent = this.newOrder.items
+        invent = this.newOrder.orderItems
       }
       return invent
     }
@@ -597,7 +597,7 @@ export default {
       })
     },
     checkInventoryData (index, isValid) {
-      this.newOrder.items[index].valid = isValid
+      this.newOrder.orderItems[index].valid = isValid
     },
     removeOrderTax (index) {
       this.newOrder.taxes.splice(index, 1)
@@ -606,7 +606,7 @@ export default {
       this.$v.newOrder.$touch()
       window.hub.$emit('checkInventory')
       let isValid = true
-      this.newOrder.items.forEach((each) => {
+      this.newOrder.orderItems.forEach((each) => {
         if (!each.valid) {
           isValid = false
         }
@@ -617,15 +617,6 @@ export default {
       }
       return isValid
     },
-    // async searchDebtorRefNumber(data) {
-    //    this.newOrder.reference_number = null;
-    //    let response = await this.fetchReferenceNumber(data)
-    //     if (response.data && response.data.order) {
-    //       this.newOrder.reference_number = response.data.order.reference_number
-    //     } else {
-    //       this.newOrder.reference_number = this.orderNumAttribute
-    //     }
-    // },
     showEndList(val) {
       this.showAddNewInventory = !val;
       this.showEndOfList = val;
