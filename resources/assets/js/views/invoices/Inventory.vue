@@ -156,7 +156,7 @@ import TaxStub from '../../stub/tax'
 import InvoiceStub from '../../stub/invoice'
 import InventorySelect from './InventorySelect'
 import Tax from './Tax'
-const { required, minValue, between, maxLength } = require('vuelidate/lib/validators')
+const { required, minValue, between, maxLength, requiredIf } = require('vuelidate/lib/validators')
 
 export default {
   components: {
@@ -368,12 +368,16 @@ export default {
           maxLength: maxLength(20)
         },
         price: {
-          required,
+          required: requiredIf(function () {
+            return ('orders' !== this.inventoryType)
+          }),
           minValue: minValue(1),
           maxLength: maxLength(20)
         },
         sale_price: {
-          required,
+          required: requiredIf(function () {
+            return ('orders' !== this.inventoryType)
+          }),
           minValue: minValue(1),
           maxLength: maxLength(20)
         },
@@ -442,7 +446,7 @@ export default {
           totalCompoundTax: this.totalCompoundTax,
           totalTax: this.totalTax,
           tax: this.totalTax,
-          taxes: [...this.inventory.taxes]
+          taxes: ('orders' !== this.inventoryType) ? [...this.inventory.taxes] : []
         }
       })
     },
