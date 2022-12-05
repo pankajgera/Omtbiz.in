@@ -61,6 +61,7 @@ class InvoicesController extends Controller
         } catch (Exception $e) {
             Log::error('Error while getting invoice index ', [$e]);
         }
+        return response()->json(500);
     }
 
     /**

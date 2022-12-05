@@ -8,6 +8,9 @@ use Carbon\Carbon;
 class Estimate extends Model
 {
     const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
+    const DRAFT = 'DRAFT';
+    const SENT = 'SENT';
+    const COMPLETED = 'COMPLETED';
 
     protected $dates = [
         'created_at',

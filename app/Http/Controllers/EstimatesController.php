@@ -34,11 +34,29 @@ class EstimatesController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $estimates = Estimate::with([
+        $estimates_inprogress = Estimate::where('status', 'DRAFT')->with([
             'items',
             'master'
-        ])
-            ->join('users', 'users.id', '=', 'estimates.user_id')
+        ])->join('users', 'users.id', '=', 'estimates.user_id')
+            ->applyFilters($request->only([
+                'status',
+                'customer_id',
+                'estimate_number',
+                'from_date',
+                'to_date',
+                'search',
+                'orderByField',
+                'orderBy'
+            ]))
+            ->whereCompany($request->header('company'))
+            ->select('estimates.*', 'users.name')
+            ->latest()
+            ->paginate($limit);
+
+        $estimates_completed = Estimate::where('status', 'SENT')->with([
+            'items',
+            'master'
+        ])->join('users', 'users.id', '=', 'estimates.user_id')
             ->applyFilters($request->only([
                 'status',
                 'customer_id',
@@ -55,8 +73,10 @@ class EstimatesController extends Controller
             ->paginate($limit);
 
         $siteData = [
-            'estimates' => $estimates,
-            'estimateTotalCount' => Estimate::count()
+            'estimates_draft' => $estimates_inprogress,
+            'estimates_sent' => $estimates_completed,
+            'draft_count' => Estimate::where('status', 'DRAFT')->count(),
+            'sent_count' => Estimate::where('status', 'SENT')->count(),
         ];
 
         return response()->json($siteData);
@@ -118,7 +138,7 @@ class EstimatesController extends Controller
         ])->validate();
 
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
-        $status = Estimate::TO_BE_DISPATCH;
+        $status = Estimate::DRAFT;
         $tax_per_item = CompanySetting::getSetting(
             'tax_per_item',
             $request->header('company')
