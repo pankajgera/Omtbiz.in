@@ -30,7 +30,7 @@ class OrdersController extends Controller
         $limit = $request->has('limit') ? $request->limit : 10;
 
         $orders = Orders::with([
-            'order_items',
+            'orderItems',
             'master'
         ])
             ->join('users', 'users.id', '=', 'orders.user_id')
@@ -50,7 +50,7 @@ class OrdersController extends Controller
 
         $siteData = [
             'orders' => $orders,
-            'orderTotalCount' => Orders::count()
+            'count' => Orders::whereCompany($request->header('company'))->count()
         ];
 
         return response()->json($siteData);
@@ -106,7 +106,7 @@ class OrdersController extends Controller
         ])->validate();
 
         $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
-        $status = Orders::TO_BE_DISPATCH;
+        $status = Orders::DRAFT;
 
         $order = Orders::create([
             'order_date' => $order_date,
@@ -115,18 +115,14 @@ class OrdersController extends Controller
             'user_id' => $request->user_id,
             'company_id' => $request->header('company'),
             'status' => $status,
-            'sub_total' => $request->sub_total,
-            'total' => $request->total,
             'notes' => $request->notes,
             'unique_hash' => str_random(60),
             'account_master_id' => $request->debtors['id'],
         ]);
 
-        foreach ($request->orderItems as $orderItem) {
+        foreach ($request->order_items as $orderItem) {
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
-            $orderItem['price'] = $orderItem['price'];
-            $orderItem['sale_price'] = $orderItem['sale_price'];
             $item = $order->orderItems()->create($orderItem);
         }
 
@@ -157,7 +153,7 @@ class OrdersController extends Controller
         }
 
         $order = Orders::with([
-            'order_items',
+            'orderItems',
             'user',
         ])->find($order->id);
 
@@ -177,7 +173,7 @@ class OrdersController extends Controller
     public function show(Request $request, $id)
     {
         $order = Orders::with([
-            'order_items',
+            'orderItems',
             'user',
         ])->find($id);
 
@@ -199,7 +195,7 @@ class OrdersController extends Controller
     public function edit(Request $request, $id)
     {
         $order = Orders::with([
-            'order_items',
+            'orderItems',
             'user',
         ])->find($id);
         $customers = User::where('role', 'customer')->get();
@@ -226,13 +222,11 @@ class OrdersController extends Controller
     public function update(OrdersRequest $request, $id)
     {
         $order = Orders::findOrFail($id);
-        $order->sub_total = $request->sub_total;
-        $order->total = $request->total;
         $order->notes = $request->notes;
         $order->save();
 
         $oldItems = $order->orderItems->toArray();
-        $orderItems = $request->orderItems;
+        $orderItems = $request->order_items;
 
         foreach ($oldItems as $oldItem) {
             OrderItems::destroy($oldItem['id']);
@@ -241,14 +235,12 @@ class OrdersController extends Controller
         foreach ($orderItems as $orderItem) {
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
-            $orderItem['price'] = $orderItem['price'];
-            $orderItem['sale_price'] = $orderItem['sale_price'];
             $item = $order->orderItems()->create($orderItem);
 
         }
 
         $order = Orders::with([
-            'order_items',
+            'orderItems',
             'user',
         ])->find($order->id);
 
@@ -322,7 +314,7 @@ class OrdersController extends Controller
      */
     public function orderToInvoice(Request $request, $id)
     {
-        $order = Orders::with(['order_items', 'user'])->find($id);
+        $order = Orders::with(['orderItems', 'user'])->find($id);
         $invoice_date = Carbon::parse($order->order_date);
         $due_date = Carbon::parse($order->order_date)->addDays(7);
 
@@ -337,9 +329,6 @@ class OrdersController extends Controller
             'company_id' => $request->header('company'),
             'status' => Invoice::TO_BE_DISPATCH,
             'paid_status' => Invoice::STATUS_PAID,
-            'sub_total' => $order->sub_total,
-            'total' => $order->total,
-            'due_amount' => $order->total,
             'notes' => $order->notes,
             'unique_hash' => str_random(60)
         ]);
@@ -353,7 +342,7 @@ class OrdersController extends Controller
         }
 
         $invoice = Invoice::with([
-            'order_items',
+            'orderItems',
             'user',
         ])->find($invoice->id);
 

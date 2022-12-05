@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class Orders extends Model
 {
     protected $table = 'orders';
-    const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
+    const DRAFT = 'DRAFT';
 
     protected $dates = [
         'created_at',
@@ -81,7 +81,7 @@ class Orders extends Model
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItems::class);
+        return $this->hasMany(OrderItems::class, 'order_id');
     }
 
     public function user()
