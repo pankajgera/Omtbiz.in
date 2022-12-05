@@ -89,7 +89,7 @@
           </base-button>
         </div>
       </div>
-      <div class="side-content">
+      <!-- <div class="side-content">
         <router-link
           v-for="(estimate,index) in estimates"
           :to="`/estimates/${estimate.id}/view`"
@@ -108,7 +108,7 @@
         <p v-if="!estimates.length" class="no-result">
           {{ $t('estimates.no_matching_estimates') }}
         </p>
-      </div>
+      </div> -->
     </div>
     <div class="estimate-view-page-container">
       <iframe :src="`${shareableLink}`" class="frame-style"/>
