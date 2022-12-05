@@ -38,22 +38,6 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <!-- <div class="filter-status">
-            <label>{{ $t('orders.status') }}</label>
-            <base-select
-              v-model.trim="filters.status"
-              :options="status"
-              :group-select="false"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('general.select_a_status')"
-              group-values="options"
-              group-label="label"
-              track-by="name"
-              label="name"
-              @remove="clearStatusSearch()"
-            />
-          </div> -->
           <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
@@ -108,19 +92,6 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ orders.length }}</b> {{ $t('general.of') }} <b>{{ totalOrders }}</b></p>
-
-        <!-- Tabs -->
-        <!-- <ul class="tabs">
-          <li class="tab" @click="getStatus('UNPAID')">
-            <a :class="['tab-link', {'a-active': filters.status.value === 'UNPAID'}]" href="#" >{{ $t('general.due') }}</a>
-          </li>
-          <li class="tab" @click="getStatus('DRAFT')">
-            <a :class="['tab-link', {'a-active': filters.status.value === 'DRAFT'}]" href="#">{{ $t('general.draft') }}</a>
-          </li>
-          <li class="tab" @click="getStatus('')">
-            <a :class="['tab-link', {'a-active': filters.status.value === '' || filters.status.value === null || filters.status.value !== 'DRAFT' && filters.status.value !== 'UNPAID'}]" href="#">{{ $t('general.all') }}</a>
-          </li>
-        </ul> -->
         <transition name="fade">
           <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -195,17 +166,8 @@
         <table-column
           :label="$t('orders.count')"
           width="20%"
-          show="items.length"
+          show="order_items.length"
         />
-        <table-column
-          :label="$t('orders.total')"
-          sort-as="total"
-        >
-          <template slot-scope="row">
-            <span>{{ $t('orders.amount') }}</span>
-             	₹ {{ (row.total).toFixed(2) }}
-          </template>
-        </table-column>
         <table-column
           :sortable="false"
           :filterable="false"
@@ -222,10 +184,10 @@
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-                <router-link :to="{path: `orders/${row.id}/view`}" class="dropdown-item">
+                <!-- <router-link :to="{path: `orders/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('orders.view') }}
-                </router-link>
+                </router-link> -->
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
                 <a class="dropdown-item" href="#/" @click="sendOrder(row.id)" v-if="role === 'admin'">

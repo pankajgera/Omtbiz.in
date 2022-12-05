@@ -11,11 +11,11 @@
     </div>
     <form v-if="!initLoading" action="" @submit.prevent="submitOrderData">
       <div class="page-header">
-        <h3 v-if="$route.name === 'orders.edit'" class="page-title">{{ $t('orders.edit_order') }}</h3>
+        <h3 v-if="isEdit" class="page-title">{{ $t('orders.edit_order') }}</h3>
         <h3 v-else class="page-title">{{ $t('orders.new_order') }} </h3>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><router-link slot="item-title" to="/orders">{{ $tc('orders.order', 2) }}</router-link></li>
-          <li v-if="$route.name === 'orders.edit'" class="breadcrumb-item">{{ $t('orders.edit_order') }}</li>
+          <li v-if="isEdit" class="breadcrumb-item">{{ $t('orders.edit_order') }}</li>
           <li v-else class="breadcrumb-item">{{ $t('orders.new_order') }}</li>
         </ol>
       </div>
@@ -32,7 +32,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="$route.name === 'orders.edit'"
+              :disabled="isEdit"
               :placeholder="$t('receipts.select_a_list')"
             />
             <div v-if="$v.newOrder.debtors.$error">
@@ -160,7 +160,7 @@
         </div>
       </div>
       <div class="page-actions row">
-          <!-- <a v-if="$route.name === 'orders.edit'" :href="`/orders/pdf/${newOrder.unique_hash}`" target="_blank" class="mr-3 order-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+          <!-- <a v-if="isEdit" :href="`/orders/pdf/${newOrder.unique_hash}`" target="_blank" class="mr-3 order-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
           <base-button
@@ -237,11 +237,9 @@ export default {
         discount_val: 0,
         discount: 0,
         //reference_number: null,
-        orderItems: [{
+        order_items: [{
           ...OrderStub,
-          taxes: [{...TaxStub, id: Guid.raw()}]
         }],
-        taxes: [],
         debtors: '',
       },
       customers: [],
@@ -257,7 +255,6 @@ export default {
       orderNumAttribute: null,
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
-      isEdit: false,
       url: null,
       siteURL: null,
       showAddNewInventory: true,
@@ -303,67 +300,6 @@ export default {
     currency () {
       return this.selectedCurrency
     },
-    subtotalWithDiscount () {
-      if (this.newOrder.discount_val) {
-        return this.subtotal - this.newOrder.discount_val
-      }
-      return this.subtotal
-    },
-    total () {
-      return this.subtotalWithDiscount + this.totalTax
-    },
-    subtotal () {
-      let inventory = this.newOrder.orderItems
-      if (this.$route.name === 'orders.edit') {
-        inventory = this.newOrder.orderItems
-      }
-      if (inventory && inventory.length) {
-        return inventory.reduce(function (a, b) {
-                return a + b['total']
-              }, 0)
-      }
-      return 0
-    },
-    discount: {
-      get: function () {
-        return this.newOrder.discount
-      },
-      set: function (newValue) {
-        if (this.newOrder.discount_type === 'percentage') {
-          this.newOrder.discount_val = (this.subtotal * newValue)
-        } else {
-          this.newOrder.discount_val = newValue
-        }
-        this.newOrder.discount = newValue
-      }
-    },
-    totalSimpleTax () {
-      return 0;
-      return window._.sumBy(this.newOrder.taxes, function (tax) {
-        if (!tax.compound_tax) {
-          return tax.amount
-        }
-        return 0
-      })
-    },
-    totalCompoundTax () {
-      return 0;
-      return window._.sumBy(this.newOrder.taxes, function (tax) {
-        if (tax.compound_tax) {
-          return tax.amount
-        }
-        return 0
-      })
-    },
-    totalTax () {
-      return 0;
-      if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
-        return this.totalSimpleTax + this.totalCompoundTax
-      }
-      return window._.sumBy(this.newOrder.orderItems, function (tax) {
-        return tax.tax
-      })
-    },
     setOrderDebtor: {
       cache: false,
       get() {
@@ -375,11 +311,17 @@ export default {
       },
     },
     inventoryBind() {
-      let invent = this.newOrder.orderItems
-      if (this.$route.name === 'orders.edit') {
-        invent = this.newOrder.orderItems
+      let invent = this.newOrder.order_items
+      if (this.isEdit) {
+        invent = this.newOrder.order_items
       }
       return invent
+    },
+    isEdit() {
+      if (this.$route.name === 'orders.edit') {
+        return true
+      }
+      return false
     }
   },
   watch: {
@@ -424,19 +366,16 @@ export default {
       })
     },
     async loadData () {
-      if (this.$route.name === 'orders.edit') {
+      if (this.isEdit) {
         this.initLoading = true
         let response = await this.fetchOrder(this.$route.params.id)
-        this.isEdit = true
         if (response.data) {
           this.newOrder = response.data.order
           this.inventoryList = response.data.inventories
           this.inventoryNegative = response.data.inventory_negative
           this.newOrder.order_date = moment(response.data.order.order_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
-          this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
-          this.orderTemplates = response.data.orderTemplates
           this.orderPrefix = response.data.order_prefix
           this.orderNumAttribute = response.data.orderNumber
           this.newOrder.debtors = response.data.sundryDebtorsList[0]
@@ -451,7 +390,6 @@ export default {
         this.discountPerInventory = response.data.discount_per_inventory
         this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
-        this.orderTemplates = response.data.orderTemplates
         this.newOrder.order_date = response.data.order_today_date
         this.inventoryList = response.data.inventories
         this.inventoryNegative = response.data.inventory_negative
@@ -461,15 +399,8 @@ export default {
       }
       this.initLoading = false
     },
-    openTemplateModal () {
-      this.openModal({
-        'title': this.$t('general.choose_template'),
-        'componentName': 'OrderTemplate',
-        'data': this.orderTemplates
-      })
-    },
     addInventory () {
-      this.inventoryBind.push({...OrderStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.inventoryBind.push({...OrderStub})
       this.$nextTick(() => {
         this.$refs.orderInventory[this.inventoryBind.length-1].$el.focus()
         this.$refs.orderInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
@@ -507,13 +438,10 @@ export default {
       let data = {
         ...this.newOrder,
         order_date: moment(this.newOrder.order_date).format('DD/MM/YYYY'),
-        sub_total: this.subtotal,
-        total: this.total,
-        tax: this.totalTax,
         user_id: this.user.id,
         order_template_id: this.getTemplateId,
       }
-      if (this.$route.name === 'orders.edit') {
+      if (this.isEdit) {
         this.submitUpdate(data)
         return
       }
@@ -597,16 +525,13 @@ export default {
       })
     },
     checkInventoryData (index, isValid) {
-      this.newOrder.orderItems[index].valid = isValid
-    },
-    removeOrderTax (index) {
-      this.newOrder.taxes.splice(index, 1)
+      this.newOrder.order_items[index].valid = isValid
     },
     checkValid () {
       this.$v.newOrder.$touch()
       window.hub.$emit('checkInventory')
       let isValid = true
-      this.newOrder.orderItems.forEach((each) => {
+      this.newOrder.order_items.forEach((each) => {
         if (!each.valid) {
           isValid = false
         }
