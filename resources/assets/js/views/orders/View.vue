@@ -89,7 +89,7 @@
           </base-button>
         </div>
       </div>
-      <div class="side-content">
+      <!-- <div class="side-content">
         <router-link
           v-for="(order,index) in orders"
           :to="`/orders/${order.id}/view`"
@@ -108,7 +108,7 @@
         <p v-if="!orders.length" class="no-result">
           {{ $t('orders.no_matching_orders') }}
         </p>
-      </div>
+      </div> -->
     </div>
     <div class="order-view-page-container">
       <iframe :src="`${shareableLink}`" class="frame-style"/>
@@ -161,7 +161,7 @@ export default {
     this.onSearched = _.debounce(this.onSearched, 500)
   },
   methods: {
-    ...mapActions('order', [
+    ...mapActions('orders', [
       'fetchOrders',
       'getRecord',
       'searchOrder',

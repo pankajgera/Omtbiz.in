@@ -189,12 +189,12 @@
                   {{ $t('orders.view') }}
                 </router-link> -->
               </v-dropdown-item>
-              <v-dropdown-item v-if="row.status == 'DRAFT'">
+              <!-- <v-dropdown-item v-if="row.status == 'DRAFT'">
                 <a class="dropdown-item" href="#/" @click="sendOrder(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
                   {{ $t('orders.send_order') }}
                 </a>
-              </v-dropdown-item>
+              </v-dropdown-item> -->
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeOrder(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
