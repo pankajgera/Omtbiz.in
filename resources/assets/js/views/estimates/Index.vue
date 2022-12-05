@@ -240,10 +240,10 @@
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-                <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
+                <!-- <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('estimates.view') }}
-                </router-link>
+                </router-link> -->
               </v-dropdown-item>
               <v-dropdown-item v-if="row.status == 'DRAFT'">
                 <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
