@@ -1,12 +1,20 @@
 import * as types from './mutation-types'
 
 export default {
-  [types.SET_ESTIMATES] (state, data) {
-    state.estimates = data
+  [types.SET_ESTIMATES_DRAFT] (state, data) {
+    state.estimatesDraft = data
   },
 
-  [types.SET_TOTAL_ESTIMATES] (state, totalEstimates) {
-    state.totalEstimates = totalEstimates
+  [types.SET_ESTIMATES_SENT] (state, data) {
+    state.estimatesSent = data
+  },
+
+  [types.SET_TOTAL_ESTIMATES_DRAFT] (state, totalEstimates) {
+    state.totalEstimatesDraft = totalEstimates
+  },
+
+  [types.SET_TOTAL_ESTIMATES_SENT] (state, totalEstimates) {
+    state.totalEstimatesSent = totalEstimates
   },
 
   [types.ADD_ESTIMATE] (state, data) {

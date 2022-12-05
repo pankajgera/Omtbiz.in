@@ -4,8 +4,10 @@ import * as dashboardTypes from '../dashboard/mutation-types'
 export const fetchEstimates = ({ commit, estimates, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates`, {params}).then((response) => {
-      commit(types.SET_ESTIMATES, response.data.estimates.data)
-      commit(types.SET_TOTAL_ESTIMATES, response.data.estimateTotalCount)
+      commit(types.SET_ESTIMATES_DRAFT, response.data.estimates_draft.data)
+      commit(types.SET_ESTIMATES_SENT, response.data.estimates_sent.data)
+      commit(types.SET_TOTAL_ESTIMATES_DRAFT, response.data.draft_count)
+      commit(types.SET_TOTAL_ESTIMATES_SENT, response.data.sent_count)
       resolve(response)
     }).catch((err) => {
       reject(err)

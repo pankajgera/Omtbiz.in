@@ -75,8 +75,6 @@ class FrontendController extends Controller
         }
 
         if ($estimate) {
-            $estimate->status = Estimate::TO_BE_DISPATCH;
-            $estimate->save();
             $notifyEstimateViewed = CompanySetting::getSetting(
                 'notify_estimate_viewed',
                 $estimate->company_id

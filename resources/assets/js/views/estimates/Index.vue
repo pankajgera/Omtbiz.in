@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
       <Header :title="$tc('estimates.estimate', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalEstimates || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalEstimatesDraft || totalEstimatesSent || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -84,7 +84,7 @@
       </div>
     </transition>
 
-    <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
+    <div v-cloak v-show="(showEmptyScreenDraft && showEmptyScreenSent)" class="col-xs-1 no-data-info" align="center">
       <moon-walker-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
         <label class="col title">{{ $t('estimates.no_estimates') }}</label>
@@ -105,22 +105,9 @@
       </div>
     </div>
 
-    <div v-show="!showEmptyScreen" class="table-container">
+    <div v-show="!showEmptyScreenDraft" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimates.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimates }}</b></p>
-
-        <!-- Tabs -->
-        <!-- <ul class="tabs">
-          <li class="tab" @click="getStatus('UNPAID')">
-            <a :class="['tab-link', {'a-active': filters.status.value === 'UNPAID'}]" href="#" >{{ $t('general.due') }}</a>
-          </li>
-          <li class="tab" @click="getStatus('DRAFT')">
-            <a :class="['tab-link', {'a-active': filters.status.value === 'DRAFT'}]" href="#">{{ $t('general.draft') }}</a>
-          </li>
-          <li class="tab" @click="getStatus('')">
-            <a :class="['tab-link', {'a-active': filters.status.value === '' || filters.status.value === null || filters.status.value !== 'DRAFT' && filters.status.value !== 'UNPAID'}]" href="#">{{ $t('general.all') }}</a>
-          </li>
-        </ul> -->
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesDraft.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimatesDraft }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -151,7 +138,136 @@
       <table-component
         ref="table"
         :show-filter="false"
-        :data="fetchData"
+        :data="fetchDataDraft"
+        table-class="table"
+      >
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="no-click"
+        >
+          <template slot-scope="row">
+            <div class="custom-control custom-checkbox">
+              <input
+                :id="row.id"
+                v-model="selectField"
+                :value="row.id"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label :for="row.id" class="custom-control-label"/>
+            </div>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('estimates.number')"
+          show="estimate_number"
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `estimates/${row.id}/edit?d=true`}" class="dropdown-item">
+               {{ row.estimate_number }}
+              </router-link>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('estimates.date')"
+          sort-as="estimate_date"
+          show="formattedEstimateDate"
+        />
+        <table-column
+          :label="$t('estimates.name')"
+          width="20%"
+          show="master.name"
+        />
+        <table-column
+          :label="$t('estimates.count')"
+          width="20%"
+          show="totalEstimatesSent"
+        />
+        <table-column
+          :label="$t('estimates.total')"
+          sort-as="total"
+        >
+          <template slot-scope="row">
+            <span>{{ $t('estimates.amount') }}</span>
+             	₹ {{ (row.total).toFixed(2) }}
+          </template>
+        </table-column>
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="action-dropdown no-click"
+        >
+          <template slot-scope="row">
+            <span>{{ $t('estimates.action') }}</span>
+            <v-dropdown>
+              <a slot="activator" href="#">
+                <dot-icon />
+              </a>
+              <v-dropdown-item>
+                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
+                  {{ $t('general.edit') }}
+                </router-link>
+                <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
+                  <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                  {{ $t('estimates.view') }}
+                </router-link>
+              </v-dropdown-item>
+              <v-dropdown-item v-if="row.status == 'DRAFT'">
+                <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
+                  {{ $t('estimates.send_estimate') }}
+                </a>
+              </v-dropdown-item>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </template>
+        </table-column>
+      </table-component>
+    </div>
+
+    <!--COMPLETED/SENT START-->
+
+    <div v-show="!showEmptyScreenSent" class="table-container">
+      <div class="table-actions mt-5">
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesSent.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimatesSent }}</b></p>
+        <transition name="fade">
+          <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
+            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+              {{ $t('general.actions') }}
+            </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeMultipleEstimates">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </transition>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input
+          id="select-all"
+          v-model="selectAllFieldStatus"
+          type="checkbox"
+          class="custom-control-input"
+          @change="selectAllEstimates"
+        >
+        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+          <span class="select-all-label">{{ $t('general.select_all') }} </span>
+        </label>
+      </div>
+
+      <table-component
+        ref="table"
+        :show-filter="false"
+        :data="fetchDataSent"
         table-class="table"
       >
         <table-column
@@ -197,24 +313,6 @@
           width="20%"
           show="items.length"
         />
-        <!-- <table-column
-          :label="$t('estimates.status')"
-          sort-as="status"
-        >
-          <template slot-scope="row" >
-            <span> {{ $t('estimates.status') }}</span>
-            <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'PARTIALLY_PAID')? row.status : row.status.replace('_', ' ') }}</span>
-          </template>
-        </table-column> -->
-        <!-- <table-column
-          :label="$t('estimates.status')"
-          sort-as="status"
-        >
-          <template slot-scope="row">
-            <span>{{ $t('estimates.status') }}</span>
-            <span :class="'inv-status-'+row.status.toLowerCase()">{{ (row.status != 'DISPATCHED') ? 'PAID' : row.status }}</span>
-          </template>
-        </table-column> -->
         <table-column
           :label="$t('estimates.total')"
           sort-as="total"
@@ -326,8 +424,11 @@ export default {
   },
 
   computed: {
-    showEmptyScreen () {
-      return !this.totalEstimates && !this.isRequestOngoing && !this.filtersApplied
+    showEmptyScreenDraft () {
+      return !this.totalEstimatesDraft && !this.isRequestOngoing && !this.filtersApplied
+    },
+    showEmptyScreenSent () {
+      return !this.totalEstimatesSent && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -337,8 +438,10 @@ export default {
     ]),
     ...mapGetters('estimate', [
       'selectedEstimates',
-      'totalEstimates',
-      'estimates',
+      'estimatesDraft',
+      'estimatesSent',
+      'totalEstimatesDraft',
+      'totalEstimatesSent',
       'selectAllField'
     ]),
     selectField: {
@@ -416,7 +519,7 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
-    async fetchData ({ page, filter, sort }) {
+    async fetchDataDraft ({ page, filter, sort }) {
       let data = {
         estimate_number: this.filters.estimate_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
@@ -432,14 +535,37 @@ export default {
       let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
 
-      //this.currency = response.data.currency
+      return {
+        data: response.data.estimates_draft.data,
+        pagination: {
+          totalPages: response.data.estimates_draft.last_page,
+          currentPage: page,
+          count: response.data.draft_count
+        }
+      }
+    },
+    async fetchDataSent ({ page, filter, sort }) {
+      let data = {
+        estimate_number: this.filters.estimate_number,
+        customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
+        status: '',
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
+        orderByField: sort.fieldName || 'created_at',
+        orderBy: sort.order || 'desc',
+        page
+      }
+
+      this.isRequestOngoing = true
+      let response = await this.fetchEstimates(data)
+      this.isRequestOngoing = false
 
       return {
-        data: response.data.estimates.data,
+        data: response.data.estimates_sent.data,
         pagination: {
-          totalPages: response.data.estimates.last_page,
+          totalPages: response.data.estimates_sent.last_page,
           currentPage: page,
-          count: response.data.estimates.count
+          count: response.data.sent_count
         }
       }
     },

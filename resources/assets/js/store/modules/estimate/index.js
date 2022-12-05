@@ -3,11 +3,13 @@ import * as actions from './actions'
 import * as getters from './getters'
 
 const initialState = {
-  estimates: [],
+  estimatesDraft: [],
+  estimatesSent: [],
   estimateTemplateId: 1,
   selectAllField: false,
   selectedEstimates: [],
-  totalEstimates: 0,
+  totalEstimatesDraft: 0,
+  totalEstimatesSent: 0,
   selectedCustomer: null
 }
 
