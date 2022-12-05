@@ -427,7 +427,6 @@ export default {
           this.$refs.orderInventory[data.index].$children[1].$refs.baseInput.focus()
         }
       })
-
     },
     submitOrderData () {
       if (!this.checkValid()) {

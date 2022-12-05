@@ -318,7 +318,7 @@ export default {
       },
       set: function (newValue) {
         let maxQuantity = parseInt(this.inventoryList.find(i => i.name === this.inventory.name).quantity);
-        if (maxQuantity < newValue && !this.inventoryNegative) {
+        if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),
             text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantity}),
