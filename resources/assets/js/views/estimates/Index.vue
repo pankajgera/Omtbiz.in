@@ -38,22 +38,6 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <!-- <div class="filter-status">
-            <label>{{ $t('estimates.status') }}</label>
-            <base-select
-              v-model.trim="filters.status"
-              :options="status"
-              :group-select="false"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('general.select_a_status')"
-              group-values="options"
-              group-label="label"
-              track-by="name"
-              label="name"
-              @remove="clearStatusSearch()"
-            />
-          </div> -->
           <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
@@ -107,6 +91,7 @@
 
     <div v-show="!showEmptyScreenDraft" class="table-container">
       <div class="table-actions mt-5">
+        <h4>Pending Estimates</h4>
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesDraft.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimatesDraft }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
@@ -182,7 +167,7 @@
         <table-column
           :label="$t('estimates.count')"
           width="20%"
-          show="totalEstimatesSent"
+          show="items.length"
         />
         <table-column
           :label="$t('estimates.total')"
@@ -236,6 +221,7 @@
 
     <div v-show="!showEmptyScreenSent" class="table-container">
       <div class="table-actions mt-5">
+        <h4>Completed Estimates</h4>
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesSent.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimatesSent }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
@@ -523,7 +509,7 @@ export default {
       let data = {
         estimate_number: this.filters.estimate_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
-        status: '',
+        status: 'DRAFT',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
@@ -548,7 +534,7 @@ export default {
       let data = {
         estimate_number: this.filters.estimate_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
-        status: '',
+        status: 'SENT',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
