@@ -1,433 +1,390 @@
+<?php
+function numberTowords($num)
+{
+    $ones = [
+        0 => 'ZERO',
+        1 => 'ONE',
+        2 => 'TWO',
+        3 => 'THREE',
+        4 => 'FOUR',
+        5 => 'FIVE',
+        6 => 'SIX',
+        7 => 'SEVEN',
+        8 => 'EIGHT',
+        9 => 'NINE',
+        10 => 'TEN',
+        11 => 'ELEVEN',
+        12 => 'TWELVE',
+        13 => 'THIRTEEN',
+        14 => 'FOURTEEN',
+        15 => 'FIFTEEN',
+        16 => 'SIXTEEN',
+        17 => 'SEVENTEEN',
+        18 => 'EIGHTEEN',
+        19 => 'NINETEEN',
+    ];
+    $tens = [
+        0 => 'ZERO',
+        1 => 'TEN',
+        2 => 'TWENTY',
+        3 => 'THIRTY',
+        4 => 'FORTY',
+        5 => 'FIFTY',
+        6 => 'SIXTY',
+        7 => 'SEVENTY',
+        8 => 'EIGHTY',
+        9 => 'NINETY',
+    ];
+    $hundreds = ['HUNDRED', 'THOUSAND', 'MILLION', 'BILLION', 'TRILLION', 'QUARDRILLION']; /*limit t quadrillion */
+    $num = number_format($num, 2, '.', ',');
+    $num_arr = explode('.', $num);
+    $wholenum = $num_arr[0];
+    $decnum = $num_arr[1];
+    $whole_arr = array_reverse(explode(',', $wholenum));
+    krsort($whole_arr, 1);
+    $rettxt = '';
+    foreach ($whole_arr as $key => $i) {
+        while (substr($i, 0, 1) == '0') {
+            $i = substr($i, 1, 5);
+        }
+        if ($i < 20 && $i > 0) {
+            /* echo "getting:".$i; */
+            $rettxt .= $ones[$i];
+        } elseif ($i < 100 && $i > 0) {
+            if (substr($i, 0, 1) != '0') {
+                $rettxt .= $tens[substr($i, 0, 1)];
+            }
+            if (substr($i, 1, 1) != '0') {
+                $rettxt .= ' ' . $ones[substr($i, 1, 1)];
+            }
+        } else {
+            if ($i > 0) {
+                if (substr($i, 0, 1) != '0') {
+                    $rettxt .= $ones[substr($i, 0, 1)] . ' ' . $hundreds[0];
+                }
+                if (substr($i, 1, 1) != '0') {
+                    $rettxt .= ' ' . $tens[substr($i, 1, 1)];
+                }
+                if (substr($i, 2, 1) != '0') {
+                    $rettxt .= ' ' . $ones[substr($i, 2, 1)];
+                }
+            }
+        }
+        if ($key > 0) {
+            $rettxt .= ' ' . $hundreds[$key] . ' ';
+        }
+    }
+    if ($decnum > 0) {
+        $rettxt .= ' and ';
+        if ($decnum < 20) {
+            $rettxt .= $ones[$decnum];
+        } elseif ($decnum < 100) {
+            $rettxt .= $tens[substr($decnum, 0, 1)];
+            $rettxt .= ' ' . $ones[substr($decnum, 1, 1)];
+        }
+    }
+    return $rettxt . ' ONLY';
+}
+?>
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Invoice</title>
-    {{-- <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet"> --}}
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<html lang="en">
 
+<head>
+    <title>Banks Report</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
         }
-
-        html {
-            margin: 0px;
-            padding: 0px;
-            margin-top: 50px;
-        }
-
         table {
             border-collapse: collapse;
         }
 
-        hr {
-            color:rgba(0, 0, 0, 0.2);
-            position: absolute;
-            top: 90px;
-            left: 0px;
+        .heading-text {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 24px;
+            color: #f54c4c;
             width: 100%;
-            margin: 0 30px 0 30px;
+            text-align: left;
+            padding: 0px;
+            margin: 0px;
         }
-
-        .header-center {
-            text-align: center
-        }
-
-        .header-table {
-            position: absolute;
+        .heading-date-range {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            color: #A5ACC1;
             width: 100%;
-            height: 90px;
-            left: 0px;
-            top: -50px;
+            text-align: right;
+            padding: 0px;
+            margin: 0px;
         }
-
-        .header-logo {
-            height: 50px;
+        .sub-heading-text {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            /* line-height: 21px; */
+            color: #595959;
+            padding: 0px;
+            margin: 0px;
+            margin-top: 6px;
+        }
+        .types-title {
             margin-top: 20px;
-            text-transform: capitalize;
-            color: #e37a7a;
-        }
-
-        .inv-flex{
-            display:flex;
-        }
-
-        .inv-data{
-            text-align:right;
-            margin-right:120px;
-        }
-        .inv-value{
-            text-align:left;
-            margin-left:160px;
-        }
-        .header {
-            font-size: 20px;
-            color: rgba(0, 0, 0, 0.7);
-        }
-
-        .TextColor1 {
-            font-size: 16px;
-            color: rgba(0, 0, 0, 0.5);
-        }
-
-        @page {
-            margin-top: 60px !important;
-        }
-
-        .wrapper {
-           display: block;
-           margin-top: 0px;
-           padding-top: 16px;
-           padding-bottom: 20px;
-        }
-
-        .address {
-            /* display: inline-block; */
-            padding-top: 30px
-        }
-
-        .company {
-            float: left;
-            padding-left: 30px;
-            font-weight: normal;
-            display: inline;
-            float:left;
-            width:30%;
-            text-transform: capitalize;
-            margin-bottom: 2px;
-        }
-
-        .company h1 {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 15px;
-            line-height: 22px;
-            letter-spacing: 0.05em;
-            margin-bottom: 0px;
-        }
-
-        .company-add {
-            margin-top: 2px;
-            text-align: left;
+            padding-left: 3px;
             font-style: normal;
             font-weight: normal;
             font-size: 12px;
-            line-height: 15px;
-            color: #595959;
-        }
-
-        .job-add {
-            /* display: inline; */
-            float: right;
-            padding: 10px 30px 0 0;
-        }
-        .amount-due {
-            background-color: #f2f2f2;
-        }
-
-        .textRight {
-            text-align: right;
-        }
-
-        .textLeft {
-            text-align: left;
-        }
-
-        .textStyle1 {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 18px;
-            padding-right: 40px;
-        }
-
-        .textStyle2 {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 18px;
-            text-align: right;
-        }
-        .bill-add {
-            width:45%;
-            padding: 0px 0 0 0px;
-        }
-
-        /* -------------------------- */
-        /* shipping style */
-
-        .ship-address-container {
-            float: right;
-            padding-left: 30px;
-        }
-
-        .ship-to {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 18px;
-            padding: 0px;
-            margin-top: 27px;
-            margin-bottom: 0px;
-        }
-
-        .ship-user-name {
-            max-width: 250px
-            font-style: normal;
-            font-weight: normal;
-            font-size: 15px;
-            line-height: 22px;
-            padding: 0px;
-            margin: 0px;
-        }
-        .ship-user-address {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 10px;
-            line-height: 15px;
-            color: #595959;
-            padding: 0px;
-            margin: 0px;
-            width: 160px;
-        }
-        .ship-user-phone {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 10px;
-            line-height: 15px;
-            color: #595959;
-            padding: 0px;
-            margin: 0px;
-        }
-
-        /* -------------------------- */
-        /* billing style */
-
-        .bill-address-container {
-            float: left;
-            padding-left: 30px;
-        }
-
-        .bill-to {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 18px;
-            padding: 0px;
-            margin-top: 27px;
-            margin-bottom: 0px;
-        }
-
-        .bill-user-name {
-            max-width: 250px
-            font-style: normal;
-            font-weight: normal;
-            font-size: 15px;
-            line-height: 22px;
-            padding: 0px;
-            margin: 0px;
-        }
-
-        .bill-user-address {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 10px;
-            line-height: 15px;
-            color: #595959;
-            padding: 0px;
-            margin: 0px;
-            width: 160px;
-        }
-
-        .bill-user-phone {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 10px;
-            line-height: 15px;
-            color: #595959;
-            padding: 0px;
-            margin: 0px;
-        }
-
-        .table2 {
-            margin-top: 35px;
-            border-bottom: 1px solid #EAF1FB;
-            padding: 0px 30px 0 30px;
-            page-break-before: avoid;
-            page-break-after: auto;
-        }
-
-
-        .table2 hr {
-            height:0.1px;
-        }
-
-        .ItemTableHeader {
-            font-size: 13.5;
-            text-align: center;
-            color: rgba(0, 0, 0, 0.85);
-            padding: 5px;
-        }
-
-        tr.main-table-header th {
-            border-bottom: 0.620315px solid #E8E8E8;
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 18px;
-        }
-
-        tr.item-details td {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 18px;
-        }
-
-        .items {
-            font-size: 13;
-            color: rgba(0, 0, 0, 0.6);
-            text-align: center;
-            padding: 5px;
-        }
-
-        .padd8 {
-            padding-top: 8px;
-            padding-bottom: 8px;
-        }
-
-        .padd2 {
-            padding-top: 2px;
-            padding-bottom: 2px;
-        }
-
-        .table3 {
-            /* border: 1px solid #EAF1FB; */
-            border-top: none;
-            /* padding-right: 30px; */
-            box-sizing: border-box;
-            width: 630px;
-            /* position: absolute;
-            right: -25; */
-            page-break-inside: avoid;
-            page-break-before: auto;
-            page-break-after: auto;
-        }
-
-        .total-border-left {
-            border: 1px solid #E8E8E8!important;
-            border-right: 0px !important;
-            padding-top: 0px;
-            padding:8px !important;
-        }
-        .total-border-right {
-            border: 1px solid #E8E8E8!important;
-            border-left: 0px !important;
-            padding-top: 0px;
-            padding:8px !important;
-
-        }
-
-        .inv-item {
-            border-color: #d9d9d9;
-        }
-
-        .no-border {
-            border: none;
-        }
-
-        .desc {
-            font-weight: 100;
-            text-align: justify;
-            font-size: 10px;
-            margin-bottom: 15px;
-            margin-top:7px;
-            color:rgba(0, 0, 0, 0.85);
-        }
-
-        .notes {
-            font-style: normal;
-            font-weight: 300;
-            font-size: 12px;
-            color: #595959;
-            margin-top: 15px;
-            margin-left: 30px;
-            width: 442px;
-            text-align: left;
-            page-break-inside: avoid;
-        }
-
-        .notes-label {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 15px;
-            line-height: 22px;
-            letter-spacing: 0.05em;
+            line-height: 21px;
             color: #040405;
-            width: 108px;
-            height: 19.87px;
+        }
+        .title {
+            margin-top: 60px;
+            padding-left: 3px;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 21px;
+            color: #040405;
+        }
+        .table-container {
+            padding-left: 10px;
+        }
+        .table {
+            width: 100%;
             padding-bottom: 10px;
         }
-
+        .title-item {
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 21px;
+            color: #595959;
+            width: 100%;
+            float: right;
+            text-align: right;
+        }
+        .money {
+            padding: 0px;
+            margin: 0px;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 14px;
+            line-height: 21px;
+            text-align: right;
+            color: #595959;
+        }
+        .border {
+            border: 1px solid #a5a5a5 !important;
+        }
+        tr.td-border td {
+            border-top: 1px solid #a5a5a5;
+            border-bottom: 1px solid #a5a5a5;
+        }
+        td {
+            border-right: 1px solid #a5a5a5;
+            border-left: 1px solid #a5a5a5;
+        }
+        p {
+            padding: 5px !important;
+        }
+        .total-table {
+            width: 100%;
+        }
+        .total-cell {
+            padding-right: 20px;
+        }
+        .total {
+            padding-top: 10px;
+            padding-right: 30px;
+            padding: 0px;
+            margin: 0px;
+            text-align: right;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 21px;
+            text-align: right;
+            color: #040405;
+        }
+        .total-table {
+            width: 100%;
+            margin-top: 40px;
+            padding: 15px 0px;
+            box-sizing: border-box;
+        }
+        .total-title {
+            padding: 0px;
+            margin: 0px;
+            text-align: left;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 21px;
+            color: #595959;
+        }
+        .row-item td p {
+            line-height: 1px;
+            marign: 0 5px !important;
+            padding: 0 5px !important;
+        }
+        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 150px; }
+        @page {
+            margin: 120px 20px 20px 20px;
+          }
     </style>
 </head>
+
 <body>
-    <div class="header-table">
-        <table width="100%">
+    <header>
+        <table style=" width: 100% !important;">
             <tr>
-                <td class="header-center">
-                    @if($logo)
-                        <img class="header-logo" src="{{ $logo }}" alt="Company Logo">
-                    @else
-                        @if($invoice->user->company)
-                            <h2 class="header-logo"> {{$invoice->user->company->name}} </h2>
-                        @endif
-                    @endif
+                <td class="border">
+                    <p class="sub-heading-text"> Invoice</p>
+                    <p class="heading-text">
+                        {{ $company->name }}
+                    </p>
+                </td>
+                <td class="border">
+                    <p class="total-title">Invoice Date <span
+                            style="float:right; font-size: 12px;">{{ $invoice->invoice_date }}</span></p>
+                    <p class="total-title">Invoice Number <span
+                            style="float:right; font-size: 12px;">{{ $invoice->invoice_number }}</span></p>
+                    <p class="total-title">Reference Number <span
+                        style="float:right; font-size: 12px;">{{ $invoice->reference_number }}</span></p>
+                    <p class="total-title">Party Name <span
+                            style="float:right; font-size: 12px;">{{ $invoice->master->name }}</span></p>
                 </td>
             </tr>
         </table>
-        <hr class="header-line" style="border: 0.620315px solid #E8E8E8;"/>
+    </header>
+    <div style="margin-top: 40px;">
+        <table>
+            <tbody>
+                <div class="main-container">
+                    <div class="sub-container">
+                        <table class="table">
+                            <tr class="td-border">
+                                <td>
+                                    <p style="font-size: 14px; font-weight: bold">
+                                        S.No.
+                                    </p>
+                                </td>
+                                <td>
+                                    <p style="font-size: 14px; font-weight: bold">
+                                        Description
+                                    </p>
+                                </td>
+                                <td>
+                                    <p style="font-size: 14px; font-weight: bold">
+                                        Quantity
+                                    </p>
+                                </td>
+                                <td>
+                                    <p style="font-size: 14px; font-weight: bold">
+                                        Rate
+                                    </p>
+                                </td>
+                                <td>
+                                    <p style="font-size: 14px; font-weight: bold">
+                                        Per
+                                    </p>
+                                </td>
+                                <td>
+                                    <p style="font-size: 14px; font-weight: bold">
+                                        Amount
+                                    </p>
+                                </td>
+                            </tr>
+                            @foreach ($invoice_items as $key => $item)
+                                <tr class="row-item">
+                                    <td>
+                                        <p style="font-size: 12px;">
+                                            {{ $key + 1 }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p style="font-size: 12px;">
+                                            {{ $item->name }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p style="font-size: 12px;">
+                                            {{ $item->quantity }} {{ $item->inventory ? $item->inventory->unit : '' }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p style="font-size: 12px;">
+                                            ₹ {{ $item->sale_price }}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p style="font-size: 12px;">
+                                            {{ $item->inventory ? $item->inventory->unit : ''}}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p style="font-size: 12px;">
+                                            ₹ {{ $item->total }}
+                                        </p>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr class="td-border">
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <p style="font-size: 12px;">
+                                        Total: {{ $total_quantity }}
+                                    </p>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <p style="font-size: 12px;">
+                                        {{ 'Rs ' . $total_amount }}
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </tbody>
+        </table>
     </div>
-    <div class="wrapper">
-        <div class="address">
-            <div class="company">
-                @include('app.pdf.invoice.partials.company-address')
-            </div>
-            <div class="job-add">
-                <table>
-                    <tr>
-                        <td class="textStyle1" style="text-align: left; color: #55547A">Invoice Number</td>
-                        <td class="textStyle2"> &nbsp;{{$invoice->invoice_number}}</td>
-                    </tr>
-                    <tr>
-                        <td class="textStyle1" style="text-align: left; color: #55547A">Invoice Date </td>
-                        <td class="textStyle2"> &nbsp;{{$invoice->formattedInvoiceDate}}</td>
-                    </tr>
-                    {{--  <tr>
-                        <td class="textStyle1" style="text-align: left; color: #55547A">Due date</td>
-                        <td class="textStyle2"> &nbsp;{{$invoice->formattedDueDate}}</td>
-                    </tr>  --}}
-                </table>
-            </div>
-            <div style="clear: both;"></div>
+    <footer>
+        <div>
+            <p style="font-size: 12px;">
+                Amount Chargeable (in words)
+                <br />
+                {{ numberTowords($total_amount) }}
+            </p>
         </div>
-        <div class="bill-add">
-            <div class="bill-address-container">
-                    @include('app.pdf.invoice.partials.billing-address')
-            </div>
-            @if($invoice->user->billingaddress)
-                <div class="ship-address-container">
-            @else
-                <div class="ship-address-container " style="float:left;padding-left:0px;">
-            @endif
-                @include('app.pdf.invoice.partials.shipping-address')
-            </div>
-            <div style="clear: both;"></div>
+        <div style="margin: 10px 0px; position: fixed; bottom: 180px">
+            <p style="font-size: 12px; bottom: 0">
+                Remark: <br>
+                {{ $invoice->notes }}
+            </p>
+            <table>
+                <tr class="td-border">
+                    <td style="width: 50%">
+                        <p style="font-size: 12px;">
+                            <u> Declaration: </u> <br>
+                            We declare that this invoice shows the actual
+                            price of the goods described and that all
+                            particulars are true and correct
+                        </p>
+                    </td>
+                    <td style="width: 50%">
+                        <p style="font-size: 12px; float: right; bottom: 40px; right: 0; position: fixed">
+                            Authorised Signatory
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p style="font-size: 10px; bottom: 0px; margin: 0; padding: 0">This is a Computer Generated Invoice</p>
         </div>
-        <div style="width: 100%;">
-            @include('app.pdf.invoice.partials.table')
-        </div>
-        @include('app.pdf.invoice.partials.notes')
-    </div>
+    </footer>
 </body>
+
 </html>

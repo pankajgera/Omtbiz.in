@@ -146,7 +146,6 @@ export default {
     }
   },
   computed: {
-
     getOrderBy () {
       if (this.searchData.orderBy === 'asc' || this.searchData.orderBy == null) {
         return true

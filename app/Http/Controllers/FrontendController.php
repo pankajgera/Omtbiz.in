@@ -13,6 +13,7 @@ use App\Models\InvoiceTemplate;
 use App\Models\EstimateTemplate;
 use App\Mail\EstimateViewed;
 use App\Mail\InvoiceViewed;
+use App\Models\InvoiceItem;
 
 class FrontendController extends Controller
 {
@@ -347,7 +348,6 @@ class FrontendController extends Controller
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
         $company = Company::find($invoice->company_id);
-        $companyAddress = User::with(['addresses', 'addresses.country'])->find(1);
 
         $logo = $company->getMedia('logo')->first();
 
@@ -368,14 +368,19 @@ class FrontendController extends Controller
             ->whereCompany($invoice->company_id)
             ->get();
 
+        $invoice_i = InvoiceItem::with('inventory')->where('type', 'invoice')->where('invoice_id', $invoice->id);
+        $invoice_items = $invoice_i->get();
+
+        $invoiceWith = Invoice::with(['master'])->where('id', $invoice->id)->first();
         view()->share([
-            'invoice' => $invoice,
-            'company_address' => $companyAddress,
-            'logo' => $logo ?? null,
-            'colors' => $colorSettings,
-            'labels' => $labels,
-            'taxes' => $taxes
+            'invoice' => $invoiceWith,
+            'total_quantity' => $invoice_i->sum('quantity'),
+            'total_amount' => $invoiceWith->sub_total,
+            'invoice_items' => $invoice_items,
+            'colorSettings' => $colorSettings,
+            'company' => $company,
         ]);
+
         $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
 
         return $pdf->stream();
