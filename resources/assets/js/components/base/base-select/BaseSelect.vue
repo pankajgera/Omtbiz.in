@@ -13,10 +13,10 @@
     @keyup.esc="deactivate()"
   >
     <slot :toggle="toggle" name="caret">
-      <div class="multiselect__select" @mousedown.prevent.stop="toggle()" />
+      <div id="caret" class="multiselect__select" @mousedown.prevent.stop="toggle()" />
     </slot>
     <!-- <slot name="clear" :search="search"></slot> -->
-    <div ref="tags" :class="{'in-valid': invalid}" class="multiselect__tags">
+    <div ref="tags"  :class="{'in-valid': invalid}" class="multiselect__tags">
       <slot
         :search="search"
         :remove="removeElement"
@@ -28,8 +28,8 @@
           <template v-for="(option, index) of visibleValues" @mousedown.prevent>
             <slot :option="option" :search="search" :remove="removeElement" name="tag">
               <span :key="index" class="multiselect__tag">
-                <span v-text="getOptionLabel(option)"/>
-                <i class="multiselect__tag-icon" tabindex="1" @keypress.enter.prevent="removeElement(option)" @mousedown.prevent="removeElement(option)"/>
+                <span style="color:#000" v-text="getOptionLabel(option)"/>
+                <i class="multiselect__tag-icon" tabindex="1" id="tag_icon" @keypress.enter.prevent="removeElement(option)" @mousedown.prevent="removeElement(option)"/>
               </span>
             </slot>
           </template>
@@ -45,6 +45,7 @@
           <div v-show="loading" class="multiselect__spinner"/>
         </slot>
       </transition>
+      <span  id="hide_tags">
       <input
         ref="search"
         :name="name"
@@ -68,6 +69,7 @@
         @keypress.enter.prevent.stop.self="addPointerElement($event, doNotSelectDefault)"
         @keydown.delete.stop="removeLastElement()"
       >
+      </span>
       <span v-if="!multiple">
         <span
           v-if="isSingleLabelVisible"
@@ -377,3 +379,11 @@ export default {
   }
 }
 </script>
+<style>
+.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon::after {
+  color:#000 !important
+}
+.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag {
+   color:#000 !important
+}
+</style>

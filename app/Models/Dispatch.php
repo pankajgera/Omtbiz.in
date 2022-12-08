@@ -146,7 +146,7 @@ class Dispatch extends Model
     public static function addDispatchBillTy($dispatch, $invoice_total_amount, $company_id, ?array $dispatch_ids)
     {
         $item = new Item();
-        $item->name = $dispatch->name;
+        $item->name = 'Ledger 1';
         $item->unit = 'pc';
         $item->description = '';
         $item->company_id = $company_id;

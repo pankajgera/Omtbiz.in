@@ -13154,7 +13154,7 @@ fieldset[disabled] .multiselect {
   padding: 4px 26px 4px 10px;
   border-radius: 5px;
   margin-right: 10px;
-  color: #fff;
+  color: #333;
   line-height: 1;
   background: #41b883;
   margin-bottom: 5px;
@@ -13178,6 +13178,7 @@ fieldset[disabled] .multiselect {
   line-height: 22px;
   transition: all 0.2s ease;
   border-radius: 5px;
+  color: #000;
 }
 
 .multiselect__tag-icon:after {
@@ -13487,11 +13488,11 @@ fieldset[disabled] .multiselect {
   background: #1eaec5 !important;
 }
 .multiselect .multiselect__tags-wrap .multiselect__tag {
-  background: #1eaec5 !important;
+  background: #ccc !important;
   color: #040405;
 }
 .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon:hover {
-  background: #1eaec5 !important;
+  background: #ccc !important;
 }
 .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon::after {
   color: #040405;
