@@ -68,6 +68,7 @@ class InventoryController extends Controller
         try {
             $inventory = new Inventory();
             $inventory->name = $request->name;
+            $inventory->worker_name = $request->worker_name;
             $inventory->quantity = $request->quantity;
             $inventory->price = $request->price;
             $inventory->sale_price = $request->sale_price;
@@ -171,10 +172,9 @@ class InventoryController extends Controller
      */
     public function increasePrice(Request $request)
     {
-
         $inventory = Inventory::whereIn('id', $request->selected_ids)->get();
 
-        foreach($inventory as $each) {
+        foreach ($inventory as $each) {
             $each->update([
                 'price' => $request->price,
                 'sale_price' => $request->sale_price,

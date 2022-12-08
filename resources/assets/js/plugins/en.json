@@ -1267,6 +1267,7 @@
         "title": "Inventory",
         "date": "Date",
         "name": "Name",
+        "worker_name": "Worker Name",
         "unit": "Unit",
         "description": "Description",
         "added_on": "Added On",
