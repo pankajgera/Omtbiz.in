@@ -15,6 +15,7 @@
       :typeable="typeable"
       :clear-button="clearButton"
       :clear-button-icon="clearButtonIcon"
+      :hide-clear-button="true"
       :calendar-button="calendarButton"
       :calendar-button-icon="calendarButtonIcon"
       :calendar-button-icon-content="calendarButtonIconContent"

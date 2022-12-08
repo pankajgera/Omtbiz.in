@@ -86,7 +86,7 @@ class Dispatch extends Model
      * @param  $company_id
      * @return Boolean
      */
-    public static function moveDispatch($id,  $company_id)
+    public static function moveDispatch($id, $company_id)
     {
         //Selected dispatch might have multiple invoices
         $same_invoice_dispatch = Dispatch::whereIn('invoice_id', [Dispatch::where('id', $id)->value('invoice_id')])->get();

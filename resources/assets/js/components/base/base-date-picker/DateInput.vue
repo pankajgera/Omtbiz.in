@@ -31,7 +31,7 @@
         <!-- <i :class="clearButtonIcon">
           <span v-if="!clearButtonIcon">&times;</span>
         </i> -->
-        <font-awesome-icon :icon="clearButtonIcon"/>
+        <font-awesome-icon id="clear-icon" :icon="clearButtonIcon"/>
       </span>
     </span>
     <slot name="afterDateInput"></slot>
