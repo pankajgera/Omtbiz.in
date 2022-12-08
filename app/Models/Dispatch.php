@@ -86,7 +86,7 @@ class Dispatch extends Model
      * @param  $company_id
      * @return Boolean
      */
-    public static function moveDispatch($id,  $company_id)
+    public static function moveDispatch($id, $company_id)
     {
         //Selected dispatch might have multiple invoices
         $same_invoice_dispatch = Dispatch::whereIn('invoice_id', [Dispatch::where('id', $id)->value('invoice_id')])->get();
@@ -146,7 +146,7 @@ class Dispatch extends Model
     public static function addDispatchBillTy($dispatch, $invoice_total_amount, $company_id, ?array $dispatch_ids)
     {
         $item = new Item();
-        $item->name = 'Ledger 1';
+        $item->name = $dispatch->name;
         $item->unit = 'pc';
         $item->description = '';
         $item->company_id = $company_id;
