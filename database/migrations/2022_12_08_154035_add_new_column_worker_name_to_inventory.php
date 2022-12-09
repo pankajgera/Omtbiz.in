@@ -13,20 +13,8 @@ class AddNewColumnWorkerNameToInventory extends Migration
      */
     public function up()
     {
-        Schema::table('inventory', function (Blueprint $table) {
-            //
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('inventory', function (Blueprint $table) {
-            //
+        Schema::table('inventories', function (Blueprint $table) {
+            $table->string('worker_name')->nullable();
         });
     }
 }

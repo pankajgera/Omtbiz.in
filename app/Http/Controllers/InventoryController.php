@@ -21,6 +21,7 @@ class InventoryController extends Controller
             $inventories = Inventory::applyFilters($request->only([
                 'name',
                 'quantity',
+                'worker_name',
                 'price',
                 'unit',
                 'orderByField',
@@ -99,6 +100,7 @@ class InventoryController extends Controller
         try {
             $inventory = Inventory::find($id);
             $inventory->name = $request->name;
+            $inventory->worker_name = $request->worker_name;
             $inventory->quantity = $request->quantity;
             $inventory->price = $request->price;
             $inventory->sale_price = $request->sale_price;
