@@ -9,6 +9,7 @@ class Inventory extends Model
     protected $fillable = [
         'name',
         'quantity',
+        'worker_name',
         'price',
         'sale_price',
         'unit',
@@ -18,6 +19,10 @@ class Inventory extends Model
     public function scopeWhereName($query, $name)
     {
         return $query->where('name', 'LIKE', '%' . $name . '%');
+    }
+    public function scopeWhereWorkerName($query, $worker_name)
+    {
+        return $query->where('worker_name', 'LIKE', '%' . $worker_name . '%');
     }
 
     public function scopeWhereQuantity($query, $quantity)
@@ -51,6 +56,9 @@ class Inventory extends Model
 
         if ($filters->get('name')) {
             $query->whereName($filters->get('name'));
+        }
+        if ($filters->get('worker_name')) {
+            $query->whereWorkerName($filters->get('worker_name'));
         }
 
         if ($filters->get('quantity')) {
