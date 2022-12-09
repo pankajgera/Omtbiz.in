@@ -198,18 +198,6 @@ const routes = [
         component: LayoutBasic, // Change the desired Layout here
         meta: { requiresAuth: true },
         children: [
-            // Dashbord
-            // {
-            //     path: '/',
-            //     component: Dashboard,
-            //     name: 'dashboard',
-            //     meta: ['admin']
-            // },
-            // {
-            //     path: 'dashboard',
-            //     component: Dashboard,
-            //     meta: ['admin']
-            // },
 
             // Customer
             {
@@ -669,11 +657,6 @@ const routes = [
                         component: Notifications,
                         meta: ['admin']
                     },
-                    // {
-                    //   path: 'update-app',
-                    //   name: 'updateapp',
-                    //   component: UpdateApp
-                    // }
                 ]
             },
         ]
