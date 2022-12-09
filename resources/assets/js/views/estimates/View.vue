@@ -125,7 +125,8 @@ export default {
     return {
       id: null,
       count: null,
-      estimates: [],
+      estimatesDraft: [],
+      estimatesSent: [],
       estimate: null,
       currency: null,
       searchData: {
@@ -173,7 +174,8 @@ export default {
     async loadEstimates () {
       let response = await this.fetchEstimates()
       if (response.data) {
-        this.estimates = response.data.estimates.data
+        this.estimatesDraft = response.data.estimates_draft.data
+        this.estimatesSent = response.data.estimates_sent.data
       }
     },
     async loadEstimate () {
@@ -200,7 +202,8 @@ export default {
       let response = await this.searchEstimate(data)
       this.isSearching = false
       if (response.data) {
-        this.estimates = response.data.estimates.data
+        this.estimatesDraft = response.data.estimates_draft.data
+        this.estimatesSent = response.data.estimates_sent.data
       }
     },
     sortData () {

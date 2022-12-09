@@ -15,6 +15,8 @@ use Carbon\Carbon;
 use App\Models\AccountGroup;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
+use App\Models\Estimate;
+use App\Models\EstimateItem;
 use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -678,6 +680,51 @@ class ReportController extends Controller
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.invoice');
+
+        return $pdf->stream();
+    }
+
+
+    /**
+     * Generate Estimate Report
+     *
+     * @param Request $request
+     * @param string|integer $id
+     * @return PDF
+     */
+    public function estimateReport(Request $request, $id)
+    {
+        $company = Company::findOrFail($request->company_id);
+        $colors = [
+            'primary_text_color',
+            'heading_text_color',
+            'section_heading_text_color',
+            'border_color',
+            'body_text_color',
+            'footer_text_color',
+            'footer_total_color',
+            'footer_bg_color',
+            'date_text_color'
+        ];
+        $colorSettings = CompanySetting::whereIn('option', $colors)
+            ->whereCompany($company->id)
+            ->get();
+
+
+        $estimate_i = EstimateItem::with('estimate')->where('estimate_id', $id);
+        $estimate_items = $estimate_i->get();
+
+        $estimateWith = Estimate::with(['master'])->where('id', $id)->first();
+        view()->share([
+            'estimate' => $estimateWith,
+            'total_quantity' => $estimate_i->sum('quantity'),
+            'total_amount' => $estimateWith->sub_total,
+            'estimate_items' => $estimate_items,
+            'colorSettings' => $colorSettings,
+            'company' => $company,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.reports.estimate');
 
         return $pdf->stream();
     }
