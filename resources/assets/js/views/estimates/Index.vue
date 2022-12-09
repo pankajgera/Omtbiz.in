@@ -199,12 +199,6 @@
                   {{ $t('estimates.view') }}
                 </router-link>
               </v-dropdown-item>
-              <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
-                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('estimates.send_estimate') }}
-                </a>
-              </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -320,20 +314,10 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
-                  {{ $t('general.edit') }}
-                </router-link>
                 <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('estimates.view') }}
                 </router-link>
-              </v-dropdown-item>
-              <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendEstimate(row.id)" v-if="role === 'admin'">
-                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('estimates.send_estimate') }}
-                </a>
               </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
@@ -476,32 +460,6 @@ export default {
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    async sendEstimate (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_send'),
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          const data = {
-            id: id
-          }
-          let response = await this.sendEmail(data)
-          this.refreshTable()
-          if (response.data.success) {
-            window.toastr['success'](this.$tc('estimates.send_estimate_successfully'))
-            return true
-          }
-          if (response.data.error === 'user_email_does_not_exist') {
-            window.toastr['error'](this.$tc('estimates.user_email_does_not_exist'))
-            return false
-          }
-          window.toastr['error'](this.$tc('estimates.something_went_wrong'))
-        }
-      })
-    },
     refreshTable () {
       this.$refs.table.refresh()
     },

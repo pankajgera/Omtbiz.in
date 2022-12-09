@@ -17,13 +17,22 @@ export default {
     state.totalEstimatesSent = totalEstimates
   },
 
-  [types.ADD_ESTIMATE] (state, data) {
-    state.estimates = [...state.estimates, data]
+  [types.ADD_ESTIMATE_DRAFT] (state, data) {
+    state.estimatesDraft = [...state.estimatesDraft, data]
   },
 
-  [types.DELETE_ESTIMATE] (state, id) {
-    let index = state.estimates.findIndex(estimate => estimate.id === id)
-    state.estimates.splice(index, 1)
+  [types.ADD_ESTIMATE_SENT] (state, data) {
+    state.estimatesSent = [...state.estimatesSent, data]
+  },
+
+  [types.DELETE_ESTIMATE_DRAFT] (state, id) {
+    let index = state.estimatesDraft.findIndex(estimate => estimate.id === id)
+    state.estimatesDraft.splice(index, 1)
+  },
+
+  [types.DELETE_ESTIMATE_SENT] (state, id) {
+    let index = state.estimatesSent.findIndex(estimate => estimate.id === id)
+    state.estimatesSent.splice(index, 1)
   },
 
   [types.SET_SELECTED_ESTIMATES] (state, data) {
@@ -39,7 +48,7 @@ export default {
     state.selectedEstimates = []
   },
 
-  [types.UPDATE_ESTIMATE] (state, data) {
+  [types.UPDATE_ESTIMATE_DRAFT] (state, data) {
     let pos = state.estimates.findIndex(estimate => estimate.id === data.estimate.id)
 
     state.estimates[pos] = data.estimate

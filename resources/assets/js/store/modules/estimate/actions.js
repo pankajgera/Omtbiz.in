@@ -83,8 +83,8 @@ export const sendEmail = ({ commit, estimates, state }, data) => {
 export const addEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/estimates', data).then((response) => {
-      commit(types.ADD_ESTIMATE, response.data.estimate)
-
+      //new estimate is only added to draftw
+      commit(types.ADD_ESTIMATE_DRAFT, response.data.estimate)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -95,8 +95,10 @@ export const addEstimate = ({ commit, estimates, state }, data) => {
 export const deleteEstimate = ({ commit, estimates, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/estimates/${id}`).then((response) => {
-      commit(types.DELETE_ESTIMATE, id)
-      commit('dashboard/' + dashboardTypes.DELETE_ESTIMATE, id, { root: true })
+      commit(types.DELETE_ESTIMATE_DRAFT, id)
+      commit(types.DELETE_ESTIMATE_SENT, id)
+      commit('dashboard/' + dashboardTypes.DELETE_ESTIMATE_DRAFT, id, { root: true })
+      commit('dashboard/' + dashboardTypes.DELETE_ESTIMATE_SENT, id, { root: true })
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -118,7 +120,7 @@ export const deleteMultipleEstimates = ({ commit, estimates, state }, id) => {
 export const updateEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/estimates/${data.id}`, data).then((response) => {
-      commit(types.UPDATE_ESTIMATE, response.data)
+      commit(types.UPDATE_ESTIMATE_DRAFT, response.data)
       resolve(response)
     }).catch((err) => {
       reject(err)

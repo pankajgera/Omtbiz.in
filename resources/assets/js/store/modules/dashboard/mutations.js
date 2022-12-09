@@ -47,7 +47,12 @@ export default {
     state.dueInvoices.splice(index, 1)
   },
 
-  [types.DELETE_ESTIMATE] (state, id) {
+  [types.DELETE_ESTIMATE_DRAFT] (state, id) {
+    let index = state.recentEstimates.findIndex(estimate => estimate.id === id)
+    state.recentEstimatesDraft.splice(index, 1)
+  },
+
+  [types.DELETE_ESTIMATE_SENT] (state, id) {
     let index = state.recentEstimates.findIndex(estimate => estimate.id === id)
     state.recentEstimates.splice(index, 1)
   },

@@ -213,30 +213,6 @@ export default {
       this.onSearched()
       return true
     },
-    async onSendEstimate (id) {
-      window.swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('estimates.confirm_send_estimate'),
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          this.isSendingEmail = true
-          let response = await this.sendEmail({id: this.estimate.id})
-          this.isSendingEmail = false
-          if (response.data.success) {
-            window.toastr['success'](this.$tc('estimates.send_estimate_successfully'))
-            return true
-          }
-          if (response.data.error === 'user_email_does_not_exist') {
-            window.toastr['error'](this.$tc('estimates.user_email_does_not_exist'))
-            return true
-          }
-          window.toastr['error'](this.$tc('estimates.something_went_wrong'))
-        }
-      })
-    },
     async removeEstimate (id) {
       window.swal({
         title: 'Deleted',
