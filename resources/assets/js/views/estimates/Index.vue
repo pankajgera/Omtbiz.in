@@ -196,6 +196,12 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
+                <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
+                  <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                  {{ $t('estimates.view') }}
+                </router-link>
+              </v-dropdown-item>
+              <v-dropdown-item>
                 <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
@@ -269,9 +275,7 @@
           show="estimate_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `estimates/${row.id}/edit?d=true`}" class="dropdown-item">
-               {{ row.estimate_number }}
-              </router-link>
+            {{ row.estimate_number }}
           </template>
         </table-column>
         <table-column
