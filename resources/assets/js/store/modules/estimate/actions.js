@@ -1,5 +1,4 @@
 import * as types from './mutation-types'
-import * as dashboardTypes from '../dashboard/mutation-types'
 
 export const fetchEstimates = ({ commit, estimates, state }, params) => {
   return new Promise((resolve, reject) => {
@@ -66,20 +65,6 @@ export const fetchViewEstimate = ({ commit, estimates, state }, id) => {
   })
 }
 
-export const sendEmail = ({ commit, estimates, state }, data) => {
-  return new Promise((resolve, reject) => {
-    window.axios.post(`/api/estimates/send`, data).then((response) => {
-      if (response.data.success) {
-        commit(types.UPDATE_ESTIMATE_STATUS, {id: data.id, status: 'SENT'})
-        commit('dashboard/' + dashboardTypes.UPDATE_ESTIMATE_STATUS, { id: data.id, status: 'SENT' }, { root: true })
-      }
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
-
 export const addEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/estimates', data).then((response) => {
@@ -97,8 +82,6 @@ export const deleteEstimate = ({ commit, estimates, state }, id) => {
     window.axios.delete(`/api/estimates/${id}`).then((response) => {
       commit(types.DELETE_ESTIMATE_DRAFT, id)
       commit(types.DELETE_ESTIMATE_SENT, id)
-      commit('dashboard/' + dashboardTypes.DELETE_ESTIMATE_DRAFT, id, { root: true })
-      commit('dashboard/' + dashboardTypes.DELETE_ESTIMATE_SENT, id, { root: true })
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -152,7 +135,7 @@ export const searchEstimate = ({ commit, estimates, state }, data) => {
 
 export const selectEstimate = ({ commit, estimates, state }, data) => {
   commit(types.SET_SELECTED_ESTIMATES, data)
-  if (state.selectedEstimates.length === state.estimates.length) {
+  if (state.selectedEstimates.length === state.estimatesDraft.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)
@@ -164,11 +147,11 @@ export const setSelectAllState = ({ commit, estimates, state }, data) => {
 }
 
 export const selectAllEstimates = ({ commit, estimates, state }) => {
-  if (state.selectedEstimates.length === state.estimates.length) {
+  if (state.selectedEstimates.length === state.estimatesDraft.length) {
     commit(types.SET_SELECTED_ESTIMATES, [])
     commit(types.SET_SELECT_ALL_STATE, false)
   } else {
-    let allEstimateIds = state.estimates.map(estimt => estimt.id)
+    let allEstimateIds = state.estimatesDraft.map(estimt => estimt.id)
     commit(types.SET_SELECTED_ESTIMATES, allEstimateIds)
     commit(types.SET_SELECT_ALL_STATE, true)
   }

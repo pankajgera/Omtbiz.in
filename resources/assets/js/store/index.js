@@ -11,7 +11,6 @@ import category from './modules/category'
 import customer from './modules/customer'
 import company from './modules/company'
 import companyInfo from './modules/settings/company-info'
-import dashboard from './modules/dashboard'
 import estimate from './modules/estimate'
 import expense from './modules/expense'
 import invoice from './modules/invoice'
@@ -61,7 +60,6 @@ export default new Vuex.Store({
         company,
         companyInfo,
         customer,
-        dashboard,
         estimate,
         item,
         bill,

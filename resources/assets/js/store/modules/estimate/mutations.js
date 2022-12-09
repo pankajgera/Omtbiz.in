@@ -41,24 +41,31 @@ export default {
 
   [types.DELETE_MULTIPLE_ESTIMATES] (state, selectedEstimates) {
     selectedEstimates.forEach((estimate) => {
-      let index = state.estimates.findIndex(_est => _est.id === estimate.id)
-      state.estimates.splice(index, 1)
+      let index = state.estimatesDraft.findIndex(_est => _est.id === estimate.id)
+      state.estimatesDraft.splice(index, 1)
     })
-
     state.selectedEstimates = []
   },
 
   [types.UPDATE_ESTIMATE_DRAFT] (state, data) {
-    let pos = state.estimates.findIndex(estimate => estimate.id === data.estimate.id)
+    let pos = state.estimatesDraft.findIndex(estimate => estimate.id === data.estimate.id)
+    state.estimatesDraft[pos] = data.estimate
+  },
 
-    state.estimates[pos] = data.estimate
+  [types.UPDATE_ESTIMATE_SENT] (state, data) {
+    let pos = state.estimatesSent.findIndex(estimate => estimate.id === data.estimate.id)
+    state.estimatesSent[pos] = data.estimate
   },
 
   [types.UPDATE_ESTIMATE_STATUS] (state, data) {
-    let pos = state.estimates.findIndex(estimate => estimate.id === data.id)
+    let pos1 = state.estimatesDraft.findIndex(estimate => estimate.id === data.id)
+    let pos2 = state.estimatesSent.findIndex(estimate => estimate.id === data.id)
 
-    if (state.estimates[pos]) {
-      state.estimates[pos].status = data.status
+    if (state.estimatesDraft[pos1]) {
+      state.estimatesDraft[pos1].status = data.status
+    }
+    if (state.estimatesSent[pos2]) {
+      state.estimatesSent[pos2].status = data.status
     }
   },
 
