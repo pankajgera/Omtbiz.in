@@ -83,6 +83,7 @@ export const sendEmail = ({ commit, estimates, state }, data) => {
 export const addEstimate = ({ commit, estimates, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/estimates', data).then((response) => {
+      //new estimate is only added to draftw
       commit(types.ADD_ESTIMATE_DRAFT, response.data.estimate)
       resolve(response)
     }).catch((err) => {
