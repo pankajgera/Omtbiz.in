@@ -370,30 +370,12 @@ export default {
     },
     totalSimpleTax () {
       return 0;
-      return window._.sumBy(this.newEstimate.taxes, function (tax) {
-        if (!tax.compound_tax) {
-          return tax.amount
-        }
-        return 0
-      })
     },
     totalCompoundTax () {
       return 0;
-      return window._.sumBy(this.newEstimate.taxes, function (tax) {
-        if (tax.compound_tax) {
-          return tax.amount
-        }
-        return 0
-      })
     },
     totalTax () {
       return 0;
-      if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
-        return this.totalSimpleTax + this.totalCompoundTax
-      }
-      return window._.sumBy(this.newEstimate.items, function (tax) {
-        return tax.tax
-      })
     },
     setEstimateDebtor: {
       cache: false,
@@ -553,7 +535,7 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        window.location.reload()
+        //window.location.reload()
         this.isLoading = false
       }, 2000)
     },
@@ -591,7 +573,8 @@ export default {
           window.toastr['success'](this.$t('estimates.created_message'))
           this.reset()
         }
-      }).catch((err) => {s
+      }).catch((err) => {
+        console.log(err)
         this.isLoading = false
         if (err) {
           window.toastr['error'](err)

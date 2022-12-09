@@ -29,7 +29,7 @@
 
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
-        <div class="filter-container">
+        <div class="filter-container">ww
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
             <base-customer-select
