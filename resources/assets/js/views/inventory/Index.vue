@@ -60,7 +60,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('inventory.unit') }} </label>
             <base-input
               v-model="filters.unit"
@@ -69,7 +69,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('inventory.avg_price') }} </label>
             <base-input
               v-model="filters.price"
@@ -78,12 +78,21 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('inventory.quantity') }} </label>
             <base-input
               v-model="filters.quantity"
               type="text"
               name="quantity"
+              autocomplete="off"
+            />
+          </div>
+           <div class="col-sm-3">
+            <label class="form-label"> {{ $tc('inventory.worker_name') }} </label>
+            <base-input
+              v-model="filters.worker_name"
+              type="text"
+              name="worker_name"
               autocomplete="off"
             />
           </div>
@@ -197,6 +206,10 @@
           :label="$t('inventory.quantity')"
           show="quantity"
         />
+         <table-column
+          :label="$t('inventory.worker_name')"
+          show="worker_name"
+        />
         <table-column
           :key="Math.random()"
           :sortable="false"
@@ -259,6 +272,7 @@ export default {
       filtersApplied: false,
       filters: {
         name: '',
+        worker_name: '',
         unit: '',
         price: '',
         quantity: ''
@@ -329,6 +343,7 @@ export default {
         price: this.filters.price !== null ? this.filters.price : '',
         quantity: this.filters.quantity !== null ? this.filters.quantity : '',
         unit: this.filters.unit !== null ? this.filters.unit : '',
+        worker_name: this.filters.worker_name !== null ? this.filters.worker_name : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -360,6 +375,7 @@ export default {
       this.filters = {
         name: '',
         unit: '',
+        worker_name: '',
         price: '',
         quantity: ''
       }
