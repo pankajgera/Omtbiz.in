@@ -121,7 +121,7 @@
       </div>
 
       <table-component
-        ref="table"
+        ref="estimateTableDraft"
         :show-filter="false"
         :data="fetchDataDraft"
         table-class="table"
@@ -194,10 +194,6 @@
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-                <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
-                  <font-awesome-icon icon="eye" class="dropdown-item-icon" />
-                  {{ $t('estimates.view') }}
-                </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin'">
@@ -245,7 +241,7 @@
       </div>
 
       <table-component
-        ref="table"
+        ref="estimateTableSent"
         :show-filter="false"
         :data="fetchDataSent"
         table-class="table"
@@ -461,7 +457,8 @@ export default {
       'fetchCustomers'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      this.$refs.estimateTableDraft.refresh()
+      this.$refs.estimateTableSent.refresh()
     },
     async fetchDataDraft ({ page, filter, sort }) {
       let data = {
@@ -565,7 +562,7 @@ export default {
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('estimates.deleted_message'))
-            this.$refs.table.refresh()
+            this.refreshTable()
             return true
           }
 
@@ -578,7 +575,7 @@ export default {
           return true
         }
 
-        this.$refs.table.refresh()
+        this.refreshTable()
         this.filtersApplied = false
         this.resetSelectedEstimates()
       })
