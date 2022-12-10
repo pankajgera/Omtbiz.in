@@ -14,7 +14,7 @@
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
-            <div class="dropdown-item" @click="removeOrder($route.params.id)">
+            <div class="dropdown-item" @click="removeReceipt($route.params.id)">
               <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
               {{ $t('general.delete') }}
             </div>
@@ -84,7 +84,7 @@
             </div>
           </v-dropdown>
           <base-button class="inv-button inv-filter-sorting-btn" color="default" size="medium" @click="sortData">
-            <font-awesome-icon v-if="getOrderBy" icon="sort-amount-up" />
+            <font-awesome-icon v-if="getReceiptBy" icon="sort-amount-up" />
             <font-awesome-icon v-else icon="sort-amount-down" />
           </base-button>
         </div>
@@ -102,7 +102,7 @@
           </div>
           <div class="right">
             <div class="inv-amount" v-html="$utils.formatMoney(receipt.total, receipt.user.currency)" />
-            <div class="inv-date">{{ receipt.formattedOrderDate }}</div>
+            <div class="inv-date">{{ receipt.formattedReceiptDate }}</div>
           </div>
         </router-link>
         <p v-if="!receipts.length" class="no-result">
@@ -139,7 +139,7 @@ export default {
     }
   },
   computed: {
-    getOrderBy () {
+    getReceiptBy () {
       if (this.searchData.receiptBy === 'asc' || this.searchData.receiptBy == null) {
         return true
       }
@@ -147,38 +147,38 @@ export default {
     },
 
     shareableLink () {
-      return `/receipts/pdf/${this.receipt.unique_hash}`
+      return `/receipts/pdf/${this.receipt.id}`
     }
   },
   watch: {
     $route (to, from) {
-      this.loadOrder()
+      this.loadReceipt()
     }
   },
   created () {
-    this.loadOrders()
-    this.loadOrder()
+    this.loadReceipts()
+    this.loadReceipt()
     this.onSearched = _.debounce(this.onSearched, 500)
   },
   methods: {
-    ...mapActions('receipts', [
-      'fetchOrders',
+    ...mapActions('receipt', [
+      'fetchReceipts',
       'getRecord',
-      'searchOrder',
+      'searchReceipt',
       'sendEmail',
-      'deleteOrder',
-      'selectOrder',
-      'fetchViewOrder'
+      'deleteReceipt',
+      'selectReceipt',
+      'fetchViewReceipt'
     ]),
-    async loadOrders () {
-      let response = await this.fetchOrders()
+    async loadReceipts () {
+      let response = await this.fetchReceipts()
       if (response.data) {
         this.receipts = response.data.receipts.data
       }
     },
-    async loadOrder () {
-      let response = await this.fetchViewOrder(this.$route.params.id)
-
+    async loadReceipt () {
+      let response = await this.fetchViewReceipt(this.$route.params.id)
+console.log('response', response)
       if (response.data) {
         this.receipt = response.data.receipt
       }
@@ -197,7 +197,7 @@ export default {
         data += `receiptByField=${this.searchData.receiptByField}`
       }
       this.isSearching = true
-      let response = await this.searchOrder(data)
+      let response = await this.searchReceipt(data)
       this.isSearching = false
       if (response.data) {
         this.receipts = response.data.receipts.data
@@ -213,7 +213,7 @@ export default {
       this.onSearched()
       return true
     },
-    async onSendOrder (id) {
+    async onSendReceipt (id) {
       window.swal({
         title: this.$t('general.are_you_sure'),
         text: this.$t('receipts.confirm_send_receipt'),
@@ -237,7 +237,7 @@ export default {
         }
       })
     },
-    async removeOrder (id) {
+    async removeReceipt (id) {
       window.swal({
         title: 'Deleted',
         text: 'you will not be able to recover this receipt!',
@@ -246,7 +246,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let request = await this.deleteOrder(id)
+          let request = await this.deleteReceipt(id)
           if (request.data.success) {
             window.toastr['success'](this.$tc('receipts.deleted_message', 1))
             this.$router.push('/receipts')
