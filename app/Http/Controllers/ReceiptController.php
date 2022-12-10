@@ -30,9 +30,9 @@ class ReceiptController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $receipts = Receipt::with('user', 'invoice')
+        $receipts = Receipt::with('user')
             ->join('users', 'users.id', '=', 'receipts.user_id')
-            ->leftJoin('invoices', 'invoices.id', '=', 'receipts.invoice_id')
+            ->leftJoin('account_masters', 'account_masters.id', '=', 'receipts.account_master_id')
             ->applyFilters($request->only([
                 'search',
                 'receipt_status',
@@ -42,7 +42,7 @@ class ReceiptController extends Controller
                 'orderBy'
             ]))
             ->whereCompany($request->header('company'))
-            ->select('receipts.*', 'users.name', 'invoices.invoice_number')
+            ->select('receipts.*', 'users.name', 'account_masters.name')
             ->latest()
             ->paginate($limit);
 

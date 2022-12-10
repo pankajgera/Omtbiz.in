@@ -29,7 +29,7 @@
 
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
-        <div class="filter-container">ww
+        <div class="filter-container">
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
             <base-customer-select
@@ -156,17 +156,22 @@
         <table-column
           :label="$t('receipts.date')"
           sort-as="receipt_date"
-          show="formattedOrderDate"
+          show="formattedReceiptDate"
         />
         <table-column
           :label="$t('receipts.name')"
           width="20%"
-          show="master.name"
+          show="name"
         />
         <table-column
-          :label="$t('receipts.count')"
+          :label="$t('receipts.mode')"
           width="20%"
-          show="receipt_items.length"
+          show="receipt_mode"
+        />
+        <table-column
+          :label="$t('receipts.amount')"
+          width="20%"
+          show="amount"
         />
         <table-column
           :sortable="false"
@@ -184,19 +189,13 @@
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-                <!-- <router-link :to="{path: `receipts/${row.id}/view`}" class="dropdown-item">
+                <router-link :to="{path: `receipts/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('receipts.view') }}
-                </router-link> -->
+                </router-link>
               </v-dropdown-item>
-              <!-- <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendOrder(row.id)" v-if="role === 'admin'">
-                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('receipts.send_receipt') }}
-                </a>
-              </v-dropdown-item> -->
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeOrder(row.id)" v-if="role === 'admin'">
+                <div class="dropdown-item" @click="removeReceipt(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -277,7 +276,7 @@ export default {
     ...mapGetters('customer', [
       'customers'
     ]),
-    ...mapGetters('receipts', [
+    ...mapGetters('receipt', [
       'selectedReceipts',
       'totalReceipts',
       'receipts',
@@ -288,7 +287,7 @@ export default {
         return this.selectedReceipts
       },
       set: function (val) {
-        this.selectOrder(val)
+        this.selectReceipt(val)
       }
     },
     selectAllFieldStatus: {
@@ -315,13 +314,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions('receipts', [
+    ...mapActions('receipt', [
       'fetchReceipts',
       'getRecord',
-      'selectOrder',
+      'selectReceipt',
       'resetSelectedReceipts',
       'selectAllReceipts',
-      'deleteOrder',
+      'deleteReceipt',
       'deleteMultipleReceipts',
       'sendEmail',
       'setSelectAllState'
@@ -329,7 +328,7 @@ export default {
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    async sendOrder (id) {
+    async sendReceipt (id) {
       swal({
         title: this.$t('general.are_you_sure'),
         text: this.$t('receipts.confirm_send'),
@@ -423,7 +422,7 @@ export default {
     onSelectCustomer (customer) {
       this.filters.customer = customer
     },
-    async removeOrder (id) {
+    async removeReceipt (id) {
       this.id = id
       swal({
         title: this.$t('general.are_you_sure'),
@@ -433,7 +432,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
-          let res = await this.deleteOrder(this.id)
+          let res = await this.deleteReceipt(this.id)
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('receipts.deleted_message'))

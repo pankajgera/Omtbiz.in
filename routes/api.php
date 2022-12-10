@@ -190,16 +190,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'EstimatesController@sendEstimate'
     ]);
 
-    Route::post('/estimates/accept', [
-        'as' => 'estimates.mark.accepted',
-        'uses' => 'EstimatesController@markEstimateAccepted'
-    ]);
-
-    Route::post('/estimates/reject', [
-        'as' => 'estimates.mark.rejected',
-        'uses' => 'EstimatesController@markEstimateRejected'
-    ]);
-
     Route::post('/estimates/{id}/convert-to-invoice', [
         'as' => 'estimate.to.invoice',
         'uses' => 'EstimatesController@estimateToInvoice'
@@ -224,16 +214,6 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/orders/send', [
         'as' => 'orders.send',
         'uses' => 'OrdersController@sendOrder'
-    ]);
-
-    Route::post('/orders/accept', [
-        'as' => 'orders.mark.accepted',
-        'uses' => 'OrdersController@markOrderAccepted'
-    ]);
-
-    Route::post('/orders/reject', [
-        'as' => 'orders.mark.rejected',
-        'uses' => 'OrdersController@markOrderRejected'
     ]);
 
     Route::post('/orders/{id}/convert-to-invoice', [
