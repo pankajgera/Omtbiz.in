@@ -314,6 +314,12 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
+                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
+                  {{ $t('general.edit') }}
+                </router-link>
+              </v-dropdown-item>
+              <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('estimates.view') }}
@@ -479,7 +485,6 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
-
       return {
         data: response.data.estimates_draft.data,
         pagination: {
