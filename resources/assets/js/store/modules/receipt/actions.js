@@ -34,7 +34,7 @@ export const fetchReceipt = ({ commit, receipt }, id) => {
 
 export const fetchViewReceipt = ({ commit, receipt, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/receipt/${id}`).then((response) => {
+    window.axios.get(`/api/receipts/${id}`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)
