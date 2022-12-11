@@ -65,7 +65,7 @@ class DispatchController extends Controller
      * Edit Dispatch
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Request $request, $id)
     {
@@ -81,7 +81,7 @@ class DispatchController extends Controller
      * Edit To Be Dispatch
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function tobeEdit(Request $request)
     {
@@ -113,7 +113,6 @@ class DispatchController extends Controller
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
             $dispatch = new Dispatch();
-            // $dispatch->name = $request->name;
             $dispatch->invoice_id = implode(', ', $request->invoice_id);
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
@@ -121,14 +120,11 @@ class DispatchController extends Controller
             $dispatch->time = $request->time;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');
-            $dispatch->save();
 
             $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
             foreach ($invoices as $each) {
                 if (!$dispatch->name) {
-                    $dispatch->update([
-                        'name' => $dispatch->name,
-                    ]);
+                    $dispatch->name = $each->invoice_number;
                 } else {
                     if (false === strpos($dispatch->name, $each->invoice_number)) {
                         $dispatch->update([
@@ -145,6 +141,8 @@ class DispatchController extends Controller
             if ('Sent' === $dispatch->status) {
                 $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'), []);
             }
+
+            $dispatch->save();
 
             return response()->json([
                 'dispatch' => $dispatch,
