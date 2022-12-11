@@ -31,23 +31,6 @@
                   @remove="removeInvoice"
                 />
               </div>
-              <!-- <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.name') }}</label><span class="text-danger"> *</span>
-                <base-input
-                  v-model.trim="formData.name"
-                  :invalid="$v.formData.name.$error"
-                  focus
-                  type="text"
-                  name="name"
-                  @input="$v.formData.name.$touch()"
-                />
-                <div v-if="$v.formData.name.$error">
-                  <span v-if="!$v.formData.name.required" class="text-danger">{{ $t('validation.required') }} </span>
-                  <span v-if="!$v.formData.name.minLength" class="text-danger">
-                    {{ $tc('validation.name_min_length', $v.formData.name.$params.minLength.min, { count: $v.formData.name.$params.minLength.min }) }}
-                  </span>
-                </div>
-              </div> -->
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
