@@ -181,6 +181,7 @@ export default {
     async submitItem () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
+        window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }
       if (this.formData.unit) {
