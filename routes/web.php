@@ -75,6 +75,11 @@ Route::get('/invoices/pdf/{id}', [
     'uses' => 'FrontendController@getInvoicePdf'
 ]);
 
+Route::get('/receipts/pdf/{id}', [
+    'as' => 'get.receipt.pdf',
+    'uses' => 'FrontendController@getReceiptPdf'
+]);
+
 
 // download estimate pdf with a unique_hash $id
 // -------------------------------------------------
@@ -98,11 +103,6 @@ Route::get('/expenses/{id}/receipt/{hash}', [
     'uses' => 'ExpensesController@downloadReceipt'
 ]);
 
-// Setup for instalation of app
-// ----------------------------------------------
-Route::get('/on-boarding', function () {
-    return view('app');
-})->name('install')->middleware('redirect-if-installed');
 
 // Move other http requests to the Vue App
 // -------------------------------------------------

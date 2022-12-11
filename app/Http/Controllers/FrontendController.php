@@ -15,6 +15,7 @@ use App\Mail\EstimateViewed;
 use App\Mail\InvoiceViewed;
 use App\Models\EstimateItem;
 use App\Models\InvoiceItem;
+use App\Models\Receipt;
 
 class FrontendController extends Controller
 {
@@ -393,6 +394,50 @@ class FrontendController extends Controller
         ]);
 
         $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
+
+        return $pdf->stream();
+    }
+
+
+    /**
+     * Get receipt view pdf
+     */
+    public function getReceiptPdf($id)
+    {
+        $receipt = Receipt::with([
+            'user',
+            'master',
+        ])->where('id', $id)->first();
+
+        $company = Company::find($receipt->company_id);
+
+        $logo = $company->getMedia('logo')->first();
+
+        if ($logo) {
+            $logo = $logo->getFullUrl();
+        }
+
+        $colors = [
+            'receipt_primary_color',
+            'receipt_column_heading',
+            'receipt_field_label',
+            'receipt_field_value',
+            'receipt_body_text',
+            'receipt_description_text',
+            'receipt_border_color'
+        ];
+        $colorSettings = CompanySetting::whereIn('option', $colors)
+            ->whereCompany($receipt->company_id)
+            ->get();
+
+        view()->share([
+            'receipt' => $receipt,
+            'total_amount' => $receipt->amount,
+            'colorSettings' => $colorSettings,
+            'company' => $company,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.receipt.receipt');
 
         return $pdf->stream();
     }

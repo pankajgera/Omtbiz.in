@@ -300,7 +300,7 @@ class ReceiptController extends Controller
     {
         $receipt = Receipt::with([
             'user',
-        ])->find($id);
+            ])->find($id);
 
         $siteData = [
             'receipt' => $receipt,

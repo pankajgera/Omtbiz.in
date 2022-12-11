@@ -178,7 +178,6 @@ export default {
     },
     async loadReceipt () {
       let response = await this.fetchViewReceipt(this.$route.params.id)
-console.log('response', response)
       if (response.data) {
         this.receipt = response.data.receipt
       }
