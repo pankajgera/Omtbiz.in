@@ -298,7 +298,16 @@ class ReceiptController extends Controller
      */
     public function show($id)
     {
-        //
+        $receipt = Receipt::with([
+            'user',
+            ])->find($id);
+
+        $siteData = [
+            'receipt' => $receipt,
+            'shareable_link' => url('/receipts/pdf/' . $receipt->id)
+        ];
+
+        return response()->json($siteData);
     }
 
     /**
