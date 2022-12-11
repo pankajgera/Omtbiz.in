@@ -93,7 +93,7 @@
                   </label>
                 </div>
                 <div v-if="formData.image">
-                  <a style="font-size: 12px" :href="formData.image" target="_blank">{{ formData.image }} </a>
+                  <a style="font-size: 12px" :href="formData.image" target="_blank"></a>
                 </div>
               </div>
               <div class="form-group">
@@ -279,6 +279,7 @@ export default {
     async submitItem () {
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
+        window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }
       this.isLoading = true
