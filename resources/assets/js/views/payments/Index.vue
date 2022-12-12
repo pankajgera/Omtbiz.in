@@ -1,87 +1,67 @@
 <template>
-  <div class="payments main-content">
+  <div class="items main-content">
     <div class="page-header">
-      <h3 class="page-title">{{ $t('payments.title') }}</h3>
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="dashboard">
-            {{ $t('general.home') }}
-          </router-link>
-        </li>
-        <li class="breadcrumb-item">
-          <router-link
-            slot="item-title"
-            to="#">
-            {{ $tc('payments.payment',2) }}
-          </router-link>
-        </li>
-      </ol>
-      <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+      <Header :title="$tc('payments.payment', 2)" :bread-crumb-links="breadCrumbLinks">
+        <div v-show="totalPayments || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
-            v-show="totalPayments || filtersApplied"
             :outline="true"
             :icon="filterIcon"
+            size="large"
             color="theme"
             right-icon
-            size="large"
             @click="toggleFilter"
           >
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="payments/create">
-          <base-button
-            color="theme"
-            icon="plus"
-            size="large"
-          >
-            {{ $t('payments.add_payment') }}
-          </base-button>
-        </router-link>
-      </div>
+        <div>
+          <router-link slot="item-title" to="/payments/create">
+            <base-button
+              size="large"
+              icon="plus"
+              color="theme">
+              {{ $t('payments.new_payment') }}
+            </base-button>
+          </router-link>
+        </div>
+      </Header>
     </div>
 
-    <transition name="fade" mode="out-in">
+    <transition name="fade">
       <div v-show="showFilters" class="filter-section">
-        <div class="row">
-          <div class="col-md-3">
-            <label class="form-label">{{ $t('payments.customer') }}</label>
+        <div class="filter-container">ww
+          <div class="filter-customer">
+            <label>{{ $tc('customers.customer',1) }} </label>
             <base-customer-select
               ref="customerSelect"
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
           </div>
-          <div class="col-sm-3">
-            <label for="">{{ $t('payments.payment_number') }}</label>
+          <div class="filter-date">
+            <div class="from pr-3">
+              <label>{{ $t('general.from') }}</label>
+              <base-date-picker
+                v-model="filters.from_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+            </div>
+            <div class="dashed" />
+            <div class="to pl-3">
+              <label>{{ $t('general.to') }}</label>
+              <base-date-picker
+                v-model="filters.to_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+            </div>
+          </div>
+          <div class="filter-payment">
+            <label>{{ $t('payments.payment_number') }}</label>
             <base-input
               v-model="filters.payment_number"
-              :placeholder="$t(payments.payment_number)"
-              name="payment_number"
-            />
-          </div>
-          <div class="col-sm-3">
-            <label class="form-label">{{ $t('payments.payment_mode') }}</label>
-            <base-select
-              v-model="filters.payment_mode"
-              :options="payment_mode"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('payments.payment_mode')"
-            />
-          </div>
-          <div class="col-sm-3">
-            <label class="form-label">{{ $t('payments.payment_status') }}</label>
-            <base-select
-              v-model="filters.payment_status"
-              :options="payment_status"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('payments.payment_status')"
-            />
+              icon="hashtag"/>
           </div>
         </div>
         <label class="clear-filter" @click="clearFilter">{{ $t('general.clear_all') }}</label>
@@ -89,7 +69,7 @@
     </transition>
 
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
-      <capsule-icon class="mt-5 mb-4"/>
+      <moon-walker-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
         <label class="col title">{{ $t('payments.no_payments') }}</label>
       </div>
@@ -104,7 +84,7 @@
           size="large"
           @click="$router.push('payments/create')"
         >
-          {{ $t('payments.add_new_payment') }}
+          {{ $t('payments.new_payment') }}
         </base-button>
       </div>
     </div>
@@ -112,9 +92,8 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ payments.length }}</b> {{ $t('general.of') }} <b>{{ totalPayments }}</b></p>
-
         <transition name="fade">
-          <v-dropdown v-if="selectedPayments.length" :show-arrow="false">
+          <v-dropdown v-if="selectedPayments && selectedPayments.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -127,7 +106,6 @@
           </v-dropdown>
         </transition>
       </div>
-
       <div class="custom-control custom-checkbox">
         <input
           id="select-all"
@@ -143,8 +121,8 @@
 
       <table-component
         ref="table"
-        :data="fetchData"
         :show-filter="false"
+        :data="fetchData"
         table-class="table"
       >
         <table-column
@@ -161,8 +139,18 @@
                 type="checkbox"
                 class="custom-control-input"
               >
-              <label :for="row.id" class="custom-control-label" />
+              <label :for="row.id" class="custom-control-label"/>
             </div>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('payments.number')"
+          show="payment_number"
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `payments/${row.id}/edit?d=true`}" class="dropdown-item">
+               {{ row.payment_number }}
+              </router-link>
           </template>
         </table-column>
         <table-column
@@ -171,34 +159,15 @@
           show="formattedPaymentDate"
         />
         <table-column
-          :label="$t('payments.customer')"
-          show="name"
+          :label="$t('payments.name')"
+          width="20%"
+          show="master.name"
         />
         <table-column
-          :label="$t('payments.payment_mode')"
-          show="payment_mode"
+          :label="$t('payments.count')"
+          width="20%"
+          show="payment_items.length"
         />
-        <table-column
-          :label="$t('payments.payment_status')"
-          show="payment_status"
-        />
-        <table-column
-          :label="$t('payments.payment_number')"
-          show="payment_number"
-        />
-        <table-column
-          :label="$t('payments.invoice')"
-          sort-as="invoice_id"
-          show="invoice.invoice_number"
-        />
-        <table-column
-          :label="$t('payments.amount')"
-        >
-          <template slot-scope="row">
-            <span>{{ $t('payments.amount') }}</span>
-            <div v-html="$utils.formatMoney(row.amount, row.user.currency)" />
-          </template>
-        </table-column>
         <table-column
           :sortable="false"
           :filterable="false"
@@ -211,15 +180,23 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-
-                <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-
+                <!-- <router-link :to="{path: `payments/${row.id}/view`}" class="dropdown-item">
+                  <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                  {{ $t('payments.view') }}
+                </router-link> -->
               </v-dropdown-item>
+              <!-- <v-dropdown-item v-if="row.status == 'DRAFT'">
+                <a class="dropdown-item" href="#/" @click="sendPayment(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
+                  {{ $t('payments.send_payment') }}
+                </a>
+              </v-dropdown-item> -->
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removePayment(row.id)">
+                <div class="dropdown-item" @click="removePayment(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -234,31 +211,60 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
-import CapsuleIcon from '../../components/icon/CapsuleIcon'
-import BaseButton from '../../../js/components/base/BaseButton'
+import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'
+import moment from 'moment'
+import BaseButton from '../../components/base/BaseButton'
 
 export default {
   components: {
-    'capsule-icon': CapsuleIcon,
-    'SweetModal': SweetModal,
-    'SweetModalTab': SweetModalTab,
-    BaseButton
+    'moon-walker-icon': MoonWalkerIcon,
+    BaseButton,
   },
   data () {
     return {
       showFilters: false,
-      sortedBy: 'created_at',
+      breadCrumbLinks:[
+        {
+          url:'dashboard',
+          title:this.$t('general.home'),
+        },
+        {
+          url:'#',
+          title:this.$tc('payments.payment', 2)
+        }
+      ],
+      status: [
+        {
+          label: 'Status',
+          isDisable: true,
+          options: [
+            { name: 'DRAFT', value: 'DRAFT' },
+            { name: 'DUE', value: 'UNPAID' },
+            { name: 'SENT', value: 'SENT' },
+            { name: 'VIEWED', value: 'VIEWED' },
+            { name: 'OVERDUE', value: 'OVERDUE' },
+            { name: 'COMPLETED', value: 'COMPLETED' }
+          ]
+        },
+        {
+          label: 'Paid Status',
+          options: [
+            { name: 'UNPAID', value: 'UNPAID' },
+            { name: 'PAID', value: 'PAID' },
+            { name: 'PARTIALLY PAID', value: 'PARTIALLY_PAID' }
+          ]
+        }
+      ],
       filtersApplied: false,
       isRequestOngoing: true,
-      payment_mode: ['Cash', 'Check', 'Credit Card', 'Bank Transfer'],
-      payment_status: ['Draft', 'Sent'],
       filters: {
-        customer: null,
-        payment_mode: '',
         payment_number: '',
-        payment_status: ''
-      }
+        customer: '',
+        status: { name: 'DUE', value: 'UNPAID' },
+        from_date: '',
+        to_date: ''
+      },
+      role: this.$store.state.user.currentUser.role
     }
   },
   computed: {
@@ -300,7 +306,7 @@ export default {
       deep: true
     }
   },
-  mounted () {
+  created () {
     this.fetchCustomers()
   },
   destroyed () {
@@ -311,43 +317,73 @@ export default {
   methods: {
     ...mapActions('payment', [
       'fetchPayments',
-      'selectAllPayments',
+      'getRecord',
       'selectPayment',
+      'resetSelectedPayments',
+      'selectAllPayments',
       'deletePayment',
       'deleteMultiplePayments',
+      'sendEmail',
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
+    async sendPayment (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('payments.confirm_send'),
+        icon: '/assets/icon/paper-plane-solid.svg',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          const data = {
+            id: id
+          }
+          let response = await this.sendEmail(data)
+          this.refreshTable()
+          if (response.data.success) {
+            window.toastr['success'](this.$tc('payments.send_payment_successfully'))
+            return true
+          }
+          if (response.data.error === 'user_email_does_not_exist') {
+            window.toastr['error'](this.$tc('payments.user_email_does_not_exist'))
+            return false
+          }
+          window.toastr['error'](this.$tc('payments.something_went_wrong'))
+        }
+      })
+    },
+    refreshTable () {
+      this.$refs.table.refresh()
+    },
     async fetchData ({ page, filter, sort }) {
       let data = {
-        customer_id: this.filters.customer !== null ? this.filters.customer.id : '',
         payment_number: this.filters.payment_number,
-        payment_mode: this.filters.payment_mode ? this.filters.payment_mode : '',
-        payment_status: this.filters.payment_status ? this.filters.payment_status : '',
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
+        status: '',
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
+        paymentByField: sort.fieldName || 'created_at',
+        paymentBy: sort.payment || 'desc',
         page
       }
 
       this.isRequestOngoing = true
-
       let response = await this.fetchPayments(data)
-
       this.isRequestOngoing = false
+
+      //this.currency = response.data.currency
 
       return {
         data: response.data.payments.data,
         pagination: {
           totalPages: response.data.payments.last_page,
           currentPage: page,
-          count: response.data.payments.scount
+          count: response.data.payments.count
         }
       }
-    },
-    refreshTable () {
-      this.$refs.table.refresh()
     },
     setFilters () {
       if (this.timer) {
@@ -356,6 +392,7 @@ export default {
       }
       this.timer = setTimeout(() => {
 				this.filtersApplied = true
+        this.resetSelectedPayments()
         this.refreshTable()
 			}, 1000);
     },
@@ -363,12 +400,12 @@ export default {
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
-
       this.filters = {
-        customer: null,
-        payment_mode: '',
         payment_number: '',
-        payment_status: ''
+        customer: '',
+        status: '',
+        from_date: '',
+        to_date: ''
       }
 
       this.$nextTick(() => {
@@ -394,17 +431,28 @@ export default {
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
+      }).then(async (value) => {
+        if (value) {
           let res = await this.deletePayment(this.id)
+
           if (res.data.success) {
-            window.toastr['success'](this.$tc('payments.deleted_message', 1))
+            window.toastr['success'](this.$tc('payments.deleted_message'))
             this.$refs.table.refresh()
             return true
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
           }
+
+          if (res.data.error === 'payment_attached') {
+            window.toastr['error'](this.$t('payments.payment_attached_message'), this.$t('general.action_failed'))
+            return true
+          }
+
+          window.toastr['error'](res.data.error)
+          return true
         }
+
+        this.$refs.table.refresh()
+        this.filtersApplied = false
+        this.resetSelectedPayments()
       })
     },
     async removeMultiplePayments () {
@@ -414,32 +462,31 @@ export default {
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let request = await this.deleteMultiplePayments()
-          if (request.data.success) {
-            window.toastr['success'](this.$tc('payments.deleted_message', 2))
+      }).then(async (value) => {
+        if (value) {
+          let res = await this.deleteMultiplePayments()
+          if (res.data.error === 'payment_attached') {
+            window.toastr['error'](this.$t('payments.payment_attached_message'), this.$t('general.action_failed'))
+            return true
+          }
+          if (res.data) {
             this.$refs.table.refresh()
-          } else if (request.data.error) {
-            window.toastr['error'](request.data.message)
+            this.filtersApplied = false
+            this.resetSelectedPayments()
+            window.toastr['success'](this.$tc('payments.deleted_message', 2))
+          } else if (res.data.error) {
+            window.toastr['error'](res.data.message)
           }
         }
       })
     },
     async clearCustomerSearch (removedOption, id) {
       this.filters.customer = ''
-      this.$refs.table.refresh()
+      this.refreshTable()
     },
-    showModel (selectedRow) {
-      this.selectedRow = selectedRow
-      this.$refs.Delete_modal.open()
-    },
-    async removeSelectedItems () {
-      this.$refs.Delete_modal.close()
-      await this.selectedRow.forEach(row => {
-        this.deletePayment(this.id)
-      })
-      this.$refs.table.refresh()
+    async clearStatusSearch (removedOption, id) {
+      this.filters.status = ''
+      this.refreshTable()
     }
   }
 }
