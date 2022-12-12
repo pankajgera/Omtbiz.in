@@ -313,12 +313,12 @@
               <a slot="activator" href="#">
                 <dot-icon />
               </a>
-              <v-dropdown-item>
+              <!-- <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
-              </v-dropdown-item>
+              </v-dropdown-item> -->
               <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
