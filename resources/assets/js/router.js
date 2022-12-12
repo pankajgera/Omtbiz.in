@@ -48,7 +48,7 @@ import InvoiceCreate from './views/invoices/Create.vue'
 import InvoiceView from './views/invoices/View.vue'
 
 // Payments
-// import PaymentsIndex from './views/payments/Index.vue'
+import PaymentsIndex from './views/payments/Index.vue'
 import PaymentCreate from './views/payments/Create.vue'
 
 //Receipt
@@ -405,12 +405,12 @@ const routes = [
             },
 
             // Payments
-            // {
-            //     path: 'payments',
-            //     name: 'payments.index',
-            //     component: PaymentsIndex,
-            //     meta: ['admin', 'accountant']
-            // },
+            {
+                path: 'payments',
+                name: 'payments.index',
+                component: PaymentsIndex,
+                meta: ['admin', 'accountant']
+            },
             {
                 path: 'payments/create',
                 name: 'payments.create',

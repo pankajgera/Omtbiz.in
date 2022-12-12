@@ -80,7 +80,7 @@ export default {
           {
             title: "navigation.payments",
             icon: "credit-card",
-            route: "/payments/create",
+            route: "/payments",
             meta: ["admin", "accountant"],
           },
           {
