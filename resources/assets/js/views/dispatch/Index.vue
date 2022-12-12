@@ -504,6 +504,7 @@ export default {
         date_time: this.filters.date_time !== null ? this.filters.date_time : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.showFilters,
         page
       }
 
@@ -527,6 +528,7 @@ export default {
         date_time: this.filters.date_time !== null ? this.filters.date_time : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.showFilters,
         page
       }
 
@@ -553,6 +555,7 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+      this.showFilters=false;
       this.filters = {
         name: '',
         date_time: '',

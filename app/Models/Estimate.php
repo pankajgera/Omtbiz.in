@@ -217,7 +217,7 @@ class Estimate extends Model
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
         $query->where('estimates.company_id', $company_id);
     }

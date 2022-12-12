@@ -49,7 +49,7 @@ class InvoicesController extends Controller
                     'orderBy',
                     'search',
                 ]))
-                ->whereCompany($request->header('company'))
+                ->whereCompany($request->header('company'),$request['filterBy'])
                 ->select('invoices.*', 'users.name')
                 ->latest()
                 ->paginate($limit);
