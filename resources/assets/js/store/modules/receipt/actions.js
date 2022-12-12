@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 
-export const fetchReceipts = ({ commit, dispatch, state }, params) => {
+export const fetchReceipts = ({ commit, receipt, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/receipts`, {params}).then((response) => {
       commit(types.SET_RECEIPTS, response.data.receipts.data)
@@ -12,7 +12,7 @@ export const fetchReceipts = ({ commit, dispatch, state }, params) => {
   })
 }
 
-export const fetchCreateReceipt = ({ commit, dispatch }, page) => {
+export const fetchCreateReceipt = ({ commit, receipt }, page) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/receipts/create`).then((response) => {
       resolve(response)
@@ -22,7 +22,7 @@ export const fetchCreateReceipt = ({ commit, dispatch }, page) => {
   })
 }
 
-export const fetchReceipt = ({ commit, dispatch }, id) => {
+export const fetchReceipt = ({ commit, receipt }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/receipts/${id}/edit`).then((response) => {
       resolve(response)
@@ -32,7 +32,17 @@ export const fetchReceipt = ({ commit, dispatch }, id) => {
   })
 }
 
-export const addReceipt = ({ commit, dispatch, state }, data) => {
+export const fetchViewReceipt = ({ commit, receipt, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/receipts/${id}`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const addReceipt = ({ commit, receipt, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/receipts', data).then((response) => {
       resolve(response)
@@ -42,11 +52,11 @@ export const addReceipt = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const setSelectAllState = ({ commit, dispatch, state }, data) => {
+export const setSelectAllState = ({ commit, receipt, state }, data) => {
   commit(types.SET_SELECT_ALL_STATE, data)
 }
 
-export const selectReceipt = ({ commit, dispatch, state }, data) => {
+export const selectReceipt = ({ commit, receipt, state }, data) => {
   commit(types.SET_SELECTED_RECEIPTS, data)
   if (state.selectedReceipts.length === state.receipts.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
@@ -55,7 +65,7 @@ export const selectReceipt = ({ commit, dispatch, state }, data) => {
   }
 }
 
-export const updateReceipt = ({ commit, dispatch, state }, data) => {
+export const updateReceipt = ({ commit, receipt, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/receipts/${data.id}`, data.editData).then((response) => {
       resolve(response)
@@ -65,7 +75,7 @@ export const updateReceipt = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const deleteReceipt = ({ commit, dispatch, state }, id) => {
+export const deleteReceipt = ({ commit, receipt, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/receipts/${id}`).then((response) => {
       commit(types.DELETE_RECEIPT, id)
@@ -76,7 +86,7 @@ export const deleteReceipt = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const deleteMultipleReceipts = ({ commit, dispatch, state }, id) => {
+export const deleteMultipleReceipts = ({ commit, receipt, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/receipts/delete`, {'id': state.selectedReceipts}).then((response) => {
       commit(types.DELETE_MULTIPLE_RECEIPTS, state.selectedReceipts)
@@ -87,7 +97,7 @@ export const deleteMultipleReceipts = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const selectAllReceipts = ({ commit, dispatch, state }) => {
+export const selectAllReceipts = ({ commit, receipt, state }) => {
   if (state.selectedReceipts.length === state.receipts.length) {
     commit(types.SET_SELECTED_RECEIPTS, [])
     commit(types.SET_SELECT_ALL_STATE, false)

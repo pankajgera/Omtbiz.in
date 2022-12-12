@@ -1,11 +1,20 @@
 <template>
   <div class="receipt-create main-content">
+    <div class="page-header">
+      <div class="page-actions row">
+        <router-link slot="item-title" class="col-xs-2" to="/receipts">
+          <base-button size="large" icon="envelope" color="theme">
+            {{ $t('receipts.title') }}
+          </base-button>
+        </router-link>
+      </div>
+    </div>
     <form action="" @submit.prevent="submitReceiptData">
       <div class="page-header">
         <h3 class="page-title">{{ isEdit ? $t('receipts.edit_receipt') : $t('receipts.new_receipt') }}</h3>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
-          <!-- <li class="breadcrumb-item"><router-link slot="item-title" to="/receipts">{{ $tc('receipts.receipt', 2) }}</router-link></li> -->
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/receipts">{{ $tc('receipts.receipt', 2) }}</router-link></li>
           <li class="breadcrumb-item">{{ isEdit ? $t('receipts.edit_receipt') : $t('receipts.new_receipt') }}</li>
         </ol>
       </div>
@@ -377,6 +386,7 @@ export default {
       //this.$v.customer.$touch()
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
+        window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
 

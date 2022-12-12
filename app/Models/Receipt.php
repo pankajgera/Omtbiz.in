@@ -98,6 +98,11 @@ class Receipt extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function master()
+    {
+        return $this->belongsTo(AccountMaster::class, 'account_master_id');
+    }
+
     public function getFormattedCreatedAtAttribute($value)
     {
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);

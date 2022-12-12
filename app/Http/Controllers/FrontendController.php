@@ -13,7 +13,9 @@ use App\Models\InvoiceTemplate;
 use App\Models\EstimateTemplate;
 use App\Mail\EstimateViewed;
 use App\Mail\InvoiceViewed;
+use App\Models\EstimateItem;
 use App\Models\InvoiceItem;
+use App\Models\Receipt;
 
 class FrontendController extends Controller
 {
@@ -223,7 +225,7 @@ class FrontendController extends Controller
     }
 
     /**
-     * Get estimate pdf
+     * Get estimate view pdf
      */
     public function getEstimatePdf($id)
     {
@@ -290,13 +292,23 @@ class FrontendController extends Controller
             ->whereCompany($estimate->company_id)
             ->get();
 
+        $estimate_i = EstimateItem::with('inventory')->where('estimate_id', $estimate->id);
+        $estimate_items = $estimate_i->get();
+
+        $estimateWith = Estimate::with(['master'])->where('id', $estimate->id)->first();
+
         view()->share([
-            'estimate' => $estimate,
             'logo' => $logo ?? null,
             'company_address' => $companyAddress,
             'colors' => $colorSettings,
             'labels' => $labels,
-            'taxes' => $taxes
+            'taxes' => $taxes,
+            'estimate' => $estimateWith,
+            'total_quantity' => $estimate_i->sum('quantity'),
+            'total_amount' => $estimateWith->sub_total,
+            'estimate_items' => $estimate_items,
+            'colorSettings' => $colorSettings,
+            'company' => $company,
         ]);
         $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view);
 
@@ -304,7 +316,7 @@ class FrontendController extends Controller
     }
 
     /**
-     * Get invoice pdf
+     * Get invoice view pdf
      */
     public function getInvoicePdf($id)
     {
@@ -385,4 +397,49 @@ class FrontendController extends Controller
 
         return $pdf->stream();
     }
+
+
+    /**
+     * Get receipt view pdf
+     */
+    public function getReceiptPdf($id)
+    {
+        $receipt = Receipt::with([
+            'user',
+            'master',
+        ])->where('id', $id)->first();
+
+        $company = Company::find($receipt->company_id);
+
+        $logo = $company->getMedia('logo')->first();
+
+        if ($logo) {
+            $logo = $logo->getFullUrl();
+        }
+
+        $colors = [
+            'receipt_primary_color',
+            'receipt_column_heading',
+            'receipt_field_label',
+            'receipt_field_value',
+            'receipt_body_text',
+            'receipt_description_text',
+            'receipt_border_color'
+        ];
+        $colorSettings = CompanySetting::whereIn('option', $colors)
+            ->whereCompany($receipt->company_id)
+            ->get();
+
+        view()->share([
+            'receipt' => $receipt,
+            'total_amount' => $receipt->amount,
+            'colorSettings' => $colorSettings,
+            'company' => $company,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.receipt.receipt');
+
+        return $pdf->stream();
+    }
+
 }

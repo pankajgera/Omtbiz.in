@@ -48,11 +48,13 @@ import InvoiceCreate from './views/invoices/Create.vue'
 import InvoiceView from './views/invoices/View.vue'
 
 // Payments
-// import PaymentsIndex from './views/payments/Index.vue'
+import PaymentsIndex from './views/payments/Index.vue'
 import PaymentCreate from './views/payments/Create.vue'
 
 //Receipt
 import ReceiptCreate from './views/receipts/Create.vue'
+import ReceiptIndex from './views/receipts/Index.vue'
+import ReceiptView from './views/receipts/View.vue'
 
 // Estimates
 import EstimateIndex from './views/estimates/Index.vue'
@@ -403,12 +405,12 @@ const routes = [
             },
 
             // Payments
-            // {
-            //     path: 'payments',
-            //     name: 'payments.index',
-            //     component: PaymentsIndex,
-            //     meta: ['admin', 'accountant']
-            // },
+            {
+                path: 'payments',
+                name: 'payments.index',
+                component: PaymentsIndex,
+                meta: ['admin', 'accountant']
+            },
             {
                 path: 'payments/create',
                 name: 'payments.create',
@@ -446,6 +448,18 @@ const routes = [
                 name: 'receipts.edit',
                 component: ReceiptCreate,
                 meta: ['admin', 'accountant']
+            },
+            {
+                path: 'receipts',
+                name: 'receipts.index',
+                component: ReceiptIndex,
+                meta: ['admin']
+            },
+            {
+                path: 'receipts/:id/view',
+                name: 'receipts.view',
+                component: ReceiptView,
+                meta: ['admin']
             },
 
             // Expenses

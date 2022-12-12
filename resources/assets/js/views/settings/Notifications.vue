@@ -104,6 +104,7 @@ export default {
     async saveEmail () {
       this.$v.$touch()
       if (this.$v.$invalid) {
+        window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
       this.isLoading = true

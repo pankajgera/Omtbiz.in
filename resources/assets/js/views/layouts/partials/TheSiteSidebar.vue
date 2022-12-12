@@ -74,13 +74,13 @@ export default {
           {
             title: "navigation.receipts",
             icon: "credit-card",
-            route: "/receipts/create",
+            route: "/receipts",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.payments",
             icon: "credit-card",
-            route: "/payments/create",
+            route: "/payments",
             meta: ["admin", "accountant"],
           },
           {

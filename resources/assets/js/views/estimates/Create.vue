@@ -535,7 +535,7 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        //window.location.reload()
+        window.location.reload()
         this.isLoading = false
       }, 2000)
     },

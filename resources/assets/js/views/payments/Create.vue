@@ -30,7 +30,7 @@
             <div class="col-sm-6">
               <label class="form-label">{{ $t('payments.list') }}</label><span class="text-danger"> *</span>
               <base-select
-                v-model="formData.list"
+                v-model="partySelectBind"
                 :class="{'invalid' : $v.formData.list.$error}"
                 :options="sundryCreditorList"
                 :searchable="true"
@@ -216,6 +216,15 @@ export default {
     getPaymentMode () {
       return ['Cash', 'Check', 'Credit Card', 'Bank Transfer']
     },
+    partySelectBind: {
+      cache: false,
+      get() {
+        return this.formData.list
+      },
+      set(value) {
+        this.formData.list = value
+      }
+    },
     amount: {
       get: function () {
         return this.formData.amount
@@ -306,6 +315,9 @@ export default {
         this.formData.amount = parseFloat(response.data.payment.amount)
         this.paymentPrefix = response.data.payment_prefix
         //this.paymentNumAttribute = response.data.nextPaymentNumber
+        this.sundryCreditorList = response.data.usersOfSundryCreditor
+        this.accountLedger = response.data.account_ledger
+        this.formData.list = response.data.payment.master
         if (response.data.payment.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
@@ -330,6 +342,7 @@ export default {
       //this.$v.customer.$touch()
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
+        window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
 

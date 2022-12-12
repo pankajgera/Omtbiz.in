@@ -121,7 +121,7 @@
       </div>
 
       <table-component
-        ref="table"
+        ref="estimateTableDraft"
         :show-filter="false"
         :data="fetchDataDraft"
         table-class="table"
@@ -194,6 +194,8 @@
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
+              </v-dropdown-item>
+              <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('estimates.view') }}
@@ -245,7 +247,7 @@
       </div>
 
       <table-component
-        ref="table"
+        ref="estimateTableSent"
         :show-filter="false"
         :data="fetchDataSent"
         table-class="table"
@@ -273,9 +275,7 @@
           show="estimate_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `estimates/${row.id}/edit?d=true`}" class="dropdown-item">
-               {{ row.estimate_number }}
-              </router-link>
+            {{ row.estimate_number }}
           </template>
         </table-column>
         <table-column
@@ -461,7 +461,8 @@ export default {
       'fetchCustomers'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      this.$refs.estimateTableDraft.refresh()
+      this.$refs.estimateTableSent.refresh()
     },
     async fetchDataDraft ({ page, filter, sort }) {
       let data = {
@@ -479,7 +480,6 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
-
       return {
         data: response.data.estimates_draft.data,
         pagination: {
@@ -567,7 +567,7 @@ export default {
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('estimates.deleted_message'))
-            this.$refs.table.refresh()
+            this.refreshTable()
             return true
           }
 
@@ -580,7 +580,7 @@ export default {
           return true
         }
 
-        this.$refs.table.refresh()
+        this.refreshTable()
         this.filtersApplied = false
         this.resetSelectedEstimates()
       })
