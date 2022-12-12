@@ -711,6 +711,7 @@
         "payment_mode": "Payment Mode",
         "invoice": "Invoice",
         "note": "Note",
+        "party_name": "Party name",
         "select_a_list": "Select from list",
         "add_payment": "Add Payment",
         "new_payment": "New Payment",

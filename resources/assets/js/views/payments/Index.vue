@@ -144,29 +144,29 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('payments.number')"
-          show="payment_number"
+          :label="$t('payments.party_name')"
+          show="master.name"
         >
           <template slot-scope="row">
             <router-link :to="{path: `payments/${row.id}/edit?d=true`}" class="dropdown-item">
-               {{ row.payment_number }}
+               {{ row.master.name }}
               </router-link>
           </template>
         </table-column>
+        <table-column
+          :label="$t('payments.amount')"
+          width="20%"
+          show="amount"
+        />
         <table-column
           :label="$t('payments.date')"
           sort-as="payment_date"
           show="formattedPaymentDate"
         />
         <table-column
-          :label="$t('payments.name')"
+          :label="$t('payments.payment_mode')"
           width="20%"
-          show="master.name"
-        />
-        <table-column
-          :label="$t('payments.count')"
-          width="20%"
-          show="payment_items.length"
+          show="payment_mode"
         />
         <table-column
           :sortable="false"
