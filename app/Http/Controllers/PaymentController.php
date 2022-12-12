@@ -30,7 +30,7 @@ class PaymentController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 10;
 
-        $payments = Payment::with('user', 'invoice')
+        $payments = Payment::with('user', 'invoice', 'master')
             ->join('users', 'users.id', '=', 'payments.user_id')
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->applyFilters($request->only([
@@ -61,7 +61,6 @@ class PaymentController extends Controller
     {
         $payment_prefix = CompanySetting::getSetting('payment_prefix', $request->header('company'));
         $payment_num_auto_generate = CompanySetting::getSetting('payment_auto_generate', $request->header('company'));
-
 
         $nextPaymentNumberAttribute = null;
         $nextPaymentNumber = Payment::getNextPaymentNumber($payment_prefix);
@@ -263,7 +262,16 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        //
+        $payment = Payment::with([
+            'user',
+            ])->find($id);
+
+        $siteData = [
+            'payment' => $payment,
+            'shareable_link' => url('/payments/pdf/' . $payment->id)
+        ];
+
+        return response()->json($siteData);
     }
 
     /**
@@ -274,12 +282,23 @@ class PaymentController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $payment = Payment::with('user', 'invoice')->find($id);
+        $payment = Payment::with('user', 'invoice', 'master')->find($id);
 
         $invoices = Invoice::where('paid_status', '<>', Invoice::STATUS_PAID)
             ->where('user_id', $payment->user_id)->where('due_amount', '>', 0)
             ->whereCompany($request->header('company'))
             ->get();
+
+        $usersOfSundryCreditor = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance', 'type')->get();
+        $account_ledger = [];
+        foreach ($usersOfSundryCreditor as $master) {
+            $ledger = AccountLedger::where('account_master_id', $master->id)->first();
+            $obj = new stdClass();
+            $obj->id = $master->id;
+            $obj->balance = isset($ledger) ? $ledger->balance : 0;
+            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+            array_push($account_ledger, $obj);
+        }
 
         return response()->json([
             'customers' => User::where('role', 'customer')
@@ -287,8 +306,10 @@ class PaymentController extends Controller
                 ->get(),
             'nextPaymentNumber' => $payment->getPaymentNumAttribute(),
             'payment_prefix' => $payment->getPaymentPrefixAttribute(),
+            'usersOfSundryCreditor' => $usersOfSundryCreditor,
             'payment' => $payment,
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'account_ledger' => $account_ledger,
         ]);
     }
 
