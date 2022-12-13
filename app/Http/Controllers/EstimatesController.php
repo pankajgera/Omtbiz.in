@@ -33,7 +33,7 @@ class EstimatesController extends Controller
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 10;
-
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         $estimates_inprogress = Estimate::where('status', 'DRAFT')->with([
             'items',
             'master'
@@ -77,6 +77,7 @@ class EstimatesController extends Controller
             'estimates_sent' => $estimates_completed,
             'draft_count' => Estimate::where('status', 'DRAFT')->count(),
             'sent_count' => Estimate::where('status', 'SENT')->count(),
+            'sundryDebtorsList' => $sundryDebtorsList,
         ];
 
         return response()->json($siteData);

@@ -32,11 +32,20 @@
         <div class="filter-container">
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
-            <base-customer-select
+             <base-select
+             v-model="filters.customer"
               ref="customerSelect"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              label="name"
+              track-by="id"
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
+        
           </div>
           <div class="filter-date">
             <div class="from pr-3">
@@ -389,7 +398,8 @@ export default {
         from_date: '',
         to_date: ''
       },
-      role: this.$store.state.user.currentUser.role
+      role: this.$store.state.user.currentUser.role,
+       sundryDebtorsList: [],
     }
   },
 
@@ -480,6 +490,7 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
+      this.sundryDebtorsList = response.data.sundryDebtorsList
       return {
         data: response.data.estimates_draft.data,
         pagination: {
@@ -528,6 +539,8 @@ export default {
     },
     clearFilter () {
       this.showFilters = false;
+      this.filtersApplied = false;
+      this.clearCustomerSearch();
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
