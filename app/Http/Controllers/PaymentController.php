@@ -12,12 +12,13 @@ use Carbon\Carbon;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 
-use function MongoDB\BSON\toJSON;
 use App\Models\User;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Voucher;
 use stdClass;
 use Validator;
+
+use function MongoDB\BSON\toJSON;
 
 class PaymentController extends Controller
 {
@@ -49,8 +50,10 @@ class PaymentController extends Controller
             ->latest()
             ->paginate($limit);
 
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
-            'payments' => $payments
+            'payments' => $payments,
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 

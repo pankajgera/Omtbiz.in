@@ -49,8 +49,10 @@ class ReceiptController extends Controller
             ->latest()
             ->paginate($limit);
 
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
-            'receipts' => $receipts
+            'receipts' => $receipts,
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 

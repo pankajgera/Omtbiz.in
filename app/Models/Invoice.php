@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
-    const STATUS_PAID = 'PAID';
-    const DISPATCH = 'DISPATCH';
-    const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
+    public const STATUS_PAID = 'PAID';
+    public const DISPATCH = 'DISPATCH';
+    public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
     protected $dates = [
         'created_at',
@@ -252,12 +252,11 @@ class Invoice extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        if($filter==='false') {
+        if ($filter==='false') {
             $query->where('invoices.company_id', $company_id)->where('invoice_date', Carbon::now()->format('Y-m-d'));
         } else {
             $query->where('invoices.company_id', $company_id);
         }
-       
     }
 
     public function scopeWhereCustomer($query, $customer_id)

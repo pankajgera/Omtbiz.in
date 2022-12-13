@@ -49,13 +49,15 @@ class InvoicesController extends Controller
                     'orderBy',
                     'search',
                 ]))
-                ->whereCompany($request->header('company'),$request['filterBy'])
+                ->whereCompany($request->header('company'), $request['filterBy'])
                 ->select('invoices.*', 'users.name')
                 ->latest()
                 ->paginate($limit);
 
+            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
             return response()->json([
                 'invoices' => $invoices,
+                'sundryDebtorsList' => $sundryDebtorsList,
                 'invoiceTotalCount' => Invoice::count()
             ]);
         } catch (Exception $e) {

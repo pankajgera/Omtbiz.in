@@ -20,7 +20,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, Notifiable, InteractsWithMedia;
+    use HasApiTokens;
+    use Notifiable;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.

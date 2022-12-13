@@ -32,11 +32,20 @@
         <div class="filter-container">
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
-            <base-customer-select
+             <base-select
+             v-model="filters.customer"
               ref="customerSelect"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              label="name"
+              track-by="id"
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
+        
           </div>
           <div class="filter-date">
             <div class="from pr-3">
@@ -389,7 +398,9 @@ export default {
         from_date: '',
         to_date: ''
       },
-      role: this.$store.state.user.currentUser.role
+      role: this.$store.state.user.currentUser.role,
+       sundryDebtorsList: [],
+       filterBy: false,
     }
   },
 
@@ -473,13 +484,14 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.filterBy,
         page
       }
 
       this.isRequestOngoing = true
       let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
+      this.sundryDebtorsList = response.data.sundryDebtorsList
       return {
         data: response.data.estimates_draft.data,
         pagination: {
@@ -498,7 +510,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.filterBy,
         page
       }
 
@@ -527,7 +539,9 @@ export default {
 			}, 1000);
     },
     clearFilter () {
-      this.showFilters = false;
+      this.filterBy = false;
+      this.filtersApplied = false;
+      this.clearCustomerSearch();
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
@@ -544,6 +558,9 @@ export default {
       })
     },
     toggleFilter () {
+      if (this.filters.estimate_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
+        this.filterBy = true;
+      }
       if (this.showFilters && this.filtersApplied) {
         this.clearFilter()
         this.refreshTable()

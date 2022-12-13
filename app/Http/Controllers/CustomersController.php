@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -35,7 +36,8 @@ class CustomersController extends Controller
                 'orderBy'
             ]))
             ->whereCompany($request->header('company'))
-            ->select('users.*',
+            ->select(
+                'users.*',
                 DB::raw('sum(invoices.due_amount) as due_amount')
             )
             ->groupBy('users.id')

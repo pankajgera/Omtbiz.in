@@ -45,7 +45,6 @@ Route::get('/countries', [
 // Onboarding
 //----------------------------------
 Route::group(['middleware' => 'redirect-if-installed'], function () {
-
     Route::get('/onboarding', [
         'as' => 'admin.onboarding',
         'uses' => 'OnboardingController@getOnboardingData'
@@ -112,7 +111,6 @@ Route::get('/settings/app/version', [
 ]);
 
 Route::group(['middleware' => 'api'], function () {
-
     Route::get('/bootstrap', [
         'as' => 'bootstrap',
         'uses' => 'UsersController@getBootstrap'
@@ -280,7 +278,6 @@ Route::group(['middleware' => 'api'], function () {
     //----------------------------------
 
     Route::group(['prefix' => 'settings'], function () {
-
         Route::get('/profile', [
             'as' => 'get.admin.profile',
             'uses' => 'CompanyController@getAdmin'
