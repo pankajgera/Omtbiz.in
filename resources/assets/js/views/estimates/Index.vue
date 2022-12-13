@@ -1,5 +1,5 @@
 <template>
-  <div class="items main-content">
+  <div class="items estimate-index-page  main-content">
     <div class="page-header">
       <Header :title="$tc('estimates.estimate', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalEstimatesDraft || totalEstimatesSent || filtersApplied" class="mr-4 mb-3 mb-sm-0">
@@ -527,6 +527,7 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+      this.showFilters = false;
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }

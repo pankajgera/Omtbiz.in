@@ -1,5 +1,5 @@
 <template>
-  <div class="items main-content">
+  <div class="items receipt-index-page main-content">
     <div class="page-header">
       <Header :title="$tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalReceipts || filtersApplied" class="mr-4 mb-3 mb-sm-0">
@@ -366,6 +366,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         receiptByField: sort.fieldName || 'created_at',
         receiptBy: sort.receipt || 'desc',
+        filterBy: this.showFilters,
         page
       }
 
@@ -396,6 +397,7 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+      this.showFilters = false;
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
