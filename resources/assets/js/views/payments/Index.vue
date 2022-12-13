@@ -1,5 +1,5 @@
 <template>
-  <div class="items main-content">
+  <div class="items receipt-index-page main-content">
     <div class="page-header">
       <Header :title="$tc('payments.payment', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalPayments || filtersApplied" class="mr-4 mb-3 mb-sm-0">
@@ -32,8 +32,16 @@
         <div class="filter-container">
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
-            <base-customer-select
+           <base-select
+              v-model="filters.customer"
               ref="customerSelect"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              label="name"
+              track-by="id"
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
@@ -223,6 +231,8 @@ export default {
   data () {
     return {
       showFilters: false,
+      sundryDebtorsList: [],
+      filterBy: false,
       breadCrumbLinks:[
         {
           url:'dashboard',
@@ -367,14 +377,14 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         paymentByField: sort.fieldName || 'created_at',
         paymentBy: sort.payment || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.filterBy,
         page
       }
 
       this.isRequestOngoing = true
       let response = await this.fetchPayments(data)
       this.isRequestOngoing = false
-
+       this.sundryDebtorsList = response.data.sundryDebtorsList
       //this.currency = response.data.currency
 
       return {
@@ -398,7 +408,8 @@ export default {
 			}, 1000);
     },
     clearFilter () {
-     this.showFilters=false;
+        this.filterBy=false;
+      this.clearCustomerSearch();
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
@@ -415,6 +426,9 @@ export default {
       })
     },
     toggleFilter () {
+      if (this.filters.payment_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
+        this.filterBy = true;
+      }
       if (this.showFilters && this.filtersApplied) {
         this.clearFilter()
         this.refreshTable()

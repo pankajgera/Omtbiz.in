@@ -426,7 +426,7 @@ export default {
       })
     },
     toggleFilter () {
-        if (this.filters.estimate_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
+        if (this.filters.order_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
         this.filterBy = true;
       }
       if (this.showFilters && this.filtersApplied) {

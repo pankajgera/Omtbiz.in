@@ -32,8 +32,16 @@
         <div class="filter-container">
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
-            <base-customer-select
+           <base-select
+              v-model="filters.customer"
               ref="customerSelect"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              label="name"
+              track-by="id"
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
@@ -221,6 +229,8 @@ export default {
   },
   data () {
     return {
+      sundryDebtorsList: [],
+      filterBy: false,
       showFilters: false,
       breadCrumbLinks:[
         {
@@ -366,14 +376,14 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         receiptByField: sort.fieldName || 'created_at',
         receiptBy: sort.receipt || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.filterBy,
         page
       }
 
       this.isRequestOngoing = true
       let response = await this.fetchReceipts(data)
       this.isRequestOngoing = false
-
+       this.sundryDebtorsList = response.data.sundryDebtorsList
       //this.currency = response.data.currency
 
       return {
@@ -397,7 +407,8 @@ export default {
 			}, 1000);
     },
     clearFilter () {
-      this.showFilters = false;
+       this.filterBy=false;
+      this.clearCustomerSearch();
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }
@@ -414,6 +425,9 @@ export default {
       })
     },
     toggleFilter () {
+       if (this.filters.receipt_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
+        this.filterBy = true;
+      }
       if (this.showFilters && this.filtersApplied) {
         this.clearFilter()
         this.refreshTable()
