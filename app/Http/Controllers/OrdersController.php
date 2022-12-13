@@ -47,9 +47,11 @@ class OrdersController extends Controller
             ->latest()
             ->paginate($limit);
 
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         $siteData = [
             'orders' => $orders,
-            'count' => Orders::whereCompany($request->header('company'))->count()
+            'count' => Orders::whereCompany($request->header('company'))->count(),
+            'sundryDebtorsList' => $sundryDebtorsList
         ];
 
         return response()->json($siteData);

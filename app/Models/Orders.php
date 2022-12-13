@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,7 +9,7 @@ use Carbon\Carbon;
 class Orders extends Model
 {
     protected $table = 'orders';
-    const DRAFT = 'DRAFT';
+    public const DRAFT = 'DRAFT';
 
     protected $dates = [
         'created_at',
@@ -45,17 +46,17 @@ class Orders extends Model
 
     public static function getNextOrderNumber($value)
     {
-         // Get the last created order
-         $lastOrder = Orders::where('order_number', 'LIKE', $value . '-%')
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+        // Get the last created order
+        $lastOrder = Orders::where('order_number', 'LIKE', $value . '-%')
+                       ->orderBy('created_at', 'desc')
+                       ->first();
 
         if (!$lastOrder) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$lastOrder->order_number);
+            $number = explode("-", $lastOrder->order_number);
             $number = $number[1];
         }
 
@@ -97,7 +98,7 @@ class Orders extends Model
 
     public function getOrderPrefixAttribute()
     {
-        $prefix = explode("-",$this->order_number)[0];
+        $prefix = explode("-", $this->order_number)[0];
         return $prefix;
     }
 
@@ -143,7 +144,7 @@ class Orders extends Model
 
     public function scopeWhereOrderNumber($query, $orderNumber)
     {
-        return $query->where('orders.order_number', $orderNumber);
+        return $query->where('orders.order_number', 'LIKE', '%'.$orderNumber.'%');
     }
 
     public function scopeWhereSearch($query, $search)
@@ -188,7 +189,6 @@ class Orders extends Model
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
         }
-        
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -198,13 +198,11 @@ class Orders extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-       
-        if($filter==='false') {
+        if ($filter==='false') {
             $query->where('orders.company_id', $company_id)->where('order_date', Carbon::now()->format('Y-m-d'));
         } else {
             $query->where('orders.company_id', $company_id);
         }
-        
     }
 
     public function scopeWhereCustomer($query, $customer_id)
