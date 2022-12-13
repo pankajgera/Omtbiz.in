@@ -12,12 +12,13 @@ use Carbon\Carbon;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 
-use function MongoDB\BSON\toJSON;
 use App\Models\User;
 use App\Http\Requests\ReceiptRequest;
 use App\Models\Voucher;
 use stdClass;
 use Validator;
+
+use function MongoDB\BSON\toJSON;
 
 class ReceiptController extends Controller
 {
@@ -39,9 +40,11 @@ class ReceiptController extends Controller
                 'receipt_mode',
                 'customer_id',
                 'orderByField',
-                'orderBy'
+                'orderBy',
+                'from_date',
+                'to_date',
             ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->select('receipts.*', 'users.name', 'account_masters.name')
             ->latest()
             ->paginate($limit);

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -7,10 +8,10 @@ use Carbon\Carbon;
 
 class Estimate extends Model
 {
-    const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
-    const DRAFT = 'DRAFT';
-    const SENT = 'SENT';
-    const COMPLETED = 'COMPLETED';
+    public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
+    public const DRAFT = 'DRAFT';
+    public const SENT = 'SENT';
+    public const COMPLETED = 'COMPLETED';
 
     protected $dates = [
         'created_at',
@@ -57,17 +58,17 @@ class Estimate extends Model
 
     public static function getNextEstimateNumber($value)
     {
-         // Get the last created order
-         $lastOrder = Estimate::where('estimate_number', 'LIKE', $value . '-%')
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+        // Get the last created order
+        $lastOrder = Estimate::where('estimate_number', 'LIKE', $value . '-%')
+                       ->orderBy('created_at', 'desc')
+                       ->first();
 
         if (!$lastOrder) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-",$lastOrder->estimate_number);
+            $number = explode("-", $lastOrder->estimate_number);
             $number = $number[1];
         }
 
@@ -119,7 +120,7 @@ class Estimate extends Model
 
     public function getEstimatePrefixAttribute()
     {
-        $prefix = explode("-",$this->estimate_number)[0];
+        $prefix = explode("-", $this->estimate_number)[0];
         return $prefix;
     }
 
@@ -217,9 +218,13 @@ class Estimate extends Model
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('estimates.company_id', $company_id);
+        if ($filter==='false') {
+            $query->where('estimates.company_id', $company_id)->where('estimates.estimate_date', Carbon::now()->format('Y-m-d'));
+        } else {
+            $query->where('estimates.company_id', $company_id);
+        }
     }
 
     public function scopeWhereCustomer($query, $customer_id)

@@ -48,7 +48,7 @@ class EstimatesController extends Controller
                 'orderByField',
                 'orderBy'
             ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->select('estimates.*', 'users.name')
             ->latest()
             ->paginate($limit);
@@ -67,7 +67,7 @@ class EstimatesController extends Controller
                 'orderByField',
                 'orderBy'
             ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->select('estimates.*', 'users.name')
             ->latest()
             ->paginate($limit);
