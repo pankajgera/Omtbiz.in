@@ -166,7 +166,7 @@ class Estimate extends Model
 
     public function scopeWhereEstimateNumber($query, $estimateNumber)
     {
-        return $query->where('estimates.estimate_number', $estimateNumber);
+        return   $query->where('estimates.estimate_number', 'LIKE', '%'.$estimateNumber.'%');
     }
 
     public function scopeWhereSearch($query, $search)

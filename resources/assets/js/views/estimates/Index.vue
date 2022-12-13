@@ -400,6 +400,7 @@ export default {
       },
       role: this.$store.state.user.currentUser.role,
        sundryDebtorsList: [],
+       filterBy: false,
     }
   },
 
@@ -483,7 +484,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.filterBy,
         page
       }
 
@@ -509,7 +510,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.filterBy,
         page
       }
 
@@ -538,7 +539,7 @@ export default {
 			}, 1000);
     },
     clearFilter () {
-      this.showFilters = false;
+      this.filterBy = false;
       this.filtersApplied = false;
       this.clearCustomerSearch();
       if (this.filters.customer) {
@@ -557,6 +558,9 @@ export default {
       })
     },
     toggleFilter () {
+      if (this.filters.estimate_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
+        this.filterBy = true;
+      }
       if (this.showFilters && this.filtersApplied) {
         this.clearFilter()
         this.refreshTable()
