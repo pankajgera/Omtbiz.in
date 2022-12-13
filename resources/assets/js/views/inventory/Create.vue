@@ -30,20 +30,13 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label">{{ $t('inventory.worker_name') }}</label><span class="text-danger"> *</span>
+                <label class="control-label">{{ $t('inventory.worker_name') }}</label>
                 <base-input
                   v-model.trim="formData.worker_name"
-                  :invalid="$v.formData.worker_name.$error"
                   focus
                   type="text"
                   name="name"
                 />
-                <div v-if="$v.formData.worker_name.$error">
-                  <span v-if="!$v.formData.worker_name.required" class="text-danger">{{ $t('validation.required') }} </span>
-                  <span v-if="!$v.formData.worker_name.minLength" class="text-danger">
-                    {{ $tc('validation.name_min_length', $v.formData.worker_name.$params.minLength.min, { count: $v.formData.worker_name.$params.minLength.min }) }}
-                  </span>
-                </div>
               </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('inventory.quantity') }}</label><span class="text-danger"> *</span>
@@ -191,10 +184,6 @@ export default {
   validations: {
     formData: {
       name: {
-        required,
-        minLength: minLength(3)
-      },
-      worker_name: {
         required,
         minLength: minLength(3)
       },
