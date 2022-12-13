@@ -40,9 +40,11 @@ class PaymentController extends Controller
                 'payment_mode',
                 'customer_id',
                 'orderByField',
+                'from_date',
+                'to_date',
                 'orderBy'
             ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->select('payments.*', 'users.name', 'invoices.invoice_number')
             ->latest()
             ->paginate($limit);
