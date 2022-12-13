@@ -24,7 +24,7 @@ class DispatchController extends Controller
             'orderByField',
             'orderBy',
         ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->groupBy('invoice_id')
             ->latest()
             ->paginate($limit);
@@ -43,7 +43,7 @@ class DispatchController extends Controller
             'orderByField',
             'orderBy',
         ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'),$request['filterBy'])
             ->groupBy('invoice_id')
             ->latest()
             ->paginate($limit);

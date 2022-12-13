@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 class Dispatch extends Model
 {
     protected $fillable = [
@@ -35,9 +36,14 @@ class Dispatch extends Model
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('company_id', $company_id);
+        if($filter==='false') {
+           $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
+        } else {
+            $query->where('company_id', $company_id);
+        }
+        
     }
 
     public function scopeApplyFilters($query, array $filters)

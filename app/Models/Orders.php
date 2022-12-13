@@ -188,6 +188,7 @@ class Orders extends Model
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
         }
+        
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -195,9 +196,15 @@ class Orders extends Model
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('orders.company_id', $company_id);
+       
+        if($filter==='false') {
+            $query->where('orders.company_id', $company_id)->where('order_date', Carbon::now()->format('Y-m-d'));
+        } else {
+            $query->where('orders.company_id', $company_id);
+        }
+        
     }
 
     public function scopeWhereCustomer($query, $customer_id)

@@ -367,6 +367,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.showFilters,
         page
       }
 
@@ -397,6 +398,7 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+       this.showFilters=false;
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }

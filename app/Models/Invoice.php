@@ -250,9 +250,14 @@ class Invoice extends Model
         }
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('invoices.company_id', $company_id);
+        if($filter==='false') {
+            $query->where('invoices.company_id', $company_id)->where('invoice_date', Carbon::now()->format('Y-m-d'));
+        } else {
+            $query->where('invoices.company_id', $company_id);
+        }
+       
     }
 
     public function scopeWhereCustomer($query, $customer_id)

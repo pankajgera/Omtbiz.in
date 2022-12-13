@@ -135,15 +135,27 @@ class Payment extends Model
     {
         return $query->where('payments.payment_mode', $paymentMode);
     }
+    public function scopepaymentBetween($query, $start, $end)
+    {
+        return $query->whereBetween(
+            'payments.payment_date',
+            [$start->format('Y-m-d'), $end->format('Y-m-d')]
+        );
+    }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('payments.company_id', $company_id);
+        if($filter==='false') {
+            $query->where('payments.company_id', $company_id)->where('payments.payment_date', Carbon::now()->format('Y-m-d'));
+         } else {
+             $query->where('payments.company_id', $company_id);
+         }
+        // $query->where('payments.company_id', $company_id);
     }
 
     public function scopeWhereCustomer($query, $customer_id)
@@ -166,6 +178,12 @@ class Payment extends Model
         if ($filters->get('payment_mode')) {
             $query->paymentMode($filters->get('payment_mode'));
         }
+        if ($filters->get('from_date') && $filters->get('to_date')) {
+            $start = Carbon::createFromFormat('d/m/Y', $filters->get('from_date'));
+            $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
+            $query->paymentBetween($start, $end);
+        }
+
 
         if ($filters->get('customer_id')) {
             $query->whereCustomer($filters->get('customer_id'));

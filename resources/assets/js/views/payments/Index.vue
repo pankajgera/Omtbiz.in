@@ -29,7 +29,7 @@
 
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
-        <div class="filter-container">ww
+        <div class="filter-container">
           <div class="filter-customer">
             <label>{{ $tc('customers.customer',1) }} </label>
             <base-customer-select
@@ -367,6 +367,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         paymentByField: sort.fieldName || 'created_at',
         paymentBy: sort.payment || 'desc',
+        filterBy: this.showFilters,
         page
       }
 
@@ -397,6 +398,7 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+     this.showFilters=false;
       if (this.filters.customer) {
         this.$refs.customerSelect.$refs.baseSelect.removeElement(this.filters.customer)
       }

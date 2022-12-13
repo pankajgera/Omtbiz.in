@@ -473,6 +473,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.showFilters,
         page
       }
 
@@ -497,6 +498,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.showFilters,
         page
       }
 

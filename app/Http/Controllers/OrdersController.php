@@ -28,7 +28,6 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 10;
-
         $orders = Orders::with([
             'orderItems',
             'master'
@@ -43,7 +42,7 @@ class OrdersController extends Controller
                 'orderByField',
                 'orderBy'
             ]))
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->select('orders.*', 'users.name')
             ->latest()
             ->paginate($limit);
@@ -236,7 +235,6 @@ class OrdersController extends Controller
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
             $item = $order->orderItems()->create($orderItem);
-
         }
 
         $order = Orders::with([
