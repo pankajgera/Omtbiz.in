@@ -330,6 +330,18 @@ class ReceiptController extends Controller
             ->whereCompany($request->header('company'))
             ->get();
 
+        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
+
+        $account_ledger = [];
+        foreach ($usersOfSundryDebitors as $master) {
+            $ledger = AccountLedger::where('account_master_id', $master->id)->first();
+            $obj = new stdClass();
+            $obj->id = $master->id;
+            $obj->balance = isset($ledger) ? $ledger->balance : 0;
+            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+            array_push($account_ledger, $obj);
+        }
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
@@ -337,7 +349,9 @@ class ReceiptController extends Controller
             'nextReceiptNumber' => $receipt->getReceiptNumAttribute(),
             'receipt_prefix' => $receipt->getReceiptPrefixAttribute(),
             'receipt' => $receipt,
-            'invoices' => $invoices
+            'invoices' => $invoices,
+            'usersOfSundryDebitors' => $usersOfSundryDebitors,
+            'account_ledger' => $account_ledger,
         ]);
     }
 
