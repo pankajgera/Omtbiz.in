@@ -25,10 +25,6 @@ class Item extends Model
         'price' => 'integer',
     ];
 
-    protected $appends = [
-        'formattedCreatedAt',
-    ];
-
     public function scopeWhereSearch($query, $search)
     {
         return $query->where('name', 'LIKE', '%' . $search . '%');

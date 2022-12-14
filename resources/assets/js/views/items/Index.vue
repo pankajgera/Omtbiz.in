@@ -76,6 +76,7 @@
     </div>
 
     <div v-if="!showEmptyScreen">
+      <h4>Pending Bill-Ty</h4>
       <div class="table-container">
         <div class="table-actions mt-5">
           <transition name="fade">
@@ -200,6 +201,7 @@
         </table-component>
       </div>
 
+      <h4>Completed Bill-Ty</h4>
       <div class="table-container">
         <div class="table-actions mt-5">
           <transition name="fade">
