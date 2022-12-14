@@ -9,11 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    const PAYMENT_MODE_CHECK = 'CHECK';
-    const PAYMENT_MODE_OTHER = 'OTHER';
-    const PAYMENT_MODE_CASH = 'CASH';
-    const PAYMENT_MODE_CREDIT_CARD = 'CREDIT_CARD';
-    const PAYMENT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
+    public const PAYMENT_MODE_CHECK = 'CHECK';
+    public const PAYMENT_MODE_OTHER = 'OTHER';
+    public const PAYMENT_MODE_CASH = 'CASH';
+    public const PAYMENT_MODE_CREDIT_CARD = 'CREDIT_CARD';
+    public const PAYMENT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
 
     protected $dates = ['created_at', 'updated_at', 'payment_date'];
 
@@ -150,17 +150,17 @@ class Payment extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        if($filter==='false') {
+        if ($filter==='false') {
             $query->where('payments.company_id', $company_id)->where('payments.payment_date', Carbon::now()->format('Y-m-d'));
-         } else {
-             $query->where('payments.company_id', $company_id);
-         }
+        } else {
+            $query->where('payments.company_id', $company_id);
+        }
         // $query->where('payments.company_id', $company_id);
     }
 
     public function scopeWhereCustomer($query, $customer_id)
     {
-        $query->where('payments.user_id', $customer_id);
+        $query->where('payments.account_master_id', $customer_id);
     }
 
     public function scopeApplyFilters($query, array $filters)

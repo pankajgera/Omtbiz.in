@@ -220,6 +220,7 @@ class Estimate extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
+        // dd($filter);
         if ($filter==='false') {
             $query->where('estimates.company_id', $company_id)->where('estimates.estimate_date', Carbon::now()->format('Y-m-d'));
         } else {
@@ -229,7 +230,7 @@ class Estimate extends Model
 
     public function scopeWhereCustomer($query, $customer_id)
     {
-        $query->where('estimates.user_id', $customer_id);
+        $query->where('estimates.account_master_id', $customer_id);
     }
 
     public static function deleteEstimate($id)

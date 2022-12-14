@@ -261,6 +261,6 @@ class Invoice extends Model
 
     public function scopeWhereCustomer($query, $customer_id)
     {
-        $query->where('invoices.user_id', $customer_id);
+        $query->where('invoices.account_master_id', $customer_id);
     }
 }
