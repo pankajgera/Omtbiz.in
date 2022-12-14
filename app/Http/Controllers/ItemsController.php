@@ -269,8 +269,11 @@ class ItemsController extends Controller
      */
     public function getDispatch(Request $request)
     {
+        $items_already_done = Item::whereNotNull('dispatch_id')->pluck('dispatch_id')->toArray();
+
         $dispatch = Dispatch::where('status', 'Sent')->whereNotNull('invoice_id')
             ->whereCompany($request->header('company'))
+            ->whereNotIn('id', $items_already_done)
             ->get();
 
         return response()->json([
