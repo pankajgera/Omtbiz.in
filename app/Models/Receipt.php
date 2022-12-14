@@ -152,7 +152,7 @@ class Receipt extends Model
 
     public function scopeWhereCustomer($query, $customer_id)
     {
-        $query->where('receipts.user_id', $customer_id);
+        $query->where('receipts.account_master_id', $customer_id);
     }
 
     public function scopeReceiptBetween($query, $start, $end)

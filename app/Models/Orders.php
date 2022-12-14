@@ -207,7 +207,7 @@ class Orders extends Model
 
     public function scopeWhereCustomer($query, $customer_id)
     {
-        $query->where('orders.user_id', $customer_id);
+        $query->where('orders.account_master_id', $customer_id);
     }
 
     public static function deleteOrder($id)

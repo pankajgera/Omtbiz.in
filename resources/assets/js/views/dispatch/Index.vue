@@ -415,6 +415,11 @@ export default {
     }
   },
   computed: {
+      applyFilter() {
+        if (this.filters.estimate_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        return true;
+      } return false;
+    },
     ...mapGetters('dispatch', [
       'dispatch',
       'toBeDispatch',
@@ -504,7 +509,7 @@ export default {
         date_time: this.filters.date_time !== null ? this.filters.date_time : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.applyFilter,
         page
       }
 
@@ -528,7 +533,7 @@ export default {
         date_time: this.filters.date_time !== null ? this.filters.date_time : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
-        filterBy: this.showFilters,
+        filterBy: this.applyFilter,
         page
       }
 

@@ -277,6 +277,11 @@ export default {
     }
   },
   computed: {
+      applyFilter() {
+        if (this.filters.estimate_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        return true;
+      } return false;
+    },
     showEmptyScreen () {
       return !this.totalReceipts && !this.isRequestOngoing && !this.filtersApplied
     },
@@ -376,7 +381,7 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         receiptByField: sort.fieldName || 'created_at',
         receiptBy: sort.receipt || 'desc',
-        filterBy: this.filterBy,
+        filterBy: this.applyFilter,
         page
       }
 
@@ -425,9 +430,6 @@ export default {
       })
     },
     toggleFilter () {
-       if (this.filters.receipt_number || this.filters.customer || this.filters.status || this.filters.from_date || this.filters.to_date) {
-        this.filterBy = true;
-      }
       if (this.showFilters && this.filtersApplied) {
         this.clearFilter()
         this.refreshTable()
