@@ -43,7 +43,7 @@ class DispatchController extends Controller
             'orderByField',
             'orderBy',
         ]))
-            ->whereCompany($request->header('company'),$request['filterBy'])
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->groupBy('invoice_id')
             ->latest()
             ->paginate($limit);
@@ -143,9 +143,10 @@ class DispatchController extends Controller
             }
 
             $dispatch->save();
-
+            $invoices_master_id = AccountMaster::where('groups', 'Sundry Debtors')->get();
             return response()->json([
                 'dispatch' => $dispatch,
+                'invoices' => $invoices_master_id,
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving dispatch', [$e]);
