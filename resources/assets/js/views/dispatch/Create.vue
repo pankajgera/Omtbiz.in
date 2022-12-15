@@ -256,7 +256,6 @@ export default {
       if (value) {
         this.formData.invoice_id.push(value.id)
       }
-      this.loadFilterInvoice(value);
     },
     removeInvoice (value) {
       let index = this.formData.invoice_id.findIndex(each => each === value.id)
@@ -333,15 +332,7 @@ export default {
         }
       }
     },
-     loadFilterInvoice(value) {
-      console.log(value);
-       let new_array = this.invoice.filter(j => j.account_master_id === value.account_master_id);
-       console.log(new_array);
-      if(new_array.length===1) {
-        let val = 1;
-        this.filterInvoice=new_array;
-      }
-    },
+  
     async showDispatchPopup (invoice_id, invoices_master_id) {
       console.log(invoices_master_id, this.invoice);
       this.change_invoice = true;
