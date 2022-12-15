@@ -13,7 +13,7 @@
         <div class="card">
           <form action="" @submit.prevent="submitDispatch">
             <div class="card-body" id="to_print">
-              <div class="form-group" v-if="invoiceList && invoiceList.length">
+              <div class="form-group" v-if="invoiceList && invoiceList.length && !change_invoice">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
                   :multiple="true"
@@ -30,6 +30,12 @@
                   @select="addInvoice"
                   @remove="removeInvoice"
                 />
+                
+              </div>
+              <div class="form-group" v-if="change_invoice">
+              <span class="ml-2" v-for="(value, index) in filterInvoice " :key="index" >
+               {{ value.invoice_number }}
+               </span>
               </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
@@ -159,6 +165,9 @@ export default {
   data () {
     return {
       isLoading: false,
+      filterInvoice: [],
+      change_invoice: false,
+      invoice_count: '',
       title: 'Add Dispatch',
       formData: {
         name: '',
@@ -247,6 +256,7 @@ export default {
       if (value) {
         this.formData.invoice_id.push(value.id)
       }
+      this.loadFilterInvoice(value);
     },
     removeInvoice (value) {
       let index = this.formData.invoice_id.findIndex(each => each === value.id)
@@ -255,21 +265,24 @@ export default {
       }
     },
     invoiceWithAmount ({ invoice_number, due_amount, master}) {
-      let count = this.invoice.filter(i => i.account_master_id === master.id).length
+      let count = this.invoice.filter(i => i.account_master_id === master.id).length;
       return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
     },
     loadInvoice() {
       this.invoice = []
       this.formData.invoice_id.map(i => {
         let findFromList = this.invoiceList.find(j => j.id === parseInt(i));
-        this.invoice.push(findFromList)
+        this.invoice.push(findFromList);
+        
       })
+    
       let current = new Date();
       this.formData.time = current.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
       });
     },
+   
     printDispatch() {
       return printJS({
             onPrintDialogClose: () => {
@@ -320,7 +333,28 @@ export default {
         }
       }
     },
-    async showDispatchPopup (invoice_id) {
+     loadFilterInvoice(value) {
+      console.log(value);
+       let new_array = this.invoice.filter(j => j.account_master_id === value.account_master_id);
+       console.log(new_array);
+      if(new_array.length===1) {
+        let val = 1;
+        this.filterInvoice=new_array;
+      }
+    },
+    async showDispatchPopup (invoice_id, invoices_master_id) {
+      console.log(invoices_master_id, this.invoice);
+      this.change_invoice = true;
+      this.filterInvoice =  invoices_master_id.map(node=> {
+        let new_node = {};
+        new_node.data = this.invoiceList.filter(j => j.account_master_id === node.id)[0];
+        new_node.count = this.invoice.filter(i => i.account_master_id === node.id).length;
+        new_node.name = new_node.data.master.name;
+        new_node.invoice_number = '('+new_node.data.invoice_number + ' - ' + '(' + new_node.name+')' + ' * ' + new_node.count +')';
+        
+         return new_node;
+      });
+
       swal({
         title: this.$t('dispatch.invoice_report_title'),
         text: this.$t('dispatch.invoice_report_text'),
@@ -329,12 +363,13 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.printDispatch()
+          this.printDispatch();
         } else {
           this.resetSelectedDispatch()
           this.resetSelectedToBeDispatch()
           this.$router.push('/dispatch')
         }
+        this.change_invoice = false;
       })
     },
     async submitDispatch () {
@@ -363,7 +398,7 @@ export default {
           } else {
             window.toastr['success'](this.$tc('dispatch.created_message'))
           }
-          this.showDispatchPopup(response.data.dispatch.id)
+          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)
           //this.$router.push('/dispatch')
           //return true
         }
