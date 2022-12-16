@@ -213,6 +213,7 @@ export default {
       sundryDebtorList: [],
       closingBalanceType: '',
       accountLedger: [],
+      receiptMode: [],
     }
   },
   validations () {
@@ -246,7 +247,7 @@ export default {
       user: 'currentUser'
     }),
     getReceiptMode () {
-      return ['Cash in Hand', 'Bank Accounts']
+      return this.receiptMode.map(i => i.name)
     },
     amount: {
       get: function () {
@@ -361,6 +362,7 @@ export default {
         this.sundryDebtorList = response.data.usersOfSundryDebitors
         this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)
         this.accountLedger = response.data.account_ledger
+        this.receiptMode = response.data.receipt_mode
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
           //this.invoice = response.data.receipt.invoice
@@ -372,6 +374,7 @@ export default {
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
         this.formData.receipt_date = moment(new Date()).toString()
+        this.receiptMode = response.data.receipt_mode
       }
       return true
     },
