@@ -110,6 +110,7 @@
                   {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}
                 </base-button>
               </div>
+              <!--
               <div class="form-group" v-if="isEdit">
                 <base-button
                   id="print-dispatch"
@@ -124,6 +125,7 @@
                   {{ $t('dispatch.print_dispatch') }}
                 </base-button>
               </div>
+              -->
             </div>
           </form>
         </div>
@@ -335,7 +337,6 @@ export default {
     },
   
     async showDispatchPopup (invoice_id, invoices_master_id) {
-      console.log(this.invoice);
       this.change_invoice = true;
       this.filterInvoice =  this.invoice.map(node=>{
            let new_node = {};
