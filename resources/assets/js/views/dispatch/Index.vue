@@ -145,7 +145,6 @@
       </div>
 
       <table-component
-        id="to_print_to_be_dispatch"
         ref="toBeTableDispatch"
         :data="toBeDispatchedData"
         :show-filter="false"
@@ -233,6 +232,65 @@
         </template>
       </table-column>
       </table-component>
+
+      <!--  print table -->
+      <table-component
+        id="to_print_to_be_dispatch"
+        ref="toBeTableDispatch"
+        :data="toBeDispatchedData"
+        :show-filter="false"
+        table-class="table"
+      >
+
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="no-click"
+        >
+          <template slot-scope="row">
+            <div class="custom-control custom-checkbox">
+              <input
+                :id="'to_be_' + row.id"
+                v-model="selectToBeField"
+                :value="row.id"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label :for="'to_be_' + row.id" class="custom-control-label"/>
+            </div>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('dispatch.invoice_id')"
+        >
+        <template slot-scope="row">
+            <router-link :to="{path: `dispatch/${row.id}/edit`}" >
+              <span> {{ $t('dispatch.invoice_id') }} </span>
+          <span v-if="row.invoices.length ">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>
+          </router-link>
+        </template>
+        </table-column>
+        <table-column
+          :label="$t('dispatch.name')"
+        >
+          <template slot-scope="row">
+            <span> {{ $t('dispatch.name') }} </span>
+            <span v-if="row.master">{{ row.master.name }}</span>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('dispatch.date_time')"
+          show="date_time"
+        />
+        <!-- <table-column
+          :label="$t('dispatch.status')"
+          show="status"
+        /> -->
+        <table-column
+          :label="$t('dispatch.transport')"
+          show="transport"
+        />
+      </table-component>
     </div>
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
@@ -284,7 +342,6 @@
       </div>
 
       <table-component
-        id="to_print_dispatched"
         ref="tableDispatch"
         :data="dipatchedCompletedData"
         :show-filter="false"
@@ -314,7 +371,8 @@
           <template slot-scope="row">
               <router-link :to="{path: `dispatch/${row.id}/edit`}" >
                 <span> {{ $t('dispatch.invoice_id') }} </span>
-                <span v-if="row.invoices.length">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
+                
+                <span v-if="row.invoices.length ">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
             </router-link>
           </template>
         </table-column>
@@ -365,12 +423,74 @@
         </template>
       </table-column>
       </table-component>
+
+      <!-- print table here -->
+      <table-component
+        id="to_print_dispatched"
+        ref="tableDispatch"
+        :data="dipatchedCompletedData"
+        :show-filter="false"
+        table-class="table"
+      >
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="no-click"
+        >
+          <template slot-scope="row">
+            <div class="custom-control custom-checkbox">
+              <input
+                :id="row.id"
+                v-model="selectField"
+                :value="row.id"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label :for="row.id" class="custom-control-label"/>
+            </div>
+          </template>
+        </table-column>
+       <table-column
+          :label="$t('dispatch.invoice_id')"
+        >
+          <template slot-scope="row">
+              <router-link :to="{path: `dispatch/${row.id}/edit`}" >
+                <span> {{ $t('dispatch.invoice_id') }} </span>
+                
+                <span v-if="row.invoices.length ">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>
+            </router-link>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('dispatch.name')"
+        >
+          <template slot-scope="row">
+              <span> {{ $t('dispatch.name') }} </span>
+              <span v-if="row.master">{{ row.master.name }}</span>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('dispatch.date_time')"
+          show="date_time"
+        />
+        <!-- <table-column
+          :label="$t('dispatch.status')"
+          show="status"
+        /> -->
+        <table-column
+          :label="$t('dispatch.transport')"
+          show="transport"
+        />
+      </table-component>
     </div>
   </div>
 </template>
 <style>
 body > .expandable-image.expanded {
   width: 100% !important;
+}
+#to_print_dispatched, #to_print_to_be_dispatch {
+  display:none;
 }
 .expandable-image{
   width: 100px;
@@ -391,6 +511,7 @@ export default {
   data () {
     return {
       id: null,
+      change_invoice: false,
       breadCrumbLinks:[
         {
           url:'dashboard',
@@ -721,6 +842,7 @@ export default {
         })
     },
     printDispatched() {
+      
         printJS({
           printable: 'to_print_dispatched',
           type: 'html',
