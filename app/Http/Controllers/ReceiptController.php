@@ -188,7 +188,7 @@ class ReceiptController extends Controller
         if ($request->receipt_mode !== 'Cash in Hand') {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $bank_account_id,
-                'account' => 'Bank',
+                'account' => $request->receipt_mode,
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
@@ -213,7 +213,7 @@ class ReceiptController extends Controller
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $bank_account_id,
-                'account' => 'Bank',
+                'account' => $request->receipt_mode,
                 'credit' => 0,
                 'debit' => $req_amount,
                 'account_ledger_id' => $account_ledger->id,
@@ -226,7 +226,7 @@ class ReceiptController extends Controller
         } else {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $cash_account_id,
-                'account' => 'Cash',
+                'account' => $request->receipt_mode,
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
@@ -250,7 +250,7 @@ class ReceiptController extends Controller
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $cash_account_id,
-                'account' => 'Cash',
+                'account' => $request->receipt_mode,
                 'credit' => 0,
                 'debit' => $req_amount,
                 'account_ledger_id' => $account_ledger->id,
