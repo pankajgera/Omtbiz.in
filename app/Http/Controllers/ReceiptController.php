@@ -85,6 +85,8 @@ class ReceiptController extends Controller
             array_push($account_ledger, $obj);
         }
 
+        $receipt_mode = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
@@ -94,6 +96,7 @@ class ReceiptController extends Controller
             'receipt_prefix' => $receipt_prefix,
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
             'account_ledger' => $account_ledger,
+            'receipt_mode' => $receipt_mode,
         ]);
     }
 
@@ -342,6 +345,8 @@ class ReceiptController extends Controller
             array_push($account_ledger, $obj);
         }
 
+        $receipt_mode = AccountMaster::where('groups', 'Bank Accounts')->where('groups', 'Cash-in-Hand')->get();
+
         return response()->json([
             'customers' => User::where('role', 'customer')
                 ->whereCompany($request->header('company'))
@@ -352,6 +357,7 @@ class ReceiptController extends Controller
             'invoices' => $invoices,
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
             'account_ledger' => $account_ledger,
+            'receipt_mode' => $receipt_mode,
         ]);
     }
 
