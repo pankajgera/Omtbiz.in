@@ -246,7 +246,7 @@ export default {
       user: 'currentUser'
     }),
     getReceiptMode () {
-      return ['Cash', 'Check', 'Credit Card', 'Bank Transfer']
+      return ['Cash in Hand', 'Bank Accounts']
     },
     amount: {
       get: function () {
