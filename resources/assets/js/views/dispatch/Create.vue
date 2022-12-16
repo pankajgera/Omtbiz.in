@@ -34,7 +34,8 @@
               </div>
               <div class="form-group" v-if="change_invoice">
               <span class="ml-2" v-for="(value, index) in filterInvoice " :key="index" >
-               {{ value.invoice_number }}
+              
+               {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}
                </span>
               </div>
               <div class="form-group">
@@ -109,6 +110,7 @@
                   {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}
                 </base-button>
               </div>
+              <!--
               <div class="form-group" v-if="isEdit">
                 <base-button
                   id="print-dispatch"
@@ -123,6 +125,7 @@
                   {{ $t('dispatch.print_dispatch') }}
                 </base-button>
               </div>
+              -->
             </div>
           </form>
         </div>
@@ -334,18 +337,19 @@ export default {
     },
   
     async showDispatchPopup (invoice_id, invoices_master_id) {
-      console.log(invoices_master_id, this.invoice);
       this.change_invoice = true;
-      this.filterInvoice =  invoices_master_id.map(node=> {
-        let new_node = {};
-        new_node.data = this.invoiceList.filter(j => j.account_master_id === node.id)[0];
-        new_node.count = this.invoice.filter(i => i.account_master_id === node.id).length;
-        new_node.name = new_node.data.master.name;
-        new_node.invoice_number = '('+new_node.data.invoice_number + ' - ' + '(' + new_node.name+')' + ' * ' + new_node.count +')';
-        
-         return new_node;
+      this.filterInvoice =  this.invoice.map(node=>{
+           let new_node = {};
+          new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;
+            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {
+              return new Date(a.created_at) - new Date(b.created_at);
+            });
+           new_node.account_master_id = node.account_master_id;
+           new_node.name = node.master.name;
+           new_node.id = node.id;
+          return new_node;
       });
-
+      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);
       swal({
         title: this.$t('dispatch.invoice_report_title'),
         text: this.$t('dispatch.invoice_report_text'),
