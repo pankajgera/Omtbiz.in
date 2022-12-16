@@ -35,7 +35,7 @@
                         <cell
                             v-for="(column, columnIndex) in columnDefs"
                             :ref="`cell`"
-                            :key="$route.name === 'vouchers.edit' ? columnIndex + row.account_id : columnIndex"
+                            :key="$route.name === 'vouchers.edit' ? columnIndex + row.account_id : 'each-' + columnIndex + rowIndex"
                             :column="column"
                             :row="row"
                             :columnIndex="columnIndex"
@@ -278,6 +278,7 @@ export default {
       const visibleCount = Math.ceil(body.clientHeight / itemHeight) + 1 + this.virtualScrollOffset
       this.offsetRows = offset
       this.visibleRows = this.rowDataPage.slice(offset, offset + visibleCount)
+      console.log(this.rowDataPage)
     },
     filtersChanged () {
       this.page = 0
