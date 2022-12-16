@@ -182,7 +182,7 @@ class ReceiptController extends Controller
         ]);
         //AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
 
-        if ($request->receipt_mode !== 'Cash') {
+        if ($request->receipt_mode !== 'Cash in Hand') {
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $bank_account_id,
                 'account' => 'Bank',
