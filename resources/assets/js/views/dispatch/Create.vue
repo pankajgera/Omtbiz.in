@@ -30,13 +30,11 @@
                   @select="addInvoice"
                   @remove="removeInvoice"
                 />
-                
               </div>
               <div class="form-group" v-if="change_invoice">
-              <span class="ml-2" v-for="(value, index) in filterInvoice " :key="index" >
-              
-               {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}
-               </span>
+                <span class="ml-2" v-for="(value, index) in filterInvoice " :key="index" >
+                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}
+                </span>
               </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
@@ -84,19 +82,6 @@
                   name="transport"
                 />
               </div>
-              <!-- <div class="form-group">
-                <label class="control-label">{{ $t('dispatch.status') }}</label><span class="text-danger"> *</span>
-                <base-select
-                    v-model="formData.status"
-                    :options="statusList"
-                    :invalid="$v.formData.status.$error"
-                    :show-labels="false"
-                    :placeholder="$t('dispatch.status')"
-                    :allow-empty="false"
-                    track-by="id"
-                    label="name"
-                  />
-              </div> -->
               <div class="form-group">
                 <base-button
                   id="submit-dispatch"
@@ -110,22 +95,6 @@
                   {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}
                 </base-button>
               </div>
-              <!--
-              <div class="form-group" v-if="isEdit">
-                <base-button
-                  id="print-dispatch"
-                  :loading="isLoading"
-                  :disabled="isLoading"
-                  icon="print"
-                  color="theme"
-                  type="button"
-                  class="collapse-button"
-                  @click="printDispatch"
-                >
-                  {{ $t('dispatch.print_dispatch') }}
-                </base-button>
-              </div>
-              -->
             </div>
           </form>
         </div>
@@ -186,18 +155,8 @@ export default {
         all_selected_dispatch: []
       },
       invoice: [],
-      invoiceList: null,
+      invoiceList: [],
       assignToBeDispatch: false,
-      // statusList: [
-      //   {
-      //     id: 1,
-      //     name: 'Draft',
-      //   },
-      //   {
-      //     id: 2,
-      //     name: 'Sent',
-      //   }
-      // ],
       isToBeDispatch: []
     }
   },
@@ -229,19 +188,12 @@ export default {
   },
   validations: {
     formData: {
-      // name: {
-      //   required,
-      //   minLength: minLength(3)
-      // },
       date_time: {
         required,
       },
       time: {
         required,
       },
-      // status: {
-      //   required,
-      // },
     }
   },
   methods: {
@@ -275,16 +227,13 @@ export default {
       this.formData.invoice_id.map(i => {
         let findFromList = this.invoiceList.find(j => j.id === parseInt(i));
         this.invoice.push(findFromList);
-        
       })
-    
       let current = new Date();
       this.formData.time = current.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
       });
     },
-   
     printDispatch() {
       return printJS({
             onPrintDialogClose: () => {
@@ -325,6 +274,7 @@ export default {
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
+        console.log(response.data.invoices)
         this.invoiceList = response.data.invoices
         if (this.isEdit) {
           this.loadEditData()
@@ -335,12 +285,11 @@ export default {
         }
       }
     },
-  
     async showDispatchPopup (invoice_id, invoices_master_id) {
       this.change_invoice = true;
       this.filterInvoice =  this.invoice.map(node=>{
            let new_node = {};
-          new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;
+            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;
             new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {
               return new Date(a.created_at) - new Date(b.created_at);
             });
@@ -373,7 +322,6 @@ export default {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }
-
       try {
         this.isLoading = true
         let response = null;
@@ -394,8 +342,6 @@ export default {
             window.toastr['success'](this.$tc('dispatch.created_message'))
           }
           this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)
-          //this.$router.push('/dispatch')
-          //return true
         }
       } catch (err) {
         if (err) {

@@ -43,7 +43,7 @@ class Dispatch extends Model
         } else {
             $query->where('company_id', $company_id);
         }
-        
+
     }
 
     public function scopeApplyFilters($query, array $filters)
