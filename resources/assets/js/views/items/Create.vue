@@ -15,20 +15,20 @@
             <div class="card-body">
               <div class="form-group">
                 <div class="form-group" v-if="dispatchList && dispatchList.length">
-                <label class="form-label">{{ $t('items.dispatch') }}</label><span class="text-danger"> *</span>
-                <base-select
-                  v-model="dispatch"
-                  :multiple="false"
-                  :options="dispatchList"
-                  :searchable="true"
-                  :show-labels="false"
-                  :allow-empty="false"
-                  :disabled="isEdit"
-                  :custom-label="dispatchWithAmount"
-                  track-by="id"
-                  @select="addDispatch"
-                  @remove="removeDispatch"
-                />
+                  <label class="form-label">{{ $t('items.dispatch') }}</label><span class="text-danger"> *</span>
+                  <base-select
+                    v-model="dispatch"
+                    :multiple="false"
+                    :options="dispatchList"
+                    :searchable="true"
+                    :show-labels="false"
+                    :allow-empty="false"
+                    :disabled="isEdit"
+                    :custom-label="dispatchWithAmount"
+                    track-by="id"
+                    @select="addDispatch"
+                    @remove="removeDispatch"
+                  />
               </div>
                 <label class="control-label">{{ $t('items.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -208,18 +208,9 @@ export default {
         required,
         minLength: minLength(3)
       },
-      // price: {
-      //   required,
-      //   numeric,
-      //   maxLength: maxLength(20),
-      //   minValue: minValue(0.1)
-      // },
       description: {
         maxLength: maxLength(255)
       },
-      // unit: {
-      //   required
-      // },
       date: {
         required
       },
@@ -251,8 +242,10 @@ export default {
         }
       }
     },
-    dispatchWithAmount ({ name }) {
-      return `${name}`
+    dispatchWithAmount ({ name, value }) {
+      let sum = value.invoice.reduce((a, b) => a + b.total).total
+      console.log(name, value, sum)
+      return `${name}` + ' - (₹' + `${sum}` + ') * ' + `${value.count}`
     },
     addDispatch (value) {
       if (value) {

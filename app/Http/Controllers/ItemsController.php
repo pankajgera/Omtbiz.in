@@ -12,6 +12,7 @@ use App\Models\TaxType;
 use App\Models\Tax;
 use Carbon\Carbon;
 use Exception;
+use stdClass;
 
 class ItemsController extends Controller
 {
@@ -276,8 +277,18 @@ class ItemsController extends Controller
             ->whereNotIn('id', $items_already_done)
             ->get();
 
+        foreach($dispatch as $each) {
+            $obj = new stdClass();
+            $obj->invoice = Invoice::whereIn('id', [$each->invoice_id])->get();
+            $obj->count = Invoice::whereIn('id', [$each->invoice_id])->count();
+            foreach($obj->invoice as $master) {
+                $obj->master = AccountMaster::whereIn('id', [$master->account_master_id])->first();
+            }
+            $each['value'] = $obj;
+        }
+
         return response()->json([
-            'dispatch' => $dispatch
+            'dispatch' => $dispatch,
         ]);
     }
 }
