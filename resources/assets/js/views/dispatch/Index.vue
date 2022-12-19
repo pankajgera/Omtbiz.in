@@ -33,7 +33,7 @@
       <div v-show="showFilters" class="filter-section">
         <div class="row">
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('dispatch.name') }} </label>
+            <label class="form-label"> {{ $tc('dispatch.invoice_name') }} </label>
             <base-input
               v-model.trim="filters.name"
               type="text"
@@ -43,12 +43,11 @@
           </div>
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('dispatch.date_time') }} </label>
-            <base-input
-              v-model="filters.date_time"
-              type="text"
-              name="date_time"
-              autocomplete="off"
-            />
+             <base-date-picker
+                v-model="filters.date_time"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
           </div>
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('dispatch.status') }} </label>
@@ -236,7 +235,7 @@
       <!--  print table -->
       <table-component
         id="to_print_to_be_dispatch"
-        ref="toBeTableDispatch"
+        ref="toBeTableDispatch1"
         :data="toBeDispatchedData"
         :show-filter="false"
         table-class="table"
@@ -340,7 +339,7 @@
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
-
+      
       <table-component
         ref="tableDispatch"
         :data="dipatchedCompletedData"
@@ -427,7 +426,7 @@
       <!-- print table here -->
       <table-component
         id="to_print_dispatched"
-        ref="tableDispatch"
+        ref="tableDispatch1"
         :data="dipatchedCompletedData"
         :show-filter="false"
         table-class="table"
@@ -529,7 +528,7 @@ export default {
       filters: {
         name: '',
         date_time: '',
-        // status: '',
+        status: '',
         transport: ''
       },
       index: null,
@@ -537,7 +536,7 @@ export default {
   },
   computed: {
       applyFilter() {
-        if (this.filters.estimate_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        if (this.filters.name || this.filters.date_time || this.filters.transport || this.filters.status) {
         return true;
       } return false;
     },
@@ -620,7 +619,10 @@ export default {
     ]),
     refreshTable () {
       this.$refs.tableDispatch.refresh()
+      this.$refs.tableDispatch1.refresh()
+      this.$refs.toBeTableDispatch1.refresh()
       this.$refs.toBeTableDispatch.refresh()
+     
     },
     async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
@@ -661,7 +663,7 @@ export default {
       this.isRequestOngoing = true
       let response = await this.dipatchedData(data)
       this.isRequestOngoing = false
-
+      console.log( response.data.dispatch_completed.data);
       return {
         data: response.data.dispatch_completed.data,
         pagination: {
@@ -677,7 +679,7 @@ export default {
       }
       this.timer = setTimeout(() => {
 				this.filtersApplied = true
-        this.refreshTable()
+        this.refreshTable();
 			}, 1000);
     },
     clearFilter () {

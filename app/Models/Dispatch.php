@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+
 class Dispatch extends Model
 {
     protected $fillable = [
@@ -18,12 +19,13 @@ class Dispatch extends Model
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', 'LIKE', '%' . $name . '%');
+        return $query->where('name', $name);
     }
 
     public function scopeWhereDesignNo($query, $date_time)
     {
-        return $query->where('date_time', 'LIKE', '%' . $date_time . '%');
+        $date = Carbon::parse($date_time)->format('Y-m-d');
+        return $query->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), $date);
     }
 
     public function scopeWhereAverage($query, $transport)
@@ -38,12 +40,11 @@ class Dispatch extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        if($filter==='false') {
-           $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
+        if ($filter==='false') {
+            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
         } else {
             $query->where('company_id', $company_id);
         }
-
     }
 
     public function scopeApplyFilters($query, array $filters)
