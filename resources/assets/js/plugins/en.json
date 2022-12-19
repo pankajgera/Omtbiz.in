@@ -1255,6 +1255,7 @@
         "average": "Average",
         "per_price": "Per Price",
         "invoice_id": "Invoice Number",
+        "invoice_name": "Invoice Name",
         "invoice_report_title": "Dispatch",
         "invoice_report_text": "Do you want to print this dispatch?",
         "dispatch_attached_message": "Cannot delete an dispatch which is already in use",
