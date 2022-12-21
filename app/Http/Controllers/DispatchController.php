@@ -23,6 +23,7 @@ class DispatchController extends Controller
             'transport',
             'orderByField',
             'orderBy',
+            'status',
         ]))
             ->whereCompany($request->header('company'), $request['filterBy'])
             ->groupBy('invoice_id')
@@ -54,6 +55,7 @@ class DispatchController extends Controller
                 $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
             }
         }
+
         return response()->json([
             'dispatch_inprogress' => $dispatch_inprogress,
             'dispatch_completed' => $dispatch_completed,

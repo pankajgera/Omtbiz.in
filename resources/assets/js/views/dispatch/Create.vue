@@ -40,6 +40,7 @@
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
                   v-model="formData.date_time"
+                  format="Y-m-d"
                   :invalid="$v.formData.date_time.$error"
                   :calendar-button="true"
                   calendar-button-icon="calendar"
