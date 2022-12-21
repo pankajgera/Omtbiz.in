@@ -321,7 +321,6 @@ class ReportController extends Controller
             'expenseCategories' => $expenseCategories,
             'totalExpense' => $totalAmount,
             'colorSettings' => $colorSettings,
-            'company' => $company,
             'from_date' => $from_date,
             'to_date' => $to_date
         ]);
@@ -359,7 +358,7 @@ class ReportController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
             ->where('account', '!=', $ledger->account)
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
@@ -386,7 +385,6 @@ class ReportController extends Controller
         $calc_type = $ledger->type;
         $calc_total = 0;
         $calc_opening_balance = 0;
-        $calc_opening_balance_total = 0;
         $calc_opening_balance_type = $ledger->accountMaster->type;
 
         //Calculate opening balance
@@ -397,32 +395,6 @@ class ReportController extends Controller
         } else {
             $calc_opening_balance = $vouchers_before_credit_sum - $vouchers_before_debit_sum;
             $calc_opening_balance_type = 'Cr';
-        }
-
-        if ('Dr' === $ledger->accountMaster->type) {
-            if ('Dr' === $calc_opening_balance_type) {
-                $calc_opening_balance_total = $calc_opening_balance + $opening_balance;
-            } else {
-                if ($calc_opening_balance > $opening_balance) {
-                    $calc_opening_balance_total = $calc_opening_balance - $opening_balance;
-                    $calc_opening_balance_type = 'Cr';
-                } else {
-                    $calc_opening_balance_total = $opening_balance - $calc_opening_balance;
-                    $calc_opening_balance_type = 'Dr';
-                }
-            }
-        } else {
-            if ('Cr' === $calc_opening_balance_type) {
-                $calc_opening_balance_total = $calc_opening_balance + $opening_balance;
-            } else {
-                if ($calc_opening_balance > $opening_balance) {
-                    $calc_opening_balance_total  = $calc_opening_balance - $opening_balance;
-                    $calc_opening_balance_type = 'Dr';
-                } else {
-                    $calc_opening_balance_total = $opening_balance - $calc_opening_balance;
-                    $calc_opening_balance_type = 'Cr';
-                }
-            }
         }
 
         //Calculate total balance, type, debit/credit
@@ -466,12 +438,6 @@ class ReportController extends Controller
             'balance' => $calc_balance,
         ]);
 
-        $totalAmount = 0;
-        if ($calc_balance > $calc_opening_balance) {
-            $totalAmount = $calc_balance - $calc_opening_balance;
-        } else {
-            $totalAmount = $calc_opening_balance - $calc_balance;
-        }
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
         $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date)->format($dateFormat);
@@ -494,11 +460,8 @@ class ReportController extends Controller
 
         view()->share([
             'ledgerType' => $calc_type,
-            'opening_balance' => $calc_opening_balance_total,
-            'opening_balance_type' => $calc_opening_balance_type,
             'ledger' => $ledger,
             'related_vouchers' => $related_vouchers,
-            'totalAmount' => $totalAmount,
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
