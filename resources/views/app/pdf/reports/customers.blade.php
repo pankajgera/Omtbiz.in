@@ -188,20 +188,29 @@
                         <p class="sub-heading-text"> REPORT</p>
                     </td>
                 </tr>
-            </table>
-            <table class="tax-total-table">
-                <tr>
+                <tr class="td-border">
                     <td>
-                        <p class="total-tax-title">OPENING BALANCE</p>
+                        <p style="font-size: 14px; font-weight: bold">
+                            Date
+                        </p>
                     </td>
-                    <td class="tax-total-cell">
-                        <p class="" style="float:right; padding:0px; margin: 0px">
-                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
+                    <td>
+                        <p style="font-size: 14px; font-weight: bold">
+                            Particulars
+                        </p>
+                    </td>
+                    <td>
+                        <p style="font-size: 14px; font-weight: bold">
+                            Debit
+                        </p>
+                    </td>
+                    <td>
+                        <p style="font-size: 14px; font-weight: bold">
+                            Credit
                         </p>
                     </td>
                 </tr>
             </table>
-            <br/>
             <div class="tax-table-container">
                 <table class="tax-table">
                     @foreach ($related_vouchers as $each)
@@ -216,17 +225,38 @@
                                     {{ $each->account }}
                                 </p>
                             </td>
+                            @if($each->debit > 0)
                             <td>
                                 <p class="tax-money">
-                                    ₹ {!! ($each->debit > 0 ? $each->debit : $each->credit) !!}
-                                    {!! ($each->debit > 0 ? ' Dr' : ' Cr') !!}
+                                    ₹ {!! ($each->debit) . ' Dr' !!}
                                 </p>
                             </td>
+                            <td></td>
+                            @else
+                            <td></td>
+                            <td>
+                                <p class="tax-money">
+                                    ₹ {!! ($each->credit) . ' Cr' !!}
+                                </p>
+                            </td>
+                            @endif
                         </tr>
                     @endforeach
                 </table>
             </div>
-            <br/>
+            <br/>wa
+            <table class="tax-total-table">
+                <tr>
+                    <td>
+                        <p class="total-tax-title">OPENING BALANCE</p>
+                    </td>
+                    <td class="tax-total-cell">
+                        <p class="" style="float:right; padding:0px; margin: 0px">
+                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
+                        </p>
+                    </td>
+                </tr>
+            </table>
             <table class="tax-total-table">
                 <tr>
                     <td>
