@@ -283,7 +283,7 @@ class OnboardingController extends Controller
             'footer_text_color' => '#595959',
             'footer_total_color' => '#f54c4c',
             'footer_bg_color' => '#F9FBFF',
-            'date_text_color' => '#A5ACC1',
+            'date_text_color' => '#595959',
             'invoice_primary_color' => '#f54c4c',
             'invoice_column_heading' => '#55547A',
             'invoice_field_label' => '#55547A',

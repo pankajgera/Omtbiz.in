@@ -45,7 +45,7 @@
             font-style: normal;
             font-weight: 600;
             font-size: 15px;
-            color: #A5ACC1;
+            color: #595959;
             width: 100%;
             text-align: right;
             padding: 0px;

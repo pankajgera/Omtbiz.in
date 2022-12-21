@@ -44,7 +44,7 @@ class CompanySeeder extends Seeder
         CompanySetting::create(['option' => 'footer_text_color', 'value' => '#595959', 'company_id' => 1]);
         CompanySetting::create(['option' => 'footer_total_color', 'value' => '#5851D8', 'company_id' => 1]);
         CompanySetting::create(['option' => 'footer_bg_color', 'value' => '#F9FBFF', 'company_id' => 1]);
-        CompanySetting::create(['option' => 'date_text_color', 'value' => '#A5ACC1', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'date_text_color', 'value' => '#595959', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_primary_color', 'value' => '#5851D8', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_column_heading', 'value' => '#55547A', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_field_label', 'value' => '#55547A', 'company_id' => 1]);
