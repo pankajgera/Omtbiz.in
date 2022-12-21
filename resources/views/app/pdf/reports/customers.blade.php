@@ -13,8 +13,21 @@
             padding: 0px;
         } */
 
+
         table {
             border-collapse: collapse;
+        }
+
+        table tr th {
+            text-align: left;
+            left: 0;
+            border: 1px #eee solid
+        }
+        table tr.page td {
+            text-align: left;
+            left: 0;
+            border: 1px #eee solid;
+            padding: 2px;
         }
 
         .main-container {
@@ -27,7 +40,7 @@
 
         .header {
             width: 100%;
-            margin-bottom: 60px
+            margin-bottom: 20px
         }
 
         .heading-text {
@@ -45,7 +58,7 @@
             font-style: normal;
             font-weight: 600;
             font-size: 15px;
-            color: #A5ACC1;
+            color: #595959;
             width: 100%;
             text-align: right;
             padding: 0px;
@@ -89,7 +102,7 @@
 
         .tax-table {
             width: 100%;
-            padding-bottom: 10px;
+            padding-bottom: 5px;
         }
 
         .tax-title {
@@ -170,51 +183,45 @@
 <body>
     <div class="main-container">
         <div class="sub-container">
-            <table class="header">
-                <tr>
-                    <td>
-                        <p class="heading-text">
-                            {{ $ledger->account }}
-                        </p>
-                    </td>
-                    <td>
-                        <p class="heading-date-range">
-                            {{ $from_date }} - {{ $to_date }}
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <p class="sub-heading-text"> REPORT</p>
-                    </td>
-                </tr>
-                <tr class="td-border">
-                    <td>
-                        <p style="font-size: 14px; font-weight: bold">
-                            Date
-                        </p>
-                    </td>
-                    <td>
-                        <p style="font-size: 14px; font-weight: bold">
-                            Particulars
-                        </p>
-                    </td>
-                    <td>
-                        <p style="font-size: 14px; font-weight: bold">
-                            Debit
-                        </p>
-                    </td>
-                    <td>
-                        <p style="font-size: 14px; font-weight: bold">
-                            Credit
-                        </p>
-                    </td>
-                </tr>
-            </table>
+            <div>
+                <p class="heading-text">
+                    {{ $ledger->account }}
+                    <p class="heading-date-range">
+                        {{ $from_date }} - {{ $to_date }}
+                    </p>
+                </p>
+            </div>
             <div class="tax-table-container">
                 <table class="tax-table">
+                    <tr>
+                        <th>
+                            <p style="font-size: 14px; font-weight: bold">
+                                Date
+                            </p>
+                        </th>
+                        <th>
+                            <p style="font-size: 14px; font-weight: bold">
+                                Particulars
+                            </p>
+                        </th>
+                        <th>
+                            <p style="font-size: 14px; font-weight: bold">
+                                Quantity
+                            </p>
+                        </th>
+                        <th>
+                            <p style="font-size: 14px; font-weight: bold">
+                                Debit
+                            </p>
+                        </th>
+                        <th>
+                            <p style="font-size: 14px; font-weight: bold">
+                                Credit
+                            </p>
+                        </th>
+                    </tr>
                     @foreach ($related_vouchers as $each)
-                        <tr>
+                        <tr class="page">
                             <td>
                                 <p class="tax-title">
                                     {{ \Carbon\Carbon::parse($each->date, 'UTC')->isoFormat('DD/MM/YYYY') }}
@@ -223,6 +230,11 @@
                             <td>
                                 <p class="tax-title">
                                     {{ $each->account }}
+                                </p>
+                            </td>
+                            <td>
+                                <p class="tax-title">
+                                    {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories[0]->quantity : 0 }}
                                 </p>
                             </td>
                             @if($each->debit > 0)
@@ -242,33 +254,90 @@
                             @endif
                         </tr>
                     @endforeach
+                    <tr>
+                        <td>
+                            <p class="total-tax-title" style="padding-top: 30px">Opening Balance</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        @if ('Cr' === $ledger->accountMaster->type)
+                        <td class="tax-total-cell" style="padding-top: 30px">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ 0.00
+                            </p>
+                        </td>
+                        <td class="tax-total-cell" style="padding-top: 30px">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->opening_balance : 0.00 !!}
+                                {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->type : '' !!}
+                            </p>
+                        </td>
+                        @else
+                        <td class="tax-total-cell" style="padding-top: 30px">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->opening_balance : 0.00 !!}
+                                {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->type : '' !!}
+                            </p>
+                        </td>
+                        <td class="tax-total-cell" style="padding-top: 30px">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ 0.00
+                            </p>
+                        </td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="total-tax-title">Current Balance</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td class="tax-total-cell">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ {!! $ledger->debit ? $ledger->debit : 0.00 !!}
+                                {!! $ledger->debit ? 'Dr' : '' !!}
+                            </p>
+                        </td>
+                        <td class="tax-total-cell">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ {!! $ledger->credit ? $ledger->credit : 0.00 !!}
+                                {!! $ledger->credit ? 'Cr' : '' !!}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="total-tax-title">Closing Balance</p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        @if ('Cr' === $ledgerType)
+                        <td class="tax-total-cell">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ 0.00
+                            </p>
+                        </td>
+                        <td class="tax-total-cell">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ {!! $ledger->balance !!} {!! $ledgerType !!}
+                            </p>
+                        </td>
+                        @else
+                        <td class="tax-total-cell">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ {!! $ledger->balance !!} {!! $ledgerType !!}
+                            </p>
+                        </td>
+                        <td class="tax-total-cell">
+                            <p class="" style="float:right; font-size: 14px; padding:0px; margin: 0px">
+                                ₹ 0.00
+                            </p>
+                        </td>
+                        @endif
+                    </tr>
                 </table>
             </div>
-            <br/>wa
-            <table class="tax-total-table">
-                <tr>
-                    <td>
-                        <p class="total-tax-title">OPENING BALANCE</p>
-                    </td>
-                    <td class="tax-total-cell">
-                        <p class="" style="float:right; padding:0px; margin: 0px">
-                            ₹ {!! $opening_balance ? $opening_balance : 0.00 !!} {!! $opening_balance ? $opening_balance_type : '' !!}
-                        </p>
-                    </td>
-                </tr>
-            </table>
-            <table class="tax-total-table">
-                <tr>
-                    <td>
-                        <p class="total-tax-title">CLOSING BALANCE</p>
-                    </td>
-                    <td class="tax-total-cell">
-                        <p class="" style="float:right; padding:0px; margin: 0px">
-                            ₹ {!! $totalAmount !!} {!! $ledgerType !!}
-                        </p>
-                    </td>
-                </tr>
-            </table>
+            <br/>
         </div>
     </div>
 </body>
