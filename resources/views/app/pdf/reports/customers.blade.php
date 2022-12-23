@@ -237,10 +237,10 @@
                                     {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories[0]->quantity : 0 }}
                                 </p>
                             </td>
-                            @if($each->debit > 0)
+                            @if($each->credit > 0)
                             <td>
                                 <p class="tax-money">
-                                    ₹ {!! ($each->debit) . ' Dr' !!}
+                                    ₹ {!! ($each->credit) !!}
                                 </p>
                             </td>
                             <td></td>
@@ -248,7 +248,7 @@
                             <td></td>
                             <td>
                                 <p class="tax-money">
-                                    ₹ {!! ($each->credit) . ' Cr' !!}
+                                    ₹ {!! ($each->debit) !!}
                                 </p>
                             </td>
                             @endif
