@@ -362,15 +362,81 @@ class ReportController extends Controller
             ->where('account', '!=', $ledger->account)
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
-            ->orderBy('date')
+            ->orderBy('id')
             ->get();
 
+        $vouchers_before_selected_from = Voucher::where('account_ledger_id', $request->ledger_id)
+            ->whereDate('date', '<', $from)
+            ->orderBy('id')
+            ->get();
 
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
         }
 
+        $vouchers_debit_sum = $all_voucher_ids->sum('debit');
+        $vouchers_credit_sum = $all_voucher_ids->sum('credit');
+
+        $vouchers_before_debit_sum = $vouchers_before_selected_from->sum('debit');
+        $vouchers_before_credit_sum = $vouchers_before_selected_from->sum('credit');
+
+        $opening_balance = $ledger->accountMaster->opening_balance;
+        $calc_balance = $ledger->balance;
         $calc_type = $ledger->type;
+        $calc_total = 0;
+        $calc_opening_balance = 0;
+        $calc_opening_balance_type = $ledger->accountMaster->type;
+
+        //Calculate opening balance
+        //It will be ledger opening-balance (+-) what is before selected from date
+        if ($vouchers_before_debit_sum > $vouchers_before_credit_sum) {
+            $calc_opening_balance = $vouchers_before_debit_sum - $vouchers_before_credit_sum;
+            $calc_opening_balance_type = 'Dr';
+        } else {
+            $calc_opening_balance = $vouchers_before_credit_sum - $vouchers_before_debit_sum;
+            $calc_opening_balance_type = 'Cr';
+        }
+
+        //Calculate total balance, type, debit/credit
+        if ($vouchers_debit_sum > $vouchers_credit_sum) {
+            $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
+            $calc_type = 'Dr';
+        } else {
+            $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
+            $calc_type = 'Cr';
+        }
+        if ('Dr' === $ledger->accountMaster->type) {
+            if ('Dr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance = $calc_total - $opening_balance;
+                    $calc_type = 'Cr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Dr';
+                }
+            }
+        } else {
+            if ('Cr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance  = $calc_total - $opening_balance;
+                    $calc_type = 'Dr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Cr';
+                }
+            }
+        }
+
+        $ledger->update([
+            'type' => $calc_type,
+            'credit' => $vouchers_credit_sum,
+            'debit' => $vouchers_debit_sum,
+            'balance' => $calc_balance,
+        ]);
 
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
