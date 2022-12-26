@@ -19,7 +19,8 @@ class Dispatch extends Model
 
     public function scopeWhereName($query, $name)
     {
-        return AccountMaster::where('name', $name);
+        $invoices = Invoice::where('account_master_id', $name)->pluck('id')->toArray();
+        return $query->whereIn('invoice_id', $invoices);
     }
 
     public function scopeWhereDesignNo($query, $date_time)
@@ -49,7 +50,6 @@ class Dispatch extends Model
         $query->where('company_id', $company_id);
         if ($filter==='false') {
             $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
-        } else {
         }
     }
 

@@ -57,11 +57,12 @@ class DispatchController extends Controller
                 $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
             }
         }
-
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'dispatch_inprogress' => $dispatch_inprogress,
             'dispatch_completed' => $dispatch_completed,
             'dispatch_total' =>  Dispatch::count(),
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
