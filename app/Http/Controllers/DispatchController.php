@@ -19,7 +19,8 @@ class DispatchController extends Controller
 
         $dispatch_inprogress = Dispatch::where('status', 'Draft')->applyFilters($request->only([
             'name',
-            'date_time',
+            'from_date',
+            'to_date',
             'transport',
             'orderByField',
             'orderBy',
@@ -39,7 +40,8 @@ class DispatchController extends Controller
 
         $dispatch_completed = Dispatch::where('status', 'Sent')->applyFilters($request->only([
             'name',
-            'date_time',
+            'from_date',
+            'to_date',
             'transport',
             'orderByField',
             'orderBy',
