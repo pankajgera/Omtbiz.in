@@ -20,8 +20,6 @@ class Dispatch extends Model
     public function scopeWhereName($query, $name)
     {
         $invoices = Invoice::where('account_master_id', $name)->pluck('id')->toArray();
-        // dd( $invoices);
-        // dd($query->whereIn('invoice_id', [$invoices->id]));
         return $query->whereIn('invoice_id', $invoices);
     }
 
