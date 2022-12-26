@@ -19,7 +19,7 @@ class Dispatch extends Model
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where('name', $name);
+        return AccountMaster::where('name', $name);
     }
 
     public function scopeWhereDesignNo($query, $date_time)
@@ -27,7 +27,13 @@ class Dispatch extends Model
         $date = Carbon::parse($date_time)->format('Y-m-d');
         return $query->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), $date);
     }
-
+    public function scopeDisptachBetween($query, $start, $end)
+    {
+        return $query->whereBetween(
+            'date_time',
+            [$start->format('Y-m-d'), $end->format('Y-m-d')]
+        );
+    }
     public function scopeWhereAverage($query, $transport)
     {
         return $query->where('transport', 'LIKE', '%' . $transport . '%');
@@ -40,10 +46,10 @@ class Dispatch extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
+        $query->where('company_id', $company_id);
         if ($filter==='false') {
             $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
         } else {
-            $query->where('company_id', $company_id);
         }
     }
 
@@ -67,6 +73,12 @@ class Dispatch extends Model
             $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'name';
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
+        }
+
+        if ($filters->get('from_date') && $filters->get('to_date')) {
+            $start = Carbon::createFromFormat('d/m/Y', $filters->get('from_date'));
+            $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
+            $query->disptachBetween($start, $end);
         }
     }
 
