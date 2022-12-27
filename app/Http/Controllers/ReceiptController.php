@@ -336,6 +336,14 @@ class ReceiptController extends Controller
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
+        $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
+        $receipt_num_auto_generate = CompanySetting::getSetting('receipt_auto_generate', $request->header('company'));
+        $nextReceiptNumberAttribute = null;
+        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix);
+        if ($receipt_num_auto_generate == "YES") {
+            $nextReceiptNumberAttribute = $nextReceiptNumber;
+        }
+
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
@@ -359,6 +367,7 @@ class ReceiptController extends Controller
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
             'account_ledger' => $account_ledger,
             'receipt_mode' => $receipt_mode,
+            'nextReceiptNumberAttribute' => $nextReceiptNumberAttribute,
         ]);
     }
 
@@ -371,13 +380,6 @@ class ReceiptController extends Controller
      */
     public function update(ReceiptRequest $request, $id)
     {
-        // $receipt_number = explode("-", $request->receipt_number);
-        // $number_attributes['receipt_number'] = $receipt_number[0] . '-' . sprintf('%06d', intval($receipt_number[1]));
-
-        // Validator::make($number_attributes, [
-        //     'receipt_number' => 'required|unique:receipts,receipt_number' . ',' . $id
-        // ])->validate();
-
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
         $receipt = Receipt::find($id);

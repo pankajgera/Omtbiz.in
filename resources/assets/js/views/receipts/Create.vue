@@ -67,22 +67,6 @@
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
-            <!-- <div class="col-sm-6">
-              <div class="form-group">
-                <label class="form-label">{{ $t('receipts.invoice') }}</label>
-                <base-select
-                  v-model="invoice"
-                  :options="invoiceListFiltered"
-                  :searchable="true"
-                  :show-labels="false"
-                  :allow-empty="false"
-                  :disabled="isEdit || !formData.list"
-                  :placeholder="$t('invoices.select_invoice')"
-                  :custom-label="invoiceWithAmount"
-                  track-by="invoice_number"
-                />
-              </div>
-            </div> -->
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.amount') }}</label><span class="text-danger"> *</span>
@@ -95,8 +79,6 @@
                   />
                 <div v-if="$v.formData.amount.$error">
                   <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
-                  <!-- <span v-if="!$v.formData.amount.between && $v.formData.amount.numeric && amount <= 0" class="text-danger">{{ $t('validation.receipt_greater_than_zero') }}</span> -->
-                  <!-- <span v-if="!$v.formData.amount.between && amount > 0" class="text-danger">{{ $t('receipts.receipt_greater_than_due_amount') }}</span> -->
                 </div>
               </div>
             </div>
@@ -184,12 +166,10 @@ export default {
   data () {
     return {
       formData: {
-        // user_id: null,
         receipt_number: null,
         receipt_date: null,
         amount: null,
         receipt_mode: null,
-        //invoice_id: null,
         notes: null,
         list: null,
       },
@@ -201,10 +181,6 @@ export default {
         masked: false
       },
       customer: null,
-      //invoice: null,
-      //customerList: [],
-      //invoiceList: [],
-      //invoiceListFiltered: [],
       isLoading: false,
       maxPayableAmount: Number.MAX_SAFE_INTEGER,
       isSettingInitialData: true,
@@ -230,7 +206,6 @@ export default {
         },
         amount: {
           required,
-          // between: between(1, this.maxPayableAmount + 1)
         },
       },
       receiptNumAttribute: {
@@ -313,20 +288,9 @@ export default {
         return this.formData.list
       },
       set(val) {
-        // this.invoiceListFiltered = this.invoiceList.filter(i => i.account_master_id === val.id)
         this.formData.list = val
       }
     }
-  },
-  watch: {
-    // invoice (newValue) {
-    //   if (newValue) {
-    //     this.formData.invoice_id = newValue.id
-    //     if (!this.isEdit) {
-    //       this.setReceiptAmountByInvoiceData(newValue.id)
-    //     }
-    //   }
-    // }
   },
   async mounted () {
     this.$nextTick(() => {
@@ -337,35 +301,26 @@ export default {
     })
   },
   methods: {
-    // ...mapActions('invoice', [
-    //   'fetchInvoice'
-    // ]),
     ...mapActions('receipt', [
       'fetchCreateReceipt',
       'addReceipt',
       'updateReceipt',
       'fetchReceipt'
     ]),
-    // invoiceWithAmount ({ invoice_number, due_amount }) {
-    //   return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)})`
-    // },
     async loadData () {
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
-        //this.customerList = response.data.customers
         this.formData = { ...response.data.receipt }
-        //this.customer = response.data.receipt.user
         this.formData.receipt_date = moment(response.data.receipt.receipt_date, 'YYYY-MM-DD').toString()
         this.formData.amount = parseFloat(response.data.receipt.amount)
         this.receiptPrefix = response.data.receipt_prefix
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.sundryDebtorList = response.data.usersOfSundryDebitors
-        this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)
+        this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)[0]
         this.accountLedger = response.data.account_ledger
         this.receiptMode = response.data.receipt_mode
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
-          //this.invoice = response.data.receipt.invoice
         }
       } else {
         let response = await this.fetchCreateReceipt()
@@ -381,7 +336,6 @@ export default {
     async setInvoiceReceiptData () {
       let data = await this.fetchInvoice(this.$route.params.id)
       this.customer = data.data.invoice.user
-      //this.invoice = data.data.invoice
     },
     async setReceiptAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)
@@ -389,7 +343,6 @@ export default {
       this.maxPayableAmount = parseFloat(data.data.invoice.due_amount).toFixed(2)
     },
     async submitReceiptData () {
-      //this.$v.customer.$touch()
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
