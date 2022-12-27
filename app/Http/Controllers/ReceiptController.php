@@ -52,6 +52,7 @@ class ReceiptController extends Controller
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'receipts' => $receipts,
+            'total' => Receipt::count(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
