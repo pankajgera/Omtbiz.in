@@ -4,7 +4,7 @@ export const fetchReceipts = ({ commit, receipt, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/receipts`, {params}).then((response) => {
       commit(types.SET_RECEIPTS, response.data.receipts.data)
-      commit(types.SET_TOTAL_RECEIPTS, response.data.receipts.total)
+      commit(types.SET_TOTAL_RECEIPTS, response.data.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
