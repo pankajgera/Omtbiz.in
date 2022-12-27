@@ -33,23 +33,40 @@
       <div v-show="showFilters" class="filter-section">
         <div class="row">
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('dispatch.invoice_name') }} </label>
-            <base-input
-              v-model.trim="filters.name"
-              type="text"
-              name="name"
-              autocomplete="off"
+            <label class="form-label"> {{ $tc('items.party_name') }} </label>
+            <base-select
+             v-model="filters.name"
+              ref="customerSelect"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              label="name"
+              track-by="id"
+              @select="onSelectCustomer"
+              @deselect="clearCustomerSearch"
             />
           </div>
-          <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('dispatch.date_time') }} </label>
-             <base-date-picker
-                v-model="filters.date_time"
+          <div class="col-sm-2">
+           <label>{{ $t('general.from') }}</label>
+              <base-date-picker
+                v-model="filters.from_date"
                 :calendar-button="true"
                 calendar-button-icon="calendar"
               />
+             
           </div>
           <div class="col-sm-3">
+           <label>{{ $t('general.to') }}</label>
+              <base-date-picker
+                v-model="filters.to_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+             
+          </div>
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('dispatch.status') }} </label>
             <base-input
               v-model.trim="filters.status"
@@ -58,7 +75,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-3">
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('dispatch.transport') }} </label>
             <base-input
               v-model="filters.transport"
@@ -498,6 +515,7 @@ body > .expandable-image.expanded {
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
+import moment from 'moment'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
 
@@ -510,6 +528,7 @@ export default {
   data () {
     return {
       id: null,
+      sundryDebtorsList: [],
       change_invoice: false,
       breadCrumbLinks:[
         {
@@ -529,14 +548,16 @@ export default {
         name: '',
         date_time: '',
         status: '',
-        transport: ''
+        transport: '',
+        from_date: '',
+        to_date: ''
       },
       index: null,
     }
   },
   computed: {
       applyFilter() {
-        if (this.filters.name || this.filters.date_time || this.filters.transport || this.filters.status) {
+        if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {
         return true;
       } return false;
     },
@@ -626,10 +647,11 @@ export default {
     },
     async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
-        name: this.filters.name !== null ? this.filters.name : '',
+       name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
         status: this.filters.status !== null ? this.filters.status : '',
         transport: this.filters.transport !== null ? this.filters.transport : '',
-        date_time: this.filters.date_time !== null ? this.filters.date_time : '',
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         filterBy: this.applyFilter,
@@ -639,7 +661,7 @@ export default {
       this.isRequestOngoing = true
       let response = await this.dipatchedData(data)
       this.isRequestOngoing = false
-
+      this.sundryDebtorsList = response.data.sundryDebtorsList;
       return {
         data: response.data.dispatch_inprogress.data,
         pagination: {
@@ -648,12 +670,20 @@ export default {
         }
       }
     },
+     onSelectCustomer (customer) {
+      this.filters.name = customer.name
+    },
+    async clearCustomerSearch (removedOption, id) {
+      this.filters.name = ''
+      this.refreshTable()
+    },
     async dipatchedCompletedData ({ page, filter, sort }) {
       let data = {
-        name: this.filters.name !== null ? this.filters.name : '',
+        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
         status: this.filters.status !== null ? this.filters.status : '',
         transport: this.filters.transport !== null ? this.filters.transport : '',
-        date_time: this.filters.date_time !== null ? this.filters.date_time : '',
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         filterBy: this.applyFilter,
@@ -683,10 +713,12 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+       this.filtersApplied = false;
       this.showFilters=false;
       this.filters = {
         name: '',
-        date_time: '',
+        from_date: '',
+        to_date: '',
         status: '',
         transport: ''
       }

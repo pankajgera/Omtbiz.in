@@ -19,7 +19,8 @@ class DispatchController extends Controller
 
         $dispatch_inprogress = Dispatch::where('status', 'Draft')->applyFilters($request->only([
             'name',
-            'date_time',
+            'from_date',
+            'to_date',
             'transport',
             'orderByField',
             'orderBy',
@@ -39,7 +40,8 @@ class DispatchController extends Controller
 
         $dispatch_completed = Dispatch::where('status', 'Sent')->applyFilters($request->only([
             'name',
-            'date_time',
+            'from_date',
+            'to_date',
             'transport',
             'orderByField',
             'orderBy',
@@ -55,11 +57,12 @@ class DispatchController extends Controller
                 $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
             }
         }
-
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'dispatch_inprogress' => $dispatch_inprogress,
             'dispatch_completed' => $dispatch_completed,
             'dispatch_total' =>  Dispatch::count(),
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 

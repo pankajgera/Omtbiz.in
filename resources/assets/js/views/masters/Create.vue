@@ -95,8 +95,9 @@
                     <div class="col-md-4 p-0">
                       <label class="control-label">Type</label>
                       <select class="select-class" style="width: 95%" v-model="formData.type">
-                        <option value="Cr">Cr</option>
                         <option value="Dr">Dr</option>
+                        <option value="Cr">Cr</option>
+                     
                       </select>
                     </div>
                     <div class="col-md-8 p-0">
@@ -180,7 +181,7 @@ export default {
         country: 'IN',
         state: '',
         opening_balance: 0,
-        type: 'Cr',
+        type: 'Dr',
         mobile_number: '',
       },
       groupOptions: [],
