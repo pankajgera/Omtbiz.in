@@ -57,6 +57,10 @@
           <base-button outline color="theme" class="report-button" @click="getReports()">
             {{ $t('reports.update_report') }}
           </base-button>
+          <br/>
+          <base-button v-if="selectedLedger" outline color="theme" class="report-button" @click="sendReports()">
+            {{ $t('reports.send_report') }}
+          </base-button>
         </div>
       </div>
     </div>
@@ -228,8 +232,7 @@ export default {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
-      this.url = `${this.siteURL}?
-        from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${this.ledgersArr.find(i => i.account === this.ledger).id}`
+      this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${this.ledgersArr.find(i => i.account === this.ledger).id}`
       return true
     },
     downloadReport () {
@@ -245,6 +248,14 @@ export default {
       let response = await this.fetchLedgersReport()
       this.ledgersArr = response.data.ledgers
     },
+    sendReports() {
+      let mobile = this.ledgersArr.find(i => i.account === this.selectedLedger).account_master.mobile_number
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+      window.open("https://api.whatsapp.com/send/?phone=" + mobile + "&text=" + encodeURIComponent("http://65.2.39.221" + this.url))
+    }
   }
 }
 </script>
