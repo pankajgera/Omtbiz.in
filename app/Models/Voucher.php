@@ -20,6 +20,7 @@ class Voucher extends Model
         'invoice_id',
         'invoice_item_id',
         'voucher_type',
+        'receipt_id',
     ];
 
     public function accountMaster()

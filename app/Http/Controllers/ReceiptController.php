@@ -211,6 +211,7 @@ class ReceiptController extends Controller
                 'type' => 'Cr',
                 'company_id' => $company_id,
                 'voucher_type' => 'Receipt',
+                'receipt_id' => $receipt->id,
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $bank_account_id,
@@ -223,6 +224,7 @@ class ReceiptController extends Controller
                 'type' => 'Dr',
                 'company_id' => $company_id,
                 'voucher_type' => 'Receipt',
+                'receipt_id' => $receipt->id,
             ]);
         } else {
             $account_ledger = AccountLedger::firstOrCreate([
@@ -248,6 +250,7 @@ class ReceiptController extends Controller
                 'type' => 'Cr',
                 'company_id' => $company_id,
                 'voucher_type' => 'Receipt',
+                'receipt_id' => $receipt->id,
             ]);
             $voucher_2 = Voucher::create([
                 'account_master_id' => $cash_account_id,
@@ -260,6 +263,7 @@ class ReceiptController extends Controller
                 'type' => 'Dr',
                 'company_id' => $company_id,
                 'voucher_type' => 'Receipt',
+                'receipt_id' => $receipt->id,
             ]);
         }
 
@@ -418,7 +422,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified receipt with vouchers
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -435,6 +439,11 @@ class ReceiptController extends Controller
             $invoice->save();
         }
 
+        $vouchers = Voucher::where('receipt_id', $id)->get();
+        foreach($vouchers as $each) {
+            $each->delete();
+        }
+
         $receipt->delete();
 
         return response()->json([
@@ -442,6 +451,11 @@ class ReceiptController extends Controller
         ]);
     }
 
+    /**
+     * Delete mulitple receipt with vouchers
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete(Request $request)
     {
         foreach ($request->id as $id) {
@@ -453,6 +467,11 @@ class ReceiptController extends Controller
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();
+            }
+
+            $vouchers = Voucher::where('receipt_id', $id)->get();
+            foreach($vouchers as $each) {
+                $each->delete();
             }
 
             $receipt->delete();
