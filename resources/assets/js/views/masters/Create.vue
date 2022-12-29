@@ -217,7 +217,7 @@ export default {
       }
     })
     this.loadStates()
-    this.onSearch = _.debounce(this.checkName, 1000)
+    this.onSearch = _.debounce(this.checkName, 1000,)
   },
   validations: {
     formData: {
@@ -263,6 +263,7 @@ export default {
       this.selectedGroup = this.formData.groups
     },
     async checkName() {
+       this.duplicateName = false;
       let response = await this.checkMasterName(this.formData)
       if (response.data.name_exists) {
           this.duplicateName = true
