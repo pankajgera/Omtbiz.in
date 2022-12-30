@@ -164,13 +164,6 @@ export default {
         bill_ty: '',
         dispatch_id: [],
       },
-      money: {
-        decimal: '.',
-        thousands: ',',
-        prefix: '₹ ',
-        precision: 2,
-        masked: false
-      },
       previewImage: '',
       dispatchList: [],
       dispatchOrgList: [],
@@ -236,15 +229,14 @@ export default {
         //which is set with dispatchOrgList
         this.dispatchList = unique
         this.dispatchOrgList = response.data.dispatch
-        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch
-        if (this.isToBeDispatch.length) {
-          this.loadIsToBeDispatch()
-        }
       }
     },
     dispatchWithAmount ({ name, value }) {
-      let sum = value.invoice.reduce((a, b) => a + b.total).total
-      return `${name}` + ' - (₹' + `${sum}` + ') * ' + `${value.count}`
+      if (value && value.invoice.length) {
+        let sum = value.invoice.reduce((a, b) => a + b.total).total
+        return `${name}` + ' - (₹' + `${sum}` + ') * ' + `${value.count}`
+      }
+      return `${name}`
     },
     addDispatch (value) {
       if (value) {
@@ -265,8 +257,10 @@ export default {
       this.formData.unit = this.units.find(_unit => response.data.item.unit === _unit.name)
       this.fractional_price = response.data.item.price
       this.dispatch = response.data.item.dispatch
-      this.previewImage = response.data.item.images.original_image_path
-      this.formData.image = response.data.item.images.original_image_path
+      if (response.data.item.images) {
+        this.previewImage = response.data.item.images.original_image_path
+        this.formData.image = response.data.item.images.original_image_path
+      }
     },
     async submitItem () {
       this.$v.formData.$touch()
