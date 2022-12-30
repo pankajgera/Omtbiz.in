@@ -58,9 +58,14 @@ class NoteController extends Controller
             $note->save();
 
             $note = Note::find($note->id);
+            $image = '';
+            if ($request->image) {
+                $image = $note->uploadImage($request->image);
+            }
 
             return response()->json([
                 'note' => $note,
+                'image' => $image,
             ]);
         } catch (Exception $e) {
             Log::error('Error while saving note', [$e]);
@@ -88,9 +93,13 @@ class NoteController extends Controller
             $note->save();
 
             $note = Note::find($note->id);
-
+            $image = '';
+            if ($request->image) {
+                $image = $note->uploadImage($request->image);
+            }
             return response()->json([
                 'note' => $note,
+                'image' => $image,
             ]);
         } catch (Exception $e) {
             Log::error('Error while updating note', [$e]);
