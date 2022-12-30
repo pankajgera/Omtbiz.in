@@ -179,7 +179,7 @@ export default {
         this.settingData.currency = this.currencies.find(currency => currency.id === 1)
         this.settingData.language = this.languages.find(language => language.code === 'en')
         this.settingData.dateFormat = response.data.date_formats.find(dateFormat => dateFormat.carbon_format_value == 'd M Y')
-        this.settingData.timeZone = this.timeZones.find(timeZone => timeZone.value === 'UTC')
+        this.settingData.timeZone = this.timeZones.find(timeZone => timeZone.value === 'Asia/Kolkata')
         this.settingData.fiscalYear = this.fiscalYears.find(fiscalYear => fiscalYear.value === '1-12')
       }
     },
