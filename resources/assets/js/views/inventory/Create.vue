@@ -119,18 +119,22 @@
             <tr>
               <th>ID</th>
               <th>Name</th>
+              <th>Worker Name</th>
               <th>Quantity</th>
               <th>Cost Price</th>
               <th>Sale Price</th>
               <th>Unit</th>
+              <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in relatedInventories" :key="index">
               <td>{{each.id}}</td>
               <td>{{each.name}}</td>
+              <td>{{each.worker_name}}</td>
               <td>{{each.quantity}}</td>
               <td>{{each.price}}</td>
               <td>{{each.sale_price}}</td>
               <td>{{each.unit}}</td>
+              <td>{{each.date_time}}</td>
             </tr>
           </table>
         </div>
