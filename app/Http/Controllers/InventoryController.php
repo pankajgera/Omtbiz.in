@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inventory;
 use App\Models\Invoice;
+use Carbon\Carbon;
 use Exception;
 use Log;
 
@@ -47,6 +48,9 @@ class InventoryController extends Controller
         try {
             $inventory = Inventory::find($id);
             $related_inventories = Inventory::where('name', $inventory->name)->where('id', '!=', $inventory->id)->get();
+            foreach($related_inventories as $each) {
+                $each->date_time = Carbon::parse($each->created_at, 'Asia/Kolkata')->toDateTimeString();
+            }
             return response()->json([
                 'related_inventories' => $related_inventories,
                 'inventory' => [$inventory],

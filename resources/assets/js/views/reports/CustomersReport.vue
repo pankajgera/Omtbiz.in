@@ -254,7 +254,7 @@ export default {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
       }
-      window.open("https://api.whatsapp.com/send/?phone=" + mobile + "&text=" + encodeURIComponent("http://65.2.39.221" + this.url))
+      window.open("https://api.whatsapp.com/send/?phone=" +'+91'+ mobile + "&text=" + encodeURIComponent("http://65.2.39.221" + this.url))
     }
   }
 }
