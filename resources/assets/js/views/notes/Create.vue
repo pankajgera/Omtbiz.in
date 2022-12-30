@@ -75,7 +75,20 @@
                   name="note"
                 />
               </div>
-
+                <div class="form-group">
+                <div class="fileUpload btn btn-default">
+                  <label class="upload mb-0">
+                    <input type="file" accept="image/*" name="image" @change="uploadImage">
+                      Upload Photo
+                  </label>
+                </div>
+                  <div  v-if="previewImage" style="width:200px; height:auto; margin-top:20px">
+        <img :src="previewImage" class="uploading-image" style="width: 100%; height: 100%">
+      </div>
+                <div v-if="formData.image">
+                  <a style="font-size: 12px" :href="formData.image" target="_blank"></a>
+                </div>
+              </div>
               <div class="form-group">
                 <base-button
                   id="submit-note"
@@ -98,6 +111,14 @@
   </div>
 </template>
 <style scoped>
+input[type="file"]
+{
+  display: none;
+}
+.fileUpload input.upload
+{
+    display: inline-block;
+}
 .base-text-area.text-area-field {
     width: 100%;
     padding: 8px 13px;
@@ -125,8 +146,10 @@ export default {
     return {
       isLoading: false,
       title: 'Add Note',
+      previewImage: '',
       formData: {
         name: '',
+        image: '',
         design_no: '',
         rate: '',
         average: '',
@@ -165,6 +188,8 @@ export default {
     async loadEditData () {
       let response = await this.fetchNote(this.$route.params.id)
       this.formData = response.data.note
+       this.previewImage = response.data.item.images.original_image_path
+      this.formData.image = response.data.item.images.original_image_path
     },
     async submitNote () {
       this.$v.formData.$touch()
@@ -192,6 +217,15 @@ export default {
           return true
         }
         window.toastr['success'](response.data.success)
+      }
+    },
+    uploadImage (e) {
+      const image = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(image)
+      reader.onload = e => {
+        this.previewImage = e.target.result
+        this.formData.image = this.previewImage
       }
     },
     printNote() {
