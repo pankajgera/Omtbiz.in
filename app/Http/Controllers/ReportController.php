@@ -635,7 +635,7 @@ class ReportController extends Controller
         $invoiceWith = Invoice::with(['master'])->where('id', $id)->first();
         $time = substr($invoiceWith->created_at, -8);
         $date = substr($invoiceWith->invoice_date, 0, 10);
-        $invoiceWith->invoice_date = Carbon::parse($date . ' ' . $time, 'UTC')->toDateTimeString();
+        $invoiceWith->invoice_date = Carbon::parse($date . ' ' . $time, 'Asia/Kolkata')->toDateTimeString();
         view()->share([
             'invoice' => $invoiceWith,
             'total_quantity' => $invoice_i->sum('quantity'),
@@ -683,7 +683,7 @@ class ReportController extends Controller
         $estimateWith = Estimate::with(['master'])->where('id', $id)->first();
         $time = substr($estimateWith->created_at, -8);
         $date = substr($estimateWith->invoice_date, 0, 10);
-        $estimateWith->invoice_date = Carbon::parse($date . ' ' . $time, 'UTC')->toDateTimeString();
+        $estimateWith->invoice_date = Carbon::parse($date . ' ' . $time, 'Asia/Kolkata')->toDateTimeString();
         view()->share([
             'estimate' => $estimateWith,
             'total_quantity' => $estimate_i->sum('quantity'),

@@ -152,7 +152,7 @@ class InvoicesController extends Controller
             $dispatch = new Dispatch();
             $dispatch->name = $invoice->invoice_number;
             $dispatch->invoice_id = $invoice->id;
-            $dispatch->date_time = Carbon::now('UTC');
+            $dispatch->date_time = Carbon::now('Asia/Kolkata');
             $dispatch->transport = null;
             $dispatch->status = 'Draft';
             $dispatch->company_id = $request->header('company');
@@ -743,7 +743,7 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
-        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('UTC')->toDateString())
+        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
             ->where('account_master_id', $request->id)
             ->orderBy('id', 'asc')->first();
 

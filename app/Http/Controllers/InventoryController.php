@@ -49,7 +49,7 @@ class InventoryController extends Controller
             $inventory = Inventory::find($id);
             $related_inventories = Inventory::where('name', $inventory->name)->where('id', '!=', $inventory->id)->get();
             foreach($related_inventories as $each) {
-                $each->date_time = Carbon::parse($each->created_at)->toDateTimeString();
+                $each->date_time = Carbon::parse($each->created_at, 'Asia/Kolkata')->toDateTimeString();
             }
             return response()->json([
                 'related_inventories' => $related_inventories,
