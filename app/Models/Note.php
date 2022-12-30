@@ -150,6 +150,7 @@ class Note extends Model
 
         //make an entry in the database
         $photo = new \App\Models\Images();
+
         $photo->item_id = $this->id;
         $photo->name = $fileName;
         $photo->image_path = $screenUrl;
