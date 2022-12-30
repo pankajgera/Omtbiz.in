@@ -188,8 +188,8 @@ export default {
     async loadEditData () {
       let response = await this.fetchNote(this.$route.params.id)
       this.formData = response.data.note
-       this.previewImage = response.data.item.images.original_image_path
-      this.formData.image = response.data.item.images.original_image_path
+       this.previewImage = response.data.image
+      this.formData.image = response.data.image
     },
     async submitNote () {
       this.$v.formData.$touch()

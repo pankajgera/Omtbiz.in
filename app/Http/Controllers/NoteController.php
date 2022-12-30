@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Images;
 use Illuminate\Http\Request;
 use App\Models\Note;
 use Exception;
@@ -33,9 +34,11 @@ class NoteController extends Controller
     public function edit(Request $request, $id)
     {
         $note = Note::find($id);
+        $image_upload = Images::where('id', $note->images_id)->first();
 
         return response()->json([
             'note' => $note,
+            'image' => $image_upload->image_path,
         ]);
     }
 
@@ -58,6 +61,7 @@ class NoteController extends Controller
             $note->save();
 
             $note = Note::find($note->id);
+
             $image = '';
             if ($request->image) {
                 $image = $note->uploadImage($request->image);
@@ -97,6 +101,7 @@ class NoteController extends Controller
             if ($request->image) {
                 $image = $note->uploadImage($request->image);
             }
+
             return response()->json([
                 'note' => $note,
                 'image' => $image,
