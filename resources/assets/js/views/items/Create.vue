@@ -244,7 +244,6 @@ export default {
     },
     dispatchWithAmount ({ name, value }) {
       let sum = value.invoice.reduce((a, b) => a + b.total).total
-      console.log(name, value, sum)
       return `${name}` + ' - (₹' + `${sum}` + ') * ' + `${value.count}`
     },
     addDispatch (value) {
