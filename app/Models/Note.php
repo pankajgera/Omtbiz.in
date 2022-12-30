@@ -13,6 +13,7 @@ class Note extends Model
     protected $fillable = [
         'name',
         'design_no',
+        'images_id',
         'rate',
         'average',
         'per_price',
