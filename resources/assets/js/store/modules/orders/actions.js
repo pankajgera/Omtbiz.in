@@ -3,8 +3,10 @@ import * as types from './mutation-types'
 export const fetchOrders = ({ commit, orders, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/orders`, {params}).then((response) => {
-      commit(types.SET_ORDERS, response.data.orders.data)
-      commit(types.SET_TOTAL_ORDERS, response.data.count)
+      commit(types.SET_ORDERS_PENDING, response.data.pending_orders.data)
+      commit(types.SET_ORDERS_COMPLETED, response.data.completedorders.data)
+      commit(types.SET_TOTAL_ORDERS_PENDING, response.data.pending_count)
+      commit(types.SET_TOTAL_ORDERS_COMPLETED, response.data.completed_count)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -63,25 +65,25 @@ export const fetchViewOrder = ({ commit, orders, state }, id) => {
   })
 }
 
-export const sendEmail = ({ commit, orders, state }, data) => {
-  return new Promise((resolve, reject) => {
-    window.axios.post(`/api/orders/send`, data).then((response) => {
-      if (response.data.success) {
-        commit(types.UPDATE_ORDER_STATUS, {id: data.id, status: 'SENT'})
-        commit('dashboard/' + types.UPDATE_ORDER_STATUS, { id: data.id, status: 'SENT' }, { root: true })
-      }
-      resolve(response)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
+// export const sendEmail = ({ commit, orders, state }, data) => {
+//   return new Promise((resolve, reject) => {
+//     window.axios.post(`/api/orders/send`, data).then((response) => {
+//       if (response.data.success) {
+//         commit(types.UPDATE_ORDER_STATUS, {id: data.id, status: 'SENT'})
+//         commit('dashboard/' + types.UPDATE_ORDER_STATUS, { id: data.id, status: 'SENT' }, { root: true })
+//       }
+//       resolve(response)
+//     }).catch((err) => {
+//       reject(err)
+//     })
+//   })
+// }
 
 export const addOrder = ({ commit, orders, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('/api/orders', data).then((response) => {
-      commit(types.ADD_ORDER, response.data.order)
-
+      commit(types.ADD_ORDER_PENDING, response.data.pending_order)
+      commit(types.ADD_ORDER_COMPLETED, response.data.completed_order)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -92,8 +94,10 @@ export const addOrder = ({ commit, orders, state }, data) => {
 export const deleteOrder = ({ commit, orders, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/orders/${id}`).then((response) => {
-      commit(types.DELETE_ORDER, id)
-      commit('dashboard/' + types.DELETE_ORDER, id, { root: true })
+      commit(types.DELETE_ORDER_PENDING, id)
+      commit(types.DELETE_ORDER_COMPLETED, id)
+      commit('dashboard/' + types.DELETE_ORDER_PENDING, id, { root: true })
+      commit('dashboard/' + types.DELETE_ORDER_COMPLETED, id, { root: true })
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -104,7 +108,8 @@ export const deleteOrder = ({ commit, orders, state }, id) => {
 export const deleteMultipleOrders = ({ commit, orders, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.post(`/api/orders/delete`, {'id': state.selectedOrders}).then((response) => {
-      commit(types.DELETE_MULTIPLE_ORDERS, state.selectedOrders)
+      commit(types.DELETE_MULTIPLE_ORDERS_PENDING, state.selectedOrders)
+      commit(types.DELETE_MULTIPLE_ORDERS_COMPLETED, state.selectedOrders)
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -115,7 +120,8 @@ export const deleteMultipleOrders = ({ commit, orders, state }, id) => {
 export const updateOrder = ({ commit, orders, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/orders/${data.id}`, data).then((response) => {
-      commit(types.UPDATE_ORDER, response.data)
+      commit(types.UPDATE_ORDER_PENDING, response.data)
+      commit(types.UPDATE_ORDER_COMPLETED, response.data)
       resolve(response)
     }).catch((err) => {
       reject(err)

@@ -2,7 +2,7 @@
   <div class="items order-index-page main-content">
     <div class="page-header">
       <Header :title="$tc('orders.order', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalOrders || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalPendingOrders || totalCompletedOrders || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -99,7 +99,8 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ orders.length }}</b> {{ $t('general.of') }} <b>{{ totalOrders }}</b></p>
+        <h4>Pending Orders</h4>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ pendingOrders.length }}</b> {{ $t('general.of') }} <b>{{ totalPendingOrders }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -130,7 +131,126 @@
       <table-component
         ref="table"
         :show-filter="false"
-        :data="fetchData"
+        :data="getPendingOrders"
+        table-class="table"
+      >
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="no-click"
+        >
+          <template slot-scope="row">
+            <div class="custom-control custom-checkbox">
+              <input
+                :id="row.id"
+                v-model="selectField"
+                :value="row.id"
+                type="checkbox"
+                class="custom-control-input"
+              >
+              <label :for="row.id" class="custom-control-label"/>
+            </div>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('orders.number')"
+          show="order_number"
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `orders/${row.id}/edit?d=true`}" class="dropdown-item">
+               {{ row.order_number }}
+              </router-link>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('orders.date')"
+          sort-as="order_date"
+          show="formattedOrderDate"
+        />
+        <table-column
+          :label="$t('orders.name')"
+          width="20%"
+          show="master.name"
+        />
+        <table-column
+          :label="$t('orders.count')"
+          width="20%"
+          show="order_items.length"
+        />
+        <table-column
+          :sortable="false"
+          :filterable="false"
+          cell-class="action-dropdown no-click"
+        >
+          <template slot-scope="row">
+            <span>{{ $t('orders.action') }}</span>
+            <v-dropdown>
+              <a slot="activator" href="#">
+                <dot-icon />
+              </a>
+              <v-dropdown-item>
+                <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
+                  {{ $t('general.edit') }}
+                </router-link>
+                <!-- <router-link :to="{path: `orders/${row.id}/view`}" class="dropdown-item">
+                  <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                  {{ $t('orders.view') }}
+                </router-link> -->
+              </v-dropdown-item>
+              <!-- <v-dropdown-item v-if="row.status == 'DRAFT'">
+                <a class="dropdown-item" href="#/" @click="sendOrder(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
+                  {{ $t('orders.send_order') }}
+                </a>
+              </v-dropdown-item> -->
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeOrder(row.id)" v-if="role === 'admin'">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </template>
+        </table-column>
+      </table-component>
+    </div>
+
+    <div v-show="!showEmptyScreen" class="table-container">
+      <div class="table-actions mt-5">
+        <h4>Completed Orders</h4>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ completedOrders.length }}</b> {{ $t('general.of') }} <b>{{ totalCompletedOrders }}</b></p>
+        <transition name="fade">
+          <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
+            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+              {{ $t('general.actions') }}
+            </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="removeMultipleOrders">
+                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+          </v-dropdown>
+        </transition>
+      </div>
+      <div class="custom-control custom-checkbox">
+        <input
+          id="select-all"
+          v-model="selectAllFieldStatus"
+          type="checkbox"
+          class="custom-control-input"
+          @change="selectAllOrders"
+        >
+        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+          <span class="select-all-label">{{ $t('general.select_all') }} </span>
+        </label>
+      </div>
+
+      <table-component
+        ref="table"
+        :show-filter="false"
+        :data="getCompletedOrders"
         table-class="table"
       >
         <table-column
@@ -275,17 +395,18 @@ export default {
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [],
       filterBy: false,
+      getPendingOrders: [],
+      getCompletedOrders: [],
     }
   },
   computed: {
-
-      applyFilter() {
+    applyFilter() {
         if (this.filters.estimate_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
         return true;
       } return false;
     },
     showEmptyScreen () {
-      return !this.totalOrders && !this.isRequestOngoing && !this.filtersApplied
+      return !this.totalPendingOrders && !this.totalCompletedOrders && !this.isRequestOngoing && !this.filtersApplied
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -295,8 +416,10 @@ export default {
     ]),
     ...mapGetters('orders', [
       'selectedOrders',
-      'totalOrders',
-      'orders',
+      'totalPendingOrders',
+      'totalCompletedOrders',
+      'pendingOrders',
+      'completedOrders',
       'selectAllField'
     ]),
     selectField: {
@@ -391,16 +514,31 @@ export default {
       let response = await this.fetchOrders(data)
       this.isRequestOngoing = false
       this.sundryDebtorsList = response.data.sundryDebtorsList
-      //this.currency = response.data.currency
 
-      return {
-        data: response.data.orders.data,
+      this.setPendingOrder(data);
+      this.setCompletedOrder(data);
+    },
+    setPendingOrder(response) {
+      this.getPendingOrders = {
+        data: response.data.pending_orders.data,
         pagination: {
-          totalPages: response.data.orders.last_page,
+          totalPages: response.data.pending_orders.last_page,
           currentPage: page,
-          count: response.data.orders.count
+          count: response.data.pending_count
         }
       }
+      return this.getPendingOrders
+    },
+    setCompletedOrder(response) {
+      this.getCompletedOrders = {
+        data: response.data.completed_orders.data,
+        pagination: {
+          totalPages: response.data.completed_orders.last_page,
+          currentPage: page,
+          count: response.data.completed_count
+        }
+      }
+      this.getCompletedOrders
     },
     setFilters () {
       if (this.timer) {
