@@ -131,7 +131,7 @@
       <table-component
         ref="table"
         :show-filter="false"
-        :data="getPendingOrders"
+        :data="getPendingOrders.data"
         table-class="table"
       >
         <table-column
@@ -250,7 +250,7 @@
       <table-component
         ref="table"
         :show-filter="false"
-        :data="getCompletedOrders"
+        :data="getCompletedOrders.data"
         table-class="table"
       >
         <table-column
@@ -526,17 +526,16 @@ export default {
           count: response.data.pending_count
         }
       }
-      return this.getPendingOrders
     },
     setCompletedOrder(response) {
-      this.getCompletedOrders.push({
+      this.getCompletedOrders = {
         data: response.data.completed_orders.data,
         pagination: {
           totalPages: response.data.completed_orders.last_page,
           currentPage: response.data.completed_orders.current_page,
           count: response.data.completed_count
         }
-      })
+      }
     },
     setFilters () {
       if (this.timer) {
