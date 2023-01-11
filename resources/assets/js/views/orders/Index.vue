@@ -178,6 +178,22 @@
           show="order_items.length"
         />
         <table-column
+          :label="$t('orders.quantity')"
+          width="20%"
+        >
+          <template slot-scope="row">
+            {{ row.order_items.reduce((i, j) => i + parseInt(j.quantity), 0) }}
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('orders.remaining_quantity')"
+          width="20%"
+        >
+          <template slot-scope="row">
+            {{ row.order_items.reduce((i, j) => i + parseInt(j.remaining_quantity), 0) }}
+          </template>
+        </table-column>
+        <table-column
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown no-click"
@@ -297,6 +313,22 @@
           show="order_items.length"
         />
         <table-column
+          :label="$t('orders.quantity')"
+          width="20%"
+        >
+        <template slot-scope="row">
+            {{ row.order_items.reduce((i, j) => i + parseInt(j.quantity), 0) }}
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('orders.remaining_quantity')"
+          width="20%"
+        >
+          <template slot-scope="row">
+            {{ row.order_items.reduce((i, j) => i + parseInt(j.remaining_quantity), 0) }}
+          </template>
+        </table-column>
+        <table-column
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown no-click"
@@ -308,21 +340,15 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                <!-- <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
-                </router-link>
+                </router-link> -->
                 <!-- <router-link :to="{path: `orders/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
                   {{ $t('orders.view') }}
                 </router-link> -->
               </v-dropdown-item>
-              <!-- <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendOrder(row.id)" v-if="role === 'admin'">
-                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('orders.send_order') }}
-                </a>
-              </v-dropdown-item> -->
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeOrder(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -367,10 +393,6 @@ export default {
           isDisable: true,
           options: [
             { name: 'DRAFT', value: 'DRAFT' },
-            { name: 'DUE', value: 'UNPAID' },
-            { name: 'SENT', value: 'SENT' },
-            { name: 'VIEWED', value: 'VIEWED' },
-            { name: 'OVERDUE', value: 'OVERDUE' },
             { name: 'COMPLETED', value: 'COMPLETED' }
           ]
         },
@@ -463,38 +485,11 @@ export default {
       'selectAllOrders',
       'deleteOrder',
       'deleteMultipleOrders',
-      'sendEmail',
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    async sendOrder (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('orders.confirm_send'),
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          const data = {
-            id: id
-          }
-          let response = await this.sendEmail(data)
-          this.refreshTable()
-          if (response.data.success) {
-            window.toastr['success'](this.$tc('orders.send_order_successfully'))
-            return true
-          }
-          if (response.data.error === 'user_email_does_not_exist') {
-            window.toastr['error'](this.$tc('orders.user_email_does_not_exist'))
-            return false
-          }
-          window.toastr['error'](this.$tc('orders.something_went_wrong'))
-        }
-      })
-    },
     refreshTable () {
       this.$refs.table.refresh()
     },
@@ -509,13 +504,12 @@ export default {
         orderBy: 'desc',
         filterBy: this.applyFilter,
       }
-
       this.isRequestOngoing = true
       let response = await this.fetchOrders(data)
-      this.isRequestOngoing = false
       this.sundryDebtorsList = response.data.sundryDebtorsList
       this.setPendingOrder(response);
       this.setCompletedOrder(response);
+      this.isRequestOngoing = false
     },
     setPendingOrder(response) {
       this.getPendingOrders = {

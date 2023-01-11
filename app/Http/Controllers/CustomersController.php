@@ -36,12 +36,12 @@ class CustomersController extends Controller
                 'orderBy'
             ]))
             ->whereCompany($request->header('company'))
+            ->leftJoin('invoices', 'users.id', '=', 'invoices.user_id')
             ->select(
                 'users.*',
                 DB::raw('sum(invoices.due_amount) as due_amount')
             )
             ->groupBy('users.id')
-            ->leftJoin('invoices', 'users.id', '=', 'invoices.user_id')
             ->paginate($limit);
 
         $siteData = [
