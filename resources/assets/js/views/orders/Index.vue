@@ -395,13 +395,13 @@ export default {
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [],
       filterBy: false,
-      getPendingOrders: [],
-      getCompletedOrders: [],
+      getPendingOrders: null,
+      getCompletedOrders: null,
     }
   },
   computed: {
     applyFilter() {
-        if (this.filters.estimate_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        if (this.filters.order_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
         return true;
       } return false;
     },
@@ -447,6 +447,7 @@ export default {
   },
   created () {
     this.fetchCustomers()
+    this.fetchData()
   },
   destroyed () {
     if (this.selectAllField) {
@@ -497,48 +498,45 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
-    async fetchData ({ page, filter, sort }) {
+    async fetchData () {
       let data = {
         order_number: this.filters.order_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
         status: '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        orderByField: 'created_at',
+        orderBy: 'desc',
         filterBy: this.applyFilter,
-        page
       }
 
       this.isRequestOngoing = true
       let response = await this.fetchOrders(data)
       this.isRequestOngoing = false
       this.sundryDebtorsList = response.data.sundryDebtorsList
-
-      this.setPendingOrder(data);
-      this.setCompletedOrder(data);
+      this.setPendingOrder(response);
+      this.setCompletedOrder(response);
     },
     setPendingOrder(response) {
       this.getPendingOrders = {
         data: response.data.pending_orders.data,
         pagination: {
           totalPages: response.data.pending_orders.last_page,
-          currentPage: page,
+          currentPage: response.data.pending_orders.current_page,
           count: response.data.pending_count
         }
       }
       return this.getPendingOrders
     },
     setCompletedOrder(response) {
-      this.getCompletedOrders = {
+      this.getCompletedOrders.push({
         data: response.data.completed_orders.data,
         pagination: {
           totalPages: response.data.completed_orders.last_page,
-          currentPage: page,
+          currentPage: response.data.completed_orders.current_page,
           count: response.data.completed_count
         }
-      }
-      this.getCompletedOrders
+      })
     },
     setFilters () {
       if (this.timer) {

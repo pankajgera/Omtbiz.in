@@ -4,7 +4,7 @@ export const fetchOrders = ({ commit, orders, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/orders`, {params}).then((response) => {
       commit(types.SET_ORDERS_PENDING, response.data.pending_orders.data)
-      commit(types.SET_ORDERS_COMPLETED, response.data.completedorders.data)
+      commit(types.SET_ORDERS_COMPLETED, response.data.completed_orders.data)
       commit(types.SET_TOTAL_ORDERS_PENDING, response.data.pending_count)
       commit(types.SET_TOTAL_ORDERS_COMPLETED, response.data.completed_count)
       resolve(response)
