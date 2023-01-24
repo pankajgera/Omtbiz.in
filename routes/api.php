@@ -265,7 +265,7 @@ Route::group(['middleware' => 'api'], function () {
         ]);
 
         Route::get('/get-inventory-type', [
-            'as' => 'get.admin.setting',
+            'as' => 'get.inventory.type',
             'uses' => 'CompanyController@getInventoryType'
         ]);
 
@@ -378,10 +378,7 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'VouchersController@delete'
     ]);
 
-    Route::post('/vouchers/update', [
-        'as' => 'vouchers.update',
-        'uses' => 'VouchersController@update'
-    ]);
+    Route::post('/vouchers/update', 'VouchersController@update');
 
     Route::get('/vouchers/{id}/book', [
         'as' => 'vouchers.book',
@@ -410,10 +407,7 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'BanksController@delete'
     ]);
 
-    Route::post('/banks/update', [
-        'as' => 'banks.update',
-        'uses' => 'BanksController@update'
-    ]);
+    Route::post('/banks/update', 'BanksController@update');
 
     Route::resource('banks', 'BanksController');
 
@@ -430,10 +424,7 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'DispatchController@multiple'
     ]);
 
-    Route::post('/dispatch/{id}/update', [
-        'as' => 'dispatch.update',
-        'uses' => 'DispatchController@updateDispatch'
-    ]);
+    Route::post('/dispatch/{id}/update', 'DispatchController@updateDispatch');
 
     Route::post('/dispatch/update-to-be', [
         'as' => 'dispatch.updatetobe',
