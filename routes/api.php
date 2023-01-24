@@ -41,67 +41,6 @@ Route::get('/countries', [
     'uses' => 'LocationController@getCountries'
 ]);
 
-
-// Onboarding
-//----------------------------------
-Route::group(['middleware' => 'redirect-if-installed'], function () {
-    Route::get('/onboarding', [
-        'as' => 'admin.onboarding',
-        'uses' => 'OnboardingController@getOnboardingData'
-    ]);
-
-    Route::get('/onboarding/requirements', [
-        'as' => 'admin.onboarding.requirements',
-        'uses' => 'RequirementsController@requirements'
-    ]);
-
-    Route::get('/onboarding/permissions', [
-        'as' => 'admin.onboarding.permissions',
-        'uses' => 'PermissionsController@permissions'
-    ]);
-
-    Route::post('/onboarding/environment/database', [
-        'as' => 'admin.onboarding.database',
-        'uses' => 'EnvironmentController@saveDatabaseEnvironment'
-    ]);
-
-    Route::get('/onboarding/environment/mail', [
-        'as' => 'admin.onboarding.mail',
-        'uses' => 'EnvironmentController@getMailDrivers'
-    ]);
-
-    Route::post('/onboarding/environment/mail', [
-        'as' => 'admin.onboarding.save',
-        'uses' => 'EnvironmentController@saveMailEnvironment'
-    ]);
-
-    Route::post('/onboarding/profile', [
-        'as' => 'admin.profile',
-        'uses' => 'OnboardingController@adminProfile'
-    ]);
-
-    Route::post('/profile/upload-avatar', [
-        'as' => 'admin.on_boarding.avatar',
-        'uses' => 'OnboardingController@uploadAdminAvatar'
-    ]);
-
-    Route::post('/onboarding/company', [
-        'as' => 'admin.company',
-        'uses' => 'OnboardingController@adminCompany'
-    ]);
-
-    Route::post('/onboarding/company/upload-logo', [
-        'as' => 'upload.admin.company.logo',
-        'uses' => 'CompanyController@uploadCompanyLogo'
-    ]);
-
-    Route::post('/onboarding/settings', [
-        'as' => 'admin.settings',
-        'uses' => 'OnboardingController@companySettings'
-    ]);
-});
-
-
 // App version
 // ----------------------------------
 
@@ -157,7 +96,7 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::get('/invoices/estimate/{estimate}', [
-        'as' => 'bootstrap',
+        'as' => 'estimate',
         'uses' => 'InvoicesController@getInvoiceEstimate'
     ]);
 
@@ -234,13 +173,10 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'ExpensesController@delete'
     ]);
 
-    Route::get('/expenses/{id}/show/receipt', [
-        'as' => 'expenses.show',
-        'uses' => 'ExpensesController@showReceipt',
-    ]);
+    Route::get('/expenses/{id}/show/receipt', 'ExpensesController@showReceipt');
 
     Route::post('/expenses/{id}/upload/receipts', [
-        'as' => 'estimate.to.invoice',
+        'as' => 'estimate.to.receipts',
         'uses' => 'ExpensesController@uploadReceipts'
     ]);
 
@@ -284,7 +220,7 @@ Route::group(['middleware' => 'api'], function () {
         ]);
 
         Route::put('/profile', [
-            'as' => 'admin.profile',
+            'as' => 'admin.put.profile',
             'uses' => 'CompanyController@updateAdminProfile'
         ]);
 
@@ -510,7 +446,7 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::get('/dispatch/invoices', [
-        'as' => 'bootstrap',
+        'as' => 'dispatch',
         'uses' => 'DispatchController@getInvoices'
     ]);
 
