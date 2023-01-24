@@ -89,12 +89,12 @@ Route::get('/estimates/pdf/{id}', [
 ]);
 
 Route::get('/customer/invoices/pdf/{id}', [
-    'as' => 'get.invoice.pdf',
+    'as' => 'get.customer.invoice.pdf',
     'uses' => 'FrontendController@getCustomerInvoicePdf'
 ]);
 
 Route::get('/customer/estimates/pdf/{id}', [
-    'as' => 'get.estimate.pdf',
+    'as' => 'get.customer.estimate.pdf',
     'uses' => 'FrontendController@getCustomerEstimatePdf'
 ]);
 
