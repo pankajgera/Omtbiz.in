@@ -71,7 +71,7 @@ Route::group(['middleware' => 'redirect-if-installed'], function () {
     ]);
 
     Route::post('/onboarding/environment/mail', [
-        'as' => 'admin.onboarding.mail',
+        'as' => 'admin.onboarding.save',
         'uses' => 'EnvironmentController@saveMailEnvironment'
     ]);
 
