@@ -28,7 +28,7 @@ class OrdersController extends Controller
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 10;
-        $orders = Orders::with([
+        $pending_orders = Orders::with([
             'orderItems',
             'master'
         ])
@@ -43,14 +43,37 @@ class OrdersController extends Controller
                 'orderBy'
             ]))
             ->whereCompany($request->header('company'), $request['filterBy'])
+            ->where('status', 'DRAFT')
+            ->select('orders.*', 'users.name')
+            ->latest()
+            ->paginate($limit);
+
+        $completed_orders = Orders::with([
+            'orderItems',
+            'master'
+        ])
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->applyFilters($request->only([
+                'status',
+                'order_number',
+                'from_date',
+                'to_date',
+                'search',
+                'orderByField',
+                'orderBy'
+            ]))
+            ->whereCompany($request->header('company'), $request['filterBy'])
+            ->where('status', 'COMPLETED')
             ->select('orders.*', 'users.name')
             ->latest()
             ->paginate($limit);
 
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         $siteData = [
-            'orders' => $orders,
-            'count' => Orders::whereCompany($request->header('company'))->count(),
+            'pending_orders' => $pending_orders,
+            'completed_orders' => $completed_orders,
+            'pending_count' => Orders::whereCompany($request->header('company'))->where('status', 'DRAFT')->count(),
+            'completed_count' => Orders::whereCompany($request->header('company'))->where('status', 'COMPLETED')->count(),
             'sundryDebtorsList' => $sundryDebtorsList
         ];
 

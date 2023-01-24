@@ -11,6 +11,7 @@ class OrderItems extends Model
         'name',
         'description',
         'quantity',
+        'remaining_quantity',
         'company_id',
         'inventory_id',
     ];
@@ -24,11 +25,6 @@ class OrderItems extends Model
     public function order()
     {
         return $this->belongsTo(Order::class, 'id');
-    }
-
-    public function orderItem()
-    {
-        return $this->belongsTo(OrderItems::class);
     }
 
     public function inventory()

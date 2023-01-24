@@ -279,7 +279,7 @@ export default {
   },
   computed: {
      applyFilter() {
-        if (this.filters.estimate_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        if (this.filters.payment_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
         return true;
       } return false;
     },

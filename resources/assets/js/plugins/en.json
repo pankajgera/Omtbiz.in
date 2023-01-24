@@ -497,6 +497,7 @@
         "ref_no": "REF NO.",
         "number": "NUMBER",
         "due_amount": "AMOUNT DUE",
+        "remaining_quantity": "Remaining Quantity",
         "partially_paid": "Partially Paid",
         "total": "Total",
         "discount": "Discount",

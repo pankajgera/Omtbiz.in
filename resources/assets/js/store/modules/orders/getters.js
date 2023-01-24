@@ -1,10 +1,16 @@
-export const orders = (state) => state.orders
+export const pendingOrders = (state) => state.pendingOrders
+export const completedOrders = (state) => state.completedOrders
 export const selectAllField = (state) => state.selectAllField
 export const getTemplateId = (state) => state.orderTemplateId
 export const selectedOrders = (state) => state.selectedOrders
-export const totalOrders = (state) => state.totalOrders
+export const totalPendingOrders = (state) => state.totalPendingOrders
+export const totalCompletedOrders = (state) => state.totalCompletedOrders
 export const selectedCustomer = (state) => state.selectedCustomer
-export const getOrder = (state) => (id) => {
+export const getPendingOrder = (state) => (id) => {
   let invId = parseInt(id)
-  return state.orders.find(order => order.id === invId)
+  return state.pendingOrders.find(order => order.id === invId)
+}
+export const getCompletedOrder = (state) => (id) => {
+  let invId = parseInt(id)
+  return state.completedOrders.find(order => order.id === invId)
 }
