@@ -27,13 +27,13 @@
   <div class="modal-dialog mt-5 pt-5">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">OmtBiz calculator</h5>
+        <h5 class="modal-title"> Calculator</h5>
         <button type="button" @click="closeModal" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <vue-advanced-calculator description="Advance Cacluclator" title="OmtBiz Cacluclator"/>
+      <vue-advanced-calculator description="Advance Cacluclator" title="Cacluclator"/>
       </div>
     </div>
   </div>
@@ -44,6 +44,13 @@
 <style>
 .justify-content-between .btn-sm {
   visibility:hidden !important
+}
+.sidebar-left .modal {
+  width:auto;
+  height:auto;
+  bottom:0 !important;
+  top:30%;
+  left:10px;
 }
 </style>
 <script type="text/babel">
