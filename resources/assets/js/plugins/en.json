@@ -2,6 +2,7 @@
     "navigation": {
         "dashboard": "Dashboard",
         "customers": "Customers",
+        "calculator": "Calculator",
         "items": "Bill-ty",
         "bills": "Raw Bill",
         "invoices": "Invoices",
