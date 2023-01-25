@@ -89,6 +89,7 @@ import SettingsLayout from './views/settings/layout/Index.vue'
 import CompanyInfo from './views/settings/CompanyInfo.vue'
 import Customization from './views/settings/Customization.vue'
 import Notifications from './views/settings/Notifications.vue'
+import Calculator from './views/settings/Calculator.vue'
 import Preferences from './views/settings/Preferences.vue'
 import UserProfile from './views/settings/UserProfile.vue'
 import TaxTypes from './views/settings/TaxTypes.vue'
@@ -555,7 +556,12 @@ const routes = [
                 component: BankCreate,
                 meta: ['admin']
             },
-
+            {
+                path: 'calculator',
+                name: 'calculator',
+                component: Calculator,
+                meta: ['admin', 'accountant', 'employee']
+            },
             // Dispatch
             {
               path: 'dispatch',
