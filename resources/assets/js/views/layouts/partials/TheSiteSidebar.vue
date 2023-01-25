@@ -159,13 +159,6 @@ export default {
           //   route: '/bank',
           //   meta: ['admin']
           // },
-           {
-            title: 'navigation.calculator',
-            icon: "file",
-            iconType: "fa",
-            route: '/calculator',
-            meta: ["admin", "accountant", "employee"],
-          },
         ],
         [
           // {
