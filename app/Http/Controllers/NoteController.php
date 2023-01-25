@@ -38,7 +38,7 @@ class NoteController extends Controller
 
         return response()->json([
             'note' => $note,
-            'image' => $image_upload->image_path,
+            'image' => $image_upload ? $image_upload->image_path : null,
         ]);
     }
 
