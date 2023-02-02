@@ -131,12 +131,12 @@
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
-            <v-dropdown-item>
+            <!-- <v-dropdown-item>
               <div class="dropdown-item" @click="multipleDispatch('draft')">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.dispatch') }}
               </div>
-            </v-dropdown-item>
+            </v-dropdown-item> -->
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleDispatch('draft')">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -328,12 +328,6 @@
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="multipleDispatch('sent')">
-                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.undispatch') }}
-              </div>
-            </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleDispatch('sent')">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -778,70 +772,70 @@ export default {
         }
       })
     },
-    async multipleDispatch (type) {
-      let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));
-      let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));
-      let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);
-      if (type === 'draft') {
-        modal_text = this.$tc('dispatch.confirm_dispatch', 2);
-      }
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: modal_text,
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: false
-      }).then(async (willSend) => {
-        if (willSend) {
-          if ('sent' === type) {
-            let name = '';
-            dispatchArray.map(i => {
-              if (name && name !== i.master.name) {
-                 window.toastr['error']('To move multiple dispatch, party name should be same.')
-                 return
-              }
-            });
-            let res = await this.moveMultipleDispatch(this.selectedDispatch)
-            if (res) {
-              window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
-              window.location.reload()
-            } else {
-              window.toastr['error'](res.data.message)
-            }
-          } else {
-            let name = '';
-            let allowMoving = true;
-            let showEdit = [];
-            tobeDispatchArray.some(i => {
-              if (name && name !== i.master.name) {
-                 window.toastr['error']('To move multiple dispatch, party name should be same.')
-                 allowMoving = false
-                 return true
-              }
-              name = i.master.name
-              if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
-                showEdit.push(i)
-                allowMoving = false
-              }
-            })
-            if (showEdit.length) {
-              showEdit.map(i => {
-                window.open('/dispatch/' + i.id + '/edit', '_blank').focus()
-              })
-            }
-            if (allowMoving) {
-              let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)
-              if (res) {
-                window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
-                window.location.reload()
-              } else {
-                window.toastr['error'](res.data.message)
-              }
-            }
-          }
-        }
-      })
-    },
+    // async multipleDispatch (type) {
+    //   let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));
+    //   let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));
+    //   let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);
+    //   if (type === 'draft') {
+    //     modal_text = this.$tc('dispatch.confirm_dispatch', 2);
+    //   }
+    //   swal({
+    //     title: this.$t('general.are_you_sure'),
+    //     text: modal_text,
+    //     icon: '/assets/icon/paper-plane-solid.svg',
+    //     buttons: true,
+    //     dangerMode: false
+    //   }).then(async (willSend) => {
+    //     if (willSend) {
+    //       if ('sent' === type) {
+    //         let name = '';
+    //         dispatchArray.map(i => {
+    //           if (name && name !== i.master.name) {
+    //              window.toastr['error']('To move multiple dispatch, party name should be same.')
+    //              return
+    //           }
+    //         });
+    //         let res = await this.moveMultipleDispatch(this.selectedDispatch)
+    //         if (res) {
+    //           window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+    //           window.location.reload()
+    //         } else {
+    //           window.toastr['error'](res.data.message)
+    //         }
+    //       } else {
+    //         let name = '';
+    //         let allowMoving = true;
+    //         let showEdit = [];
+    //         tobeDispatchArray.some(i => {
+    //           if (name && name !== i.master.name) {
+    //              window.toastr['error']('To move multiple dispatch, party name should be same.')
+    //              allowMoving = false
+    //              return true
+    //           }
+    //           name = i.master.name
+    //           if (!i.person || !i.transport || i.invoices && !i.invoices.length) {
+    //             showEdit.push(i)
+    //             allowMoving = false
+    //           }
+    //         })
+    //         if (showEdit.length) {
+    //           showEdit.map(i => {
+    //             window.open('/dispatch/' + i.id + '/edit', '_blank').focus()
+    //           })
+    //         }
+    //         if (allowMoving) {
+    //           let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)
+    //           if (res) {
+    //             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))
+    //             window.location.reload()
+    //           } else {
+    //             window.toastr['error'](res.data.message)
+    //           }
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
     async singleDispatch (id) {
       let data = this.toBeDispatch.find(i => i.id === id);
       data.invoice_id = data.invoices.map(i => i.id.toString())
