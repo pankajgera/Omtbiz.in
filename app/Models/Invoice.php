@@ -118,6 +118,11 @@ class Invoice extends Model
         return $this->belongsTo(AccountMaster::class, 'account_master_id');
     }
 
+    public function dispatch()
+    {
+        return $this->belongsTo(Dispatch::class, 'dispatch_id');
+    }
+
     private function strposX($haystack, $needle, $number)
     {
         if ($number == '1') {
