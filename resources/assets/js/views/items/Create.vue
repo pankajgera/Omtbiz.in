@@ -4,7 +4,7 @@
       <h3 class="page-title">{{ isEdit ? $t('items.edit_bill') : $t('items.new_bill') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
-        <li class="breadcrumb-item"><router-link slot="item-title" to="/items">{{ $tc('items.bill_ty',2) }}</router-link></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/bill-ty">{{ $tc('items.bill_ty',2) }}</router-link></li>
         <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('items.edit_bill') : $t('items.new_bill') }}</a></li>
       </ol>
     </div>
@@ -219,7 +219,7 @@ export default {
       'updateItem'
     ]),
     async fetchDispatch () {
-      let response = await axios.get(`/api/items/dispatch`)
+      let response = await axios.get(`/api/bill-ty/dispatch`)
       if (response.data) {
         let unique = response.data.dispatch.filter(function({name}) {
             var key = `${name}`;
@@ -274,7 +274,7 @@ export default {
         if (response.data) {
           this.isLoading = false
           window.toastr['success'](this.$tc('items.updated_message'))
-          this.$router.push('/items')
+          this.$router.push('/bill-ty')
           return true
         }
         window.toastr['error'](response.data.error)
@@ -282,7 +282,7 @@ export default {
         let response = await this.addItem(this.formData)
         if (response.data) {
           window.toastr['success'](this.$tc('items.created_message'))
-          this.$router.push('/items')
+          this.$router.push('/bill-ty')
           this.isLoading = false
           return true
         }

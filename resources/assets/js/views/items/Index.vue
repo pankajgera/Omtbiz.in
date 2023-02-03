@@ -15,7 +15,7 @@
           </base-button>
         </div>
         <div>
-          <router-link slot="item-title" to="items/create">
+          <router-link slot="item-title" to="bill-ty/create">
             <base-button
               color="theme"
               icon="plus"
@@ -68,7 +68,7 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('items/create')"
+          @click="$router.push('bill-ty/create')"
         >
           {{ $t('items.add_new_item') }}
         </base-button>
@@ -136,7 +136,7 @@
             show="party_name"
           >
             <template slot-scope="row">
-              <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+              <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                 {{ row.party_name ? row.party_name : row.name }}
                 </router-link>
             </template>
@@ -183,7 +183,7 @@
                 </a>
                 <v-dropdown-item>
 
-                  <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                  <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                     <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                     {{ $t('general.edit') }}
                   </router-link>
@@ -262,7 +262,7 @@
             show="party_name"
           >
             <template slot-scope="row">
-              <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+              <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                 {{ row.party_name ? row.party_name : row.name }}
               </router-link>
             </template>
@@ -308,7 +308,7 @@
                   <dot-icon />
                 </a>
                 <v-dropdown-item>
-                  <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                  <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                     <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                     {{ $t('general.edit') }}
                   </router-link>

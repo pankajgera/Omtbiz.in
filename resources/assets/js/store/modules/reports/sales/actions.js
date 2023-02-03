@@ -12,7 +12,7 @@ export const loadLinkByCustomer = ({ commit, dispatch, state }, url) => {
 
 export const loadLinkByItems = ({ commit, dispatch, state }, url) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/reports/sales/items/link`).then((response) => {
+    window.axios.get(`/api/reports/sales/bill-ty/link`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)

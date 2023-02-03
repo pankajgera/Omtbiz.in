@@ -2,7 +2,7 @@ import * as types from './mutation-types'
 
 export const fetchItems = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/items`, {params}).then((response) => {
+    window.axios.get(`/api/bill-ty`, {params}).then((response) => {
       commit(types.BOOTSTRAP_ITEMS, [response.data.items.data, response.data.itemsToBe.data])
       commit(types.SET_TOTAL_ITEMS, response.data.items.total)
       commit(types.SET_TOTAL_ITEMS_TO_BE, response.data.itemsToBe.total)
@@ -15,7 +15,7 @@ export const fetchItems = ({ commit, dispatch, state }, params) => {
 
 export const fetchItem = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/items/${id}/edit`).then((response) => {
+    window.axios.get(`/api/bill-ty/${id}/edit`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -25,7 +25,7 @@ export const fetchItem = ({ commit, dispatch }, id) => {
 
 export const addItem = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.post('/api/items', data).then((response) => {
+    window.axios.post('/api/bill-ty', data).then((response) => {
       commit(types.ADD_ITEM, response.data)
 
       resolve(response)
@@ -37,7 +37,7 @@ export const addItem = ({ commit, dispatch, state }, data) => {
 
 export const updateItem = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
-    window.axios.put(`/api/items/${data.id}`, data).then((response) => {
+    window.axios.put(`/api/bill-ty/${data.id}`, data).then((response) => {
       commit(types.UPDATE_ITEM, response.data)
       resolve(response)
     }).catch((err) => {
@@ -48,7 +48,7 @@ export const updateItem = ({ commit, dispatch, state }, data) => {
 
 export const deleteItem = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/items/${id}`).then((response) => {
+    window.axios.delete(`/api/bill-ty/${id}`).then((response) => {
       commit(types.DELETE_ITEM, response.data)
       resolve(response)
     }).catch((err) => {
@@ -59,7 +59,7 @@ export const deleteItem = ({ commit, dispatch, state }, id) => {
 
 export const deleteMultipleItems = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/items/delete`, {'id': state.selectedItems}).then((response) => {
+    window.axios.post(`/api/bill-ty/delete`, {'id': state.selectedItems}).then((response) => {
       commit(types.DELETE_MULTIPLE_ITEMS, state.selectedItems)
       resolve(response)
     }).catch((err) => {
@@ -69,7 +69,7 @@ export const deleteMultipleItems = ({ commit, dispatch, state }, id) => {
 }
 export const deleteMultipleItemsToBe = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/items/delete`, {'id': state.selectedItemsToBe}).then((response) => {
+    window.axios.post(`/api/bill-ty/delete`, {'id': state.selectedItemsToBe}).then((response) => {
       commit(types.DELETE_MULTIPLE_ITEMS_TO_BE, state.selectedItemsToBe)
       resolve(response)
     }).catch((err) => {
