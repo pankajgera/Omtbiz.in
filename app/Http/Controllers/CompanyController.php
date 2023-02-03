@@ -210,7 +210,7 @@ class CompanyController extends Controller
         $payment_auto_generate = CompanySetting::getSetting('payment_auto_generate', $request->header('company'));
 
         return  response()->json([
-            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
+            'invoice_prefix' => $invoice_prefix,
             'invoice_auto_generate' => $invoice_auto_generate,
             'estimate_prefix' => $estimate_prefix,
             'estimate_auto_generate' => $estimate_auto_generate,
@@ -240,7 +240,6 @@ class CompanyController extends Controller
                 'estimate_prefix',
             ];
         }
-
         foreach ($sets as $key) {
             CompanySetting::setSetting($key, $request->$key, $request->header('company'));
         }
