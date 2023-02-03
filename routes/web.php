@@ -18,7 +18,7 @@ Route::group(['prefix' => 'reports'], function () {
 
     // sales report by items
     //----------------------------------
-    Route::get('/sales/items/{hash}', [
+    Route::get('/sales/bill-ty/{hash}', [
         'as' => 'get.sales.items',
         'uses' => 'ReportController@itemsSalesReport'
     ]);

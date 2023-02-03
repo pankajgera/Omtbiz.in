@@ -69,17 +69,17 @@ Route::group(['middleware' => 'api'], function () {
     // Items
     //----------------------------------
 
-    Route::post('/items/delete', [
+    Route::post('/bill-ty/delete', [
         'as' => 'items.delete',
         'uses' => 'ItemsController@delete'
     ]);
 
-    Route::get('/items/dispatch', [
+    Route::get('/bill-ty/dispatch', [
         'as' => 'items.dispatch',
         'uses' => 'ItemsController@getDispatch'
     ]);
 
-    Route::resource('items', 'ItemsController');
+    Route::resource('bill-ty', 'ItemsController');
 
 
     // Invoices

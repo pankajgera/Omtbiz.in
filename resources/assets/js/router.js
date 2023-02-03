@@ -223,18 +223,18 @@ const routes = [
 
             // Items
             {
-                path: 'items',
+                path: 'bill-ty',
                 component: ItemsIndex,
                 meta: ['admin', 'employee']
             },
             {
-                path: 'items/create',
+                path: 'bill-ty/create',
                 name: 'items.create',
                 component: ItemCreate,
                 meta: ['admin', 'employee']
             },
             {
-                path: 'items/:id/edit',
+                path: 'bill-ty/:id/edit',
                 name: 'items.edit',
                 component: ItemCreate,
                 meta: ['admin', 'employee']
@@ -710,7 +710,7 @@ router.beforeEach((to, from, next) => {
                 return next('/invoices/create')
                 break;
             case 'employee':
-                return next('/items')
+                return next('/bill-ty')
                 break;
             default:
                 return next('/invoices/create')
@@ -734,7 +734,7 @@ router.beforeEach((to, from, next) => {
                     return next('/invoices/create')
                     break;
                 case 'employee':
-                    return next('/items')
+                    return next('/bill-ty')
                     break;
                 default:
                     return next('/invoices/create')
