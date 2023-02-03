@@ -240,7 +240,6 @@ class CompanyController extends Controller
                 'estimate_prefix',
             ];
         }
-        // dd($request->type, $sets);
         foreach ($sets as $key) {
             CompanySetting::setSetting($key, $request->$key, $request->header('company'));
         }
