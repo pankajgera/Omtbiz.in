@@ -346,7 +346,7 @@ class OrdersController extends Controller
         $invoice = Invoice::create([
             'invoice_date' => $invoice_date,
             'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix),
+            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company')),
             //'reference_number' => $order->reference_number,
             'user_id' => $order->user_id,
             'company_id' => $request->header('company'),

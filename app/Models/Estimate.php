@@ -56,10 +56,11 @@ class Estimate extends Model
         'discount_val' => 'integer',
     ];
 
-    public static function getNextEstimateNumber($value)
+    public static function getNextEstimateNumber($value, $company_id)
     {
         // Get the last created order
         $lastOrder = Estimate::where('estimate_number', 'LIKE', $value . '-%')
+                       ->where('company_id', $company_id)
                        ->orderBy('created_at', 'desc')
                        ->first();
 

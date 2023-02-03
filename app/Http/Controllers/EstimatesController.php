@@ -95,7 +95,7 @@ class EstimatesController extends Controller
         $estimate_num_auto_generate = CompanySetting::getSetting('estimate_auto_generate', $request->header('company'));
 
         $nextEstimateNumberAttribute = null;
-        $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix);
+        $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix, $request->header('company'));
 
         if ($estimate_num_auto_generate == "YES") {
             $nextEstimateNumberAttribute = $nextEstimateNumber;
@@ -477,7 +477,7 @@ class EstimatesController extends Controller
         $invoice = Invoice::create([
             'invoice_date' => $invoice_date,
             'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix),
+            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company')),
             //'reference_number' => $estimate->reference_number,
             'user_id' => $estimate->user_id,
             'company_id' => $request->header('company'),
