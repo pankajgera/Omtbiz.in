@@ -327,7 +327,7 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
-        $invoices = Invoice::with(['master', 'dispatch'])->where('status', '!=', 'COMPLETED')
+        $invoices = Invoice::with('master')->where('status', '!=', 'COMPLETED')
             ->whereCompany($request->header('company'))
             ->get();
 
