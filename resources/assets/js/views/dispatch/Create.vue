@@ -19,7 +19,7 @@
                   :multiple="true"
                   v-model="invoice"
                   :show-pointer="false"
-                  :options="invoiceList.filter(node=>node.dispatch_id!==null)"
+                  :options="invoiceList.filter(node=>node.status!=='COMPLETED')"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="true"
