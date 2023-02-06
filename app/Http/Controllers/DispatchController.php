@@ -52,7 +52,7 @@ class DispatchController extends Controller
             ->paginate($limit);
 
         foreach ($dispatch_completed as $processed) {
-            $processed['invoices'] =  Invoice::whereIn('id', explode(',', $processed['invoice_id']))->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            $processed['invoices'] =  Invoice::whereIn('id', explode(',', $processed['invoice_id']))->with('master')->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
             foreach ($processed['invoices'] as $each) {
                 $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
             }
