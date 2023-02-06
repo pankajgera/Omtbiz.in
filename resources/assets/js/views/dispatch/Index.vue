@@ -291,7 +291,7 @@
         >
           <template slot-scope="row">
             <span> {{ $t('dispatch.name') }} </span>
-            <span v-if="row.master">{{ row.master.name }}</span>
+             <span v-if="row.master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
           </template>
         </table-column>
         <table-column
@@ -391,7 +391,7 @@
         >
           <template slot-scope="row">
               <span> {{ $t('dispatch.name') }} </span>
-              <span v-if="row.master">{{ row.master.name }}</span>
+              <span v-if="row.master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
           </template>
         </table-column>
         <table-column
