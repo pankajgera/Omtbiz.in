@@ -127,7 +127,12 @@ class DispatchController extends Controller
             $dispatch->company_id = $request->header('company');
 
             $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+
             foreach ($invoices as $each) {
+                $deleteing_disptach = Dispatch::where('invoice_id', $each->id)->first();
+                if ($deleteing_disptach) {
+                    $deleteing_disptach->delete();
+                }
                 if (!$dispatch->name) {
                     $dispatch->name = $each->invoice_number;
                 } else {
@@ -141,6 +146,7 @@ class DispatchController extends Controller
                 $each->update([
                     'dispatch_id' => $dispatch->id,
                     'paid_status' => 'DISPATCHED',
+                    'status' => $request->status['name'] === 'Sent' ? 'COMPLETED' : 'TO_BE_DISPATCH',
                 ]);
             }
             if ('Sent' === $dispatch->status) {
