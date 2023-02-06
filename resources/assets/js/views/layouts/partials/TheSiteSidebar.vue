@@ -105,7 +105,7 @@ export default {
           {
             title: "navigation.items",
             icon: "file",
-            route: "/items",
+            route: "/bill-ty",
             meta: ["admin", "accountant"],
           },
           {
