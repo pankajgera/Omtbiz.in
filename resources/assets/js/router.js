@@ -244,7 +244,7 @@ const routes = [
             {
               path: 'masters',
               component: MastersIndex,
-              meta: ['admin']
+              meta: ['admin', 'accountant']
             },
             {
                 path: 'masters/create',
@@ -697,24 +697,24 @@ router.beforeEach((to, from, next) => {
     //  Redirect if not authenticated on secured routes
     if (to.matched.some(m => m.meta.requiresAuth)) {
         if (!store.getters['auth/isAuthenticated']) {
+            console.log('d');
             return next('/login')
         }
     }
 
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
+        console.log('matched', role);
         switch (role) {
             case 'admin':
                 return next('/invoices/create')
-                break;
             case 'accountant':
                 return next('/invoices/create')
-                break;
-            case 'employee':
-                return next('/bill-ty')
-                break;
+            case 'estimate':
+                return next('/estimates/create')
+            case 'dispatch':
+                return next('/dispatch/create')
             default:
                 return next('/invoices/create')
-                break;
         }
     }
 
@@ -723,22 +723,26 @@ router.beforeEach((to, from, next) => {
             next()
         } else if (to.meta.includes('accountant') && role === 'accountant') {
             next()
-        } else if (to.meta.includes('employee') && role === 'employee') {
+        } else if (to.meta.includes('estimate') && role === 'estimate') {
             next()
-        } else if (role && role !== 'undefined') {
+        } else if (to.meta.includes('dispatch') && role === 'dispatch') {
+            next()
+        }
+         else if (role && role !== 'undefined') {
+            console.log('length', role);
             switch (role) {
                 case 'admin':
                     return next('/invoices/create')
-                    break;
                 case 'accountant':
                     return next('/invoices/create')
-                    break;
-                case 'employee':
+                case 'accountant':
                     return next('/bill-ty')
-                    break;
+                case 'estimate':
+                return next('/estimates/create')
+                case 'dispatch':
+                    return next('/dispatch/create')
                 default:
                     return next('/invoices/create')
-                    break;
             }
         }
     }

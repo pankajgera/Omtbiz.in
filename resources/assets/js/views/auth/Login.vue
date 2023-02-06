@@ -133,6 +133,7 @@ export default {
       this.isLoading = true
       this.login(this.loginData).then((res) => {
         let role = Ls.get('role');
+        console.log(role);
         switch (role) {
             case 'admin':
                 return this.$router.push('/invoices/create')
@@ -140,8 +141,11 @@ export default {
             case 'accountant':
                 return this.$router.push('/invoices/create')
                 break;
-            case 'employee':
-                return this.$router.push('/bill-ty')
+            case 'dispatch':
+                return this.$router.push('/dispatch/create')
+                break;
+            case 'estimate':
+                return this.$router.push('/estimates/create')
                 break;
             default:
                 return this.$router.push('/')
