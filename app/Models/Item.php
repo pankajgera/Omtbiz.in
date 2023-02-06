@@ -135,7 +135,7 @@ class Item extends Model
         //make an Intervention Image object
         $image = Image::make($request_image);
         $fileName = str_random(30) . '-' . time() . '.jpg';
-        Log::info('$fileName', [$fileName]);
+
         // store our uploaded file in our uploads folder
         // set our results to have our asset path
         $ds = DIRECTORY_SEPARATOR;
@@ -147,11 +147,11 @@ class Item extends Model
         $save_paths['thumb'] = 'userUploads' . $ds . 'thumbnails' . $ds . $timely_url;
         $save_paths['screen'] = 'userUploads' . $ds . 'screen' . $ds . $timely_url;
 
-        foreach ($save_paths as $path) {
-            if (!is_dir($path)) {
-                mkdir($path, 0700, true);
-            }
-        }
+        // foreach ($save_paths as $path) {
+        //     if (!is_dir($path)) {
+        //         mkdir($path, 0700, true);
+        //     }
+        // }
 
         //save Original
         //$image->save($save_paths['original'].$ds.$fileName);

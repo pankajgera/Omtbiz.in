@@ -141,7 +141,7 @@ export default {
                 return this.$router.push('/invoices/create')
                 break;
             case 'employee':
-                return this.$router.push('/items')
+                return this.$router.push('/bill-ty')
                 break;
             default:
                 return this.$router.push('/')

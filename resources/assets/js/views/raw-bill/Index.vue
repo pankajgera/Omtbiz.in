@@ -100,7 +100,7 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('items/create')"
+          @click="$router.push('bill-ty/create')"
         >
           {{ $t('bills.add_new_item') }}
         </base-button>
@@ -198,7 +198,7 @@
               </a>
               <v-dropdown-item>
 
-                <router-link :to="{path: `items/${row.id}/edit`}" class="dropdown-item">
+                <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                   {{ $t('general.edit') }}
                 </router-link>

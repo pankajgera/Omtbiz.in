@@ -79,7 +79,7 @@ class InvoicesController extends Controller
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
-        $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix);
+        $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
 
         if ($invoice_num_auto_generate == "YES") {
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
@@ -91,12 +91,12 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' =>  $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month . '-' . $nextInvoiceNumber,
+            'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
             'inventories' => Inventory::query()->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
-            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
+            'invoice_prefix' => $invoice_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
             'inventory_negative' => ('YES' === $inventory_negative),

@@ -134,7 +134,7 @@ export default {
   },
   mounted () {
     this.customerSiteURL = `/reports/sales/customers/${this.getSelectedCompany.unique_hash}`
-    this.itemsSiteURL = `/reports/sales/items/${this.getSelectedCompany.unique_hash}`
+    this.itemsSiteURL = `/reports/sales/bill-ty/${this.getSelectedCompany.unique_hash}`
     this.getInitialReport()
   },
   methods: {
