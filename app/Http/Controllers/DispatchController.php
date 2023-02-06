@@ -194,6 +194,8 @@ class DispatchController extends Controller
 
                 $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
                 foreach ($invoices as $each) {
+                    $each->status = 'COMPLETED';
+                    $each->save();
                     if (!$dispatch->name) {
                         $dispatch->update([
                             'name' => $each->invoice_number,
