@@ -16,10 +16,10 @@
               <div class="form-group" v-if="invoiceList && invoiceList.length && !change_invoice">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
-                  :multiple="true"
                   v-model="invoice"
+                  :multiple="true"
                   :show-pointer="false"
-                  :options="invoiceList.filter(node=>node.status!=='COMPLETED')"
+                  :options="isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="true"
@@ -220,8 +220,10 @@ export default {
       }
     },
     invoiceWithAmount ({ invoice_number, due_amount, master}) {
-      let count = this.invoice.filter(i => i.account_master_id === master.id).length;
-      return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
+      if (this.invoice.length) {
+        let count = this.invoice.filter(i => i.account_master_id === master.id).length;
+        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
+      }
     },
     loadInvoice() {
       this.invoice = []
@@ -275,7 +277,6 @@ export default {
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
-        console.log(response.data.invoices)
         this.invoiceList = response.data.invoices
         if (this.isEdit) {
           this.loadEditData()

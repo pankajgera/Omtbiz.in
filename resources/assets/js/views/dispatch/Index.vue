@@ -35,7 +35,7 @@
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('items.party_name') }} </label>
             <base-select
-             v-model="filters.name"
+              v-model="filters.name"
               ref="customerSelect"
               :options="sundryDebtorsList"
               :required="'required'"
@@ -55,7 +55,7 @@
                 :calendar-button="true"
                 calendar-button-icon="calendar"
               />
-             
+
           </div>
           <div class="col-sm-3">
            <label>{{ $t('general.to') }}</label>
@@ -64,7 +64,7 @@
                 :calendar-button="true"
                 calendar-button-icon="calendar"
               />
-             
+
           </div>
           <div class="col-sm-2">
             <label class="form-label"> {{ $tc('dispatch.status') }} </label>
@@ -291,7 +291,7 @@
         >
           <template slot-scope="row">
             <span> {{ $t('dispatch.name') }} </span>
-             <span v-if="row.master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
+             <span v-if="row.invoices.length && row.invoices[0].master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
           </template>
         </table-column>
         <table-column
@@ -350,7 +350,7 @@
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
-      
+
       <table-component
         ref="tableDispatch"
         :data="dipatchedCompletedData"
@@ -381,7 +381,7 @@
           <template slot-scope="row">
               <router-link :to="{path: `dispatch/${row.id}/edit`}" >
                 <span> {{ $t('dispatch.invoice_id') }} </span>
-                
+
                 <span v-if="row.invoices.length ">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
             </router-link>
           </template>
@@ -460,13 +460,11 @@
             </div>
           </template>
         </table-column>
-       <table-column
-          :label="$t('dispatch.invoice_id')"
-        >
+       <table-column :label="$t('dispatch.invoice_id')">
           <template slot-scope="row">
               <router-link :to="{path: `dispatch/${row.id}/edit`}" >
                 <span> {{ $t('dispatch.invoice_id') }} </span>
-                
+
                 <span v-if="row.invoices.length ">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>
             </router-link>
           </template>
@@ -552,8 +550,9 @@ export default {
   computed: {
       applyFilter() {
         if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {
-        return true;
-      } return false;
+          return true;
+        }
+        return false;
     },
     ...mapGetters('dispatch', [
       'dispatch',
@@ -637,7 +636,6 @@ export default {
       this.$refs.tableDispatch1.refresh()
       this.$refs.toBeTableDispatch1.refresh()
       this.$refs.toBeTableDispatch.refresh()
-     
     },
     async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
@@ -664,7 +662,7 @@ export default {
         }
       }
     },
-     onSelectCustomer (customer) {
+    onSelectCustomer (customer) {
       this.filters.name = customer.name
     },
     async clearCustomerSearch (removedOption, id) {
@@ -687,7 +685,6 @@ export default {
       this.isRequestOngoing = true
       let response = await this.dipatchedData(data)
       this.isRequestOngoing = false
-      console.log( response.data.dispatch_completed.data);
       return {
         data: response.data.dispatch_completed.data,
         pagination: {
@@ -870,7 +867,7 @@ export default {
         })
     },
     printDispatched() {
-      
+
         printJS({
           printable: 'to_print_dispatched',
           type: 'html',

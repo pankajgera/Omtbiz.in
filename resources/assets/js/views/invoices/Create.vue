@@ -713,7 +713,6 @@ export default {
           window.toastr['error'](err)
           return true
         }
-        console.log(err)
       })
     },
     submitUpdate (data) {
@@ -739,7 +738,6 @@ export default {
           window.toastr['error'](err)
           return true
         }
-        console.log(err)
       })
     },
     checkInventoryData (index, isValid) {

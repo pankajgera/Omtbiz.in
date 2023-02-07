@@ -697,13 +697,11 @@ router.beforeEach((to, from, next) => {
     //  Redirect if not authenticated on secured routes
     if (to.matched.some(m => m.meta.requiresAuth)) {
         if (!store.getters['auth/isAuthenticated']) {
-            console.log('d');
             return next('/login')
         }
     }
 
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
-        console.log('matched', role);
         switch (role) {
             case 'admin':
                 return next('/invoices/create')
@@ -729,7 +727,6 @@ router.beforeEach((to, from, next) => {
             next()
         }
          else if (role && role !== 'undefined') {
-            console.log('length', role);
             switch (role) {
                 case 'admin':
                     return next('/invoices/create')
