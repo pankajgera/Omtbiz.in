@@ -35,7 +35,7 @@
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('items.party_name') }} </label>
             <base-select
-             v-model="filters.name"
+              v-model="filters.name"
               ref="customerSelect"
               :options="sundryDebtorsList"
               :required="'required'"
@@ -291,7 +291,7 @@
         >
           <template slot-scope="row">
             <span> {{ $t('dispatch.name') }} </span>
-             <span v-if="row.master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
+             <span v-if="row.invoices.length && row.invoices[0].master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
           </template>
         </table-column>
         <table-column
@@ -460,9 +460,7 @@
             </div>
           </template>
         </table-column>
-       <table-column
-          :label="$t('dispatch.invoice_id')"
-        >
+       <table-column :label="$t('dispatch.invoice_id')">
           <template slot-scope="row">
               <router-link :to="{path: `dispatch/${row.id}/edit`}" >
                 <span> {{ $t('dispatch.invoice_id') }} </span>
@@ -552,8 +550,9 @@ export default {
   computed: {
       applyFilter() {
         if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {
-        return true;
-      } return false;
+          return true;
+        }
+        return false;
     },
     ...mapGetters('dispatch', [
       'dispatch',
@@ -637,7 +636,6 @@ export default {
       this.$refs.tableDispatch1.refresh()
       this.$refs.toBeTableDispatch1.refresh()
       this.$refs.toBeTableDispatch.refresh()
-
     },
     async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
