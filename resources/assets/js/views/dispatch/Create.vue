@@ -16,10 +16,10 @@
               <div class="form-group" v-if="invoiceList && invoiceList.length && !change_invoice">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
-                  :multiple="true"
                   v-model="invoice"
+                  :multiple="true"
                   :show-pointer="false"
-                  :options="invoiceList.filter(node=>node.status!=='COMPLETED')"
+                  :options="isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="true"
