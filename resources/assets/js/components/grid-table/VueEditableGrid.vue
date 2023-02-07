@@ -278,7 +278,6 @@ export default {
       const visibleCount = Math.ceil(body.clientHeight / itemHeight) + 1 + this.virtualScrollOffset
       this.offsetRows = offset
       this.visibleRows = this.rowDataPage.slice(offset, offset + visibleCount)
-      console.log(this.rowDataPage)
     },
     filtersChanged () {
       this.page = 0

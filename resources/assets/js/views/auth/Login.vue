@@ -133,7 +133,6 @@ export default {
       this.isLoading = true
       this.login(this.loginData).then((res) => {
         let role = Ls.get('role');
-        console.log(role);
         switch (role) {
             case 'admin':
                 return this.$router.push('/invoices/create')

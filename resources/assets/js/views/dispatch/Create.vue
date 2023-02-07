@@ -275,7 +275,6 @@ export default {
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
-        console.log(response.data.invoices)
         this.invoiceList = response.data.invoices
         if (this.isEdit) {
           this.loadEditData()

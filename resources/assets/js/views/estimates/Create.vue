@@ -574,7 +574,6 @@ export default {
           this.reset()
         }
       }).catch((err) => {
-        console.log(err)
         this.isLoading = false
         if (err) {
           window.toastr['error'](err)
