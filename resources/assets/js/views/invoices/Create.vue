@@ -140,7 +140,7 @@
           <invoice-inventory
             v-for="(each, index) in inventoryBind"
             ref="invoiceInventory"
-            :key="each.name+index"
+            :key="each.name+index+'-'+each.id"
             :index="index"
             :inventory-data="each"
             :currency="currency"
@@ -553,6 +553,8 @@ export default {
         filter: {},
         orderByField: '',
         orderBy: ''
+      }).then(resp => {
+        this.inventoryList = resp.data.inventories.data
       })
     },
     async loadData () {
@@ -566,7 +568,6 @@ export default {
         }
         if (response.data) {
           this.newInvoice = response.data.invoice
-          this.inventoryList = response.data.invoice.inventories
           this.inventoryNegative = response.data.inventory_negative
           this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
@@ -590,7 +591,6 @@ export default {
         this.selectedCurrency = this.defaultCurrency
         this.invoiceTemplates = response.data.invoiceTemplates
         this.newInvoice.invoice_date = response.data.invoice_today_date
-        this.inventoryList = response.data.inventories
         this.inventoryNegative = response.data.inventory_negative
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
@@ -630,6 +630,7 @@ export default {
       })
     },
     updateInventory (data) {
+      console.log('data', data)
       if (data.inventory && !data.inventory.inventory_id) {
         return false
       }
@@ -731,7 +732,6 @@ export default {
           this.isLoading = false
           window.toastr['error'](this.$t('invoices.invalid_due_amount_message'))
         }
-
       }).catch((err) => {
         this.isLoading = false
         if (err) {
