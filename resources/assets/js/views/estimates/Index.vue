@@ -199,7 +199,7 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'estimate'">
+                <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'estimate' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -211,7 +211,7 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin' || role === 'estimate'">
+                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin' || role === 'estimate' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -329,7 +329,7 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin' || role === 'estimate'">
+                <div class="dropdown-item" @click="removeEstimate(row.id)" v-if="role === 'admin' || role === 'estimate' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
