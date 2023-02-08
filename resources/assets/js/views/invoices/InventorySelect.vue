@@ -6,14 +6,16 @@
       :options="inventoriesOptions"
       :show-labels="true"
       :preserve-search="false"
+      :allow-empty="false"
+      :searchable="true"
       :initial-search="inventory.name"
+      :custom-label="customLabel"
       :invalid="invalid"
       :placeholder="$t('invoices.inventory.select_an_inventory')"
       :do-not-select-default="true"
       :disabled="isDisable"
       label="name"
       track-by="id"
-      class="multi-select-inventory remove-extra"
       @value="onTextChange"
     >
       <div slot="afterList">
@@ -25,18 +27,13 @@
     </base-select>
   </div>
 </template>
-<style>
-div.remove-extra div.multiselect__tags span.multiselect__single{
-    display: none !important;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
   props: {
     inventory: {
-      type: Object,
+      type: [Object, Array],
       required: true
     },
     invalid: {
@@ -62,9 +59,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('inventory', [
-      'inventories'
-    ]),
+    // ...mapGetters('inventory', [
+    //   'inventories'
+    // ]),
     inventoriesOptions() {
       //First array item to add "End of list" option
       let array = [];
@@ -77,7 +74,7 @@ export default {
         sale_price: 0,
         unit: "pc",
       })
-      array.push(...this.inventories)
+      array.push(...this.inventory)
       return array
     },
     inventorySelected: {
@@ -107,6 +104,12 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    customLabel ({ name, sale_price, quantity }) {
+      if (name !== 'End of List') {
+        return `${name} - ₹${sale_price} (${quantity})`
+      }
+      return `${name}`
+    },
     async searchInventory (search) {
       let data = {
         filter: {

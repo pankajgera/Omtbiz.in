@@ -630,7 +630,6 @@ export default {
       })
     },
     updateInventory (data) {
-      console.log('data', data)
       if (data.inventory && !data.inventory.inventory_id) {
         return false
       }

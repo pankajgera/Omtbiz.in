@@ -174,10 +174,10 @@ class InvoicesController extends Controller
                 $inventory_id = $inventory->id;
                 //Reset inventory quantity
                 $invent = Inventory::find($inventory->inventory_id);
-                $quan = (int) ($inventory->quantity);
+                $quantity_used = (int) ($inventory->quantity);
                 if ($invent) {
                     $invent->update([
-                        'quantity' => $invent->quantity - $quan,
+                        'quantity' => $invent->quantity > $quantity_used ? $invent->quantity - $quantity_used : $quantity_used - $invent->quantity,
                     ]);
                 }
             }
@@ -462,10 +462,11 @@ class InvoicesController extends Controller
 
             //Reset inventory quantity
             $invent = Inventory::find($inventory->inventory_id);
-            $quan = (int) ($inventory->quantity);
+            $quantity_used = (int) ($inventory->quantity);
             if ($invent) {
+                \Log::info('update1', [$invent->quantity, $quantity_used]);
                 $invent->update([
-                    'quantity' => $invent->quantity - $quan,
+                    'quantity' => $invent->quantity - $quantity_used,
                 ]);
             }
         }
@@ -531,10 +532,12 @@ class InvoicesController extends Controller
 
             //Reset inventory quantity
             $invent = Inventory::find($item->inventory_id);
-            $quan = (int) ($item->quantity);
+            $quantity_used = (int) ($item->quantity);
             if ($invent) {
+                \Log::info('update2', [(int) ($invent->quantity), $quantity_used]);
+                $difference = (int) ($invent->quantity) - $quantity_used;
                 $invent->update([
-                    'quantity' => $invent->quantity - $quan,
+                    'quantity' => $invent->quantity > $quantity_used ? $invent->quantity - $quantity_used : $quantity_used + $invent->quantity,
                 ]);
             }
 
