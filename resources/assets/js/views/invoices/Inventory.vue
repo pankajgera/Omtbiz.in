@@ -26,6 +26,7 @@
                   :invalid-description="$v.inventory.description.$error"
                   :inventory="inventoryList"
                   :is-disable="isDisable"
+                  :picked-inventory="inventoryData"
                   @search="searchVal"
                   @select="onSelectInventory"
                   @deselect="deselectInventory"

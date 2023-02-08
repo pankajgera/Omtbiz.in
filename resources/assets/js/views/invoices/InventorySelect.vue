@@ -29,6 +29,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { selectInventory } from '../../store/modules/inventory/actions';
 
 export default {
   props: {
@@ -50,11 +51,15 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    pickedInventory: {
+      type: [Object],
+      required: false
     }
   },
   data () {
     return {
-      selectedInventory: null,
+      newInventory: this.pickedInventory && this.pickedInventory.id ? this.pickedInventory : null,
       loading: false,
     }
   },
@@ -80,13 +85,13 @@ export default {
     inventorySelected: {
       cache: false,
       get() {
-        return this.selectedInventory
+        return this.newInventory
       },
       set(newVal) {
         if (0 === newVal.id) {
           this.$emit('endlist', true)
         } else {
-          this.selectedInventory = newVal
+          this.newInventory = newVal
           this.$emit('select', newVal)
         }
       }
@@ -135,10 +140,6 @@ export default {
         'title': 'Add Inventory',
         'componentName': 'InventoryModal'
       })
-    },
-    deselectInventory () {
-      this.inventorySelected = null
-      this.$emit('deselect')
     },
     showEndList(val) {
       this.$emit('endlist', true)
