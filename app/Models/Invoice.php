@@ -74,7 +74,7 @@ class Invoice extends Model
             $number = 0;
         } else {
             $number = explode("-", $lastOrder->invoice_number);
-            $number = $number[2];
+            $number = $number[1];
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001

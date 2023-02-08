@@ -402,7 +402,7 @@ const routes = [
                 path: 'invoices/:id/edit',
                 name: 'invoices.edit',
                 component: InvoiceCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
 
             // Payments
