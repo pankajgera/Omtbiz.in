@@ -188,7 +188,7 @@
                 <dot-icon />
               </a>
               <v-dropdown-item>
-                <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -204,7 +204,7 @@
                 </a>
               </v-dropdown-item> -->
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removePayment(row.id)" v-if="role === 'admin'">
+                <div class="dropdown-item" @click="removePayment(row.id)" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
