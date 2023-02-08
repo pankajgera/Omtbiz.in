@@ -643,6 +643,11 @@ class InvoicesController extends Controller
             ]);
         }
 
+        $vouchers = Voucher::where('invoice_id', $id)->get();
+        foreach ($vouchers as $each) {
+            $each->delete();
+        }
+
         $invoice = Invoice::destroy($id);
 
         return response()->json([
@@ -666,6 +671,12 @@ class InvoicesController extends Controller
                     'error' => 'payment_attached',
                 ]);
             }
+
+        }
+
+        $vouchers = Voucher::where('invoice_id', $id)->get();
+        foreach ($vouchers as $each) {
+            $each->delete();
         }
 
         $invoice = Invoice::destroy($request->id);
