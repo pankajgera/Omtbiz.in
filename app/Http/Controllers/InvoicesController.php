@@ -398,7 +398,7 @@ class InvoicesController extends Controller
         }
 
         return response()->json([
-            'invoiceNumber' =>  $invoice->reference_number,
+            'invoiceNumber' =>  $invoice->invoice_number,
             'invoice' => $invoice,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $invoice->tax_per_item,
