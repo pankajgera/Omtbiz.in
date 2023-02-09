@@ -6,14 +6,16 @@
       :options="inventoriesOptions"
       :show-labels="true"
       :preserve-search="false"
+      :allow-empty="false"
+      :searchable="true"
       :initial-search="inventory.name"
+      :custom-label="customLabel"
       :invalid="invalid"
       :placeholder="$t('invoices.inventory.select_an_inventory')"
       :do-not-select-default="true"
       :disabled="isDisable"
       label="name"
       track-by="id"
-      class="multi-select-inventory remove-extra"
       @value="onTextChange"
     >
       <div slot="afterList">
@@ -25,18 +27,14 @@
     </base-select>
   </div>
 </template>
-<style>
-div.remove-extra div.multiselect__tags span.multiselect__single{
-    display: none !important;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { selectInventory } from '../../store/modules/inventory/actions';
 
 export default {
   props: {
     inventory: {
-      type: Object,
+      type: [Object, Array],
       required: true
     },
     invalid: {
@@ -53,18 +51,22 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    pickedInventory: {
+      type: [Object],
+      required: false
     }
   },
   data () {
     return {
-      selectedInventory: null,
+      newInventory: this.pickedInventory && this.pickedInventory.id ? this.pickedInventory : null,
       loading: false,
     }
   },
   computed: {
-    ...mapGetters('inventory', [
-      'inventories'
-    ]),
+    // ...mapGetters('inventory', [
+    //   'inventories'
+    // ]),
     inventoriesOptions() {
       //First array item to add "End of list" option
       let array = [];
@@ -77,19 +79,19 @@ export default {
         sale_price: 0,
         unit: "pc",
       })
-      array.push(...this.inventories)
+      array.push(...this.inventory)
       return array
     },
     inventorySelected: {
       cache: false,
       get() {
-        return this.selectedInventory
+        return this.newInventory
       },
       set(newVal) {
         if (0 === newVal.id) {
           this.$emit('endlist', true)
         } else {
-          this.selectedInventory = newVal
+          this.newInventory = newVal
           this.$emit('select', newVal)
         }
       }
@@ -107,6 +109,12 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    customLabel ({ name, sale_price }) {
+      if (name !== 'End of List') {
+        return `${name} - ₹${sale_price}`
+      }
+      return `${name}`
+    },
     async searchInventory (search) {
       let data = {
         filter: {
@@ -132,10 +140,6 @@ export default {
         'title': 'Add Inventory',
         'componentName': 'InventoryModal'
       })
-    },
-    deselectInventory () {
-      this.inventorySelected = null
-      this.$emit('deselect')
     },
     showEndList(val) {
       this.$emit('endlist', true)
