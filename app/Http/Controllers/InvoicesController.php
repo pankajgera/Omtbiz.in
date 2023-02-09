@@ -515,10 +515,13 @@ class InvoicesController extends Controller
             'balance' => $total_amount,
         ]);
 
+        $total_invoice_items_amount = 0;
         foreach ($invoiceItems as $single) {
             $single['company_id'] = $request->header('company');
             $single['type'] = 'invoice';
+            $total_invoice_items_amount = $total_invoice_items_amount + $single['total'];
             $new_invoice_item = null;
+
             //Reset inventory quantity
             //Add if quantity is reduce in existing invoice item
             //Subtract if quantity is add in existing invoice item
@@ -556,74 +559,75 @@ class InvoicesController extends Controller
                     'quantity' => $updated_quantity,
                 ]);
             }
+        }
 
-            //Handle vouchers
-            $amount = $single['total'];
-            //It will add voucher for sales from invoice
-            $voucher_1 = Voucher::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->debtors['name'],
-                'company_id' => $company_id,
-                'account_ledger_id' => $dr_account_ledger->id,
-                'type' => 'Dr',
-                'invoice_id' => $invoice->id,
-                'invoice_item_id' => $single['id'] ?? $new_invoice_item->id,
-                'voucher_type' => 'Sales',
-            ], [
-                'debit' => $amount,
-                'credit' => 0,
-                'date' => Carbon::now()->toDateTimeString(),
-                'related_voucher' => null,
-            ]);
-            $voucher_2 = Voucher::firstOrCreate([
-                'account_master_id' => $sale_account_id,
-                'account' => 'Sales',
-                'company_id' => $company_id,
-                'account_ledger_id' => $account_ledger->id,
-                'invoice_id' => $invoice->id,
-                'invoice_item_id' => $single['id'] ?? $new_invoice_item->id,
-                'voucher_type' => 'Sales',
-            ], [
-                'debit' => 0,
-                'credit' => $amount,
-                'date' => Carbon::now()->toDateTimeString(),
-                'related_voucher' => null,
-                'type' => 'Cr',
-            ]);
+        $amount = $total_invoice_items_amount;
+        \Log::info('amount', [$amount]);
+        //It will add voucher for sales from invoice
+        $voucher_1 = Voucher::where([
+            'account_master_id' => $account_master_id,
+            'account' => $request->debtors['name'],
+            'company_id' => $company_id,
+            'account_ledger_id' => $dr_account_ledger->id,
+            'type' => 'Dr',
+            'invoice_id' => $invoice->id,
+            'voucher_type' => 'Sales',
+        ])->first();
+        $voucher_1->update([
+            'debit' => $amount,
+            'credit' => 0,
+            'date' => Carbon::now()->toDateTimeString(),
+            'related_voucher' => null,
+        ]);
 
-            //Now update vouchers id to ledger-bill-no and related_voucher
-            $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-            if ($account_ledger->bill_no) {
-                $account_ledger->update([
-                    'credit' => $account_ledger->credit + $amount,
-                    'balance' => $account_ledger->balance + $amount,
-                    'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-                ]);
-                $dr_account_ledger->update([
-                    'debit' => $dr_account_ledger->debit + $amount,
-                    'balance' => $dr_account_ledger->balance + $amount,
-                    'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-                ]);
-            } else {
-                $account_ledger->update([
-                    'bill_no' => $voucher_ids,
-                ]);
-                $dr_account_ledger->update([
-                    'bill_no' => $voucher_ids,
-                ]);
-            }
-            foreach ($voucher as $key => $each) {
+        $voucher_2 = Voucher::where([
+            'account_master_id' => $sale_account_id,
+            'account' => 'Sales',
+            'company_id' => $company_id,
+            'account_ledger_id' => $account_ledger->id,
+            'invoice_id' => $invoice->id,
+            'voucher_type' => 'Sales',
+        ])->first();
+        $voucher_2->update([
+            'debit' => 0,
+            'credit' => $amount,
+            'date' => Carbon::now()->toDateTimeString(),
+            'related_voucher' => null,
+            'type' => 'Cr',
+        ]);
+
+        //Now update vouchers id to ledger-bill-no and related_voucher
+        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+        if ($account_ledger->bill_no) {
+            $account_ledger->update([
+                'credit' => $account_ledger->credit + $amount,
+                'balance' => $account_ledger->balance + $amount,
+                'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
+            ]);
+            $dr_account_ledger->update([
+                'debit' => $dr_account_ledger->debit + $amount,
+                'balance' => $dr_account_ledger->balance + $amount,
+                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
+            ]);
+        } else {
+            $account_ledger->update([
+                'bill_no' => $voucher_ids,
+            ]);
+            $dr_account_ledger->update([
+                'bill_no' => $voucher_ids,
+            ]);
+        }
+        foreach ($voucher as $key => $each) {
+            $each->update([
+                'invoice_item_id' => $single['id'],
+                'debit' => $each->type === 'Dr' ? $amount : 0,
+                'credit' => $each->type === 'Cr' ? $amount : 0,
+            ]);
+            if ($key < substr_count($voucher_ids, ',') + 1) {
                 $each->update([
-                    'invoice_item_id' => $single['id'],
-                    'debit' => $each->type === 'Dr' ? $amount : 0,
-                    'credit' => $each->type === 'Cr' ? $amount : 0,
+                    'related_voucher' => $voucher_ids,
                 ]);
-                if ($key < substr_count($voucher_ids, ',') + 1) {
-                    $each->update([
-                        'related_voucher' => $voucher_ids,
-                    ]);
-                }
             }
         }
 
