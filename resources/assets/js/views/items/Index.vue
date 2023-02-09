@@ -485,7 +485,7 @@ export default {
       let data = {
         search: this.filters.name !== null ? this.filters.name : '',
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
-        price: this.filters.price * 100,
+        price: this.filters.price ? this.filters.price * 100 : null,
         bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
