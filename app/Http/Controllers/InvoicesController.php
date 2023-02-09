@@ -566,7 +566,15 @@ class InvoicesController extends Controller
         }
 
         //Delete removed invoice items from database
-        InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $existing_invoice_items)->delete();
+        $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $existing_invoice_items)->get();
+        foreach($delete_invoice_items as $del) {
+            $find_invent = Inventory::where('id', $del->inventory_id)->first();
+            //Add deleting item quantity back to inventory
+            $find_invent->update([
+                'quantity' => $find_invent->quantity + $del->quantity,
+            ]);
+            $del->delete();
+        }
 
         $amount = $total_invoice_items_amount;
         //It will add voucher for sales from invoice
