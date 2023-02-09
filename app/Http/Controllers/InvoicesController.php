@@ -398,7 +398,7 @@ class InvoicesController extends Controller
         }
         $number = explode("-", $invoice->invoice_number);
         $number = $number[2];
-           
+
         return response()->json([
             'invoiceNumber' =>   $number,
             'invoice' => $invoice,
