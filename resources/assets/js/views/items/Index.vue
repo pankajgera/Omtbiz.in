@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
        <Header :title="$tc('items.bill_ty', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div  v-show="totalItemsToBe>0 || totalItems>0 || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -32,12 +32,19 @@
       <div v-show="showFilters" class="filter-section">
         <div class="row">
           <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('items.name') }} </label>
-            <base-input
-              v-model.trim="filters.name"
-              type="text"
-              name="name"
-              autocomplete="off"
+            <label class="form-label"> {{ $tc('items.party_name') }} </label>
+            <base-select
+              v-model="filters.name"
+              ref="customerSelect"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              label="name"
+              track-by="id"
+              @select="onSelectCustomer"
+              @deselect="clearCustomerSearch"
             />
           </div>
           <div class="col-sm-4">
@@ -351,6 +358,7 @@ export default {
   data () {
     return {
       id: null,
+      sundryDebtorsList: [],
       breadCrumbLinks:[
         {
           url:'dashboard',
@@ -366,7 +374,7 @@ export default {
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
-        party_name: '',
+        name: '',
         invoice_number: '',
         unit: '',
         bill_ty: ''
@@ -375,6 +383,12 @@ export default {
     }
   },
   computed: {
+       applyFilter() {
+        if (this.filters.name || this.filters.bill_ty ||  this.filters.invoice_number ||  this.filters.unit) {
+          return true;
+        }
+        return false;
+    },
     ...mapGetters('item', [
       'items',
       'itemsToBe',
@@ -459,18 +473,19 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
-        search: this.filters.name !== null ? this.filters.name : '',
+        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
         bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.applyFilter,
         page
       }
 
       this.isRequestOngoing = true
       let response = await this.fetchItems(data)
       this.isRequestOngoing = false
-
+       this.sundryDebtorsList = response.data.sundryDebtorsList;
       return {
         data: response.data.items.data,
         pagination: {
@@ -481,18 +496,19 @@ export default {
     },
     async fetchDataToBe ({ page, filter, sort }) {
       let data = {
-        search: this.filters.name !== null ? this.filters.name : '',
+        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
         bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.applyFilter,
         page
       }
 
       this.isRequestOngoing = true
       let response = await this.fetchItems(data)
       this.isRequestOngoing = false
-
+      this.sundryDebtorsList = response.data.sundryDebtorsList;
       return {
         data: response.data.itemsToBe.data,
         pagination: {
