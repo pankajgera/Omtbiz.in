@@ -28,6 +28,7 @@ class ItemsController extends Controller
 
         $items = Item::where('status', 'Sent')->applyFilters($request->only([
             'search',
+            'name',
             'unit',
             'orderByField',
             'orderBy',
@@ -54,11 +55,12 @@ class ItemsController extends Controller
 
         $itemsToBe = Item::where('status', 'Draft')->applyFilters($request->only([
             'search',
+            'name',
             'unit',
             'orderByField',
             'orderBy',
         ]))->with('images', 'dispatch')
-            ->whereCompany($request->header('company'))
+            ->whereCompany($request->header('company'), $request['filterBy'])
             ->latest()
             ->paginate($limit);
 
@@ -77,11 +79,13 @@ class ItemsController extends Controller
                 $each['dispatch'] = Dispatch::whereIn('id', [$each->dispatch_id])->first();
             }
         }
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
 
         return response()->json([
             'items' => $items,
             'itemsToBe' => $itemsToBe,
             'taxTypes' => TaxType::latest()->get(),
+            'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
 
@@ -275,11 +279,11 @@ class ItemsController extends Controller
             ->whereNotIn('id', $items_already_done)
             ->get();
 
-        foreach($dispatch as $each) {
+        foreach ($dispatch as $each) {
             $obj = new stdClass();
             $obj->invoice = Invoice::whereIn('id', [$each->invoice_id])->get();
             $obj->count = Invoice::whereIn('id', [$each->invoice_id])->count();
-            foreach($obj->invoice as $master) {
+            foreach ($obj->invoice as $master) {
                 $obj->master = AccountMaster::whereIn('id', [$master->account_master_id])->first();
             }
             $each['value'] = $obj;

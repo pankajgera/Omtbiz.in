@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Image;
 use Storage;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -40,9 +41,17 @@ class Item extends Model
         return $query->where('unit', $unit);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereName($query, $name)
+    {
+        $invoices = Invoice::where('account_master_id', $name)->pluck('dispatch_id')->toArray();
+        return $query->whereIn('dispatch_id', $invoices);
+    }
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
         $query->where('company_id', $company_id);
+        if ($filter==='false') {
+            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
+        }
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -58,8 +67,8 @@ class Item extends Model
             $query->whereSearch($filters->get('search'));
         }
 
-        if ($filters->get('price')) {
-            $query->wherePrice($filters->get('price'));
+        if ($filters->get('name')) {
+            $query->whereName($filters->get('name'));
         }
 
         if ($filters->get('unit')) {
