@@ -562,7 +562,6 @@ class InvoicesController extends Controller
         }
 
         $amount = $total_invoice_items_amount;
-        \Log::info('amount', [$amount]);
         //It will add voucher for sales from invoice
         $voucher_1 = Voucher::where([
             'account_master_id' => $account_master_id,
