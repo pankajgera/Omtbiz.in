@@ -450,34 +450,34 @@ class InvoicesController extends Controller
         $invoice->save();
 
         $invoiceItems = $request->inventories;
-        $newAddedItems = array_filter($invoiceItems, function ($v, $k) {
-            return $k === 'invoice_id' && $v === null;
-        }, ARRAY_FILTER_USE_BOTH);
-        $inventory_id = null;
-        foreach ($newAddedItems as $each) {
-            $each['company_id'] = $request->header('company');
-            $each['type'] = 'invoice';
-            $inventory = $invoice->inventories()->create($each);
-            $inventory_id = $inventory->id;
 
-            //Reset inventory quantity
-            $invent = Inventory::find($inventory->inventory_id);
-            $quantity_used = (int) ($inventory->quantity);
-            if ($invent) {
-                \Log::info('update1', [$invent->quantity, $quantity_used]);
-                $invent->update([
-                    'quantity' => $invent->quantity - $quantity_used,
-                ]);
-            }
-        }
+        // $newAddedItems = array_filter($invoiceItems, function ($v, $k) {
+        //     return $k === 'invoice_id' && $v === null;
+        // }, ARRAY_FILTER_USE_BOTH);
+        // $inventory_id = null;
+        // foreach ($newAddedItems as $each) {
+        //     $each['company_id'] = $request->header('company');
+        //     $each['type'] = 'invoice';
+        //     $inventory = $invoice->inventories()->create($each);
+        //     $inventory_id = $inventory->id;
+
+        //     //Reset inventory quantity
+        //     $invent = Inventory::find($inventory->inventory_id);
+        //     $quantity_used = (int) ($inventory->quantity);
+        //     if ($invent) {
+        //         \Log::info('update1', [$invent->quantity, $quantity_used]);
+        //         $invent->update([
+        //             'quantity' => $invent->quantity - $quantity_used,
+        //         ]);
+        //     }
+        // }
         //Deleting old taxes and invoice_items
-        $oldItems = $invoice->inventories->toArray();
+        //$oldItems = $invoice->inventories->toArray();
+        // foreach ($oldItems as $oldItem) {
+        //     InvoiceItem::destroy($oldItem['id']);
+        // }
+
         $oldTaxes = $invoice->taxes->toArray();
-
-        foreach ($oldItems as $oldItem) {
-            InvoiceItem::destroy($oldItem['id']);
-        }
-
         foreach ($oldTaxes as $oldTax) {
             Tax::destroy($oldTax['id']);
         }
@@ -512,37 +512,51 @@ class InvoicesController extends Controller
             'credit' => 0,
             'balance' => $total_amount,
         ]);
-        //$opening_balance = (int) $request->debtors['opening_balance'];
-        //$calc_closing_balance = $opening_balance > $total_amount ? $opening_balance - $total_amount : $total_amount - $opening_balance;
-        //AccountMaster::updateOpeningBalance($account_master_id, $calc_closing_balance);
 
-        foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
-            $invoiceItem['type'] = 'invoice';
-            $item = $invoice->inventories()->create($invoiceItem);
-
-            // if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
-            //     foreach ($invoiceItem['taxes'] as $tax) {
-            //         $tax['company_id'] = $request->header('company');
-            //         if (gettype($tax['amount']) !== "NULL") {
-            //             $item->taxes()->create($tax);
-            //         }
-            //     }
-            // }
-
+        foreach ($invoiceItems as $single) {
+            $single['company_id'] = $request->header('company');
+            $single['type'] = 'invoice';
+            $new_invoice_item = null;
             //Reset inventory quantity
-            $invent = Inventory::find($item->inventory_id);
-            $quantity_used = (int) ($item->quantity);
-            if ($invent) {
-                \Log::info('update2', [(int) ($invent->quantity), $quantity_used]);
-                $difference = (int) ($invent->quantity) - $quantity_used;
+            //Add if quantity is reduce in existing invoice item
+            //Subtract if quantity is add in existing invoice item
+            if ($single['invoice_id']) {
+                $invent = Inventory::find($single['inventory_id']);
+                $invent_quantity = (int) ($invent->quantity);
+                $request_item_quantity = (int) ($single['quantity']);
+                $existing_invoice_item = InvoiceItem::findOrFail($single['id']);
+                $difference = $existing_invoice_item->quantity - $request_item_quantity;
+                $updated_quantity = $invent_quantity + $difference;
+                if ($invent) {
+                    $invent->update([
+                        'quantity' => $updated_quantity,
+                    ]);
+                    //Update existing invoice item, just in case user had changed anything
+                    $existing_invoice_item->update([
+                        'name' => $single['name'],
+                        'price' => $single['price'],
+                        'sale_price' => $single['sale_price'],
+                        'total' => $single['total'],
+                        'inventory_id' => $single['inventory_id'],
+                        'quantity' => $request_item_quantity,
+                    ]);
+                }
+            } else {
+                //Create/add new invoice items
+                $new_invoice_item = $invoice->inventories()->create($single);
+
+                //update inventory quantity
+                $invent = Inventory::find($new_invoice_item->inventory_id);
+                $invent_quantity = (int) ($invent->quantity);
+                $request_item_quantity = (int) ($single['quantity']);
+                $updated_quantity = $invent_quantity - $new_invoice_item->quantity;
                 $invent->update([
-                    'quantity' => $invent->quantity > $quantity_used ? $invent->quantity - $quantity_used : $quantity_used + $invent->quantity,
+                    'quantity' => $updated_quantity,
                 ]);
             }
 
             //Handle vouchers
-            $amount = (int) ($item['total']);
+            $amount = $single['total'];
             //It will add voucher for sales from invoice
             $voucher_1 = Voucher::firstOrCreate([
                 'account_master_id' => $account_master_id,
@@ -551,7 +565,7 @@ class InvoicesController extends Controller
                 'account_ledger_id' => $dr_account_ledger->id,
                 'type' => 'Dr',
                 'invoice_id' => $invoice->id,
-                'invoice_item_id' => $invoiceItem['id'] ?? $inventory_id,
+                'invoice_item_id' => $single['id'] ?? $new_invoice_item->id,
                 'voucher_type' => 'Sales',
             ], [
                 'debit' => $amount,
@@ -565,7 +579,7 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
                 'account_ledger_id' => $account_ledger->id,
                 'invoice_id' => $invoice->id,
-                'invoice_item_id' => $invoiceItem['id'] ?? $inventory_id,
+                'invoice_item_id' => $single['id'] ?? $new_invoice_item->id,
                 'voucher_type' => 'Sales',
             ], [
                 'debit' => 0,
@@ -599,7 +613,7 @@ class InvoicesController extends Controller
             }
             foreach ($voucher as $key => $each) {
                 $each->update([
-                    'invoice_item_id' => $item['id'],
+                    'invoice_item_id' => $single['id'],
                     'debit' => $each->type === 'Dr' ? $amount : 0,
                     'credit' => $each->type === 'Cr' ? $amount : 0,
                 ]);
