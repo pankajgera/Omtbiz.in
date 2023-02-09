@@ -3,8 +3,7 @@ import * as types from './mutation-types'
 export const fetchItems = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/bill-ty`, {params}).then((response) => {
-      console.log(response);
-      commit(types.BOOTSTRAP_ITEMS, [response.data.items.data])
+      commit(types.BOOTSTRAP_ITEMS, [response.data.items.data, response.data.itemsToBe.data])
       commit(types.SET_TOTAL_ITEMS, response.data.items.total)
       commit(types.SET_TOTAL_ITEMS_TO_BE, response.data.itemsToBe.total)
       resolve(response)
