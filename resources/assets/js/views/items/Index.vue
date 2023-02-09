@@ -369,7 +369,6 @@ export default {
         party_name: '',
         invoice_number: '',
         unit: '',
-        price: '',
         bill_ty: ''
       },
       index: null,
@@ -462,7 +461,6 @@ export default {
       let data = {
         search: this.filters.name !== null ? this.filters.name : '',
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
-        price: this.filters.price * 100,
         bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
@@ -485,7 +483,6 @@ export default {
       let data = {
         search: this.filters.name !== null ? this.filters.name : '',
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
-        price: this.filters.price * 100,
         bill_ty: this.filters.bill_ty !== null ? this.filters.bill_ty : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
@@ -518,7 +515,6 @@ export default {
       this.filters = {
         name: '',
         unit: '',
-        price: '',
         bill_ty: ''
       }
 

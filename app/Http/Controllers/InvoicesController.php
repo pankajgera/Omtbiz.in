@@ -396,9 +396,11 @@ class InvoicesController extends Controller
         if (0 < count($find_invoice_estimate)) {
             $estimateList = $find_invoice_estimate;
         }
-
+        $number = explode("-", $invoice->invoice_number);
+        $number = $number[2];
+           
         return response()->json([
-            'invoiceNumber' =>  $invoice->reference_number,
+            'invoiceNumber' =>   $number,
             'invoice' => $invoice,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $invoice->tax_per_item,
@@ -406,7 +408,7 @@ class InvoicesController extends Controller
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
-            'invoice_prefix' => $invoice_prefix . '-' . Carbon::now()->year . '-' . Carbon::now()->month,
+            'invoice_prefix' => $invoice_prefix,
             'inventory_negative' => ('YES' === $inventory_negative),
         ]);
     }

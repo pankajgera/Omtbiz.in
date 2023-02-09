@@ -575,7 +575,7 @@ export default {
           this.selectedCurrency = this.defaultCurrency
           this.invoiceTemplates = response.data.invoiceTemplates
           this.invoicePrefix = response.data.invoice_prefix
-          this.invoiceNumAttribute = response.data.invoiceNumber.substring(response.data.invoiceNumber.lastIndexOf("-"))
+          this.invoiceNumAttribute = response.data.invoiceNumber
           this.newInvoice.debtors = response.data.sundryDebtorsList[0]
           this.newInvoice.estimate = response.data.estimateList[0]
         }

@@ -28,7 +28,6 @@ class ItemsController extends Controller
 
         $items = Item::where('status', 'Sent')->applyFilters($request->only([
             'search',
-            'price',
             'unit',
             'orderByField',
             'orderBy',
@@ -55,7 +54,6 @@ class ItemsController extends Controller
 
         $itemsToBe = Item::where('status', 'Draft')->applyFilters($request->only([
             'search',
-            'price',
             'unit',
             'orderByField',
             'orderBy',
