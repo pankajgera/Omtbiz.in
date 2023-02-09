@@ -24,8 +24,9 @@
                   ref="inventorySelect"
                   :invalid="$v.inventory.name.$error"
                   :invalid-description="$v.inventory.description.$error"
-                  :inventory="inventory"
+                  :inventory="inventoryList"
                   :is-disable="isDisable"
+                  :picked-inventory="inventoryData"
                   @search="searchVal"
                   @select="onSelectInventory"
                   @deselect="deselectInventory"
@@ -214,13 +215,6 @@ export default {
       inventorySelect: null,
       inventory: {...this.inventoryData},
       maxDiscount: 0,
-      // money: {
-      //   decimal: '.',
-      //   thousands: ',',
-      //   prefix: '₹ ',
-      //   precision: 2,
-      //   masked: false
-      // },
       isSelected: false,
       updatingInput: '',
     }
@@ -317,7 +311,11 @@ export default {
         return this.inventory.quantity
       },
       set: function (newValue) {
-        let maxQuantity = parseInt(this.inventoryList.find(i => i.name === this.inventory.name).quantity);
+        let maxQuantity = parseInt(
+            this.inventoryList.find(i =>
+              i.name === this.inventory.name &&
+              i.sale_price === this.inventory.sale_price
+            ).quantity);
         if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),
@@ -412,7 +410,7 @@ export default {
       if (!inventory || 0 === inventory.id) {
         return;
       }
-      this.inventory.id = inventory.iwd
+      this.inventory.id = inventory.id
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price
       this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
