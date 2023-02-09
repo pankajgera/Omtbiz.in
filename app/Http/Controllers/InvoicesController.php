@@ -516,11 +516,15 @@ class InvoicesController extends Controller
         ]);
 
         $total_invoice_items_amount = 0;
+        $existing_invoice_items = [];
         foreach ($invoiceItems as $single) {
             $single['company_id'] = $request->header('company');
             $single['type'] = 'invoice';
             $total_invoice_items_amount = $total_invoice_items_amount + $single['total'];
             $new_invoice_item = null;
+
+            //Existing invoice items, other items in database should be deleted
+            array_push($existing_invoice_items, $single['id']);
 
             //Reset inventory quantity
             //Add if quantity is reduce in existing invoice item
@@ -560,6 +564,9 @@ class InvoicesController extends Controller
                 ]);
             }
         }
+
+        //Delete removed invoice items from database
+        InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $existing_invoice_items)->delete();
 
         $amount = $total_invoice_items_amount;
         //It will add voucher for sales from invoice
@@ -650,7 +657,7 @@ class InvoicesController extends Controller
     }
 
     /**
-     * Remove the specified inoice from storage.
+     * Remove the specified invoice from storage.
      *
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
