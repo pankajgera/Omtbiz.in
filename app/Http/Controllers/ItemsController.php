@@ -31,7 +31,7 @@ class ItemsController extends Controller
             'unit',
             'orderByField',
             'orderBy',
-        ]))->with('dispatch')
+        ]))->with('images', 'dispatch')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
@@ -57,7 +57,7 @@ class ItemsController extends Controller
             'unit',
             'orderByField',
             'orderBy',
-        ]))->with('dispatch')
+        ]))->with('images', 'dispatch')
             ->whereCompany($request->header('company'))
             ->latest()
             ->paginate($limit);
