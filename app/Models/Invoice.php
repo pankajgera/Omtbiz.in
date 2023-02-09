@@ -67,14 +67,15 @@ class Invoice extends Model
     {
         // Get the last created order
         $lastOrder = Invoice::orderBy('created_at', 'desc')->where('company_id', $company_id)->first();
-
+        
         if (!$lastOrder) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
             $number = explode("-", $lastOrder->invoice_number);
-            $number = $number[1];
+            $number = $number[2];
+           
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001
