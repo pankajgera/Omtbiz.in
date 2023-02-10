@@ -408,6 +408,7 @@ class InvoicesController extends Controller
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
+            'InvoiceEstimate' => $find_invoice_estimate,
             'invoice_prefix' => $invoice_prefix,
             'inventory_negative' => ('YES' === $inventory_negative),
         ]);
@@ -567,7 +568,7 @@ class InvoicesController extends Controller
 
         //Delete removed invoice items from database
         $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $existing_invoice_items)->get();
-        foreach($delete_invoice_items as $del) {
+        foreach ($delete_invoice_items as $del) {
             $find_invent = Inventory::where('id', $del->inventory_id)->first();
             //Add deleting item quantity back to inventory
             $find_invent->update([
@@ -708,7 +709,6 @@ class InvoicesController extends Controller
                     'error' => 'payment_attached',
                 ]);
             }
-
         }
 
         $vouchers = Voucher::where('invoice_id', $id)->get();
