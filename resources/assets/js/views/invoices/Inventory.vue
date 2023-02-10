@@ -333,8 +333,10 @@ export default {
             }
           })
         } else {
+          console.log(newValue);
           this.inventory.quantity = newValue
         }
+         this.updatingInput = 'quantity'
       }
     }
   },
@@ -444,7 +446,7 @@ export default {
           totalCompoundTax: this.totalCompoundTax,
           totalTax: this.totalTax,
           tax: this.totalTax,
-          taxes: ('orders' !== this.inventoryType) ? [...this.inventory.taxes] : []
+          taxes: ('orders' !== this.inventoryType && this.inventory.taxes) ? [...this.inventory.taxes] : []
         }
       })
     },
