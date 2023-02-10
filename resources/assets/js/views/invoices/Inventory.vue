@@ -316,7 +316,7 @@ export default {
               i.name === this.inventory.name &&
               i.sale_price === this.inventory.sale_price
             ).quantity);
-        if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType) {
+        if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),
             text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantity}),
