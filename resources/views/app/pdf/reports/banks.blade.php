@@ -73,7 +73,7 @@
             color: #040405;
         }
 
-        .tax-title {
+        .bank-title {
             margin-top: 60px;
             padding-left: 3px;
             font-style: normal;
@@ -83,16 +83,16 @@
             color: #040405;
         }
 
-        .tax-table-container {
+        .bank-table-container {
             padding-left: 10px;
         }
 
-        .tax-table {
+        .bank-table {
             width: 100%;
             padding-bottom: 10px;
         }
 
-        .tax-title {
+        .bank-title {
             padding: 0px;
             margin: 0px;
             font-style: normal;
@@ -102,7 +102,7 @@
             color: #595959;
         }
 
-        .tax-money {
+        .bank-money {
             padding: 0px;
             margin: 0px;
             font-style: normal;
@@ -113,16 +113,16 @@
             color: #595959;
         }
 
-        .tax-total-table {
+        .bank-total-table {
             border-top: 1px solid #EAF1FB;
             width: 100%;
         }
 
-        .tax-total-cell {
+        .bank-total-cell {
             padding-right: 20px;
         }
 
-        .tax-total {
+        .bank-total {
             padding-top: 10px;
             padding-right: 30px;
             padding: 0px;
@@ -136,7 +136,7 @@
             color: #040405;
         }
 
-        .total-tax-table {
+        .total-bank-table {
             width: 100%;
             margin-top: 40px;
             padding: 15px 20px;
@@ -144,7 +144,7 @@
             box-sizing: border-box;
         }
 
-        .total-tax-title {
+        .total-bank-title {
             padding: 0px;
             margin: 0px;
             text-align: left;
@@ -155,7 +155,7 @@
             color: #595959;
         }
 
-        .total-tax-money {
+        .total-bank-money {
             padding: 0px;
             margin: 0px;
             text-align: right;
@@ -189,12 +189,12 @@
                     </td>
                 </tr>
             </table>
-            <table class="tax-total-table" style="margin-top: 20px">
+            <table class="bank-total-table" style="margin-top: 20px">
                 <tr>
                     <td>
-                        <p class="total-tax-title">OPENING BALANCE</p>
+                        <p class="total-bank-title">OPENING BALANCE</p>
                     </td>
-                    <td class="tax-total-cell">
+                    <td class="bank-total-cell">
                         <p class="" style="float:right; padding:0px; margin: 0px">
                             ₹ {!! $opening_balance ? $opening_balance : 0.00 !!}
                             {!! $master_type !!}
@@ -202,25 +202,25 @@
                     </td>
                 </tr>
             </table>
-            <div class="tax-table-container">
-                <table class="tax-table">
+            <div class="bank-table-container">
+                <table class="bank-table">
                     @foreach ($related_vouchers as $key => $vouchers)
                         <div style="margin: 20px 0;">
                             @foreach($vouchers as $j => $each)
                                 @if(isset($each['id']))
                                     <tr>
                                         <td>
-                                            <p class="tax-title">
+                                            <p class="bank-title">
                                                 {{ \Carbon\Carbon::parse($each['date'], 'UTC')->isoFormat('DD/MM/YYYY') }}
                                             </p>
                                         </td>
                                         <td>
-                                            <p class="tax-title">
+                                            <p class="bank-title">
                                                 {{ $each['account'] }}
                                             </p>
                                         </td>
                                         <td>
-                                            <p class="tax-money">
+                                            <p class="bank-money">
                                                 ₹ {!! ($each['debit'] > 0 ? $each['debit'] : $each['credit']) !!}
                                                 {!! ($each['debit'] > 0 ? ' Dr' : ' Cr') !!}
                                             </p>
@@ -230,12 +230,12 @@
                             @endforeach
                         </div>
                     @endforeach
-                    <table class="tax-total-table">
+                    <table class="bank-total-table">
                         <tr>
                             <td>
-                                <p class="total-tax-title">CLOSING BALANCE</p>
+                                <p class="total-bank-title">CLOSING BALANCE</p>
                             </td>
-                            <td class="tax-total-cell">
+                            <td class="bank-total-cell">
                                 <p class="" style="float:right; padding:0px; margin: 0px">
                                     ₹ {!! $credit_debit_sum !!} {!! $credit_debit_type !!}
                                 </p>

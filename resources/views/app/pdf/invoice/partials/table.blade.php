@@ -59,60 +59,6 @@
 </table>
 
 <table cellspacing="0px" style="width:770px; margin-left:550px; top: 30px" border="0" class="table3 @if (count($invoice->inventories) > 12) page-break @endif">
-    {{--  <tr>
-        <td class="no-borde" style="color: #55547A; padding-left:10px;  font-size:12px;">Subtotal</td>
-        <td class="no-border items"
-            style="padding-right:10px; text-align: right;  font-size:12px; color: #040405; font-weight: 500;">
-            ₹ {!! $invoice->sub_total / 100 !!}</td>
-    </tr>  --}}
-
-    @if ($invoice->tax_per_item === 'YES')
-        @for ($i = 0; $i < count($labels); $i++)
-            <tr>
-                <td class="no-border" style="padding-left:10px; text-align:left; font-size:12px;  color: #55547A;">
-                    {{ $labels[$i] }}
-                </td>
-                <td class="no-border items padd2"
-                    style="padding-right:10px; font-weight: 500; text-align: right; font-size:12px;  color: #040405">
-                    ₹ {!! $taxes[$i] !!}
-                </td>
-            </tr>
-        @endfor
-    @else
-        @foreach ($invoice->taxes as $tax)
-            <tr>
-                <td class="no-border" style="padding-left:10px; text-align:left; font-size:12px;  color: #55547A;">
-                    {{ $tax->name . ' (' . $tax->percent . '%)' }}
-                </td>
-                <td class="no-border items padd2"
-                    style="padding-right:10px; font-weight: 500; text-align: right; font-size:12px;  color: #040405">
-                    ₹ {!! $tax->amount !!}
-                </td>
-            </tr>
-        @endforeach
-    @endif
-
-    {{-- @if ($invoice->discount_per_item === 'NO')
-        <tr>
-            <td class="no-border" style="padding-left:10px; text-align:left; font-size:12px; color: #55547A;">
-                @if ($invoice->discount_type === 'fixed')
-                    Discount
-                @endif
-                @if ($invoice->discount_type === 'percentage')
-                    Discount ({{ $invoice->discount }}%)
-                @endif
-            </td>
-            <td class="no-border items padd2"
-                style="padding-right:10px; font-weight: 500; text-align: right; font-size:12px;  color: #040405">
-                @if ($invoice->discount_type === 'fixed')
-                    ₹ {!! $invoice->discount_val !!}
-                @endif
-                @if ($invoice->discount_type === 'percentage')
-                    ₹ {!! $invoice->discount_val !!}
-                @endif
-            </td>
-        </tr>
-    @endif --}}
     <tr>
         <td style="padding:3px 0px"></td>
         <td style="padding:3px 0px"></td>
