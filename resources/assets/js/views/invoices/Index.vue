@@ -43,22 +43,6 @@
               @deselect="clearCustomerSearch"
             />
           </div>
-          <!-- <div class="filter-status">
-            <label>{{ $t('invoices.status') }}</label>
-            <base-select
-              v-model.trim="filters.status"
-              :options="status"
-              :group-select="false"
-              :searchable="true"
-              :show-labels="false"
-              :placeholder="$t('general.select_a_status')"
-              group-values="options"
-              group-label="label"
-              track-by="name"
-              label="name"
-              @remove="clearStatusSearch()"
-            />
-          </div> -->
           <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
@@ -189,15 +173,6 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('invoices.status')"
-          sort-as="paid_status"
-        >
-          <template slot-scope="row">
-            <span>{{ $t('invoices.paid_status') }}</span>
-            <span :class="'inv-status-'+row.paid_status.toLowerCase()">{{ (row.paid_status != 'DISPATCHED') ? 'PAID' : row.paid_status }}</span>
-          </template>
-        </table-column>
-        <table-column
           :label="$t('invoices.total')"
           sort-as="total"
         >
@@ -227,18 +202,6 @@
                   {{ $t('invoices.view') }}
                 </router-link>
               </v-dropdown-item>
-              <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="sendInvoice(row.id)" v-if="role === 'admin' || role === 'accountant'">
-                  <font-awesome-icon icon="paper-plane" class="dropdown-item-icon" />
-                  {{ $t('invoices.send_invoice') }}
-                </a>
-              </v-dropdown-item>
-              <v-dropdown-item v-if="row.status == 'DRAFT'">
-                <a class="dropdown-item" href="#/" @click="markInvoiceAsSent(row.id)" v-if="role === 'admin' || role === 'accountant'">
-                  <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
-                  {{ $t('invoices.mark_as_sent') }}
-                </a>
-              </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -266,35 +229,13 @@ export default {
       showFilters: false,
       //currency: null,
     breadCrumbLinks:[
-      {
-        url:'dashboard',
-        title:this.$t('general.home'),
-      },
-      {
-        url:'#',
-        title:this.$tc('invoices.invoice', 2)
-      }
-    ],
-      status: [
         {
-          label: 'Status',
-          isDisable: true,
-          options: [
-            { name: 'DRAFT', value: 'DRAFT' },
-            { name: 'DUE', value: 'UNPAID' },
-            { name: 'SENT', value: 'SENT' },
-            { name: 'VIEWED', value: 'VIEWED' },
-            { name: 'OVERDUE', value: 'OVERDUE' },
-            { name: 'COMPLETED', value: 'COMPLETED' }
-          ]
+          url:'dashboard',
+          title:this.$t('general.home'),
         },
         {
-          label: 'Paid Status',
-          options: [
-            { name: 'UNPAID', value: 'UNPAID' },
-            { name: 'PAID', value: 'PAID' },
-            { name: 'PARTIALLY PAID', value: 'PARTIALLY_PAID' }
-          ]
+          url:'#',
+          title:this.$tc('invoices.invoice', 2)
         }
       ],
       filtersApplied: false,
@@ -302,7 +243,6 @@ export default {
       filters: {
         invoice_number: '',
         customer: '',
-        status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
         to_date: ''
       },
@@ -373,38 +313,11 @@ export default {
       'selectAllInvoices',
       'deleteInvoice',
       'deleteMultipleInvoices',
-      'sendEmail',
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
       'fetchCustomers'
     ]),
-    async sendInvoice (id) {
-      swal({
-        title: this.$t('general.are_you_sure'),
-        text: this.$t('invoices.confirm_send'),
-        icon: '/assets/icon/paper-plane-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          const data = {
-            id: id
-          }
-          let response = await this.sendEmail(data)
-          this.refreshTable()
-          if (response.data.success) {
-            window.toastr['success'](this.$tc('invoices.send_invoice_successfully'))
-            return true
-          }
-          if (response.data.error === 'user_email_does_not_exist') {
-            window.toastr['error'](this.$tc('invoices.user_email_does_not_exist'))
-            return false
-          }
-          window.toastr['error'](this.$tc('invoices.something_went_wrong'))
-        }
-      })
-    },
     refreshTable () {
       this.$refs.table.refresh()
     },
@@ -456,7 +369,6 @@ export default {
       this.filters = {
         invoice_number: '',
         customer: '',
-        status: '',
         from_date: '',
         to_date: ''
       }
@@ -537,10 +449,6 @@ export default {
       this.filters.customer = ''
       this.refreshTable()
     },
-    async clearStatusSearch (removedOption, id) {
-      this.filters.status = ''
-      this.refreshTable()
-    }
   }
 }
 </script>

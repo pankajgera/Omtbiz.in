@@ -454,32 +454,6 @@ class InvoicesController extends Controller
 
         $invoiceItems = $request->inventories;
 
-        // $newAddedItems = array_filter($invoiceItems, function ($v, $k) {
-        //     return $k === 'invoice_id' && $v === null;
-        // }, ARRAY_FILTER_USE_BOTH);
-        // $inventory_id = null;
-        // foreach ($newAddedItems as $each) {
-        //     $each['company_id'] = $request->header('company');
-        //     $each['type'] = 'invoice';
-        //     $inventory = $invoice->inventories()->create($each);
-        //     $inventory_id = $inventory->id;
-
-        //     //Reset inventory quantity
-        //     $invent = Inventory::find($inventory->inventory_id);
-        //     $quantity_used = (int) ($inventory->quantity);
-        //     if ($invent) {
-        //         \Log::info('update1', [$invent->quantity, $quantity_used]);
-        //         $invent->update([
-        //             'quantity' => $invent->quantity - $quantity_used,
-        //         ]);
-        //     }
-        // }
-        //Deleting old taxes and invoice_items
-        //$oldItems = $invoice->inventories->toArray();
-        // foreach ($oldItems as $oldItem) {
-        //     InvoiceItem::destroy($oldItem['id']);
-        // }
-
         $oldTaxes = $invoice->taxes->toArray();
         foreach ($oldTaxes as $oldTax) {
             Tax::destroy($oldTax['id']);
