@@ -8,8 +8,6 @@ use App\Models\AccountMaster;
 use App\Models\Dispatch;
 use App\Models\Invoice;
 use App\Models\Item;
-use App\Models\TaxType;
-use App\Models\Tax;
 use Carbon\Carbon;
 use Exception;
 use stdClass;
@@ -84,7 +82,6 @@ class ItemsController extends Controller
         return response()->json([
             'items' => $items,
             'itemsToBe' => $itemsToBe,
-            'taxTypes' => TaxType::latest()->get(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
@@ -98,13 +95,10 @@ class ItemsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $item = Item::with(['taxes', 'dispatch', 'images'])->find($id);
+        $item = Item::with(['dispatch', 'images'])->find($id);
 
         return response()->json([
             'item' => $item,
-            'taxes' => Tax::whereCompany($request->header('company'))
-                ->latest()
-                ->get(),
         ]);
     }
 
@@ -143,14 +137,7 @@ class ItemsController extends Controller
             $image = $item->uploadImage($request->image);
         }
 
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                $tax['company_id'] = $request->header('company');
-                $item->taxes()->create($tax);
-            }
-        }
-
-        $item = Item::with('taxes')->find($item->id);
+        $item = Item::find($item->id);
 
         return response()->json([
             'item' => $item,
@@ -188,25 +175,13 @@ class ItemsController extends Controller
         $item->status = 'Sent';
         $item->save();
 
-        $oldTaxes = $item->taxes->toArray();
-
-        foreach ($oldTaxes as $oldTax) {
-            Tax::destroy($oldTax['id']);
-        }
 
         $image = '';
         if ($request->image) {
             $image = $item->uploadImage($request->image);
         }
 
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                $tax['company_id'] = $request->header('company');
-                $item->taxes()->create($tax);
-            }
-        }
-
-        $item = Item::with('taxes')->find($item->id);
+        $item = Item::find($item->id);
 
         return response()->json([
             'item' => $item,

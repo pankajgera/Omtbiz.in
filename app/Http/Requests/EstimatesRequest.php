@@ -31,7 +31,6 @@ class EstimatesRequest extends FormRequest
             'discount_val' => 'required',
             'sub_total' => 'required',
             'total' => 'required',
-            'tax' => 'required',
             'estimate_template_id' => 'required',
             'items' => 'required|array',
             'items.*.description' => 'max:255',

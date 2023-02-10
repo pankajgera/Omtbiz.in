@@ -4,7 +4,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Invoice;
-use App\Models\Tax;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Inventory;
@@ -23,7 +22,6 @@ class InvoiceItem extends Model
         'discount_type',
         'discount_val',
         'total',
-        'tax',
         'discount',
         'type'
     ];
@@ -34,7 +32,6 @@ class InvoiceItem extends Model
         'discount' => 'float',
         'quantity' => 'float',
         'discount_val' => 'integer',
-        'tax' => 'integer'
     ];
 
     public function invoice()
@@ -45,11 +42,6 @@ class InvoiceItem extends Model
     public function inventory()
     {
         return $this->belongsTo(Inventory::class);
-    }
-
-    public function taxes()
-    {
-        return $this->hasMany(Tax::class);
     }
 
     public function scopeWhereCompany($query, $company_id)

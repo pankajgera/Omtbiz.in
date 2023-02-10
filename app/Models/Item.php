@@ -89,11 +89,6 @@ class Item extends Model
         return Carbon::parse($this->created_at)->format($dateFormat);
     }
 
-    public function taxes()
-    {
-        return $this->hasMany(Tax::class);
-    }
-
     public function invoiceItems()
     {
         return $this->hasMany(InvoiceItem::class);
@@ -112,10 +107,6 @@ class Item extends Model
     public static function deleteItem($id)
     {
         $item = Item::find($id);
-
-        if ($item->taxes()->exists() && $item->taxes()->count() > 0) {
-            return false;
-        }
 
         if ($item->invoiceItems()->exists() && $item->invoiceItems()->count() > 0) {
             return false;

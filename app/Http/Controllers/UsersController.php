@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Currency;
 use App\Models\Item;
-use App\Models\TaxType;
 use DB;
 use Auth;
 use App\Models\Company;
@@ -57,8 +56,6 @@ class UsersController extends Controller
 
         $items = Item::all();
 
-        $taxTypes = TaxType::latest()->get();
-
         $companies = Company::all()->toArray();
 
         $roles = Role::all()->toArray();
@@ -73,7 +70,6 @@ class UsersController extends Controller
             'companies' => $companies,
             'roles' => $roles,
             'items' => $items,
-            'taxTypes' => $taxTypes,
             'moment_date_format' => $moment_date_format,
             'fiscal_year' => $fiscal_year,
         ]);

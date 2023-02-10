@@ -32,8 +32,6 @@ class InvoicesRequest extends FormRequest
             'discount_val' => 'integer|min:0',
             'sub_total' => 'required',
             'total' => 'required',
-            'tax' => 'integer|min:0',
-            'taxes' => 'nullable|array',
             'invoice_date' => 'required',
             'invoice_template_id' => 'required',
             'inventories' => 'required|array',
