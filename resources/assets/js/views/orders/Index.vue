@@ -130,6 +130,7 @@
 
       <table-component
         ref="table"
+        v-if="getPendingOrders"
         :show-filter="false"
         :data="getPendingOrders.data"
         table-class="table"
@@ -265,6 +266,7 @@
 
       <table-component
         ref="table"
+        v-if="getCompletedOrders"
         :show-filter="false"
         :data="getCompletedOrders.data"
         table-class="table"
