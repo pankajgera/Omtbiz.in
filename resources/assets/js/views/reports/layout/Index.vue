@@ -30,18 +30,6 @@
       <div class="col-sm-12">
         <!-- Tabs -->
         <ul class="tabs">
-          <!-- <li class="tab">
-            <router-link class="tab-link" to="/reports/sales">{{ $t('reports.sales.sales') }}</router-link>
-          </li>
-          <li class="tab">
-            <router-link class="tab-link" to="/reports/profit-loss">{{ $t('reports.profit_loss.profit_loss') }}</router-link>
-          </li>
-          <li class="tab">
-            <router-link class="tab-link" to="/reports/expenses">{{ $t('reports.expenses.expenses') }}</router-link>
-          </li>
-          <li class="tab">
-            <router-link class="tab-link" to="/reports/taxes">{{ $t('reports.taxes.taxes') }}</router-link>
-          </li> -->
           <li class="tab">
             <router-link class="tab-link" to="/reports/customers">{{ $t('reports.customers.customers') }}</router-link>
           </li>

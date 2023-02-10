@@ -102,7 +102,6 @@
               :index="index"
               :inventory-data="each"
               :currency="currency"
-              :tax-per-inventory="taxPerInventory"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'orders'"
               :inventory-list="inventoryList"
@@ -211,8 +210,6 @@ import OrderStub from '../../stub/order'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
-import Guid from 'guid'
-import TaxStub from '../../stub/tax'
 const { required, between, maxLength, numeric } = require('vuelidate/lib/validators')
 
 export default {
@@ -231,7 +228,6 @@ export default {
         order_template_id: 1,
         sub_total: null,
         total: null,
-        tax: null,
         notes: null,
         discount_type: 'fixed',
         discount_val: 0,
@@ -246,7 +242,6 @@ export default {
       inventoryList: [],
       orderTemplates: [],
       selectedCurrency: '',
-      taxPerInventory: null,
       discountPerInventory: null,
       initLoading: false,
       isLoading: false,
@@ -388,7 +383,6 @@ export default {
       let response = await this.fetchCreateOrder()
       if (response.data) {
         this.discountPerInventory = response.data.discount_per_inventory
-        this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
         this.newOrder.order_date = response.data.order_today_date
         this.inventoryList = response.data.inventories

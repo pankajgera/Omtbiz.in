@@ -38,34 +38,7 @@ class FrontendController extends Controller
             ->where('unique_hash', $id)
             ->first();
 
-        $taxTypes = [];
-        $taxes = [];
         $labels = [];
-
-        if ($estimate->tax_per_item === 'YES') {
-            foreach ($estimate->items as $item) {
-                foreach ($item->taxes as $tax) {
-                    if (!in_array($tax->name, $taxTypes)) {
-                        array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
-                    }
-                }
-            }
-
-            foreach ($taxTypes as $taxType) {
-                $total = 0;
-
-                foreach ($estimate->items as $item) {
-                    foreach ($item->taxes as $tax) {
-                        if ($tax->name == $taxType) {
-                            $total += $tax->amount;
-                        }
-                    }
-                }
-
-                array_push($taxes, $total);
-            }
-        }
 
         $estimateTemplate = EstimateTemplate::find($estimate->estimate_template_id);
 
@@ -116,7 +89,6 @@ class FrontendController extends Controller
             'company_address' => $companyAddress,
             'colors' => $colorSettings,
             'labels' => $labels,
-            'taxes' => $taxes
         ]);
         $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view);
 
@@ -135,39 +107,11 @@ class FrontendController extends Controller
             'inventories',
             'user',
             'invoiceTemplate',
-            'taxes'
         ])
             ->where('unique_hash', $id)
             ->first();
 
-        $taxTypes = [];
-        $taxes = [];
         $labels = [];
-
-        if ($invoice->tax_per_item === 'YES') {
-            foreach ($invoice->inventories as $item) {
-                foreach ($item->taxes as $tax) {
-                    if (!in_array($tax->name, $labels)) {
-                        array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
-                    }
-                }
-            }
-
-            foreach ($taxTypes as $taxType) {
-                $total = 0;
-
-                foreach ($invoice->inventories as $item) {
-                    foreach ($item->taxes as $tax) {
-                        if ($tax->name == $taxType) {
-                            $total += $tax->amount;
-                        }
-                    }
-                }
-
-                array_push($taxes, $total);
-            }
-        }
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
 
@@ -217,7 +161,6 @@ class FrontendController extends Controller
             'company_address' => $companyAddress,
             'logo' => $logo ?? null,
             'labels' => $labels,
-            'taxes' => $taxes
         ]);
         $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
 
@@ -231,43 +174,11 @@ class FrontendController extends Controller
     {
         $estimate = Estimate::with([
             'items',
-            'items.taxes',
             'user',
             'estimateTemplate',
-            'taxes',
-            'taxes.taxType'
-        ])
-            ->where('unique_hash', $id)
-            ->first();
+        ])->where('unique_hash', $id)->first();
 
-        $taxTypes = [];
-        $taxes = [];
         $labels = [];
-
-        if ($estimate->tax_per_item === 'YES') {
-            foreach ($estimate->items as $item) {
-                foreach ($item->taxes as $tax) {
-                    if (!in_array($tax->name, $taxTypes)) {
-                        array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
-                    }
-                }
-            }
-
-            foreach ($taxTypes as $taxType) {
-                $total = 0;
-
-                foreach ($estimate->items as $item) {
-                    foreach ($item->taxes as $tax) {
-                        if ($tax->name == $taxType) {
-                            $total += $tax->amount;
-                        }
-                    }
-                }
-
-                array_push($taxes, $total);
-            }
-        }
 
         $estimateTemplate = EstimateTemplate::find($estimate->estimate_template_id);
 
@@ -302,7 +213,6 @@ class FrontendController extends Controller
             'company_address' => $companyAddress,
             'colors' => $colorSettings,
             'labels' => $labels,
-            'taxes' => $taxes,
             'estimate' => $estimateWith,
             'total_quantity' => $estimate_i->sum('quantity'),
             'total_amount' => $estimateWith->sub_total,
@@ -324,39 +234,11 @@ class FrontendController extends Controller
             'inventories',
             'user',
             'invoiceTemplate',
-            'taxes'
         ])
             ->where('unique_hash', $id)
             ->first();
 
-        $taxTypes = [];
-        $taxes = [];
         $labels = [];
-
-        if ($invoice->tax_per_item === 'YES') {
-            foreach ($invoice->inventories as $item) {
-                foreach ($item->taxes as $tax) {
-                    if (!in_array($tax->name, $taxTypes)) {
-                        array_push($taxTypes, $tax->name);
-                        array_push($labels, $tax->name . ' (' . $tax->percent . '%)');
-                    }
-                }
-            }
-
-            foreach ($taxTypes as $taxType) {
-                $total = 0;
-
-                foreach ($invoice->inventories as $item) {
-                    foreach ($item->taxes as $tax) {
-                        if ($tax->name == $taxType) {
-                            $total += $tax->amount;
-                        }
-                    }
-                }
-
-                array_push($taxes, $total);
-            }
-        }
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
         $company = Company::find($invoice->company_id);

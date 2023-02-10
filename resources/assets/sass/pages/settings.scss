@@ -84,31 +84,6 @@
             background-color: $ls-color-gray--very-light !important;
         }
     }
-
-    .tax-table {
-        td {
-            background-color: $ls-color-gray--very-light !important;
-        }
-
-        .tax-name {
-
-        }
-
-        .compound-tax {
-            display: inline;
-            padding: 2px 8px;
-            font-size: 10px;
-            line-height: 15px;
-            background: $red--very-light;
-            color: $red--dark;
-        }
-    }
-
-    .add-new-tax {
-        height: 45px;
-        white-space: nowrap;
-    }
-
     .flex-box {
         display: flex;
     }
@@ -193,15 +168,6 @@
 
         }
 
-        .tax-table {
-
-            .tax-name {
-                margin-top: 21px;
-                width: 76%;
-            }
-
-        }
-
         .expense-category {
 
             .table-component__table__body {
@@ -217,11 +183,6 @@
 
             }
 
-        }
-
-        .add-new-tax {
-            position: relative;
-            z-index: 1;
         }
 
     }

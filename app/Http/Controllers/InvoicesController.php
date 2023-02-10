@@ -20,7 +20,6 @@ use App\Models\Estimate;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
-use App\Models\Tax;
 use App\Models\Voucher;
 use Exception;
 
@@ -36,7 +35,7 @@ class InvoicesController extends Controller
         try {
             $limit = $request->has('limit') ? $request->limit : 20;
 
-            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes', 'master'])
+            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'master'])
                 ->join('users', 'users.id', '=', 'invoices.user_id')
                 ->applyFilters($request->only([
                     'status',
@@ -73,7 +72,6 @@ class InvoicesController extends Controller
      */
     public function create(Request $request)
     {
-        $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company'));
         $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company'));
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
@@ -94,7 +92,6 @@ class InvoicesController extends Controller
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
             'inventories' => Inventory::query()->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'tax_per_item' => $tax_per_item,
             'discount_per_item' => $discount_per_item,
             'invoice_prefix' => $invoice_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
@@ -121,7 +118,6 @@ class InvoicesController extends Controller
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::TO_BE_DISPATCH;
 
-            $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
             $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company')) ?? 'NO';
 
             $invoice = Invoice::create([
@@ -140,9 +136,7 @@ class InvoicesController extends Controller
                 'discount_val' => $request->discount_val,
                 'total' => $request->total,
                 'due_amount' => $request->total,
-                'tax_per_item' => $tax_per_item,
                 'discount_per_item' => $discount_per_item,
-                'tax' => $request->tax,
                 'notes' => $request->notes,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
@@ -286,17 +280,6 @@ class InvoicesController extends Controller
                 }
             }
 
-
-            if ($request->has('taxes')) {
-                foreach ($request->taxes as $tax) {
-                    $tax['company_id'] = $request->header('company');
-
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $invoice->taxes()->create($tax);
-                    }
-                }
-            }
-
             if ($request->has('invoiceSend')) {
                 $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
                 $data['user'] = User::find($request->user_id)->toArray();
@@ -324,7 +307,7 @@ class InvoicesController extends Controller
                 \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
             }
 
-            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
+            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
             if ($invoice) {
                 //Update estimate
@@ -362,7 +345,6 @@ class InvoicesController extends Controller
             'inventories',
             'user',
             'invoiceTemplate',
-            'taxes.taxType'
         ])->findOrFail($id);
 
         $siteData = [
@@ -383,10 +365,8 @@ class InvoicesController extends Controller
     {
         $invoice = Invoice::with([
             'inventories',
-            'inventories.taxes',
             'user',
             'invoiceTemplate',
-            'taxes.taxType'
         ])->find($id);
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
@@ -403,8 +383,6 @@ class InvoicesController extends Controller
             'invoiceNumber' =>   $number,
             'invoice' => $invoice,
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'tax_per_item' => $invoice->tax_per_item,
-            'discount_per_item' => $invoice->discount_per_item,
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
@@ -448,16 +426,10 @@ class InvoicesController extends Controller
         $invoice->discount = $request->discount;
         $invoice->discount_type = $request->discount_type;
         $invoice->discount_val = $request->discount_val;
-        $invoice->tax = $request->tax;
         $invoice->notes = $request->notes;
         $invoice->save();
 
         $invoiceItems = $request->inventories;
-
-        $oldTaxes = $invoice->taxes->toArray();
-        foreach ($oldTaxes as $oldTax) {
-            Tax::destroy($oldTax['id']);
-        }
 
         //Add journal entry
         //It will be "Sales" type
@@ -620,17 +592,7 @@ class InvoicesController extends Controller
             }
         }
 
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                $tax['company_id'] = $request->header('company');
-
-                if (gettype($tax['amount']) !== "NULL") {
-                    $invoice->taxes()->create($tax);
-                }
-            }
-        }
-
-        $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
+        $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
         return response()->json([
             'url' => url('/invoices/pdf/' . $invoice->unique_hash),

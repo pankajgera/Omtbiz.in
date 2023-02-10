@@ -107,13 +107,6 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('invoices', 'InvoicesController');
 
-
-    // Tax Types
-    //----------------------------------
-
-    Route::resource('tax-types', 'TaxTypeController');
-
-
     // Estimates
     //-------------------------------------------------
 

@@ -11,7 +11,7 @@
         </div>
         <base-button
           outline
-          class="add-new-tax"
+          class="add-new"
           color="theme"
           @click="openCategoryModal"
         >
