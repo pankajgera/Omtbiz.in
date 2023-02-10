@@ -29,7 +29,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="isDisabled"
+              :disabled="isDisabled || estimateDisabled"
               :placeholder="$t('receipts.select_a_list')"
               label="estimate_number"
               track-by="id"
@@ -362,6 +362,7 @@ export default {
       discountPerInventory: null,
       initLoading: false,
       isLoading: false,
+      estimateDisabled: false,
       maxDiscount: 0,
       invoicePrefix: null,
       invoiceNumAttribute: null,
@@ -560,6 +561,7 @@ export default {
     async loadData () {
       if (this.$route.name === 'invoices.edit') {
         this.initLoading = true
+        this.estimateDisabled = true
         let response = await this.fetchInvoice(this.$route.params.id)
         if (this.$route.query && this.$route.query.nondis === 'false') {
           this.isDisabled = true
@@ -577,7 +579,18 @@ export default {
           this.invoicePrefix = response.data.invoice_prefix
           this.invoiceNumAttribute = response.data.invoiceNumber
           this.newInvoice.debtors = response.data.sundryDebtorsList[0]
-          this.newInvoice.estimate = response.data.estimateList[0]
+          if(response.data.InvoiceEstimate.length) {
+            this.newInvoice.estimate = response.data.InvoiceEstimate[0]
+          }
+           response.data.estimateList.map(i => {
+          let obj = {}
+          let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
+          obj['id'] = i.id;
+          obj['total'] = i.total;
+          obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');
+
+          this.estimateList.push(obj)
+        })
         }
         this.initLoading = false
         return
