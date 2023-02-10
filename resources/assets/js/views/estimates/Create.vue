@@ -133,7 +133,6 @@
               :index="index"
               :inventory-data="each"
               :currency="currency"
-              :tax-per-inventory="taxPerInventory"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'estimate'"
               :inventory-list="inventoryList"
@@ -243,7 +242,6 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import Guid from 'guid'
-import TaxStub from '../../stub/tax'
 const { required, between, maxLength, numeric } = require('vuelidate/lib/validators')
 
 export default {
@@ -262,7 +260,6 @@ export default {
         estimate_template_id: 1,
         sub_total: null,
         total: null,
-        tax: null,
         notes: null,
         discount_type: 'fixed',
         discount_val: 0,
@@ -270,16 +267,13 @@ export default {
         //reference_number: null,
         items: [{
           ...EstimateStub,
-          taxes: [{...TaxStub, id: Guid.raw()}]
         }],
-        taxes: [],
         debtors: '',
       },
       customers: [],
       inventoryList: [],
       estimateTemplates: [],
       selectedCurrency: '',
-      taxPerInventory: null,
       discountPerInventory: null,
       initLoading: false,
       isLoading: false,
@@ -341,7 +335,7 @@ export default {
       return this.subtotal
     },
     total () {
-      return this.subtotalWithDiscount + this.totalTax
+      return this.subtotalWithDiscount
     },
     subtotal () {
       let inventory = this.newEstimate.items
@@ -367,15 +361,6 @@ export default {
         }
         this.newEstimate.discount = newValue
       }
-    },
-    totalSimpleTax () {
-      return 0;
-    },
-    totalCompoundTax () {
-      return 0;
-    },
-    totalTax () {
-      return 0;
     },
     setEstimateDebtor: {
       cache: false,
@@ -447,7 +432,6 @@ export default {
           this.inventoryNegative = response.data.inventory_negative
           this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
-          this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
           this.estimateTemplates = response.data.estimateTemplates
           this.estimatePrefix = response.data.estimate_prefix
@@ -462,7 +446,6 @@ export default {
       let response = await this.fetchCreateEstimate()
       if (response.data) {
         this.discountPerInventory = response.data.discount_per_inventory
-        this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
         this.estimateTemplates = response.data.estimateTemplates
         this.newEstimate.estimate_date = response.data.estimate_today_date
@@ -482,7 +465,7 @@ export default {
       })
     },
     addInventory () {
-      this.inventoryBind.push({...EstimateStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.inventoryBind.push({...EstimateStub})
       this.$nextTick(() => {
         this.$refs.estimateInventory[this.inventoryBind.length-1].$el.focus()
         this.$refs.estimateInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
@@ -522,7 +505,6 @@ export default {
         estimate_date: moment(this.newEstimate.estimate_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
-        tax: this.totalTax,
         user_id: this.user.id,
         estimate_template_id: this.getTemplateId,
       }
@@ -609,9 +591,6 @@ export default {
     },
     checkInventoryData (index, isValid) {
       this.newEstimate.items[index].valid = isValid
-    },
-    removeEstimateTax (index) {
-      this.newEstimate.taxes.splice(index, 1)
     },
     checkValid () {
       this.$v.newEstimate.$touch()

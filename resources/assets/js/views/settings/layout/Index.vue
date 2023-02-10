@@ -62,13 +62,6 @@ export default {
           meta: ['admin']
         },
         {
-          link: '/settings/tax-types',
-          title: 'settings.menu_title.tax_types',
-          icon: 'check-circle',
-          iconType: 'far',
-          meta: ['admin']
-        },
-        {
           link: '/settings/expense-category',
           title: 'settings.menu_title.expense_category',
           icon: 'list-alt',

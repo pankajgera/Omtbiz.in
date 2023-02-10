@@ -144,7 +144,6 @@
             :index="index"
             :inventory-data="each"
             :currency="currency"
-            :tax-per-inventory="taxPerInventory"
             :discount-per-inventory="discountPerInventory"
             :is-disable="$route.query.d === 'true'"
             :inventory-type="'invoice'"
@@ -230,28 +229,6 @@
             </div>
           </div>
 
-          <div v-if="taxPerInventory === 'NO' || taxPerInventory === null">
-            <tax
-              v-for="(tax, index) in newInvoice.taxes"
-              :index="index"
-              :total="subtotalWithDiscount"
-              :key="tax.id"
-              :tax="tax"
-              :taxes="newInvoice.taxes"
-              :currency="currency"
-              :total-tax="totalSimpleTax"
-              @remove="removeInvoiceTax"
-              @update="updateTax"
-            />
-          </div>
-
-          <base-popup v-if="taxPerInventory === 'NO' || taxPerInventory === null" ref="taxModal" class="tax-selector">
-            <div slot="activator" class="float-right">
-              + {{ $t('invoices.add_tax') }}
-            </div>
-            <tax-select-popup :taxes="newInvoice.taxes" @select="onSelectTax"/>
-          </base-popup>
-
           <div class="section border-top mt-3">
             <label class="invoice-label">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>
             <label class="invoice-amount total">
@@ -318,15 +295,12 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import Guid from 'guid'
-import TaxStub from '../../stub/tax'
-import Tax from './InvoiceTax'
 const { required, between, maxLength, numeric } = require('vuelidate/lib/validators')
 
 export default {
   components: {
     InvoiceInventory,
     MultiSelect,
-    Tax,
     draggable
   },
   mixins: [validationMixin],
@@ -339,7 +313,6 @@ export default {
         invoice_template_id: 1,
         sub_total: null,
         total: null,
-        tax: null,
         notes: null,
         discount_type: 'fixed',
         discount_val: 0,
@@ -347,9 +320,7 @@ export default {
         reference_number: null,
         inventories: [{
           ...InvoiceStub,
-          taxes: [{...TaxStub, id: Guid.raw()}]
         }],
-        taxes: [],
         debtors: '',
         estimate: '',
       },
@@ -358,7 +329,6 @@ export default {
       inventoryNegative: false,
       invoiceTemplates: [],
       selectedCurrency: '',
-      taxPerInventory: null,
       discountPerInventory: null,
       initLoading: false,
       isLoading: false,
@@ -422,7 +392,7 @@ export default {
       return this.subtotal
     },
     total () {
-      return this.subtotalWithDiscount + this.totalTax
+      return this.subtotalWithDiscount
     },
     subtotal () {
       let inventory = this.newInvoice.inventories;
@@ -445,31 +415,6 @@ export default {
         }
         this.newInvoice.discount = newValue
       }
-    },
-    totalSimpleTax () {
-      return window._.sumBy(this.newInvoice.taxes, function (tax) {
-        if (!tax.compound_tax) {
-          return tax.amount
-        }
-        return 0
-      })
-    },
-    totalCompoundTax () {
-      return window._.sumBy(this.newInvoice.taxes, function (tax) {
-        if (tax.compound_tax) {
-          return tax.amount
-        }
-        return 0
-      })
-    },
-    totalTax () {
-      if (this.taxPerInventory === 'NO' || this.taxPerInventory === null) {
-        return this.totalSimpleTax + this.totalCompoundTax
-      }
-
-      return window._.sumBy(this.newInvoice.inventories, function (tax) {
-        return tax.tax
-      })
     },
     setInvoiceDebtor: {
       cache: false,
@@ -506,7 +451,6 @@ export default {
   created () {
     this.loadData()
     this.fetchInitialInventory()
-    window.hub.$on('newTax', this.onSelectTax)
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
     }, 500);
@@ -546,9 +490,6 @@ export default {
       this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount)
       this.newInvoice.discount_type = 'percentage'
     },
-    updateTax (data) {
-      Object.assign(this.newInvoice.taxes[data.index], {...data.inventory})
-    },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
         filter: {},
@@ -573,7 +514,6 @@ export default {
           this.inventoryNegative = response.data.inventory_negative
           this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
-          this.taxPerInventory = response.data.tax_per_inventory
           this.selectedCurrency = this.defaultCurrency
           this.invoiceTemplates = response.data.invoiceTemplates
           this.invoicePrefix = response.data.invoice_prefix
@@ -600,7 +540,6 @@ export default {
       let response = await this.fetchCreateInvoice()
       if (response.data) {
         this.discountPerInventory = response.data.discount_per_inventory
-        this.taxPerInventory = response.data.tax_per_inventory
         this.selectedCurrency = this.defaultCurrency
         this.invoiceTemplates = response.data.invoiceTemplates
         this.newInvoice.invoice_date = response.data.invoice_today_date
@@ -629,7 +568,7 @@ export default {
       })
     },
     addInventory () {
-      this.inventoryBind.push({...InvoiceStub, taxes: [{...TaxStub, id: Guid.raw()}]})
+      this.inventoryBind.push({...InvoiceStub})
       this.$nextTick(() => {
         this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()
         this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
@@ -668,7 +607,6 @@ export default {
         invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
-        tax: this.totalTax,
         user_id: this.user.id,
         invoice_template_id: this.getTemplateId,
       }
@@ -755,30 +693,6 @@ export default {
     checkInventoryData (index, isValid) {
       this.newInvoice.inventories[index].valid = isValid
     },
-    onSelectTax (selectedTax) {
-      let amount = 0
-
-      if (selectedTax.compound_tax && this.subtotalWithDiscount) {
-        amount = ((this.subtotalWithDiscount + this.totalSimpleTax) * selectedTax.percent)
-      } else if (this.subtotalWithDiscount && selectedTax.percent) {
-        amount = (this.subtotalWithDiscount * selectedTax.percent)
-      }
-
-      this.newInvoice.taxes.push({
-        ...TaxStub,
-        id: Guid.raw(),
-        name: selectedTax.name,
-        percent: selectedTax.percent,
-        compound_tax: selectedTax.compound_tax,
-        tax_type_id: selectedTax.id,
-        amount
-      })
-
-      this.$refs.taxModal.close()
-    },
-    removeInvoiceTax (index) {
-      this.newInvoice.taxes.splice(index, 1)
-    },
     checkValid () {
       this.$v.newInvoice.$touch()
       window.hub.$emit('checkInventory')
@@ -828,13 +742,11 @@ export default {
         invoice_template_id: 1,
         sub_total: invoice.sub_total,
         total: invoice.total,
-        tax: invoice.tax,
         notes: invoice.notes,
         discount_type: 'fixed',
         discount_val: 0,
         discount: 0,
         inventories: inventory,
-        taxes: [],
         reference_number: null,
         debtors: this.sundryDebtorsList.find(i => i.id === invoice.account_master_id),
         estimate: this.newInvoice.estimate

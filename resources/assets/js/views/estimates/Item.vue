@@ -115,24 +115,6 @@
               </div>
             </td>
           </tr>
-          <tr v-if="taxPerItem === 'YES'" class="tax-tr">
-            <td />
-            <td colspan="4">
-              <tax
-                v-for="(tax, index) in item.taxes"
-                :key="tax.id"
-                :index="index"
-                :tax-data="tax"
-                :taxes="item.taxes"
-                :discounted-total="total"
-                :total-tax="totalSimpleTax"
-                :total="total"
-                :currency="currency"
-                @update="updateTax"
-                @remove="removeTax"
-              />
-            </td>
-          </tr>
         </tbody>
       </table>
     </td>
@@ -142,15 +124,12 @@
 import Guid from 'guid'
 import { validationMixin } from 'vuelidate'
 import { mapGetters } from 'vuex'
-import TaxStub from '../../stub/tax'
 import EstimateStub from '../../stub/estimate'
 import ItemSelect from './ItemSelect'
-import Tax from './Tax'
 const { required, minValue, between, maxLength } = require('vuelidate/lib/validators')
 
 export default {
   components: {
-    Tax,
     ItemSelect
   },
   mixins: [validationMixin],
@@ -170,10 +149,6 @@ export default {
     currency: {
       type: [Object, String],
       required: true
-    },
-    taxPerItem: {
-      type: String,
-      default: ''
     },
     discountPerItem: {
       type: String,
@@ -222,27 +197,6 @@ export default {
     },
     total () {
       return this.subtotal - this.item.discount_val
-    },
-    totalSimpleTax () {
-      return window._.sumBy(this.item.taxes, function (tax) {
-        if (!tax.compound_tax) {
-          return tax.amount
-        }
-
-        return 0
-      })
-    },
-    totalCompoundTax () {
-      return window._.sumBy(this.item.taxes, function (tax) {
-        if (tax.compound_tax) {
-          return tax.amount
-        }
-
-        return 0
-      })
-    },
-    totalTax () {
-      return this.totalSimpleTax + this.totalCompoundTax
     },
     price: {
       get: function () {
@@ -312,30 +266,11 @@ export default {
     })
   },
   methods: {
-    updateTax (data) {
-      this.$set(this.item.taxes, data.index, data.item)
-
-      let lastTax = this.item.taxes[this.item.taxes.length - 1]
-
-      if (lastTax.tax_type_id !== 0) {
-        this.item.taxes.push({...TaxStub, id: Guid.raw()})
-      }
-
-      this.updateItem()
-    },
-    removeTax (index) {
-      this.item.taxes.splice(index, 1)
-
-      this.updateItem()
-    },
-    taxWithPercentage ({ name, percent }) {
-      return `${name} (${percent}%)`
-    },
     searchVal (val) {
       this.item.name = val
     },
     deselectItem () {
-      this.item = {...EstimateStub, id: this.item.id, taxes: [{...TaxStub, id: Guid.raw()}]}
+      this.item = {...EstimateStub, id: this.item.id}
       this.$nextTick(() => {
         this.$refs.itemSelect.$refs.baseSelect.$refs.search.focus()
       })
@@ -346,10 +281,6 @@ export default {
       this.item.item_id = item.id
       this.item.id = item.id
       this.item.description = item.description
-
-      // if (this.item.taxes.length) {
-      //   this.item.taxes = {...item.taxes}
-      // }
     },
     selectFixed () {
       if (this.item.discount_type === 'fixed') {
@@ -374,11 +305,6 @@ export default {
         'item': {
           ...this.item,
           total: this.total,
-          totalSimpleTax: this.totalSimpleTax,
-          totalCompoundTax: this.totalCompoundTax,
-          totalTax: this.totalTax,
-          tax: this.totalTax,
-          taxes: [...this.item.taxes]
         }
       })
     },
