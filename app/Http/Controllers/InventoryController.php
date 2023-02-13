@@ -28,7 +28,6 @@ class InventoryController extends Controller
                 ->whereCompany($request->header('company'))
                 ->with(['inventoryItem'])
                 ->orderBy('id', 'desc')
-                ->get()
                 ->paginate($limit);
 
             return response()->json([
