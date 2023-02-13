@@ -22,14 +22,13 @@ class InventoryController extends Controller
 
             $inventories = Inventory::applyFilters($request->only([
                 'name',
-                'price',
-                'unit',
                 'orderByField',
                 'orderBy',
             ]))
                 ->whereCompany($request->header('company'))
                 ->with(['inventoryItem'])
-                ->latest()
+                ->orderBy('id', 'desc')
+                ->get()
                 ->paginate($limit);
 
             return response()->json([
@@ -201,7 +200,7 @@ class InventoryController extends Controller
         $inventory = Inventory::whereIn('id', $request->selected_ids)->get();
 
         foreach ($inventory as $each) {
-            $each->update([
+            InventoryItem::where('id', $each->id)->orderBy('id', 'desc')->update([
                 'price' => $request->price,
                 'sale_price' => $request->sale_price,
             ]);

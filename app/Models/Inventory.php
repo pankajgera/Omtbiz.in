@@ -88,6 +88,7 @@ class Inventory extends Model
     public static function deleteInventory($id)
     {
         $inventory = Inventory::find($id);
+        InventoryItem::where('inventory_id', $inventory->id)->delete();
         $inventory->delete();
         return true;
     }
