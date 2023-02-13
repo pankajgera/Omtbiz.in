@@ -90,7 +90,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventory.length }}</b> {{ $t('general.of') }} <b>{{ totalInventories }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedInventory.length" :show-arrow="false">
+          <v-dropdown v-if="selectedInventory" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -171,7 +171,7 @@
           show="price"
         >
           <template slot-scope="row">
-            {{ row.price }}
+            ₹ {{ row.price }}
           </template>
         </table-column>
         <table-column
