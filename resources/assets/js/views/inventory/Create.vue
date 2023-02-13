@@ -13,6 +13,7 @@
         <div class="card">
           <form action="" @submit.prevent="submitInventory">
             <div class="card-body">
+              <span v-if="isEdit" style="font-style:italic;font-size:10px">Edit will show latest inventory item here and you can't edit old items</span>
               <div class="form-group">
                 <label class="control-label">{{ $t('inventory.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -21,6 +22,7 @@
                   focus
                   type="text"
                   name="name"
+                  :disabled="isEdit"
                 />
                 <div v-if="$v.formData.name.$error">
                   <span v-if="!$v.formData.name.required" class="text-danger">{{ $t('validation.required') }} </span>
@@ -128,7 +130,7 @@
             </tr>
             <tr v-for="(each, index) in relatedInventories" :key="index">
               <td>{{each.id}}</td>
-              <td>{{each.name}}</td>
+              <td>{{formData.name}}</td>
               <td>{{each.worker_name}}</td>
               <td>{{each.quantity}}</td>
               <td>{{each.price}}</td>
@@ -161,6 +163,7 @@ export default {
       isLoading: false,
       title: 'Add Inventory',
       formData: {
+        id: '',
         name: '',
         worker_name: '',
         quantity: '',
@@ -209,7 +212,15 @@ export default {
     ]),
     async loadEditData () {
       let response = await this.fetchInventory(this.$route.params.id)
-      this.formData = response.data.inventory[0]
+      let data = response.data.inventory
+      let latest_item = data.inventory_item[data.inventory_item.length - 1]
+      this.formData.id = data.id;
+      this.formData.name = data.name;
+      this.formData.quantity = latest_item.quantity;
+      this.formData.price = latest_item.price;
+      this.formData.sale_price = latest_item.sale_price;
+      this.formData.worker_name = latest_item.worker_name;
+      this.formData.unit = latest_item.unit;
       this.relatedInventories = response.data.related_inventories
     },
     async submitInventory () {
@@ -233,11 +244,11 @@ export default {
 
         if (response.data) {
           window.toastr['success'](this.$tc('inventory.created_message'))
-          this.$router.push('/inventory')
           this.isLoading = false
           return true
         }
-        window.toastr['success'](response.data.success)
+        window.toastr['success']('New inventory added')
+        this.$router.push('/inventory')
       }
     },
   }

@@ -8,13 +8,18 @@ class Inventory extends Model
 {
     protected $fillable = [
         'name',
-        'quantity',
-        'worker_name',
-        'price',
-        'sale_price',
-        'unit',
         'company_id'
     ];
+
+    public function inventoryItem()
+    {
+        return $this->hasMany(InventoryItem::class, 'inventory_id');
+    }
+
+    public function getQuantityAttribute()
+    {
+        return InventoryItem::where('inventory_id', $this->id)->sum('quantity');
+    }
 
     public function scopeWhereName($query, $name)
     {
