@@ -286,7 +286,7 @@ export default {
         let maxQuantity = parseInt(
             this.inventoryList.find(i =>
               i.name === this.inventory.name &&
-              i.sale_price === this.inventory.sale_price
+              parseInt(i.sale_price) === parseInt(this.inventory.sale_price)
             ).quantity);
         if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
