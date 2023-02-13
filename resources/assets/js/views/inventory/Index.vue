@@ -197,19 +197,27 @@
         <table-column
           :label="$t('inventory.unit')"
           show="unit"
-        />
+        >
+          <template slot-scope="row">
+            {{ row.inventory_item[row.inventory_item.length - 1].unit }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('inventory.avg_price')"
           show="price"
-        />
+        >
+          <template slot-scope="row">
+            {{ row.inventory_item[row.inventory_item.length - 1].price }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('inventory.quantity')"
-          show="quantity"
+          show="total_quantity"
         />
-         <table-column
+         <!-- <table-column
           :label="$t('inventory.worker_name')"
           show="worker_name"
-        />
+        /> -->
         <table-column
           :key="Math.random()"
           :sortable="false"
@@ -353,6 +361,10 @@ export default {
       let response = await this.fetchAllInventory(data)
       this.isRequestOngoing = false
 
+      let updatedData = this.inventories;
+      updatedData.map(i => {
+        i['total_quantity'] = i.inventory_item.reduce((a, b) => a + parseInt(b.quantity), 0);
+      })
       return {
         data: this.inventories, //from state, see mutation
         pagination: {
