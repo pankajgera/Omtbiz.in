@@ -60,42 +60,6 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('inventory.unit') }} </label>
-            <base-input
-              v-model="filters.unit"
-              type="text"
-              name="unit"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('inventory.avg_price') }} </label>
-            <base-input
-              v-model="filters.price"
-              type="text"
-              name="price"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('inventory.quantity') }} </label>
-            <base-input
-              v-model="filters.quantity"
-              type="text"
-              name="quantity"
-              autocomplete="off"
-            />
-          </div>
-           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('inventory.worker_name') }} </label>
-            <base-input
-              v-model="filters.worker_name"
-              type="text"
-              name="worker_name"
-              autocomplete="off"
-            />
-          </div>
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
