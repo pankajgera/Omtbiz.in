@@ -163,7 +163,7 @@
           show="unit"
         >
           <template slot-scope="row">
-            {{ row.inventory_item[row.inventory_item.length - 1].unit }}
+            {{ row.unit }}
           </template>
         </table-column>
         <table-column
@@ -171,12 +171,12 @@
           show="price"
         >
           <template slot-scope="row">
-            {{ row.inventory_item[row.inventory_item.length - 1].price }}
+            {{ row.price }}
           </template>
         </table-column>
         <table-column
           :label="$t('inventory.quantity')"
-          show="total_quantity"
+          show="quantity"
         />
          <!-- <table-column
           :label="$t('inventory.worker_name')"
@@ -324,11 +324,6 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchAllInventory(data)
       this.isRequestOngoing = false
-
-      let updatedData = this.inventories;
-      updatedData.map(i => {
-        i['total_quantity'] = i.inventory_item.reduce((a, b) => a + parseInt(b.quantity), 0);
-      })
       return {
         data: this.inventories, //from state, see mutation
         pagination: {

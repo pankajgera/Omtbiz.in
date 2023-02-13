@@ -241,14 +241,10 @@ export default {
         window.toastr['error'](response.data.error)
       } else {
         let response = await this.addInventory(this.formData)
-
-        if (response.data) {
-          window.toastr['success'](this.$tc('inventory.created_message'))
-          this.isLoading = false
-          return true
-        }
-        window.toastr['success']('New inventory added')
+        window.toastr['success'](this.$tc('inventory.created_message'))
+        this.isLoading = false
         this.$router.push('/inventory')
+        return true
       }
     },
   }
