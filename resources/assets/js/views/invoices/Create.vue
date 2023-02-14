@@ -149,6 +149,7 @@
             :inventory-type="'invoice'"
             :inventory-list="inventoryList"
             :inventory-negative="inventoryNegative"
+            :is-edit="$route.name === 'invoices.edit'"
             @remove="removeInventory"
             @update="updateInventoryBounce"
             @inventoryValidate="checkInventoryData"

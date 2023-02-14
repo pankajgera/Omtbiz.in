@@ -168,23 +168,40 @@ class InvoicesController extends Controller
 
                 $inventory_id = $inventory->id;
                 //Reset inventory quantity
-                $invent = InventoryItem::where('inventory_id', $inventory->inventory_id)->get();
+                $invent = InventoryItem::where('inventory_id', $inventory->inventory_id)->where('quantity', '!=', 0)->orderBy('id', 'desc')->get();
                 $quantity_used = (int) ($inventory->quantity);
                 if (0 < count($invent)) {
                     foreach($invent as $each_invent_item) {
-                        $new_quantity = $quantity_used;
-                        if ($each_invent_item->quantity < $new_quantity) {
-                            $new_quantity = $new_quantity - $each_invent_item->quantity;
+                        if ($quantity_used < $each_invent_item->quantity) {
                             $each_invent_item->update([
-                                'quantity' => $new_quantity,
+                                'quantity' => $each_invent_item->quantity - $quantity_used,
+                            ]);
+                            break;
+                        }
+                        //update quantity, it should decrease by item current quantity
+                        $original = $quantity_used;
+                        $quantity_used = $quantity_used - $each_invent_item->quantity;
+                        \Log::info('quantity_used', [$quantity_used, $original]);
+                        if(0 < $quantity_used) {
+                            \Log::info('IN', [$quantity_used]);
+                            $each_invent_item->update([
+                                'quantity' => 0,
                             ]);
                             continue;
                         }
-                        $new_quantity = $each_invent_item->quantity - $new_quantity;
-                        $each_invent_item->update([
-                            'quantity' => $new_quantity,
-                        ]);
-                        break;
+                        if (0 === $original) {
+                            break;
+                        }
+                        if (0 < $original) {
+                            $each_invent_item->update([
+                                'quantity' => $quantity_used,
+                            ]);
+                        }
+                        if (0 > $original) {
+                            $each_invent_item->update([
+                                'quantity' => $original - $quantity_used,
+                            ]);
+                        }
                     }
                 }
             }
@@ -490,7 +507,7 @@ class InvoicesController extends Controller
             //Add, if quantity is reduce in the existing invoice item
             //Subtract, if quantity is add in the existing invoice item
             if ($req['invoice_id']) {
-                $invent = InventoryItem::where('inventory_id', $req['inventory_id'])->get();
+                $invent = InventoryItem::where('inventory_id', $req['inventory_id'])->orderBy('id', 'desc')->get();
                 $request_item_quantity = (int) ($req['quantity']);
                 $existing_invoice_item = InvoiceItem::findOrFail($req['id']);
                 $difference_between_updated_invoice_item_quantity = $request_item_quantity - $existing_invoice_item->quantity;
@@ -546,7 +563,7 @@ class InvoicesController extends Controller
                 ]);
 
                 //update inventory quantity
-                $invent = InventoryItem::where('inventory_id', $new_invoice_item->inventory_id)->get();
+                $invent = InventoryItem::where('inventory_id', $new_invoice_item->inventory_id)->where('quantity', '!=', 0)->orderBy('id', 'desc')->get();
                 $invent_quantity = (int) ($invent->sum('quantity'));
                 $request_item_quantity = (int) ($req['quantity']);
                 $updated_quantity = $invent_quantity - $new_invoice_item->quantity;
