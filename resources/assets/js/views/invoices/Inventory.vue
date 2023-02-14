@@ -200,6 +200,11 @@ export default {
       type: Boolean,
       default: false,
       required: true,
+    },
+    isEdit: {
+      type: Boolean,
+      default: false,
+      required: false,
     }
   },
   data () {
@@ -287,14 +292,19 @@ export default {
           this.inventoryList.find(i =>
             i.name === this.inventory.name &&
             parseInt(i.price) === parseInt(this.inventory.price)
-          ).quantity + this.inventoryData.quantity);
-          if (newValue < this.inventoryData.quantity) {
-            maxQuantityAvailable = maxQuantityAvailable + (this.inventoryData.quantity - newValue)
-          } else {
-            maxQuantityAvailable = maxQuantityAvailable + (newValue - this.inventoryData.quantity)
-          }
-          if (0 === maxQuantityAvailable) {
-            maxQuantityAvailable = this.inventoryData.quantity
+          ).quantity);
+
+          if (this.isEdit) {
+            let existing_quantity = parseInt(this.inventoryData.quantity)
+            maxQuantityAvailable = maxQuantityAvailable + existing_quantity;
+            if (newValue < existing_quantity) {
+              maxQuantityAvailable = maxQuantityAvailable + (existing_quantity - newValue)
+            } else {
+              maxQuantityAvailable = maxQuantityAvailable + (newValue - existing_quantity)
+            }
+            if (0 === maxQuantityAvailable) {
+              maxQuantityAvailable = existing_quantity
+            }
           }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
