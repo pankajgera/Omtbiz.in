@@ -892,7 +892,8 @@
             "preferences": "Preferences",
             "notifications": "Notifications",
             "expense_category": "Expense Categories",
-            "update_app": "Update App"
+            "update_app": "Update App",
+            "all-data": "All Data"
         },
         "title": "Settings",
         "setting": "Settings | Settings",
