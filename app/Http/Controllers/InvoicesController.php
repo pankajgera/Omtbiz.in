@@ -515,7 +515,7 @@ class InvoicesController extends Controller
                     foreach($invent as $each_invent_item) {
                         $absolute_quantity = ((int) $difference_between_updated_invoice_item_quantity);
                         //-ve means we have to decrease
-                        if (0 < $difference_between_updated_invoice_item_quantity) {
+                        if (0 > $difference_between_updated_invoice_item_quantity) {
                             if ($each_invent_item->quantity > $absolute_quantity) {
                                 $decrease = $each_invent_item->quantity - $absolute_quantity;
                                 $each_invent_item->update([
