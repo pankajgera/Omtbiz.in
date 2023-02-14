@@ -19,6 +19,8 @@ use App\Space\TimeZones;
 use App\Models\Currency;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
+use App\Jobs\EraseData;
+use Auth;
 
 class CompanyController extends Controller
 {
@@ -378,6 +380,22 @@ class CompanyController extends Controller
 
         return response()->json([
             'user' => $user,
+            'success' => true
+        ]);
+    }
+
+     /**
+     * Retrive all Data .
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function delete(Request $request)
+    {
+        $job = new EraseData();
+        dispatch($job);
+
+        return response()->json([
             'success' => true
         ]);
     }
