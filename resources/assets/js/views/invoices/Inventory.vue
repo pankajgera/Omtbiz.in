@@ -47,7 +47,7 @@
                 type="number"
                 small
                 :disabled="isDisable || disabled"
-                @input="$v.inventory.quantity.$touch()"
+                @blur="$v.inventory.quantity.$touch()"
               />
               <div v-if="$v.inventory.quantity.$error">
                 <span v-if="!$v.inventory.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
@@ -283,31 +283,39 @@ export default {
         return this.inventory.quantity
       },
       set: function (newValue) {
-        let maxQuantity = parseInt(
-            this.inventoryList.find(i =>
-              i.name === this.inventory.name &&
-              parseInt(i.sale_price) === parseInt(this.inventory.sale_price)
-            ).quantity);
-        if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
+        let maxQuantityAvailable = parseInt(
+          this.inventoryList.find(i =>
+            i.name === this.inventory.name &&
+            parseInt(i.price) === parseInt(this.inventory.price)
+          ).quantity + this.inventoryData.quantity);
+          if (newValue < this.inventoryData.quantity) {
+            maxQuantityAvailable = maxQuantityAvailable + (this.inventoryData.quantity - newValue)
+          } else {
+            maxQuantityAvailable = maxQuantityAvailable + (newValue - this.inventoryData.quantity)
+          }
+          if (0 === maxQuantityAvailable) {
+            maxQuantityAvailable = this.inventoryData.quantity
+          }
+        if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),
-            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantity}),
+            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantityAvailable}),
             icon: '/assets/icon/check-circle-solid.svg',
             buttons: true,
             dangerMode: true
           }).then(async (success) => {
             if (success) {
               let id = this.inventory.id ? this.inventory.id : this.inventory.inventory_id;
-              this.inventory.quantity = null
+              //this.inventory.quantity = null
               window.open('/inventory/' + id + '/edit', '_blank').focus()
             } else {
-              this.inventory.quantity = null
+              //this.inventory.quantity = null
             }
           })
         } else {
           this.inventory.quantity = newValue
         }
-         this.updatingInput = 'quantity'
+        this.updatingInput = 'quantity'
       }
     }
   },
