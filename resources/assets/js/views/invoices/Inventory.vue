@@ -293,19 +293,6 @@ export default {
             i.name === this.inventory.name &&
             parseInt(i.price) === parseInt(this.inventory.price)
           ).quantity);
-
-          if (this.isEdit) {
-            let existing_quantity = parseInt(this.inventoryData.quantity)
-            maxQuantityAvailable = maxQuantityAvailable + existing_quantity;
-            if (newValue < existing_quantity) {
-              maxQuantityAvailable = maxQuantityAvailable + (existing_quantity - newValue)
-            } else {
-              maxQuantityAvailable = maxQuantityAvailable + (newValue - existing_quantity)
-            }
-            if (0 === maxQuantityAvailable) {
-              maxQuantityAvailable = existing_quantity
-            }
-          }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),

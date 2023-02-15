@@ -31,7 +31,7 @@ class InventoryController extends Controller
 
             foreach($inventories as $each) {
                 $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
-                $each['quantity'] = InventoryItem::where('inventory_id', $each->id)->sum('quantity');
+                $each['quantity'] = $each->quantity;
                 $each['price'] = $lastest_item->price;
                 $each['sale_price'] = $lastest_item->sale_price;
                 $each['unit'] = $lastest_item->unit;
@@ -59,7 +59,7 @@ class InventoryController extends Controller
                 $each->date_time = Carbon::parse($each->created_at, 'Asia/Kolkata')->toDateTimeString();
             }
             return response()->json([
-                'related_inventories' => $related_inventories,
+                'related_inventories' => 1 < count($related_inventories) ? $related_inventories : [],
                 'inventory' => $inventory,
             ]);
         } catch (Exception $e) {
@@ -93,6 +93,8 @@ class InventoryController extends Controller
                 $items->sale_price = $request->sale_price;
                 $items->unit = $request->unit;
                 $items->save();
+
+                $inventory->updateInventoryQuantity();
             } else {
                 $items = new InventoryItem();
                 $items->inventory_id = $find_inventory->id;
@@ -102,6 +104,8 @@ class InventoryController extends Controller
                 $items->sale_price = $request->sale_price;
                 $items->unit = $request->unit;
                 $items->save();
+
+                $find_inventory->updateInventoryQuantity();
             }
 
             return response()->json([
@@ -138,6 +142,8 @@ class InventoryController extends Controller
             $items->sale_price = $request->sale_price;
             $items->unit = $request->unit;
             $items->save();
+
+            $inventory->updateInventoryQuantity();
 
             return response()->json([
                 'inventory' => $inventory,

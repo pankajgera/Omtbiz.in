@@ -8,17 +8,13 @@ class Inventory extends Model
 {
     protected $fillable = [
         'name',
-        'company_id'
+        'company_id',
+        'quantity',
     ];
 
     public function inventoryItem()
     {
         return $this->hasMany(InventoryItem::class, 'inventory_id');
-    }
-
-    public function getQuantityAttribute()
-    {
-        return InventoryItem::where('inventory_id', $this->id)->sum('quantity');
     }
 
     public function scopeWhereName($query, $name)
@@ -91,5 +87,13 @@ class Inventory extends Model
         InventoryItem::where('inventory_id', $inventory->id)->delete();
         $inventory->delete();
         return true;
+    }
+
+    public function updateInventoryQuantity()
+    {
+        $total = InventoryItem::where('inventory_id', $this->id)->sum('quantity');
+        $this->update([
+            'quantity' => $total,
+        ]);
     }
 }
