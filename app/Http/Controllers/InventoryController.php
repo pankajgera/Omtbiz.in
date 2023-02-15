@@ -143,7 +143,7 @@ class InventoryController extends Controller
             $items->unit = $request->unit;
             $items->save();
 
-            $inventory->updateInventoryQuantity();
+            $inventory->updateInventoryQuantity($items->quantity);
 
             return response()->json([
                 'inventory' => $inventory,
