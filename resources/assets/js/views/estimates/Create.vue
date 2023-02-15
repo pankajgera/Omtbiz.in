@@ -419,6 +419,8 @@ export default {
         filter: {},
         orderByField: '',
         orderBy: ''
+      }).then((resp) => {
+        this.inventoryList = resp.data.inventories.data
       })
     },
     async loadData () {
@@ -428,7 +430,6 @@ export default {
         this.isEdit = true
         if (response.data) {
           this.newEstimate = response.data.estimate
-          this.inventoryList = response.data.inventories
           this.inventoryNegative = response.data.inventory_negative
           this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
@@ -449,7 +450,6 @@ export default {
         this.selectedCurrency = this.defaultCurrency
         this.estimateTemplates = response.data.estimateTemplates
         this.newEstimate.estimate_date = response.data.estimate_today_date
-        this.inventoryList = response.data.inventories
         this.inventoryNegative = response.data.inventory_negative
         this.estimatePrefix = response.data.estimate_prefix
         this.estimateNumAttribute = response.data.nextEstimateNumberAttribute
