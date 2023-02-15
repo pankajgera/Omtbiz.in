@@ -94,7 +94,7 @@ class InventoryController extends Controller
                 $items->unit = $request->unit;
                 $items->save();
 
-                $inventory->updateInventoryQuantity();
+                $inventory->updateInventoryQuantity($items->quantity);
             } else {
                 $items = new InventoryItem();
                 $items->inventory_id = $find_inventory->id;
@@ -105,7 +105,7 @@ class InventoryController extends Controller
                 $items->unit = $request->unit;
                 $items->save();
 
-                $find_inventory->updateInventoryQuantity();
+                $find_inventory->updateInventoryQuantity($items->quantity);
             }
 
             return response()->json([

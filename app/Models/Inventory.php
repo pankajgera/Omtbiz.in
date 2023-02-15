@@ -89,11 +89,11 @@ class Inventory extends Model
         return true;
     }
 
-    public function updateInventoryQuantity()
+    public function updateInventoryQuantity($new_item_quantity)
     {
-        $total = InventoryItem::where('inventory_id', $this->id)->sum('quantity');
+        $total = Inventory::where('name', $this->name)->first();
         $this->update([
-            'quantity' => $total,
+            'quantity' => $total->quantity + $new_item_quantity,
         ]);
     }
 }
