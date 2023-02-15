@@ -94,18 +94,22 @@ class InventoryController extends Controller
                 $items->unit = $request->unit;
                 $items->save();
 
-                $inventory->updateInventoryQuantity($items->quantity);
+                if ($inventory->quantity !== $items->quantity) {
+                    $inventory->updateInventoryQuantity($items->quantity);
+                }
             } else {
                 $items = new InventoryItem();
                 $items->inventory_id = $find_inventory->id;
                 $items->worker_name = $request->worker_name;
-                $items->quantity = $request->quantity;
+                // $items->quantity = $request->quantity;
                 $items->price = $request->price;
                 $items->sale_price = $request->sale_price;
                 $items->unit = $request->unit;
                 $items->save();
 
-                $find_inventory->updateInventoryQuantity($items->quantity);
+                if ($find_inventory->quantity !==  $request->quantity) {
+                    $find_inventory->updateInventoryQuantity( $request->quantity);
+                }
             }
 
             return response()->json([
@@ -137,13 +141,15 @@ class InventoryController extends Controller
             //Update latest entry
             $items = InventoryItem::where('inventory_id', $inventory->id)->orderBy('id', 'desc')->first();
             $items->worker_name = $request->worker_name;
-            $items->quantity = $request->quantity;
+            //$items->quantity = $request->quantity;
             $items->price = $request->price;
             $items->sale_price = $request->sale_price;
             $items->unit = $request->unit;
             $items->save();
 
-            $inventory->updateInventoryQuantity($items->quantity);
+            // if ($inventory->quantity !==  $request->quantity) {
+            //     $inventory->updateInventoryQuantity($request->quantity);
+            // }
 
             return response()->json([
                 'inventory' => $inventory,
