@@ -49,6 +49,7 @@
                   type="number"
                   min="0"
                   name="quantity"
+                  :disabled="isEdit"
                 />
                 <div v-if="$v.formData.quantity.$error">
                   <span v-if="!$v.formData.quantity.required" class="text-danger">{{ $t('validation.required') }} </span>
