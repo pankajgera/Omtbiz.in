@@ -475,18 +475,20 @@ class InvoicesController extends Controller
             $request_item_quantity = (int) ($req['quantity']);
             if ($req['invoice_id']) {
                 $invent = Inventory::where('id', $req['inventory_id'])->first();
+                $existing_invoice_item = InvoiceItem::findOrFail($req['id']);
                 //If user didn't changed quantity but changed something else
                 //In that case we don't update inventory
                 if ($request_item_quantity !== $invent->quantity) {
-                    $calc_quantity = $invent->quantity > $request_item_quantity ? $invent->quantity - $request_item_quantity : $request_item_quantity - $invent->quantity;
-                    $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
-                    if (!$inventory_negative && 0 < $calc_quantity) {
-                        $invent->update([
-                            'quantity' => $calc_quantity,
-                        ]);
-                    }
+                    $calc_quantity = $request_item_quantity > $existing_invoice_item->quantity ?
+                        $request_item_quantity - $existing_invoice_item->quantity :
+                        $existing_invoice_item->quantity - $request_item_quantity;
+                    $calc_quantity = $calc_quantity > $invent->quantity ?
+                        $calc_quantity - $invent->quantity :
+                        $invent->quantity - $calc_quantity;
+                    $invent->update([
+                        'quantity' => $calc_quantity,
+                    ]);
                 }
-                $existing_invoice_item = InvoiceItem::findOrFail($req['id']);
                 //Existing invoice items, other items in database should be deleted
                 array_push($existing_invoice_items, $existing_invoice_item['id']);
                 //Update existing invoice item, just in case user had changed anything
