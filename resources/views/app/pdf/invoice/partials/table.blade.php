@@ -1,21 +1,9 @@
 <table width="100%" class="table2" cellspacing="0" border="0">
     <tr class="main-table-header">
         <th class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">#</th>
-        @if ($invoice->discount_per_item === 'NO')
-            <th width="50%" class="ItemTableHeader" style="text-align: left; color: #55547A; padding-left: 0px">Items
-            </th>
-        @else
-            <th width="30%" class="ItemTableHeader" style="text-align: left; color: #55547A; padding-left: 0px">Items
-            </th>
-        @endif
-        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Quantity
-        </th>
-        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Price
-        </th>
-        @if ($invoice->discount_per_item === 'YES')
-            <th width="10%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-left: 10px">
-                Discount</th>
-        @endif
+        <th width="30%" class="ItemTableHeader" style="text-align: left; color: #55547A; padding-left: 0px">Items</th>
+        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Quantity</th>
+        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Price</th>
         <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A;">Amount</th>
     </tr>
     @php
@@ -38,16 +26,6 @@
             <td class="inv-item items" style="text-align: right; color: #040405; padding-right: 20px">
                 ₹ {!! $item->price / 100 !!}
             </td>
-            @if ($invoice->discount_per_item === 'YES')
-                <td class="inv-item items" style="text-align: right; color: #040405; padding-left: 10px">
-                    @if ($item->discount_type === 'fixed')
-                        ₹ {!! $item->discount_val !!}
-                    @endif
-                    @if ($item->discount_type === 'percentage')
-                        {{ $item->discount }}%
-                    @endif
-                </td>
-            @endif
             <td class="inv-item items" style="text-align: right; color: #040405;">
                 ₹ {!! $item->total / 100 !!}
             </td>

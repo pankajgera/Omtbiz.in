@@ -7,8 +7,4 @@ export default {
     state.languages = data.languages
     state.date_formats = data.date_formats
   },
-
-  [types.SET_ITEM_DISCOUNT] (state) {
-    state.item_discount = true
-  }
 }
