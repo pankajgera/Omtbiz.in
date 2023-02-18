@@ -74,7 +74,6 @@ class InvoicesController extends Controller
     public function create(Request $request)
     {
         $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company'));
-        $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company'));
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
@@ -95,7 +94,6 @@ class InvoicesController extends Controller
             'inventories' => Inventory::query()->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $tax_per_item,
-            'discount_per_item' => $discount_per_item,
             'invoice_prefix' => $invoice_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
@@ -122,7 +120,6 @@ class InvoicesController extends Controller
             $status = Invoice::TO_BE_DISPATCH;
 
             $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
-            $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company')) ?? 'NO';
 
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
@@ -135,13 +132,9 @@ class InvoicesController extends Controller
                 'status' => Invoice::TO_BE_DISPATCH,
                 'paid_status' => Invoice::STATUS_PAID,
                 'sub_total' => $request->sub_total,
-                'discount' => $request->discount,
-                'discount_type' => $request->discount_type,
-                'discount_val' => $request->discount_val,
                 'total' => $request->total,
                 'due_amount' => $request->total,
                 'tax_per_item' => $tax_per_item,
-                'discount_per_item' => $discount_per_item,
                 'tax' => $request->tax,
                 'notes' => $request->notes,
                 'unique_hash' => str_random(60),
@@ -404,7 +397,6 @@ class InvoicesController extends Controller
             'invoice' => $invoice,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'tax_per_item' => $invoice->tax_per_item,
-            'discount_per_item' => $invoice->discount_per_item,
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
@@ -445,9 +437,6 @@ class InvoicesController extends Controller
         $invoice->status = $request->status;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
-        $invoice->discount = $request->discount;
-        $invoice->discount_type = $request->discount_type;
-        $invoice->discount_val = $request->discount_val;
         $invoice->tax = $request->tax;
         $invoice->notes = $request->notes;
         $invoice->save();

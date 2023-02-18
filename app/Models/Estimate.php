@@ -34,9 +34,6 @@ class Estimate extends Model
         'company_id',
         'reference_number',
         'estimate_template_id',
-        'discount',
-        'discount_type',
-        'discount_val',
         'status',
         'sub_total',
         'tax_per_item',
@@ -52,8 +49,6 @@ class Estimate extends Model
         'total' => 'integer',
         'tax' => 'integer',
         'sub_total' => 'integer',
-        'discount' => 'float',
-        'discount_val' => 'integer',
     ];
 
     public static function getNextEstimateNumber($value, $company_id)
