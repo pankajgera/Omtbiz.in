@@ -25,8 +25,6 @@ class Invoice extends Model
     protected $casts = [
         'total' => 'integer',
         'sub_total' => 'integer',
-        'discount' => 'float',
-        'discount_val' => 'integer',
     ];
 
     protected $fillable = [
@@ -40,11 +38,7 @@ class Invoice extends Model
         'status',
         'paid_status',
         'sub_total',
-        'discount_per_item',
         'total',
-        'discount',
-        'discount_type',
-        'discount_val',
         'due_amount',
         'notes',
         'unique_hash',

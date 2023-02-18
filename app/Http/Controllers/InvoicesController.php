@@ -501,8 +501,6 @@ class InvoicesController extends Controller
                     'company_id' => $req['company_id'],
                     'quantity' => $request_item_quantity,
                     'type' => 'invoice',
-                    'discount_type' => 'fixed',
-                    'discount' => 0,
                 ]);
                 //Existing invoice items, other items in database should be deleted
                 array_push($existing_invoice_items, $existing_invoice_item['id']);

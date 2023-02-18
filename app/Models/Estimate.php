@@ -36,7 +36,6 @@ class Estimate extends Model
         'estimate_template_id',
         'status',
         'sub_total',
-        'discount_per_item',
         'total',
         'notes',
         'unique_hash',
