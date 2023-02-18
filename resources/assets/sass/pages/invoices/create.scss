@@ -296,25 +296,6 @@
         }
     }
 
-    .tax-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-
-        .tax-amount {
-            flex: 3;
-        }
-
-        .tax-select {
-            flex: 4;
-        }
-    }
-
-    .tax-tr td {
-        padding: 0 21px;
-    }
-
     .multi-select-item {
         .multiselect,
         .multiselect__input,
@@ -456,10 +437,6 @@
                     color: $ls-color-primary--light;
                 }
 
-                .discount-drop-down {
-                    width: 105px;
-                }
-
                 .item-dropdown {
                     font-family: Arial, Helvetica, sans-serif !important;
                     font-size: 16px;
@@ -470,14 +447,6 @@
                 margin: 0;
                 padding-top: 7px;
                 border-top: 1px solid $ls-color-gray--light;
-            }
-
-            .tax-selector {
-                font-weight: 600;
-                font-size: 14px;
-                margin-top: 12px;
-                line-height: 21px;
-                color: $ls-color-primary--light;
             }
         }
     }
@@ -541,12 +510,6 @@
         &:focus {
             box-shadow: none !important;
         }
-    }
-
-    .item-discount {
-        border-radius: 5px 0px 0px 5px !important;
-        height: 40px;
-        // border-right: 0px !important;
     }
 
     @media (max-width: $x-small-breakpoint) {

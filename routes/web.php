@@ -31,15 +31,6 @@ Route::group(['prefix' => 'reports'], function () {
         'uses' => 'ReportController@expensesReport'
     ]);
 
-
-    // report for tax summary
-    //----------------------------------
-    Route::get('/tax-summary/{hash}', [
-        'as' => 'get.tax.summary',
-        'uses' => 'ReportController@taxSummary'
-    ]);
-
-
     // report for profit and loss
     //----------------------------------
     Route::get('/profit-loss/{hash}', [

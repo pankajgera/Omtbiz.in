@@ -32,14 +32,6 @@
                   {{ getFormattedDate(row.date) }}
                 </template>
               </table-column>
-              <!-- <table-column
-                  :label="$t('ledgers.particulars')"
-                  show="particulars"
-                >
-                  <template slot-scope="row">
-                    {{ row.particulars }}
-                  </template>
-                </table-column> -->
               <table-column
                 :label="$t('ledgers.particulars')"
                 show="particulars"
@@ -49,7 +41,8 @@
                     :to="{ path: `/vouchers/${row.id}/edit` }"
                     class="dropdown-item"
                   >
-                    {{ row.particulars }}
+                  {{ masterData.groups }}
+                    <!-- {{ row.particulars }} -->
                   </router-link>
                 </template>
               </table-column>

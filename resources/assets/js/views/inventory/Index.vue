@@ -60,42 +60,6 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('inventory.unit') }} </label>
-            <base-input
-              v-model="filters.unit"
-              type="text"
-              name="unit"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('inventory.avg_price') }} </label>
-            <base-input
-              v-model="filters.price"
-              type="text"
-              name="price"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('inventory.quantity') }} </label>
-            <base-input
-              v-model="filters.quantity"
-              type="text"
-              name="quantity"
-              autocomplete="off"
-            />
-          </div>
-           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('inventory.worker_name') }} </label>
-            <base-input
-              v-model="filters.worker_name"
-              type="text"
-              name="worker_name"
-              autocomplete="off"
-            />
-          </div>
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
@@ -126,7 +90,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventory.length }}</b> {{ $t('general.of') }} <b>{{ totalInventories }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedInventory.length" :show-arrow="false">
+          <v-dropdown v-if="selectedInventory" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -197,19 +161,27 @@
         <table-column
           :label="$t('inventory.unit')"
           show="unit"
-        />
+        >
+          <template slot-scope="row">
+            {{ row.unit }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('inventory.avg_price')"
           show="price"
-        />
+        >
+          <template slot-scope="row">
+            ₹ {{ row.price }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('inventory.quantity')"
           show="quantity"
         />
-         <table-column
+         <!-- <table-column
           :label="$t('inventory.worker_name')"
           show="worker_name"
-        />
+        /> -->
         <table-column
           :key="Math.random()"
           :sortable="false"
@@ -352,7 +324,6 @@ export default {
       this.isRequestOngoing = true
       let response = await this.fetchAllInventory(data)
       this.isRequestOngoing = false
-
       return {
         data: this.inventories, //from state, see mutation
         pagination: {

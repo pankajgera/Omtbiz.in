@@ -47,7 +47,7 @@
                 type="number"
                 small
                 :disabled="isDisable || disabled"
-                @input="$v.inventory.quantity.$touch()"
+                @blur="$v.inventory.quantity.$touch()"
               />
               <div v-if="$v.inventory.quantity.$error">
                 <span v-if="!$v.inventory.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
@@ -153,15 +153,12 @@
 import Guid from 'guid'
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
-import TaxStub from '../../stub/tax'
 import InvoiceStub from '../../stub/invoice'
 import InventorySelect from './InventorySelect'
-import Tax from './Tax'
 const { required, minValue, between, maxLength, requiredIf } = require('vuelidate/lib/validators')
 
 export default {
   components: {
-    Tax,
     InventorySelect
   },
   mixins: [validationMixin],
@@ -181,10 +178,6 @@ export default {
     currency: {
       type: [Object, String],
       required: true
-    },
-    taxPerInventory: {
-      type: String,
-      default: ''
     },
     discountPerInventory: {
       type: String,
@@ -207,6 +200,11 @@ export default {
       type: Boolean,
       default: false,
       required: true,
+    },
+    isEdit: {
+      type: Boolean,
+      default: false,
+      required: false,
     }
   },
   data () {
@@ -256,27 +254,6 @@ export default {
     total () {
       return this.subtotal - this.inventory.discount_val
     },
-    totalSimpleTax () {
-      return window._.sumBy(this.inventory.taxes, function (tax) {
-        if (!tax.compound_tax) {
-          return tax.amount
-        }
-
-        return 0
-      })
-    },
-    totalCompoundTax () {
-      return window._.sumBy(this.inventory.taxes, function (tax) {
-        if (tax.compound_tax) {
-          return tax.amount
-        }
-
-        return 0
-      })
-    },
-    totalTax () {
-      return this.totalSimpleTax + this.totalCompoundTax
-    },
     price: {
       get: function () {
         return this.inventory.price
@@ -311,32 +288,31 @@ export default {
         return this.inventory.quantity
       },
       set: function (newValue) {
-        let maxQuantity = parseInt(
-            this.inventoryList.find(i =>
-              i.name === this.inventory.name &&
-              i.sale_price === this.inventory.sale_price
-            ).quantity);
-        if (maxQuantity < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
+        let maxQuantityAvailable = parseInt(
+          this.inventoryList.find(i =>
+            i.name === this.inventory.name &&
+            parseInt(i.price) === parseInt(this.inventory.price)
+          ).quantity);
+        if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),
-            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantity}),
+            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantityAvailable}),
             icon: '/assets/icon/check-circle-solid.svg',
             buttons: true,
             dangerMode: true
           }).then(async (success) => {
             if (success) {
               let id = this.inventory.id ? this.inventory.id : this.inventory.inventory_id;
-              this.inventory.quantity = null
+              //this.inventory.quantity = null
               window.open('/inventory/' + id + '/edit', '_blank').focus()
             } else {
-              this.inventory.quantity = null
+              //this.inventory.quantity = null
             }
           })
         } else {
-          console.log(newValue);
           this.inventory.quantity = newValue
         }
-         this.updatingInput = 'quantity'
+        this.updatingInput = 'quantity'
       }
     }
   },
@@ -403,7 +379,7 @@ export default {
       this.inventory.name = val
     },
     deselectInventory () {
-      this.inventory = {...InvoiceStub, id: this.inventory.id, taxes: [{...TaxStub, id: Guid.raw()}]}
+      this.inventory = {...InvoiceStub, id: this.inventory.id}
       this.$nextTick(() => {
         this.$refs.inventorySelect.$refs.baseSelect.$refs.search.focus()
       })
@@ -442,11 +418,6 @@ export default {
         'inventory': {
           ...this.inventory,
           total: this.total,
-          totalSimpleTax: this.totalSimpleTax,
-          totalCompoundTax: this.totalCompoundTax,
-          totalTax: this.totalTax,
-          tax: this.totalTax,
-          taxes: ('orders' !== this.inventoryType && this.inventory.taxes) ? [...this.inventory.taxes] : []
         }
       })
     },

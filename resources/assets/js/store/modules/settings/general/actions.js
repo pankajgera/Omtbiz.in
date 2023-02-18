@@ -21,7 +21,3 @@ export const loadData = ({ commit, dispatch, state }) => {
     })
   })
 }
-
-export const setItemDiscount = ({ commit, dispatch, state }) => {
-  commit(types.SET_ITEM_DISCOUNT)
-}

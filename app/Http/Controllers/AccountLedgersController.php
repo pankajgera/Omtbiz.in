@@ -32,6 +32,82 @@ class AccountLedgersController extends Controller
             ->latest()
             ->paginate($limit);
 
+
+        foreach($ledgers as $ledger) {
+            $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
+                ->whereCompany($request->header('company'))
+                ->whereNotNull('related_voucher')
+                ->get();
+            $each_ids = null;
+            foreach ($all_voucher_ids as $each) {
+                if ($each_ids) {
+                    $each_ids = $each_ids . ', ' . $each->related_voucher;
+                } else {
+                    $each_ids = $each->related_voucher;
+                }
+            }
+            $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+            $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
+                ->where('account', '!=', $ledger->account)
+                ->whereCompany($request->header('company'))
+                ->orderBy('id', 'desc')
+                ->get();
+            //Update balance according to 'debit' or 'credit'
+            $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)->get();
+            $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
+            $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+            $opening_balance = $ledger->accountMaster->opening_balance;
+            $calc_balance = $ledger->balance;
+            $calc_type = $ledger->type;
+            $calc_total = 0;
+
+            if ($vouchers_debit_sum > $vouchers_credit_sum) {
+                $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
+                $calc_type = 'Dr';
+            } else {
+                $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
+                $calc_type = 'Cr';
+            }
+            if ('Dr' === $ledger->accountMaster->type) {
+                if ('Dr' === $calc_type) {
+                    $calc_balance = $calc_total + $opening_balance;
+                } else {
+                    if ($calc_total > $opening_balance) {
+                        $calc_balance = $calc_total - $opening_balance;
+                        $calc_type = 'Cr';
+                    } else {
+                        $calc_balance = $opening_balance - $calc_total;
+                        $calc_type = 'Dr';
+                    }
+                }
+            } else {
+                if ('Cr' === $calc_type) {
+                    $calc_balance = $calc_total + $opening_balance;
+                } else {
+                    if ($calc_total > $opening_balance) {
+                        $calc_balance  = $calc_total - $opening_balance;
+                        $calc_type = 'Dr';
+                    } else {
+                        $calc_balance = $opening_balance - $calc_total;
+                        $calc_type = 'Cr';
+                    }
+                }
+            }
+
+            $ledger->update([
+                'type' => $calc_type,
+                'credit' => $vouchers_credit_sum,
+                'debit' => $vouchers_debit_sum,
+                'balance' => $calc_balance,
+            ]);
+
+            //Extra's for vouchers collection
+            foreach ($related_vouchers as $each) {
+                $each['voucher_type'] = 'Journal';
+                $each['particulars'] = $each->account;
+            }
+        }
+
         return response()->json([
             'ledgers' => $ledgers,
         ]);
@@ -73,61 +149,6 @@ class AccountLedgersController extends Controller
             ->whereCompany($request->header('company'))
             ->orderBy('id', 'desc')
             ->get();
-
-        //Update balance according to 'debit' or 'credit'
-        $vouchers_by_ledger = Voucher::where('account_ledger_id', $id)->get();
-        $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
-        $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
-        $opening_balance = $ledger->accountMaster->opening_balance;
-        $calc_balance = $ledger->balance;
-        $calc_type = $ledger->type;
-        $calc_total = 0;
-
-        if ($vouchers_debit_sum > $vouchers_credit_sum) {
-            $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
-            $calc_type = 'Dr';
-        } else {
-            $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
-            $calc_type = 'Cr';
-        }
-        if ('Dr' === $ledger->accountMaster->type) {
-            if ('Dr' === $calc_type) {
-                $calc_balance = $calc_total + $opening_balance;
-            } else {
-                if ($calc_total > $opening_balance) {
-                    $calc_balance = $calc_total - $opening_balance;
-                    $calc_type = 'Cr';
-                } else {
-                    $calc_balance = $opening_balance - $calc_total;
-                    $calc_type = 'Dr';
-                }
-            }
-        } else {
-            if ('Cr' === $calc_type) {
-                $calc_balance = $calc_total + $opening_balance;
-            } else {
-                if ($calc_total > $opening_balance) {
-                    $calc_balance  = $calc_total - $opening_balance;
-                    $calc_type = 'Dr';
-                } else {
-                    $calc_balance = $opening_balance - $calc_total;
-                    $calc_type = 'Cr';
-                }
-            }
-        }
-
-        $ledger->update([
-            'type' => $calc_type,
-            'credit' => $vouchers_credit_sum,
-            'debit' => $vouchers_debit_sum,
-            'balance' => $calc_balance,
-        ]);
-
-        //Extra's for vouchers collection
-        foreach ($related_vouchers as $each) {
-            $each['voucher_type'] = 'Journal';
-            $each['particulars'] = $each->account;
-        }
 
         return response()->json([
             'vouchers' => $related_vouchers,

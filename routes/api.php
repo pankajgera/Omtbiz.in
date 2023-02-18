@@ -65,7 +65,6 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('customers', 'CustomersController');
 
-
     // Items
     //----------------------------------
 
@@ -106,13 +105,6 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::resource('invoices', 'InvoicesController');
-
-
-    // Tax Types
-    //----------------------------------
-
-    Route::resource('tax-types', 'TaxTypeController');
-
 
     // Estimates
     //-------------------------------------------------
@@ -217,6 +209,14 @@ Route::group(['middleware' => 'api'], function () {
         Route::get('/profile', [
             'as' => 'get.admin.profile',
             'uses' => 'CompanyController@getAdmin'
+        ]);
+
+        // Erase Data
+        //----------------------------------
+
+        Route::delete('/data/delete', [
+            'as' => 'admin.data.delete',
+            'uses' => 'CompanyController@delete'
         ]);
 
         Route::put('/profile', [

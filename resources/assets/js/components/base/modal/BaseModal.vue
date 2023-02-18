@@ -15,8 +15,6 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import TaxTypeModal from './TaxTypeModal'
-import ItemModal from './ItemModal'
 import EstimateTemplate from './EstimateTemplate'
 import InvoiceTemplate from './InvoiceTemplate'
 import CustomerModal from './CustomerModal'
@@ -27,7 +25,6 @@ import GroupModal from './GroupModal'
 
 export default {
   components: {
-    TaxTypeModal,
     InventoryModal,
     IncreasePriceModal,
     EstimateTemplate,

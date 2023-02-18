@@ -75,7 +75,6 @@ import ExpenseCreate from './views/expenses/Create.vue'
 import SalesReports from './views/reports/SalesReports'
 import ExpensesReport from './views/reports/ExpensesReport'
 import ProfitLossReport from './views/reports/ProfitLossReport'
-import TaxReport from './views/reports/TaxReport.vue'
 import CustomersReport from './views/reports/CustomersReport.vue'
 import ReportLayout from './views/reports/layout/Index.vue'
 import BanksReport from './views/reports/BanksReport.vue'
@@ -92,7 +91,6 @@ import Notifications from './views/settings/Notifications.vue'
 import Calculator from './views/settings/Calculator.vue'
 import Preferences from './views/settings/Preferences.vue'
 import UserProfile from './views/settings/UserProfile.vue'
-import TaxTypes from './views/settings/TaxTypes.vue'
 import ExpenseCategory from './views/settings/ExpenseCategory.vue'
 import MailConfig from './views/settings/MailConfig.vue'
 //import UpdateApp from './views/settings/UpdateApp.vue'
@@ -502,11 +500,6 @@ const routes = [
                         meta: ['admin', 'accountant']
                     },
                     {
-                        path: 'taxes',
-                        component: TaxReport,
-                        meta: ['admin', 'accountant']
-                    },
-                    {
                       path: 'customers',
                       component: CustomersReport,
                       meta: ['admin', 'accountant']
@@ -651,12 +644,6 @@ const routes = [
                         path: 'preferences',
                         name: 'preferences',
                         component: Preferences,
-                        meta: ['admin']
-                    },
-                    {
-                        path: 'tax-types',
-                        name: 'tax.types',
-                        component: TaxTypes,
                         meta: ['admin']
                     },
                     {
