@@ -296,25 +296,6 @@
         }
     }
 
-    .tax-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 10px;
-
-        .tax-amount {
-            flex: 3;
-        }
-
-        .tax-select {
-            flex: 4;
-        }
-    }
-
-    .tax-tr td {
-        padding: 0 21px;
-    }
-
     .multi-select-item {
         .multiselect,
         .multiselect__input,
@@ -470,14 +451,6 @@
                 margin: 0;
                 padding-top: 7px;
                 border-top: 1px solid $ls-color-gray--light;
-            }
-
-            .tax-selector {
-                font-weight: 600;
-                font-size: 14px;
-                margin-top: 12px;
-                line-height: 21px;
-                color: $ls-color-primary--light;
             }
         }
     }

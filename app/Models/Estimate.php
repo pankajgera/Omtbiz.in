@@ -36,10 +36,8 @@ class Estimate extends Model
         'estimate_template_id',
         'status',
         'sub_total',
-        'tax_per_item',
         'discount_per_item',
         'total',
-        'tax',
         'notes',
         'unique_hash',
         'account_master_id'
@@ -47,7 +45,6 @@ class Estimate extends Model
 
     protected $casts = [
         'total' => 'integer',
-        'tax' => 'integer',
         'sub_total' => 'integer',
     ];
 
@@ -96,11 +93,6 @@ class Estimate extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User');
-    }
-
-    public function taxes()
-    {
-        return $this->hasMany(Tax::class);
     }
 
     public function estimateTemplate()
@@ -235,10 +227,6 @@ class Estimate extends Model
 
         if ($estimate->items()->exists()) {
             $estimate->items()->delete();
-        }
-
-        if ($estimate->taxes()->exists()) {
-            $estimate->taxes()->delete();
         }
 
         $estimate->delete();

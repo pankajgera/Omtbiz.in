@@ -16,6 +16,7 @@
               <span class="menu-title ml-3">{{ $t(menuItem.title) }}</span>
             </router-link>
           </li>
+          <li v-if="'admin' === role"><a href="#" @click="showModal" class="link-color ml-2"><svg aria-hidden="true" focusable="false" data-prefix="fa" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="setting-icon svg-inline--fa fa-trash fa-w-14"><path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z" class=""></path></svg> <span class="menu-title ml-3 pl-1">All Data</span></a></li>
         </ol>
       </div>
       <div class="col-lg-9">
@@ -62,13 +63,6 @@ export default {
           meta: ['admin']
         },
         {
-          link: '/settings/tax-types',
-          title: 'settings.menu_title.tax_types',
-          icon: 'check-circle',
-          iconType: 'far',
-          meta: ['admin']
-        },
-        {
           link: '/settings/expense-category',
           title: 'settings.menu_title.expense_category',
           icon: 'list-alt',
@@ -106,6 +100,20 @@ export default {
     }
   },
   methods: {
+    async showModal () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: '',
+        icon: '/assets/icon/trash-solid.svg',
+        buttons: true,
+        dangerMode: true
+      }).then(async (willDelete) => {
+        if (willDelete) {
+        let res  =  axios.delete(`/api/settings/data/delete`);
+         window.toastr['success'](this.$tc('ledgers.deleted_message', 2))
+        }
+      })
+    },
     hasActiveUrl (url) {
       return this.$route.path.indexOf(url) > -1
     }

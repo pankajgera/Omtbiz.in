@@ -17,10 +17,10 @@ use App\Mail\invoicePdf;
 use App\Models\AccountLedger;
 use App\Models\Dispatch;
 use App\Models\Estimate;
+use App\Models\InventoryItem;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
-use App\Models\Tax;
 use App\Models\Voucher;
 use Exception;
 
@@ -36,7 +36,7 @@ class InvoicesController extends Controller
         try {
             $limit = $request->has('limit') ? $request->limit : 20;
 
-            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes', 'master'])
+            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'master'])
                 ->join('users', 'users.id', '=', 'invoices.user_id')
                 ->applyFilters($request->only([
                     'status',
@@ -73,7 +73,6 @@ class InvoicesController extends Controller
      */
     public function create(Request $request)
     {
-        $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company'));
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
@@ -93,7 +92,6 @@ class InvoicesController extends Controller
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
             'inventories' => Inventory::query()->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'tax_per_item' => $tax_per_item,
             'invoice_prefix' => $invoice_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
@@ -119,8 +117,6 @@ class InvoicesController extends Controller
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::TO_BE_DISPATCH;
 
-            $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company')) ?? 'NO';
-
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
@@ -134,8 +130,6 @@ class InvoicesController extends Controller
                 'sub_total' => $request->sub_total,
                 'total' => $request->total,
                 'due_amount' => $request->total,
-                'tax_per_item' => $tax_per_item,
-                'tax' => $request->tax,
                 'notes' => $request->notes,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
@@ -166,13 +160,11 @@ class InvoicesController extends Controller
 
                 $inventory_id = $inventory->id;
                 //Reset inventory quantity
-                $invent = Inventory::find($inventory->inventory_id);
                 $quantity_used = (int) ($inventory->quantity);
-                if ($invent) {
-                    $invent->update([
-                        'quantity' => $invent->quantity > $quantity_used ? $invent->quantity - $quantity_used : $quantity_used - $invent->quantity,
-                    ]);
-                }
+                $invent = Inventory::where('id', $inventory->inventory_id)->first();
+                $invent->update([
+                    'quantity' => $invent->quantity - $quantity_used,
+                ]);
             }
 
             //Add journal entry
@@ -279,17 +271,6 @@ class InvoicesController extends Controller
                 }
             }
 
-
-            if ($request->has('taxes')) {
-                foreach ($request->taxes as $tax) {
-                    $tax['company_id'] = $request->header('company');
-
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $invoice->taxes()->create($tax);
-                    }
-                }
-            }
-
             if ($request->has('invoiceSend')) {
                 $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
                 $data['user'] = User::find($request->user_id)->toArray();
@@ -317,7 +298,7 @@ class InvoicesController extends Controller
                 \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
             }
 
-            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
+            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
             if ($invoice) {
                 //Update estimate
@@ -355,7 +336,6 @@ class InvoicesController extends Controller
             'inventories',
             'user',
             'invoiceTemplate',
-            'taxes.taxType'
         ])->findOrFail($id);
 
         $siteData = [
@@ -376,10 +356,8 @@ class InvoicesController extends Controller
     {
         $invoice = Invoice::with([
             'inventories',
-            'inventories.taxes',
             'user',
             'invoiceTemplate',
-            'taxes.taxType'
         ])->find($id);
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
@@ -396,7 +374,6 @@ class InvoicesController extends Controller
             'invoiceNumber' =>   $number,
             'invoice' => $invoice,
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'tax_per_item' => $invoice->tax_per_item,
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
@@ -437,16 +414,10 @@ class InvoicesController extends Controller
         $invoice->status = $request->status;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
-        $invoice->tax = $request->tax;
         $invoice->notes = $request->notes;
         $invoice->save();
 
-        $invoiceItems = $request->inventories;
-
-        $oldTaxes = $invoice->taxes->toArray();
-        foreach ($oldTaxes as $oldTax) {
-            Tax::destroy($oldTax['id']);
-        }
+        $requestInvoiceItems = $request->inventories;
 
         //Add journal entry
         //It will be "Sales" type
@@ -481,50 +452,65 @@ class InvoicesController extends Controller
 
         $total_invoice_items_amount = 0;
         $existing_invoice_items = [];
-        foreach ($invoiceItems as $single) {
-            $single['company_id'] = $request->header('company');
-            $single['type'] = 'invoice';
-            $total_invoice_items_amount = $total_invoice_items_amount + $single['total'];
+        foreach ($requestInvoiceItems as $req) {
+            $req['company_id'] = $request->header('company');
+            $req['type'] = 'invoice';
+            $total_invoice_items_amount = $total_invoice_items_amount + $req['total'];
             $new_invoice_item = null;
 
-            //Existing invoice items, other items in database should be deleted
-            array_push($existing_invoice_items, $single['id']);
-
             //Reset inventory quantity
-            //Add if quantity is reduce in existing invoice item
-            //Subtract if quantity is add in existing invoice item
-            if ($single['invoice_id']) {
-                $invent = Inventory::find($single['inventory_id']);
-                $invent_quantity = (int) ($invent->quantity);
-                $request_item_quantity = (int) ($single['quantity']);
-                $existing_invoice_item = InvoiceItem::findOrFail($single['id']);
-                $difference = $existing_invoice_item->quantity - $request_item_quantity;
-                $updated_quantity = $invent_quantity + $difference;
-                if ($invent) {
+            //Add, if quantity is reduce in the existing invoice item
+            //Subtract, if quantity is add in the existing invoice item
+            $request_item_quantity = (int) ($req['quantity']);
+            if ($req['invoice_id']) {
+                $invent = Inventory::where('id', $req['inventory_id'])->first();
+                $existing_invoice_item = InvoiceItem::findOrFail($req['id']);
+                //If user didn't changed quantity but changed something else
+                //In that case we don't update inventory
+                if ($request_item_quantity !== $invent->quantity) {
+                    $calc_quantity = $request_item_quantity > $existing_invoice_item->quantity ?
+                        $request_item_quantity - $existing_invoice_item->quantity :
+                        $existing_invoice_item->quantity - $request_item_quantity;
+                    $calc_quantity = $calc_quantity > $invent->quantity ?
+                        $calc_quantity - $invent->quantity :
+                        $invent->quantity - $calc_quantity;
                     $invent->update([
-                        'quantity' => $updated_quantity,
-                    ]);
-                    //Update existing invoice item, just in case user had changed anything
-                    $existing_invoice_item->update([
-                        'name' => $single['name'],
-                        'price' => $single['price'],
-                        'sale_price' => $single['sale_price'],
-                        'total' => $single['total'],
-                        'inventory_id' => $single['inventory_id'],
-                        'quantity' => $request_item_quantity,
+                        'quantity' => $calc_quantity,
                     ]);
                 }
+                //Existing invoice items, other items in database should be deleted
+                array_push($existing_invoice_items, $existing_invoice_item['id']);
+                //Update existing invoice item, just in case user had changed anything
+                $existing_invoice_item->update([
+                    'name' => $req['name'],
+                    'price' => $req['price'],
+                    'sale_price' => $req['sale_price'],
+                    'total' => $req['total'],
+                    'inventory_id' => $req['inventory_id'],
+                    'quantity' => $request_item_quantity,
+                ]);
             } else {
                 //Create/add new invoice items
-                $new_invoice_item = $invoice->inventories()->create($single);
+                $existing_invoice_item = InvoiceItem::create([
+                    'invoice_id' => $invoice->id,
+                    'inventory_id' => $req['inventory_id'],
+                    'name' => $req['name'],
+                    'price' => $req['price'],
+                    'sale_price' => $req['sale_price'],
+                    'total' => $req['total'],
+                    'company_id' => $req['company_id'],
+                    'quantity' => $request_item_quantity,
+                    'type' => 'invoice',
+                    'discount_type' => 'fixed',
+                    'discount' => 0,
+                ]);
+                //Existing invoice items, other items in database should be deleted
+                array_push($existing_invoice_items, $existing_invoice_item['id']);
 
                 //update inventory quantity
-                $invent = Inventory::find($new_invoice_item->inventory_id);
-                $invent_quantity = (int) ($invent->quantity);
-                $request_item_quantity = (int) ($single['quantity']);
-                $updated_quantity = $invent_quantity - $new_invoice_item->quantity;
+                $invent = Inventory::where('id', $req['inventory_id'])->first();
                 $invent->update([
-                    'quantity' => $updated_quantity,
+                    'quantity' => $invent->quantity - $request_item_quantity,
                 ]);
             }
         }
@@ -532,8 +518,8 @@ class InvoicesController extends Controller
         //Delete removed invoice items from database
         $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $existing_invoice_items)->get();
         foreach ($delete_invoice_items as $del) {
+            //'Add' deleting item quantity back to inventory
             $find_invent = Inventory::where('id', $del->inventory_id)->first();
-            //Add deleting item quantity back to inventory
             $find_invent->update([
                 'quantity' => $find_invent->quantity + $del->quantity,
             ]);
@@ -598,7 +584,6 @@ class InvoicesController extends Controller
         }
         foreach ($voucher as $key => $each) {
             $each->update([
-                'invoice_item_id' => $single['id'],
                 'debit' => $each->type === 'Dr' ? $amount : 0,
                 'credit' => $each->type === 'Cr' ? $amount : 0,
             ]);
@@ -609,17 +594,7 @@ class InvoicesController extends Controller
             }
         }
 
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                $tax['company_id'] = $request->header('company');
-
-                if (gettype($tax['amount']) !== "NULL") {
-                    $invoice->taxes()->create($tax);
-                }
-            }
-        }
-
-        $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'taxes'])->find($invoice->id);
+        $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
         return response()->json([
             'url' => url('/invoices/pdf/' . $invoice->unique_hash),
@@ -647,6 +622,15 @@ class InvoicesController extends Controller
         $vouchers = Voucher::where('invoice_id', $id)->get();
         foreach ($vouchers as $each) {
             $each->delete();
+        }
+
+        $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
+        foreach ($invoice_item as $each) {
+            //'Add' deleting item quantity back to inventory
+            $find_invent = Inventory::where('id', $each->inventory_id)->first();
+            $find_invent->update([
+                'quantity' => $find_invent->quantity + $each->quantity,
+            ]);
         }
 
         $invoice = Invoice::destroy($id);
@@ -677,6 +661,15 @@ class InvoicesController extends Controller
         $vouchers = Voucher::where('invoice_id', $id)->get();
         foreach ($vouchers as $each) {
             $each->delete();
+        }
+
+        $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
+        foreach ($invoice_item as $each) {
+            //'Add' deleting item quantity back to inventory
+            $find_invent = Inventory::where('id', $each->inventory_id)->first();
+            $find_invent->update([
+                'quantity' => $find_invent->quantity + $each->quantity,
+            ]);
         }
 
         $invoice = Invoice::destroy($request->id);

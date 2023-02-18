@@ -55,7 +55,6 @@
         "discount": "DISCOUNT",
         "fixed": "Fixed",
         "percentage": "Percentage",
-        "tax": "TAX",
         "total_amount": "TOTAL AMOUNT",
         "bill_to": "Bill to",
         "ship_to": "Ship to",
@@ -71,11 +70,9 @@
         "powered_by": "Powered by",
         "bytefury": "Bytefury",
         "select_a_status": "Select a status",
-        "select_a_tax": "Select a tax",
         "search": "Search",
         "are_you_sure": "Are you sure?",
         "list_is_empty": "List is empty.",
-        "no_tax_found": "No tax found!",
         "four_zero_four": "404",
         "you_got_lost": "Whoops! You got Lost!",
         "go_home": "Go Home",
@@ -127,12 +124,6 @@
             "actions": "Actions",
             "view_all": "View All"
         }
-    },
-    "tax_types": {
-        "name": "Name",
-        "description": "Description",
-        "percent": "Percent",
-        "compound_tax": "Compound Tax"
     },
     "customers": {
         "title": "Customers",
@@ -401,13 +392,11 @@
         "due_date": "Due Date",
         "expiry_date": "Expiry Date",
         "status": "Status",
-        "add_tax": "Add Tax",
         "amount": "Amount",
         "action": "Action",
         "notes": "Notes",
         "bank": "Bank",
         "banks": "Banks",
-        "tax": "Tax",
         "estimate_template": "Template",
         "convert_to_invoice": "Convert to Invoice",
         "mark_as_sent": "Mark as Sent",
@@ -437,7 +426,6 @@
         "edit_estimate": "Edit Estimate",
         "items": "items",
         "Estimate": "Estimate | Estimates",
-        "add_new_tax": "Add New Tax",
         "no_estimates": "No estimates yet!",
         "list_of_estimates": "This section will contain the list of estimates.",
         "mark_as_rejected": "Mark as rejected",
@@ -452,7 +440,6 @@
             "total": "Total",
             "total_discount": "Total Discount",
             "sub_total": "Sub Total",
-            "tax": "Tax",
             "amount": "Amount",
             "select_an_inventory": "Type or click to select an item",
             "type_inventory_description": "Type Item Description (optional)"
@@ -474,7 +461,6 @@
             "total": "Total",
             "total_discount": "Total Discount",
             "sub_total": "Sub Total",
-            "tax": "Tax",
             "amount": "Amount",
             "select_an_item": "Type or click to select an item",
             "type_item_description": "Type Item Description (optional)"
@@ -511,13 +497,11 @@
         "due_date": "Due Date",
         "expiry_date": "Expiry Date",
         "status": "Status",
-        "add_tax": "Add Tax",
         "amount": "Amount",
         "action": "Action",
         "notes": "Notes",
         "bank": "Bank",
         "banks": "Banks",
-        "tax": "Tax",
         "order_template": "Template",
         "convert_to_invoice": "Convert to Invoice",
         "mark_as_sent": "Mark as Sent",
@@ -547,7 +531,6 @@
         "edit_order": "Edit Order",
         "items": "items",
         "Order": "Order | Orders",
-        "add_new_tax": "Add New Tax",
         "no_orders": "No orders yet!",
         "list_of_orders": "This section will contain the list of orders.",
         "mark_as_rejected": "Mark as rejected",
@@ -562,7 +545,6 @@
             "total": "Total",
             "total_discount": "Total Discount",
             "sub_total": "Sub Total",
-            "tax": "Tax",
             "amount": "Amount",
             "select_an_inventory": "Type or click to select an item",
             "type_inventory_description": "Type Item Description (optional)"
@@ -584,7 +566,6 @@
             "total": "Total",
             "total_discount": "Total Discount",
             "sub_total": "Sub Total",
-            "tax": "Tax",
             "amount": "Amount",
             "select_an_item": "Type or click to select an item",
             "type_item_description": "Type Item Description (optional)"
@@ -620,7 +601,6 @@
         "date": "Date",
         "due_date": "Due Date",
         "status": "Status",
-        "add_tax": "Add Tax",
         "amount": "Amount",
         "action": "Action",
         "notes": "Notes",
@@ -641,7 +621,6 @@
         "new_invoice": "New Invoice",
         "save_invoice": "Save Invoice",
         "update_invoice": "Update Invoice",
-        "add_new_tax": "Add New Tax",
         "no_invoices": "No Invoices yet!",
         "list_of_invoices": "This section will contain the list of invoices.",
         "select_invoice": "Select Invoice",
@@ -661,7 +640,6 @@
             "total": "Total",
             "total_discount": "Total Discount",
             "sub_total": "Sub Total",
-            "tax": "Tax",
             "amount": "Amount",
             "select_an_inventory": "Type or click to select an item",
             "type_inventory_description": "Type Item Description (optional)"
@@ -696,8 +674,7 @@
             "discount": "Discount",
             "total": "Total",
             "total_discount": "Total Discount",
-            "sub_total": "Sub Total",
-            "tax": "Tax"
+            "sub_total": "Sub Total"
         }
     },
     "payments": {
@@ -857,12 +834,6 @@
             "from_date": "From Date",
             "report_type": "Report Type"
         },
-        "taxes": {
-            "taxes": "Taxes",
-            "to_date": "To Date",
-            "from_date": "From Date",
-            "date_range": "Select Date Range"
-        },
         "errors": {
             "required": "Field is required."
         },
@@ -920,9 +891,9 @@
             "customization": "Customization",
             "preferences": "Preferences",
             "notifications": "Notifications",
-            "tax_types": "Tax Types",
             "expense_category": "Expense Categories",
-            "update_app": "Update App"
+            "update_app": "Update App",
+            "all-data": "All Data"
         },
         "title": "Settings",
         "setting": "Settings | Settings",
@@ -1077,24 +1048,6 @@
             "save": "Save",
             "email_save_message": "Email saved successfully",
             "please_enter_email": "Please Enter Email"
-        },
-        "tax_types": {
-            "title": "Tax Types",
-            "add_tax": "Add Tax",
-            "description": "You can add or Remove Taxes as you please. Omtbiz supports Taxes on Individual Items as well as on the invoice.",
-            "add_new_tax": "Add New Tax",
-            "tax_settings": "Tax Settings",
-            "tax_per_item": "Tax Per Item",
-            "tax_name": "Tax Name",
-            "compound_tax": "Compound Tax",
-            "percent": "Percent",
-            "action": "Action",
-            "tax_setting_description": "Enable this if you want to add taxes to individual invoice items. By default, taxes are added directly to the invoice.",
-            "created_message": "Tax type created successfully",
-            "updated_message": "Tax type updated successfully",
-            "deleted_message": "Tax type deleted successfully",
-            "confirm_delete": "You will not be able to recover this Tax Type",
-            "already_in_use": "Tax is already in use"
         },
         "expense_category": {
             "title": "Expense Categories",
@@ -1437,7 +1390,6 @@
         "not_yet": "Not yet? Send it again",
         "password_min_length": "Password must contain {count} characters",
         "name_min_length": "Name must have at least {count} letters.",
-        "enter_valid_tax_rate": "Enter valid tax rate",
         "numbers_only": "Numbers Only.",
         "number_min": "Minimum length should be {min}",
         "number_max": "Maximum length should be {max}",

@@ -74,30 +74,6 @@
             style="padding-right:10px; text-align: right;  font-size:12px; color: #040405; font-weight: 500;">{!! format_money_pdf($estimate->sub_total, $estimate->user->currency) !!}</td>
     </tr>
 
-    @if ($estimate->tax_per_item === 'YES')
-        @for ($i = 0; $i < count($labels); $i++)
-            <tr>
-                <td class="no-border" style="padding-left:10px; text-align:left; font-size:12px;  color: #55547A;">
-                    {{$labels[$i]}}
-                </td>
-                <td class="no-border items padd2" style="padding-right:10px; font-weight: 500; text-align: right; font-size:12px;  color: #040405">
-                    {!! format_money_pdf($taxes[$i], $estimate->user->currency) !!}
-                </td>
-            </tr>
-        @endfor
-    @else
-        @foreach ($estimate->taxes as $tax)
-            <tr>
-                <td class="no-border" style="padding-left:10px; text-align:left; font-size:12px;  color: #55547A;">
-                    {{$tax->name.' ('.$tax->percent.'%)'}}
-                </td>
-                <td class="no-border items padd2" style="padding-right:10px; font-weight: 500; text-align: right; font-size:12px;  color: #040405">
-                    {!! format_money_pdf($tax->amount, $estimate->user->currency) !!}
-                </td>
-            </tr>
-        @endforeach
-    @endif
-
     @if ($estimate->discount_per_item === 'NO')
         <tr>
             <td class="no-border" style="padding-left:10px; text-align:left; font-size:12px; color: #55547A;">

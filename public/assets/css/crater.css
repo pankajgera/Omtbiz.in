@@ -13635,65 +13635,6 @@ fieldset[disabled] .multiselect {
   background: #F9FBFF;
 }
 
-.tax-select .main-section {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 15px 15px 0 15px;
-}
-.tax-select .search-bar {
-  display: flex;
-  position: relative;
-  width: 100%;
-}
-.tax-select .no-data-label {
-  display: flex;
-  justify-content: center;
-  color: #B9C1D1;
-  padding: 20px 20px;
-}
-.tax-select .no-data-label label {
-  margin: 0 0 0 0;
-}
-.tax-select .list {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  overflow: auto;
-  max-height: 112px;
-}
-.tax-select .list .list-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  max-height: 56px;
-  border-bottom: 1px solid rgba(185, 193, 209, 0.41);
-  cursor: pointer;
-}
-.tax-select .list .list-item label {
-  font-size: 16px;
-  margin: 0;
-  font-weight: normal;
-  color: #262630;
-  line-height: 1.2;
-  display: inline-block;
-  cursor: pointer;
-}
-.tax-select .list .list-item:last-child {
-  border: none;
-}
-.tax-select .list .list-item:hover {
-  background: #F9FBFF;
-  cursor: pointer;
-}
-.tax-select .list .item-disabled {
-  background: #F9FBFF;
-  cursor: not-allowed !important;
-  opacity: 0.5;
-  z-index: -10;
-  pointer-events: none !important;
-}
-
 .image-upload-box {
   height: 110px;
   padding: 20px;
@@ -13950,35 +13891,6 @@ fieldset[disabled] .multiselect {
     position: relative;
   }
   .base-modal .customer-modal .input-label {
-    text-align: left;
-  }
-}
-.tax-type-modal .card-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 20px 20px;
-}
-.tax-type-modal .input-label {
-  text-align: end;
-  padding-right: 0;
-  position: relative;
-}
-.tax-type-modal .required {
-  position: absolute;
-  left: -10px;
-  color: #FB7178;
-}
-.tax-type-modal .compound-tax-toggle {
-  display: flex;
-  align-items: center;
-  margin-top: 9px;
-}
-
-@media (max-width: 480px) {
-  .base-modal .tax-type-modal {
-    width: 100vw;
-  }
-  .base-modal .tax-type-modal .input-label {
     text-align: left;
   }
 }
@@ -14701,21 +14613,6 @@ fieldset[disabled] .multiselect {
 .settings-container .expense-category td {
   background-color: #F9FBFF !important;
 }
-.settings-container .tax-table td {
-  background-color: #F9FBFF !important;
-}
-.settings-container .tax-table .compound-tax {
-  display: inline;
-  padding: 2px 8px;
-  font-size: 10px;
-  line-height: 15px;
-  background: #FED7D7;
-  color: #9B2C2C;
-}
-.settings-container .add-new-tax {
-  height: 45px;
-  white-space: nowrap;
-}
 .settings-container .flex-box {
   display: flex;
 }
@@ -14777,17 +14674,9 @@ fieldset[disabled] .multiselect {
     text-align: center;
     justify-content: center;
   }
-  .settings-container .tax-table .tax-name {
-    margin-top: 21px;
-    width: 76%;
-  }
   .settings-container .expense-category .table-component__table__body tr:first-child td:nth-child(2) {
     height: auto;
     width: 101%;
-  }
-  .settings-container .add-new-tax {
-    position: relative;
-    z-index: 1;
   }
 }
 .invoice-create-page {
@@ -15026,21 +14915,6 @@ fieldset[disabled] .multiselect {
 .invoice-create-page .item-table .item-body .item-row .remove-icon {
   color: #55547A;
 }
-.invoice-create-page .tax-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.invoice-create-page .tax-row .tax-amount {
-  flex: 3;
-}
-.invoice-create-page .tax-row .tax-select {
-  flex: 4;
-}
-.invoice-create-page .tax-tr td {
-  padding: 0 21px;
-}
 .invoice-create-page .multi-select-item .multiselect,
 .invoice-create-page .multi-select-item .multiselect__input,
 .invoice-create-page .multi-select-item .multiselect__single {
@@ -15172,13 +15046,6 @@ fieldset[disabled] .multiselect {
   margin: 0;
   padding-top: 7px;
   border-top: 1px solid #f9fbff;
-}
-.invoice-create-page .invoice-foot .invoice-total .tax-selector {
-  font-weight: 600;
-  font-size: 14px;
-  margin-top: 12px;
-  line-height: 21px;
-  color: #e37a7a;
 }
 .invoice-create-page .item-row .item-name {
   font-weight: 500;
@@ -15753,21 +15620,6 @@ fieldset[disabled] .multiselect {
 .estimate-create-page .item-table .item-body .item-row .remove-icon {
   color: #55547A;
 }
-.estimate-create-page .tax-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.estimate-create-page .tax-row .tax-amount {
-  flex: 3;
-}
-.estimate-create-page .tax-row .tax-select {
-  flex: 4;
-}
-.estimate-create-page .tax-tr td {
-  padding: 0 21px;
-}
 .estimate-create-page .multi-select-item .multiselect,
 .estimate-create-page .multi-select-item .multiselect__input,
 .estimate-create-page .multi-select-item .multiselect__single {
@@ -15900,13 +15752,6 @@ fieldset[disabled] .multiselect {
   margin: 0;
   padding-top: 7px;
   border-top: 1px solid #f9fbff;
-}
-.estimate-create-page .estimate-foot .estimate-total .tax-selector {
-  font-weight: 600;
-  font-size: 14px;
-  margin-top: 12px;
-  line-height: 21px;
-  color: #e37a7a;
 }
 .estimate-create-page .item-row .item-name {
   font-weight: 500;
@@ -16443,21 +16288,6 @@ fieldset[disabled] .multiselect {
 .settings-container .expense-category td {
   background-color: #F9FBFF !important;
 }
-.settings-container .tax-table td {
-  background-color: #F9FBFF !important;
-}
-.settings-container .tax-table .compound-tax {
-  display: inline;
-  padding: 2px 8px;
-  font-size: 10px;
-  line-height: 15px;
-  background: #FED7D7;
-  color: #9B2C2C;
-}
-.settings-container .add-new-tax {
-  height: 45px;
-  white-space: nowrap;
-}
 .settings-container .flex-box {
   display: flex;
 }
@@ -16519,17 +16349,9 @@ fieldset[disabled] .multiselect {
     text-align: center;
     justify-content: center;
   }
-  .settings-container .tax-table .tax-name {
-    margin-top: 21px;
-    width: 76%;
-  }
   .settings-container .expense-category .table-component__table__body tr:first-child td:nth-child(2) {
     height: auto;
     width: 101%;
-  }
-  .settings-container .add-new-tax {
-    position: relative;
-    z-index: 1;
   }
 }
 .wizard .logo-main {
@@ -17250,21 +17072,6 @@ fieldset[disabled] .multiselect {
 .order-create-page .item-table .item-body .item-row .remove-icon {
   color: #55547A;
 }
-.order-create-page .tax-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.order-create-page .tax-row .tax-amount {
-  flex: 3;
-}
-.order-create-page .tax-row .tax-select {
-  flex: 4;
-}
-.order-create-page .tax-tr td {
-  padding: 0 21px;
-}
 .order-create-page .multi-select-item .multiselect,
 .order-create-page .multi-select-item .multiselect__input,
 .order-create-page .multi-select-item .multiselect__single {
@@ -17397,13 +17204,6 @@ fieldset[disabled] .multiselect {
   margin: 0;
   padding-top: 7px;
   border-top: 1px solid #f9fbff;
-}
-.order-create-page .order-foot .order-total .tax-selector {
-  font-weight: 600;
-  font-size: 14px;
-  margin-top: 12px;
-  line-height: 21px;
-  color: #e37a7a;
 }
 .order-create-page .item-row .item-name {
   font-weight: 500;
@@ -18024,21 +17824,6 @@ fieldset[disabled] .multiselect {
 .receipt-create-page .item-table .item-body .item-row .remove-icon {
   color: #55547A;
 }
-.receipt-create-page .tax-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.receipt-create-page .tax-row .tax-amount {
-  flex: 3;
-}
-.receipt-create-page .tax-row .tax-select {
-  flex: 4;
-}
-.receipt-create-page .tax-tr td {
-  padding: 0 21px;
-}
 .receipt-create-page .multi-select-item .multiselect,
 .receipt-create-page .multi-select-item .multiselect__input,
 .receipt-create-page .multi-select-item .multiselect__single {
@@ -18171,13 +17956,6 @@ fieldset[disabled] .multiselect {
   margin: 0;
   padding-top: 7px;
   border-top: 1px solid #f9fbff;
-}
-.receipt-create-page .receipt-foot .receipt-total .tax-selector {
-  font-weight: 600;
-  font-size: 14px;
-  margin-top: 12px;
-  line-height: 21px;
-  color: #e37a7a;
 }
 .receipt-create-page .item-row .item-name {
   font-weight: 500;

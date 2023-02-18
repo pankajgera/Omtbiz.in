@@ -23,11 +23,9 @@ import bill from './modules/bill'
 import modal from './modules/modal'
 import currency from './modules/currency'
 import general from './modules/settings/general'
-import taxType from './modules/tax-type'
 import profitLossReport from './modules/reports/profit-loss'
 import salesReport from './modules/reports/sales'
 import ExpensesReport from './modules/reports/expense'
-import TaxReport from './modules/reports/tax'
 import notes from './modules/notes'
 import inventory from './modules/inventory'
 import master from './modules/master'
@@ -72,11 +70,9 @@ export default new Vuex.Store({
         receipt,
         preferences,
         general,
-        taxType,
         profitLossReport,
         salesReport,
         ExpensesReport,
-        TaxReport,
         notes,
         inventory,
         master,

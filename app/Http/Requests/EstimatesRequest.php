@@ -29,7 +29,6 @@ class EstimatesRequest extends FormRequest
             'user_id' => 'required|integer',
             'sub_total' => 'required',
             'total' => 'required',
-            'tax' => 'required',
             'estimate_template_id' => 'required',
             'items' => 'required|array',
             'items.*.description' => 'max:255',

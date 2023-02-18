@@ -29,8 +29,6 @@ class InvoicesRequest extends FormRequest
             'debtors.name' => 'required|string',
             'sub_total' => 'required',
             'total' => 'required',
-            'tax' => 'integer|min:0',
-            'taxes' => 'nullable|array',
             'invoice_date' => 'required',
             'invoice_template_id' => 'required',
             'inventories' => 'required|array',

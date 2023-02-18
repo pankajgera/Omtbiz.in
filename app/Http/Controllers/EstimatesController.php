@@ -18,8 +18,6 @@ use App\Models\Company;
 use App\Mail\EstimatePdf;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
-use App\Models\TaxType;
-use App\Models\Tax;
 use Illuminate\Http\JsonResponse;
 
 class EstimatesController extends Controller
@@ -101,7 +99,6 @@ class EstimatesController extends Controller
             $nextEstimateNumberAttribute = $nextEstimateNumber;
         }
 
-        $tax_per_item = CompanySetting::getSetting('tax_per_item', $request->header('company'));
         $customers = User::where('role', 'customer')->get();
 
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
@@ -112,8 +109,6 @@ class EstimatesController extends Controller
             'inventories' => Inventory::query()->get(),
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
             'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
-            'taxes' => Tax::whereCompany($request->header('company'))->latest()->get(),
-            'tax_per_item' => $tax_per_item,
             'estimateTemplates' => EstimateTemplate::all(),
             'shareable_link' => '',
             'estimate_prefix' => $estimate_prefix,
@@ -138,13 +133,6 @@ class EstimatesController extends Controller
 
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
         $status = Estimate::DRAFT;
-        $tax_per_item = CompanySetting::getSetting(
-            'tax_per_item',
-            $request->header('company')
-        ) ? CompanySetting::getSetting(
-            'tax_per_item',
-            $request->header('company')
-        ) : 'NO';
 
         $estimate = Estimate::create([
             'estimate_date' => $estimate_date,
@@ -157,8 +145,6 @@ class EstimatesController extends Controller
             'status' => $status,
             'sub_total' => $request->sub_total,
             'total' => $request->total,
-            'tax_per_item' => $tax_per_item,
-            'tax' => $request->tax,
             'notes' => $request->notes,
             'unique_hash' => str_random(60),
             'account_master_id' => $request->debtors['id'],
@@ -169,27 +155,8 @@ class EstimatesController extends Controller
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
-            $estimateItem['price'] = $estimateItem['price'];
-            $estimateItem['sale_price'] = $estimateItem['sale_price'];
+
             $item = $estimate->items()->create($estimateItem);
-
-            if (array_key_exists('taxes', $estimateItem) && $estimateItem['taxes']) {
-                foreach ($estimateItem['taxes'] as $tax) {
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $tax['company_id'] = $request->header('company');
-                        $item->taxes()->create($tax);
-                    }
-                }
-            }
-        }
-
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                if (gettype($tax['amount']) !== "NULL") {
-                    $tax['company_id'] = $request->header('company');
-                    $estimate->taxes()->create($tax);
-                }
-            }
         }
 
         if ($request->has('estimateSend')) {
@@ -222,7 +189,6 @@ class EstimatesController extends Controller
             'items',
             'user',
             'estimateTemplate',
-            'taxes'
         ])->find($estimate->id);
 
         return response()->json([
@@ -242,11 +208,8 @@ class EstimatesController extends Controller
     {
         $estimate = Estimate::with([
             'items',
-            'items.taxes',
             'user',
             'estimateTemplate',
-            'taxes',
-            'taxes.taxType'
         ])->find($id);
 
         $siteData = [
@@ -268,11 +231,8 @@ class EstimatesController extends Controller
     {
         $estimate = Estimate::with([
             'items',
-            'items.taxes',
             'user',
             'estimateTemplate',
-            'taxes',
-            'taxes.taxType'
         ])->find($id);
         $customers = User::where('role', 'customer')->get();
         $sundryDebtorsList = AccountMaster::where('id', $estimate->account_master_id)->select('id', 'name', 'opening_balance')->get();
@@ -281,10 +241,8 @@ class EstimatesController extends Controller
             'customers' => $customers,
             'inventories' => Inventory::query()->get(),
             'estimateNumber' => $estimate->getEstimateNumAttribute(),
-            'taxes' => Tax::latest()->whereCompany($request->header('company'))->get(),
             'estimate' => $estimate,
             'estimateTemplates' => EstimateTemplate::all(),
-            'tax_per_item' => $estimate->tax_per_item,
             'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash),
             'estimate_prefix' => $estimate->getEstimatePrefixAttribute(),
             'sundryDebtorsList' => $sundryDebtorsList,
@@ -303,53 +261,27 @@ class EstimatesController extends Controller
         $estimate = Estimate::findOrFail($id);
         $estimate->sub_total = $request->sub_total;
         $estimate->total = $request->total;
-        $estimate->tax = $request->tax;
         $estimate->notes = $request->notes;
         $estimate->save();
 
         $oldItems = $estimate->items->toArray();
-        $oldTaxes = $estimate->taxes->toArray();
         $estimateItems = $request->items;
 
         foreach ($oldItems as $oldItem) {
             EstimateItem::destroy($oldItem['id']);
         }
 
-        foreach ($oldTaxes as $oldTax) {
-            Tax::destroy($oldTax['id']);
-        }
-
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
-            $estimateItem['price'] = $estimateItem['price'];
-            $estimateItem['sale_price'] = $estimateItem['sale_price'];
+
             $item = $estimate->items()->create($estimateItem);
-
-            if (array_key_exists('taxes', $estimateItem) && $estimateItem['taxes']) {
-                foreach ($estimateItem['taxes'] as $tax) {
-                    if (gettype($tax['amount']) !== "NULL") {
-                        $tax['company_id'] = $request->header('company');
-                        $item->taxes()->create($tax);
-                    }
-                }
-            }
-        }
-
-        if ($request->has('taxes')) {
-            foreach ($request->taxes as $tax) {
-                if (gettype($tax['amount']) !== "NULL") {
-                    $tax['company_id'] = $request->header('company');
-                    $estimate->taxes()->create($tax);
-                }
-            }
         }
 
         $estimate = Estimate::with([
             'items',
             'user',
             'estimateTemplate',
-            'taxes'
         ])->find($estimate->id);
 
         return response()->json([
@@ -422,17 +354,9 @@ class EstimatesController extends Controller
      */
     public function estimateToInvoice(Request $request, $id)
     {
-        $estimate = Estimate::with(['items', 'items.taxes', 'user', 'estimateTemplate', 'taxes'])->find($id);
+        $estimate = Estimate::with(['items', 'user', 'estimateTemplate'])->find($id);
         $invoice_date = Carbon::parse($estimate->estimate_date);
         $due_date = Carbon::parse($estimate->estimate_date)->addDays(7);
-        $tax_per_item = CompanySetting::getSetting(
-            'tax_per_item',
-            $request->header('company')
-        ) ? CompanySetting::getSetting(
-            'tax_per_item',
-            $request->header('company')
-        ) : 'NO';
-
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
 
         $invoice = Invoice::create([
@@ -448,8 +372,6 @@ class EstimatesController extends Controller
             'sub_total' => $estimate->sub_total,
             'total' => $estimate->total,
             'due_amount' => $estimate->total,
-            'tax_per_item' => $tax_per_item,
-            'tax' => $estimate->tax,
             'notes' => $estimate->notes,
             'unique_hash' => str_random(60)
         ]);
@@ -458,32 +380,13 @@ class EstimatesController extends Controller
 
         foreach ($invoiceItems as $invoiceItem) {
             $invoiceItem['company_id'] = $request->header('company');
-            $invoiceItem['name'] = $invoiceItem['name'];
             $item = $invoice->items()->create($invoiceItem);
-
-            if (array_key_exists('taxes', $invoiceItem) && $invoiceItem['taxes']) {
-                foreach ($invoiceItem['taxes'] as $tax) {
-                    $tax['company_id'] = $request->header('company');
-
-                    if ($tax['amount']) {
-                        $item->taxes()->create($tax);
-                    }
-                }
-            }
-        }
-
-        if ($estimate->taxes) {
-            foreach ($estimate->taxes->toArray() as $tax) {
-                $tax['company_id'] = $request->header('company');
-                $invoice->taxes()->create($tax);
-            }
         }
 
         $invoice = Invoice::with([
             'items',
             'user',
             'invoiceTemplate',
-            'taxes'
         ])->find($invoice->id);
 
         return response()->json([
