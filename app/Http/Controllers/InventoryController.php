@@ -29,7 +29,7 @@ class InventoryController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate($limit);
 
-            foreach($inventories as $each) {
+            foreach ($inventories as $each) {
                 $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
                 $each['quantity'] = $each->quantity;
                 $each['price'] = $lastest_item->price;
@@ -55,7 +55,7 @@ class InventoryController extends Controller
         try {
             $inventory = Inventory::with(['inventoryItem'])->find($id);
             $related_inventories = InventoryItem::where('inventory_id', $id)->orderBy('id', 'asc')->get();
-            foreach($related_inventories as $each) {
+            foreach ($related_inventories as $each) {
                 $each->date_time = Carbon::parse($each->created_at, 'Asia/Kolkata')->toDateTimeString();
             }
             return response()->json([
@@ -79,7 +79,7 @@ class InventoryController extends Controller
         }
         try {
             $find_inventory = Inventory::where('name', $request->name)->where('company_id', $request->header('company'))->first();
-            if (empty ($find_inventory)) {
+            if (empty($find_inventory)) {
                 $inventory = new Inventory();
                 $inventory->name = $request->name;
                 $inventory->company_id = $request->header('company');
@@ -101,14 +101,14 @@ class InventoryController extends Controller
                 $items = new InventoryItem();
                 $items->inventory_id = $find_inventory->id;
                 $items->worker_name = $request->worker_name;
-                // $items->quantity = $request->quantity;
+                $items->quantity = $request->quantity;
                 $items->price = $request->price;
                 $items->sale_price = $request->sale_price;
                 $items->unit = $request->unit;
                 $items->save();
 
                 if ($find_inventory->quantity !==  $request->quantity) {
-                    $find_inventory->updateInventoryQuantity( $request->quantity);
+                    $find_inventory->updateInventoryQuantity($request->quantity);
                 }
             }
 
