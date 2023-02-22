@@ -106,7 +106,6 @@ class EstimatesController extends Controller
         return response()->json([
             'estimate_today_date' => Carbon::now()->toDateString(),
             'customers' => $customers,
-            'inventories' => Inventory::query()->get(),
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
             'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
             'estimateTemplates' => EstimateTemplate::all(),
@@ -239,7 +238,6 @@ class EstimatesController extends Controller
 
         return response()->json([
             'customers' => $customers,
-            'inventories' => Inventory::query()->get(),
             'estimateNumber' => $estimate->getEstimateNumAttribute(),
             'estimate' => $estimate,
             'estimateTemplates' => EstimateTemplate::all(),

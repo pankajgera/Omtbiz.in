@@ -10643,7 +10643,7 @@ a {
 a:hover, a:focus {
   color: #355282;
   padding: 1px 4px;
-  border: 1px solid rgba(182, 182, 182, 0.5) !important;
+  border: 2px solid rgba(182, 182, 182, 0.5) !important;
   text-decoration: none;
   border-radius: 10%/10%;
   -webkit-border-radius: 10%/10%;

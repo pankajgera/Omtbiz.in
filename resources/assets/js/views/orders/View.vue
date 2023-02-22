@@ -213,30 +213,6 @@ export default {
       this.onSearched()
       return true
     },
-    // async onSendOrder (id) {
-    //   window.swal({
-    //     title: this.$t('general.are_you_sure'),
-    //     text: this.$t('orders.confirm_send_order'),
-    //     icon: '/assets/icon/paper-plane-solid.svg',
-    //     buttons: true,
-    //     dangerMode: true
-    //   }).then(async (value) => {
-    //     if (value) {
-    //       this.isSendingEmail = true
-    //       let response = await this.sendEmail({id: this.order.id})
-    //       this.isSendingEmail = false
-    //       if (response.data.success) {
-    //         window.toastr['success'](this.$tc('orders.send_order_successfully'))
-    //         return true
-    //       }
-    //       if (response.data.error === 'user_email_does_not_exist') {
-    //         window.toastr['error'](this.$tc('orders.user_email_does_not_exist'))
-    //         return true
-    //       }
-    //       window.toastr['error'](this.$tc('orders.something_went_wrong'))
-    //     }
-    //   })
-    // },
     async removeOrder (id) {
       window.swal({
         title: 'Deleted',
