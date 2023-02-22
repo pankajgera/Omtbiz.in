@@ -105,7 +105,6 @@ class OrdersController extends Controller
         return response()->json([
             'order_today_date' => Carbon::now()->toDateString(),
             'customers' => $customers,
-            'inventories' => Inventory::query()->get(),
             'nextOrderNumberAttribute' => $nextOrderNumberAttribute,
             'nextOrderNumber' => $order_prefix . '-' . $nextOrderNumber,
             'shareable_link' => '',
@@ -148,32 +147,6 @@ class OrdersController extends Controller
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
             $item = $order->orderItems()->create($orderItem);
-        }
-
-        if ($request->has('orderSend')) {
-            $data['order'] = $order->toArray();
-            $userId = $data['order']['user_id'];
-            $data['user'] = User::find($userId)->toArray();
-            $data['company'] = Company::find($order->company_id);
-            $email = $data['user']['email'];
-            $notificationEmail = CompanySetting::getSetting(
-                'notification_email',
-                $request->header('company')
-            );
-
-            if (!$email) {
-                return response()->json([
-                    'error' => 'user_email_does_not_exist'
-                ]);
-            }
-
-            if (!$notificationEmail) {
-                return response()->json([
-                    'error' => 'notification_email_does_not_exist'
-                ]);
-            }
-
-            \Mail::to($email)->send(new OrderPdf($data, $notificationEmail));
         }
 
         $order = Orders::with([
@@ -227,7 +200,6 @@ class OrdersController extends Controller
 
         return response()->json([
             'customers' => $customers,
-            'inventories' => Inventory::query()->get(),
             'orderNumber' => $order->getOrderNumAttribute(),
             'order' => $order,
             'shareable_link' => url('/orders/pdf/' . $order->unique_hash),
@@ -282,46 +254,6 @@ class OrdersController extends Controller
     public function destroy($id)
     {
         Orders::deleteOrder($id);
-
-        return response()->json([
-            'success' => true
-        ]);
-    }
-
-    /**
-     * Send order
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function sendOrder(Request $request)
-    {
-        $order = Orders::findOrFail($request->id);
-
-        $data['order'] = $order->toArray();
-        $userId = $data['order']['user_id'];
-        $data['user'] = User::find($userId)->toArray();
-        $data['company'] = Company::find($order->company_id);
-
-        $email = $data['user']['email'];
-        $notificationEmail = CompanySetting::getSetting(
-            'notification_email',
-            $request->header('company')
-        );
-
-        if (!$email) {
-            return response()->json([
-                'error' => 'user_email_does_not_exist'
-            ]);
-        }
-
-        if (!$notificationEmail) {
-            return response()->json([
-                'error' => 'notification_email_does_not_exist'
-            ]);
-        }
-
-        \Mail::to($email)->send(new OrderPdf($data, $notificationEmail));
 
         return response()->json([
             'success' => true

@@ -358,6 +358,8 @@ export default {
         filter: {},
         orderByField: '',
         orderBy: ''
+      }).then((resp) => {
+        this.inventoryList = resp.data.inventories.data
       })
     },
     async loadData () {
@@ -366,7 +368,6 @@ export default {
         let response = await this.fetchOrder(this.$route.params.id)
         if (response.data) {
           this.newOrder = response.data.order
-          this.inventoryList = response.data.inventories
           this.inventoryNegative = response.data.inventory_negative
           this.newOrder.order_date = moment(response.data.order.order_date).format('YYYY-MM-DD')
           this.discountPerInventory = response.data.discount_per_inventory
@@ -385,7 +386,6 @@ export default {
         this.discountPerInventory = response.data.discount_per_inventory
         this.selectedCurrency = this.defaultCurrency
         this.newOrder.order_date = response.data.order_today_date
-        this.inventoryList = response.data.inventories
         this.inventoryNegative = response.data.inventory_negative
         this.orderPrefix = response.data.order_prefix
         this.orderNumAttribute = response.data.nextOrderNumberAttribute

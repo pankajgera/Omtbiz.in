@@ -140,11 +140,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'OrdersController@delete'
     ]);
 
-    Route::post('/orders/send', [
-        'as' => 'orders.send',
-        'uses' => 'OrdersController@sendOrder'
-    ]);
-
     Route::post('/orders/{id}/convert-to-invoice', [
         'as' => 'order.to.invoice',
         'uses' => 'OrdersController@orderToInvoice'

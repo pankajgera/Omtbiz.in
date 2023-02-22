@@ -90,7 +90,6 @@ class InvoicesController extends Controller
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
-            'inventories' => Inventory::query()->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
             'invoice_prefix' => $invoice_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
