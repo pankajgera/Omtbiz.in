@@ -38,6 +38,11 @@ class Voucher extends Model
         return $this->belongsTo(\App\Models\Invoice::class);
     }
 
+    public function receipt()
+    {
+        return $this->belongsTo(\App\Models\Receipt::class);
+    }
+
     public function scopeWhereType($query, $type)
     {
         return $query->where('type', 'LIKE', '%' . $type . '%');
