@@ -36,13 +36,12 @@
                 :label="$t('ledgers.particulars')"
                 show="particulars"
               >
-                <template slot-scope="row">
+              <template slot-scope="row">
                   <router-link
-                    :to="{ path: `/vouchers/${row.id}/edit` }"
+                    :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` : `/receipts/${row.receipt_id}/edit`}"
                     class="dropdown-item"
                   >
-                  {{ masterData.groups }}
-                    <!-- {{ row.particulars }} -->
+                    {{ row.account }}
                   </router-link>
                 </template>
               </table-column>
