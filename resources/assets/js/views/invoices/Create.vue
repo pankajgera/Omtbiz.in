@@ -195,10 +195,12 @@
             
           </div>
           <div class="section" v-if="incomeLedgerList.length">
-          <div class="row align-items-center">
+          <div class="section">
            <div class="pl-3 mb-2">
              <label class="form-label">{{ $t('invoices.add') }}</label>
            </div>
+             </div>
+       <div class="section">
         <div class="pl-3 mb-2">
             <base-select
               v-model="income_ledger"
@@ -221,14 +223,17 @@
                 @input="$v.newInvoice.discount_val.$touch()"
               />
         </div>
+       </div>
         </div>
 
-          </div>
+        
           <div class="section" v-if="expenseLedgerList.length">
-            <div class="row align-items-center">
+            <div class="section">
            <div class="pl-3 mb-2">
              <label class="form-label">{{ $t('invoices.less') }}</label>
            </div>
+           </div>
+            <div class="section">
         <div class="pl-3 mb-2">
             <base-select
               v-model="expense_ledger"
@@ -252,7 +257,8 @@
               />
         </div>
         </div>
-          </div>
+        </div>
+        
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
             <label class="invoice-label">{{ $t('invoices.discount') }}</label>
             <div
