@@ -192,6 +192,66 @@
             <label class="invoice-amount">
               ₹ {{ subtotal }}
             </label>
+            
+          </div>
+          <div class="section" v-if="incomeLedgerList.length">
+          <div class="row align-items-center">
+           <div class="pl-3 mb-2">
+             <label class="form-label">{{ $t('invoices.add') }}</label>
+           </div>
+        <div class="pl-3 mb-2">
+            <base-select
+              v-model="income_ledger"
+              :options="incomeLedgerList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :disabled="isDisabled"
+              :placeholder="$t('receipts.select_a_list')"
+              label="name"
+              track-by="id"
+            />
+        </div>
+        <div class="pl-3 mb-2">
+           <base-input
+                v-model="discount"
+                :invalid="$v.newInvoice.discount_val.$error"
+                input-class="item-discount"
+                @input="$v.newInvoice.discount_val.$touch()"
+              />
+        </div>
+        </div>
+
+          </div>
+          <div class="section" v-if="expenseLedgerList.length">
+            <div class="row align-items-center">
+           <div class="pl-3 mb-2">
+             <label class="form-label">{{ $t('invoices.less') }}</label>
+           </div>
+        <div class="pl-3 mb-2">
+            <base-select
+              v-model="expense_ledger"
+              :options="expenseLedgerList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :disabled="isDisabled"
+              :placeholder="$t('receipts.select_a_list')"
+              label="name"
+              track-by="id"
+            />
+        </div>
+        <div class="pl-3 mb-2">
+           <base-input
+                v-model="discount"
+                :invalid="$v.newInvoice.discount_val.$error"
+                input-class="item-discount"
+                @input="$v.newInvoice.discount_val.$touch()"
+              />
+        </div>
+        </div>
           </div>
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
             <label class="invoice-label">{{ $t('invoices.discount') }}</label>
@@ -340,6 +400,10 @@ export default {
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
       estimateList: [], //List of estimates
+      incomeLedgerList: [], //List of income indirect group ledger
+      expenseLedgerList: [], //List of expense indirect group ledger
+      income_ledger: null,
+      expense_ledger: null,
       isDisabled: false,
       url: null,
       siteURL: null,
@@ -548,6 +612,8 @@ export default {
         this.invoicePrefix = response.data.invoice_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
+        this.incomeLedgerList = response.data.incomeIndirectLedgers
+        this.expenseLedgerList = response.data.expenseIndirectLedgers
 
         response.data.estimateList.map(i => {
           let obj = {}

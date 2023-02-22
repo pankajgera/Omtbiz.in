@@ -563,6 +563,7 @@
         "view": "View"
     },
     "invoices": {
+        "add": "Add :",
         "title": "Invoices",
         "invoices_list": "Invoices List",
         "days": "{days} Days",
@@ -611,6 +612,7 @@
         "update_invoice": "Update Invoice",
         "no_invoices": "No Invoices yet!",
         "list_of_invoices": "This section will contain the list of invoices.",
+        "less": "Less : ",
         "select_invoice": "Select Invoice",
         "no_matching_invoices": "There are no matching invoices!",
         "mark_as_sent_successfully": "Invoice marked as sent successfully",
