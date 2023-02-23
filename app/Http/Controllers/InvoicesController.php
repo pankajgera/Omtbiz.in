@@ -125,7 +125,7 @@ class InvoicesController extends Controller
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('d-m-Y');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::TO_BE_DISPATCH;
-
+            // dd($request->income_ledger_value, $request);
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
@@ -140,6 +140,10 @@ class InvoicesController extends Controller
                 'total' => $request->total,
                 'due_amount' => $request->total,
                 'notes' => $request->notes,
+                'indirect_income' => $request->income_ledger,
+                'indirect_income_value' => $request->income_ledger_value,
+                'indirect_expense' => $request->expense_ledger,
+                'indirect_expense_value' => $request->expense_ledger_value,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
             ]);
@@ -428,6 +432,11 @@ class InvoicesController extends Controller
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->notes = $request->notes;
+        $invoice->indirect_income = $request->income_ledger;
+        $invoice->indirect_income_value = $request->income_ledger_value;
+        $invoice->indirect_expense = $request->expense_ledger;
+        $invoice->indirect_expense_value = $request->expense_ledger_value;
+
         $invoice->save();
 
         $requestInvoiceItems = $request->inventories;

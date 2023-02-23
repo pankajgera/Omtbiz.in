@@ -197,7 +197,7 @@
           <div class="section" v-if="incomeLedgerList.length">
           <div class="row align-items-center">
             <div class="pl-3">
-             <label class="form-label">{{ $t('invoices.add') }}</label>
+             <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
             </div>
             <div class="pl-3 mr-5">
               <base-select
@@ -218,10 +218,10 @@
        <div>
       <base-input
                 style="width:100px"
-                v-model="discount"
-                :invalid="$v.newInvoice.discount_val.$error"
+                :disabled="this.income_ledger===null"
+                v-model="income_ledger_value"
                 input-class="item-discount"
-                @input="$v.newInvoice.discount_val.$touch()"
+                @input="returnZero()"
               />
        </div>
         </div>
@@ -230,7 +230,7 @@
           <div class="section" v-if="expenseLedgerList.length">
            <div class="row align-items-center">
             <div class="pl-3 mb-2">
-             <label class="form-label">{{ $t('invoices.less') }}</label>
+             <label class="form-label"><strong>{{ $t('invoices.less') }}</strong></label>
            </div>
              <div class="pl-3 mb-2 mr-5">
             <base-select
@@ -249,10 +249,10 @@
            </div>
            <base-input
             style="width:100px"
-                v-model="discount"
-                :invalid="$v.newInvoice.discount_val.$error"
+             :disabled="this.expense_ledger===null"
+                v-model="expense_ledger_value"
                 input-class="item-discount"
-                @input="$v.newInvoice.discount_val.$touch()"
+                @input="returnZero()"
               />
         </div>
         
@@ -416,6 +416,8 @@ export default {
       expenseLedgerList: [], //List of expense indirect group ledger
       income_ledger: null,
       expense_ledger: null,
+      expense_ledger_value: 0,
+      income_ledger_value: 0,
       isDisabled: false,
       url: null,
       siteURL: null,
@@ -466,6 +468,12 @@ export default {
       if (this.newInvoice.discount_val) {
         return this.subtotal - this.newInvoice.discount_val
       }
+      if (this.income_ledger_value!==0 &&  this.expense_ledger_value===0) {
+        return  this.subtotal + parseInt(this.income_ledger_value)
+      }
+       if (this.income_ledger_value!==0 && this.expense_ledger_value!==0) {
+        return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)
+      }
       return this.subtotal
     },
     total () {
@@ -478,6 +486,7 @@ export default {
                 return a + b['total']
               }, 0)
       }
+      
       return 0
     },
     discount: {
@@ -547,7 +556,16 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    returnZero() {
+      if(this.income_ledger_value===null || this.income_ledger_value==='' )  {
+        this.income_ledger_value = 0;
+      }
+       if(this.expense_ledger_value===null || this.expense_ledger_value==='' )  {
+        this.expense_ledger_value = 0;
+      }
+    },
     totalQuantity(inventory){
+      console.log(inventory);
       if (inventory.length) {
         return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
       }
@@ -596,9 +614,15 @@ export default {
           this.invoicePrefix = response.data.invoice_prefix
           this.invoiceNumAttribute = response.data.invoiceNumber
           this.newInvoice.debtors = response.data.sundryDebtorsList[0]
+          this.incomeLedgerList = response.data.incomeIndirectLedgers
+          this.expenseLedgerList = response.data.expenseIndirectLedgers
           if(response.data.InvoiceEstimate.length) {
             this.newInvoice.estimate = response.data.InvoiceEstimate[0]
           }
+          this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.filter(node=> node.name === response.data.invoice.indirect_expense) : response.data.invoice.indirect_expense
+          this.income_ledger= response.data.invoice.indirect_income? this.incomeLedgerList.filter(node=> node.name === response.data.invoice.indirect_income) : response.data.invoice.indirect_income
+          this.income_ledger_value= response.data.invoice.indirect_income_value
+          this.expense_ledger_value= response.data.invoice.indirect_expense_value
            response.data.estimateList.map(i => {
           let obj = {}
           let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
@@ -713,6 +737,10 @@ export default {
         sub_total: this.subtotal,
         total: this.total,
         user_id: this.user.id,
+        income_ledger: this.income_ledger ? this.income_ledger.name : null,
+        income_ledger_value: this.income_ledger_value ? this.income_ledger_value : 0,
+        expense_ledger: this.expense_ledger ? this.expense_ledger.name : null,
+        expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,
         invoice_template_id: this.getTemplateId,
       }
 
