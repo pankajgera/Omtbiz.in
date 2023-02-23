@@ -32,14 +32,6 @@
                   {{ getFormattedDate(row.date) }}
                 </template>
               </table-column>
-              <!-- <table-column
-                  :label="$t('ledgers.particulars')"
-                  show="particulars"
-                >
-                  <template slot-scope="row">
-                    {{ row.particulars }}
-                  </template>
-                </table-column> -->
               <table-column
                 :label="$t('ledgers.particulars')"
                 show="particulars"

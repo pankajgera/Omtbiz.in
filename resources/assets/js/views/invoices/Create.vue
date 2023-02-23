@@ -598,8 +598,34 @@ export default {
         }
       })
     },
-    submitInvoiceData () {
-      if (!this.checkValid()) {
+    async validateInventoryQuantity() {
+      let valid = true;
+      this.newInvoice.inventories.map(selectedItem => {
+        let maxQuantityAvailable = parseInt(
+          this.inventoryList.find(i =>
+            i.name === selectedItem.name &&
+            parseInt(i.price) === parseInt(selectedItem.price)
+          ).quantity);
+        if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
+          swal({
+            title: this.$t('invoices.out_of_stock'),
+            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantityAvailable}),
+            icon: '/assets/icon/check-circle-solid.svg',
+            buttons: true,
+            dangerMode: true
+          }).then(async (success) => {
+            if (success) {
+              window.open('/inventory/' + selectedItem.inventory_id + '/edit', '_blank').focus()
+            }
+          })
+          valid = false
+        }
+      })
+      return valid
+    },
+    async submitInvoiceData () {
+      let validQuantity = await this.validateInventoryQuantity();
+      if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {
         return false
       }
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
