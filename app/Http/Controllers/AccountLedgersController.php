@@ -168,7 +168,6 @@ class AccountLedgersController extends Controller
             $ledger = new AccountLedger();
             $ledger->date = $request->date;
             $ledger->type = $request->type;
-            $ledger->bill_no = $request->bill_no;
             $ledger->account = $request->account;
             $ledger->debit = $request->debit;
             $ledger->credit = $request->credit;
@@ -203,7 +202,6 @@ class AccountLedgersController extends Controller
             $ledger = AccountLedger::find($id);
             $ledger->date = $request->date;
             $ledger->type = $request->type;
-            $ledger->bill_no = $request->bill_no;
             $ledger->account = $request->account;
             $ledger->debit = $request->debit;
             $ledger->credit = $request->credit;

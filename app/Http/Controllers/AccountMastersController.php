@@ -65,7 +65,6 @@ class AccountMastersController extends Controller
             $ledger = new AccountLedger();
             $ledger->date = Carbon::now('Asia/Kolkata');
             $ledger->type = $request->type;
-            $ledger->bill_no = null;
             $ledger->account = $request->name;
             $ledger->debit = 'Dr' === $request->type ? $request->opening_balance : 0;
             $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
