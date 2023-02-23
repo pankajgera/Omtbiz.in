@@ -195,14 +195,12 @@
             
           </div>
           <div class="section" v-if="incomeLedgerList.length">
-          <div class="section">
-           <div class="pl-3 mb-2">
+          <div class="row align-items-center">
+            <div class="pl-3">
              <label class="form-label">{{ $t('invoices.add') }}</label>
-           </div>
-             </div>
-       <div class="section">
-        <div class="pl-3 mb-2">
-            <base-select
+            </div>
+            <div class="pl-3 mr-5">
+              <base-select
               v-model="income_ledger"
               :options="incomeLedgerList"
               :required="'required'"
@@ -214,27 +212,27 @@
               label="name"
               track-by="id"
             />
-        </div>
-        <div class="pl-3 mb-2">
-           <base-input
+            </div>
+          
+             </div>
+       <div>
+      <base-input
+                style="width:100px"
                 v-model="discount"
                 :invalid="$v.newInvoice.discount_val.$error"
                 input-class="item-discount"
                 @input="$v.newInvoice.discount_val.$touch()"
               />
-        </div>
        </div>
         </div>
 
         
           <div class="section" v-if="expenseLedgerList.length">
-            <div class="section">
-           <div class="pl-3 mb-2">
+           <div class="row align-items-center">
+            <div class="pl-3 mb-2">
              <label class="form-label">{{ $t('invoices.less') }}</label>
            </div>
-           </div>
-            <div class="section">
-        <div class="pl-3 mb-2">
+             <div class="pl-3 mb-2 mr-5">
             <base-select
               v-model="expense_ledger"
               :options="expenseLedgerList"
@@ -248,15 +246,14 @@
               track-by="id"
             />
         </div>
-        <div class="pl-3 mb-2">
+           </div>
            <base-input
+            style="width:100px"
                 v-model="discount"
                 :invalid="$v.newInvoice.discount_val.$error"
                 input-class="item-discount"
                 @input="$v.newInvoice.discount_val.$touch()"
               />
-        </div>
-        </div>
         </div>
         
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
