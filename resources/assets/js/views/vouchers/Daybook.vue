@@ -193,9 +193,12 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `${row.id}/edit`}" class="dropdown-item">
-               {{ row.account }}
-              </router-link>
+            <router-link
+              :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` : `/receipts/${row.receipt_id}/edit`}"
+              class="dropdown-item"
+            >
+              {{ row.account }}
+            </router-link>
           </template>
         </table-column>
         <table-column
