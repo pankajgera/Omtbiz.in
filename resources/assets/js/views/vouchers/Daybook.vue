@@ -107,15 +107,6 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('daybook.voucher_balance') }} </label>
-            <base-input
-              v-model="filters.voucher_balance"
-              type="text"
-              name="voucher_balance"
-              autocomplete="off"
-            />
-          </div>
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
@@ -207,6 +198,14 @@
         >
           <template slot-scope="row">
              {{ row.voucher_type }}
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('daybook.quantity')"
+          show="quantity"
+        >
+        <template slot-scope="row">
+             {{ row.quantity }}
           </template>
         </table-column>
         <table-column

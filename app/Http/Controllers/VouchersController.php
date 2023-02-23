@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -227,7 +228,7 @@ class VouchersController extends Controller
                 $each['voucher_count'] = Voucher::whereRaw("find_in_set(" . $each->id . ",related_voucher)")->count();
                 $each['voucher_debit'] = $each->debit;
                 $each['voucher_credit'] = $each->credit;
-                $each['voucher_balance'] = $each->debit > $each->credit ? $each->debit - $each->credit : $each->credit - $each->debit;
+                $each['quantity'] = InvoiceItem::where('invoice_id', $each->invoice_id)->sum('quantity');
                 array_push($voucher, $each);
             }
         }
