@@ -210,14 +210,6 @@
           </template>
         </table-column>
         <table-column
-          :label="$t('daybook.voucher_count')"
-          show="voucher_count"
-        >
-          <template slot-scope="row">
-             {{ row.voucher_count }}
-          </template>
-        </table-column>
-        <table-column
           :label="$t('daybook.voucher_debit')"
           show="voucher_debit"
         >
@@ -234,14 +226,14 @@
           </template>
         </table-column>
 
-        <table-column
+        <!-- <table-column
           :label="$t('daybook.voucher_balance')"
           show="voucher_balance"
         >
           <template slot-scope="row">
             ₹ {{ row.voucher_balance }}
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :key="Math.random()"
           :sortable="false"
