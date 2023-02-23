@@ -226,7 +226,7 @@
        </div>
         </div>
 
-        
+
           <div class="section" v-if="expenseLedgerList.length">
            <div class="row align-items-center">
             <div class="pl-3 mb-2">

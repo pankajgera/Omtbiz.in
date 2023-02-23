@@ -178,13 +178,11 @@ class ReceiptController extends Controller
             'company_id' => $company_id,
         ], [
             'date' => Carbon::now()->toDateTimeString(),
-            'bill_no' => null,
             'debit' => $req_amount,
             'type' => 'Dr',
             'credit' => 0,
             'balance' => $req_amount,
         ]);
-        //AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
 
         if ($request->receipt_mode !== 'Cash in Hand') {
             $account_ledger = AccountLedger::firstOrCreate([
@@ -193,7 +191,6 @@ class ReceiptController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
                 'credit' => $req_amount,
@@ -233,7 +230,6 @@ class ReceiptController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
                 'credit' => $req_amount,
@@ -270,14 +266,11 @@ class ReceiptController extends Controller
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
-        //Update credit/debit and bill_no, which is vouchers ids
         $account_ledger->update([
             'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
-            'bill_no' => $account_ledger->bill_no ? $account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
         $dr_account_ledger->update([
             'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
-            'bill_no' => $account_ledger->bill_no ? $dr_account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
 
         //Update ledger balance by calculating credit/debit

@@ -304,6 +304,7 @@
         "price": "Price",
         "date_of_creation": "Date Of Creation",
         "action": "Action",
+        "quantity": "Quantity",
         "add_daybook": "Add Day Book",
         "save_daybook": "Save Day Book",
         "update_daybook": "Update Day Book",

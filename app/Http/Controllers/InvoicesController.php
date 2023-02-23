@@ -203,7 +203,6 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
                 'credit' => $total_amount,
@@ -215,7 +214,6 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'debit' => $total_amount,
                 'type' => 'Dr',
                 'credit' => 0,
@@ -257,25 +255,14 @@ class InvoicesController extends Controller
             //Now update vouchers id to ledger-bill-no and related_voucher
             $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
             $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-            if ($account_ledger->bill_no) {
-                $account_ledger->update([
-                    'credit' => $account_ledger->credit + $total_amount,
-                    'balance' => $account_ledger->balance + $total_amount,
-                    'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-                ]);
-                $dr_account_ledger->update([
-                    'debit' => $dr_account_ledger->debit + $total_amount,
-                    'balance' => $dr_account_ledger->balance + $total_amount,
-                    'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-                ]);
-            } else {
-                $account_ledger->update([
-                    'bill_no' => $voucher_ids,
-                ]);
-                $dr_account_ledger->update([
-                    'bill_no' => $voucher_ids,
-                ]);
-            }
+            $account_ledger->update([
+                'credit' => $account_ledger->credit + $total_amount,
+                'balance' => $account_ledger->balance + $total_amount,
+            ]);
+            $dr_account_ledger->update([
+                'debit' => $dr_account_ledger->debit + $total_amount,
+                'balance' => $dr_account_ledger->balance + $total_amount,
+            ]);
             foreach ($voucher as $key => $each) {
                 if ($key < substr_count($voucher_ids, ',') + 1) {
                     $each->update([
@@ -453,7 +440,6 @@ class InvoicesController extends Controller
             'company_id' => $company_id,
         ], [
             'date' => Carbon::now()->toDateTimeString(),
-            'bill_no' => null,
             'type' => 'Cr',
             'debit' => 0,
             'credit' => $total_amount,
@@ -465,7 +451,6 @@ class InvoicesController extends Controller
             'company_id' => $company_id,
         ], [
             'date' => Carbon::now()->toDateTimeString(),
-            'bill_no' => null,
             'debit' => $total_amount,
             'type' => 'Dr',
             'credit' => 0,
@@ -583,25 +568,14 @@ class InvoicesController extends Controller
         //Now update vouchers id to ledger-bill-no and related_voucher
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-        if ($account_ledger->bill_no) {
-            $account_ledger->update([
-                'credit' => $account_ledger->credit + $amount,
-                'balance' => $account_ledger->balance + $amount,
-                'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'debit' => $dr_account_ledger->debit + $amount,
-                'balance' => $dr_account_ledger->balance + $amount,
-                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-        } else {
-            $account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-        }
+        $account_ledger->update([
+            'credit' => $account_ledger->credit + $amount,
+            'balance' => $account_ledger->balance + $amount,
+        ]);
+        $dr_account_ledger->update([
+            'debit' => $dr_account_ledger->debit + $amount,
+            'balance' => $dr_account_ledger->balance + $amount,
+        ]);
         foreach ($voucher as $key => $each) {
             $each->update([
                 'debit' => $each->type === 'Dr' ? $amount : 0,
