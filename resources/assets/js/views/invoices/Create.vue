@@ -320,6 +320,15 @@
   </div>
 </template>
 <style scoped>
+.invoice-create-page .invoice-foot .invoice-total {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  min-width: 590px;
+  padding: 15px 20px;
+  border: 1px solid #f9fbff;
+  border-radius: 5px;
+}
 input.base-prefix-input:disabled {
     background: rgba(59, 59, 59, 0.3) !important;
     border-color: rgba(118, 118, 118, 0.3) !important;

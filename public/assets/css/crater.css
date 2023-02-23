@@ -15003,7 +15003,7 @@ fieldset[disabled] .multiselect {
   display: flex;
   flex-direction: column;
   background: #ffffff;
-  min-width: 590px;
+  min-width: 390px;
   padding: 15px 20px;
   border: 1px solid #f9fbff;
   border-radius: 5px;
