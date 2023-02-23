@@ -123,18 +123,6 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                //Update voucher_id's in ledger->bill_no
-                $bill_no = 0;
-                $existing_voucher_id = $ledger->bill_no;
-                if (!empty($existing_voucher_id)) {
-                    $bill_no = $existing_voucher_id . ', ' . $voucher->id;
-                } else {
-                    $bill_no = $voucher->id;
-                }
-                $ledger->update([
-                    'bill_no' => $bill_no,
-                ]);
-
                 array_push($ledger_ids, $ledger->id);
                 if (!empty($voucher_ids)) {
                     $voucher_ids = $voucher_ids . ', ' . $voucher->id;
