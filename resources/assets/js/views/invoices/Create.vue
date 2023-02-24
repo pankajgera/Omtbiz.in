@@ -619,8 +619,8 @@ export default {
           if(response.data.InvoiceEstimate.length) {
             this.newInvoice.estimate = response.data.InvoiceEstimate[0]
           }
-          this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.filter(node=> node.name === response.data.invoice.indirect_expense) : response.data.invoice.indirect_expense
-          this.income_ledger= response.data.invoice.indirect_income? this.incomeLedgerList.filter(node=> node.name === response.data.invoice.indirect_income) : response.data.invoice.indirect_income
+          this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null
+          this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null
           this.income_ledger_value= response.data.invoice.indirect_income_value
           this.expense_ledger_value= response.data.invoice.indirect_expense_value
            response.data.estimateList.map(i => {
@@ -730,20 +730,21 @@ export default {
         return false
       }
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
-
+        // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
+        // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
       let data = {
         ...this.newInvoice,
         invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
         user_id: this.user.id,
-        income_ledger: this.income_ledger ? this.income_ledger.name : null,
+        income_ledger: this.income_ledger,
         income_ledger_value: this.income_ledger_value ? this.income_ledger_value : 0,
-        expense_ledger: this.expense_ledger ? this.expense_ledger.name : null,
+        expense_ledger:  this.expense_ledger,
         expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,
         invoice_template_id: this.getTemplateId,
       }
-
+     
       if (this.$route.name === 'invoices.edit') {
         this.submitUpdate(data)
         return

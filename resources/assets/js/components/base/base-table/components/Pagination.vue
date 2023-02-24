@@ -118,3 +118,11 @@ export default {
 }
 
 </script>
+<style scoped>
+.pagination .page-item a {
+  padding: 0.5rem 0.75rem !important;
+}
+.pagination .page-item a:hover {
+  cursor:pointer !important;
+}
+</style>

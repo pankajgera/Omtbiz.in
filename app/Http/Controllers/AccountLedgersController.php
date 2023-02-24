@@ -54,7 +54,9 @@ class AccountLedgersController extends Controller
                 ->get();
             //Update balance according to 'debit' or 'credit'
             $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)->get();
+           
             $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
+            
             $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
             $opening_balance = $ledger->accountMaster->opening_balance;
             $calc_balance = $ledger->balance;
