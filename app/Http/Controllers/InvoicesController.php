@@ -140,9 +140,9 @@ class InvoicesController extends Controller
                 'total' => $request->total,
                 'due_amount' => $request->total,
                 'notes' => $request->notes,
-                'indirect_income' => $request->income_ledger,
+                'indirect_income' => $request->income_ledger['name'],
                 'indirect_income_value' => $request->income_ledger_value,
-                'indirect_expense' => $request->expense_ledger,
+                'indirect_expense' => $request->expense_ledger['name'],
                 'indirect_expense_value' => $request->expense_ledger_value,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
@@ -414,14 +414,13 @@ class InvoicesController extends Controller
                 'error' => 'invalid_due_amount'
             ]);
         }
-
         $invoice->status = $request->status;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->notes = $request->notes;
-        $invoice->indirect_income = $request->income_ledger;
+        $invoice->indirect_income = $request->income_ledger['name'];
         $invoice->indirect_income_value = $request->income_ledger_value;
-        $invoice->indirect_expense = $request->expense_ledger;
+        $invoice->indirect_expense = $request->expense_ledger['name'];
         $invoice->indirect_expense_value = $request->expense_ledger_value;
 
         $invoice->save();
@@ -531,7 +530,7 @@ class InvoicesController extends Controller
             $del->delete();
         }
 
-        $amount = $total_invoice_items_amount;
+        $amount = $total_amount;
         //It will add voucher for sales from invoice
         $voucher_1 = Voucher::where([
             'account_master_id' => $account_master_id,
