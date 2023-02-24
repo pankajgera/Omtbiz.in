@@ -53,15 +53,29 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('daybook.date') }} </label>
-            <base-input
-              v-model="filters.date"
-              type="text"
-              name="date"
-              autocomplete="off"
-            />
+          <div class="col-sm-3">
+            <div class="filter-date">
+            <div class="from pr-3">
+              <label>{{ $t('general.from') }}</label>
+              <base-date-picker
+                v-model="filters.from_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+            </div> 
           </div>
+           
+          </div>
+           <div class="col-sm-3">
+              <div class="to pl-3">
+              <label>{{ $t('general.to') }}</label>
+              <base-date-picker
+                v-model="filters.to_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+            </div>
+            </div>
           <div class="col-sm-2">
             <label class="form-label"> {{ $tc('daybook.account') }} </label>
             <base-input
@@ -71,7 +85,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-1">
+          <!--<div class="col-sm-1">
             <label class="form-label"> {{ $tc('daybook.voucher_type') }} </label>
             <base-input
               v-model="filters.voucher_type"
@@ -79,7 +93,7 @@
               name="voucher_type"
               autocomplete="off"
             />
-          </div>
+          </div> 
           <div class="col-sm-1">
             <label class="form-label"> {{ $tc('daybook.voucher_count') }} </label>
             <base-input
@@ -88,11 +102,11 @@
               name="voucher_count"
               autocomplete="off"
             />
-          </div>
-          <div class="col-sm-4">
+          </div>-->
+          <div class="col-sm-2">
             <label class="form-label"> {{ $tc('daybook.voucher_debit') }} </label>
             <base-input
-              v-model="filters.voucher_debit"
+              v-model="filters.debit"
               type="text"
               name="voucher_debit"
               autocomplete="off"
@@ -101,7 +115,7 @@
           <div class="col-sm-2">
             <label class="form-label"> {{ $tc('daybook.voucher_credit') }} </label>
             <base-input
-              v-model="filters.voucher_credit"
+              v-model="filters.credit"
               type="text"
               name="voucher_credit"
               autocomplete="off"
@@ -278,7 +292,8 @@ export default {
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
-        date: '',
+        from_date: '',
+        to_date: '',
         account: '',
         debit: '',
         credit: '',
@@ -298,6 +313,11 @@ export default {
     ]),
     showEmptyScreen () {
       return !this.totalDaybook && !this.isRequestOngoing && !this.filtersApplied
+    },
+    applyFilter() {
+        if (this.filters.from_date || this.filters.to_date || this.filters.account || this.filters.debit || this.filters.credit) {
+        return true;
+      } return false;
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -348,13 +368,15 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
-        date: this.filters.date !== null ? this.filters.date : '',
+       from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         account: this.filters.account !== null ? this.filters.account : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
         credit: this.filters.credit !== null ? this.filters.credit : '',
         balance: this.filters.balance !== null ? this.filters.balance : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
+        filterBy: this.applyFilter,
         page
       }
 
@@ -377,8 +399,10 @@ export default {
 			}, 1000);
     },
     clearFilter () {
+       this.filterBy=false;
       this.filters = {
-        date: '',
+        from_date: '',
+        to_date: '',
         account: '',
         debit: '',
         credit: '',

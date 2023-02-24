@@ -140,9 +140,9 @@ class InvoicesController extends Controller
                 'total' => $request->total,
                 'due_amount' => $request->total,
                 'notes' => $request->notes,
-                'indirect_income' => $request->income_ledger['name'],
+                'indirect_income' =>  $request->income_ledger ? $request->income_ledger['name'] : null,
                 'indirect_income_value' => $request->income_ledger_value,
-                'indirect_expense' => $request->expense_ledger['name'],
+                'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
                 'indirect_expense_value' => $request->expense_ledger_value,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
@@ -418,9 +418,9 @@ class InvoicesController extends Controller
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->notes = $request->notes;
-        $invoice->indirect_income = $request->income_ledger['name'];
+        $invoice->indirect_income = $request->income_ledger ? $request->income_ledger['name'] : null;
         $invoice->indirect_income_value = $request->income_ledger_value;
-        $invoice->indirect_expense = $request->expense_ledger['name'];
+        $invoice->indirect_expense = $request->expense_ledger ? $request->expense_ledger['name'] : null;
         $invoice->indirect_expense_value = $request->expense_ledger_value;
 
         $invoice->save();

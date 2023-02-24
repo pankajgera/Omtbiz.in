@@ -205,9 +205,14 @@ class VouchersController extends Controller
      */
     public function getDaybook(Request $request)
     {
-        $day_voucher = Voucher::whereCompany($request->header('company'))
-            ->where('updated_at', '>', Carbon::today())
-            ->where('updated_at', '<', Carbon::tomorrow())
+        $day_voucher = Voucher::applyFilters($request->only([
+            'type',
+            'account',
+            'debit',
+            'credit',
+            'from_date',
+            'to_date'
+        ]))->whereCompany($request->header('company'), $request['filterBy'])
             ->get();
 
         $voucher = [];
