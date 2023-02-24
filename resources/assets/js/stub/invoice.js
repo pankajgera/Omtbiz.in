@@ -8,8 +8,5 @@ export default {
   quantity: null,
   price: 0,
   sale_price: 0,
-  discount_type: 'fixed',
-  discount_val: 0,
-  discount: 0,
   total: 0,
 }

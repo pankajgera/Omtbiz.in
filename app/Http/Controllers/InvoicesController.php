@@ -55,9 +55,14 @@ class InvoicesController extends Controller
                 ->paginate($limit);
 
             $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+
+            $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+            $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
             return response()->json([
                 'invoices' => $invoices,
                 'sundryDebtorsList' => $sundryDebtorsList,
+                'incomeIndirectLedgers' => $income_indirect_ledgers,
+                'expenseIndirectLedgers' => $expense_indirect_ledgers,
                 'invoiceTotalCount' => Invoice::count()
             ]);
         } catch (Exception $e) {
@@ -73,7 +78,6 @@ class InvoicesController extends Controller
      */
     public function create(Request $request)
     {
-        $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company'));
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
@@ -87,15 +91,18 @@ class InvoicesController extends Controller
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
 
+        $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+        $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
+
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
-            'inventories' => Inventory::query()->get(),
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'discount_per_item' => $discount_per_item,
             'invoice_prefix' => $invoice_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
+            'incomeIndirectLedgers' => $income_indirect_ledgers,
+            'expenseIndirectLedgers' => $expense_indirect_ledgers,
             'estimateList' => $estimateList,
             'inventory_negative' => ('YES' === $inventory_negative),
         ]);
@@ -118,9 +125,7 @@ class InvoicesController extends Controller
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('d-m-Y');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::TO_BE_DISPATCH;
-
-            $discount_per_item = CompanySetting::getSetting('discount_per_item', $request->header('company')) ?? 'NO';
-
+            // dd($request->income_ledger_value, $request);
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
@@ -132,13 +137,13 @@ class InvoicesController extends Controller
                 'status' => Invoice::TO_BE_DISPATCH,
                 'paid_status' => Invoice::STATUS_PAID,
                 'sub_total' => $request->sub_total,
-                'discount' => $request->discount,
-                'discount_type' => $request->discount_type,
-                'discount_val' => $request->discount_val,
                 'total' => $request->total,
                 'due_amount' => $request->total,
-                'discount_per_item' => $discount_per_item,
                 'notes' => $request->notes,
+                'indirect_income' =>  $request->income_ledger ? $request->income_ledger['name'] : null,
+                'indirect_income_value' => $request->income_ledger_value,
+                'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
+                'indirect_expense_value' => $request->expense_ledger_value,
                 'unique_hash' => str_random(60),
                 'account_master_id' => $request->debtors['id'],
             ]);
@@ -198,7 +203,6 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
                 'credit' => $total_amount,
@@ -210,7 +214,6 @@ class InvoicesController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'debit' => $total_amount,
                 'type' => 'Dr',
                 'credit' => 0,
@@ -252,25 +255,14 @@ class InvoicesController extends Controller
             //Now update vouchers id to ledger-bill-no and related_voucher
             $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
             $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-            if ($account_ledger->bill_no) {
-                $account_ledger->update([
-                    'credit' => $account_ledger->credit + $total_amount,
-                    'balance' => $account_ledger->balance + $total_amount,
-                    'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-                ]);
-                $dr_account_ledger->update([
-                    'debit' => $dr_account_ledger->debit + $total_amount,
-                    'balance' => $dr_account_ledger->balance + $total_amount,
-                    'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-                ]);
-            } else {
-                $account_ledger->update([
-                    'bill_no' => $voucher_ids,
-                ]);
-                $dr_account_ledger->update([
-                    'bill_no' => $voucher_ids,
-                ]);
-            }
+            $account_ledger->update([
+                'credit' => $account_ledger->credit + $total_amount,
+                'balance' => $account_ledger->balance + $total_amount,
+            ]);
+            $dr_account_ledger->update([
+                'debit' => $dr_account_ledger->debit + $total_amount,
+                'balance' => $dr_account_ledger->balance + $total_amount,
+            ]);
             foreach ($voucher as $key => $each) {
                 if ($key < substr_count($voucher_ids, ',') + 1) {
                     $each->update([
@@ -367,6 +359,8 @@ class InvoicesController extends Controller
             'user',
             'invoiceTemplate',
         ])->find($id);
+        $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+        $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
@@ -381,6 +375,8 @@ class InvoicesController extends Controller
         return response()->json([
             'invoiceNumber' =>   $number,
             'invoice' => $invoice,
+            'incomeIndirectLedgers' => $income_indirect_ledgers,
+            'expenseIndirectLedgers' => $expense_indirect_ledgers,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
             'sundryDebtorsList' => $sundryDebtorsList,
@@ -418,14 +414,15 @@ class InvoicesController extends Controller
                 'error' => 'invalid_due_amount'
             ]);
         }
-
         $invoice->status = $request->status;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
-        $invoice->discount = $request->discount;
-        $invoice->discount_type = $request->discount_type;
-        $invoice->discount_val = $request->discount_val;
         $invoice->notes = $request->notes;
+        $invoice->indirect_income = $request->income_ledger ? $request->income_ledger['name'] : null;
+        $invoice->indirect_income_value = $request->income_ledger_value;
+        $invoice->indirect_expense = $request->expense_ledger ? $request->expense_ledger['name'] : null;
+        $invoice->indirect_expense_value = $request->expense_ledger_value;
+
         $invoice->save();
 
         $requestInvoiceItems = $request->inventories;
@@ -442,7 +439,6 @@ class InvoicesController extends Controller
             'company_id' => $company_id,
         ], [
             'date' => Carbon::now()->toDateTimeString(),
-            'bill_no' => null,
             'type' => 'Cr',
             'debit' => 0,
             'credit' => $total_amount,
@@ -454,7 +450,6 @@ class InvoicesController extends Controller
             'company_id' => $company_id,
         ], [
             'date' => Carbon::now()->toDateTimeString(),
-            'bill_no' => null,
             'debit' => $total_amount,
             'type' => 'Dr',
             'credit' => 0,
@@ -512,8 +507,6 @@ class InvoicesController extends Controller
                     'company_id' => $req['company_id'],
                     'quantity' => $request_item_quantity,
                     'type' => 'invoice',
-                    'discount_type' => 'fixed',
-                    'discount' => 0,
                 ]);
                 //Existing invoice items, other items in database should be deleted
                 array_push($existing_invoice_items, $existing_invoice_item['id']);
@@ -537,7 +530,7 @@ class InvoicesController extends Controller
             $del->delete();
         }
 
-        $amount = $total_invoice_items_amount;
+        $amount = $total_amount;
         //It will add voucher for sales from invoice
         $voucher_1 = Voucher::where([
             'account_master_id' => $account_master_id,
@@ -574,25 +567,14 @@ class InvoicesController extends Controller
         //Now update vouchers id to ledger-bill-no and related_voucher
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-        if ($account_ledger->bill_no) {
-            $account_ledger->update([
-                'credit' => $account_ledger->credit + $amount,
-                'balance' => $account_ledger->balance + $amount,
-                'bill_no' => $account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'debit' => $dr_account_ledger->debit + $amount,
-                'balance' => $dr_account_ledger->balance + $amount,
-                'bill_no' => $dr_account_ledger->bill_no . ',' . $voucher_ids,
-            ]);
-        } else {
-            $account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-            $dr_account_ledger->update([
-                'bill_no' => $voucher_ids,
-            ]);
-        }
+        $account_ledger->update([
+            'credit' => $account_ledger->credit + $amount,
+            'balance' => $account_ledger->balance + $amount,
+        ]);
+        $dr_account_ledger->update([
+            'debit' => $dr_account_ledger->debit + $amount,
+            'balance' => $dr_account_ledger->balance + $amount,
+        ]);
         foreach ($voucher as $key => $each) {
             $each->update([
                 'debit' => $each->type === 'Dr' ? $amount : 0,

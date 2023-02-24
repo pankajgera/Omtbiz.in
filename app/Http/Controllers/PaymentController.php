@@ -141,7 +141,6 @@ class PaymentController extends Controller
             'company_id' => $company_id,
         ], [
             'date' => Carbon::now()->toDateTimeString(),
-            'bill_no' => null,
             'debit' => $req_amount,
             'type' => 'Dr',
             'credit' => 0,
@@ -156,7 +155,6 @@ class PaymentController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'debit' => 0,
                 'type' => 'Cr',
                 'credit' => $req_amount,
@@ -193,7 +191,6 @@ class PaymentController extends Controller
                 'company_id' => $company_id,
             ], [
                 'date' => Carbon::now()->toDateTimeString(),
-                'bill_no' => null,
                 'type' => 'Cr',
                 'debit' => 0,
                 'credit' => $req_amount,
@@ -227,14 +224,11 @@ class PaymentController extends Controller
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
-        //Only update for existing ledger else new one with bill_no
         $account_ledger->update([
             'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
-            'bill_no' => $account_ledger->bill_no ? $account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
         $dr_account_ledger->update([
             'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
-            'bill_no' => $account_ledger->bill_no ? $dr_account_ledger->bill_no . ',' . $voucher_ids : $voucher_ids,
         ]);
         //Update ledger balance by calculating credit/debit
         $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -122,18 +123,6 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                //Update voucher_id's in ledger->bill_no
-                $bill_no = 0;
-                $existing_voucher_id = $ledger->bill_no;
-                if (!empty($existing_voucher_id)) {
-                    $bill_no = $existing_voucher_id . ', ' . $voucher->id;
-                } else {
-                    $bill_no = $voucher->id;
-                }
-                $ledger->update([
-                    'bill_no' => $bill_no,
-                ]);
-
                 array_push($ledger_ids, $ledger->id);
                 if (!empty($voucher_ids)) {
                     $voucher_ids = $voucher_ids . ', ' . $voucher->id;
@@ -216,9 +205,14 @@ class VouchersController extends Controller
      */
     public function getDaybook(Request $request)
     {
-        $day_voucher = Voucher::whereCompany($request->header('company'))
-            ->where('updated_at', '>', Carbon::today())
-            ->where('updated_at', '<', Carbon::tomorrow())
+        $day_voucher = Voucher::applyFilters($request->only([
+            'type',
+            'account',
+            'debit',
+            'credit',
+            'from_date',
+            'to_date'
+        ]))->whereCompany($request->header('company'), $request['filterBy'])
             ->get();
 
         $voucher = [];
@@ -227,7 +221,7 @@ class VouchersController extends Controller
                 $each['voucher_count'] = Voucher::whereRaw("find_in_set(" . $each->id . ",related_voucher)")->count();
                 $each['voucher_debit'] = $each->debit;
                 $each['voucher_credit'] = $each->credit;
-                $each['voucher_balance'] = $each->debit > $each->credit ? $each->debit - $each->credit : $each->credit - $each->debit;
+                $each['quantity'] = InvoiceItem::where('invoice_id', $each->invoice_id)->sum('quantity');
                 array_push($voucher, $each);
             }
         }

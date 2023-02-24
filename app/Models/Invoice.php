@@ -25,8 +25,6 @@ class Invoice extends Model
     protected $casts = [
         'total' => 'integer',
         'sub_total' => 'integer',
-        'discount' => 'float',
-        'discount_val' => 'integer',
     ];
 
     protected $fillable = [
@@ -40,11 +38,7 @@ class Invoice extends Model
         'status',
         'paid_status',
         'sub_total',
-        'discount_per_item',
         'total',
-        'discount',
-        'discount_type',
-        'discount_val',
         'due_amount',
         'notes',
         'unique_hash',
@@ -52,6 +46,10 @@ class Invoice extends Model
         'viewed',
         'account_master_id',
         'dispatch_id',
+        'indirect_income',
+        'indirect_income_value',
+        'indirect_expense',
+        'indirect_expense_value',
     ];
 
     protected $appends = [
@@ -72,7 +70,6 @@ class Invoice extends Model
         } else {
             $number = explode("-", $lastOrder->invoice_number);
             $number = $number[2];
-
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001

@@ -27,8 +27,6 @@ class EstimatesRequest extends FormRequest
             'estimate_date' => 'required',
             'expiry_date' => 'nullable',
             'user_id' => 'required|integer',
-            'discount' => 'required',
-            'discount_val' => 'required',
             'sub_total' => 'required',
             'total' => 'required',
             'estimate_template_id' => 'required',

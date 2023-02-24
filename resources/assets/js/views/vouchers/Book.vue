@@ -38,10 +38,10 @@
               >
                 <template slot-scope="row">
                   <router-link
-                    :to="{ path: `/vouchers/${row.id}/edit` }"
+                    :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` : `/receipts/${row.receipt_id}/edit`}"
                     class="dropdown-item"
                   >
-                    {{ row.particulars }}
+                    {{ row.account }}
                   </router-link>
                 </template>
               </table-column>
@@ -63,7 +63,7 @@
                 show="quantity"
               >
                 <template slot-scope="row">
-                  {{ row.invoice ? row.invoice.inventories[0].quantity : 0 }}
+                  {{ row.invoice ? row.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b) : 0 }}
                 </template>
               </table-column>
               <table-column :label="$t('ledgers.debit')" show="debit">
@@ -222,7 +222,7 @@ export default {
       this.currentTotalCredit = this.ledgerData.credit;
       this.currentTotalDebit = this.ledgerData.debit;
       let quan = this.displayArray.filter(i => i.invoice)
-        .map(i => i.invoice.inventories[0].quantity).filter(i => i);
+        .map(i => i.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b)).filter(i => i);
       if (quan.length) {
         this.totalQuantity = quan.reduce((a, c) =>  a + c);
       }

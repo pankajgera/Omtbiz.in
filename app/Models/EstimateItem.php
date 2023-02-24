@@ -14,19 +14,14 @@ class EstimateItem extends Model
         'company_id',
         'price',
         'sale_price',
-        'discount_type',
-        'discount_val',
         'total',
-        'discount',
         'inventory_id',
     ];
 
     protected $casts = [
         'price' => 'integer',
         'total' => 'integer',
-        'discount' => 'float',
         'quantity' => 'float',
-        'discount_val' => 'integer',
     ];
 
     public function estimate()

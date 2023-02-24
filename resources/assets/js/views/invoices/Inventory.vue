@@ -252,7 +252,7 @@ export default {
       }
     },
     total () {
-      return this.subtotal - this.inventory.discount_val
+      return this.subtotal
     },
     price: {
       get: function () {
