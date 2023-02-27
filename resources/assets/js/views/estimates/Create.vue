@@ -416,6 +416,7 @@ export default {
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
+        limit: 1000,
         filter: {},
         orderByField: '',
         orderBy: ''

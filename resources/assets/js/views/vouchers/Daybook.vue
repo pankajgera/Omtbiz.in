@@ -62,9 +62,9 @@
                 :calendar-button="true"
                 calendar-button-icon="calendar"
               />
-            </div> 
+            </div>
           </div>
-           
+
           </div>
            <div class="col-sm-3">
               <div class="to pl-3">
@@ -93,7 +93,7 @@
               name="voucher_type"
               autocomplete="off"
             />
-          </div> 
+          </div>
           <div class="col-sm-1">
             <label class="form-label"> {{ $tc('daybook.voucher_count') }} </label>
             <base-input
@@ -219,7 +219,7 @@
           show="quantity"
         >
         <template slot-scope="row">
-             {{ row.quantity }}
+             {{ parseInt(row.quantity) }}
           </template>
         </table-column>
         <table-column
