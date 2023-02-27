@@ -10,7 +10,6 @@ class AccountLedger extends Model
     protected $fillable = [
         'date',
         'type',
-        'bill_no',
         'account',
         'account_master_id',
         'debit',

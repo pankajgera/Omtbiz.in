@@ -19,19 +19,14 @@ class InvoiceItem extends Model
         'quantity',
         'price',
         'sale_price',
-        'discount_type',
-        'discount_val',
         'total',
-        'discount',
         'type'
     ];
 
     protected $casts = [
         'price' => 'integer',
         'total' => 'integer',
-        'discount' => 'float',
         'quantity' => 'float',
-        'discount_val' => 'integer',
     ];
 
     public function invoice()

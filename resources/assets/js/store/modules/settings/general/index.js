@@ -7,7 +7,6 @@ const initialState = {
   time_zones: null,
   languages: null,
   date_formats: null,
-  item_discount: false
 }
 
 export default {

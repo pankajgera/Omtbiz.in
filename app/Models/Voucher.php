@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Voucher extends Model
 {
@@ -38,6 +40,11 @@ class Voucher extends Model
         return $this->belongsTo(\App\Models\Invoice::class);
     }
 
+    public function receipt()
+    {
+        return $this->belongsTo(\App\Models\Receipt::class);
+    }
+
     public function scopeWhereType($query, $type)
     {
         return $query->where('type', 'LIKE', '%' . $type . '%');
@@ -63,9 +70,21 @@ class Voucher extends Model
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('company_id', $company_id);
+        if ($filter==='false') {
+            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
+        } else {
+            $query->where('company_id', $company_id);
+        }
+    }
+
+    public function scopeVoucherBetween($query, $start, $end)
+    {
+        return $query->whereBetween(
+            'date',
+            [$start->format('Y-m-d'), $end->format('Y-m-d')]
+        );
     }
 
     public function scopeApplyFilters($query, array $filters)
@@ -75,7 +94,11 @@ class Voucher extends Model
         if ($filters->get('type')) {
             $query->whereType($filters->get('type'));
         }
-
+        if ($filters->get('from_date') && $filters->get('to_date')) {
+            $start = Carbon::createFromFormat('d/m/Y', $filters->get('from_date'));
+            $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
+            $query->voucherBetween($start, $end);
+        }
         if ($filters->get('account')) {
             $query->whereAccount($filters->get('account'));
         }
