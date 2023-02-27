@@ -234,7 +234,7 @@
                             </td>
                             <td>
                                 <p class="bank-title">
-                                    {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories[0]->quantity : 0 }}
+                                    {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0 }}
                                 </p>
                             </td>
                             @if($each->credit > 0)
