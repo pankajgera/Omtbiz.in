@@ -353,6 +353,21 @@ function numberTowords($num)
         </table>
     </div>
     <footer>
+      <div class="row" style="border: 1px solid #eee; padding:20px">
+
+           <div>
+              <p style="font-size: 12px;">
+               Indirect Income :
+                {{ $indirect_income_value }}
+            </p>
+           </div>
+             <div>
+              <p style="font-size: 12px;">
+               Indirect Expense :
+                {{ $indirect_expense_value }}
+            </p>
+             </div>
+        </div>
         <div>
             <p style="font-size: 12px;">
                 Amount Chargeable (in words)
