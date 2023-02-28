@@ -707,7 +707,7 @@ export default {
             parseInt(i.price) === parseInt(selectedItem.price)
           );
         if (!findItem) {
-          findItem = 0
+          findItem = {}
         }
         let maxQuantityAvailable = parseInt(findItem.quantity);
         if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
