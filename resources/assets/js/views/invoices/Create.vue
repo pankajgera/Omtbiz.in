@@ -93,70 +93,70 @@
         </div>
       </div>
       <div class="table-responsive">
-      <table class="table item-table">
-        <colgroup>
-          <col style="width: 40%;">
-          <col style="width: 10%;">
-          <col style="width: 15%;">
-          <col style="width: 15%;">
-          <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
-          <col style="width: 15%;">
-        </colgroup>
-        <thead class="item-table-header">
-          <tr>
-            <th class="text-left">
-              <span class="column-heading heading-1 item-heading">
-                {{ $tc('invoices.inventory.title',2) }}
-              </span>
-            </th>
-            <th class="text-right">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.quantity') }}
-              </span>
-            </th>
-            <th class="text-left">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.price') }}
-              </span>
-            </th>
-            <th class="text-left">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.sale_price') }}
-              </span>
-            </th>
-            <th v-if="discountPerInventory === 'YES'" class="text-right">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.discount') }}
-              </span>
-            </th>
-            <th class="text-right">
-              <span class="column-heading amount-heading">
-                {{ $t('invoices.inventory.amount') }}
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
-          <invoice-inventory
-            v-for="(each, index) in inventoryBind"
-            ref="invoiceInventory"
-            :key="each.name+index"
-            :index="index"
-            :inventory-data="each"
-            :currency="currency"
-            :discount-per-inventory="discountPerInventory"
-            :is-disable="$route.query.d === 'true'"
-            :inventory-type="'invoice'"
-            :inventory-list="inventoryList"
-            :inventory-negative="inventoryNegative"
-            :is-edit="$route.name === 'invoices.edit'"
-            @remove="removeInventory"
-            @update="updateInventoryBounce"
-            @inventoryValidate="checkInventoryData"
-            @endlist="showEndList"
-          />
-        </draggable>
-      </table>
+        <table class="table item-table">
+          <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
+            <col style="width: 15%;">
+          </colgroup>
+          <thead class="item-table-header">
+            <tr>
+              <th class="text-left">
+                <span class="column-heading heading-1 item-heading">
+                  {{ $tc('invoices.inventory.title',2) }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.quantity') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.price') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.sale_price') }}
+                </span>
+              </th>
+              <th v-if="discountPerInventory === 'YES'" class="text-right">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.discount') }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading amount-heading">
+                  {{ $t('invoices.inventory.amount') }}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
+            <invoice-inventory
+              v-for="(each, index) in inventoryBind"
+              ref="invoiceInventory"
+              :key="each.name+index"
+              :index="index"
+              :inventory-data="each"
+              :currency="currency"
+              :discount-per-inventory="discountPerInventory"
+              :is-disable="$route.query.d === 'true'"
+              :inventory-type="'invoice'"
+              :inventory-list="inventoryList"
+              :inventory-negative="inventoryNegative"
+              :is-edit="$route.name === 'invoices.edit'"
+              @remove="removeInventory"
+              @update="updateInventoryBounce"
+              @inventoryValidate="checkInventoryData"
+              @endlist="showEndList"
+            />
+          </draggable>
+        </table>
       </div>
       <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="isDisabled" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
@@ -557,10 +557,10 @@ export default {
       'fetchAllInventory'
     ]),
     returnZero() {
-      if(this.income_ledger_value===null || this.income_ledger_value==='' )  {
+      if(!this.income_ledger_value)  {
         this.income_ledger_value = 0;
       }
-       if(this.expense_ledger_value===null || this.expense_ledger_value==='' )  {
+      if(!this.expense_ledger_value)  {
         this.expense_ledger_value = 0;
       }
     },
@@ -707,7 +707,7 @@ export default {
             parseInt(i.price) === parseInt(selectedItem.price)
           );
         if (!findItem) {
-          findItem = {}
+          return;
         }
         let maxQuantityAvailable = parseInt(findItem.quantity);
         if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
