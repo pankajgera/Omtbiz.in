@@ -565,7 +565,6 @@ export default {
       }
     },
     totalQuantity(inventory){
-      console.log(inventory);
       if (inventory.length) {
         return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
       }
@@ -703,11 +702,14 @@ export default {
     async validateInventoryQuantity() {
       let valid = true;
       this.newInvoice.inventories.map(selectedItem => {
-        let maxQuantityAvailable = parseInt(
-          this.inventoryList.find(i =>
+        let findItem = this.inventoryList.find(i =>
             i.name === selectedItem.name &&
             parseInt(i.price) === parseInt(selectedItem.price)
-          ).quantity);
+          );
+        if (!findItem) {
+          findItem = 0
+        }
+        let maxQuantityAvailable = parseInt(findItem.quantity);
         if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
           swal({
             title: this.$t('invoices.out_of_stock'),
