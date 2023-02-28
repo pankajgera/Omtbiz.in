@@ -195,38 +195,37 @@
 
           </div>
           <div class="section" v-if="incomeLedgerList.length">
-          <div class="row align-items-center">
-            <div class="pl-3">
-             <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
-            </div>
-            <div class="pl-3 mr-5">
-              <base-select
-              v-model="income_ledger"
-              :options="incomeLedgerList"
-              :required="'required'"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="false"
-              :disabled="isDisabled"
-              :placeholder="$t('receipts.select_a_list')"
-              label="name"
-              track-by="id"
-            />
-            </div>
+            <div class="row align-items-center">
+              <div class="pl-3">
+              <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
+              </div>
+              <div class="pl-3 mr-5">
+                <base-select
+                v-model="income_ledger"
+                :options="incomeLedgerList"
+                :required="'required'"
+                :searchable="true"
+                :show-labels="false"
+                :allow-empty="false"
+                :disabled="isDisabled"
+                :placeholder="$t('receipts.select_a_list')"
+                label="name"
+                track-by="id"
+              />
+              </div>
 
-             </div>
-       <div>
-      <base-input
+            </div>
+            <div>
+              <base-input
                 style="width:100px"
                 :disabled="this.income_ledger===null"
                 v-model="income_ledger_value"
+                type="number"
+                min="0"
                 input-class="item-discount"
-                @input="returnZero()"
               />
-       </div>
-        </div>
-
-
+            </div>
+          </div>
           <div class="section" v-if="expenseLedgerList.length">
            <div class="row align-items-center">
             <div class="pl-3 mb-2">
@@ -248,11 +247,12 @@
         </div>
            </div>
            <base-input
-            style="width:100px"
-             :disabled="this.expense_ledger===null"
-                v-model="expense_ledger_value"
-                input-class="item-discount"
-                @input="returnZero()"
+              style="width:100px"
+              :disabled="this.expense_ledger===null"
+              v-model="expense_ledger_value"
+              type="number"
+              min="0"
+              input-class="item-discount"
               />
         </div>
 
@@ -468,10 +468,13 @@ export default {
       if (this.newInvoice.discount_val) {
         return this.subtotal - this.newInvoice.discount_val
       }
-      if (this.income_ledger_value!==0 &&  this.expense_ledger_value===0) {
+      if (this.income_ledger_value && !this.expense_ledger_value) {
         return  this.subtotal + parseInt(this.income_ledger_value)
       }
-       if (this.income_ledger_value!==0 && this.expense_ledger_value!==0) {
+      if (!this.income_ledger_value && this.expense_ledger_value) {
+        return  this.subtotal - parseInt(this.expense_ledger_value)
+      }
+      if (this.income_ledger_value && this.expense_ledger_value) {
         return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)
       }
       return this.subtotal
@@ -556,14 +559,6 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
-    returnZero() {
-      if(!this.income_ledger_value)  {
-        this.income_ledger_value = 0;
-      }
-      if(!this.expense_ledger_value)  {
-        this.expense_ledger_value = 0;
-      }
-    },
     totalQuantity(inventory){
       if (inventory.length) {
         return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
@@ -621,8 +616,8 @@ export default {
           }
           this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null
           this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null
-          this.income_ledger_value= response.data.invoice.indirect_income_value
-          this.expense_ledger_value= response.data.invoice.indirect_expense_value
+          this.income_ledger_value = response.data.invoice.indirect_income_value ? response.data.invoice.indirect_income_value : 0
+          this.expense_ledger_value= response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0
            response.data.estimateList.map(i => {
           let obj = {}
           let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
