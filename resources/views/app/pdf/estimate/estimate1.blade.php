@@ -90,7 +90,7 @@ function numberTowords($num)
 <html lang="en">
 
 <head>
-    <title>Banks Report</title>
+    <title>Estimate Report</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";

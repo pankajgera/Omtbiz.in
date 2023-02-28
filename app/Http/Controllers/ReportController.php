@@ -578,7 +578,7 @@ class ReportController extends Controller
         view()->share([
             'invoice' => $invoiceWith,
             'total_quantity' => $invoice_i->sum('quantity'),
-            'total_amount' => $invoiceWith->sub_total,
+            'total_amount' => $invoiceWith->total,
             'invoice_items' => $invoice_items,
             'colorSettings' => $colorSettings,
             'company' => $company,

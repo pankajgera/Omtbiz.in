@@ -90,7 +90,7 @@ function numberTowords($num)
 <html lang="en">
 
 <head>
-    <title>Banks Report</title>
+    <title>Invoice Report</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
@@ -113,18 +113,22 @@ function numberTowords($num)
             font-style: normal;
             font-weight: 600;
             font-size: 14px;
-            color: #595959;
+            color: #000;
             width: 100%;
             text-align: right;
             padding: 0px;
             margin: 0px;
+        }
+        .td-header {
+            font-size: 14px;
+            font-weight: bold;
         }
         .sub-heading-text {
             font-style: normal;
             font-weight: 600;
             font-size: 14px;
             /* line-height: 21px; */
-            color: #595959;
+            color: #000;
             padding: 0px;
             margin: 0px;
             margin-top: 6px;
@@ -136,7 +140,7 @@ function numberTowords($num)
             font-weight: normal;
             font-size: 12px;
             line-height: 21px;
-            color: #040405;
+            color: #000;
         }
         .title {
             margin-top: 60px;
@@ -145,7 +149,7 @@ function numberTowords($num)
             font-weight: normal;
             font-size: 14px;
             line-height: 21px;
-            color: #040405;
+            color: #000;
         }
         .table-container {
             padding-left: 10px;
@@ -159,7 +163,7 @@ function numberTowords($num)
             font-weight: normal;
             font-size: 14px;
             line-height: 21px;
-            color: #595959;
+            color: #000;
             width: 100%;
             float: right;
             text-align: right;
@@ -172,18 +176,18 @@ function numberTowords($num)
             font-size: 14px;
             line-height: 21px;
             text-align: right;
-            color: #595959;
+            color: #000;
         }
         .border {
-            border: 1px solid #a5a5a5 !important;
+            border: 1px solid #797979 !important;
         }
         tr.td-border td {
-            border-top: 1px solid #a5a5a5;
-            border-bottom: 1px solid #a5a5a5;
+            border-top: 1px solid #797979;
+            border-bottom: 1px solid #797979;
         }
         td {
-            border-right: 1px solid #a5a5a5;
-            border-left: 1px solid #a5a5a5;
+            border-right: 1px solid #797979;
+            border-left: 1px solid #797979;
         }
         p {
             padding: 5px !important;
@@ -205,7 +209,7 @@ function numberTowords($num)
             font-size: 14px;
             line-height: 21px;
             text-align: right;
-            color: #040405;
+            color: #000;
         }
         .total-table {
             width: 100%;
@@ -221,13 +225,14 @@ function numberTowords($num)
             font-weight: 600;
             font-size: 14px;
             line-height: 21px;
-            color: #595959;
+            color: #000;
         }
         .row-item td p {
             line-height: 1px;
             marign: 0 5px !important;
             padding: 0 5px !important;
         }
+        tr    { page-break-inside:avoid; }
         header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 150px; }
         @page {
             margin: 120px 20px 20px 20px;
@@ -258,72 +263,62 @@ function numberTowords($num)
             </tr>
         </table>
     </header>
-    <div style="margin-top: 40px;">
-        <table>
+    <div style="top: 40px; position: relative">
+        <table style=" width: 100% !important;">
             <tbody>
                 <div class="main-container">
                     <div class="sub-container">
                         <table class="table">
                             <tr class="td-border">
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 10%">
+                                    <p class="td-header">
                                         S.No.
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 40%">
+                                    <p class="td-header">
                                         Description
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 10%">
+                                    <p class="td-header">
                                         Quantity
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 20%">
+                                    <p class="td-header">
                                         Rate
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
-                                        Per
-                                    </p>
-                                </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 20%">
+                                    <p class="td-header">
                                         Amount
                                     </p>
                                 </td>
                             </tr>
                             @foreach ($invoice_items as $key => $item)
-                                <tr class="row-item">
-                                    <td>
+                                <tr class="row-item" @if ($key > 29 && $key%30 === 0) style="page-break-after: always" @endif>
+                                    <td style="width: 10%">
                                         <p style="font-size: 12px;">
                                             {{ $key + 1 }}
                                         </p>
                                     </td>
-                                    <td>
+                                    <td style="width: 40%">
                                         <p style="font-size: 12px;">
                                             {{ $item->name }}
                                         </p>
                                     </td>
-                                    <td>
+                                    <td style="width: 10%">
                                         <p style="font-size: 12px;">
                                             {{ $item->quantity }} {{ $item->inventory ? $item->inventory->unit : '' }}
                                         </p>
                                     </td>
-                                    <td>
+                                    <td style="width: 20%">
                                         <p style="font-size: 12px;">
                                             ₹ {{ $item->sale_price }}
                                         </p>
                                     </td>
-                                    <td>
-                                        <p style="font-size: 12px;">
-                                            {{ $item->inventory ? $item->inventory->unit : ''}}
-                                        </p>
-                                    </td>
-                                    <td>
+                                    <td style="width: 20%">
                                         <p style="font-size: 12px;">
                                             ₹ {{ $item->total }}
                                         </p>
@@ -331,18 +326,41 @@ function numberTowords($num)
                                 </tr>
                             @endforeach
                             <tr class="td-border">
-                                <td></td>
-                                <td></td>
-                                <td>
+                                <td style="width: 10%"></td>
+                                <td style="width: 40%"></td>
+                                <td style="width: 10%">
                                     <p style="font-size: 12px;">
-                                        Total: {{ $total_quantity }}
+                                        Total Quantity: {{ str_replace('.00', '', $total_quantity) }}
                                     </p>
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <td>
+                                <td style="width: 20%">
                                     <p style="font-size: 12px;">
-                                        {{ 'Rs ' . $total_amount }}
+                                        Subtotal :
+                                        <br/>
+                                        @if($invoice->indirect_income)
+                                            {{ $invoice->indirect_income}} :
+                                        @endif
+                                        <br/>
+                                        @if($invoice->indirect_expense)
+                                            {{ $invoice->indirect_expense }} :
+                                        @endif
+                                        <br/>
+                                        <span style="font-weight: bold">Total :<span>
+                                    </p>
+                                </td>
+                                <td style="width: 20%">
+                                    <p style="font-size: 12px; font-weight: bold">
+                                        ₹ {{ $invoice->sub_total}}
+                                        <br/>
+                                        @if($invoice->indirect_income)
+                                            ₹ {{ $invoice->indirect_income_value }}
+                                        @endif
+                                        <br/>
+                                        @if($invoice->indirect_expense)
+                                            (-) ₹ {{ $invoice->indirect_expense_value }}
+                                        @endif
+                                        <br/>
+                                        ₹ {{ $invoice->total }}
                                     </p>
                                 </td>
                             </tr>
@@ -353,14 +371,14 @@ function numberTowords($num)
         </table>
     </div>
     <footer>
-        <div>
+        <div style="margin-top: 30px">
             <p style="font-size: 12px;">
                 Amount Chargeable (in words)
                 <br />
                 {{ numberTowords($total_amount) }}
             </p>
         </div>
-        <div style="margin: 10px 0px; position: fixed; bottom: 180px">
+        <div style="margin: 10px 0px; position: fixed; bottom: 20px">
             <p style="font-size: 12px; bottom: 0">
                 Remark: <br>
                 {{ $invoice->notes }}
