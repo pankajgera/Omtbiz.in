@@ -93,70 +93,70 @@
         </div>
       </div>
       <div class="table-responsive">
-      <table class="table item-table">
-        <colgroup>
-          <col style="width: 40%;">
-          <col style="width: 10%;">
-          <col style="width: 15%;">
-          <col style="width: 15%;">
-          <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
-          <col style="width: 15%;">
-        </colgroup>
-        <thead class="item-table-header">
-          <tr>
-            <th class="text-left">
-              <span class="column-heading heading-1 item-heading">
-                {{ $tc('invoices.inventory.title',2) }}
-              </span>
-            </th>
-            <th class="text-right">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.quantity') }}
-              </span>
-            </th>
-            <th class="text-left">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.price') }}
-              </span>
-            </th>
-            <th class="text-left">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.sale_price') }}
-              </span>
-            </th>
-            <th v-if="discountPerInventory === 'YES'" class="text-right">
-              <span class="column-heading">
-                {{ $t('invoices.inventory.discount') }}
-              </span>
-            </th>
-            <th class="text-right">
-              <span class="column-heading amount-heading">
-                {{ $t('invoices.inventory.amount') }}
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
-          <invoice-inventory
-            v-for="(each, index) in inventoryBind"
-            ref="invoiceInventory"
-            :key="each.name+index"
-            :index="index"
-            :inventory-data="each"
-            :currency="currency"
-            :discount-per-inventory="discountPerInventory"
-            :is-disable="$route.query.d === 'true'"
-            :inventory-type="'invoice'"
-            :inventory-list="inventoryList"
-            :inventory-negative="inventoryNegative"
-            :is-edit="$route.name === 'invoices.edit'"
-            @remove="removeInventory"
-            @update="updateInventoryBounce"
-            @inventoryValidate="checkInventoryData"
-            @endlist="showEndList"
-          />
-        </draggable>
-      </table>
+        <table class="table item-table">
+          <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
+            <col style="width: 15%;">
+          </colgroup>
+          <thead class="item-table-header">
+            <tr>
+              <th class="text-left">
+                <span class="column-heading heading-1 item-heading">
+                  {{ $tc('invoices.inventory.title',2) }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.quantity') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.price') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.sale_price') }}
+                </span>
+              </th>
+              <th v-if="discountPerInventory === 'YES'" class="text-right">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.discount') }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading amount-heading">
+                  {{ $t('invoices.inventory.amount') }}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
+            <invoice-inventory
+              v-for="(each, index) in inventoryBind"
+              ref="invoiceInventory"
+              :key="each.name+index"
+              :index="index"
+              :inventory-data="each"
+              :currency="currency"
+              :discount-per-inventory="discountPerInventory"
+              :is-disable="$route.query.d === 'true'"
+              :inventory-type="'invoice'"
+              :inventory-list="inventoryList"
+              :inventory-negative="inventoryNegative"
+              :is-edit="$route.name === 'invoices.edit'"
+              @remove="removeInventory"
+              @update="updateInventoryBounce"
+              @inventoryValidate="checkInventoryData"
+              @endlist="showEndList"
+            />
+          </draggable>
+        </table>
       </div>
       <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="isDisabled" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
@@ -195,38 +195,37 @@
 
           </div>
           <div class="section" v-if="incomeLedgerList.length">
-          <div class="row align-items-center">
-            <div class="pl-3">
-             <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
-            </div>
-            <div class="pl-3 mr-5">
-              <base-select
-              v-model="income_ledger"
-              :options="incomeLedgerList"
-              :required="'required'"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="false"
-              :disabled="isDisabled"
-              :placeholder="$t('receipts.select_a_list')"
-              label="name"
-              track-by="id"
-            />
-            </div>
+            <div class="row align-items-center">
+              <div class="pl-3">
+              <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
+              </div>
+              <div class="pl-3 mr-5">
+                <base-select
+                v-model="income_ledger"
+                :options="incomeLedgerList"
+                :required="'required'"
+                :searchable="true"
+                :show-labels="false"
+                :allow-empty="false"
+                :disabled="isDisabled"
+                :placeholder="$t('receipts.select_a_list')"
+                label="name"
+                track-by="id"
+              />
+              </div>
 
-             </div>
-       <div>
-      <base-input
+            </div>
+            <div>
+              <base-input
                 style="width:100px"
                 :disabled="this.income_ledger===null"
                 v-model="income_ledger_value"
+                type="number"
+                min="0"
                 input-class="item-discount"
-                @input="returnZero()"
               />
-       </div>
-        </div>
-
-
+            </div>
+          </div>
           <div class="section" v-if="expenseLedgerList.length">
            <div class="row align-items-center">
             <div class="pl-3 mb-2">
@@ -248,11 +247,12 @@
         </div>
            </div>
            <base-input
-            style="width:100px"
-             :disabled="this.expense_ledger===null"
-                v-model="expense_ledger_value"
-                input-class="item-discount"
-                @input="returnZero()"
+              style="width:100px"
+              :disabled="this.expense_ledger===null"
+              v-model="expense_ledger_value"
+              type="number"
+              min="0"
+              input-class="item-discount"
               />
         </div>
 
@@ -468,10 +468,13 @@ export default {
       if (this.newInvoice.discount_val) {
         return this.subtotal - this.newInvoice.discount_val
       }
-      if (this.income_ledger_value!==0 &&  this.expense_ledger_value===0) {
+      if (this.income_ledger_value && !this.expense_ledger_value) {
         return  this.subtotal + parseInt(this.income_ledger_value)
       }
-       if (this.income_ledger_value!==0 && this.expense_ledger_value!==0) {
+      if (!this.income_ledger_value && this.expense_ledger_value) {
+        return  this.subtotal - parseInt(this.expense_ledger_value)
+      }
+      if (this.income_ledger_value && this.expense_ledger_value) {
         return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)
       }
       return this.subtotal
@@ -556,14 +559,6 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
-    returnZero() {
-      if(this.income_ledger_value===null || this.income_ledger_value==='' )  {
-        this.income_ledger_value = 0;
-      }
-       if(this.expense_ledger_value===null || this.expense_ledger_value==='' )  {
-        this.expense_ledger_value = 0;
-      }
-    },
     totalQuantity(inventory){
       if (inventory.length) {
         return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
@@ -621,8 +616,8 @@ export default {
           }
           this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null
           this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null
-          this.income_ledger_value= response.data.invoice.indirect_income_value
-          this.expense_ledger_value= response.data.invoice.indirect_expense_value
+          this.income_ledger_value = response.data.invoice.indirect_income_value ? response.data.invoice.indirect_income_value : 0
+          this.expense_ledger_value= response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0
            response.data.estimateList.map(i => {
           let obj = {}
           let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
@@ -707,7 +702,7 @@ export default {
             parseInt(i.price) === parseInt(selectedItem.price)
           );
         if (!findItem) {
-          findItem = {}
+          return;
         }
         let maxQuantityAvailable = parseInt(findItem.quantity);
         if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
