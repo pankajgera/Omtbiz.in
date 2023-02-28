@@ -90,7 +90,7 @@ function numberTowords($num)
 <html lang="en">
 
 <head>
-    <title>Banks Report</title>
+    <title>Invoice Report</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
@@ -353,7 +353,7 @@ function numberTowords($num)
         </table>
     </div>
     <footer>
-      
+
         <div>
             <p style="font-size: 12px;">
                 Amount Chargeable (in words)

@@ -579,8 +579,6 @@ class ReportController extends Controller
             'invoice' => $invoiceWith,
             'total_quantity' => $invoice_i->sum('quantity'),
             'total_amount' => $invoiceWith->total,
-            'indirect_income_value' => $invoiceWith->indirect_income_value,
-            'indirect_expense_value' => $invoiceWith->indirect_expense_value,
             'invoice_items' => $invoice_items,
             'colorSettings' => $colorSettings,
             'company' => $company,

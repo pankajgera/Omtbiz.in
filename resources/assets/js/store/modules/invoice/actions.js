@@ -128,7 +128,6 @@ export const deleteMultipleInvoices = ({ commit, dispatch, state }, id) => {
 }
 
 export const updateInvoice = ({ commit, dispatch, state }, data) => {
-  console.log(data);
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/invoices/${data.id}`, data).then((response) => {
       if (response.data.invoice) {
