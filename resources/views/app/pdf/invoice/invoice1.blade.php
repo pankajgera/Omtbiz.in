@@ -353,6 +353,7 @@ function numberTowords($num)
         </table>
     </div>
     <footer>
+      
         <div>
             <p style="font-size: 12px;">
                 Amount Chargeable (in words)
