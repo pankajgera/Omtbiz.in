@@ -192,7 +192,7 @@
             <label class="invoice-amount">
               ₹ {{ subtotal }}
             </label>
-            
+
           </div>
           <div class="section" v-if="incomeLedgerList.length">
           <div class="row align-items-center">
@@ -213,7 +213,7 @@
               track-by="id"
             />
             </div>
-          
+
              </div>
        <div>
       <base-input
@@ -255,7 +255,7 @@
                 @input="returnZero()"
               />
         </div>
-        
+
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
             <label class="invoice-label">{{ $t('invoices.discount') }}</label>
             <div
@@ -486,7 +486,7 @@ export default {
                 return a + b['total']
               }, 0)
       }
-      
+
       return 0
     },
     discount: {
@@ -745,7 +745,7 @@ export default {
         expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,
         invoice_template_id: this.getTemplateId,
       }
-     
+
       if (this.$route.name === 'invoices.edit') {
         this.submitUpdate(data)
         return
