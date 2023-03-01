@@ -7,6 +7,8 @@ use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Models\Payment;
+use App\Models\Receipt;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -218,6 +220,20 @@ class VouchersController extends Controller
         $voucher = [];
         foreach ($day_voucher as $key => $each) {
             if (0 === $key % 2) {
+                $invoice = Invoice::where('id', $each->invoice_id)->first();
+                $payment = Payment::where('account_master_id', $each->account_master_id)->first();
+                $receipt = Receipt::where('id', $each->receipt_id)->first();
+                $each['date'] = Carbon::parse($each->date)->format('Y-m-d');
+                if($each->voucher_type==='Sales') {
+                    $each['date'] = $invoice ? Carbon::parse($invoice->invoice_date)->format('Y-m-d') : null;
+                }
+                if($each->voucher_type==='Receipt') {
+                    $each['date'] =  $receipt ? Carbon::parse($receipt->receipt_date)->format('Y-m-d') : null;
+                    // dd(Carbon::parse($receipt->receipt_date)->format('Y-m-d'),  $each['date'],  $receipt);
+                }
+                if($each->voucher_type==='Payment') {
+                    $each['date'] =  $payment ? Carbon::parse($payment->payment_date)->format('Y-m-d') : null;
+                }
                 $each['voucher_count'] = Voucher::whereRaw("find_in_set(" . $each->id . ",related_voucher)")->count();
                 $each['voucher_debit'] = $each->debit;
                 $each['voucher_credit'] = $each->credit;

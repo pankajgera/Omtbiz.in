@@ -190,7 +190,7 @@
           show="date"
         >
           <template slot-scope="row">
-             {{ getFormattedDate(row.date) }}
+             {{ row.date }}
           </template>
         </table-column>
         <table-column
@@ -361,7 +361,13 @@ export default {
       'fetchDaybook',
     ]),
     getFormattedDate(date) {
-      return moment(date).format('DD-MM-YYYY')
+      console.log(date);
+      if(date) {
+         return moment(date).format('DD-MM-YYYY')
+      } else {
+        return null;
+      }
+     
     },
     refreshTable () {
       this.$refs.table.refresh()
