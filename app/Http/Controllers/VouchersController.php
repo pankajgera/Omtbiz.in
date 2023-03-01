@@ -212,7 +212,7 @@ class VouchersController extends Controller
             'credit',
             'from_date',
             'to_date'
-        ]))->whereCompany($request->header('company'), $request['filterBy'])
+        ]))->whereCompany($request->header('company'), $request['filterBy'], $request['type'])
             ->get();
 
         $voucher = [];
