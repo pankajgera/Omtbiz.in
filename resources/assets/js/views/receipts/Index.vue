@@ -99,7 +99,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ totalReceipts }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ total_counts }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedReceipts && selectedReceipts.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -232,6 +232,7 @@ export default {
       sundryDebtorsList: [],
       filterBy: false,
       showFilters: false,
+      total_counts: 0,
       breadCrumbLinks:[
         {
           url:'dashboard',
@@ -389,7 +390,7 @@ export default {
       let response = await this.fetchReceipts(data)
       this.isRequestOngoing = false
        this.sundryDebtorsList = response.data.sundryDebtorsList
-      //this.currency = response.data.currency
+      this.total_counts = response.data.total
 
       return {
         data: response.data.receipts.data,

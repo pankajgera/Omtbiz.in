@@ -100,7 +100,7 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <h4>Pending Orders</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ pendingOrders.length }}</b> {{ $t('general.of') }} <b>{{ totalPendingOrders }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ pendingOrders.length }}</b> {{ $t('general.of') }} <b>{{ pending_filtered_count }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -230,7 +230,7 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <h4>Completed Orders</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ completedOrders.length }}</b> {{ $t('general.of') }} <b>{{ totalCompletedOrders }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ completedOrders.length }}</b> {{ $t('general.of') }} <b>{{ completed_filtered_count }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -415,6 +415,8 @@ export default {
       filterBy: false,
       getPendingOrders: null,
       getCompletedOrders: null,
+      pending_filtered_count: 0,
+      completed_filtered_count: 0,
     }
   },
   computed: {
@@ -506,6 +508,8 @@ export default {
       this.setPendingOrder(response);
       this.setCompletedOrder(response);
       this.isRequestOngoing = false
+      this.pending_filtered_count = response.data.pending_orders.total
+      this.completed_filtered_count = response.data.completed_orders.total
     },
     setPendingOrder(response) {
       this.getPendingOrders = {
