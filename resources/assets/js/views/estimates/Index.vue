@@ -101,7 +101,7 @@
     <div v-show="!showEmptyScreenDraft" class="table-container">
       <div class="table-actions mt-5">
         <h4>Pending Estimates</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesDraft.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimatesDraft }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesDraft.length }}</b> {{ $t('general.of') }} <b>{{ draftCount }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -227,7 +227,7 @@
     <div v-show="!showEmptyScreenSent" class="table-container">
       <div class="table-actions mt-5">
         <h4>Completed Estimates</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesSent.length }}</b> {{ $t('general.of') }} <b>{{ totalEstimatesSent }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesSent.length }}</b> {{ $t('general.of') }} <b>{{ sentCount }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -391,6 +391,8 @@ export default {
       ],
       filtersApplied: false,
       isRequestOngoing: true,
+      draftCount: 0,
+      sentCount: 0,
       filters: {
         estimate_number: '',
         customer: '',
@@ -497,6 +499,8 @@ export default {
       let response = await this.fetchEstimates(data)
       this.isRequestOngoing = false
       this.sundryDebtorsList = response.data.sundryDebtorsList
+      this.draftCount = response.data.estimates_draft.total
+      this.sentCount = response.data.estimates_sent.total
       return {
         data: response.data.estimates_draft.data,
         pagination: {
