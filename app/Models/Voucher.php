@@ -72,10 +72,12 @@ class Voucher extends Model
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
+        $query->where('company_id', $company_id);
+
         if ($filter==='false') {
-            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
-        } else {
-            $query->where('company_id', $company_id);
+            $reciepts = Receipt::where('receipt_date', Carbon::now()->format('Y-m-d'))->pluck('id')->toArray();
+            $invoices = Invoice::where('invoice_date', Carbon::now()->format('Y-m-d'))->pluck('id')->toArray();
+            return $query->whereIn('receipt_id', $reciepts)->orWhereIn('invoice_id', $invoices);
         }
     }
 
