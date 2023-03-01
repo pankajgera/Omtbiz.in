@@ -53,7 +53,7 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-sm-2">
+          <div class="col-sm-3">
             <div class="filter-date">
             <div class="from pr-3">
               <label>{{ $t('general.from') }}</label>
@@ -66,7 +66,7 @@
           </div>
 
           </div>
-           <div class="col-sm-2">
+           <div class="col-sm-3">
               <div class="to pl-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
@@ -85,16 +85,15 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-1">
+          <!--<div class="col-sm-1">
             <label class="form-label"> {{ $tc('daybook.voucher_type') }} </label>
             <base-input
-              v-model="filters.type"
+              v-model="filters.voucher_type"
               type="text"
               name="voucher_type"
               autocomplete="off"
             />
           </div>
-          <!--
           <div class="col-sm-1">
             <label class="form-label"> {{ $tc('daybook.voucher_count') }} </label>
             <base-input
@@ -295,7 +294,6 @@ export default {
       filters: {
         from_date: '',
         to_date: '',
-        type: '',
         account: '',
         debit: '',
         credit: '',
@@ -376,7 +374,6 @@ export default {
         debit: this.filters.debit !== null ? this.filters.debit : '',
         credit: this.filters.credit !== null ? this.filters.credit : '',
         balance: this.filters.balance !== null ? this.filters.balance : '',
-        type: this.filters.type !== null ? this.filters.type : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         filterBy: this.applyFilter,

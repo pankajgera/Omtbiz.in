@@ -70,7 +70,7 @@ class Voucher extends Model
         $query->orderBy($orderByField, $orderBy);
     }
 
-    public function scopeWhereCompany($query, $company_id, $filter=null, $type=null)
+    public function scopeWhereCompany($query, $company_id, $filter=null)
     {
         $query->where('company_id', $company_id);
 
