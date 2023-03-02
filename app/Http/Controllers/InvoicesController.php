@@ -281,33 +281,6 @@ class InvoicesController extends Controller
                 }
             }
 
-            if ($request->has('invoiceSend')) {
-                $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
-                $data['user'] = User::find($request->user_id)->toArray();
-                $data['company'] = Company::find($invoice->company_id);
-
-                $notificationEmail = CompanySetting::getSetting(
-                    'notification_email',
-                    $request->header('company')
-                );
-
-                $email = $data['user']['email'];
-
-                if (!$email) {
-                    return response()->json([
-                        'error' => 'user_email_does_not_exist'
-                    ]);
-                }
-
-                if (!$notificationEmail) {
-                    return response()->json([
-                        'error' => 'notification_email_does_not_exist'
-                    ]);
-                }
-
-                \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
-            }
-
             $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
             if ($invoice) {
