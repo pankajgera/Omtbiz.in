@@ -122,10 +122,20 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
-            $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('d-m-Y');
+            //Check if same invoice number is already present
+            //if YES, then add 1 to this invoice number
+            $invoice_number = $number_attributes['invoice_number'];
+            $find_invoice = Invoice::where('invoice_number', '=', $invoice_number)->first();
+            if (! empty($find_invoice)) {
+                $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+                $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
+                $number_attributes['invoice_number'] = $invoice_prefix . '-' . $nextInvoiceNumber;
+            }
+
+            $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::TO_BE_DISPATCH;
-            // dd($request->income_ledger_value, $request);
+
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
