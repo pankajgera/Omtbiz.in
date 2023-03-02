@@ -181,24 +181,18 @@ class ReceiptController extends Controller
             'account_master_id' => $account_master_id
         ]);
 
-        $dr_account_ledger = AccountLedger::firstOrCreate([
+        $dr_account_ledger = AccountLedger::where([
             'account_master_id' => $account_master_id,
             'account' => $request->list['name'],
             'company_id' => $company_id,
-        ], [
-            'date' => Carbon::now()->toDateTimeString(),
-            'debit' => $req_amount,
-            'type' => 'Dr',
-            'credit' => 0,
-            'balance' => $req_amount,
-        ]);
+        ])->firstOrFail();
 
         if ($request->receipt_mode !== 'Cash in Hand') {
             $account_ledger = AccountLedger::where([
                 'account_master_id' => $bank_account_id,
                 'account' => $request->receipt_mode,
                 'company_id' => $company_id,
-            ])->first();
+            ])->firstOrFail();
 
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
@@ -231,7 +225,8 @@ class ReceiptController extends Controller
                 'account_master_id' => $cash_account_id,
                 'account' => $request->receipt_mode,
                 'company_id' => $company_id,
-            ])->first();
+            ])->firstOrFail();
+
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
@@ -260,25 +255,35 @@ class ReceiptController extends Controller
             ]);
         }
 
-        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-
         $account_ledger->update([
-            'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
+            'credit' => $account_ledger->credit > $req_amount ?
+                $account_ledger->credit - $req_amount :
+                    $req_amount - $account_ledger->credit,
         ]);
         $dr_account_ledger->update([
-            'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
+            'debit' => $dr_account_ledger->debit > $req_amount ?
+                $dr_account_ledger->debit - $req_amount :
+                    $req_amount - $dr_account_ledger->debit,
         ]);
 
         //Update ledger balance by calculating credit/debit
-        $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;
-        $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ? $dr_account_ledger->credit - $dr_account_ledger->debit : $dr_account_ledger->debit - $dr_account_ledger->credit;
+        $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ?
+            $account_ledger->debit - $account_ledger->credit :
+                $account_ledger->credit - $account_ledger->debit;
+        $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ?
+            $dr_account_ledger->credit - $dr_account_ledger->debit :
+                $dr_account_ledger->debit - $dr_account_ledger->credit;
+
         $account_ledger->update([
             'balance' => $calc_cr_balance,
         ]);
         $dr_account_ledger->update([
             'balance' => $calc_dr_balance,
         ]);
+
+        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+
         foreach ($voucher as $key => $each) {
             if ($key < substr_count($voucher_ids, ',') + 1) {
                 $each->update([
