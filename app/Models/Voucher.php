@@ -117,11 +117,4 @@ class Voucher extends Model
             $query->whereOrder($field, $orderBy);
         }
     }
-
-    public static function deleteAccountLedger($id)
-    {
-        $master = self::find($id);
-        $master->delete();
-        return true;
-    }
 }

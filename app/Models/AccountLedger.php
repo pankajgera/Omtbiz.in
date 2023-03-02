@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class AccountLedger extends Model
 {
@@ -120,6 +121,11 @@ class AccountLedger extends Model
 
     public static function deleteAccountLedger($id)
     {
+        $find_vouchers = Voucher::where('account_ledger_id', $id)->exists();
+        if ($find_vouchers) {
+            Log::error('Voucher exists for account_ledger_id' . $id . ', so we cannnot delete this ledger');
+            return false;
+        }
         $ledger = self::find($id);
         $ledger->delete();
         return true;
