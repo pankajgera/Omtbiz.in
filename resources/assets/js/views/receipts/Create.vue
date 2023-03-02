@@ -311,7 +311,7 @@ export default {
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
         this.formData = { ...response.data.receipt }
-        this.formData.receipt_date = moment(response.data.receipt.receipt_date, 'YYYY-MM-DD').toString()
+        this.formData.receipt_date = response.data.receipt.receipt_date
         this.formData.amount = parseFloat(response.data.receipt.amount)
         this.receiptPrefix = response.data.receipt_prefix
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
