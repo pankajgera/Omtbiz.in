@@ -87,7 +87,7 @@
             :invalid="$v.newInvoice.reference_number.$error"
             icon="hashtag"
             @input="$v.newInvoice.reference_number.$touch()"
-            :disabled="estimateSelected"
+            :disabled="true"
           />
           <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
         </div>
