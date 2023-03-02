@@ -189,11 +189,13 @@ export default {
       try {
         this.isLoading = true
         let response = await this.addVoucher(rows)
-
         if (response.data) {
           window.toastr['success'](this.$tc('vouchers.created_message'))
           this.isLoading = false
           this.alreadySubmitted = true;
+          setTimeout(() => {
+            window.location.reload()
+          }, 2000)
           return true
         }
       } catch (err) {
