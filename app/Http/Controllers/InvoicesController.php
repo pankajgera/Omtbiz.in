@@ -207,6 +207,7 @@ class InvoicesController extends Controller
             $company_id = (int) $request->header('company');
             $account_master_id = (int) $request->debtors['id'];
             $total_amount = (int) ($request->total);
+
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account->id,
                 'account' => 'Sales',
@@ -527,7 +528,7 @@ class InvoicesController extends Controller
         $voucher_1->update([
             'debit' => $amount,
             'credit' => 0,
-            'date' => Carbon::now()->toDateTimeString(),
+            'date' => $invoice->invoice_date,
             'related_voucher' => null,
         ]);
 
@@ -542,7 +543,7 @@ class InvoicesController extends Controller
         $voucher_2->update([
             'debit' => 0,
             'credit' => $amount,
-            'date' => Carbon::now()->toDateTimeString(),
+            'date' => $invoice->invoice_date,
             'related_voucher' => null,
             'type' => 'Cr',
         ]);
