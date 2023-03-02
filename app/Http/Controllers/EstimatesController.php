@@ -344,55 +344,6 @@ class EstimatesController extends Controller
     }
 
     /**
-     * Estimate to invoice
-     *
-     * @param Request $request
-     * @param mixed $id
-     * @return JsonResponse
-     */
-    public function estimateToInvoice(Request $request, $id)
-    {
-        $estimate = Estimate::with(['items', 'user', 'estimateTemplate'])->find($id);
-        $invoice_date = Carbon::parse($estimate->estimate_date);
-        $due_date = Carbon::parse($estimate->estimate_date)->addDays(7);
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-
-        $invoice = Invoice::create([
-            'invoice_date' => $invoice_date,
-            'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company')),
-            //'reference_number' => $estimate->reference_number,
-            'user_id' => $estimate->user_id,
-            'company_id' => $request->header('company'),
-            'invoice_template_id' => 1,
-            'status' => Invoice::TO_BE_DISPATCH,
-            'paid_status' => Invoice::STATUS_PAID,
-            'sub_total' => $estimate->sub_total,
-            'total' => $estimate->total,
-            'due_amount' => $estimate->total,
-            'notes' => $estimate->notes,
-            'unique_hash' => str_random(60)
-        ]);
-
-        $invoiceItems = $estimate->items->toArray();
-
-        foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
-            $item = $invoice->items()->create($invoiceItem);
-        }
-
-        $invoice = Invoice::with([
-            'items',
-            'user',
-            'invoiceTemplate',
-        ])->find($invoice->id);
-
-        return response()->json([
-            'invoice' => $invoice
-        ]);
-    }
-
-    /**
      * Delete estimate
      *
      * @param Request $request

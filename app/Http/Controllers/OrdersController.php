@@ -261,52 +261,6 @@ class OrdersController extends Controller
     }
 
     /**
-     * Order to invoice
-     *
-     * @param Request $request
-     * @param mixed $id
-     * @return JsonResponse
-     */
-    public function orderToInvoice(Request $request, $id)
-    {
-        $order = Orders::with(['orderItems', 'user'])->find($id);
-        $invoice_date = Carbon::parse($order->order_date);
-        $due_date = Carbon::parse($order->order_date)->addDays(7);
-
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-
-        $invoice = Invoice::create([
-            'invoice_date' => $invoice_date,
-            'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company')),
-            //'reference_number' => $order->reference_number,
-            'user_id' => $order->user_id,
-            'company_id' => $request->header('company'),
-            'status' => Invoice::TO_BE_DISPATCH,
-            'paid_status' => Invoice::STATUS_PAID,
-            'notes' => $order->notes,
-            'unique_hash' => str_random(60)
-        ]);
-
-        $invoiceItems = $order->orderItems->toArray();
-
-        foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
-            $invoiceItem['name'] = $invoiceItem['name'];
-            $item = $invoice->orderItems()->create($invoiceItem);
-        }
-
-        $invoice = Invoice::with([
-            'orderItems',
-            'user',
-        ])->find($invoice->id);
-
-        return response()->json([
-            'invoice' => $invoice
-        ]);
-    }
-
-    /**
      * Delete order
      *
      * @param Request $request

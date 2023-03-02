@@ -311,7 +311,7 @@ export default {
         //this.customerList = response.data.customers
         this.formData = { ...response.data.payment }
         //this.customer = response.data.payment.user
-        this.formData.payment_date = moment(response.data.payment.payment_date, 'YYYY-MM-DD').toString()
+        this.formData.payment_date = response.data.payment.payment_date
         this.formData.amount = parseFloat(response.data.payment.amount)
         this.paymentPrefix = response.data.payment_prefix
         //this.paymentNumAttribute = response.data.nextPaymentNumber
