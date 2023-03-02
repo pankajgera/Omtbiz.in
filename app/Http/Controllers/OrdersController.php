@@ -5,14 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Requests\OrdersRequest;
-use App\Models\Invoice;
 use App\Models\User;
 use Validator;
 use App\Models\CompanySetting;
-use App\Models\Company;
-use App\Mail\OrderPdf;
 use App\Models\AccountMaster;
-use App\Models\Inventory;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use Illuminate\Http\JsonResponse;
@@ -92,7 +88,7 @@ class OrdersController extends Controller
         $order_num_auto_generate = CompanySetting::getSetting('order_auto_generate', $request->header('company'));
 
         $nextOrderNumberAttribute = null;
-        $nextOrderNumber = Orders::getNextOrderNumber($order_prefix);
+        $nextOrderNumber = Orders::getNextOrderNumber($order_prefix, $request->header('company'));
 
         if ($order_num_auto_generate == "YES") {
             $nextOrderNumberAttribute = $nextOrderNumber;
@@ -127,6 +123,15 @@ class OrdersController extends Controller
         Validator::make($number_attributes, [
             'order_number' => 'required'
         ])->validate();
+
+        //Check if same order number is already present
+        //if YES, then add 1 to this order number
+        $find_order = Orders::where('order_number', '=', $order_number)->first();
+        if (! empty($find_order)) {
+            $order_prefix = CompanySetting::getSetting('order_prefix', $request->header('company'));
+            $nextOrderNumber = Orders::getNextOrderNumber($order_prefix, $request->header('company'));
+            $number_attributes['order_number'] = $order_prefix . '-' . $nextOrderNumber;
+        }
 
         $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
         $status = Orders::DRAFT;

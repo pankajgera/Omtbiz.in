@@ -57,10 +57,11 @@ class Receipt extends Model
         return substr($this->receipt_number, $position);
     }
 
-    public static function getNextReceiptNumber($value)
+    public static function getNextReceiptNumber($value, $company_id)
     {
         // Get the last created order
         $receipt = Receipt::where('receipt_number', 'LIKE', $value . '-%')
+            ->where('company_id', $company_id)
             ->orderBy('created_at', 'desc')
             ->first();
         if (!$receipt) {
