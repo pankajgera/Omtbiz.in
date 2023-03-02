@@ -173,9 +173,9 @@
             <table class="header">
                 <tr>
                     <td>
-                        <p class="heading-text">
+                        {{-- <p class="heading-text">
                             {{ $company->name }}
-                        </p>
+                        </p> --}}
                     </td>
                     <td>
                         <p class="heading-date-range">
