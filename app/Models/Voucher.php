@@ -73,10 +73,7 @@ class Voucher extends Model
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
         if ($filter==='false') {
-            $reciepts = Receipt::where('receipt_date', Carbon::now()->format('Y-m-d'))->pluck('id')->toArray();
-            $invoices = Invoice::where('invoice_date', Carbon::now()->format('Y-m-d'))->pluck('id')->toArray();
-            $vouchers = $this::where(DB::raw("(DATE_FORMAT(date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'))->whereNull('receipt_id')->whereNull('invoice_id')->pluck('id')->toArray();
-            return $query->whereIn('receipt_id', $reciepts)->orWhereIn('invoice_id', $invoices)->orWhereIn('id', $vouchers);
+            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
         } else {
             $query->where('company_id', $company_id);
         }
@@ -84,16 +81,10 @@ class Voucher extends Model
 
     public function scopeVoucherBetween($query, $start, $end)
     {
-        $reciepts = Receipt::whereBetween('receipt_date', [$start->format('Y-m-d'), $end->format('Y-m-d')])->pluck('id')->toArray();
-        $invoices = Invoice::whereBetween('invoice_date', [$start->format('Y-m-d'), $end->format('Y-m-d')])->pluck('id')->toArray();
-        $vouchers = $this::whereBetween(DB::raw("(DATE_FORMAT(date,'%Y-%m-%d'))"), [$start->format('Y-m-d'), $end->format('Y-m-d')])->whereNull('receipt_id')->whereNull('invoice_id')->pluck('id')->toArray();
-
-        return $query->whereIn('receipt_id', $reciepts)->orWhereIn('invoice_id', $invoices)->orWhereIn('id', $vouchers);
-
-        // return $query->whereBetween(
-        //     'date',
-        //     [$start->format('Y-m-d'), $end->format('Y-m-d')]
-        // );
+        return $query->whereBetween(
+            'date',
+            [$start->format('Y-m-d'), $end->format('Y-m-d')]
+        );
     }
 
     public function scopeApplyFilters($query, array $filters)
