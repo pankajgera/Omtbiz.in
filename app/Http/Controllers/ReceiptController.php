@@ -68,7 +68,7 @@ class ReceiptController extends Controller
         $receipt_num_auto_generate = CompanySetting::getSetting('receipt_auto_generate', $request->header('company'));
 
         $nextReceiptNumberAttribute = null;
-        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix);
+        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix, $request->header('company'));
 
         if ($receipt_num_auto_generate == "YES") {
             $nextReceiptNumberAttribute = $nextReceiptNumber;
@@ -116,6 +116,15 @@ class ReceiptController extends Controller
         Validator::make($number_attributes, [
             'receipt_number' => 'required|unique:receipts,receipt_number'
         ])->validate();
+
+        //Check if same receipt number is already present
+        //if YES, then add 1 to this receipt number
+        $find_receipt = Receipt::where('receipt_number', '=', $request->receipt_number)->first();
+        if (! empty($find_receipt)) {
+            $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
+            $nextOrderNumber = Receipt::getNextReceiptNumber($receipt_prefix, $request->header('company'));
+            $number_attributes['receipt_number'] = $receipt_prefix . '-' . $nextOrderNumber;
+        }
 
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
@@ -185,17 +194,11 @@ class ReceiptController extends Controller
         ]);
 
         if ($request->receipt_mode !== 'Cash in Hand') {
-            $account_ledger = AccountLedger::firstOrCreate([
+            $account_ledger = AccountLedger::where([
                 'account_master_id' => $bank_account_id,
                 'account' => $request->receipt_mode,
                 'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'type' => 'Cr',
-                'debit' => 0,
-                'credit' => $req_amount,
-                'balance' => $req_amount,
-            ]);
+            ])->first();
 
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
@@ -224,17 +227,11 @@ class ReceiptController extends Controller
                 'receipt_id' => $receipt->id,
             ]);
         } else {
-            $account_ledger = AccountLedger::firstOrCreate([
+            $account_ledger = AccountLedger::where([
                 'account_master_id' => $cash_account_id,
                 'account' => $request->receipt_mode,
                 'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'type' => 'Cr',
-                'debit' => 0,
-                'credit' => $req_amount,
-                'balance' => $req_amount,
-            ]);
+            ])->first();
             $voucher_1 = Voucher::create([
                 'account_master_id' => $account_master_id,
                 'account' => $request->list['name'],
@@ -336,7 +333,7 @@ class ReceiptController extends Controller
         $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
         $receipt_num_auto_generate = CompanySetting::getSetting('receipt_auto_generate', $request->header('company'));
         $nextReceiptNumberAttribute = null;
-        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix);
+        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix, $request->header('company'));
         if ($receipt_num_auto_generate == "YES") {
             $nextReceiptNumberAttribute = $nextReceiptNumber;
         }
