@@ -123,7 +123,7 @@ class AccountLedger extends Model
     {
         $find_vouchers = Voucher::where('account_ledger_id', $id)->exists();
         if ($find_vouchers) {
-            Log::error('Voucher exists for account_ledger_id' . $id . ', so we cannnot delete this ledger');
+            Log::error('Voucher exists for account_ledger_id ' . $id . ', so we cannnot delete this ledger');
             return false;
         }
         $ledger = self::find($id);

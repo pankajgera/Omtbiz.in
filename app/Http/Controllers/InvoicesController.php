@@ -398,7 +398,10 @@ class InvoicesController extends Controller
                 'error' => 'invalid_due_amount'
             ]);
         }
+        $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+
         $invoice->status = $request->status;
+        $invoice->invoice_date = $invoice_date;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->notes = $request->notes;
