@@ -130,6 +130,15 @@ class EstimatesController extends Controller
             'estimate_number' => 'required'
         ])->validate();
 
+        //Check if same estimate number is already present
+        //if YES, then add 1 to this estimate number
+        $find_estimate = Estimate::where('estimate_number', '=', $estimate_number)->first();
+        if (! empty($find_estimate)) {
+            $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
+            $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix, $request->header('company'));
+            $number_attributes['estimate_number'] = $estimate_prefix . '-' . $nextEstimateNumber;
+        }
+
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
         $status = Estimate::DRAFT;
 

@@ -44,12 +44,13 @@ class Orders extends Model
         'sub_total' => 'integer',
     ];
 
-    public static function getNextOrderNumber($value)
+    public static function getNextOrderNumber($value, $company_id)
     {
         // Get the last created order
         $lastOrder = Orders::where('order_number', 'LIKE', $value . '-%')
-                       ->orderBy('created_at', 'desc')
-                       ->first();
+                        ->where('company_id', $company_id)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
 
         if (!$lastOrder) {
             // We get here if there is no order at all
