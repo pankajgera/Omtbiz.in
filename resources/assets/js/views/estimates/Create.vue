@@ -67,17 +67,6 @@
               />
               <span v-show="$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
             </div>
-            <!-- <div class="col collapse-input">
-              <label>{{ $t('estimates.ref_number') }}</label>
-              <base-input
-                v-model="newEstimate.reference_number"
-                :invalid="$v.newEstimate.reference_number.$error"
-                icon="hashtag"
-                @input="$v.newEstimate.reference_number.$touch()"
-                :disabled="isEdit"
-              />
-              <div v-if="$v.newEstimate.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -264,7 +253,6 @@ export default {
         discount_type: 'fixed',
         discount_val: 0,
         discount: 0,
-        //reference_number: null,
         items: [{
           ...EstimateStub,
         }],
@@ -296,15 +284,9 @@ export default {
         estimate_date: {
           required
         },
-        // discount_val: {
-        //   between: between(0, this.subtotal)
-        // },
         notes: {
           maxLength: maxLength(255)
         },
-        // reference_number: {
-        //   maxLength: maxLength(255)
-        // },
         debtors: {
           required
         }
