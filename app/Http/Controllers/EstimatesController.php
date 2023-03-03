@@ -130,6 +130,15 @@ class EstimatesController extends Controller
             'estimate_number' => 'required'
         ])->validate();
 
+        //Check if same estimate number is already present
+        //if YES, then add 1 to this estimate number
+        $find_estimate = Estimate::where('estimate_number', '=', $estimate_number)->first();
+        if (! empty($find_estimate)) {
+            $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
+            $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix, $request->header('company'));
+            $number_attributes['estimate_number'] = $estimate_prefix . '-' . $nextEstimateNumber;
+        }
+
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
         $status = Estimate::DRAFT;
 
@@ -340,55 +349,6 @@ class EstimatesController extends Controller
 
         return response()->json([
             'success' => true
-        ]);
-    }
-
-    /**
-     * Estimate to invoice
-     *
-     * @param Request $request
-     * @param mixed $id
-     * @return JsonResponse
-     */
-    public function estimateToInvoice(Request $request, $id)
-    {
-        $estimate = Estimate::with(['items', 'user', 'estimateTemplate'])->find($id);
-        $invoice_date = Carbon::parse($estimate->estimate_date);
-        $due_date = Carbon::parse($estimate->estimate_date)->addDays(7);
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-
-        $invoice = Invoice::create([
-            'invoice_date' => $invoice_date,
-            'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company')),
-            //'reference_number' => $estimate->reference_number,
-            'user_id' => $estimate->user_id,
-            'company_id' => $request->header('company'),
-            'invoice_template_id' => 1,
-            'status' => Invoice::TO_BE_DISPATCH,
-            'paid_status' => Invoice::STATUS_PAID,
-            'sub_total' => $estimate->sub_total,
-            'total' => $estimate->total,
-            'due_amount' => $estimate->total,
-            'notes' => $estimate->notes,
-            'unique_hash' => str_random(60)
-        ]);
-
-        $invoiceItems = $estimate->items->toArray();
-
-        foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
-            $item = $invoice->items()->create($invoiceItem);
-        }
-
-        $invoice = Invoice::with([
-            'items',
-            'user',
-            'invoiceTemplate',
-        ])->find($invoice->id);
-
-        return response()->json([
-            'invoice' => $invoice
         ]);
     }
 

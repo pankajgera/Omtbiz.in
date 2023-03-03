@@ -122,10 +122,20 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
-            $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('d-m-Y');
+            //Check if same invoice number is already present
+            //if YES, then add 1 to this invoice number
+            $invoice_number = $number_attributes['invoice_number'];
+            $find_invoice = Invoice::where('invoice_number', '=', $invoice_number)->first();
+            if (! empty($find_invoice)) {
+                $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+                $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
+                $number_attributes['invoice_number'] = $invoice_prefix . '-' . $nextInvoiceNumber;
+            }
+
+            $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
             //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
             $status = Invoice::TO_BE_DISPATCH;
-            // dd($request->income_ledger_value, $request);
+
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
@@ -197,6 +207,7 @@ class InvoicesController extends Controller
             $company_id = (int) $request->header('company');
             $account_master_id = (int) $request->debtors['id'];
             $total_amount = (int) ($request->total);
+
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account->id,
                 'account' => 'Sales',
@@ -229,7 +240,7 @@ class InvoicesController extends Controller
                 'debit' => $total_amount,
                 'credit' => 0,
                 'account_ledger_id' => $dr_account_ledger->id,
-                'date' => Carbon::now()->toDateTimeString(),
+                'date' => $invoice_date,
                 'related_voucher' => null,
                 'type' => 'Dr',
                 'company_id' => $company_id,
@@ -243,7 +254,7 @@ class InvoicesController extends Controller
                 'debit' => 0,
                 'credit' => $total_amount,
                 'account_ledger_id' => $account_ledger->id,
-                'date' => Carbon::now()->toDateTimeString(),
+                'date' => $invoice_date,
                 'related_voucher' => null,
                 'type' => 'Cr',
                 'company_id' => $company_id,
@@ -269,33 +280,6 @@ class InvoicesController extends Controller
                         'related_voucher' => $voucher_ids,
                     ]);
                 }
-            }
-
-            if ($request->has('invoiceSend')) {
-                $data['invoice'] = Invoice::findOrFail($invoice->id)->toArray();
-                $data['user'] = User::find($request->user_id)->toArray();
-                $data['company'] = Company::find($invoice->company_id);
-
-                $notificationEmail = CompanySetting::getSetting(
-                    'notification_email',
-                    $request->header('company')
-                );
-
-                $email = $data['user']['email'];
-
-                if (!$email) {
-                    return response()->json([
-                        'error' => 'user_email_does_not_exist'
-                    ]);
-                }
-
-                if (!$notificationEmail) {
-                    return response()->json([
-                        'error' => 'notification_email_does_not_exist'
-                    ]);
-                }
-
-                \Mail::to($email)->send(new invoicePdf($data, $notificationEmail));
             }
 
             $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
@@ -414,7 +398,10 @@ class InvoicesController extends Controller
                 'error' => 'invalid_due_amount'
             ]);
         }
+        $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+
         $invoice->status = $request->status;
+        $invoice->invoice_date = $invoice_date;
         $invoice->sub_total = $request->sub_total;
         $invoice->total = $request->total;
         $invoice->notes = $request->notes;
@@ -544,7 +531,7 @@ class InvoicesController extends Controller
         $voucher_1->update([
             'debit' => $amount,
             'credit' => 0,
-            'date' => Carbon::now()->toDateTimeString(),
+            'date' => $invoice->invoice_date,
             'related_voucher' => null,
         ]);
 
@@ -559,7 +546,7 @@ class InvoicesController extends Controller
         $voucher_2->update([
             'debit' => 0,
             'credit' => $amount,
-            'date' => Carbon::now()->toDateTimeString(),
+            'date' => $invoice->invoice_date,
             'related_voucher' => null,
             'type' => 'Cr',
         ]);

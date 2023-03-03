@@ -119,11 +119,6 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'EstimatesController@sendEstimate'
     ]);
 
-    Route::post('/estimates/{id}/convert-to-invoice', [
-        'as' => 'estimate.to.invoice',
-        'uses' => 'EstimatesController@estimateToInvoice'
-    ]);
-
     Route::post('/estimates/create-invoice', [
         'as' => 'estimates.create-invoice',
         'uses' => 'EstimatesController@store'
@@ -138,11 +133,6 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/orders/delete', [
         'as' => 'orders.delete',
         'uses' => 'OrdersController@delete'
-    ]);
-
-    Route::post('/orders/{id}/convert-to-invoice', [
-        'as' => 'order.to.invoice',
-        'uses' => 'OrdersController@orderToInvoice'
     ]);
 
     Route::post('/orders/create-invoice', [

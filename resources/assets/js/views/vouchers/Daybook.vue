@@ -190,7 +190,7 @@
           show="date"
         >
           <template slot-scope="row">
-             {{ getFormattedDate(row.date) }}
+          {{ getFormattedDate(row.date) }}
           </template>
         </table-column>
         <table-column

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class AccountMaster extends Model
 {
@@ -53,6 +54,11 @@ class AccountMaster extends Model
 
     public static function deleteAccountMaster($id)
     {
+        $find_vouchers = Voucher::where('account_master_id', $id)->exists();
+        if ($find_vouchers) {
+            Log::error('Voucher exists for account_master_id ' . $id . ', so we cannnot delete this ledger');
+            return false;
+        }
         $master = self::find($id);
         $master->delete();
         return true;

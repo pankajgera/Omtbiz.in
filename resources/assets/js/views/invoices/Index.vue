@@ -96,7 +96,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ totalInvoices }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedInvoices.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -240,6 +240,7 @@ export default {
       ],
       filtersApplied: false,
       isRequestOngoing: true,
+      filtered_count: 0,
       filters: {
         invoice_number: '',
         customer: '',
@@ -338,6 +339,7 @@ export default {
       let response = await this.fetchInvoices(data)
       this.isRequestOngoing = false
       this.sundryDebtorsList = response.data.sundryDebtorsList
+      this.filtered_count = response.data.invoices.total
       //this.currency = response.data.currency
 
       return {

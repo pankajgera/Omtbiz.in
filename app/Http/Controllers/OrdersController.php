@@ -5,14 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Requests\OrdersRequest;
-use App\Models\Invoice;
 use App\Models\User;
 use Validator;
 use App\Models\CompanySetting;
-use App\Models\Company;
-use App\Mail\OrderPdf;
 use App\Models\AccountMaster;
-use App\Models\Inventory;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use Illuminate\Http\JsonResponse;
@@ -92,7 +88,7 @@ class OrdersController extends Controller
         $order_num_auto_generate = CompanySetting::getSetting('order_auto_generate', $request->header('company'));
 
         $nextOrderNumberAttribute = null;
-        $nextOrderNumber = Orders::getNextOrderNumber($order_prefix);
+        $nextOrderNumber = Orders::getNextOrderNumber($order_prefix, $request->header('company'));
 
         if ($order_num_auto_generate == "YES") {
             $nextOrderNumberAttribute = $nextOrderNumber;
@@ -127,6 +123,15 @@ class OrdersController extends Controller
         Validator::make($number_attributes, [
             'order_number' => 'required'
         ])->validate();
+
+        //Check if same order number is already present
+        //if YES, then add 1 to this order number
+        $find_order = Orders::where('order_number', '=', $order_number)->first();
+        if (! empty($find_order)) {
+            $order_prefix = CompanySetting::getSetting('order_prefix', $request->header('company'));
+            $nextOrderNumber = Orders::getNextOrderNumber($order_prefix, $request->header('company'));
+            $number_attributes['order_number'] = $order_prefix . '-' . $nextOrderNumber;
+        }
 
         $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
         $status = Orders::DRAFT;
@@ -257,52 +262,6 @@ class OrdersController extends Controller
 
         return response()->json([
             'success' => true
-        ]);
-    }
-
-    /**
-     * Order to invoice
-     *
-     * @param Request $request
-     * @param mixed $id
-     * @return JsonResponse
-     */
-    public function orderToInvoice(Request $request, $id)
-    {
-        $order = Orders::with(['orderItems', 'user'])->find($id);
-        $invoice_date = Carbon::parse($order->order_date);
-        $due_date = Carbon::parse($order->order_date)->addDays(7);
-
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-
-        $invoice = Invoice::create([
-            'invoice_date' => $invoice_date,
-            'due_date' => $due_date,
-            'invoice_number' => "INV-" . Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company')),
-            //'reference_number' => $order->reference_number,
-            'user_id' => $order->user_id,
-            'company_id' => $request->header('company'),
-            'status' => Invoice::TO_BE_DISPATCH,
-            'paid_status' => Invoice::STATUS_PAID,
-            'notes' => $order->notes,
-            'unique_hash' => str_random(60)
-        ]);
-
-        $invoiceItems = $order->orderItems->toArray();
-
-        foreach ($invoiceItems as $invoiceItem) {
-            $invoiceItem['company_id'] = $request->header('company');
-            $invoiceItem['name'] = $invoiceItem['name'];
-            $item = $invoice->orderItems()->create($invoiceItem);
-        }
-
-        $invoice = Invoice::with([
-            'orderItems',
-            'user',
-        ])->find($invoice->id);
-
-        return response()->json([
-            'invoice' => $invoice
         ]);
     }
 
