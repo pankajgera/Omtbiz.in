@@ -50,13 +50,13 @@ class AccountLedgersController extends Controller
             $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
                 ->where('account', '!=', $ledger->account)
                 ->whereCompany($request->header('company'))
-                ->orderBy('id', 'desc')
+                ->orderBy('date', 'desc')
                 ->get();
             //Update balance according to 'debit' or 'credit'
             $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)->get();
-           
+
             $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
-            
+
             $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
             $opening_balance = $ledger->accountMaster->opening_balance;
             $calc_balance = $ledger->balance;
@@ -149,7 +149,7 @@ class AccountLedgersController extends Controller
         $related_vouchers = Voucher::with(['invoice.inventories', 'receipt'])->whereIn('id', explode(',', $unique_ids))
             ->where('account', '!=', $ledger->account)
             ->whereCompany($request->header('company'))
-            ->orderBy('id', 'desc')
+            ->orderBy('date', 'desc')
             ->get();
 
         return response()->json([
