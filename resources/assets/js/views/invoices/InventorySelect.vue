@@ -111,6 +111,7 @@ export default {
     ]),
     customLabel ({ name, sale_price }) {
       if (name !== 'End of List') {
+        console.log(name);
         return `${name} - ₹${sale_price}`
       }
       return `${name}`
