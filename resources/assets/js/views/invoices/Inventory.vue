@@ -391,7 +391,6 @@ export default {
       this.inventory.id = inventory.id
       this.inventory.name = inventory.name
       this.inventory.price = inventory.price
-      this.inventory.quantity = inventory.quantity
       this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
       this.inventory.inventory_id = inventory.id
       this.inventory.description = inventory.description
