@@ -289,31 +289,31 @@ class ReceiptController extends Controller
         $receipt = Receipt::find($id);
         $oldAmount = $receipt->amount;
 
-        if ($request->has('invoice_id') && $request->invoice_id && ($oldAmount != $request->amount)) {
-            $amount = (int)$request->amount - (int)$oldAmount;
-            $invoice = Invoice::find($request->invoice_id);
-            $invoice->due_amount = (int)$invoice->due_amount - (int)$amount;
-
-            if ($invoice->due_amount < 0) {
-                return response()->json([
-                    'error' => 'invalid_amount'
-                ]);
-            }
-
-            $invoice->status = Invoice::DISPATCH;
-            $invoice->paid_status = Invoice::STATUS_PAID;
-            $invoice->save();
-        }
-
         $receipt->receipt_date = $receipt_date;
-        //$receipt->receipt_number = $number_attributes['receipt_number'];
         $receipt->receipt_status = $request->receipt_status;
         $receipt->user_id = $request->user_id;
-        $receipt->invoice_id = $request->invoice_id;
-        $receipt->receipt_mode = $request->receipt_mode;
         $receipt->amount = $request->amount;
         $receipt->notes = $request->notes;
         $receipt->save();
+
+        //It will add voucher for sales from invoice
+        $dr_voucher = Voucher::where([
+            'receipt_id' => $receipt->id,
+            'type' => 'Dr',
+        ])->first();
+        $dr_voucher->update([
+            'debit' => $request->amount,
+            'date' => $receipt_date,
+        ]);
+
+        $cr_voucher = Voucher::where([
+            'receipt_id' => $receipt->id,
+            'type' => 'Cr',
+        ])->first();
+        $cr_voucher->update([
+            'credit' => $request->amount,
+            'date' => $receipt_date,
+        ]);
 
         return response()->json([
             'receipt' => $receipt,
