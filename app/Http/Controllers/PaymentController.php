@@ -87,9 +87,6 @@ class PaymentController extends Controller
         }
 
         return response()->json([
-            'customers' => User::where('role', 'customer')
-                ->whereCompany($request->header('company'))
-                ->get(),
             'nextPaymentNumberAttribute' => $nextPaymentNumberAttribute,
             'nextPaymentNumber' => $payment_prefix . '-' . $nextPaymentNumber,
             'payment_prefix' => $payment_prefix,
@@ -300,9 +297,6 @@ class PaymentController extends Controller
         }
 
         return response()->json([
-            'customers' => User::where('role', 'customer')
-                ->whereCompany($request->header('company'))
-                ->get(),
             'nextPaymentNumber' => $payment->getPaymentNumAttribute(),
             'payment_prefix' => $payment->getPaymentPrefixAttribute(),
             'usersOfSundryCreditor' => $usersOfSundryCreditor,
