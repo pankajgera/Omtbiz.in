@@ -301,12 +301,12 @@ class ReportController extends Controller
             ->where('account', '!=', $ledger->account)
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
-            ->orderBy('id')
+            ->orderBy('date')
             ->get();
 
         $vouchers_before_selected_from = Voucher::where('account_ledger_id', $request->ledger_id)
             ->whereDate('date', '<', $from)
-            ->orderBy('id')
+            ->orderBy('date')
             ->get();
 
         foreach ($related_vouchers as $each) {
@@ -463,7 +463,7 @@ class ReportController extends Controller
                 ->where('account_master_id', '!=', $master->id)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)
-                ->orderBy('id')
+                ->orderBy('date')
                 ->get();
             if (0 < count($vouchers)) {
                 array_push($related_vouchers, $vouchers->toArray());
