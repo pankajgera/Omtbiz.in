@@ -82,6 +82,7 @@ class InventoryController extends Controller
             if (empty($find_inventory)) {
                 $inventory = new Inventory();
                 $inventory->name = $request->name;
+                $inventory->quantity = $request->quantity;
                 $inventory->company_id = $request->header('company');
                 $inventory->save();
 
@@ -111,7 +112,7 @@ class InventoryController extends Controller
                     $find_inventory->updateInventoryQuantity($request->quantity);
                 }
             }
-
+            $inventory->price =  $items->price;
             return response()->json([
                 'inventory' => $inventory,
             ]);

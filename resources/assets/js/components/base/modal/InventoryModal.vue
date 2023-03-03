@@ -38,6 +38,21 @@
             </div>
           </div>
         </div>
+          <div class="form-group row">
+          <label class="col-sm-4 col-form-label input-label">{{ $t('daybook.quantity') }}<span class="required">*</span></label>
+          <div class="col-sm-7">
+            <base-input
+                v-model="formData.quantity"
+                :invalid="$v.formData.quantity.$error"
+                type="text"
+                name="quantity"
+                @input="$v.formData.quantity.$touch()"
+              />
+            <div v-if="$v.formData.quantity.$error">
+            <span v-if="!$v.formData.quantity.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            </div>
+          </div>
+        </div>
         <div class="form-group row">
           <label class="col-sm-4 col-form-label input-label">{{ $t('items.unit') }}</label>
           <div class="col-sm-7">
@@ -46,7 +61,7 @@
               :options="units"
               :searchable="true"
               :show-labels="false"
-              label="name"
+               :allow-empty="false"
               class="hide-select-header"
             />
           </div>
@@ -99,14 +114,12 @@ export default {
       isEdit: false,
       isLoading: false,
       tempData: null,
-      units: [
-        {name: 'pc' ,value: 'pc'},
-        {name: 'sqm' ,value: 'sqm'},
-      ],
+      units: ['pc', 'sqm'],
       formData: {
         name: null,
         price: null,
-        unit: null
+        unit: 'pc',
+        quantity: null
       }
     }
   },
@@ -115,6 +128,9 @@ export default {
       name: {
         required,
         minLength: minLength(3)
+      },
+      quantity: {
+        required
       },
       price: {
         required,
@@ -172,6 +188,7 @@ export default {
         name: null,
         price: null,
         unit: null,
+        quantity: null,
         id: null
       }
 
@@ -183,6 +200,7 @@ export default {
         this.formData.name = this.tempData.name
         this.formData.price = this.tempData.price
         this.formData.unit = this.tempData.unit
+        this.formData.quantity = this.tempData.quantity
         this.formData.id = this.tempData.id
       }
     },
@@ -194,7 +212,7 @@ export default {
         return true
       }
       if (this.formData.unit) {
-        this.formData.unit = this.formData.unit.name
+        this.formData.unit = this.formData.unit
       }
       this.isLoading = true
       let response
