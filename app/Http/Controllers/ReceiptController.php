@@ -142,30 +142,8 @@ class ReceiptController extends Controller
             $receipt_status = 'Done';
         }
         $voucher_ids = [];
-        $voucher_1 = null;
-        $voucher_2 = null;
         $company_id = (int) $request->header('company');
-        $account_master_id = (int) $request->list['id'];
-        $cash_account_id = AccountMaster::firstOrCreate([
-            'name' => 'Cash',
-        ], [
-            'address' => null,
-            'groups' => 'Cash-in-Hand',
-            'country' => 'IN',
-            'state' => 'Rajasthan',
-            'opening_balance' => 0,
-            'type' => 'Cr',
-        ])->id;
-        $bank_account_id = AccountMaster::firstOrCreate([
-            'name' => 'Bank',
-        ], [
-            'address' => null,
-            'groups' => 'Bank Accounts',
-            'country' => 'IN',
-            'state' => 'Rajasthan',
-            'opening_balance' => 0,
-            'type' => 'Cr',
-        ])->id;
+        $dr_account_master = AccountMaster::where('name', '=', $request->receipt_mode)->firstOrFail();
 
         //Create receipt
         $receipt = Receipt::create([
@@ -178,110 +156,48 @@ class ReceiptController extends Controller
             'receipt_mode' => $request->receipt_mode,
             'amount' => $req_amount,
             'notes' => $request->notes,
-            'account_master_id' => $account_master_id
+            'account_master_id' => $dr_account_master->id,
         ]);
 
         $dr_account_ledger = AccountLedger::where([
-            'account_master_id' => $account_master_id,
+            'account_master_id' => $dr_account_master->id,
+            'account' => $request->receipt_mode,
+            'company_id' => $company_id,
+        ])->firstOrFail();
+        $cr_account_ledger = AccountLedger::where([
+            'account_master_id' => $request->list['id'],
             'account' => $request->list['name'],
             'company_id' => $company_id,
         ])->firstOrFail();
 
-        if ($request->receipt_mode !== 'Cash in Hand') {
-            $account_ledger = AccountLedger::where([
-                'account_master_id' => $bank_account_id,
-                'account' => $request->receipt_mode,
-                'company_id' => $company_id,
-            ])->firstOrFail();
-
-            $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
-                'credit' => $req_amount,
-                'debit' => 0,
-                'account_ledger_id' => $dr_account_ledger->id,
-                'date' => $receipt_date,
-                'related_voucher' => null,
-                'type' => 'Cr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Receipt',
-                'receipt_id' => $receipt->id,
-            ]);
-            $voucher_2 = Voucher::create([
-                'account_master_id' => $bank_account_id,
-                'account' => $request->receipt_mode,
-                'credit' => 0,
-                'debit' => $req_amount,
-                'account_ledger_id' => $account_ledger->id,
-                'date' => $receipt_date,
-                'related_voucher' => null,
-                'type' => 'Dr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Receipt',
-                'receipt_id' => $receipt->id,
-            ]);
-        } else {
-            $account_ledger = AccountLedger::where([
-                'account_master_id' => $cash_account_id,
-                'account' => $request->receipt_mode,
-                'company_id' => $company_id,
-            ])->firstOrFail();
-
-            $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
-                'credit' => $req_amount,
-                'debit' => 0,
-                'account_ledger_id' => $dr_account_ledger->id,
-                'date' => $receipt_date,
-                'related_voucher' => null,
-                'type' => 'Cr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Receipt',
-                'receipt_id' => $receipt->id,
-            ]);
-            $voucher_2 = Voucher::create([
-                'account_master_id' => $cash_account_id,
-                'account' => $request->receipt_mode,
-                'credit' => 0,
-                'debit' => $req_amount,
-                'account_ledger_id' => $account_ledger->id,
-                'date' => $receipt_date,
-                'related_voucher' => null,
-                'type' => 'Dr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Receipt',
-                'receipt_id' => $receipt->id,
-            ]);
-        }
-
-        $account_ledger->update([
-            'credit' => $account_ledger->credit > $req_amount ?
-                $account_ledger->credit - $req_amount :
-                    $req_amount - $account_ledger->credit,
+        $cr_voucher = Voucher::create([
+            'account_master_id' => $request->list['id'],
+            'account' => $request->list['name'],
+            'credit' => $req_amount,
+            'debit' => 0,
+            'account_ledger_id' => $cr_account_ledger->id,
+            'date' => $receipt_date,
+            'related_voucher' => null,
+            'type' => 'Cr',
+            'company_id' => $company_id,
+            'voucher_type' => 'Receipt',
+            'receipt_id' => $receipt->id,
         ]);
-        $dr_account_ledger->update([
-            'debit' => $dr_account_ledger->debit > $req_amount ?
-                $dr_account_ledger->debit - $req_amount :
-                    $req_amount - $dr_account_ledger->debit,
+        $dr_voucher = Voucher::create([
+            'account_master_id' => $dr_account_master->id,
+            'account' => $request->receipt_mode,
+            'credit' => 0,
+            'debit' => $req_amount,
+            'account_ledger_id' => $dr_account_ledger->id,
+            'date' => $receipt_date,
+            'related_voucher' => null,
+            'type' => 'Dr',
+            'company_id' => $company_id,
+            'voucher_type' => 'Receipt',
+            'receipt_id' => $receipt->id,
         ]);
 
-        //Update ledger balance by calculating credit/debit
-        $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ?
-            $account_ledger->debit - $account_ledger->credit :
-                $account_ledger->credit - $account_ledger->debit;
-        $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ?
-            $dr_account_ledger->credit - $dr_account_ledger->debit :
-                $dr_account_ledger->debit - $dr_account_ledger->credit;
-
-        $account_ledger->update([
-            'balance' => $calc_cr_balance,
-        ]);
-        $dr_account_ledger->update([
-            'balance' => $calc_dr_balance,
-        ]);
-
-        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+        $voucher_ids = $cr_voucher->id . ', ' . $dr_voucher->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
         foreach ($voucher as $key => $each) {
