@@ -89,9 +89,6 @@ class ReceiptController extends Controller
         $receipt_mode = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
 
         return response()->json([
-            'customers' => User::where('role', 'customer')
-                ->whereCompany($request->header('company'))
-                ->get(),
             'nextReceiptNumberAttribute' => $nextReceiptNumberAttribute,
             'nextReceiptNumber' => $receipt_prefix . '-' . $nextReceiptNumber,
             'receipt_prefix' => $receipt_prefix,
@@ -156,7 +153,7 @@ class ReceiptController extends Controller
             'receipt_mode' => $request->receipt_mode,
             'amount' => $req_amount,
             'notes' => $request->notes,
-            'account_master_id' => $dr_account_master->id,
+            'account_master_id' => $request->list['id'],
         ]);
 
         $dr_account_ledger = AccountLedger::where([
@@ -244,11 +241,6 @@ class ReceiptController extends Controller
     {
         $receipt = Receipt::with('user', 'invoice')->find($id);
 
-        $invoices = Invoice::where('paid_status', '<>', Invoice::STATUS_PAID)
-            ->where('user_id', $receipt->user_id)->where('due_amount', '>', 0)
-            ->whereCompany($request->header('company'))
-            ->get();
-
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
         $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
@@ -264,6 +256,7 @@ class ReceiptController extends Controller
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
             $obj = new stdClass();
             $obj->id = $master->id;
+            $obj->name = $ledger->account;
             $obj->balance = isset($ledger) ? $ledger->balance : 0;
             $obj->type = isset($ledger) ? $ledger->type : 'Cr';
             array_push($account_ledger, $obj);
@@ -272,13 +265,9 @@ class ReceiptController extends Controller
         $receipt_mode = AccountMaster::where('groups', 'Bank Accounts')->where('groups', 'Cash-in-Hand')->get();
 
         return response()->json([
-            'customers' => User::where('role', 'customer')
-                ->whereCompany($request->header('company'))
-                ->get(),
             'nextReceiptNumber' => $receipt->getReceiptNumAttribute(),
             'receipt_prefix' => $receipt->getReceiptPrefixAttribute(),
             'receipt' => $receipt,
-            'invoices' => $invoices,
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
             'account_ledger' => $account_ledger,
             'receipt_mode' => $receipt_mode,
