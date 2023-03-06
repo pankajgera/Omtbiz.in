@@ -43,6 +43,7 @@
                   :invalid="$v.receiptNumAttribute.$error"
                   v-model.trim="receiptNumAttribute"
                   :prefix="receiptPrefix"
+                  :disabled="isEdit"
                   @input="$v.receiptNumAttribute.$touch()"
                 />
                 <div v-if="$v.receiptNumAttribute.$error">
@@ -62,6 +63,7 @@
                 :placeholder="$t('receipts.select_a_list')"
                 label="name"
                 track-by="id"
+                :disabled="isEdit"
               />
               <div v-if="$v.formData.list.$error">
                 <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -92,6 +94,7 @@
                   :show-labels="false"
                   :class="{'invalid' : $v.formData.receipt_mode.$error}"
                   :placeholder="$t('receipts.select_receipt_mode')"
+                  :disabled="isEdit"
                 />
                 <div v-if="$v.formData.receipt_mode.$error">
                   <span v-if="!$v.formData.receipt_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
