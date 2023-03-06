@@ -36,7 +36,6 @@
         </div>
         <div class="col-xs-2 mr-4">
           <base-button
-            v-show="totalDaybook || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -145,9 +144,7 @@
             </span>
           </v-dropdown>
         </transition>
-      </div>
-
-      <div class="custom-control custom-checkbox">
+            <div class="custom-control custom-checkbox">
         <input
           id="select-all"
           v-model="selectAllFieldStatus"
@@ -160,8 +157,30 @@
         </label>
       </div>
 
+
+        <div>
+     <base-button
+            v-show="fetchData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            :style="['position: absolute',' margin-right: 5%']"
+            right-icon
+            @click="printfetchData"
+          >
+            Print
+          </base-button>
+    </div>
+
+
+      </div>
+
+    
+
       <table-component
         ref="table"
+        id="printData"
         :data="fetchData"
         :show-filter="false"
         table-class="table"
@@ -360,6 +379,16 @@ export default {
     ...mapActions('voucher', [
       'fetchDaybook',
     ]),
+    printfetchData() {
+        printJS({
+          printable: 'printData',
+          type: 'html',
+          ignoreElements: ['no-print-check', 'no-print-option'],
+          scanStyles: true,
+          targetStyles: ['*'],
+          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+        })
+    },
     getFormattedDate(date) {
       return moment(date).format('DD-MM-YYYY')
     },
