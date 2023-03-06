@@ -221,21 +221,21 @@ class PaymentController extends Controller
         $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
         $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
-        $account_ledger->update([
-            'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
-        ]);
-        $dr_account_ledger->update([
-            'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
-        ]);
-        //Update ledger balance by calculating credit/debit
-        $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;
-        $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ? $dr_account_ledger->credit - $dr_account_ledger->debit : $dr_account_ledger->debit - $dr_account_ledger->credit;
-        $account_ledger->update([
-            'balance' => $calc_cr_balance,
-        ]);
-        $dr_account_ledger->update([
-            'balance' => $calc_dr_balance,
-        ]);
+        // $account_ledger->update([
+        //     'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
+        // ]);
+        // $dr_account_ledger->update([
+        //     'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
+        // ]);
+        // //Update ledger balance by calculating credit/debit
+        // $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;
+        // $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ? $dr_account_ledger->credit - $dr_account_ledger->debit : $dr_account_ledger->debit - $dr_account_ledger->credit;
+        // $account_ledger->update([
+        //     'balance' => $calc_cr_balance,
+        // ]);
+        // $dr_account_ledger->update([
+        //     'balance' => $calc_dr_balance,
+        // ]);
         foreach ($voucher as $key => $each) {
             if ($key < substr_count($voucher_ids, ',') + 1) {
                 $each->update([
