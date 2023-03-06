@@ -40,7 +40,7 @@
                   <router-link
                     :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` :
                       row.receipt_id ? `/receipts/${row.receipt_id}/edit` :
-                      `/vouchers/${row.receipt_id}/edit`}"
+                      `/vouchers/${row.id}/edit`}"
                     class="dropdown-item"
                   >
                     {{ row.account }}
