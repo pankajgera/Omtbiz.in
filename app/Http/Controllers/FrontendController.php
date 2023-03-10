@@ -13,9 +13,12 @@ use App\Models\InvoiceTemplate;
 use App\Models\EstimateTemplate;
 use App\Mail\EstimateViewed;
 use App\Mail\InvoiceViewed;
+use App\Models\AccountLedger;
 use App\Models\EstimateItem;
 use App\Models\InvoiceItem;
 use App\Models\Receipt;
+use App\Models\Voucher;
+use Carbon\Carbon;
 
 class FrontendController extends Controller
 {
@@ -234,43 +237,111 @@ class FrontendController extends Controller
             'inventories',
             'user',
             'invoiceTemplate',
-        ])
-            ->where('unique_hash', $id)
-            ->first();
-
-        $labels = [];
+        ])->where('unique_hash', $id)->first();
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
-        $company = Company::find($invoice->company_id);
+        $company = Company::where('id', $invoice->company_id)->first();
+        $ledger = AccountLedger::findOrFail($invoice->account_master_id);
 
-        $logo = $company->getMedia('logo')->first();
+        $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)->whereNotNull('related_voucher')->get();
+        $each_ids = null;
+        foreach ($all_voucher_ids as $each) {
+            if ($each_ids) {
+                $each_ids = $each_ids . ', ' . $each->related_voucher;
+            } else {
+                $each_ids = $each->related_voucher;
+            }
+        }
+        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
+            ->orderBy('date')
+            ->get();
 
-        if ($logo) {
-            $logo = $logo->getFullUrl();
+        foreach ($related_vouchers as $each) {
+            $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
         }
 
+        $vouchers_debit_sum = $all_voucher_ids->sum('debit');
+        $vouchers_credit_sum = $all_voucher_ids->sum('credit');
+
+        $opening_balance = $ledger->accountMaster->opening_balance;
+        $calc_balance = $ledger->balance;
+        $calc_type = $ledger->type;
+        $calc_total = 0;
+
+        //Calculate total balance, type, debit/credit
+        if ($vouchers_debit_sum > $vouchers_credit_sum) {
+            $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
+            $calc_type = 'Dr';
+        } else {
+            $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
+            $calc_type = 'Cr';
+        }
+        if ('Dr' === $ledger->accountMaster->type) {
+            if ('Dr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance = $calc_total - $opening_balance;
+                    $calc_type = 'Cr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Dr';
+                }
+            }
+        } else {
+            if ('Cr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance  = $calc_total - $opening_balance;
+                    $calc_type = 'Dr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Cr';
+                }
+            }
+        }
+
+        $ledger->update([
+            'type' => $calc_type,
+            'credit' => $vouchers_credit_sum,
+            'debit' => $vouchers_debit_sum,
+            'balance' => $calc_balance,
+        ]);
+
         $colors = [
-            'invoice_primary_color',
-            'invoice_column_heading',
-            'invoice_field_label',
-            'invoice_field_value',
-            'invoice_body_text',
-            'invoice_description_text',
-            'invoice_border_color'
+            'primary_text_color',
+            'heading_text_color',
+            'section_heading_text_color',
+            'border_color',
+            'body_text_color',
+            'footer_text_color',
+            'footer_total_color',
+            'footer_bg_color',
+            'date_text_color'
         ];
+
         $colorSettings = CompanySetting::whereIn('option', $colors)
-            ->whereCompany($invoice->company_id)
+            ->whereCompany($company->id)
             ->get();
 
         $invoice_i = InvoiceItem::with('inventory')->where('type', 'invoice')->where('invoice_id', $invoice->id);
         $invoice_items = $invoice_i->get();
 
-        $invoiceWith = Invoice::with(['master'])->where('id', $invoice->id)->first();
+        $time = substr($invoice->created_at, -8);
+        $date = substr($invoice->invoice_date, 0, 10);
+        $invoice->invoice_date = Carbon::parse($date . ' ' . $time, 'Asia/Kolkata')->toDateTimeString();
+
         view()->share([
-            'invoice' => $invoiceWith,
-            'total_quantity' => $invoice_i->sum('quantity'),
-            'total_amount' => $invoiceWith->sub_total,
+            'invoice' => $invoice,
             'invoice_items' => $invoice_items,
+            'ledgerType' => $calc_type,
+            'ledger' => $ledger,
+            'total_quantity' => $invoice_i->sum('quantity'),
+            'total_amount' => $invoice->total,
+            'related_vouchers' => $related_vouchers,
             'colorSettings' => $colorSettings,
             'company' => $company,
         ]);
