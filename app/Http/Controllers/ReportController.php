@@ -304,11 +304,6 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
 
-        $vouchers_before_selected_from = Voucher::where('account_ledger_id', $request->ledger_id)
-            ->whereDate('date', '<', $from)
-            ->orderBy('date')
-            ->get();
-
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
         }
@@ -316,25 +311,10 @@ class ReportController extends Controller
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
         $vouchers_credit_sum = $all_voucher_ids->sum('credit');
 
-        $vouchers_before_debit_sum = $vouchers_before_selected_from->sum('debit');
-        $vouchers_before_credit_sum = $vouchers_before_selected_from->sum('credit');
-
         $opening_balance = $ledger->accountMaster->opening_balance;
         $calc_balance = $ledger->balance;
         $calc_type = $ledger->type;
         $calc_total = 0;
-        $calc_opening_balance = 0;
-        $calc_opening_balance_type = $ledger->accountMaster->type;
-
-        //Calculate opening balance
-        //It will be ledger opening-balance (+-) what is before selected from date
-        if ($vouchers_before_debit_sum > $vouchers_before_credit_sum) {
-            $calc_opening_balance = $vouchers_before_debit_sum - $vouchers_before_credit_sum;
-            $calc_opening_balance_type = 'Dr';
-        } else {
-            $calc_opening_balance = $vouchers_before_credit_sum - $vouchers_before_debit_sum;
-            $calc_opening_balance_type = 'Cr';
-        }
 
         //Calculate total balance, type, debit/credit
         if ($vouchers_debit_sum > $vouchers_credit_sum) {
@@ -408,7 +388,6 @@ class ReportController extends Controller
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');
-
         if ($request->has('download')) {
             return $pdf->download();
         }
