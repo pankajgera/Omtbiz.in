@@ -146,7 +146,6 @@ class EstimatesController extends Controller
             'estimate_date' => $estimate_date,
             'expiry_date' => $estimate_date,
             'estimate_number' => $number_attributes['estimate_number'],
-            //'reference_number' => $request->reference_number,
             'user_id' => $request->user_id,
             'company_id' => $request->header('company'),
             'estimate_template_id' => $request->estimate_template_id,

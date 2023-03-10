@@ -132,15 +132,21 @@ class InvoicesController extends Controller
                 $number_attributes['invoice_number'] = $invoice_prefix . '-' . $nextInvoiceNumber;
             }
 
+            //Check reference_number
+            $reference_number = $request->reference_number;
+            $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
+                ->where('account_master_id', '!=', $request->debtors['id'])->first();
+            if (! empty($find_reference_number)) {
+                $reference_number = intval($reference_number) + 1;
+            }
+
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
-            //$due_date = Carbon::createFromFormat('d/m/Y', $request->due_date);
-            $status = Invoice::TO_BE_DISPATCH;
 
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
                 'invoice_number' => $number_attributes['invoice_number'],
-                'reference_number' => $request->reference_number,
+                'reference_number' => $reference_number,
                 'user_id' => $request->user_id,
                 'company_id' => $request->header('company'),
                 'invoice_template_id' => $request->invoice_template_id,
@@ -728,6 +734,7 @@ class InvoicesController extends Controller
     public function referenceNumber(Request $request)
     {
         $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
+            ->whereCompany($request->header('company'))
             ->where('account_master_id', $request->id)
             ->orderBy('id', 'asc')->first();
 
