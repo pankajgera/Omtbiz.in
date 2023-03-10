@@ -64,18 +64,6 @@
               >
               <label class="inv-label" for="filter_invoice_date">{{ $t('invoices.invoice_date') }}</label>
             </div>
-            <!-- <div class="filter-items">
-              <input
-                id="filter_due_date"
-                v-model="searchData.orderByField"
-                type="radio"
-                name="filter"
-                class="inv-radio"
-                value="due_date"
-                @change="onSearch"
-              >
-              <label class="inv-label" for="filter_due_date">{{ $t('invoices.due_date') }}</label>
-            </div> -->
             <div class="filter-items">
               <input
                 id="filter_invoice_number"
@@ -106,10 +94,9 @@
           <div class="left">
             <div class="inv-name">{{ invoice.user.name }}</div>
             <div class="inv-number">{{ invoice.invoice_number }}</div>
-            <div :class="'inv-status-'+invoice.status.toLowerCase()" class="inv-status">{{ invoice.status }}</div>
           </div>
           <div class="right">
-            <div class="inv-amount" v-html="'₹ ' + (invoice.due_amount/100)" />
+            <div class="inv-amount" v-html="'₹ ' + (invoice.due_amount)" />
             <div class="inv-date">{{ invoice.formattedInvoiceDate }}</div>
           </div>
         </router-link>
