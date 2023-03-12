@@ -25,10 +25,9 @@ class AccountLedgersController extends Controller
             'debit',
             'credit',
             'balance',
-            'orderByField',
-            'orderBy',
         ]))
             ->whereCompany($request->header('company'))
+            ->orderBy('account', 'asc')
             ->latest()
             ->paginate($limit);
 
