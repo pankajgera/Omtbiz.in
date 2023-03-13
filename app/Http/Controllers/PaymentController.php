@@ -15,6 +15,8 @@ use App\Models\AccountMaster;
 use App\Models\User;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Voucher;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 use Validator;
 
@@ -68,7 +70,7 @@ class PaymentController extends Controller
         $payment_num_auto_generate = CompanySetting::getSetting('payment_auto_generate', $request->header('company'));
 
         $nextPaymentNumberAttribute = null;
-        $nextPaymentNumber = Payment::getNextPaymentNumber($payment_prefix);
+        $nextPaymentNumber = Payment::getNextPaymentNumber($payment_prefix, $request->header('company'));
 
         if ($payment_num_auto_generate == "YES") {
             $nextPaymentNumberAttribute = $nextPaymentNumber;
@@ -86,12 +88,15 @@ class PaymentController extends Controller
             array_push($account_ledger, $obj);
         }
 
+        $party_list = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+
         return response()->json([
             'nextPaymentNumberAttribute' => $nextPaymentNumberAttribute,
             'nextPaymentNumber' => $payment_prefix . '-' . $nextPaymentNumber,
             'payment_prefix' => $payment_prefix,
             'usersOfSundryCreditor' => $usersOfSundryCreditor,
             'account_ledger' => $account_ledger,
+            'party_list' => $party_list,
         ]);
     }
 
@@ -114,134 +119,81 @@ class PaymentController extends Controller
 
         $voucher_ids = [];
         $company_id = (int) $request->header('company');
-        $account_master_id = (int) $request->list['id'];
-        $cash_account = AccountMaster::where('name', 'Cash')->first();
-        $bank_account = AccountMaster::where('name', 'Bank')->first();
+        $cr_account_master = AccountMaster::where('name', $request->payment_mode['name'])->first();
 
-        //Create Payment
-        $payment = Payment::create([
-            'payment_date' => $payment_date,
-            //'payment_number' => $number_attributes['payment_number'],
-            'payment_status' => $payment_status,
-            'user_id' => $request->user_id,
-            'company_id' => $company_id,
-            //'invoice_id' => $request->invoice_id,
-            'payment_mode' => $request->payment_mode,
-            'amount' => $req_amount,
-            'notes' => $request->notes,
-            'account_master_id' => $account_master_id,
-        ]);
+        //Not passing payment number from front end, so find next number from backend
+        $payment_prefix = CompanySetting::getSetting('payment_prefix', $company_id);
+        $nextOrderNumber = Payment::getNextPaymentNumber($payment_prefix, $company_id);
+        $number_attributes['payment_number'] = $payment_prefix . '-' . $nextOrderNumber;
 
-        $dr_account_ledger = AccountLedger::firstOrCreate([
-            'account_master_id' => $account_master_id,
-            'account' => $request->list['name'],
-            'company_id' => $company_id,
-        ], [
-            'date' => Carbon::now()->toDateTimeString(),
-            'debit' => $req_amount,
-            'type' => 'Dr',
-            'credit' => 0,
-            'balance' => $req_amount,
-        ]);
-        //AccountMaster::updateOpeningBalance($account_master_id, $request->closing_balance);
-
-        if ($request->payment_mode !== 'Cash') {
-            $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $bank_account->id,
-                'account' => 'Bank',
+        try {
+            //Create Payment
+            $payment = Payment::create([
+                'payment_date' => $payment_date,
+                'payment_number' => $number_attributes['payment_number'],
+                'payment_status' => $payment_status,
+                'user_id' => $request->user_id,
                 'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'debit' => 0,
-                'type' => 'Cr',
-                'credit' => $req_amount,
-                'balance' => $req_amount,
+                //'invoice_id' => $request->invoice_id,
+                'payment_mode' => $request->payment_mode['name'],
+                'amount' => $req_amount,
+                'notes' => $request->notes,
+                'account_master_id' => $cr_account_master->id,
             ]);
-            $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
-                'debit' => $req_amount,
+
+            $dr_account_ledger = AccountLedger::where([
+                'account_master_id' => $request->party_list['id'],
+                'account' => $request->party_list['name'],
+                'company_id' => $company_id,
+            ])->firstOrFail();
+            $cr_account_ledger = AccountLedger::where([
+                'account_master_id' => $request->payment_mode['id'],
+                'account' => $request->payment_mode['name'],
+                'company_id' => $company_id,
+            ])->firstOrFail();
+
+            $dr_voucher = Voucher::create([
+                'account_master_id' => $request->party_list['id'],
+                'account' => $request->party_list['name'],
                 'credit' => 0,
+                'debit' => $req_amount,
                 'account_ledger_id' => $dr_account_ledger->id,
                 'date' => $payment_date,
                 'related_voucher' => null,
                 'type' => 'Dr',
                 'company_id' => $company_id,
                 'voucher_type' => 'Payment',
+                'payment_id' => $payment->id,
             ]);
-            $voucher_2 = Voucher::create([
-                'account_master_id' => $bank_account->id,
-                'account' => 'Bank',
-                'debit' => 0,
+            $cr_voucher = Voucher::create([
+                'account_master_id' => $request->payment_mode['id'],
+                'account' => $request->payment_mode['name'],
                 'credit' => $req_amount,
-                'account_ledger_id' => $account_ledger->id,
+                'debit' => 0,
+                'account_ledger_id' => $cr_account_ledger->id,
                 'date' => $payment_date,
                 'related_voucher' => null,
                 'type' => 'Cr',
                 'company_id' => $company_id,
                 'voucher_type' => 'Payment',
+                'payment_id' => $payment->id,
             ]);
-        } else {
-            $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $cash_account->id,
-                'account' => 'Cash',
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'type' => 'Cr',
-                'debit' => 0,
-                'credit' => $req_amount,
-                'balance' => $req_amount,
-            ]);
-            $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master_id,
-                'account' => $request->list['name'],
-                'debit' => $req_amount,
-                'credit' => 0,
-                'account_ledger_id' => $dr_account_ledger->id,
-                'date' => $payment_date,
-                'related_voucher' => null,
-                'type' => 'Dr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Payment',
-            ]);
-            $voucher_2 = Voucher::create([
-                'account_master_id' => $cash_account->id,
-                'account' => 'Cash',
-                'debit' => 0,
-                'credit' => $req_amount,
-                'account_ledger_id' => $account_ledger->id,
-                'date' => $payment_date,
-                'related_voucher' => null,
-                'type' => 'Cr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Payment',
-            ]);
-        }
-        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
 
-        // $account_ledger->update([
-        //     'credit' => $account_ledger->credit > $req_amount ? $account_ledger->credit - $req_amount : $req_amount - $account_ledger->credit,
-        // ]);
-        // $dr_account_ledger->update([
-        //     'debit' => $dr_account_ledger->debit > $req_amount ? $dr_account_ledger->debit - $req_amount : $req_amount - $dr_account_ledger->debit,
-        // ]);
-        // //Update ledger balance by calculating credit/debit
-        // $calc_cr_balance = $account_ledger->debit > $account_ledger->credit ? $account_ledger->debit - $account_ledger->credit : $account_ledger->credit - $account_ledger->debit;
-        // $calc_dr_balance = $dr_account_ledger->credit > $dr_account_ledger->debit ? $dr_account_ledger->credit - $dr_account_ledger->debit : $dr_account_ledger->debit - $dr_account_ledger->credit;
-        // $account_ledger->update([
-        //     'balance' => $calc_cr_balance,
-        // ]);
-        // $dr_account_ledger->update([
-        //     'balance' => $calc_dr_balance,
-        // ]);
-        foreach ($voucher as $key => $each) {
-            if ($key < substr_count($voucher_ids, ',') + 1) {
-                $each->update([
-                    'related_voucher' => $voucher_ids,
-                ]);
+            $voucher_ids = $cr_voucher->id . ', ' . $dr_voucher->id;
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+
+            foreach ($voucher as $key => $each) {
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
+                }
             }
+        } catch (Exception $e) {
+            Log::error('Error while saving payment', [$e]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
 
         return response()->json([
@@ -296,6 +248,8 @@ class PaymentController extends Controller
             array_push($account_ledger, $obj);
         }
 
+        $party_list = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+
         return response()->json([
             'nextPaymentNumber' => $payment->getPaymentNumAttribute(),
             'payment_prefix' => $payment->getPaymentPrefixAttribute(),
@@ -303,6 +257,7 @@ class PaymentController extends Controller
             'payment' => $payment,
             'invoices' => $invoices,
             'account_ledger' => $account_ledger,
+            'party_list' => $party_list,
         ]);
     }
 
@@ -341,7 +296,7 @@ class PaymentController extends Controller
         $payment->payment_status = $request->payment_status;
         $payment->user_id = $request->user_id;
         $payment->invoice_id = $request->invoice_id;
-        $payment->payment_mode = $request->payment_mode;
+        $payment->payment_mode = $request->party_list['name'];
         $payment->amount = $request->amount;
         $payment->notes = $request->notes;
         $payment->save();

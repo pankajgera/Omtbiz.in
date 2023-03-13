@@ -6,6 +6,7 @@ use App\Models\AccountGroup;
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\State;
+use App\Models\Voucher;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -120,8 +121,13 @@ class AccountMastersController extends Controller
             $ledger->company_id = $request->header('company');
             $ledger->save();
 
-            $master = AccountMaster::find($master->id);
-
+            //Update ledger name in vouchers
+            $ledger_vouchers = Voucher::where('account_ledger_id', $ledger->id)->get();
+            foreach ($ledger_vouchers as $voucher) {
+                $voucher->update([
+                    'name' => $request->name,
+                ]);
+            }
             return response()->json([
                 'master' => $master,
             ]);

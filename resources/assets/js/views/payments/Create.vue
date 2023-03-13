@@ -31,16 +31,16 @@
               <label class="form-label">{{ $t('payments.list') }}</label><span class="text-danger"> *</span>
               <base-select
                 v-model="partySelectBind"
-                :class="{'invalid' : $v.formData.list.$error}"
-                :options="sundryCreditorList"
+                :class="{'invalid' : $v.formData.party_list.$error}"
+                :options="partyList"
                 :searchable="true"
                 :show-labels="false"
                 :placeholder="$t('payments.select_a_list')"
                 label="name"
                 track-by="id"
               />
-              <div v-if="$v.formData.list.$error">
-                <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <div v-if="$v.formData.party_list.$error">
+                <span v-if="!$v.formData.party_list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
             <div class="col-sm-6">
@@ -63,12 +63,14 @@
               <div class="form-group">
                 <label class="form-label">{{ $t('payments.payment_mode') }}</label><span class="text-danger"> *</span>
                 <base-select
-                  v-model="formData.payment_mode"
-                  :options="getPaymentMode"
+                  v-model="paymentModeBind"
+                  :options="sundryCreditorList"
                   :searchable="true"
                   :show-labels="false"
                   :class="{'invalid' : $v.formData.payment_mode.$error}"
                   :placeholder="$t('payments.select_payment_mode')"
+                  label="name"
+                  track-by="id"
                 />
                 <div v-if="$v.formData.payment_mode.$error">
                   <span v-if="!$v.formData.payment_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
@@ -160,7 +162,7 @@ export default {
         payment_mode: null,
         // invoice_id: null,
         notes: null,
-        list: null,
+        party_list: null,
       },
       money: {
         decimal: '.',
@@ -181,12 +183,13 @@ export default {
       sundryCreditorList: [],
       closingBalanceType: '',
       accountLedger: [],
+      partyList: [],
     }
   },
   validations () {
     return {
       formData: {
-        list: {
+        party_list: {
           required
         },
         payment_date: {
@@ -213,16 +216,22 @@ export default {
     ...mapGetters('user', {
       user: 'currentUser'
     }),
-    getPaymentMode () {
-      return ['Cash', 'Check', 'Credit Card', 'Bank Transfer']
-    },
     partySelectBind: {
       cache: false,
       get() {
-        return this.formData.list
+        return this.formData.party_list
       },
       set(value) {
-        this.formData.list = value
+        this.formData.party_list = value
+      }
+    },
+    paymentModeBind: {
+      cache: false,
+      get() {
+        return this.formData.payment_mode
+      },
+      set(value) {
+        this.formData.payment_mode = value
       }
     },
     amount: {
@@ -244,15 +253,15 @@ export default {
       return false
     },
     openingBalance() {
-      if (this.formData.list && this.formData.list.id) {
-        let ledger = this.accountLedger.find(each => each.id === this.formData.list.id);
+      if (this.formData.payment_mode && this.formData.payment_mode.id) {
+        let ledger = this.accountLedger.find(each => each.id === this.formData.payment_mode.id);
         return parseFloat(ledger.balance).toFixed(2);
       }
       return 0
     },
     openingBalanceType() {
-      if (this.formData.list && this.formData.list.id) {
-        let typeObj = this.accountLedger.find(each => each.id === this.formData.list.id);
+      if (this.formData.payment_mode && this.formData.payment_mode.id) {
+        let typeObj = this.accountLedger.find(each => each.id === this.formData.payment_mode.id);
         return typeObj.type;
       }
       return 'Cr';
@@ -317,7 +326,9 @@ export default {
         //this.paymentNumAttribute = response.data.nextPaymentNumber
         this.sundryCreditorList = response.data.usersOfSundryCreditor
         this.accountLedger = response.data.account_ledger
-        this.formData.list = response.data.payment.master
+        this.formData.payment_mode = response.data.payment.master
+        this.partyList = response.data.party_list
+        this.formData.party_list = this.partyList.find(i => i.account_master_id === response.data.account_master_id)
         if (response.data.payment.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
@@ -330,6 +341,7 @@ export default {
         //this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix
         this.formData.payment_date = moment(new Date()).toString()
+        this.partyList = response.data.party_list
       }
       return true
     },
