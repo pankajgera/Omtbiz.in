@@ -10,7 +10,7 @@
         <li class="breadcrumb-item">
           <router-link
             slot="item-title"
-            to="dashboard">
+            to="/">
             {{ $t('general.home') }}
           </router-link>
         </li>
@@ -156,7 +156,13 @@
         <table-column
           :label="$t('masters.name')"
           show="name"
-        />
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `masters/${row.id}/edit`}" class="dropdown-item">
+              {{ row.name }}
+              </router-link>
+          </template>
+        </table-column>
         <table-column
           :label="$t('masters.groups')"
           show="groups"
