@@ -243,14 +243,6 @@ class ReceiptController extends Controller
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
-        $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
-        $receipt_num_auto_generate = CompanySetting::getSetting('receipt_auto_generate', $request->header('company'));
-        $nextReceiptNumberAttribute = null;
-        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix, $request->header('company'));
-        if ($receipt_num_auto_generate == "YES") {
-            $nextReceiptNumberAttribute = $nextReceiptNumber;
-        }
-
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
@@ -271,7 +263,7 @@ class ReceiptController extends Controller
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
             'account_ledger' => $account_ledger,
             'receipt_mode' => $receipt_mode,
-            'nextReceiptNumberAttribute' => $nextReceiptNumberAttribute,
+            'nextReceiptNumberAttribute' => $receipt->receipt_number,
         ]);
     }
 
