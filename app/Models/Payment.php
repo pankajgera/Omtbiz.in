@@ -57,10 +57,11 @@ class Payment extends Model
         return substr($this->payment_number, $position);
     }
 
-    public static function getNextPaymentNumber($value)
+    public static function getNextPaymentNumber($value, $company_id)
     {
         // Get the last created order
         $payment = Payment::where('payment_number', 'LIKE', $value . '-%')
+            ->where('company_id', $company_id)
             ->orderBy('created_at', 'desc')
             ->first();
         if (!$payment) {
@@ -86,7 +87,6 @@ class Payment extends Model
         $prefix = explode("-", $this->payment_number)[0];
         return $prefix;
     }
-
 
     public function invoice()
     {
