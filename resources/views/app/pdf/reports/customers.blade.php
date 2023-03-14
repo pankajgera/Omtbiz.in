@@ -238,10 +238,10 @@
                                     {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0 }}
                                 </p>
                             </td>
-                            @if($each->credit > 0)
+                            @if($each->debit > 0)
                             <td>
                                 <p class="bank-money">
-                                    ₹ {!! ($each->credit) !!}
+                                    ₹ {!! ($each->debit) !!}
                                 </p>
                             </td>
                             <td></td>
@@ -249,7 +249,7 @@
                             <td></td>
                             <td>
                                 <p class="bank-money">
-                                    ₹ {!! ($each->debit) !!}
+                                    ₹ {!! ($each->credit) !!}
                                 </p>
                             </td>
                             @endif
@@ -274,7 +274,7 @@
                         </td>
                         <td></td>
                         <td></td>
-                        @if ('Cr' === $ledger->accountMaster->type)
+                        @if ('Cr' === $opening_balance_type)
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ 0.00
@@ -282,15 +282,13 @@
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->opening_balance : 0.00 !!}
-                                {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->type : '' !!}
+                                ₹ {!! $total_opening_balance ? $total_opening_balance : 0.00 !!}  Cr
                             </p>
                         </td>
                         @else
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->opening_balance : 0.00 !!}
-                                {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->type : '' !!}
+                                ₹ {!! $total_opening_balance ? $total_opening_balance : 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
@@ -308,14 +306,12 @@
                         <td></td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $ledger->debit ? $ledger->debit : 0.00 !!}
-                                {!! $ledger->debit ? 'Dr' : '' !!}
+                                ₹ {!! $current_balance_dr ? $current_balance_dr : 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $ledger->credit ? $ledger->credit : 0.00 !!}
-                                {!! $ledger->credit ? 'Cr' : '' !!}
+                                ₹ {!! $current_balance_cr ? $current_balance_cr : 0.00 !!}  Cr
                             </p>
                         </td>
                     </tr>
@@ -325,29 +321,22 @@
                         </td>
                         <td></td>
                         <td></td>
-                        @if ('Cr' === $ledgerType)
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ 0.00
+                                ₹ {!!
+                                    'Cr' === $opening_balance_type ? ($current_balance_dr > $total_opening_balance ?
+                                        $current_balance_dr - $total_opening_balance :
+                                            $total_opening_balance - $current_balance_dr) : 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $ledger->balance !!} {!! $ledgerType !!}
+                                ₹ {!!
+                                    'Dr' === $opening_balance_type ? ($current_balance_cr > $total_opening_balance ?
+                                        $current_balance_cr - $total_opening_balance :
+                                            $total_opening_balance - $current_balance_cr) : 0.00 !!}  Cr
                             </p>
                         </td>
-                        @else
-                        <td class="bank-total-cell">
-                            <p class="footer-total-amount">
-                                ₹ {!! $ledger->balance !!} {!! $ledgerType !!}
-                            </p>
-                        </td>
-                        <td class="bank-total-cell">
-                            <p class="footer-total-amount">
-                                ₹ 0.00
-                            </p>
-                        </td>
-                        @endif
                     </tr>
                 </table>
             </div>
