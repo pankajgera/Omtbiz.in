@@ -30,6 +30,10 @@
             padding: 2px;
         }
 
+        .table-column {
+            font-size: 12px; font-weight: bold
+        }
+
         .main-container {
             /* padding: 30px 60px; */
         }
@@ -110,7 +114,7 @@
             margin: 0px;
             font-style: normal;
             font-weight: normal;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 21px;
             color: #000;
         }
@@ -120,7 +124,7 @@
             margin: 0px;
             font-style: normal;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 21px;
             text-align: right;
             color: #000;
@@ -163,24 +167,14 @@
             text-align: left;
             font-style: normal;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 12px;
             line-height: 21px;
             color: #000;
         }
 
-        .total-bank-money {
-            padding: 0px;
-            margin: 0px;
-            text-align: right;
-            font-style: normal;
-            font-weight: 500;
-            font-size: 20px;
-            line-height: 21px;
-            color: #f54c4c;
-        }
         .footer-total-amount {
             float: right;
-            font-size: 14px;
+            font-size: 12px;
             padding:0px;
             margin: 0px;
             font-weight: bold;
@@ -202,27 +196,27 @@
                 <table class="bank-table">
                     <tr>
                         <th>
-                            <p style="font-size: 14px; font-weight: bold">
+                            <p class="table-column">
                                 Date
                             </p>
                         </th>
                         <th>
-                            <p style="font-size: 14px; font-weight: bold">
+                            <p class="table-column">
                                 Particulars
                             </p>
                         </th>
                         <th>
-                            <p style="font-size: 14px; font-weight: bold">
+                            <p class="table-column">
                                 Quantity
                             </p>
                         </th>
                         <th>
-                            <p style="font-size: 14px; font-weight: bold">
+                            <p class="table-column">
                                 Debit
                             </p>
                         </th>
                         <th>
-                            <p style="font-size: 14px; font-weight: bold">
+                            <p class="table-column">
                                 Credit
                             </p>
                         </th>
@@ -263,30 +257,43 @@
                     @endforeach
                     <tr>
                         <td>
-                            <p class="total-bank-title" style="padding-top: 30px">Opening Balance</p>
+                            <p class="total-bank-title" style="padding-top: 30px">Total Quantity</p>
+                        </td>
+                        <td></td>
+                        <td class="bank-total-cell" style="padding-top: 30px">
+                            <p class="footer-total-amount" style="padding-top: 10px; float: left">
+                                {!! $inventory_sum !!}
+                            </p>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p class="total-bank-title">Opening Balance</p>
                         </td>
                         <td></td>
                         <td></td>
                         @if ('Cr' === $ledger->accountMaster->type)
-                        <td class="bank-total-cell" style="padding-top: 30px">
+                        <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ 0.00
                             </p>
                         </td>
-                        <td class="bank-total-cell" style="padding-top: 30px">
+                        <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->opening_balance : 0.00 !!}
                                 {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->type : '' !!}
                             </p>
                         </td>
                         @else
-                        <td class="bank-total-cell" style="padding-top: 30px">
+                        <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->opening_balance : 0.00 !!}
                                 {!! $ledger->accountMaster->opening_balance ? $ledger->accountMaster->type : '' !!}
                             </p>
                         </td>
-                        <td class="bank-total-cell" style="padding-top: 30px">
+                        <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ 0.00
                             </p>
