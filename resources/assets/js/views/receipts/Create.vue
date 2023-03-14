@@ -55,7 +55,7 @@
             <div class="col-sm-6">
               <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
               <base-select
-                v-model="listBind"
+                v-model="formData.list"
                 :invalid="$v.formData.list.$error"
                 :options="sundryDebtorList"
                 :searchable="true"
@@ -73,7 +73,7 @@
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.amount') }}</label><span class="text-danger"> *</span>
                  <base-input
-                    v-model.trim="amount"
+                    v-model.trim="formData.amount"
                     :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
                     type="number"
                     :max="15"
@@ -347,7 +347,7 @@ export default {
     },
     async submitReceiptData () {
       this.$v.formData.$touch()
-      if (this.$v.$invalid) {
+      if (this.$v.formData.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }

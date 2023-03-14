@@ -131,9 +131,9 @@ export default {
     value () {
       if ('number' === this.type && this.value) {
         this.inputValue = (this.value).toString().replace('-', '')
-        if (this.max) {
-          this.inputValue = this.value.slice(0, this.max)
-        }
+        // if (this.max && this.value!==null && this.value!=='') {
+        //   this.inputValue = this.value.slice(0, this.max)
+        // }
       } else {
         this.inputValue = this.value
       }
