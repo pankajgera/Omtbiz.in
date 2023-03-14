@@ -304,8 +304,42 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
 
+        $inventory_sum = 0;
+        $current_balance_cr = 0;
+        $current_balance_dr = 0;
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+            $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
+            $current_balance_cr += $each->credit;
+            $current_balance_dr += $each->debit;
+        }
+
+        //Calculate Opening balace
+        $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
+            ->whereDate('date', '<', $from)
+            ->orderBy('date')
+            ->get(['id', 'debit', 'credit']);
+
+        $cr_sum = 0;
+        $dr_sum = 0;
+        $total_opening_balance = 0;
+        $opening_balance_type = 'Cr';
+        foreach ($calc_opening_balance as $each) {
+            if ($each->debit) {
+                $dr_sum += $each->debit;
+            }
+            if ($each->credit) {
+                $cr_sum += $each->credit;
+            }
+        }
+        if ($cr_sum !== $dr_sum) {
+            if ($cr_sum > $dr_sum) {
+                $total_opening_balance = $cr_sum - $dr_sum ;
+            } else {
+                $total_opening_balance = $dr_sum - $cr_sum;
+                $opening_balance_type = 'Dr';
+            }
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
@@ -316,7 +350,7 @@ class ReportController extends Controller
         $calc_type = $ledger->type;
         $calc_total = 0;
 
-        //Calculate total balance, type, debit/credit
+        //Calculate total balance, type, debit/credit and update it in ledger
         if ($vouchers_debit_sum > $vouchers_credit_sum) {
             $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
             $calc_type = 'Dr';
@@ -349,7 +383,6 @@ class ReportController extends Controller
                 }
             }
         }
-
         $ledger->update([
             'type' => $calc_type,
             'credit' => $vouchers_credit_sum,
@@ -384,7 +417,12 @@ class ReportController extends Controller
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
-            'to_date' => $to_date
+            'to_date' => $to_date,
+            'inventory_sum' => $inventory_sum,
+            'total_opening_balance' => $total_opening_balance,
+            'opening_balance_type' => $opening_balance_type,
+            'current_balance_cr' => $current_balance_cr,
+            'current_balance_dr' => $current_balance_dr,
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');
