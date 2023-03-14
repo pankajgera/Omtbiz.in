@@ -34,6 +34,17 @@
             {{ $t('general.daybook') }}
           </base-button>
         </div>
+        <div class="col-xs-2 mr-2">
+          <base-button
+            :outline="true"
+            color="theme"
+            size="large"
+            right-icon
+            @click="toggleSummaryStock"
+          >
+            {{ $t('general.stock') }}
+          </base-button>
+        </div>
         <div class="col-xs-2 mr-4">
           <base-button
             v-show="totalLedgers || filtersApplied"
@@ -389,6 +400,9 @@ export default {
     },
     toggleDayBook() {
       window.location = '/vouchers/daybook'
+    },
+    toggleSummaryStock() {
+      window.location = '/inventory/stock'
     },
     async removeLedgers (id) {
       this.id = id
