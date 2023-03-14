@@ -304,8 +304,11 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
 
+        $inventory_sum = 0;
+
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+            $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
@@ -316,7 +319,7 @@ class ReportController extends Controller
         $calc_type = $ledger->type;
         $calc_total = 0;
 
-        //Calculate total balance, type, debit/credit
+        //Calculate total balance, type, debit/credit and update it in ledger
         if ($vouchers_debit_sum > $vouchers_credit_sum) {
             $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
             $calc_type = 'Dr';
@@ -349,7 +352,6 @@ class ReportController extends Controller
                 }
             }
         }
-
         $ledger->update([
             'type' => $calc_type,
             'credit' => $vouchers_credit_sum,
@@ -384,7 +386,8 @@ class ReportController extends Controller
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
-            'to_date' => $to_date
+            'to_date' => $to_date,
+            'inventory_sum' => $inventory_sum,
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');
