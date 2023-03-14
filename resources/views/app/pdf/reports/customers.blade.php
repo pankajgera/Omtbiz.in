@@ -282,13 +282,13 @@
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $opening_balance ? $opening_balance : 0.00 !!}  Cr
+                                ₹ {!! $total_opening_balance ? $total_opening_balance : 0.00 !!}  Cr
                             </p>
                         </td>
                         @else
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $opening_balance ? $opening_balance : 0.00 !!}  Dr
+                                ₹ {!! $total_opening_balance ? $total_opening_balance : 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
@@ -321,29 +321,22 @@
                         </td>
                         <td></td>
                         <td></td>
-                        @if ('Cr' === $closing_balance_type)
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ 0.00
+                                ₹ {!!
+                                    'Cr' === $opening_balance_type ? ($current_balance_dr > $total_opening_balance ?
+                                        $current_balance_dr - $total_opening_balance :
+                                            $total_opening_balance - $current_balance_dr) : 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $closing_balance !!} {!! $closing_balance_type !!}
+                                ₹ {!!
+                                    'Dr' === $opening_balance_type ? ($current_balance_cr > $total_opening_balance ?
+                                        $current_balance_cr - $total_opening_balance :
+                                            $total_opening_balance - $current_balance_cr) : 0.00 !!}  Cr
                             </p>
                         </td>
-                        @else
-                        <td class="bank-total-cell">
-                            <p class="footer-total-amount">
-                                ₹ {!! $closing_balance !!} {!! $closing_balance_type !!}
-                            </p>
-                        </td>
-                        <td class="bank-total-cell">
-                            <p class="footer-total-amount">
-                                ₹ 0.00
-                            </p>
-                        </td>
-                        @endif
                     </tr>
                 </table>
             </div>

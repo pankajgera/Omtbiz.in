@@ -307,46 +307,37 @@ class ReportController extends Controller
         $inventory_sum = 0;
         $current_balance_cr = 0;
         $current_balance_dr = 0;
-        $closing_balance = 0;
-        $closing_balance_type = 'Cr';
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
             $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
             $current_balance_cr += $each->credit;
             $current_balance_dr += $each->debit;
         }
-        if ($current_balance_cr > $current_balance_dr) {
-            $closing_balance = $current_balance_cr - $current_balance_dr;
-        }
-        if ($current_balance_cr < $current_balance_dr) {
-            $closing_balance_type = 'Dr';
-            $closing_balance = $current_balance_dr - $current_balance_cr;
-        }
 
         //Calculate Opening balace
-        $calc_opening_balance = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
+        $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
             ->where('account', '!=', $ledger->account)
-            ->whereDate('date', '<=', $from)
+            ->whereDate('date', '<', $from)
             ->orderBy('date')
-            ->get(['debit', 'credit']);
+            ->get(['id', 'debit', 'credit']);
 
         $cr_sum = 0;
         $dr_sum = 0;
-        $opening_balance = 0;
+        $total_opening_balance = 0;
         $opening_balance_type = 'Cr';
         foreach ($calc_opening_balance as $each) {
             if ($each->debit) {
-                $dr_sum += $dr_sum;
+                $dr_sum += $each->debit;
             }
             if ($each->credit) {
-                $cr_sum += $cr_sum;
+                $cr_sum += $each->credit;
             }
         }
         if ($cr_sum !== $dr_sum) {
             if ($cr_sum > $dr_sum) {
-                $opening_balance = $cr_sum - $dr_sum ;
+                $total_opening_balance = $cr_sum - $dr_sum ;
             } else {
-                $opening_balance = $dr_sum - $cr_sum;
+                $total_opening_balance = $dr_sum - $cr_sum;
                 $opening_balance_type = 'Dr';
             }
         }
@@ -428,12 +419,10 @@ class ReportController extends Controller
             'from_date' => $from_date,
             'to_date' => $to_date,
             'inventory_sum' => $inventory_sum,
-            'opening_balance' => $opening_balance,
+            'total_opening_balance' => $total_opening_balance,
             'opening_balance_type' => $opening_balance_type,
             'current_balance_cr' => $current_balance_cr,
             'current_balance_dr' => $current_balance_dr,
-            'closing_balance' => $closing_balance,
-            'closing_balance_type' => $closing_balance_type,
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');
