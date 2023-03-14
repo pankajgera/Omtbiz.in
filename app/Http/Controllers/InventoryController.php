@@ -236,4 +236,15 @@ class InventoryController extends Controller
             'inventory' => $inventory,
         ]);
     }
+
+    /**
+     * Get summary stock
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function getStock(Request $request)
+    {
+
+    }
 }
