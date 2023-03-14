@@ -318,6 +318,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InventoryController@increasePrice'
     ]);
 
+    Route::get('/inventory/stock', [
+        'as' => 'inventory.stock',
+        'uses' => 'InventoryController@getStock'
+    ]);
+
     Route::resource('inventory', 'InventoryController');
 
 

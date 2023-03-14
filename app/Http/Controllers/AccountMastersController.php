@@ -125,7 +125,7 @@ class AccountMastersController extends Controller
             $ledger_vouchers = Voucher::where('account_ledger_id', $ledger->id)->get();
             foreach ($ledger_vouchers as $voucher) {
                 $voucher->update([
-                    'name' => $request->name,
+                    'account' => $request->name,
                 ]);
             }
             return response()->json([
