@@ -307,6 +307,8 @@ class ReportController extends Controller
         $inventory_sum = 0;
         $current_balance_cr = 0;
         $current_balance_dr = 0;
+        $closing_balance_cr = 0;
+        $closing_balance_dr = 0;
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
             $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
@@ -314,7 +316,7 @@ class ReportController extends Controller
             $current_balance_dr += $each->debit;
         }
 
-        //Calculate Opening balace
+        //Calculate Opening balance
         $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
             ->where('account', '!=', $ledger->account)
             ->whereDate('date', '<', $from)
@@ -340,6 +342,26 @@ class ReportController extends Controller
                 $total_opening_balance = $dr_sum - $cr_sum;
                 $opening_balance_type = 'Dr';
             }
+        }
+
+        //Calculate closing balance
+        if ($current_balance_cr > $current_balance_dr) {
+            $sum = 0;
+            if ('Dr' === $opening_balance_type) {
+                $sum = $current_balance_cr - ($current_balance_dr + $total_opening_balance);
+            } else {
+                $sum = ($total_opening_balance + $current_balance_cr) - $current_balance_dr;
+            }
+            $closing_balance_cr = abs($sum);
+        }
+        if ($current_balance_cr < $current_balance_dr) {
+            $sum = 0;
+            if ('Cr' === $opening_balance_type) {
+                $sum = $current_balance_dr - ($current_balance_cr + $total_opening_balance);
+            } else {
+                $sum = ($total_opening_balance + $current_balance_dr) - $current_balance_cr;
+            }
+            $closing_balance_cr = abs($sum);
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
@@ -423,6 +445,8 @@ class ReportController extends Controller
             'opening_balance_type' => $opening_balance_type,
             'current_balance_cr' => $current_balance_cr,
             'current_balance_dr' => $current_balance_dr,
+            'closing_balance_cr' => $closing_balance_cr,
+            'closing_balance_dr' => $closing_balance_dr,
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');

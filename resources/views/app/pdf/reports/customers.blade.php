@@ -238,21 +238,16 @@
                                     {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0 }}
                                 </p>
                             </td>
-                            @if($each->debit > 0)
                             <td>
                                 <p class="bank-money">
-                                    ₹ {!! ($each->debit) !!}
+                                    ₹ {!! ($each->debit ? $each->debit : 0.00) !!}
                                 </p>
                             </td>
-                            <td></td>
-                            @else
-                            <td></td>
                             <td>
                                 <p class="bank-money">
-                                    ₹ {!! ($each->credit) !!}
+                                    ₹ {!! ($each->credit ? $each->credit : 0.00) !!}
                                 </p>
                             </td>
-                            @endif
                         </tr>
                     @endforeach
                     <tr>
@@ -323,18 +318,12 @@
                         <td></td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!!
-                                    'Cr' === $opening_balance_type ? ($current_balance_dr > $total_opening_balance ?
-                                        $current_balance_dr - $total_opening_balance :
-                                            $total_opening_balance - $current_balance_dr) : 0.00 !!}  Dr
+                                ₹ {!! $closing_balance_dr ?: 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!!
-                                    'Dr' === $opening_balance_type ? ($current_balance_cr > $total_opening_balance ?
-                                        $current_balance_cr - $total_opening_balance :
-                                            $total_opening_balance - $current_balance_cr) : 0.00 !!}  Cr
+                                ₹ {!! $closing_balance_cr ?: 0.00 !!}  Cr
                             </p>
                         </td>
                     </tr>
