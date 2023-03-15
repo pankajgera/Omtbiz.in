@@ -230,7 +230,7 @@ export default {
         this.resetModalData()
         this.resetFormData()
         this.closeModal()
-        window.location.reload()
+        // window.location.reload()
         return true
       }
       window.toastr['error'](response.data.error)
