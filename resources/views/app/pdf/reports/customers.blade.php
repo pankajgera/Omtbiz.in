@@ -240,12 +240,12 @@
                             </td>
                             <td>
                                 <p class="bank-money">
-                                    ₹ {!! ($each->debit ? $each->debit : 0.00) !!}
+                                    ₹ {!! ($each->credit ? $each->credit : 0.00) !!}
                                 </p>
                             </td>
                             <td>
                                 <p class="bank-money">
-                                    ₹ {!! ($each->credit ? $each->credit : 0.00) !!}
+                                    ₹ {!! ($each->debit ? $each->debit : 0.00) !!}
                                 </p>
                             </td>
                         </tr>
