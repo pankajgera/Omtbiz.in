@@ -343,8 +343,11 @@ class ReportController extends Controller
         $opening_current_cr = 0;
         $opening_current_dr = 0;
         //Total opening balance include previous dates
-        $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
-        $total_opening_balance_dr = $total_opening_balance_dr + $total_opening_balance;
+        if ('Cr' === $master->type) {
+            $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
+        } else {
+            $total_opening_balance_dr = $total_opening_balance_dr + $total_opening_balance;
+        }
 
         //Add opening and current balance
         $opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
