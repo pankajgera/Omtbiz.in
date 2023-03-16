@@ -374,9 +374,9 @@ class ReportController extends Controller
         }
         if ($current_balance_cr === $current_balance_dr) {
             if ('Dr' === $opening_balance_type) {
-                $closing_balance_dr = $total_opening_balance;
-            } else {
                 $closing_balance_cr = $total_opening_balance;
+            } else {
+                $closing_balance_dr = $total_opening_balance;
             }
         }
 
