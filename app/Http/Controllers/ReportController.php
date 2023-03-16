@@ -370,7 +370,14 @@ class ReportController extends Controller
             } else {
                 $sum = ($total_opening_balance + $current_balance_dr) - $current_balance_cr;
             }
-            $closing_balance_cr = abs($sum);
+            $closing_balance_dr = abs($sum);
+        }
+        if ($current_balance_cr === $current_balance_dr) {
+            if ('Dr' === $opening_balance_type) {
+                $closing_balance_dr = $total_opening_balance;
+            } else {
+                $closing_balance_cr = $total_opening_balance;
+            }
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
