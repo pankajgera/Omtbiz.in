@@ -361,7 +361,7 @@ class ReportController extends Controller
             } else {
                 $sum = ($total_opening_balance + $current_balance_cr) - $current_balance_dr;
             }
-            $closing_balance_cr = abs($sum);
+            $closing_balance_dr = abs($sum);
         }
         if ($current_balance_cr < $current_balance_dr) {
             $sum = 0;
@@ -370,7 +370,7 @@ class ReportController extends Controller
             } else {
                 $sum = ($total_opening_balance + $current_balance_dr) - $current_balance_cr;
             }
-            $closing_balance_dr = abs($sum);
+            $closing_balance_cr = abs($sum);
         }
         if ($current_balance_cr === $current_balance_dr) {
             if ('Dr' === $opening_balance_type) {
