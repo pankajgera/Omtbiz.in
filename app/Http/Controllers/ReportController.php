@@ -309,12 +309,19 @@ class ReportController extends Controller
         $current_balance_dr = 0;
         $closing_balance_cr = 0;
         $closing_balance_dr = 0;
+        $total_sum = 0;
+        $total_opening_balance_cr = 0;
+        $total_opening_balance_dr = 0;
+        $master = AccountMaster::where('id', $ledger->account_master_id)->first();
+        $total_opening_balance = $master->opening_balance;
+        $opening_balance_type = $master->type;
+
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
             $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
             //we show cr to dr when we display
-            $current_balance_cr += $each->debit;
-            $current_balance_dr += $each->credit;
+            $current_balance_cr += $each->credit;
+            $current_balance_dr += $each->debit;
         }
 
         //Calculate Opening balance
@@ -324,61 +331,49 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get(['id', 'debit', 'credit']);
 
-        $cr_sum = 0;
-        $dr_sum = 0;
-        $master = AccountMaster::where('id', $ledger->account_master_id)->first();
-        $total_opening_balance = $master->opening_balance;
-        $opening_balance_type = $master->type;
+
         foreach ($calc_opening_balance as $each) {
             if ($each->debit) {
-                $dr_sum += $each->debit;
+                $total_opening_balance_dr += $each->debit;
             }
             if ($each->credit) {
-                $cr_sum += $each->credit;
+                $total_opening_balance_cr += $each->credit;
             }
         }
-        $total_sum = 0;
-        if ($cr_sum > $dr_sum) {
-            if ('Cr' === $opening_balance_type) {
-                $total_sum = $cr_sum - ($dr_sum + $total_opening_balance) ;
-            } else {
-                $total_sum = ($total_opening_balance + $cr_sum) - $dr_sum ;
-            }
+
+
+        if ('Cr' === $opening_balance_type) {
+            $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
         } else {
-            if ('Dr' === $opening_balance_type) {
-                $total_sum = $dr_sum - ($cr_sum + $total_opening_balance);
-            } else {
-                $total_sum = ($dr_sum + $total_opening_balance) - $cr_sum;
-            }
+            $total_opening_balance_dr = $total_opening_balance_cr + $total_opening_balance;
         }
-        $total_opening_balance = abs($total_sum);
 
         //Calculate closing balance
         if ($current_balance_cr > $current_balance_dr) {
             $sum = 0;
             if ('Dr' === $opening_balance_type) {
-                $sum = $current_balance_cr - ($current_balance_dr + $total_opening_balance);
+                $sum = $current_balance_cr - ($current_balance_dr + $total_opening_balance_dr);
                 $closing_balance_cr = abs($sum);
             } else {
-                $sum = ($total_opening_balance + $current_balance_cr) - $current_balance_dr;
-                $closing_balance_dr = abs($sum);
+                $sum = ($current_balance_cr + $total_opening_balance_cr) - $current_balance_dr;
+                $closing_balance_cr = abs($sum);
             }
         }
         if ($current_balance_cr < $current_balance_dr) {
             $sum = 0;
             if ('Cr' === $opening_balance_type) {
-                $sum = $current_balance_dr - ($current_balance_cr + $total_opening_balance);
+                $sum = $current_balance_dr - ($current_balance_cr + $total_opening_balance_cr);
                 $closing_balance_dr = abs($sum);
             } else {
-                $sum = ($total_opening_balance + $current_balance_dr) - $current_balance_cr;
+                $sum = ($current_balance_dr + $total_opening_balance_dr) - $current_balance_cr;
                 $closing_balance_cr = abs($sum);
             }
         }
         if ($current_balance_cr === $current_balance_dr) {
-            if ('Dr' === $opening_balance_type) {
-                $closing_balance_cr = $total_opening_balance;
+            if ('Cr' === $opening_balance_type) {
+                $closing_balance_cr = $total_opening_balance_cr;
             } else {
-                $closing_balance_dr = $total_opening_balance;
+                $closing_balance_dr = $total_opening_balance_dr;
             }
         }
 
@@ -459,7 +454,8 @@ class ReportController extends Controller
             'from_date' => $from_date,
             'to_date' => $to_date,
             'inventory_sum' => $inventory_sum,
-            'total_opening_balance' => $total_opening_balance,
+            'total_opening_balance_dr' => $total_opening_balance_dr,
+            'total_opening_balance_cr' => $total_opening_balance_cr,
             'opening_balance_type' => $opening_balance_type,
             'current_balance_cr' => $current_balance_cr,
             'current_balance_dr' => $current_balance_dr,
