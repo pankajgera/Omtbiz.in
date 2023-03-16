@@ -338,21 +338,22 @@ class ReportController extends Controller
             }
         }
         if ($cr_sum !== $dr_sum) {
+            $total_sum = 0;
             if ($cr_sum > $dr_sum) {
-                if ('Dr' === $opening_balance_type) {
-                    $total_opening_balance = $cr_sum - ($dr_sum + $total_opening_balance) ;
+                if ('Cr' === $opening_balance_type) {
+                    $total_sum = $cr_sum - ($dr_sum + $total_opening_balance) ;
                 } else {
-                    $total_opening_balance = ($total_opening_balance + $cr_sum) - $dr_sum ;
+                    $total_sum = ($total_opening_balance + $cr_sum) - $dr_sum ;
                 }
             } else {
-                if ('Cr' === $opening_balance_type) {
-                    $total_opening_balance = $dr_sum - ($cr_sum + $total_opening_balance);
+                if ('Dr' === $opening_balance_type) {
+                    $total_sum = $dr_sum - ($cr_sum + $total_opening_balance);
                 } else {
-                    $total_opening_balance = ($dr_sum + $total_opening_balance) - $cr_sum;
+                    $total_sum = ($dr_sum + $total_opening_balance) - $cr_sum;
                 }
             }
         }
-        $total_opening_balance = abs($total_opening_balance);
+        $total_opening_balance = abs($total_sum);
 
         //Calculate closing balance
         if ($current_balance_cr > $current_balance_dr) {
