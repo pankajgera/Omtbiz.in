@@ -326,7 +326,7 @@ class ReportController extends Controller
 
         $cr_sum = 0;
         $dr_sum = 0;
-        $master = AccountMaster::where('account_master_id', $ledger->account_master_id)->first();
+        $master = AccountMaster::where('id', $ledger->account_master_id)->first();
         $total_opening_balance = $master->opening_balance;
         $opening_balance_type = $master->type;
         foreach ($calc_opening_balance as $each) {
