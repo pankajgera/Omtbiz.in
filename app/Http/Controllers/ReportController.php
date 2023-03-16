@@ -342,34 +342,27 @@ class ReportController extends Controller
         }
 
 
+        $opening_current_cr = 0;
+        $opening_current_dr = 0;
         if ('Cr' === $opening_balance_type) {
             $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
+            $opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
         } else {
             $total_opening_balance_dr = $total_opening_balance_cr + $total_opening_balance;
+            $opening_current_dr = $total_opening_balance_dr + $current_balance_dr;
         }
 
+
         //Calculate closing balance
-        if ($current_balance_cr > $current_balance_dr) {
-            $sum = 0;
-            if ('Dr' === $opening_balance_type) {
-                $sum = $current_balance_cr - ($current_balance_dr + $total_opening_balance_dr);
-                $closing_balance_cr = abs($sum);
-            } else {
-                $sum = ($current_balance_cr + $total_opening_balance_cr) - $current_balance_dr;
-                $closing_balance_cr = abs($sum);
-            }
+        if ($opening_current_cr > $opening_current_dr) {
+            $sum = $opening_current_cr - $opening_current_dr;
+            $closing_balance_cr = abs($sum);
         }
-        if ($current_balance_cr < $current_balance_dr) {
-            $sum = 0;
-            if ('Cr' === $opening_balance_type) {
-                $sum = $current_balance_dr - ($current_balance_cr + $total_opening_balance_cr);
-                $closing_balance_dr = abs($sum);
-            } else {
-                $sum = ($current_balance_dr + $total_opening_balance_dr) - $current_balance_cr;
-                $closing_balance_cr = abs($sum);
-            }
+        if ($opening_current_cr < $opening_current_dr) {
+            $sum = $opening_current_dr - $opening_current_cr;
+            $closing_balance_dr = abs($sum);
         }
-        if ($current_balance_cr === $current_balance_dr) {
+        if ($opening_current_cr === $opening_current_dr) {
             if ('Cr' === $opening_balance_type) {
                 $closing_balance_cr = $total_opening_balance_cr;
             } else {
