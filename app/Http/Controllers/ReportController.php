@@ -337,8 +337,8 @@ class ReportController extends Controller
                 $cr_sum += $each->credit;
             }
         }
+        $total_sum = 0;
         if ($cr_sum !== $dr_sum) {
-            $total_sum = 0;
             if ($cr_sum > $dr_sum) {
                 if ('Cr' === $opening_balance_type) {
                     $total_sum = $cr_sum - ($dr_sum + $total_opening_balance) ;
