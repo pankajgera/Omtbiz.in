@@ -325,8 +325,8 @@ class ReportController extends Controller
 
         $cr_sum = 0;
         $dr_sum = 0;
-        $total_opening_balance = 0;
-        $opening_balance_type = 'Cr';
+        $total_opening_balance = $ledger->opening_balance;
+        $opening_balance_type = $ledger->type;
         foreach ($calc_opening_balance as $each) {
             if ($each->debit) {
                 $dr_sum += $each->debit;
@@ -337,12 +337,20 @@ class ReportController extends Controller
         }
         if ($cr_sum !== $dr_sum) {
             if ($cr_sum > $dr_sum) {
-                $total_opening_balance = $cr_sum - $dr_sum ;
+                if ('Dr' === $opening_balance_type) {
+                    $total_opening_balance = $cr_sum - ($dr_sum + $total_opening_balance) ;
+                } else {
+                    $total_opening_balance = ($total_opening_balance + $cr_sum) - $dr_sum ;
+                }
             } else {
-                $total_opening_balance = $dr_sum - $cr_sum;
-                $opening_balance_type = 'Dr';
+                if ('Cr' === $opening_balance_type) {
+                    $total_opening_balance = $dr_sum - ($cr_sum + $total_opening_balance);
+                } else {
+                    $total_opening_balance = ($dr_sum + $total_opening_balance) - $cr_sum;
+                }
             }
         }
+        $total_opening_balance = abs($total_opening_balance);
 
         //Calculate closing balance
         if ($current_balance_cr > $current_balance_dr) {
