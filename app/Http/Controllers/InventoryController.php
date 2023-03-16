@@ -91,31 +91,37 @@ class InventoryController extends Controller
                 $items->worker_name = $request->worker_name;
                 $items->quantity = $request->quantity;
                 $items->price = $request->price;
-                $items->sale_price = $request->sale_price;
+                $items->sale_price = $request->sale_price ?? $request->price;
                 $items->unit = $request->unit;
                 $items->save();
 
                 if ($inventory->quantity !== $items->quantity) {
                     $inventory->updateInventoryQuantity($items->quantity);
                 }
+                $inventory->price =  $items->price;
+
+                return response()->json([
+                    'inventory' => $inventory,
+                ]);
             } else {
                 $items = new InventoryItem();
                 $items->inventory_id = $find_inventory->id;
                 $items->worker_name = $request->worker_name;
                 $items->quantity = $request->quantity;
                 $items->price = $request->price;
-                $items->sale_price = $request->sale_price;
+                $items->sale_price = $request->sale_price ?? $request->price;
                 $items->unit = $request->unit;
                 $items->save();
 
                 if ($find_inventory->quantity !==  $request->quantity) {
                     $find_inventory->updateInventoryQuantity($request->quantity);
                 }
+                return response()->json([
+                    'inventory' => $find_inventory,
+                ]);
             }
-            $inventory->price =  $items->price;
-            return response()->json([
-                'inventory' => $inventory,
-            ]);
+
+
         } catch (Exception $e) {
             Log::error('Error while saving inventory', [$e]);
         }
@@ -229,5 +235,16 @@ class InventoryController extends Controller
         return response()->json([
             'inventory' => $inventory,
         ]);
+    }
+
+    /**
+     * Get summary stock
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function getStock(Request $request)
+    {
+
     }
 }

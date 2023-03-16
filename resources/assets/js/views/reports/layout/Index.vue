@@ -6,7 +6,7 @@
         <li class="breadcrumb-item">
           <router-link
             slot="item-title"
-            to="dashboard">
+            to="/">
             {{ $t('general.home') }}
           </router-link>
         </li>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\CompanySetting;
 use App\Models\Currency;
@@ -15,6 +16,7 @@ use App\Models\AccountMaster;
 use App\Models\User;
 use App\Http\Requests\ReceiptRequest;
 use App\Models\Voucher;
+use Illuminate\Support\Facades\Log;
 use stdClass;
 use Validator;
 
@@ -125,84 +127,91 @@ class ReceiptController extends Controller
 
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
-        if ($request->has('invoice_id') && $request->invoice_id != null) {
-            $invoice = Invoice::find($request->invoice_id);
-            $invoice->status = Invoice::DISPATCH;
-            $invoice->paid_status = Invoice::STATUS_PAID;
-            $invoice->due_amount = 0;
-            $invoice->save();
-        }
-
-        $receipt_status = 'Draft';
-
-        if ('admin' === Auth::user()->role) {
-            $receipt_status = 'Done';
-        }
-        $voucher_ids = [];
-        $company_id = (int) $request->header('company');
-        $dr_account_master = AccountMaster::where('name', '=', $request->receipt_mode)->firstOrFail();
-
-        //Create receipt
-        $receipt = Receipt::create([
-            'receipt_date' => $receipt_date,
-            'receipt_number' => $number_attributes['receipt_number'],
-            'receipt_status' => $receipt_status,
-            'user_id' => $request->user_id,
-            'company_id' => $company_id,
-            'invoice_id' => $request->invoice_id,
-            'receipt_mode' => $request->receipt_mode,
-            'amount' => $req_amount,
-            'notes' => $request->notes,
-            'account_master_id' => $request->list['id'],
-        ]);
-
-        $dr_account_ledger = AccountLedger::where([
-            'account_master_id' => $dr_account_master->id,
-            'account' => $request->receipt_mode,
-            'company_id' => $company_id,
-        ])->firstOrFail();
-        $cr_account_ledger = AccountLedger::where([
-            'account_master_id' => $request->list['id'],
-            'account' => $request->list['name'],
-            'company_id' => $company_id,
-        ])->firstOrFail();
-
-        $cr_voucher = Voucher::create([
-            'account_master_id' => $request->list['id'],
-            'account' => $request->list['name'],
-            'credit' => $req_amount,
-            'debit' => 0,
-            'account_ledger_id' => $cr_account_ledger->id,
-            'date' => $receipt_date,
-            'related_voucher' => null,
-            'type' => 'Cr',
-            'company_id' => $company_id,
-            'voucher_type' => 'Receipt',
-            'receipt_id' => $receipt->id,
-        ]);
-        $dr_voucher = Voucher::create([
-            'account_master_id' => $dr_account_master->id,
-            'account' => $request->receipt_mode,
-            'credit' => 0,
-            'debit' => $req_amount,
-            'account_ledger_id' => $dr_account_ledger->id,
-            'date' => $receipt_date,
-            'related_voucher' => null,
-            'type' => 'Dr',
-            'company_id' => $company_id,
-            'voucher_type' => 'Receipt',
-            'receipt_id' => $receipt->id,
-        ]);
-
-        $voucher_ids = $cr_voucher->id . ', ' . $dr_voucher->id;
-        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-
-        foreach ($voucher as $key => $each) {
-            if ($key < substr_count($voucher_ids, ',') + 1) {
-                $each->update([
-                    'related_voucher' => $voucher_ids,
-                ]);
+        try {
+            if ($request->has('invoice_id') && $request->invoice_id != null) {
+                $invoice = Invoice::find($request->invoice_id);
+                $invoice->status = Invoice::DISPATCH;
+                $invoice->paid_status = Invoice::STATUS_PAID;
+                $invoice->due_amount = 0;
+                $invoice->save();
             }
+
+            $receipt_status = 'Draft';
+
+            if ('admin' === Auth::user()->role) {
+                $receipt_status = 'Done';
+            }
+            $voucher_ids = [];
+            $company_id = (int) $request->header('company');
+            $dr_account_master = AccountMaster::where('name', '=', $request->receipt_mode)->firstOrFail();
+
+            //Create receipt
+            $receipt = Receipt::create([
+                'receipt_date' => $receipt_date,
+                'receipt_number' => $number_attributes['receipt_number'],
+                'receipt_status' => $receipt_status,
+                'user_id' => $request->user_id,
+                'company_id' => $company_id,
+                'invoice_id' => $request->invoice_id,
+                'receipt_mode' => $request->receipt_mode,
+                'amount' => $req_amount,
+                'notes' => $request->notes,
+                'account_master_id' => $request->list['id'],
+            ]);
+
+            $dr_account_ledger = AccountLedger::where([
+                'account_master_id' => $dr_account_master->id,
+                'account' => $request->receipt_mode,
+                'company_id' => $company_id,
+            ])->firstOrFail();
+            $cr_account_ledger = AccountLedger::where([
+                'account_master_id' => $request->list['id'],
+                'account' => $request->list['name'],
+                'company_id' => $company_id,
+            ])->firstOrFail();
+
+            $cr_voucher = Voucher::create([
+                'account_master_id' => $request->list['id'],
+                'account' => $request->list['name'],
+                'credit' => $req_amount,
+                'debit' => 0,
+                'account_ledger_id' => $cr_account_ledger->id,
+                'date' => $receipt_date,
+                'related_voucher' => null,
+                'type' => 'Cr',
+                'company_id' => $company_id,
+                'voucher_type' => 'Receipt',
+                'receipt_id' => $receipt->id,
+            ]);
+            $dr_voucher = Voucher::create([
+                'account_master_id' => $dr_account_master->id,
+                'account' => $request->receipt_mode,
+                'credit' => 0,
+                'debit' => $req_amount,
+                'account_ledger_id' => $dr_account_ledger->id,
+                'date' => $receipt_date,
+                'related_voucher' => null,
+                'type' => 'Dr',
+                'company_id' => $company_id,
+                'voucher_type' => 'Receipt',
+                'receipt_id' => $receipt->id,
+            ]);
+
+            $voucher_ids = $cr_voucher->id . ', ' . $dr_voucher->id;
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+
+            foreach ($voucher as $key => $each) {
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
+                }
+            }
+        } catch (Exception $e) {
+            Log::error('Error while saving payment', [$e]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
         }
 
         return response()->json([
@@ -243,14 +252,6 @@ class ReceiptController extends Controller
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
 
-        $receipt_prefix = CompanySetting::getSetting('receipt_prefix', $request->header('company'));
-        $receipt_num_auto_generate = CompanySetting::getSetting('receipt_auto_generate', $request->header('company'));
-        $nextReceiptNumberAttribute = null;
-        $nextReceiptNumber = Receipt::getNextReceiptNumber($receipt_prefix, $request->header('company'));
-        if ($receipt_num_auto_generate == "YES") {
-            $nextReceiptNumberAttribute = $nextReceiptNumber;
-        }
-
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
@@ -271,7 +272,7 @@ class ReceiptController extends Controller
             'usersOfSundryDebitors' => $usersOfSundryDebitors,
             'account_ledger' => $account_ledger,
             'receipt_mode' => $receipt_mode,
-            'nextReceiptNumberAttribute' => $nextReceiptNumberAttribute,
+            'nextReceiptNumberAttribute' => $receipt->receipt_number,
         ]);
     }
 

@@ -304,8 +304,80 @@ class ReportController extends Controller
             ->orderBy('date')
             ->get();
 
+        $inventory_sum = 0;
+        $current_balance_cr = 0;
+        $current_balance_dr = 0;
+        $closing_balance_cr = 0;
+        $closing_balance_dr = 0;
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+            $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
+            //we show cr to dr when we display
+            $current_balance_cr += $each->debit;
+            $current_balance_dr += $each->credit;
+        }
+
+        //Calculate Opening balance
+        $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
+            ->whereDate('date', '<', $from)
+            ->orderBy('date')
+            ->get(['id', 'debit', 'credit']);
+
+        $cr_sum = 0;
+        $dr_sum = 0;
+        $master = AccountMaster::where('id', $ledger->account_master_id)->first();
+        $total_opening_balance = $master->opening_balance;
+        $opening_balance_type = $master->type;
+        foreach ($calc_opening_balance as $each) {
+            if ($each->debit) {
+                $dr_sum += $each->debit;
+            }
+            if ($each->credit) {
+                $cr_sum += $each->credit;
+            }
+        }
+        $total_sum = 0;
+        if ($cr_sum > $dr_sum) {
+            if ('Cr' === $opening_balance_type) {
+                $total_sum = $cr_sum - ($dr_sum + $total_opening_balance) ;
+            } else {
+                $total_sum = ($total_opening_balance + $cr_sum) - $dr_sum ;
+            }
+        } else {
+            if ('Dr' === $opening_balance_type) {
+                $total_sum = $dr_sum - ($cr_sum + $total_opening_balance);
+            } else {
+                $total_sum = ($dr_sum + $total_opening_balance) - $cr_sum;
+            }
+        }
+        $total_opening_balance = abs($total_sum);
+
+        //Calculate closing balance
+        if ($current_balance_cr > $current_balance_dr) {
+            $sum = 0;
+            if ('Dr' === $opening_balance_type) {
+                $sum = $current_balance_cr - ($current_balance_dr + $total_opening_balance);
+            } else {
+                $sum = ($total_opening_balance + $current_balance_cr) - $current_balance_dr;
+            }
+            $closing_balance_dr = abs($sum);
+        }
+        if ($current_balance_cr < $current_balance_dr) {
+            $sum = 0;
+            if ('Cr' === $opening_balance_type) {
+                $sum = $current_balance_dr - ($current_balance_cr + $total_opening_balance);
+            } else {
+                $sum = ($total_opening_balance + $current_balance_dr) - $current_balance_cr;
+            }
+            $closing_balance_cr = abs($sum);
+        }
+        if ($current_balance_cr === $current_balance_dr) {
+            if ('Dr' === $opening_balance_type) {
+                $closing_balance_cr = $total_opening_balance;
+            } else {
+                $closing_balance_dr = $total_opening_balance;
+            }
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
@@ -316,7 +388,7 @@ class ReportController extends Controller
         $calc_type = $ledger->type;
         $calc_total = 0;
 
-        //Calculate total balance, type, debit/credit
+        //Calculate total balance, type, debit/credit and update it in ledger
         if ($vouchers_debit_sum > $vouchers_credit_sum) {
             $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
             $calc_type = 'Dr';
@@ -349,7 +421,6 @@ class ReportController extends Controller
                 }
             }
         }
-
         $ledger->update([
             'type' => $calc_type,
             'credit' => $vouchers_credit_sum,
@@ -384,7 +455,14 @@ class ReportController extends Controller
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
-            'to_date' => $to_date
+            'to_date' => $to_date,
+            'inventory_sum' => $inventory_sum,
+            'total_opening_balance' => $total_opening_balance,
+            'opening_balance_type' => $opening_balance_type,
+            'current_balance_cr' => $current_balance_cr,
+            'current_balance_dr' => $current_balance_dr,
+            'closing_balance_cr' => $closing_balance_cr,
+            'closing_balance_dr' => $closing_balance_dr,
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');
@@ -403,7 +481,9 @@ class ReportController extends Controller
      */
     public function getLedgersInReport(Request $request)
     {
-        $ledgers = AccountLedger::with(['accountMaster'])->where('company_id', $request->header('company'))->get();
+        $ledgers = AccountLedger::with(['accountMaster'])->where('company_id', $request->header('company'))
+            ->orderBy('account', 'asc')
+            ->get();
         return response()->json([
             'ledgers' => $ledgers,
         ]);
