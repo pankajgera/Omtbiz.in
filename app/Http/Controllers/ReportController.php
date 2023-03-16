@@ -309,12 +309,10 @@ class ReportController extends Controller
         $current_balance_dr = 0;
         $closing_balance_cr = 0;
         $closing_balance_dr = 0;
-        $total_sum = 0;
         $total_opening_balance_cr = 0;
         $total_opening_balance_dr = 0;
         $master = AccountMaster::where('id', $ledger->account_master_id)->first();
         $total_opening_balance = $master->opening_balance;
-        $opening_balance_type = $master->type;
 
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
@@ -344,14 +342,13 @@ class ReportController extends Controller
 
         $opening_current_cr = 0;
         $opening_current_dr = 0;
-        if ('Cr' === $opening_balance_type) {
-            $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
-            $opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
-        } else {
-            $total_opening_balance_dr = $total_opening_balance_cr + $total_opening_balance;
-            $opening_current_dr = $total_opening_balance_dr + $current_balance_dr;
-        }
+        //Total opening balance include previous dates
+        $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
+        $total_opening_balance_dr = $total_opening_balance_cr + $total_opening_balance;
 
+        //Add opening and current balance
+        $opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
+        $opening_current_dr = $total_opening_balance_dr + $current_balance_dr;
 
         //Calculate closing balance
         if ($opening_current_cr > $opening_current_dr) {
@@ -363,11 +360,8 @@ class ReportController extends Controller
             $closing_balance_dr = abs($sum);
         }
         if ($opening_current_cr === $opening_current_dr) {
-            if ('Cr' === $opening_balance_type) {
-                $closing_balance_cr = $total_opening_balance_cr;
-            } else {
-                $closing_balance_dr = $total_opening_balance_dr;
-            }
+            $closing_balance_cr = $total_opening_balance_cr;
+            $closing_balance_dr = $total_opening_balance_dr;
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
@@ -449,7 +443,6 @@ class ReportController extends Controller
             'inventory_sum' => $inventory_sum,
             'total_opening_balance_dr' => $total_opening_balance_dr,
             'total_opening_balance_cr' => $total_opening_balance_cr,
-            'opening_balance_type' => $opening_balance_type,
             'current_balance_cr' => $current_balance_cr,
             'current_balance_dr' => $current_balance_dr,
             'closing_balance_cr' => $closing_balance_cr,
