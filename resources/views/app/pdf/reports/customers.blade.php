@@ -318,12 +318,12 @@
                         <td></td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $closing_balance_dr ?: 0.00 !!}  Dr
+                                ₹ {!! $closing_balance_cr ?: 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $closing_balance_cr ?: 0.00 !!}  Cr
+                                ₹ {!! $closing_balance_dr ?: 0.00 !!}  Cr
                             </p>
                         </td>
                     </tr>
