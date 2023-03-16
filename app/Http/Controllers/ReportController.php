@@ -312,8 +312,9 @@ class ReportController extends Controller
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
             $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
-            $current_balance_cr += $each->credit;
-            $current_balance_dr += $each->debit;
+            //we show cr to dr when we display
+            $current_balance_cr += $each->debit;
+            $current_balance_dr += $each->credit;
         }
 
         //Calculate Opening balance
@@ -325,8 +326,9 @@ class ReportController extends Controller
 
         $cr_sum = 0;
         $dr_sum = 0;
-        $total_opening_balance = $ledger->opening_balance;
-        $opening_balance_type = $ledger->type;
+        $master = AccountMaster::where('account_master_id', $ledger->account_master_id)->first();
+        $total_opening_balance = $master->opening_balance;
+        $opening_balance_type = $master->type;
         foreach ($calc_opening_balance as $each) {
             if ($each->debit) {
                 $dr_sum += $each->debit;
