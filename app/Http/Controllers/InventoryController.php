@@ -6,6 +6,7 @@ use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use App\Models\Inventory;
 use App\Models\Invoice;
+use App\Models\InvoiceItem;
 use Carbon\Carbon;
 use Exception;
 use Log;
@@ -245,12 +246,7 @@ class InventoryController extends Controller
     public function getStock(Request $request)
     {
         try {
-            $inventories = Inventory::applyFilters($request->only([
-                'name',
-                'orderByField',
-                'orderBy',
-            ]))
-                ->whereCompany($request->header('company'))
+            $inventories = Inventory::whereCompany($request->header('company'))
                 ->orderBy('id', 'desc')
                 ->paginate(100);
 
@@ -261,10 +257,28 @@ class InventoryController extends Controller
                 $each['sale_price'] = $lastest_item->sale_price;
                 $each['unit'] = $lastest_item->unit;
                 $each['worker_name'] = $lastest_item->worker_name;
+                $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
             }
 
+
+            $invoices = Invoice::whereCompany($request->header('company'))
+                ->orderBy('id', 'desc')
+                ->paginate(100);
+
+            foreach ($invoices as $each) {
+                $lastest_item = InvoiceItem::where('invoice_id', $each->id)->orderBy('id', 'desc')->first();
+                $each['name'] = $lastest_item->name;
+                $each['quantity'] = $lastest_item->quantity;
+                $each['price'] = $lastest_item->price;
+                $each['sale_price'] = $lastest_item->sale_price;
+                $each['total'] = $lastest_item->total;
+                $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
+            }
+
+
             return response()->json([
-                'stock' => $inventories,
+                'inventoryItems' => $inventories,
+                'invoiceItems' => $invoices,
                 'total' => $inventories->count(),
             ]);
         } catch (Exception $e) {
