@@ -20,7 +20,7 @@
                 :column-defs="columnDefs"
                 :row-data="rows"
                 row-data-key='voucherId'
-                :master-options="masterData"
+                :master-options="masterDataBind"
                 @cell-updated="cellUpdated"
                 @row-selected="rowSelected"
               >
@@ -105,7 +105,17 @@ export default {
           return true
         }
         return false
-    }
+    },
+    masterDataBind() {
+      var row = this.rows
+      return this.masterData.filter((i, k) => {
+        return row.map(j => {
+          if (i.name === j.account) {
+            this.masterData.splice(k, 1)
+          }
+        })
+      })
+    },
   },
   created () {
     if (this.isEdit) {
