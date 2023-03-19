@@ -8,10 +8,10 @@
         <li class="breadcrumb-item"><a href="#"> {{ $t('general.stock') }}</a></li>
       </ol>
     </div>
-    <div class="row" v-if="summaryStock.length">
+    <div class="row" v-if="inventoryItems.length">
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
-          <h5 class="p-3">Stock</h5>
+          <h5 class="p-3">Inventory Item</h5>
           <table class="p-3 m-3">
             <tr>
               <th>ID</th>
@@ -23,14 +23,41 @@
               <th>Unit</th>
               <th>Date/Time</th>
             </tr>
-            <tr v-for="(each, index) in summaryStock" :key="index">
+            <tr v-for="(each, index) in inventoryItems" :key="index">
               <td>{{each.id}}</td>
               <td>{{each.name}}</td>
               <td>{{each.worker_name}}</td>
               <td>{{each.quantity}}</td>
-              <td>{{each.price}}</td>
-              <td>{{each.sale_price}}</td>
+              <td>₹ {{each.price}}</td>
+              <td>₹ {{each.sale_price}}</td>
               <td>{{each.unit}}</td>
+              <td>{{each.date_time}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row" v-if="invoiceItems.length">
+      <div class="col col-12 col-md-12 col-lg-12">
+        <div class="card">
+          <h5 class="p-3">Invoice Item</h5>
+          <table class="p-3 m-3">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>Cost Price</th>
+              <th>Sale Price</th>
+              <th>Total</th>
+              <th>Date/Time</th>
+            </tr>
+            <tr v-for="(each, index) in invoiceItems" :key="index">
+              <td>{{each.id}}</td>
+              <td>{{each.name}}</td>
+              <td>{{each.quantity}}</td>
+              <td>₹ {{each.price}}</td>
+              <td>₹ {{each.sale_price}}</td>
+              <td>₹ {{each.total}}</td>
               <td>{{each.date_time}}</td>
             </tr>
           </table>
@@ -57,7 +84,8 @@ export default {
       isLoading: false,
       title: 'Summary Stock',
       unitOptions: ['pc', 'sqm'],
-      summaryStock: [],
+      inventoryItems: [],
+      invoiceItems: [],
     }
   },
   computed: {
@@ -71,7 +99,8 @@ export default {
     ]),
     async loadSummaryStock () {
       let response = await this.fetchSummaryStock()
-      this.summaryStock = response.data.stock.data
+      this.inventoryItems = response.data.inventoryItems.data
+      this.invoiceItems = response.data.invoiceItems.data
     }
   }
 }
