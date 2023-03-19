@@ -241,10 +241,34 @@ class InventoryController extends Controller
      * Get summary stock
      *
      * @param Request $request
-     * @return void
      */
     public function getStock(Request $request)
     {
+        try {
+            $inventories = Inventory::applyFilters($request->only([
+                'name',
+                'orderByField',
+                'orderBy',
+            ]))
+                ->whereCompany($request->header('company'))
+                ->orderBy('id', 'desc')
+                ->paginate(100);
 
+            foreach ($inventories as $each) {
+                $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
+                $each['quantity'] = $each->quantity;
+                $each['price'] = $lastest_item->price;
+                $each['sale_price'] = $lastest_item->sale_price;
+                $each['unit'] = $lastest_item->unit;
+                $each['worker_name'] = $lastest_item->worker_name;
+            }
+
+            return response()->json([
+                'stock' => $inventories,
+                'total' => $inventories->count(),
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
