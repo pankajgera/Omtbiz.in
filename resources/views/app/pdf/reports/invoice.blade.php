@@ -246,9 +246,6 @@ function numberTowords($num)
             <tr>
                 <td class="border">
                     <p class="sub-heading-text"> Invoice</p>
-                    {{-- <p class="heading-text">
-                        {{ $company->name }}
-                    </p> --}}
                 </td>
                 <td class="border">
                     <p class="total-title">Invoice Date <span
