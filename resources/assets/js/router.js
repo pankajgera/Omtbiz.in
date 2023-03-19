@@ -11,7 +11,6 @@ import store from './store/index.js'
 // Layouts
 import LayoutBasic from './views/layouts/LayoutBasic.vue'
 import LayoutLogin from './views/layouts/LayoutLogin.vue'
-import LayoutWizard from './views/layouts/LayoutWizard.vue'
 
 // Auth
 import Login from './views/auth/Login.vue'
@@ -120,8 +119,6 @@ import VouchersCreate from './views/vouchers/Create.vue'
 import VouchersBook from './views/vouchers/Book.vue'
 import VouchersDaybook from './views/vouchers/Daybook.vue'
 
-import Wizard from './views/wizard/Index.vue'
-
 // bank
 import BankIndex from './views/bank/Index.vue'
 import BankCreate from './views/bank/Create.vue'
@@ -176,20 +173,6 @@ const routes = [
         ]
     },
 
-    /*
-     |--------------------------------------------------------------------------
-     | Onboarding Routes
-     |--------------------------------------------------------------------------|
-     */
-    // {
-    //     path: '/on-boarding',
-    //     component: LayoutWizard,
-    //     children: [{
-    //         path: '/',
-    //         component: Wizard,
-    //         name: 'wizard'
-    //     }]
-    // },
     /*
      |--------------------------------------------------------------------------
      | Admin Backend Routes

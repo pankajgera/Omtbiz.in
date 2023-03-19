@@ -74,7 +74,3 @@ export const logout = ({ commit, dispatch, state }, noRequest = false) => {
         })
     })
 }
-
-export const loginOnBoardingUser = ({ commit, dispatch, state }, token) => {
-    commit(types.AUTH_SUCCESS, token)
-}
