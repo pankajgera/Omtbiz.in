@@ -1,11 +1,12 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ $t('general.stock') }}</h3>
+      <h3 class="page-title">{{ $t('general.invoice_stock') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/inventory">{{ $tc('inventory.inventory',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ $t('general.stock') }}</a></li>
+        <li class="breadcrumb-item"><router-link slot="item-title" to="/inventory/stock">{{ $tc('general.inventory_stock',2) }}</router-link></li>
+        <li class="breadcrumb-item"><a href="#"> {{ $t('general.invoice_stock') }}</a></li>
       </ol>
     </div>
     <div class="row" v-if="invoiceItems.length">
@@ -17,7 +18,6 @@
               <th>ID</th>
               <th>Item Name</th>
               <th>Quantity</th>
-              <th>Cost Price</th>
               <th>Sale Price</th>
               <th>Total</th>
               <th>Date/Time</th>
@@ -26,7 +26,6 @@
               <td><a style="color:blue" target="_blank" :href="`/invoices/${each.id}/edit`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
               <td>{{each.quantity}}</td>
-              <td>₹ {{each.price}}</td>
               <td>₹ {{each.sale_price}}</td>
               <td>₹ {{each.total}}</td>
               <td>{{each.date_time}}</td>
@@ -34,6 +33,9 @@
           </table>
         </div>
       </div>
+    </div>
+    <div v-else>
+      No invoice item found with this inventory
     </div>
   </div>
 </template>
@@ -48,24 +50,21 @@ export default {
   data () {
     return {
       isLoading: false,
-      title: 'Summary Stock',
-      unitOptions: ['pc', 'sqm'],
-      inventoryItems: [],
+      title: 'Invoice Stock',
       invoiceItems: [],
     }
   },
   computed: {
   },
   created () {
-    this.loadSummaryStock()
+    this.loadInvoiceStock()
   },
   methods: {
     ...mapActions('inventory', [
-      'fetchSummaryStock',
+      'fetchInvoiceStock',
     ]),
-    async loadSummaryStock () {
-      let response = await this.fetchSummaryStock()
-      this.inventoryItems = response.data.inventoryItems
+    async loadInvoiceStock () {
+      let response = await this.fetchInvoiceStock(this.$route.params.id)
       this.invoiceItems = response.data.invoiceItems
     }
   }
