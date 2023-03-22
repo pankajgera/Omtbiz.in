@@ -85,6 +85,7 @@
         "to_display": "To Display",
         "increase-price": "Increase Price",
         "end_of_list": "End of list",
+        "summary_stock": "Summary Stock",
         "inventory_stock": "Inventory Stock",
         "invoice_stock": "Invoice Stock"
     },
