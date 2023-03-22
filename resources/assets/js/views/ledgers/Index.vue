@@ -42,7 +42,7 @@
             right-icon
             @click="toggleInventoryStock"
           >
-            {{ $t('general.stock') }}
+            {{ $t('general.summary_stock') }}
           </base-button>
         </div>
         <div class="col-xs-2 mr-4">
