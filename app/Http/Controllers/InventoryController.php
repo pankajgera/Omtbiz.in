@@ -248,7 +248,7 @@ class InventoryController extends Controller
         try {
             $inventories = Inventory::whereCompany($request->header('company'))
                 ->orderBy('id', 'desc')
-                ->paginate(100);
+                ->get();
 
             foreach ($inventories as $each) {
                 $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
@@ -263,7 +263,7 @@ class InventoryController extends Controller
 
             $invoices = Invoice::whereCompany($request->header('company'))
                 ->orderBy('id', 'desc')
-                ->paginate(100);
+                ->get();
 
             foreach ($invoices as $each) {
                 $lastest_item = InvoiceItem::where('invoice_id', $each->id)->orderBy('id', 'desc')->first();
