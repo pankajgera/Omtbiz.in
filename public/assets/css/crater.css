@@ -13357,18 +13357,18 @@ fieldset[disabled] .multiselect {
 .multiselect--disabled .multiselect__current,
 .multiselect--disabled .multiselect__select {
   background: #f9fbff;
-  color: #B9C1D1;
+  color: #000;
 }
 
 .multiselect--disabled .multiselect__tags {
   background: #f9fbff;
-  color: #B9C1D1;
+  color: #000;
 }
 
 .multiselect--disabled .multiselect__input,
 .multiselect--disabled .multiselect__single {
   background: #f9fbff;
-  color: #B9C1D1;
+  color: #000;
 }
 
 .multiselect__option--disabled {
