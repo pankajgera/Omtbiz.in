@@ -8,29 +8,27 @@
         <li class="breadcrumb-item"><a href="#"> {{ $t('general.stock') }}</a></li>
       </ol>
     </div>
-    <div class="row" v-if="inventoryItems.length">
+    <div class="row" v-if="invoiceItems.length">
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
-          <h5 class="p-3">Inventory Item</h5>
+          <h5 class="p-3">Invoice Item</h5>
           <table class="p-3 m-3">
             <tr>
               <th>ID</th>
-              <th>Name</th>
-              <th>Worker Name</th>
+              <th>Item Name</th>
               <th>Quantity</th>
               <th>Cost Price</th>
               <th>Sale Price</th>
-              <th>Unit</th>
+              <th>Total</th>
               <th>Date/Time</th>
             </tr>
-            <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" target="_blank" :href="`/inventory/${each.id}/edit`">{{each.id}}</a></td>
+            <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
+              <td><a style="color:blue" target="_blank" :href="`/invoices/${each.id}/edit`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
-              <td>{{each.worker_name ? each.worker_name : '-'}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.price}}</td>
               <td>₹ {{each.sale_price}}</td>
-              <td>{{each.unit}}</td>
+              <td>₹ {{each.total}}</td>
               <td>{{each.date_time}}</td>
             </tr>
           </table>

@@ -36,6 +36,7 @@
                 :searchable="true"
                 :show-labels="false"
                 :placeholder="$t('payments.select_a_list')"
+                :disabled="isEdit"
                 label="name"
                 track-by="id"
               />
@@ -69,6 +70,7 @@
                   :show-labels="false"
                   :class="{'invalid' : $v.formData.payment_mode.$error}"
                   :placeholder="$t('payments.select_payment_mode')"
+                  :disabled="isEdit"
                   label="name"
                   track-by="id"
                 />
