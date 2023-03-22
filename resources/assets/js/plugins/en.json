@@ -85,7 +85,8 @@
         "to_display": "To Display",
         "increase-price": "Increase Price",
         "end_of_list": "End of list",
-        "stock": "Summary Stock"
+        "inventory_stock": "Inventory Stock",
+        "invoice_stock": "Invoice Stock"
     },
     "dashboard": {
         "select_year": "Select year",
