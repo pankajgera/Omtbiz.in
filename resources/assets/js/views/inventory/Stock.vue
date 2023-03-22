@@ -44,7 +44,7 @@
           <table class="p-3 m-3">
             <tr>
               <th>ID</th>
-              <th>Name</th>
+              <th>Item Name</th>
               <th>Quantity</th>
               <th>Cost Price</th>
               <th>Sale Price</th>

@@ -296,7 +296,7 @@ class PaymentController extends Controller
         $payment->payment_status = $request->payment_status;
         $payment->user_id = $request->user_id;
         $payment->invoice_id = $request->invoice_id;
-        $payment->payment_mode = $request->party_list['name'];
+        $payment->payment_mode = $request->payment_mode['name'];
         $payment->amount = $request->amount;
         $payment->notes = $request->notes;
         $payment->save();
