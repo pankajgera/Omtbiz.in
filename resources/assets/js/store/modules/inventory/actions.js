@@ -34,9 +34,19 @@ export const fetchInventory = ({ commit, dispatch }, id) => {
     })
 }
 
-export const fetchSummaryStock = ({ commit, dispatch }, id) => {
+export const fetchInventoryStock = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
       window.axios.get(`/api/inventory/stock`).then((response) => {
+          resolve(response)
+      }).catch((err) => {
+          reject(err)
+      })
+  })
+}
+
+export const fetchInvoiceStock = ({ commit, dispatch }, id) => {
+  return new Promise((resolve, reject) => {
+      window.axios.get(`/api/inventory/${id}/stock`).then((response) => {
           resolve(response)
       }).catch((err) => {
           reject(err)

@@ -40,7 +40,7 @@
             color="theme"
             size="large"
             right-icon
-            @click="toggleSummaryStock"
+            @click="toggleInventoryStock"
           >
             {{ $t('general.stock') }}
           </base-button>
@@ -401,7 +401,7 @@ export default {
     toggleDayBook() {
       window.location = '/vouchers/daybook'
     },
-    toggleSummaryStock() {
+    toggleInventoryStock() {
       window.location = '/inventory/stock'
     },
     async removeLedgers (id) {

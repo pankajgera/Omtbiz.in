@@ -239,11 +239,11 @@ class InventoryController extends Controller
     }
 
     /**
-     * Get summary stock
+     * Get inventory stock
      *
      * @param Request $request
      */
-    public function getStock(Request $request)
+    public function getInventoryStock(Request $request)
     {
         try {
             $inventories = Inventory::whereCompany($request->header('company'))
@@ -258,28 +258,41 @@ class InventoryController extends Controller
                 $each['unit'] = $lastest_item->unit;
                 $each['worker_name'] = $lastest_item->worker_name;
                 $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
+
+                $invoice_items_count = InvoiceItem::whereCompany($request->header('company'))
+                    ->where('inventory_id', $each->id)
+                    ->orderBy('id', 'desc')->count();
+                $each['item_count'] = $invoice_items_count;
             }
-
-
-            $invoices = Invoice::whereCompany($request->header('company'))
-                ->orderBy('id', 'desc')
-                ->get();
-
-            foreach ($invoices as $each) {
-                $lastest_item = InvoiceItem::where('invoice_id', $each->id)->orderBy('id', 'desc')->first();
-                $each['name'] = $lastest_item->name;
-                $each['quantity'] = $lastest_item->quantity;
-                $each['price'] = $lastest_item->price;
-                $each['sale_price'] = $lastest_item->sale_price;
-                $each['total'] = $lastest_item->total;
-                $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
-            }
-
 
             return response()->json([
                 'inventoryItems' => $inventories,
-                'invoiceItems' => $invoices,
                 'total' => $inventories->count(),
+            ]);
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    /**
+     * Get invoice stock
+     *
+     * @param Request $request
+     */
+    public function getInvoiceStock(Request $request, $inventory_id)
+    {
+        try {
+            $invoice_items = InvoiceItem::whereCompany($request->header('company'))
+                    ->where('inventory_id', $inventory_id)
+                    ->orderBy('id', 'desc')->get();
+
+            foreach ($invoice_items as $each) {
+                $each['date_time'] = Carbon::parse($each->created_at)->format('d-m-Y');
+            }
+
+            return response()->json([
+                'invoiceItems' => $invoice_items,
+                'total' => $invoice_items->count(),
             ]);
         } catch (Exception $e) {
             return $e->getMessage();

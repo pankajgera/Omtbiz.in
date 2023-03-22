@@ -1,11 +1,11 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ $t('general.stock') }}</h3>
+      <h3 class="page-title">{{ $t('general.inventory_stock') }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/inventory">{{ $tc('inventory.inventory',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ $t('general.stock') }}</a></li>
+        <li class="breadcrumb-item"><a href="#"> {{ $t('general.inventory_stock') }}</a></li>
       </ol>
     </div>
     <div class="row" v-if="inventoryItems.length">
@@ -15,22 +15,22 @@
           <table class="p-3 m-3">
             <tr>
               <th>ID</th>
-              <th>Name</th>
+              <th>Item</th>
               <th>Worker Name</th>
               <th>Quantity</th>
-              <th>Cost Price</th>
               <th>Sale Price</th>
               <th>Unit</th>
+              <th>Item Used</th>
               <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" target="_blank" :href="`/inventory/${each.id}/edit`">{{each.id}}</a></td>
+              <td><a style="color:blue" target="_blank" :href="`/inventory/${each.id}/stock`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
               <td>{{each.worker_name ? each.worker_name : '-'}}</td>
               <td>{{each.quantity}}</td>
-              <td>₹ {{each.price}}</td>
               <td>₹ {{each.sale_price}}</td>
               <td>{{each.unit}}</td>
+              <td>{{each.item_count}}</td>
               <td>{{each.date_time}}</td>
             </tr>
           </table>
@@ -50,25 +50,22 @@ export default {
   data () {
     return {
       isLoading: false,
-      title: 'Summary Stock',
-      unitOptions: ['pc', 'sqm'],
+      title: 'Inventory Stock',
       inventoryItems: [],
-      invoiceItems: [],
     }
   },
   computed: {
   },
   created () {
-    this.loadSummaryStock()
+    this.loadInventoryStock()
   },
   methods: {
     ...mapActions('inventory', [
-      'fetchSummaryStock',
+      'fetchInventoryStock',
     ]),
-    async loadSummaryStock () {
-      let response = await this.fetchSummaryStock()
+    async loadInventoryStock () {
+      let response = await this.fetchInventoryStock()
       this.inventoryItems = response.data.inventoryItems
-      this.invoiceItems = response.data.invoiceItems
     }
   }
 }
