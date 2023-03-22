@@ -17,6 +17,7 @@
             <tr>
               <th>ID</th>
               <th>Item Name</th>
+              <th>Party Name</th>
               <th>Quantity</th>
               <th>Sale Price</th>
               <th>Total</th>
@@ -25,6 +26,7 @@
             <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
               <td><a style="color:blue" target="_blank" :href="`/invoices/${each.id}/edit`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
+              <td>{{each.party_name}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.sale_price}}</td>
               <td>₹ {{each.total}}</td>

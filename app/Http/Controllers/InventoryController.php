@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountMaster;
 use App\Models\InventoryItem;
 use Illuminate\Http\Request;
 use App\Models\Inventory;
@@ -287,6 +288,8 @@ class InventoryController extends Controller
                     ->orderBy('id', 'desc')->get();
 
             foreach ($invoice_items as $each) {
+                $party = Invoice::where('id', $each->invoice_id)->first()->account_master_id;
+                $each['party_name'] = AccountMaster::where('id', $party)->first()->name;
                 $each['date_time'] = Carbon::parse($each->created_at)->format('d-m-Y');
             }
 
