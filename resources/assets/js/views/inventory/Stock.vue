@@ -23,10 +23,10 @@
               <th>Unit</th>
               <th>Date/Time</th>
             </tr>
-            <tr v-for="(each, index) in inventoryItems" :key="index">
-              <td>{{each.id}}</td>
+            <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
+              <td><a style="color:blue" target="_blank" :href="`/inventory/${each.id}/edit`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
-              <td>{{each.worker_name}}</td>
+              <td>{{each.worker_name ? each.worker_name : '-'}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.price}}</td>
               <td>₹ {{each.sale_price}}</td>
@@ -51,8 +51,8 @@
               <th>Total</th>
               <th>Date/Time</th>
             </tr>
-            <tr v-for="(each, index) in invoiceItems" :key="index">
-              <td>{{each.id}}</td>
+            <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
+              <td><a style="color:blue" target="_blank" :href="`/invoices/${each.id}/edit`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.price}}</td>
@@ -99,8 +99,8 @@ export default {
     ]),
     async loadSummaryStock () {
       let response = await this.fetchSummaryStock()
-      this.inventoryItems = response.data.inventoryItems.data
-      this.invoiceItems = response.data.invoiceItems.data
+      this.inventoryItems = response.data.inventoryItems
+      this.invoiceItems = response.data.invoiceItems
     }
   }
 }
