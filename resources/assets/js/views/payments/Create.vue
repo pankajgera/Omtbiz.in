@@ -325,10 +325,10 @@ export default {
         this.paymentPrefix = response.data.payment_prefix
         //this.paymentNumAttribute = response.data.nextPaymentNumber
         this.partyList = response.data.usersOfSundryCreditor
-        this.formData.party_list = this.partyList.find(i => i.account_master_id === response.data.account_master_id)
+        this.formData.party_list = this.partyList.find(i => i.id === this.formData.account_master_id)
         this.accountLedger = response.data.account_ledger
         this.paymentMethod = response.data.payment_method
-        this.formData.payment_mode = this.paymentMethod
+        this.formData.payment_mode = this.paymentMethod.find(i => i.name === this.formData.payment_mode)
         if (response.data.payment.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
