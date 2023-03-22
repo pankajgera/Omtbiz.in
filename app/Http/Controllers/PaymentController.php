@@ -88,7 +88,7 @@ class PaymentController extends Controller
             array_push($account_ledger, $obj);
         }
 
-        $party_list = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+        $payment_method = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
 
         return response()->json([
             'nextPaymentNumberAttribute' => $nextPaymentNumberAttribute,
@@ -96,7 +96,7 @@ class PaymentController extends Controller
             'payment_prefix' => $payment_prefix,
             'usersOfSundryCreditor' => $usersOfSundryCreditor,
             'account_ledger' => $account_ledger,
-            'party_list' => $party_list,
+            'payment_method' => $payment_method,
         ]);
     }
 
@@ -119,7 +119,7 @@ class PaymentController extends Controller
 
         $voucher_ids = [];
         $company_id = (int) $request->header('company');
-        $cr_account_master = AccountMaster::where('name', $request->payment_mode['name'])->first();
+        $dr_account_master = AccountMaster::where('name', $request->party_list['name'])->first();
 
         //Not passing payment number from front end, so find next number from backend
         $payment_prefix = CompanySetting::getSetting('payment_prefix', $company_id);
@@ -138,7 +138,7 @@ class PaymentController extends Controller
                 'payment_mode' => $request->payment_mode['name'],
                 'amount' => $req_amount,
                 'notes' => $request->notes,
-                'account_master_id' => $cr_account_master->id,
+                'account_master_id' => $dr_account_master->id,
             ]);
 
             $dr_account_ledger = AccountLedger::where([
@@ -248,7 +248,7 @@ class PaymentController extends Controller
             array_push($account_ledger, $obj);
         }
 
-        $party_list = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+        $payment_method = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
 
         return response()->json([
             'nextPaymentNumber' => $payment->getPaymentNumAttribute(),
@@ -257,7 +257,7 @@ class PaymentController extends Controller
             'payment' => $payment,
             'invoices' => $invoices,
             'account_ledger' => $account_ledger,
-            'party_list' => $party_list,
+            'payment_method' => $payment_method,
         ]);
     }
 
@@ -300,6 +300,26 @@ class PaymentController extends Controller
         $payment->amount = $request->amount;
         $payment->notes = $request->notes;
         $payment->save();
+
+
+        //It will add voucher for sales from invoice
+        $dr_voucher = Voucher::where([
+            'payment_id' => $payment->id,
+            'type' => 'Dr',
+        ])->first();
+        $dr_voucher->update([
+            'debit' => $request->amount,
+            'date' => $payment_date,
+        ]);
+
+        $cr_voucher = Voucher::where([
+            'payment_id' => $payment->id,
+            'type' => 'Cr',
+        ])->first();
+        $cr_voucher->update([
+            'credit' => $request->amount,
+            'date' => $payment_date,
+        ]);
 
         return response()->json([
             'payment' => $payment,

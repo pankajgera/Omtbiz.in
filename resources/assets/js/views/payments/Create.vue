@@ -64,7 +64,7 @@
                 <label class="form-label">{{ $t('payments.payment_mode') }}</label><span class="text-danger"> *</span>
                 <base-select
                   v-model="paymentModeBind"
-                  :options="sundryCreditorList"
+                  :options="paymentMethod"
                   :searchable="true"
                   :show-labels="false"
                   :class="{'invalid' : $v.formData.payment_mode.$error}"
@@ -180,10 +180,10 @@ export default {
       isSettingInitialData: true,
       //paymentNumAttribute: null,
       paymentPrefix: '',
-      sundryCreditorList: [],
       closingBalanceType: '',
       accountLedger: [],
       partyList: [],
+      paymentMethod: [],
     }
   },
   validations () {
@@ -253,15 +253,15 @@ export default {
       return false
     },
     openingBalance() {
-      if (this.formData.payment_mode && this.formData.payment_mode.id) {
-        let ledger = this.accountLedger.find(each => each.id === this.formData.payment_mode.id);
+      if (this.formData.master && this.formData.master.id) {
+        let ledger = this.accountLedger.find(each => each.id === this.formData.master.id);
         return parseFloat(ledger.balance).toFixed(2);
       }
       return 0
     },
     openingBalanceType() {
-      if (this.formData.payment_mode && this.formData.payment_mode.id) {
-        let typeObj = this.accountLedger.find(each => each.id === this.formData.payment_mode.id);
+      if (this.formData.master && this.formData.master.id) {
+        let typeObj = this.accountLedger.find(each => each.id === this.formData.master.id);
         return typeObj.type;
       }
       return 'Cr';
@@ -324,24 +324,24 @@ export default {
         this.formData.amount = parseFloat(response.data.payment.amount)
         this.paymentPrefix = response.data.payment_prefix
         //this.paymentNumAttribute = response.data.nextPaymentNumber
-        this.sundryCreditorList = response.data.usersOfSundryCreditor
-        this.accountLedger = response.data.account_ledger
-        this.formData.payment_mode = response.data.payment.master
-        this.partyList = response.data.party_list
+        this.partyList = response.data.usersOfSundryCreditor
         this.formData.party_list = this.partyList.find(i => i.account_master_id === response.data.account_master_id)
+        this.accountLedger = response.data.account_ledger
+        this.paymentMethod = response.data.payment_method
+        this.formData.payment_mode = this.paymentMethod
         if (response.data.payment.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
         }
       } else {
         let response = await this.fetchCreatePayment()
-        this.sundryCreditorList = response.data.usersOfSundryCreditor
+        this.partyList = response.data.usersOfSundryCreditor
         this.accountLedger = response.data.account_ledger
         //this.customerList = response.data.customers
         //this.paymentNumAttribute = response.data.nextPaymentNumberAttribute
         this.paymentPrefix = response.data.payment_prefix
         this.formData.payment_date = moment(new Date()).toString()
-        this.partyList = response.data.party_list
+        this.paymentMethod = response.data.payment_method
       }
       return true
     },
