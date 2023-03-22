@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.261.14",
+            "version": "3.261.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "121638bb7e62ee2f71838c52e79884f4301a9400"
+                "reference": "ffb62955c0daa8a11065149f5cac529209c7f5e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/121638bb7e62ee2f71838c52e79884f4301a9400",
-                "reference": "121638bb7e62ee2f71838c52e79884f4301a9400",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ffb62955c0daa8a11065149f5cac529209c7f5e9",
+                "reference": "ffb62955c0daa8a11065149f5cac529209c7f5e9",
                 "shasum": ""
             },
             "require": {
@@ -146,9 +146,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.14"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.261.16"
             },
-            "time": "2023-03-17T18:21:00+00:00"
+            "time": "2023-03-21T18:20:51+00:00"
         },
         {
             "name": "aws/aws-sdk-php-laravel",
@@ -5237,16 +5237,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.11.12",
+            "version": "v0.11.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "52cb7c47d403c31c0adc9bf7710fc355f93c20f7"
+                "reference": "722317c9f5627e588788e340f29b923e58f92f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/52cb7c47d403c31c0adc9bf7710fc355f93c20f7",
-                "reference": "52cb7c47d403c31c0adc9bf7710fc355f93c20f7",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/722317c9f5627e588788e340f29b923e58f92f54",
+                "reference": "722317c9f5627e588788e340f29b923e58f92f54",
                 "shasum": ""
             },
             "require": {
@@ -5307,9 +5307,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.11.12"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.11.13"
             },
-            "time": "2023-01-29T21:24:40+00:00"
+            "time": "2023-03-21T14:22:44+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -5824,16 +5824,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "5.9.1",
+            "version": "5.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "a88ed98c8937442737e0c50163682e832d608f13"
+                "reference": "5d0a703ece4636e6bde98eb85ac72b40aa6e42bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/a88ed98c8937442737e0c50163682e832d608f13",
-                "reference": "a88ed98c8937442737e0c50163682e832d608f13",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/5d0a703ece4636e6bde98eb85ac72b40aa6e42bc",
+                "reference": "5d0a703ece4636e6bde98eb85ac72b40aa6e42bc",
                 "shasum": ""
             },
             "require": {
@@ -5894,7 +5894,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-permission/issues",
-                "source": "https://github.com/spatie/laravel-permission/tree/5.9.1"
+                "source": "https://github.com/spatie/laravel-permission/tree/5.10.0"
             },
             "funding": [
                 {
@@ -5902,7 +5902,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-06T21:37:02+00:00"
+            "time": "2023-03-22T02:57:36+00:00"
         },
         {
             "name": "spatie/temporary-directory",
