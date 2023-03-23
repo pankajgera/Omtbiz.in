@@ -283,6 +283,23 @@ class InventoryController extends Controller
     public function getInvoiceStock(Request $request, $inventory_id)
     {
         try {
+            $inventoryItems = Inventory::where('id', $inventory_id)->get();
+
+            foreach ($inventoryItems as $each) {
+                $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
+                $each['quantity'] = $each->quantity;
+                $each['price'] = $lastest_item->price;
+                $each['sale_price'] = $lastest_item->sale_price;
+                $each['unit'] = $lastest_item->unit;
+                $each['worker_name'] = $lastest_item->worker_name;
+                $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
+
+                $invoice_items_count = InvoiceItem::whereCompany($request->header('company'))
+                    ->where('inventory_id', $each->id)
+                    ->orderBy('id', 'desc')->count();
+                $each['item_count'] = $invoice_items_count;
+            }
+
             $invoice_items = InvoiceItem::whereCompany($request->header('company'))
                     ->where('inventory_id', $inventory_id)
                     ->orderBy('id', 'desc')->get();
@@ -294,6 +311,7 @@ class InventoryController extends Controller
             }
 
             return response()->json([
+                'inventoryItems' => $inventoryItems,
                 'invoiceItems' => $invoice_items,
                 'total' => $invoice_items->count(),
             ]);
