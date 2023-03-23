@@ -271,12 +271,12 @@
                         <td></td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $total_opening_balance_cr ?: 0.00 !!}  Dr
+                                ₹ {!! $total_opening_balance_dr ?: 0.00 !!}  Dr
                             </p>
                         </td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
-                                ₹ {!! $total_opening_balance_dr ?: 0.00 !!}  Cr
+                                ₹ {!! $total_opening_balance_cr ?: 0.00 !!}  Cr
                             </p>
                         </td>
                     </tr>

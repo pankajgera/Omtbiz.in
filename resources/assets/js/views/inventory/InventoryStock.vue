@@ -24,7 +24,7 @@
               <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" target="_blank" :href="`/inventory/${each.id}/stock`">{{each.id}}</a></td>
+              <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
               <td>{{each.worker_name ? each.worker_name : '-'}}</td>
               <td>{{each.quantity}}</td>
