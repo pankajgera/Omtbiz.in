@@ -288,11 +288,21 @@ export default {
         return this.inventory.quantity
       },
       set: function (newValue) {
-        let maxQuantityAvailable = parseInt(
+      //  console.log(newValue);
+        let maxQuantityAvailable = 0;
+        if(this.inventoryList.length) {
+          let quantity = parseInt(
           this.inventoryList.find(i =>
             i.name === this.inventory.name &&
             parseInt(i.price) === parseInt(this.inventory.price)
-          ).quantity);
+          ));
+          if(quantity) {
+            maxQuantityAvailable = quantity.quantity;
+          } else {
+            maxQuantityAvailable = newValue;
+          }
+
+        }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
             title: this.$t('invoices.out_of_stock'),
