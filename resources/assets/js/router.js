@@ -117,6 +117,7 @@ import LedgersDisplay from './views/ledgers/Display.vue'
 import VouchersIndex from './views/vouchers/Index.vue'
 import VouchersCreate from './views/vouchers/Create.vue'
 import VouchersBook from './views/vouchers/Book.vue'
+import VouchersDaysheet from './views/vouchers/Daysheet.vue'
 import VouchersDaybook from './views/vouchers/Daybook.vue'
 
 // bank
@@ -294,6 +295,12 @@ const routes = [
               path: 'vouchers/daybook',
               name: 'vouchers.daybook',
               component: VouchersDaybook,
+              meta: ['admin', 'accountant']
+            },
+            {
+              path: 'vouchers/daysheet',
+              name: 'vouchers.daysheet',
+              component: VouchersDaysheet,
               meta: ['admin', 'accountant']
             },
 
