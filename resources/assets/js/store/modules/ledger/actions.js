@@ -31,6 +31,15 @@ export const fetchLedgerDisplay = ({ commit, dispatch }, id) => {
     })
   })
 }
+export const fetchLedgerDaysheet = ({ commit, dispatch }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/ledgers/${id}/daysheet`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
 
 export const addLedger = ({ commit, dispatch, state }, data) => {
   return new Promise((resolve, reject) => {
