@@ -362,6 +362,10 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountLedgersController@display'
     ]);
 
+    Route::get('/ledgers/{id}/daysheet', [
+        'as' => 'ledgers.daysheet',
+        'uses' => 'AccountLedgersController@daysheet'
+    ]);
 
     Route::resource('ledgers', 'AccountLedgersController');
 

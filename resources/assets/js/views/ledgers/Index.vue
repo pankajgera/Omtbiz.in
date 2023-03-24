@@ -23,6 +23,17 @@
         </li>
       </ol>
       <div class="page-actions row">
+       <div class="col-xs-2 mr-2">
+          <base-button
+            :outline="true"
+            color="theme"
+            size="large"
+            right-icon
+            @click="toggleDaySheet"
+          >
+            {{ $t('general.daysheet') }}
+          </base-button>
+        </div>
         <div class="col-xs-2 mr-2">
           <base-button
             :outline="true"
@@ -400,6 +411,9 @@ export default {
     },
     toggleDayBook() {
       window.location = '/vouchers/daybook'
+    },
+    toggleDaySheet() {
+      window.location = '/vouchers/daysheet'
     },
     toggleInventoryStock() {
       window.location = '/inventory/stock'

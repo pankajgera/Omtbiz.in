@@ -30,6 +30,7 @@
         "download_pdf": "Download PDF",
         "save": "Save",
         "daybook": "Day Book",
+        "daysheet": "Day Sheet",
         "dispatch": "Dispatch",
         "undispatch": "Undispatch",
         "cancel": "Cancel",
@@ -297,6 +298,7 @@
     },
     "daybook": {
         "title": "Day Book",
+        "title-2": "Day Sheet",
         "date": "Date",
         "daybooks_list": "Day Books List",
         "name": "Name",
@@ -337,6 +339,11 @@
         "updated_message": "Day Book updated successfully",
         "deleted_message": "Day Book deleted successfully | Day Books deleted successfully",
         "inventory_item_quantity": "Item Quantity"
+    },
+    "daysheet": {
+       "lot" : "Lot",
+       "reference-number" : "Reference Number",
+       "party-name" : "Party Name"
     },
     "vouchers": {
         "title": "Vouchers",
