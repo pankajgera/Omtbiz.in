@@ -12,26 +12,22 @@
     <div class="row" v-if="inventoryItems.length">
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
-          <h5 class="p-3">Inventory Item</h5>
+          <h5 class="p-3">Inwards</h5>
           <table class="p-3 m-3">
             <tr>
-              <th>ID</th>
               <th>Item</th>
               <th>Worker Name</th>
               <th>Quantity</th>
               <th>Sale Price</th>
               <th>Unit</th>
-              <th>Item Used</th>
               <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.id}}</a></td>
               <td>{{each.name}}</td>
               <td>{{each.worker_name ? each.worker_name : '-'}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.sale_price}}</td>
               <td>{{each.unit}}</td>
-              <td>{{each.item_count}}</td>
               <td>{{each.date_time}}</td>
             </tr>
           </table>
@@ -41,7 +37,7 @@
     <div class="row">
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
-          <h5 class="p-3">Invoice Item</h5>
+          <h5 class="p-3">Outwards</h5>
           <table class="p-3 m-3" v-if="invoiceItems.length">
             <tr>
               <th>ID</th>
@@ -53,7 +49,7 @@
               <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" :href="`/invoices/${each.id}/edit`">{{each.id}}</a></td>
+              <td><a style="color:blue" :href="`/invoices/${each.invoice_id}/edit`">{{each.invoice_id}}</a></td>
               <td>{{each.name}}</td>
               <td>{{each.party_name}}</td>
               <td>{{each.quantity}}</td>
