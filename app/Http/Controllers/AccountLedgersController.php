@@ -285,7 +285,7 @@ class AccountLedgersController extends Controller
 
         $ledgers = [];
         foreach ($all_voucher_ids as $each) {
-            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)->count();
+            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)->where('date', Carbon::now()->format('Y-m-d'))->count();
             $each['lot'] = $lot;
             $each['party'] = $each->account;
             $each['reference_number'] = Invoice::where('id', $each->invoice_id)->first()->reference_number;
