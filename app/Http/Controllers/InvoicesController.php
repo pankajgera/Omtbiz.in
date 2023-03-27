@@ -605,7 +605,7 @@ class InvoicesController extends Controller
             ]);
         }
 
-        $vouchers = Voucher::where('invoice_id', $id)->get();
+        $vouchers = Voucher::where('invoice_id', $invoice->id)->get();
         foreach ($vouchers as $each) {
             $each->delete();
         }
@@ -642,24 +642,24 @@ class InvoicesController extends Controller
                     'error' => 'payment_attached',
                 ]);
             }
+
+            $vouchers = Voucher::where('invoice_id', $id)->get();
+            foreach ($vouchers as $each) {
+                $each->delete();
+            }
+
+            $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
+            foreach ($invoice_item as $each) {
+                //'Add' deleting item quantity back to inventory
+                $find_invent = Inventory::where('id', $each->inventory_id)->first();
+                $find_invent->update([
+                    'quantity' => $find_invent->quantity + $each->quantity,
+                ]);
+            }
+
+            $invoice = Invoice::destroy($id);
+
         }
-
-        $vouchers = Voucher::where('invoice_id', $id)->get();
-        foreach ($vouchers as $each) {
-            $each->delete();
-        }
-
-        $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
-        foreach ($invoice_item as $each) {
-            //'Add' deleting item quantity back to inventory
-            $find_invent = Inventory::where('id', $each->inventory_id)->first();
-            $find_invent->update([
-                'quantity' => $find_invent->quantity + $each->quantity,
-            ]);
-        }
-
-        $invoice = Invoice::destroy($request->id);
-
         return response()->json([
             'success' => true
         ]);
