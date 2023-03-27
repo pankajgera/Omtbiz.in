@@ -355,7 +355,7 @@ class ReportController extends Controller
         } else if ($total_opening_balance_cr < $total_opening_balance_dr) {
             $total_opening_balance_dr = abs($total_opening_balance_cr - $total_opening_balance_dr);
             $total_opening_balance_cr = 0;
-        } else ($total_opening_balance_cr === $total_opening_balance_dr) {
+        } else if ($total_opening_balance_cr === $total_opening_balance_dr) {
             $total_opening_balance_cr = 0;
             $total_opening_balance_dr = 0;
         }
@@ -373,7 +373,7 @@ class ReportController extends Controller
         } else if ($sum_opening_current_cr < $sum_opening_current_dr) {
             $sum = $sum_opening_current_dr - $sum_opening_current_cr;
             $closing_balance_dr = abs($sum);
-        } else ($sum_opening_current_cr === $sum_opening_current_dr) {
+        } else if ($sum_opening_current_cr === $sum_opening_current_dr) {
             $closing_balance_cr = $total_opening_balance_cr;
             $closing_balance_dr = $total_opening_balance_dr;
         }
