@@ -55,6 +55,7 @@ class PaymentController extends Controller
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'payments' => $payments,
+            'total' => Payment::count(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
