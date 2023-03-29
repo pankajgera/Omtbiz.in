@@ -380,7 +380,7 @@ export default {
           }
         }
       }).catch(err => {
-        window.toastr['error'](err.data.message)
+        window.toastr['error'](err.response.data.message)
       })
     },
     openIncreasePriceModal () {
@@ -407,7 +407,8 @@ export default {
           }
         }
       }).catch((err) => {
-        window.toastr['error'](err.data.message)
+        console.log(err)
+        window.toastr['error'](err.response.data.message)
       })
     },
     setIndex(index) {
