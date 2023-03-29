@@ -357,6 +357,11 @@ class PaymentController extends Controller
             $invoice->save();
         }
 
+        $vouchers = Voucher::where('payment_id', $id)->get();
+        foreach($vouchers as $each) {
+            $each->delete();
+        }
+
         $payment->delete();
 
         return response()->json([
@@ -375,6 +380,11 @@ class PaymentController extends Controller
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();
+            }
+
+            $vouchers = Voucher::where('payment_id', $id)->get();
+            foreach($vouchers as $each) {
+                $each->delete();
             }
 
             $payment->delete();
