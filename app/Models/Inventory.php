@@ -91,7 +91,7 @@ class Inventory extends Model
             $inventory->delete();
             return true;
         }
-        throw new Exception('Inventory used in invoice, cannot delete it.');
+        throw new Exception('Inventory used in the invoice, cannot delete it.');
     }
 
     public function updateInventoryQuantity($new_item_quantity)
