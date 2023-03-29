@@ -373,16 +373,14 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteInventory(this.id)
-          if (res.data.success) {
+          let resp = await this.deleteInventory(this.id)
+          if (resp.data.success) {
             window.toastr['success'](this.$tc('inventory.deleted_message', 1))
             this.$refs.table.refresh()
-            return true
           }
-
-          window.toastr['error'](res.data.message)
-          return true
         }
+      }).catch(err => {
+        window.toastr['error'](err.data.message)
       })
     },
     openIncreasePriceModal () {
@@ -402,14 +400,14 @@ export default {
         dangerMode: true
       }).then(async (willDelete) => {
         if (willDelete) {
-          let res = await this.deleteMultipleInventory()
-          if (res.data.success) {
+          let resp = await this.deleteMultipleInventory()
+          if (resp.data.success) {
             window.toastr['success'](this.$tc('inventory.deleted_message', 2))
             this.$refs.table.refresh()
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
           }
         }
+      }).catch((err) => {
+        window.toastr['error'](err.data.message)
       })
     },
     setIndex(index) {

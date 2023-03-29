@@ -368,14 +368,14 @@ class ReportController extends Controller
 
         // --- 3. Calculate closing balance
         if ($sum_opening_current_cr > $sum_opening_current_dr) {
-            $sum = $sum_opening_current_cr - $sum_opening_current_dr;
-            $closing_balance_cr = abs($sum);
+            $closing_balance_cr = abs($sum_opening_current_cr - $sum_opening_current_dr);
+            $closing_balance_dr = 0;
         } else if ($sum_opening_current_cr < $sum_opening_current_dr) {
-            $sum = $sum_opening_current_dr - $sum_opening_current_cr;
-            $closing_balance_dr = abs($sum);
+            $closing_balance_dr = abs($sum_opening_current_dr - $sum_opening_current_cr);
+            $closing_balance_cr = 0;
         } else {
-            $closing_balance_cr = $total_opening_balance_cr;
-            $closing_balance_dr = $total_opening_balance_dr;
+            $closing_balance_cr = 0;
+            $closing_balance_dr = 0;
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');
