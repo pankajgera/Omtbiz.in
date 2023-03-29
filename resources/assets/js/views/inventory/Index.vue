@@ -401,7 +401,7 @@ export default {
       }).then(async (willDelete) => {
         if (willDelete) {
           let resp = await this.deleteMultipleInventory()
-          if (resp.data.success) {
+          if (resp.data) {
             window.toastr['success'](this.$tc('inventory.deleted_message', 2))
             this.$refs.table.refresh()
           }
