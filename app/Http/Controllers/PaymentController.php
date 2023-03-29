@@ -38,7 +38,6 @@ class PaymentController extends Controller
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->applyFilters($request->only([
                 'search',
-                // 'payment_number',
                 'payment_status',
                 'payment_mode',
                 'customer_id',
@@ -52,7 +51,7 @@ class PaymentController extends Controller
             ->latest()
             ->paginate($limit);
 
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'payments' => $payments,
             'total' => Payment::count(),
