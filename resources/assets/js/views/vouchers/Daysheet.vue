@@ -82,7 +82,7 @@
                 show="lot"
               >
                 <template slot-scope="row">
-                  
+
                 </template>
               </table-column>
               <table-column :label="$tc('daysheet.pm')" show="reference_number">
@@ -103,7 +103,7 @@
                 show="party"
               >
                 <template slot-scope="row">
-                   
+
                 </template>
               </table-column>
                 <table-column
@@ -111,13 +111,13 @@
                 show="party"
               >
                 <template slot-scope="row">
-                   
+
                 </template>
               </table-column>
             </table-component>
               </div>
               </div>
-           
+
       </div>
     </div>
   </div>
@@ -162,19 +162,18 @@ export default {
     ...mapActions("ledger", ["fetchLedgerDaysheet"]),
     async loadEditData() {
       let response = await this.fetchLedgerDaysheet(this.$route.params.id);
-       this.isLoading = false
-      this.ledgerData = response.data.ledger;
+        this.isLoading = false
+        this.ledgerData = response.data.ledger.sort((a, b) => { return a.reference_number - b.reference_number});
     },
-       printData() {
-
-        printJS({
-          printable: 'to_print_table',
-          type: 'html',
-          ignoreElements: ['no-print-check', 'no-print-option'],
-          scanStyles: true,
-          targetStyles: ['*'],
-          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {border:1px solid #eee;padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table-component__table { min-width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table  .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
-        })
+    printData() {
+      printJS({
+        printable: 'to_print_table',
+        type: 'html',
+        ignoreElements: ['no-print-check', 'no-print-option'],
+        scanStyles: true,
+        targetStyles: ['*'],
+        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {border:1px solid #eee;padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table-component__table { min-width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table  .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+      })
     }
   },
 };
