@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AccountLedger;
 use App\Models\AccountMaster;
+use App\Models\Invoice;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Exception;
@@ -32,7 +33,7 @@ class AccountLedgersController extends Controller
             ->paginate($limit);
 
 
-        foreach($ledgers as $ledger) {
+        foreach ($ledgers as $ledger) {
             $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
                 ->whereCompany($request->header('company'))
                 ->whereNotNull('related_voucher')
@@ -268,6 +269,31 @@ class AccountLedgersController extends Controller
 
         return response()->json([
             'ledgers' => $ledgers,
+        ]);
+    }
+
+      /**
+     * Get ledgers to display
+     */
+    public function daysheet(Request $request, $id)
+    {
+        $all_voucher_ids = Voucher::whereCompany($request->header('company'))
+            ->where('date', Carbon::now()->format('Y-m-d'))
+            ->where('account', '!=', 'Sales')
+            ->groupBy('account_ledger_id')
+            ->get();
+
+        $ledgers = [];
+        foreach ($all_voucher_ids as $each) {
+            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)->where('date', Carbon::now()->format('Y-m-d'))->count();
+            $each['lot'] = $lot;
+            $each['party'] = $each->account;
+            $each['reference_number'] = Invoice::where('id', $each->invoice_id)->first()->reference_number;
+            array_push($ledgers, $each);
+        }
+
+        return response()->json([
+            'ledger' => $ledgers
         ]);
     }
 }

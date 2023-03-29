@@ -11,7 +11,6 @@ import store from './store/index.js'
 // Layouts
 import LayoutBasic from './views/layouts/LayoutBasic.vue'
 import LayoutLogin from './views/layouts/LayoutLogin.vue'
-import LayoutWizard from './views/layouts/LayoutWizard.vue'
 
 // Auth
 import Login from './views/auth/Login.vue'
@@ -102,8 +101,8 @@ import NotesCreate from './views/notes/Create.vue'
 // inventory
 import InventoryIndex from './views/inventory/Index.vue'
 import InventoryCreate from './views/inventory/Create.vue'
-import Inventory from './views/invoices/Inventory.vue'
-import InventoryStock from './views/inventory/Stock.vue'
+import InventoryStock from './views/inventory/InventoryStock.vue'
+import InvoiceStock from './views/inventory/InvoiceStock.vue'
 
 // Account Master
 import MastersIndex from './views/masters/Index.vue'
@@ -118,9 +117,8 @@ import LedgersDisplay from './views/ledgers/Display.vue'
 import VouchersIndex from './views/vouchers/Index.vue'
 import VouchersCreate from './views/vouchers/Create.vue'
 import VouchersBook from './views/vouchers/Book.vue'
+import VouchersDaysheet from './views/vouchers/Daysheet.vue'
 import VouchersDaybook from './views/vouchers/Daybook.vue'
-
-import Wizard from './views/wizard/Index.vue'
 
 // bank
 import BankIndex from './views/bank/Index.vue'
@@ -176,20 +174,6 @@ const routes = [
         ]
     },
 
-    /*
-     |--------------------------------------------------------------------------
-     | Onboarding Routes
-     |--------------------------------------------------------------------------|
-     */
-    // {
-    //     path: '/on-boarding',
-    //     component: LayoutWizard,
-    //     children: [{
-    //         path: '/',
-    //         component: Wizard,
-    //         name: 'wizard'
-    //     }]
-    // },
     /*
      |--------------------------------------------------------------------------
      | Admin Backend Routes
@@ -311,6 +295,12 @@ const routes = [
               path: 'vouchers/daybook',
               name: 'vouchers.daybook',
               component: VouchersDaybook,
+              meta: ['admin', 'accountant']
+            },
+            {
+              path: 'vouchers/daysheet',
+              name: 'vouchers.daysheet',
+              component: VouchersDaysheet,
               meta: ['admin', 'accountant']
             },
 
@@ -603,6 +593,12 @@ const routes = [
               path: 'inventory/stock',
               name: 'inventory.stock',
               component: InventoryStock,
+              meta: ['admin', 'accountant']
+            },
+            {
+              path: 'inventory/:id/stock',
+              name: 'invoice.stock',
+              component: InvoiceStock,
               meta: ['admin', 'accountant']
             },
 

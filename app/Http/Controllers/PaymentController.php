@@ -38,7 +38,6 @@ class PaymentController extends Controller
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->applyFilters($request->only([
                 'search',
-                // 'payment_number',
                 'payment_status',
                 'payment_mode',
                 'customer_id',
@@ -52,9 +51,10 @@ class PaymentController extends Controller
             ->latest()
             ->paginate($limit);
 
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'payments' => $payments,
+            'total' => Payment::count(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
@@ -88,7 +88,7 @@ class PaymentController extends Controller
             array_push($account_ledger, $obj);
         }
 
-        $party_list = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+        $payment_method = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
 
         return response()->json([
             'nextPaymentNumberAttribute' => $nextPaymentNumberAttribute,
@@ -96,7 +96,7 @@ class PaymentController extends Controller
             'payment_prefix' => $payment_prefix,
             'usersOfSundryCreditor' => $usersOfSundryCreditor,
             'account_ledger' => $account_ledger,
-            'party_list' => $party_list,
+            'payment_method' => $payment_method,
         ]);
     }
 
@@ -119,7 +119,7 @@ class PaymentController extends Controller
 
         $voucher_ids = [];
         $company_id = (int) $request->header('company');
-        $cr_account_master = AccountMaster::where('name', $request->payment_mode['name'])->first();
+        $dr_account_master = AccountMaster::where('name', $request->party_list['name'])->first();
 
         //Not passing payment number from front end, so find next number from backend
         $payment_prefix = CompanySetting::getSetting('payment_prefix', $company_id);
@@ -138,19 +138,31 @@ class PaymentController extends Controller
                 'payment_mode' => $request->payment_mode['name'],
                 'amount' => $req_amount,
                 'notes' => $request->notes,
-                'account_master_id' => $cr_account_master->id,
+                'account_master_id' => $dr_account_master->id,
             ]);
 
-            $dr_account_ledger = AccountLedger::where([
+            $dr_account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $request->party_list['id'],
                 'account' => $request->party_list['name'],
                 'company_id' => $company_id,
-            ])->firstOrFail();
-            $cr_account_ledger = AccountLedger::where([
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => $req_amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $req_amount,
+            ]);
+            $cr_account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $request->payment_mode['id'],
                 'account' => $request->payment_mode['name'],
                 'company_id' => $company_id,
-            ])->firstOrFail();
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => 0,
+                'type' => 'Cr',
+                'credit' => $req_amount,
+                'balance' => $req_amount,
+            ]);
 
             $dr_voucher = Voucher::create([
                 'account_master_id' => $request->party_list['id'],
@@ -248,7 +260,7 @@ class PaymentController extends Controller
             array_push($account_ledger, $obj);
         }
 
-        $party_list = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
+        $payment_method = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
 
         return response()->json([
             'nextPaymentNumber' => $payment->getPaymentNumAttribute(),
@@ -257,7 +269,7 @@ class PaymentController extends Controller
             'payment' => $payment,
             'invoices' => $invoices,
             'account_ledger' => $account_ledger,
-            'party_list' => $party_list,
+            'payment_method' => $payment_method,
         ]);
     }
 
@@ -296,10 +308,30 @@ class PaymentController extends Controller
         $payment->payment_status = $request->payment_status;
         $payment->user_id = $request->user_id;
         $payment->invoice_id = $request->invoice_id;
-        $payment->payment_mode = $request->party_list['name'];
+        $payment->payment_mode = $request->payment_mode['name'];
         $payment->amount = $request->amount;
         $payment->notes = $request->notes;
         $payment->save();
+
+
+        //It will add voucher for sales from invoice
+        $dr_voucher = Voucher::where([
+            'payment_id' => $payment->id,
+            'type' => 'Dr',
+        ])->first();
+        $dr_voucher->update([
+            'debit' => $request->amount,
+            'date' => $payment_date,
+        ]);
+
+        $cr_voucher = Voucher::where([
+            'payment_id' => $payment->id,
+            'type' => 'Cr',
+        ])->first();
+        $cr_voucher->update([
+            'credit' => $request->amount,
+            'date' => $payment_date,
+        ]);
 
         return response()->json([
             'payment' => $payment,
@@ -325,6 +357,11 @@ class PaymentController extends Controller
             $invoice->save();
         }
 
+        $vouchers = Voucher::where('payment_id', $id)->get();
+        foreach($vouchers as $each) {
+            $each->delete();
+        }
+
         $payment->delete();
 
         return response()->json([
@@ -343,6 +380,11 @@ class PaymentController extends Controller
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();
+            }
+
+            $vouchers = Voucher::where('payment_id', $id)->get();
+            foreach($vouchers as $each) {
+                $each->delete();
             }
 
             $payment->delete();

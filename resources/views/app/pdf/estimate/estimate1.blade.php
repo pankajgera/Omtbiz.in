@@ -113,7 +113,7 @@ function numberTowords($num)
             font-style: normal;
             font-weight: 600;
             font-size: 14px;
-            color: #595959;
+            color: #000;
             width: 100%;
             text-align: right;
             padding: 0px;
@@ -124,7 +124,7 @@ function numberTowords($num)
             font-weight: 600;
             font-size: 14px;
             /* line-height: 21px; */
-            color: #595959;
+            color: #000;
             padding: 0px;
             margin: 0px;
             margin-top: 6px;
@@ -159,7 +159,7 @@ function numberTowords($num)
             font-weight: normal;
             font-size: 14px;
             line-height: 21px;
-            color: #595959;
+            color: #000;
             width: 100%;
             float: right;
             text-align: right;
@@ -172,7 +172,7 @@ function numberTowords($num)
             font-size: 14px;
             line-height: 21px;
             text-align: right;
-            color: #595959;
+            color: #000;
         }
         .border {
             border: 1px solid #a5a5a5 !important;
@@ -221,17 +221,20 @@ function numberTowords($num)
             font-weight: 600;
             font-size: 14px;
             line-height: 21px;
-            color: #595959;
+            color: #000;
         }
         .row-item td p {
             line-height: 1px;
             marign: 0 5px !important;
             padding: 0 5px !important;
         }
-        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 150px; }
+        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 115px; }
         @page {
             margin: 120px 20px 20px 20px;
-          }
+        }
+        .td-header {
+            font-size: 14px; font-weight: bold;
+        }
     </style>
 </head>
 
@@ -241,89 +244,74 @@ function numberTowords($num)
             <tr>
                 <td class="border">
                     <p class="sub-heading-text"> Estimate</p>
-                    {{-- <p class="heading-text">
-                        {{ $company->name }}
-                    </p> --}}
                 </td>
                 <td class="border">
                     <p class="total-title">Estimate Date <span
                             style="float:right; font-size: 12px;">{{ $estimate->estimate_date }}</span></p>
                     <p class="total-title">Estimate Number <span
                             style="float:right; font-size: 12px;">{{ $estimate->estimate_number }}</span></p>
-                    <p class="total-title">Reference Number <span
-                        style="float:right; font-size: 12px;">{{ $estimate->reference_number }}</span></p>
                     <p class="total-title">Party Name <span
                             style="float:right; font-size: 12px;">{{ $estimate->master->name }}</span></p>
                 </td>
             </tr>
         </table>
     </header>
-    <div style="margin-top: 40px;">
-        <table>
+    <div style="margin-top: 20px; position: relative;">
+        <table style=" width: 100% !important;>
             <tbody>
                 <div class="main-container">
                     <div class="sub-container">
                         <table class="table">
                             <tr class="td-border">
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 10%">
+                                    <p class="td-header">
                                         S.No.
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 40%">
+                                    <p class="td-header">
                                         Description
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 10%">
+                                    <p class="td-header">
                                         Quantity
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 20%">
+                                    <p class="td-header">
                                         Rate
                                     </p>
                                 </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
-                                        Per
-                                    </p>
-                                </td>
-                                <td>
-                                    <p style="font-size: 14px; font-weight: bold">
+                                <td style="width: 20%">
+                                    <p class="td-header">
                                         Amount
                                     </p>
                                 </td>
                             </tr>
                             @foreach ($estimate_items as $key => $item)
                                 <tr class="row-item">
-                                    <td>
+                                    <td style="width: 10%">
                                         <p style="font-size: 12px;">
                                             {{ $key + 1 }}
                                         </p>
                                     </td>
-                                    <td>
+                                    <td style="width: 40%">
                                         <p style="font-size: 12px;">
                                             {{ $item->name }}
                                         </p>
                                     </td>
-                                    <td>
+                                    <td style="width: 10%">
                                         <p style="font-size: 12px;">
                                             {{ $item->quantity }} {{ $item->inventory ? $item->inventory->unit : '' }}
                                         </p>
                                     </td>
-                                    <td>
+                                    <td style="width: 20%">
                                         <p style="font-size: 12px;">
                                             ₹ {{ $item->sale_price }}
                                         </p>
                                     </td>
-                                    <td>
-                                        <p style="font-size: 12px;">
-                                            {{ $item->inventory ? $item->inventory->unit : ''}}
-                                        </p>
-                                    </td>
-                                    <td>
+                                    <td style="width: 20%">
                                         <p style="font-size: 12px;">
                                             ₹ {{ $item->total }}
                                         </p>
@@ -339,7 +327,6 @@ function numberTowords($num)
                                     </p>
                                 </td>
                                 <td></td>
-                                <td></td>
                                 <td>
                                     <p style="font-size: 12px;">
                                         {{ 'Rs ' . $total_amount }}
@@ -353,14 +340,14 @@ function numberTowords($num)
         </table>
     </div>
     <footer>
-        <div>
+        <div style="margin-top: 30px">
             <p style="font-size: 12px;">
                 Amount Chargeable (in words)
                 <br />
                 {{ numberTowords($total_amount) }}
             </p>
         </div>
-        <div style="margin: 10px 0px; position: fixed; bottom: 180px">
+        <div style="margin: 10px 0px; position: fixed; bottom: 20px">
             <p style="font-size: 12px; bottom: 0">
                 Remark: <br>
                 {{ $estimate->notes }}

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 
 class Inventory extends Model
@@ -84,9 +85,13 @@ class Inventory extends Model
     public static function deleteInventory($id)
     {
         $inventory = Inventory::find($id);
-        InventoryItem::where('inventory_id', $inventory->id)->delete();
-        $inventory->delete();
-        return true;
+        //Don't allow to delete inventory if invoice is preset
+        if (! InvoiceItem::where('inventory_id', $id)->exists()) {
+            InventoryItem::where('inventory_id', $inventory->id)->delete();
+            $inventory->delete();
+            return true;
+        }
+        throw new Exception('Inventory used in the invoice, cannot delete it.');
     }
 
     public function updateInventoryQuantity($new_item_quantity)

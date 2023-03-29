@@ -312,7 +312,7 @@ class ReportController extends Controller
         $total_opening_balance_cr = 0;
         $total_opening_balance_dr = 0;
         $master = AccountMaster::where('id', $ledger->account_master_id)->first();
-        $total_opening_balance = $master->opening_balance;
+        $master_opening_balance = $master->opening_balance;
 
         foreach ($related_vouchers as $each) {
             $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
@@ -339,32 +339,43 @@ class ReportController extends Controller
             }
         }
 
-
-        $opening_current_cr = 0;
-        $opening_current_dr = 0;
+        $sum_opening_current_cr = 0;
+        $sum_opening_current_dr = 0;
+        // --- 1. Calculate opening balance
         //Total opening balance include previous dates
-        if ('Cr' === $master->type) {
-            $total_opening_balance_cr = $total_opening_balance_cr + $total_opening_balance;
+        if ('Dr' === $master->type) {
+            $total_opening_balance_cr = $total_opening_balance_cr + $master_opening_balance;
         } else {
-            $total_opening_balance_dr = $total_opening_balance_dr + $total_opening_balance;
+            $total_opening_balance_dr = $total_opening_balance_dr + $master_opening_balance;
         }
 
-        //Add opening and current balance
-        $opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
-        $opening_current_dr = $total_opening_balance_dr + $current_balance_dr;
+        //For dates, add/sub total_opening so we get only single opening
+        if ($total_opening_balance_cr > $total_opening_balance_dr) {
+            $total_opening_balance_cr = abs($total_opening_balance_cr - $total_opening_balance_dr);
+            $total_opening_balance_dr = 0;
+        } else if ($total_opening_balance_cr < $total_opening_balance_dr) {
+            $total_opening_balance_dr = abs($total_opening_balance_cr - $total_opening_balance_dr);
+            $total_opening_balance_cr = 0;
+        } else {
+            $total_opening_balance_cr = 0;
+            $total_opening_balance_dr = 0;
+        }
 
-        //Calculate closing balance
-        if ($opening_current_cr > $opening_current_dr) {
-            $sum = $opening_current_cr - $opening_current_dr;
-            $closing_balance_cr = abs($sum);
-        }
-        if ($opening_current_cr < $opening_current_dr) {
-            $sum = $opening_current_dr - $opening_current_cr;
-            $closing_balance_dr = abs($sum);
-        }
-        if ($opening_current_cr === $opening_current_dr) {
-            $closing_balance_cr = $total_opening_balance_cr;
-            $closing_balance_dr = $total_opening_balance_dr;
+        // --- 2. Calculate current balance
+        //Adding opening and current balance with total opening
+        $sum_opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
+        $sum_opening_current_dr = $total_opening_balance_dr + $current_balance_dr;
+
+        // --- 3. Calculate closing balance
+        if ($sum_opening_current_cr > $sum_opening_current_dr) {
+            $closing_balance_cr = abs($sum_opening_current_cr - $sum_opening_current_dr);
+            $closing_balance_dr = 0;
+        } else if ($sum_opening_current_cr < $sum_opening_current_dr) {
+            $closing_balance_dr = abs($sum_opening_current_dr - $sum_opening_current_cr);
+            $closing_balance_cr = 0;
+        } else {
+            $closing_balance_cr = 0;
+            $closing_balance_dr = 0;
         }
 
         $vouchers_debit_sum = $all_voucher_ids->sum('debit');

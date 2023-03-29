@@ -320,7 +320,11 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::get('/inventory/stock', [
         'as' => 'inventory.stock',
-        'uses' => 'InventoryController@getStock'
+        'uses' => 'InventoryController@getInventoryStock'
+    ]);
+    Route::get('/inventory/{id}/stock', [
+        'as' => 'invoice.stock',
+        'uses' => 'InventoryController@getInvoiceStock'
     ]);
 
     Route::resource('inventory', 'InventoryController');
@@ -358,6 +362,10 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'AccountLedgersController@display'
     ]);
 
+    Route::get('/ledgers/{id}/daysheet', [
+        'as' => 'ledgers.daysheet',
+        'uses' => 'AccountLedgersController@daysheet'
+    ]);
 
     Route::resource('ledgers', 'AccountLedgersController');
 

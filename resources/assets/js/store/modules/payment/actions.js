@@ -4,7 +4,7 @@ export const fetchPayments = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/payments`, {params}).then((response) => {
       commit(types.SET_PAYMENTS, response.data.payments.data)
-      commit(types.SET_TOTAL_PAYMENTS, response.data.payments.total)
+      commit(types.SET_TOTAL_PAYMENTS, response.data.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
