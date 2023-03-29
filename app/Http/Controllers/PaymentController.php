@@ -141,16 +141,28 @@ class PaymentController extends Controller
                 'account_master_id' => $dr_account_master->id,
             ]);
 
-            $dr_account_ledger = AccountLedger::where([
+            $dr_account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $request->party_list['id'],
                 'account' => $request->party_list['name'],
                 'company_id' => $company_id,
-            ])->firstOrFail();
-            $cr_account_ledger = AccountLedger::where([
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => $req_amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $req_amount,
+            ]);
+            $cr_account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $request->payment_mode['id'],
                 'account' => $request->payment_mode['name'],
                 'company_id' => $company_id,
-            ])->firstOrFail();
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => 0,
+                'type' => 'Cr',
+                'credit' => $req_amount,
+                'balance' => $req_amount,
+            ]);
 
             $dr_voucher = Voucher::create([
                 'account_master_id' => $request->party_list['id'],
