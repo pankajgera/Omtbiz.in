@@ -86,7 +86,7 @@ class Inventory extends Model
     {
         $inventory = Inventory::find($id);
         //Don't allow to delete inventory if invoice is preset
-        if (InvoiceItem::where('inventory_id', $id)->exists()) {
+        if (! InvoiceItem::where('inventory_id', $id)->exists()) {
             InventoryItem::where('inventory_id', $inventory->id)->delete();
             $inventory->delete();
             return true;
