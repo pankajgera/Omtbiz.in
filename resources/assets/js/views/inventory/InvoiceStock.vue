@@ -66,6 +66,16 @@
     </div>
   </div>
 </template>
+<style>
+@media print {
+   .site-header, .sidebar-left, .page-header {
+      display: none;
+   }
+   .layout-default .main-content, .layout-icon-sidebar .main-content {
+    padding: 10px 10px 10px 10px;
+   }
+}
+</style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
