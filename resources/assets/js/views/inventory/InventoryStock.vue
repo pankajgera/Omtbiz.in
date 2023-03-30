@@ -9,6 +9,19 @@
       </ol>
     </div>
     <div class="row" v-if="inventoryItems.length">
+      <div class="col-sm-12 mb-2 print">
+      <base-button
+            v-show="inventoryItems"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="print"
+          >
+            Print
+          </base-button>
+      </div>
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
           <h5 class="p-3">Inventory Item</h5>
@@ -63,6 +76,9 @@ export default {
     ...mapActions('inventory', [
       'fetchInventoryStock',
     ]),
+     print() {
+      window.print();
+    },
     async loadInventoryStock () {
       let response = await this.fetchInventoryStock()
       this.inventoryItems = response.data.inventoryItems

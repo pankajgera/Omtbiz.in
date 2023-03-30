@@ -10,6 +10,19 @@
       </ol>
     </div>
     <div class="row" v-if="inventoryItems.length">
+      <div class="col-sm-12 mb-2 print">
+      <base-button
+            v-show="inventoryItems"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="print"
+          >
+            Print
+          </base-button>
+      </div>
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
           <h5 class="p-3">Inwards</h5>
@@ -68,7 +81,7 @@
 </template>
 <style>
 @media print {
-   .site-header, .sidebar-left, .page-header {
+   .site-header, .sidebar-left, .page-header, .print {
       display: none;
    }
    .layout-default .main-content, .layout-icon-sidebar .main-content {
@@ -101,6 +114,9 @@ export default {
     ...mapActions('inventory', [
       'fetchInvoiceStock',
     ]),
+    print() {
+      window.print();
+    },
     async loadInvoiceStock () {
       let response = await this.fetchInvoiceStock(this.$route.params.id)
       this.invoiceItems = response.data.invoiceItems
