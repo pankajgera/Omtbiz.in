@@ -26,7 +26,6 @@
         </div>
       </Header>
     </div>
-
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="filter-container">

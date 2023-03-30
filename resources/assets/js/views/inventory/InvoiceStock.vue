@@ -66,7 +66,6 @@
     </div>
   </div>
 </template>
-
 <style>
 @media print {
    .site-header, .sidebar-left, .page-header {

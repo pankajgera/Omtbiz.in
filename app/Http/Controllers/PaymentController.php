@@ -38,7 +38,6 @@ class PaymentController extends Controller
             ->leftJoin('invoices', 'invoices.id', '=', 'payments.invoice_id')
             ->applyFilters($request->only([
                 'search',
-                // 'payment_number',
                 'payment_status',
                 'payment_mode',
                 'customer_id',
@@ -52,9 +51,10 @@ class PaymentController extends Controller
             ->latest()
             ->paginate($limit);
 
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Creditors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'payments' => $payments,
+            'total' => Payment::count(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
@@ -141,16 +141,28 @@ class PaymentController extends Controller
                 'account_master_id' => $dr_account_master->id,
             ]);
 
-            $dr_account_ledger = AccountLedger::where([
+            $dr_account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $request->party_list['id'],
                 'account' => $request->party_list['name'],
                 'company_id' => $company_id,
-            ])->firstOrFail();
-            $cr_account_ledger = AccountLedger::where([
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => $req_amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $req_amount,
+            ]);
+            $cr_account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $request->payment_mode['id'],
                 'account' => $request->payment_mode['name'],
                 'company_id' => $company_id,
-            ])->firstOrFail();
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => 0,
+                'type' => 'Cr',
+                'credit' => $req_amount,
+                'balance' => $req_amount,
+            ]);
 
             $dr_voucher = Voucher::create([
                 'account_master_id' => $request->party_list['id'],
@@ -345,6 +357,11 @@ class PaymentController extends Controller
             $invoice->save();
         }
 
+        $vouchers = Voucher::where('payment_id', $id)->get();
+        foreach($vouchers as $each) {
+            $each->delete();
+        }
+
         $payment->delete();
 
         return response()->json([
@@ -363,6 +380,11 @@ class PaymentController extends Controller
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();
+            }
+
+            $vouchers = Voucher::where('payment_id', $id)->get();
+            foreach($vouchers as $each) {
+                $each->delete();
             }
 
             $payment->delete();
