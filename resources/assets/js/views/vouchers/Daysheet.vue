@@ -26,7 +26,7 @@
             Print
           </base-button>
       </div>
-      <div class="col-sm-12">
+      <div class="col-sm-12 daysheet">
         <table-component
               ref="table"
               :data="ledgerData"
@@ -172,7 +172,7 @@ export default {
         ignoreElements: ['no-print-check', 'no-print-option'],
         scanStyles: true,
         targetStyles: ['*'],
-        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {border:1px solid #eee;padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table-component__table { min-width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table  .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {border:1px solid #000;padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table-component__table { min-width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table  .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
       })
     }
   },
