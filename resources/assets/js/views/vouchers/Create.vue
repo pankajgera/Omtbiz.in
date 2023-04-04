@@ -9,7 +9,7 @@
       </ol>
     </div>
     <div class="row">
-      <div class="col-sm-12">
+      <div class="col-md-12">
         <div class="card">
           <div class="card-body">
               <!---- Grid table start -->
@@ -32,16 +32,29 @@
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
-              <div class="col-sm-12 p-0">
-                <textarea
-                  type="text"
-                  autofocus
-                  rows="2"
-                  width="400"
-                  class="form-control description-input mb-3"
-                  v-model="short_narration"
-                  id="narration-voucher"
-                  placeholder="Type Short Narration (optional)" />
+              <div class="col-md-12 p-0 mb-4 mt-4">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>{{ $t('vouchers.description') }}</label>
+                    <textarea
+                      type="text"
+                      autofocus
+                      rows="2"
+                      width="400"
+                      class="form-control description-input mb-3"
+                      v-model="short_narration"
+                      id="narration-voucher"
+                      placeholder="Type Short Narration (optional)" />
+                  </div>
+                  <div class="col-md-6">
+                    <label>{{ $t('vouchers.date') }}</label><span class="text-danger"> * </span>
+                    <base-date-picker
+                      v-model="date"
+                      :calendar-button="true"
+                      calendar-button-icon="calendar"
+                    />
+                  </div>
+              </div>
               </div>
               <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
               <button @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
@@ -96,6 +109,7 @@ export default {
       ],
       masterData: [],
       short_narration: '',
+      date: '',
       alreadySubmitted: false,
     }
   },
@@ -147,6 +161,8 @@ export default {
         obj['total_credit'] = 0,
         obj['balance'] = 0,
         this.rows.push(obj)
+        this.short_narration = each.short_narration
+        this.date = each.date
       })
     },
     async loadMasters () {
@@ -178,9 +194,19 @@ export default {
 
       let calc_balance = 0;
       if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {
-        swal({
+          swal({
             title: this.$t('vouchers.balace_not_equal_title'),
             text: this.$t('vouchers.balace_not_equal_desc'),
+            icon: 'error',
+            buttons: false,
+            dangerMode: true
+          })
+          return false
+      }
+      if (!this.date) {
+        swal({
+            title: 'Field required',
+            text: 'Voucher date required',
             icon: 'error',
             buttons: false,
             dangerMode: true
@@ -193,6 +219,7 @@ export default {
         each['total_credit'] = credit_sum
         each['balance'] = calc_balance
         each['short_narration'] = this.short_narration
+        each['date'] = this.date
         each['is_edit'] = this.isEdit
       });
 
@@ -216,11 +243,6 @@ export default {
       }
     },
     cellUpdated($event) {
-      // if($event.row.type === 'Cr') {
-      //   $event.row.debit = 0;
-      // } else if ($event.row.type === 'Dr') {
-      //   $event.row.credit = 0;
-      // }
       let rows = this.rows
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
       {
@@ -260,24 +282,14 @@ export default {
       } else if ($event.rowData && $event.rowData.type === 'Dr') {
         $event.rowData.credit = null;
       }
-
       //Type of Voucher Column
       if ($event.colIndex === 0) {
 
       }
-
       //Account Column
       if ($event.colIndex === 1) {
 
       }
-
-      // if ($event.colIndex === 2 && $event.rowData.type === 'Cr') {
-
-      // }
-      // if ($event.colIndex === 3) {
-
-      // }
-
     },
     addNewRow(typ = null, sum = null) {
       let deb = typ == 'Dr' ? sum : null

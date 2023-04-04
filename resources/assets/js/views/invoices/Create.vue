@@ -326,7 +326,7 @@
   background: #ffffff;
   min-width: 590px;
   padding: 15px 20px;
-  border: 1px solid #f9fbff;
+  border: 1px solid #969696;
   border-radius: 5px;
 }
 input.base-prefix-input:disabled {
