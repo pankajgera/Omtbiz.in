@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\AccountLedger;
-use App\Models\AccountMaster;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
-use App\Models\Payment;
-use App\Models\Receipt;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -44,7 +41,9 @@ class VouchersController extends Controller
             'account_master_id',
             'account_ledger_id',
             'credit',
-            'debit'
+            'debit',
+            'short_narration',
+            'date',
         ])->get();
 
         return response()->json([
@@ -91,7 +90,7 @@ class VouchersController extends Controller
                         'debit' => $each['debit'] ?? 0,
                         'credit' => $each['credit'] ?? 0,
                         'balance' => $each['balance'],
-                        'date' => Carbon::now()->toDateTimeString(),
+                        'date' => $each['date'],
                         'company_id' => $request->header('company')
                     ]);
                 }
@@ -109,7 +108,7 @@ class VouchersController extends Controller
                         'debit' => $each['debit'] ?? 0,
                         'credit' => $each['credit'] ?? 0,
                         'short_narration' => $each['short_narration'],
-                        'date' => Carbon::now()->toDateTimeString(),
+                        'date' => $each['date'],
                     ]);
                     $voucher = Voucher::find($each['id']);
                 } else {
@@ -121,7 +120,7 @@ class VouchersController extends Controller
                         'debit' => $each['debit'] ?? 0,
                         'credit' => $each['credit'] ?? 0,
                         'short_narration' => $each['short_narration'],
-                        'date' => Carbon::now()->toDateTimeString(),
+                        'date' => $each['date'],
                         'company_id' => $request->header('company'),
                         'voucher_type' => 'Voucher',
                     ]);
