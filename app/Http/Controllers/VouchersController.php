@@ -20,11 +20,13 @@ class VouchersController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 20;
 
-        $vouchers = AccountLedger::applyFilters($request->only([
+        $vouchers = Voucher::applyFilters($request->only([
             'orderByField',
             'orderBy',
         ]))
             ->whereCompany($request->header('company'))
+            ->with(['accountMaster'])
+            ->where('voucher_type', 'Voucher')
             ->latest()
             ->paginate($limit);
 

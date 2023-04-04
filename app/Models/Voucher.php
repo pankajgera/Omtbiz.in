@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class Voucher extends Model
 {
@@ -117,5 +118,21 @@ class Voucher extends Model
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
         }
+    }
+
+
+    public static function deleteVoucher($id)
+    {
+        $find_vouchers = Voucher::where('voucher_type', '!=', 'Voucher')->where('id', $id)->exists();
+        if ($find_vouchers) {
+            Log::error('Voucher used in invoice/receipt/payment, so we cannnot delete this it. ID ' . $id);
+            return false;
+        }
+        $voucher = self::find($id);
+        $related_voucher = Voucher::where('related_voucher', $voucher->related_voucher)->get();
+        foreach($related_voucher as $each) {
+            $each->delete();
+        }
+        return true;
     }
 }
