@@ -262,8 +262,8 @@ class InventoryController extends Controller
 
                 $invoice_items_count = InvoiceItem::whereCompany($request->header('company'))
                     ->where('inventory_id', $each->id)
-                    ->orderBy('id', 'desc')->count();
-                $each['item_count'] = $invoice_items_count;
+                    ->orderBy('id', 'desc')->sum('quantity');
+                $each['item_count'] = intval($invoice_items_count);
             }
 
             return response()->json([
