@@ -137,7 +137,7 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="row">
-          <div class="table-actions mt-5 mb-5">
+        <div class="table-actions mt-5 mb-5">
           <transition name="fade">
             <v-dropdown v-if="selectedLedgers.length" :show-arrow="false">
               <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -145,33 +145,32 @@
               </span>
             </v-dropdown>
           </transition>
-
-            <div class="custom-control custom-checkbox">
-          <input
-            id="select-all"
-            v-model="selectAllFieldStatus"
-            type="checkbox"
-            class="custom-control-input"
-            @change="selectAllLedgers"
-          >
-          <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
-            <span class="select-all-label">{{ $t('general.select_all') }} </span>
-          </label>
-        </div>
-        <div>
-          <base-button
-              v-show="fetchData"
-              :outline="true"
-              :icon="['fas', 'print']"
-              color="theme"
-              size="large"
-              :style="['position: absolute',' margin-right: 5%']"
-              right-icon
-              @click="printfetchData"
+          <!-- <div class="custom-control custom-checkbox">
+            <input
+              id="select-all"
+              v-model="selectAllFieldStatus"
+              type="checkbox"
+              class="custom-control-input"
+              @change="selectAllLedgers"
             >
-              Print
-            </base-button>
-        </div>
+            <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+              <span class="select-all-label">{{ $t('general.select_all') }} </span>
+            </label>
+          </div> -->
+          <div style="float: right">
+            <base-button
+                v-show="fetchData"
+                :outline="true"
+                :icon="['fas', 'print']"
+                color="theme"
+                size="large"
+                :style="['position: absolute',' margin-right: 5%']"
+                right-icon
+                @click="printfetchData"
+              >
+                Print
+              </base-button>
+          </div>
       </div>
     </div>
       <table-component
@@ -460,5 +459,6 @@ export default {
 <style scoped>
 .table-actions {
   width:100%;
+  display: block;
 }
 </style>

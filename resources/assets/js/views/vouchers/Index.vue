@@ -133,12 +133,38 @@
         </table-column>
         <table-column
           :label="$t('vouchers.name')"
-          show="name"
-        />
+          show="account"
+        >
+          <template slot-scope="row">
+            <router-link :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
+              {{ row.account }}
+            </router-link>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('ledgers.debit')"
+          show="debit"
+        >
+          <template slot-scope="row">
+            ₹ {{ row.debit }}
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('ledgers.credit')"
+          show="credit"
+        >
+          <template slot-scope="row">
+            ₹ {{ row.credit }}
+          </template>
+        </table-column>
         <table-column
           :label="$t('vouchers.groups')"
           show="groups"
-        />
+        >
+          <template slot-scope="row">
+            {{ row.account_master.groups }}
+          </template>
+        </table-column>
         <table-column
           :key="Math.random()"
           :sortable="false"

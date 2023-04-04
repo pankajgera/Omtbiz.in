@@ -262,8 +262,8 @@ class InventoryController extends Controller
 
                 $invoice_items_count = InvoiceItem::whereCompany($request->header('company'))
                     ->where('inventory_id', $each->id)
-                    ->orderBy('id', 'desc')->count();
-                $each['item_count'] = $invoice_items_count;
+                    ->orderBy('id', 'desc')->sum('quantity');
+                $each['item_count'] = intval($invoice_items_count);
             }
 
             return response()->json([
@@ -295,9 +295,9 @@ class InventoryController extends Controller
                     ->orderBy('id', 'desc')->get();
 
             foreach ($invoice_items as $each) {
-                $party = Invoice::where('id', $each->invoice_id)->first()->account_master_id;
-                $each['party_name'] = AccountMaster::where('id', $party)->first()->name;
-                $each['date_time'] = Carbon::parse($each->created_at)->format('d-m-Y');
+                $party = Invoice::where('id', $each->invoice_id)->first();
+                $each['party_name'] = AccountMaster::where('id', $party->account_master_id)->first()->name;
+                $each['date_time'] = Carbon::parse($party->invoice_date)->format('d-m-Y');
             }
 
             return response()->json([
