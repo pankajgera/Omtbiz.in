@@ -122,8 +122,8 @@ export default {
           },
           {
             title: "navigation.voucher",
-            icon: "file",
-            route: "/vouchers/create",
+            icon: "file-alt",
+            route: "/vouchers",
             meta: ["admin", "accountant"],
           },
           {
