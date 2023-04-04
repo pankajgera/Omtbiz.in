@@ -295,9 +295,9 @@ class InventoryController extends Controller
                     ->orderBy('id', 'desc')->get();
 
             foreach ($invoice_items as $each) {
-                $party = Invoice::where('id', $each->invoice_id)->first()->account_master_id;
-                $each['party_name'] = AccountMaster::where('id', $party)->first()->name;
-                $each['date_time'] = Carbon::parse($each->created_at)->format('d-m-Y');
+                $party = Invoice::where('id', $each->invoice_id)->first();
+                $each['party_name'] = AccountMaster::where('id', $party->account_master_id)->first()->name;
+                $each['date_time'] = Carbon::parse($party->invoice_date)->format('d-m-Y');
             }
 
             return response()->json([
