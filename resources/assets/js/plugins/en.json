@@ -19,7 +19,7 @@
         "inventory": "Inventory",
         "master": "Ledger",
         "ledger": "Display",
-        "voucher": "Create Voucher",
+        "voucher": "Voucher",
         "dispatch": "Dispatch",
         "orders": "Orders"
     },
@@ -357,6 +357,7 @@
         "vouchers_list": "Account Vouchers List",
         "name": "Name",
         "unit": "Unit",
+        "groups": "Group",
         "description": "Description",
         "added_on": "Added On",
         "price": "Price",
