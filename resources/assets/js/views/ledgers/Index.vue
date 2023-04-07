@@ -290,7 +290,7 @@ export default {
   data () {
     return {
       id: null,
-      showFilters: false,
+      showFilters: true,
       sortedBy: 'created_at',
       isRequestOngoing: true,
       filtersApplied: false,
