@@ -90,11 +90,11 @@ export const setSelectAllState = ({ commit, dispatch, state }, data) => {
 }
 
 export const selectAllLedgers = ({ commit, dispatch, state }) => {
-  if (state.selectedLedgers.length === state.ledger.length) {
+  if (state.selectedLedgers.length === state.ledgers.length) {
     commit(types.SET_SELECTED_LEDGERS, [])
     commit(types.SET_SELECT_ALL_STATE, false)
   } else {
-    let allLedgerIds = state.ledger.map(ledger => ledger.id)
+    let allLedgerIds = state.ledgers.map(ledger => ledger.id)
     commit(types.SET_SELECTED_LEDGERS, allLedgerIds)
     commit(types.SET_SELECT_ALL_STATE, true)
   }
@@ -102,7 +102,7 @@ export const selectAllLedgers = ({ commit, dispatch, state }) => {
 
 export const selectLedger = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECTED_LEDGERS, data)
-  if (state.selectedLedgers.length === state.ledger.length) {
+  if (state.selectedLedgers.length === state.ledgers.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)

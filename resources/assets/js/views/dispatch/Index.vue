@@ -880,3 +880,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.table-actions {
+  height: 55px;
+}
+</style>

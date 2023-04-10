@@ -5860,8 +5860,7 @@ a.close.disabled {
   float: left;
   width: 100%;
   margin-right: -100%;
-  -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
+  backface-visibility: hidden;
   transition: transform 0.6s ease-in-out;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -15316,12 +15315,6 @@ fieldset[disabled] .multiselect {
   right: 0px;
   top: -15px;
 }
-.invoice-index-page .table-actions .table-stats {
-  margin: 0;
-  position: absolute;
-  right: 0px;
-  top: 40px;
-}
 .invoice-index-page .filter-container {
   display: flex;
   justify-content: space-between;
@@ -15850,12 +15843,6 @@ fieldset[disabled] .multiselect {
   position: absolute;
   right: 0px;
   top: -15px;
-}
-.estimate-index-page .table-actions .table-stats {
-  margin: 0;
-  position: absolute;
-  right: 0px;
-  top: 40px;
 }
 .estimate-index-page .filter-container {
   display: flex;
@@ -17156,12 +17143,6 @@ fieldset[disabled] .multiselect {
   right: 0px;
   top: -15px;
 }
-.order-index-page .table-actions .table-stats {
-  margin: 0;
-  position: absolute;
-  right: 0px;
-  top: 40px;
-}
 .order-index-page .filter-container {
   display: flex;
   justify-content: space-between;
@@ -17900,12 +17881,6 @@ fieldset[disabled] .multiselect {
   position: absolute;
   right: 0px;
   top: -15px;
-}
-.receipt-index-page .table-actions .table-stats {
-  margin: 0;
-  position: absolute;
-  right: 0px;
-  top: 40px;
 }
 .receipt-index-page .filter-container {
   display: flex;
