@@ -460,5 +460,6 @@ export default {
 .table-actions {
   width:100%;
   display: block;
+  height: 55px;
 }
 </style>
