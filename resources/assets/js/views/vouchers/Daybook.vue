@@ -181,7 +181,7 @@
         table-class="table"
       >
 
-        <table-column
+        <!-- <table-column
           :sortable="false"
           :filterable="false"
           cell-class="no-click"
@@ -198,7 +198,7 @@
               <label :for="row.id" class="custom-control-label"/>
             </div>
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :label="$t('daybook.date')"
           show="date"
