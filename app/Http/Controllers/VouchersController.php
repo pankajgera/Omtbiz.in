@@ -18,6 +18,8 @@ class VouchersController extends Controller
         $limit = $request->has('limit') ? $request->limit : 20;
 
         $vouchers = Voucher::applyFilters($request->only([
+            'name',
+            'groups',
             'orderByField',
             'orderBy',
         ]))
