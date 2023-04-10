@@ -106,9 +106,8 @@ class Voucher extends Model
         }
 
         if ($filters->get('groups')) {
-            $master = AccountMaster::where('groups', 'LIKE', '%' . $filters->get('groups') . '%')->first();
-            $ledger = AccountLedger::where('account_master_id', $master->id)->first();
-            $query->where('account_ledger_id', $ledger->id);
+            $master_ids = AccountMaster::where('groups', 'LIKE', '%' . $filters->get('groups') . '%')->pluck('id')->toArray();
+            $query->whereIn('account_master_id', $master_ids);
         }
 
         if ($filters->get('debit')) {
