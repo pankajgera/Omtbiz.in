@@ -41,6 +41,7 @@ class PaymentController extends Controller
                 'payment_status',
                 'payment_mode',
                 'customer_id',
+                'payment_number',
                 'orderByField',
                 'from_date',
                 'to_date',

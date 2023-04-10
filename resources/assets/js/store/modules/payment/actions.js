@@ -97,3 +97,7 @@ export const selectAllPayments = ({ commit, dispatch, state }) => {
     commit(types.SET_SELECT_ALL_STATE, true)
   }
 }
+
+export const resetSelectedPayments = ({ commit, estimates, state }, data) => {
+  commit(types.RESET_SELECTED_PAYMENT)
+}
