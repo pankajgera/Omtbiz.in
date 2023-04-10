@@ -33,5 +33,9 @@ export default {
 
   [types.SET_SELECT_ALL_STATE] (state, data) {
     state.selectAllField = data
-  }
+  },
+
+  [types.RESET_SELECTED_RECEIPT] (state, data) {
+    state.selectedReceipts = []
+  },
 }

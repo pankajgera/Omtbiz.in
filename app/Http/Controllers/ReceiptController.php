@@ -41,6 +41,7 @@ class ReceiptController extends Controller
                 'receipt_status',
                 'receipt_mode',
                 'customer_id',
+                'receipt_number',
                 'orderByField',
                 'orderBy',
                 'from_date',
