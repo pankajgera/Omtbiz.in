@@ -140,7 +140,7 @@
             <invoice-inventory
               v-for="(each, index) in inventoryBind"
               ref="invoiceInventory"
-              :key="each.name+index"
+              :key="each.name+index+each.quantity"
               :index="index"
               :inventory-data="each"
               :currency="currency"
