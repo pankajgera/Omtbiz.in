@@ -454,7 +454,7 @@ class InvoicesController extends Controller
         ]);
 
         $total_invoice_items_amount = 0;
-        $existing_invoice_items = [];
+        $changed_invoice_items = [];
         foreach ($requestInvoiceItems as $req) {
             $req['company_id'] = $request->header('company');
             $req['type'] = 'invoice';
@@ -467,7 +467,8 @@ class InvoicesController extends Controller
             $request_item_quantity = (int) ($req['quantity']);
             if ($req['invoice_id']) {
                 $invent = Inventory::where('id', $req['inventory_id'])->first();
-                $existing_invoice_item = InvoiceItem::findOrFail($req['id']);
+                $existing_invoice_item = InvoiceItem::find($req['id']);
+
                 //If user didn't changed quantity but changed something else
                 //In that case we don't update inventory
                 if ($request_item_quantity !== $invent->quantity) {
@@ -481,8 +482,10 @@ class InvoicesController extends Controller
                         'quantity' => $calc_quantity,
                     ]);
                 }
+
                 //Existing invoice items, other items in database should be deleted
-                array_push($existing_invoice_items, $existing_invoice_item['id']);
+                array_push($changed_invoice_items, $existing_invoice_item['id']);
+
                 //Update existing invoice item, just in case user had changed anything
                 $existing_invoice_item->update([
                     'name' => $req['name'],
@@ -505,8 +508,9 @@ class InvoicesController extends Controller
                     'quantity' => $request_item_quantity,
                     'type' => 'invoice',
                 ]);
+
                 //Existing invoice items, other items in database should be deleted
-                array_push($existing_invoice_items, $existing_invoice_item['id']);
+                array_push($changed_invoice_items, $existing_invoice_item['id']);
 
                 //update inventory quantity
                 $invent = Inventory::where('id', $req['inventory_id'])->first();
@@ -517,7 +521,7 @@ class InvoicesController extends Controller
         }
 
         //Delete removed invoice items from database
-        $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $existing_invoice_items)->get();
+        $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $changed_invoice_items)->get();
         foreach ($delete_invoice_items as $del) {
             //'Add' deleting item quantity back to inventory
             $find_invent = Inventory::where('id', $del->inventory_id)->first();
