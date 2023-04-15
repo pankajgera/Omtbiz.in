@@ -89,7 +89,7 @@
             @input="$v.newInvoice.reference_number.$touch()"
             :disabled="true"
           />
-          <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_maxlength') }}</div>
+          <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
         </div>
       </div>
       <div class="table-responsive">
@@ -439,7 +439,7 @@ export default {
           maxLength: maxLength(255)
         },
         reference_number: {
-          maxLength: maxLength(255)
+          required,
         },
         debtors: {
           required

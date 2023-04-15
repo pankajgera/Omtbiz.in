@@ -140,6 +140,10 @@ class InvoicesController extends Controller
                 $reference_number = intval($reference_number) + 1;
             }
 
+            if (! $reference_number || ! $number_attributes['invoice_number']) {
+                abort(500);
+            }
+
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
 
             $invoice = Invoice::create([

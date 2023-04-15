@@ -1410,7 +1410,7 @@
         "maximum_options_error": "Maximum  of {max} options selected. First remove a selected option to select another.",
         "notes_maxlength": "Notes should not be greater than 255 characters.",
         "address_maxlength": "Address should not be greater than 255 characters.",
-        "ref_number_maxlength": "Ref Number should not be greater than 255 characters.",
+        "ref_number_required": "Reference number is required.",
         "prefix_maxlength": "Prefix should not be greater than 5 characters."
     }
 }
