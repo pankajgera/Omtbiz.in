@@ -21,7 +21,8 @@ class AccountLedgersController extends Controller
         $limit = $request->has('limit') ? $request->limit : 20;
 
         $ledgers = AccountLedger::applyFilters($request->only([
-            'date',
+            'from_date',
+            'to_date',
             'account',
             'debit',
             'credit',
