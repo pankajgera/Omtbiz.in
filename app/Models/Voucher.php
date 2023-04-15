@@ -105,6 +105,10 @@ class Voucher extends Model
             $query->whereAccount($filters->get('name'));
         }
 
+        if ($filters->get('account')) {
+            $query->whereAccount($filters->get('account'));
+        }
+
         if ($filters->get('groups')) {
             $master_ids = AccountMaster::where('groups', 'LIKE', '%' . $filters->get('groups') . '%')->pluck('id')->toArray();
             $query->whereIn('account_master_id', $master_ids);
