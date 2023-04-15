@@ -78,12 +78,22 @@ class AccountLedger extends Model
         $query->where('company_id', $company_id);
     }
 
+    public function scopeLedgerBetween($query, $start, $end)
+    {
+        return $query->whereBetween(
+            'date',
+            [$start->format('Y-m-d'), $end->format('Y-m-d')]
+        );
+    }
+
     public function scopeApplyFilters($query, array $filters)
     {
         $filters = collect($filters);
 
-        if ($filters->get('date')) {
-            $query->whereDate($filters->get('date'));
+        if ($filters->get('from_date') && $filters->get('to_date')) {
+            $start = Carbon::createFromFormat('d/m/Y', $filters->get('from_date'));
+            $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
+            $query->ledgerBetween($start, $end);
         }
 
         if ($filters->get('type')) {

@@ -109,7 +109,7 @@ export default {
       ],
       masterData: [],
       short_narration: '',
-      date: '',
+      date: new Date(),
       alreadySubmitted: false,
     }
   },

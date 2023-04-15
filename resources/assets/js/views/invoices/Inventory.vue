@@ -22,15 +22,15 @@
                 </div>
                 <inventory-select
                   ref="inventorySelect"
-                  :invalid="$v.inventory.name.$error"
-                  :invalid-description="$v.inventory.description.$error"
+                  :invalid="$v.invoiceItem.name.$error"
+                  :invalid-description="$v.invoiceItem.description.$error"
                   :inventory="inventoryList"
                   :is-disable="isDisable"
                   :picked-inventory="inventoryData"
                   @search="searchVal"
                   @select="onSelectInventory"
                   @deselect="deselectInventory"
-                  @onDesriptionInput="$v.inventory.description.$touch()"
+                  @onDesriptionInput="$v.invoiceItem.description.$touch()"
                   @onSelectInventory="isSelected = true"
                   @endlist="showEndList"
                 />
@@ -43,14 +43,14 @@
                 :key="'inventoryQuantity'+index"
                 :name="'inventoryQuantity'+index"
                 v-model="inventoryQuantityBind"
-                :invalid="$v.inventory.quantity.$error"
+                :invalid="$v.invoiceItem.quantity.$error"
                 type="number"
                 small
                 :disabled="isDisable || disabled"
-                @blur="$v.inventory.quantity.$touch()"
+                @blur="$v.invoiceItem.quantity.$touch()"
               />
-              <div v-if="$v.inventory.quantity.$error">
-                <span v-if="!$v.inventory.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
+              <div v-if="$v.invoiceItem.quantity.$error">
+                <span v-if="!$v.invoiceItem.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
               </div>
             </td>
             <td class="text-left" v-if="('orders' !== inventoryType)">
@@ -58,13 +58,13 @@
                 <div class="flex-fillbd-highlight">
                    <base-input
                     v-model.trim="price"
-                    :class="{'invalid' : $v.inventory.price.$error, 'input-field': true}"
+                    :class="{'invalid' : $v.invoiceItem.price.$error, 'input-field': true}"
                     type="text"
                     name="price"
                     :disabled="true"
                   />
-                  <div v-if="$v.inventory.price.$error">
-                    <span v-if="!$v.inventory.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
+                  <div v-if="$v.invoiceItem.price.$error">
+                    <span v-if="!$v.invoiceItem.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
                   </div>
                 </div>
 
@@ -79,12 +79,12 @@
                     :key="'inventoryPrice'+index"
                     :name="'inventoryPrice'+index"
                     v-model.trim="sale_price"
-                    :class="{'invalid' : $v.inventory.sale_price.$error, 'input-field': true}"
+                    :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
                     type="number"
                   />
-                  <div v-if="$v.inventory.sale_price.$error">
-                    <span v-if="!$v.inventory.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
+                  <div v-if="$v.invoiceItem.sale_price.$error">
+                    <span v-if="!$v.invoiceItem.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
                   </div>
                 </div>
 
@@ -98,10 +98,10 @@
                 >
                   <base-input
                     v-model="discount"
-                    :invalid="$v.inventory.discount_val.$error"
+                    :invalid="$v.invoiceItem.discount_val.$error"
                     input-class="item-discount"
                     :disabled="isDisable || disabled"
-                    @input="$v.inventory.discount_val.$touch()"
+                    @input="$v.invoiceItem.discount_val.$touch()"
                   />
                   <v-dropdown :show-arrow="false" theme-light>
                     <button
@@ -112,7 +112,7 @@
                       aria-haspopup="true"
                       aria-expanded="false"
                     >
-                      {{ inventory.discount_type == 'fixed' ? currency.symbol : '%' }}
+                      {{ invoiceItem.discount_type == 'fixed' ? currency.symbol : '%' }}
                     </button>
                     <v-dropdown-inventory>
                       <a class="dropdown-inventory" href="#" @click.prevent="selectFixed" >
@@ -211,7 +211,7 @@ export default {
     return {
       isClosePopup: false,
       inventorySelect: null,
-      inventory: {...this.inventoryData},
+      invoiceItem: {...this.inventoryData},
       maxDiscount: 0,
       isSelected: false,
       updatingInput: '',
@@ -225,29 +225,29 @@ export default {
       'modalActive'
     ]),
     disabled() {
-      return !this.inventory.inventory_id;
+      return !this.invoiceItem.inventory_id;
     },
     subtotal: {
       cache: false,
       get: function () {
-        return parseInt(this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price) * this.inventory.quantity
+        return parseInt(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price) * this.invoiceItem.quantity
       },
       set: function (newValue) {
-        return parseInt(newValue ? newValue : this.inventory.price) * this.inventory.quantity
+        return parseInt(newValue ? newValue : this.invoiceItem.price) * this.invoiceItem.quantity
       }
     },
     discount: {
       get: function () {
-        return this.inventory.discount
+        return this.invoiceItem.discount
       },
       set: function (newValue) {
-        if (this.inventory.discount_type === 'percentage') {
-          this.inventory.discount_val = (this.subtotal * newValue)
+        if (this.invoiceItem.discount_type === 'percentage') {
+          this.invoiceItem.discount_val = (this.subtotal * newValue)
         } else {
-          this.inventory.discount_val = newValue
+          this.invoiceItem.discount_val = newValue
         }
 
-        this.inventory.discount = newValue
+        this.invoiceItem.discount = newValue
         this.updatingInput = 'discount'
       }
     },
@@ -256,45 +256,44 @@ export default {
     },
     price: {
       get: function () {
-        return this.inventory.price
+        return this.invoiceItem.price
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.inventory.price = newValue
-          this.maxDiscount = this.inventory.price
+          this.invoiceItem.price = newValue
+          this.maxDiscount = this.invoiceItem.price
         } else {
-          this.inventory.price = newValue
+          this.invoiceItem.price = newValue
         }
         this.updatingInput = 'price'
       }
     },
     sale_price: {
       get: function () {
-        return this.inventory.sale_price ? this.inventory.sale_price : this.inventory.price
+        return this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.inventory.sale_price = newValue
+          this.invoiceItem.sale_price = newValue
           this.maxDiscount = newValue
           this.subtotal = newValue
         } else {
-          this.inventory.sale_price = newValue
+          this.invoiceItem.sale_price = newValue
         }
         this.updatingInput = 'sale_price'
       }
     },
     inventoryQuantityBind: {
       get: function() {
-        return this.inventory.quantity
+        return this.invoiceItem.quantity
       },
       set: function (newValue) {
-      //  console.log(newValue);
         let maxQuantityAvailable = 0;
         if(this.inventoryList.length) {
           let quantity = parseInt(
           this.inventoryList.find(i =>
-            i.name === this.inventory.name &&
-            parseInt(i.price) === parseInt(this.inventory.price)
+            i.name === this.invoiceItem.name &&
+            parseInt(i.price) === parseInt(this.invoiceItem.price)
           ));
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
@@ -312,28 +311,28 @@ export default {
             dangerMode: true
           }).then(async (success) => {
             if (success) {
-              let id = this.inventory.id ? this.inventory.id : this.inventory.inventory_id;
-              //this.inventory.quantity = null
+              let id = this.invoiceItem.id ? this.invoiceItem.id : this.invoiceItem.inventory_id;
+              //this.invoiceItem.quantity = null
               window.open('/inventory/' + id + '/edit', '_blank').focus()
             } else {
-              //this.inventory.quantity = null
+              //this.invoiceItem.quantity = null
             }
           })
         } else {
-          this.inventory.quantity = newValue
+          this.invoiceItem.quantity = newValue
         }
         this.updatingInput = 'quantity'
       }
     }
   },
   watch: {
-    inventory: {
+    invoiceItem: {
       handler: 'updateInventory',
       deep: true
     },
     subtotal (newValue) {
-      if (this.inventory.discount_type === 'percentage') {
-        this.inventory.discount_val = (this.inventory.discount * newValue)
+      if (this.invoiceItem.discount_type === 'percentage') {
+        this.invoiceItem.discount_val = (this.invoiceItem.discount * newValue)
       }
     },
     modalActive (val) {
@@ -344,7 +343,7 @@ export default {
   },
   validations () {
     return {
-      inventory: {
+      invoiceItem: {
         name: {
           required
         },
@@ -379,54 +378,54 @@ export default {
   created () {
     window.hub.$on('checkInventory', this.validateInventory)
     window.hub.$on('newInventory', (val) => {
-      if (!this.inventory.inventory_id && this.modalActive && this.isSelected) {
+      if (!this.invoiceItem.inventory_id && this.modalActive && this.isSelected) {
         this.onSelectInventory(val)
       }
     });
   },
   methods: {
     searchVal (val) {
-      this.inventory.name = val
+      this.invoiceItem.name = val
     },
     deselectInventory () {
-      this.inventory = {...InvoiceStub, id: this.inventory.id}
+      this.invoiceItem = {...InvoiceStub, id: this.invoiceItem.id}
       this.$nextTick(() => {
         this.$refs.inventorySelect.$refs.baseSelect.$refs.search.focus()
       })
     },
-    onSelectInventory (inventory) {
-      if (!inventory || 0 === inventory.id) {
+    onSelectInventory (newItem) {
+      if (!newItem || 0 === newItem.id) {
         return;
       }
-      this.inventory.id = inventory.id
-      this.inventory.name = inventory.name
-      this.inventory.price = inventory.price
-      this.inventory.sale_price = inventory.sale_price ? inventory.sale_price : inventory.price
-      this.inventory.inventory_id = inventory.id
-      this.inventory.description = inventory.description
+
+      this.invoiceItem.name = newItem.name
+      this.invoiceItem.price = newItem.price
+      this.invoiceItem.sale_price = newItem.sale_price ? newItem.sale_price : newItem.price
+      this.invoiceItem.inventory_id = newItem.id
+      this.invoiceItem.description = newItem.description
       this.updatingInput = 'quantity'
       this.updateInventory()
     },
     selectFixed () {
-      if (this.inventory.discount_type === 'fixed') {
+      if (this.invoiceItem.discount_type === 'fixed') {
         return
       }
-      this.inventory.discount_val = this.inventory.discount
-      this.inventory.discount_type = 'fixed'
+      this.invoiceItem.discount_val = this.invoiceItem.discount
+      this.invoiceItem.discount_type = 'fixed'
     },
     selectPercentage () {
-      if (this.inventory.discount_type === 'percentage') {
+      if (this.invoiceItem.discount_type === 'percentage') {
         return
       }
-      this.inventory.discount_val = (this.subtotal * this.inventory.discount)
-      this.inventory.discount_type = 'percentage'
+      this.invoiceItem.discount_val = (this.subtotal * this.invoiceItem.discount)
+      this.invoiceItem.discount_type = 'percentage'
     },
     updateInventory () {
       this.$emit('update', {
         'index': this.index,
         'updatingInput': this.updatingInput,
         'inventory': {
-          ...this.inventory,
+          ...this.invoiceItem,
           total: this.total,
         }
       })
@@ -435,8 +434,8 @@ export default {
       this.$emit('remove', this.index)
     },
     validateInventory () {
-      this.$v.inventory.$touch()
-      if (this.inventory !== null) {
+      this.$v.invoiceItem.$touch()
+      if (this.invoiceItem !== null) {
         this.$emit('inventoryValidate', this.index, !this.$v.$invalid)
       } else {
         this.$emit('inventoryValidate', this.index, false)
