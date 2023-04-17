@@ -60,11 +60,11 @@ export const setSelectAllState = ({ commit, dispatch, state }, data) => {
 }
 
 export const selectAllVouchers = ({ commit, dispatch, state }) => {
-  if (state.selectedVouchers.length === state.voucher.length) {
+  if (state.selectedVouchers.length === state.vouchers.length) {
     commit(types.SET_SELECTED_VOUCHERS, [])
     commit(types.SET_SELECT_ALL_STATE, false)
   } else {
-    let allVoucherIds = state.voucher.map(voucher => voucher.id)
+    let allVoucherIds = state.vouchers.map(voucher => voucher.id)
     commit(types.SET_SELECTED_VOUCHERS, allVoucherIds)
     commit(types.SET_SELECT_ALL_STATE, true)
   }
@@ -72,7 +72,7 @@ export const selectAllVouchers = ({ commit, dispatch, state }) => {
 
 export const selectVoucher = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECTED_VOUCHERS, data)
-  if (state.selectedVouchers.length === state.voucher.length) {
+  if (state.selectedVouchers.length === state.vouchers.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)

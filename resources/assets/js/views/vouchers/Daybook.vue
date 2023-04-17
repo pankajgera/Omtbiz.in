@@ -54,19 +54,18 @@
         <div class="row">
           <div class="col-sm-3">
             <div class="filter-date">
-            <div class="from pr-3">
-              <label>{{ $t('general.from') }}</label>
-              <base-date-picker
-                v-model="filters.from_date"
-                :calendar-button="true"
-                calendar-button-icon="calendar"
-              />
+              <div class="from pr-3">
+                <label>{{ $t('general.from') }}</label>
+                <base-date-picker
+                  v-model="filters.from_date"
+                  :calendar-button="true"
+                  calendar-button-icon="calendar"
+                />
+              </div>
             </div>
           </div>
-
-          </div>
-           <div class="col-sm-3">
-              <div class="to pl-3">
+          <div class="col-sm-3">
+            <div class="to pl-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
                 v-model="filters.to_date"
@@ -74,7 +73,7 @@
                 calendar-button-icon="calendar"
               />
             </div>
-            </div>
+          </div>
           <div class="col-sm-2">
             <label class="form-label"> {{ $tc('daybook.account') }} </label>
             <base-input
@@ -181,7 +180,7 @@
         table-class="table"
       >
 
-        <table-column
+        <!-- <table-column
           :sortable="false"
           :filterable="false"
           cell-class="no-click"
@@ -198,7 +197,7 @@
               <label :for="row.id" class="custom-control-label"/>
             </div>
           </template>
-        </table-column>
+        </table-column> -->
         <table-column
           :label="$t('daybook.date')"
           show="date"
@@ -394,7 +393,7 @@ export default {
     },
     async fetchData ({ page, filter, sort }) {
       let data = {
-       from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         account: this.filters.account !== null ? this.filters.account : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
@@ -460,5 +459,6 @@ export default {
 .table-actions {
   width:100%;
   display: block;
+  height: 55px;
 }
 </style>

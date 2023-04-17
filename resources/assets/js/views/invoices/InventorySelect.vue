@@ -59,7 +59,7 @@ export default {
   },
   data () {
     return {
-      newInventory: this.pickedInventory && this.pickedInventory.id ? this.pickedInventory : null,
+      newInventory: this.pickedInventory && this.pickedInventory.inventory_id ? this.pickedInventory : null,
       loading: false,
     }
   },

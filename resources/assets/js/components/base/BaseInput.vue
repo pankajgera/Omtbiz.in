@@ -106,7 +106,7 @@ export default {
   data () {
     return {
       inputValue: this.value,
-      focus: false,
+      focus: this.name==='account' ? true : false,
       showPass: false
     }
   },

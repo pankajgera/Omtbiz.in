@@ -84,7 +84,29 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
+            <div class="filter-date">
+              <div class="from pr-3">
+                <label>{{ $t('general.from') }}</label>
+                <base-date-picker
+                  v-model="filters.from_date"
+                  :calendar-button="true"
+                  calendar-button-icon="calendar"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="to pl-3">
+              <label>{{ $t('general.to') }}</label>
+              <base-date-picker
+                v-model="filters.to_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+            </div>
+          </div>
+          <div class="col-sm-3">
             <label class="form-label"> {{ $tc('ledgers.account') }} </label>
             <base-input
               v-model="filters.account"
@@ -111,7 +133,7 @@
               autocomplete="off"
             />
           </div> -->
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label class="form-label"> {{ $tc('ledgers.balance') }} </label>
             <base-input
               v-model="filters.balance"
@@ -280,6 +302,7 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import moment from 'moment'
 
 export default {
   components: {
@@ -290,11 +313,13 @@ export default {
   data () {
     return {
       id: null,
-      showFilters: false,
+      showFilters: true,
       sortedBy: 'created_at',
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
+        from_date: '',
+        to_date: '',
         account: '',
         credit: '',
         debit: '',
@@ -359,6 +384,8 @@ export default {
     async fetchData ({ page, filter, sort }) {
       let data = {
         account: this.filters.account !== null ? this.filters.account : '',
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         credit: this.filters.credit !== null ? this.filters.credit : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
         balance: this.filters.balance !== null ? this.filters.balance : '',
@@ -391,6 +418,8 @@ export default {
     },
     clearFilter () {
       this.filters = {
+        from_date: '',
+        to_date: '',
         account: '',
         credit: '',
         debit: '',

@@ -101,8 +101,17 @@ class Voucher extends Model
             $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
             $query->voucherBetween($start, $end);
         }
+        if ($filters->get('name')) {
+            $query->whereAccount($filters->get('name'));
+        }
+
         if ($filters->get('account')) {
             $query->whereAccount($filters->get('account'));
+        }
+
+        if ($filters->get('groups')) {
+            $master_ids = AccountMaster::where('groups', 'LIKE', '%' . $filters->get('groups') . '%')->pluck('id')->toArray();
+            $query->whereIn('account_master_id', $master_ids);
         }
 
         if ($filters->get('debit')) {
