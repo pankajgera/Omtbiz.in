@@ -82,11 +82,13 @@ class ReceiptController extends Controller
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
-            $obj = new stdClass();
-            $obj->id = $master->id;
-            $obj->balance = isset($ledger) ? $ledger->balance : 0;
-            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
-            array_push($account_ledger, $obj);
+            if ($ledger) {
+                $obj = new stdClass();
+                $obj->id = $master->id;
+                $obj->balance = isset($ledger) ? $ledger->balance : 0;
+                $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+                array_push($account_ledger, $obj);
+            }
         }
 
         $receipt_mode = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
@@ -268,12 +270,14 @@ class ReceiptController extends Controller
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
-            $obj = new stdClass();
-            $obj->id = $master->id;
-            $obj->name = $ledger->account;
-            $obj->balance = isset($ledger) ? $ledger->balance : 0;
-            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
-            array_push($account_ledger, $obj);
+            if ($ledger) {
+                $obj = new stdClass();
+                $obj->id = $master->id;
+                $obj->name = $ledger->account;
+                $obj->balance = isset($ledger) ? $ledger->balance : 0;
+                $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+                array_push($account_ledger, $obj);
+            }
         }
 
         $receipt_mode = AccountMaster::where('groups', 'Bank Accounts')->where('groups', 'Cash-in-Hand')->get();
