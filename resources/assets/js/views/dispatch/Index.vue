@@ -639,7 +639,7 @@ export default {
     },
     async toBeDispatchedData ({ page, filter, sort }) {
       let data = {
-       name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
+        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
         status: this.filters.status !== null ? this.filters.status : '',
         transport: this.filters.transport !== null ? this.filters.transport : '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),

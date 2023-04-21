@@ -247,7 +247,13 @@ class InventoryController extends Controller
     public function getInventoryStock(Request $request)
     {
         try {
-            $inventories = Inventory::whereCompany($request->header('company'))
+
+            $inventories = Inventory::applyFilters($request->only([
+                'worker_name',
+                'item_name',
+                'to_date',
+                'from_date',
+            ]))->whereCompany($request->header('company'))
                 ->orderBy('id', 'desc')
                 ->get();
 
@@ -283,7 +289,8 @@ class InventoryController extends Controller
     public function getInvoiceStock(Request $request, $inventory_id)
     {
         try {
-            $inventoryItems = InventoryItem::where('inventory_id', $inventory_id)->orderBy('id', 'desc')->get();
+            $inventoryItems = InventoryItem::where('inventory_id', $inventory_id)
+            ->orderBy('id', 'desc')->get();
 
             foreach ($inventoryItems as $each) {
                 $each['name'] = Inventory::where('id', $inventory_id)->first()->name;

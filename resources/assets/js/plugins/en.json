@@ -182,6 +182,8 @@
         "sale_price": "Sale Price",
         "dispatch": "Dispatch",
         "party_name": "Party name",
+        "worker_name": "Worker Name",
+        "item_name": "Item Name",
         "invoice_number": "Invoice Number",
         "need_to_be_dispatch": "Need to be dispatch",
         "items_list": "Items List",
