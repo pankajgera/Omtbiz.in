@@ -94,7 +94,6 @@
           <h5 class="p-3">Inventory Item</h5>
             <table class="p-3 m-3" ref="inventoryStock" v-if="inventoryItems.length > 0">
             <tr>
-              <th>ID</th>
               <th>Item</th>
               <th>Worker Name</th>
               <th>Quantity</th>
@@ -104,8 +103,7 @@
               <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.id}}</a></td>
-              <td>{{each.name}}</td>
+              <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.name}}</a></td>
               <td>{{each.worker_name ? each.worker_name : '-'}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.sale_price}}</td>

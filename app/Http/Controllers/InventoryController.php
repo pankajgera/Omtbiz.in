@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Inventory;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Exception;
 use Log;
@@ -248,29 +249,61 @@ class InventoryController extends Controller
     {
         try {
 
-            $inventories = Inventory::applyFilters($request->only([
-                'worker_name',
-                'item_name',
-                'to_date',
-                'from_date',
-            ]))->whereCompany($request->header('company'))
-                ->orderBy('id', 'desc')
-                ->get();
+            $query = DB::table('inventories as inv')
+            ->leftJoin('inventory_items as int', 'int.inventory_id', '=', 'inv.id')
+            ->leftJoin('invoice_items as ic', 'ic.inventory_id', '=', 'inv.id')
+            ->leftJoin('invoices as inc', 'inc.id', '=', 'ic.invoice_id');
+            // Set filter 
 
-            foreach ($inventories as $each) {
-                $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
-                $each['quantity'] = $each->quantity;
-                $each['price'] = $lastest_item->price;
-                $each['sale_price'] = $lastest_item->sale_price;
-                $each['unit'] = $lastest_item->unit;
-                $each['worker_name'] = $lastest_item->worker_name;
-                $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
-
-                $invoice_items_count = InvoiceItem::whereCompany($request->header('company'))
-                    ->where('inventory_id', $each->id)
-                    ->orderBy('id', 'desc')->sum('quantity');
-                $each['item_count'] = intval($invoice_items_count);
+            if (! empty($request->worker_name)) {
+                $searchBy = $request->input('worker_name');
+                $query =  $query->where(function ($query) use ($searchBy) {
+                    return $query->where('int.worker_name', 'LIKE', '%'.$searchBy.'%');
+                });
             }
+            if (! empty($request->item_name)) {
+                $searchBy = $request->input('item_name');
+                $query=  $query->where(function ($query) use ($searchBy) {
+                    return $query->where('inv.name', 'LIKE', '%'.$searchBy.'%');
+                });
+            }
+            if (! empty($request->from_date) && ! empty($request->to_date)) {
+                $start_date =  Carbon::createFromFormat('d/m/Y', $request->input('from_date'))->format('Y-m-d');
+                $end_date =  Carbon::createFromFormat('d/m/Y', $request->input('to_date'))->format('Y-m-d');
+                $query =  $query->whereBetween(
+                              'inc.invoice_date',
+                                [ $start_date,  $end_date]
+                            );
+            }
+
+            $inventories = $query->select(
+                'inc.invoice_date as invoice_date',
+                'inv.id as id',
+                'inv.name as name',
+                'inv.quantity as quantity',
+                'int.price as price',
+                'int.sale_price as sale_price',
+                'int.unit as unit',
+                'int.worker_name as worker_name',
+                DB::raw("(DATE_FORMAT(int.created_at ,'%Y-%m-%d')) as date_time"),
+                DB::raw("SUM(ic.quantity) as item_count"),
+            )->orderBy('inv.id', 'desc')
+            ->groupBy('inv.id')
+            ->get();
+            // foreach ($inventories as $each) {
+            //     $lastest_item = InventoryItem::where('inventory_id', $each->id)->orderBy('id', 'desc')->first();
+            //     $each['quantity'] = $each->quantity;
+            //     $each['price'] = $lastest_item->price;
+            //     $each['sale_price'] = $lastest_item->sale_price;
+            //     $each['unit'] = $lastest_item->unit;
+            //     $each['worker_name'] = $lastest_item->worker_name;
+            //     $each['date_time'] = Carbon::parse($lastest_item->created_at)->format('d-m-Y');
+
+            //     $invoice_items_count = InvoiceItem::whereCompany($request->header('company'))
+            //         ->where('inventory_id', $each->id)
+            //         ->orderBy('id', 'desc')->sum('quantity');
+            //     $each['item_count'] = intval($invoice_items_count);
+            // }
 
             return response()->json([
                 'inventoryItems' => $inventories,
