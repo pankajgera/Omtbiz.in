@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Inventory extends Model
 {
@@ -24,7 +25,9 @@ class Inventory extends Model
     }
     public function scopeWhereWorkerName($query, $worker_name)
     {
-        return $query->where('worker_name', 'LIKE', '%' . $worker_name . '%');
+        $inventory_item = InventoryItem::where('worker_name', $worker_name)->pluck('inventory_id')->toArray();
+        return $query->whereIn('id', $inventory_item);
+        // return $query->where('worker_name', 'LIKE', '%' . $worker_name . '%');
     }
 
     public function scopeWhereQuantity($query, $quantity)
@@ -52,12 +55,25 @@ class Inventory extends Model
         $query->where('company_id', $company_id);
     }
 
+    public function scopeItemBetween($query, $start, $end)
+    {
+        $inventory_item = InventoryItem::pluck('inventory_id')->toArray();
+        $invoice_item = InvoiceItem::whereIn('inventory_id', $inventory_item)->get();
+        foreach($invoice_item as $item) {
+            $invoice = Invoice::where('id', $item->invoice_id)->first();
+            return $query->whereBetween(
+                $invoice->invoice_date->format('Y-m-d'),
+                [$start->format('Y-m-d'), $end->format('Y-m-d')]
+            );
+        }
+    }
+
     public function scopeApplyFilters($query, array $filters)
     {
         $filters = collect($filters);
 
-        if ($filters->get('name')) {
-            $query->whereName($filters->get('name'));
+        if ($filters->get('item_name')) {
+            $query->whereName($filters->get('item_name'));
         }
         if ($filters->get('worker_name')) {
             $query->whereWorkerName($filters->get('worker_name'));
@@ -79,6 +95,12 @@ class Inventory extends Model
             $field = $filters->get('orderByField') ? $filters->get('orderByField') : 'name';
             $orderBy = $filters->get('orderBy') ? $filters->get('orderBy') : 'asc';
             $query->whereOrder($field, $orderBy);
+        }
+
+        if ($filters->get('from_date') && $filters->get('to_date')) {
+            $start = Carbon::createFromFormat('d/m/Y', $filters->get('from_date'));
+            $end = Carbon::createFromFormat('d/m/Y', $filters->get('to_date'));
+            $query->itemBetween($start, $end);
         }
     }
 

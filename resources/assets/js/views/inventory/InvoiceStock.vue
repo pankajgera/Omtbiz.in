@@ -53,7 +53,6 @@
           <h5 class="p-3">Outwards</h5>
           <table class="p-3 m-3" v-if="invoiceItems.length">
             <tr>
-              <th>ID</th>
               <th>Item Name</th>
               <th>Party Name</th>
               <th>Quantity</th>
@@ -62,8 +61,7 @@
               <th>Date/Time</th>
             </tr>
             <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" :href="`/invoices/${each.invoice_id}/edit`">{{each.invoice_id}}</a></td>
-              <td>{{each.name}}</td>
+              <td><a style="color:blue" :href="`/invoices/${each.invoice_id}/edit`">{{each.name}}</a></td>
               <td>{{each.party_name}}</td>
               <td>{{each.quantity}}</td>
               <td>₹ {{each.sale_price}}</td>
