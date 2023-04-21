@@ -253,7 +253,7 @@ class InventoryController extends Controller
             ->leftJoin('inventory_items as int', 'int.inventory_id', '=', 'inv.id')
             ->leftJoin('invoice_items as ic', 'ic.inventory_id', '=', 'inv.id')
             ->leftJoin('invoices as inc', 'inc.id', '=', 'ic.invoice_id');
-            // Set filter 
+            // Set filter
 
             if (! empty($request->worker_name)) {
                 $searchBy = $request->input('worker_name');
@@ -271,9 +271,9 @@ class InventoryController extends Controller
                 $start_date =  Carbon::createFromFormat('d/m/Y', $request->input('from_date'))->format('Y-m-d');
                 $end_date =  Carbon::createFromFormat('d/m/Y', $request->input('to_date'))->format('Y-m-d');
                 $query =  $query->whereBetween(
-                              'inc.invoice_date',
-                                [ $start_date,  $end_date]
-                            );
+                    'inc.invoice_date',
+                    [ $start_date,  $end_date]
+                );
             }
 
             $inventories = $query->select(
@@ -338,6 +338,7 @@ class InventoryController extends Controller
                 $party = Invoice::where('id', $each->invoice_id)->first();
                 $each['party_name'] = AccountMaster::where('id', $party->account_master_id)->first()->name;
                 $each['date_time'] = Carbon::parse($party->invoice_date)->format('d-m-Y');
+                $each['invoice_number'] = Invoice::where('id', $each->invoice_id)->first()->invoice_number;
             }
 
             return response()->json([
