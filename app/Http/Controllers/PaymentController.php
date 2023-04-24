@@ -82,11 +82,13 @@ class PaymentController extends Controller
         $account_ledger = [];
         foreach ($usersOfSundryCreditor as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
-            $obj = new stdClass();
-            $obj->id = $master->id;
-            $obj->balance = isset($ledger) ? $ledger->balance : 0;
-            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
-            array_push($account_ledger, $obj);
+            if ($ledger) {
+                $obj = new stdClass();
+                $obj->id = $master->id;
+                $obj->balance = isset($ledger) ? $ledger->balance : 0;
+                $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+                array_push($account_ledger, $obj);
+            }
         }
 
         $payment_method = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
@@ -254,11 +256,13 @@ class PaymentController extends Controller
         $account_ledger = [];
         foreach ($usersOfSundryCreditor as $master) {
             $ledger = AccountLedger::where('account_master_id', $master->id)->first();
-            $obj = new stdClass();
-            $obj->id = $master->id;
-            $obj->balance = isset($ledger) ? $ledger->balance : 0;
-            $obj->type = isset($ledger) ? $ledger->type : 'Cr';
-            array_push($account_ledger, $obj);
+            if ($ledger) {
+                $obj = new stdClass();
+                $obj->id = $master->id;
+                $obj->balance = isset($ledger) ? $ledger->balance : 0;
+                $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+                array_push($account_ledger, $obj);
+            }
         }
 
         $payment_method = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
