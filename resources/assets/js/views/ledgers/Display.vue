@@ -21,6 +21,7 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-body">
+             <base-loader v-if="isLoading" class="table-loader" />
             <table-component
               ref="table"
               :data="displayArray"
@@ -242,6 +243,7 @@ export default {
   methods: {
     ...mapActions("ledger", ["fetchLedgerDisplay"]),
     async loadEditData() {
+      this.isLoading=true;
       let response = await this.fetchLedgerDisplay(this.$route.params.id);
       this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
@@ -253,6 +255,7 @@ export default {
       if (quan.length) {
         this.totalQuantity = quan.reduce((a, c) =>  a + c);
       }
+      this.isLoading=false;
     },
     getFormattedDate(date) {
       return moment(date).format("DD-MM-YYYY");
