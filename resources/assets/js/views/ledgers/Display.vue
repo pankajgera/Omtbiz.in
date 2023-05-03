@@ -72,13 +72,13 @@
               <!--- Debitor will be debit but for ledger display it will show credit amount -->
               <table-column :label="$t('ledgers.debit')" show="debit">
                 <template slot-scope="row">
-                  ₹ {{ row.credit ? row.credit : "0.00" }}
+                  ₹ {{ row.credit ? numberWithCommas(row.credit) : "0.00" }}
                 </template>
               </table-column>
               <!--- Creditor will be credit but for ledger display it will show debit amount -->
               <table-column :label="$t('ledgers.credit')" show="credit">
                 <template slot-scope="row">
-                  ₹ {{ row.debit ? row.debit : "0.00" }}
+                  ₹ {{ row.debit ? numberWithCommas(row.debit) : "0.00" }}
                 </template>
               </table-column>
             </table-component>
@@ -206,6 +206,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { mapActions, mapGetters } from "vuex";
+import GlobalMixin from '../../helpers/mixins.js';
 const {
   required,
   minLength,
@@ -220,8 +221,9 @@ import moment from "moment";
 
 export default {
   mixins: {
-    validationMixin,
+    validationMixin
   },
+  mixins:[GlobalMixin],
   components: {
     VueEditableGrid,
   },
