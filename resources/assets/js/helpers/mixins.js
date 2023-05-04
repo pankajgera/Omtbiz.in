@@ -7,7 +7,8 @@ export default {
     },
     methods: {
         numberWithCommas(x) {
-            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return new Intl.NumberFormat("en-IN").format(x);
+            // return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
     }
 };
