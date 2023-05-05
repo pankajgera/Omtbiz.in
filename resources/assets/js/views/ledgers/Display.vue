@@ -23,7 +23,7 @@
           <div class="card-body">
              <base-loader v-if="isLoading" class="table-loader" />
             <table-component
-              ref="table"
+              ref="tableDisplay"
               :data="displayArray"
               :show-filter="false"
               table-class="table display-ledger"
@@ -79,6 +79,13 @@
               <table-column :label="$t('ledgers.credit')" show="credit">
                 <template slot-scope="row">
                   ₹ {{ row.debit ? numberWithCommas(row.debit) : "0.00" }}
+                </template>
+              </table-column>
+              <table-column :label="$t('general.delete')">
+                <template slot-scope="row">
+                  <a v-if="'Voucher' === row.voucher_type" href="#" class="d-block text-center" @click="removeVoucher(row.id)">
+                    <font-awesome-icon :icon="['fas', 'trash']" />
+                  </a>
                 </template>
               </table-column>
             </table-component>
@@ -243,6 +250,7 @@ export default {
     this.loadEditData();
   },
   methods: {
+    ...mapActions('voucher', ["deleteVoucher"]),
     ...mapActions("ledger", ["fetchLedgerDisplay"]),
     async loadEditData() {
       this.isLoading=true;
@@ -261,6 +269,33 @@ export default {
     },
     getFormattedDate(date) {
       return moment(date).format("DD-MM-YYYY");
+    },
+    async removeVoucher (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$tc('vouchers.confirm_delete'),
+        icon: '/assets/icon/trash-solid.svg',
+        buttons: true,
+        dangerMode: true
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          let res = await this.deleteVoucher(id)
+          if (res.data.success) {
+            window.toastr['success'](this.$tc('vouchers.deleted_message', 1))
+            // this.$refs.tableDisplay.refresh()
+            window.location.reload()
+            return true
+          }
+
+          if (res.data.error === 'voucher_attached') {
+            window.toastr['error'](this.$tc('vouchers.voucher_attached_message'), this.$t('general.action_failed'))
+            return true
+          }
+
+          window.toastr['error'](res.data.message)
+          return true
+        }
+      })
     },
   },
 };
