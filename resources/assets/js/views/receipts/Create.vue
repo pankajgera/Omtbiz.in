@@ -58,6 +58,7 @@
                 v-model="formData.list"
                 :invalid="$v.formData.list.$error"
                 :options="sundryDebtorList"
+                name="party_name"
                 :searchable="true"
                 :show-labels="false"
                 :placeholder="$t('receipts.select_a_list')"
