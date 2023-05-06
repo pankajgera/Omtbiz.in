@@ -133,30 +133,25 @@ class AccountLedgersController extends Controller
      */
     public function display(Request $request, $id)
     {
+        $form = $request->params;
         $ledger = AccountLedger::findOrFail($id);
-        $all_voucher_ids = Voucher::where('account_ledger_id', $id)
-            ->whereCompany($request->header('company'))
-            ->whereNotNull('related_voucher')
-            ->get();
-        $each_ids = null;
-        foreach ($all_voucher_ids as $each) {
-            if ($each_ids) {
-                $each_ids = $each_ids . ', ' . $each->related_voucher;
-            } else {
-                $each_ids = $each->related_voucher;
-            }
-        }
-        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::with(['invoice.inventories', 'receipt'])->whereIn('id', explode(',', $unique_ids))
-            ->where('account', '!=', $ledger->account)
-            ->whereCompany($request->header('company'))
-            ->orderBy('date', 'desc')
-            ->get();
+        $from = Carbon::parse(str_replace('/', '-', json_decode($form)->from_date))->startOfDay();
+        $to = Carbon::parse(str_replace('/', '-', json_decode($form)->to_date))->endOfDay();
+
+        //Update ledger related data
+        $response = AccountLedger::ledgerMutation($ledger, $from, $to);
 
         return response()->json([
-            'vouchers' => $related_vouchers,
+            'vouchers' => $response['related_vouchers'],
             'ledger' => $ledger,
             'account_master' => AccountMaster::where('id', $ledger->account_master_id)->first(),
+            'inventory_sum' => $response['inventory_sum'],
+            'total_opening_balance_dr' => $response['total_opening_balance_dr'],
+            'total_opening_balance_cr' => $response['total_opening_balance_cr'],
+            'current_balance_cr' => $response['current_balance_cr'],
+            'current_balance_dr' => $response['current_balance_dr'],
+            'closing_balance_cr' => $response['closing_balance_cr'],
+            'closing_balance_dr' => $response['closing_balance_dr'],
         ]);
     }
 

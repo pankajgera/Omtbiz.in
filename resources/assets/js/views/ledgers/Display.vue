@@ -6,14 +6,10 @@
       </h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item">
-          <router-link slot="item-title" to="/invoices">{{
-            $t("general.home")
-          }}</router-link>
+          <router-link slot="item-title" to="/invoices">{{$t("general.home")}}</router-link>
         </li>
         <li class="breadcrumb-item">
-          <router-link slot="item-title" to="/ledgers">{{
-            $tc("ledgers.ledgers_list", 2)
-          }}</router-link>
+          <router-link slot="item-title" to="/ledgers">{{$tc("ledgers.ledgers_list", 2)}}</router-link>
         </li>
       </ol>
     </div>
@@ -21,7 +17,50 @@
       <div class="col-sm-12">
         <div class="card">
           <div class="card-body">
-             <base-loader v-if="isLoading" class="table-loader" />
+            <div class="reports-tab-container">
+              <div class="row">
+                <div class="col-md-4 report-field-container">
+                  <label class="report-label">{{ $t('reports.customers.date_range') }}</label>
+                  <base-select
+                    v-model="selectedRange"
+                    :options="dateRange"
+                    :allow-empty="false"
+                    :show-labels="false"
+                    @input="onChangeDateRange"
+                  />
+                  <span v-if="$v.range.$error && !$v.range.required" class="text-danger"> {{ $t('validation.required') }} </span>
+                </div>
+                <div class="col-md-4 report-field-container">
+                  <label class="report-label">{{ $t('reports.customers.from_date') }}</label>
+                  <base-date-picker
+                    v-model="formData.from_date"
+                    :invalid="$v.formData.from_date.$error"
+                    :calendar-button="true"
+                    calendar-button-icon="calendar"
+                    @change="$v.formData.from_date.$touch()"
+                    @input="loadEditData()"
+                  />
+                  <span v-if="$v.formData.from_date.$error && !$v.formData.from_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+                </div>
+                <div class="col-md-4 report-field-container">
+                  <label class="report-label">{{ $t('reports.customers.to_date') }}</label>
+                  <base-date-picker
+                    v-model="formData.to_date"
+                    :invalid="$v.formData.to_date.$error"
+                    :calendar-button="true"
+                    calendar-button-icon="calendar"
+                    @change="$v.formData.to_date.$touch()"
+                    @input="loadEditData()"
+                  />
+                  <span v-if="$v.formData.to_date.$error && !$v.formData.to_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <base-loader v-if="isLoading" class="table-loader" />
             <table-component
               ref="tableDisplay"
               :data="displayArray"
@@ -37,15 +76,15 @@
                 :label="$t('ledgers.particulars')"
                 show="particulars"
               >
-              <template slot-scope="row">
-                  <router-link
-                    :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` :
-                      row.receipt_id ? `/receipts/${row.receipt_id}/edit` :
-                      `/vouchers/${row.id}/edit`}"
-                    class="dropdown-item"
-                  >
-                    {{ row.account }}
-                  </router-link>
+                <template slot-scope="row">
+                    <router-link
+                      :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` :
+                        row.receipt_id ? `/receipts/${row.receipt_id}/edit` :
+                        `/vouchers/${row.id}/edit`}"
+                      class="dropdown-item"
+                    >
+                      {{ row.account }}
+                    </router-link>
                 </template>
               </table-column>
               <table-column
@@ -92,7 +131,7 @@
             <p class="row footer-total">
               <span class="mr-30">Total Quantity:</span>
               <span class="ml-60">
-                {{ totalQuantity }}
+                {{ inventorySum }}
               </span>
             </p>
           </div>
@@ -102,42 +141,20 @@
             <p class="row p-footer">
               <span class="col-sm-4">Opening Balance:</span>
               <span class="col-sm-4">
-                {{
-                  masterData.type === "Dr" && masterData.opening_balance
-                    ? " ₹ " +
-                      parseFloat(masterData.opening_balance).toFixed(2) +
-                      " " +
-                      masterData.type
-                    : " ₹ 0.00"
-                }}
+                ₹ {{ totalOpeningBalanceCr ? totalOpeningBalanceCr :  0.00  }} Dr
               </span>
               <span class="col-sm-4">
-                {{
-                  masterData.type === "Cr" && masterData.opening_balance
-                    ? " ₹ " +
-                      parseFloat(masterData.opening_balance).toFixed(2) +
-                      " " +
-                      masterData.type
-                    : " ₹ 0.00"
-                }}
+                ₹ {{ totalOpeningBalanceDr ? totalOpeningBalanceDr :  0.00  }} Cr
               </span>
             </p>
             <br/>
             <p class="row p-footer">
               <span class="col-sm-4">Current Total:</span>
               <span class="col-sm-4">
-                {{
-                  currentTotalDebit
-                    ? " ₹ " + parseFloat(currentTotalDebit).toFixed(2) + " Dr"
-                    : " ₹ 0.00"
-                }}
+                ₹ {{ currentBalanceCr ? currentBalanceCr :  0.00  }} Dr
               </span>
               <span class="col-sm-4">
-                {{
-                  currentTotalCredit
-                    ? " ₹ " + parseFloat(currentTotalCredit).toFixed(2) + " Cr"
-                    : " ₹ 0.00"
-                }}
+                ₹ {{ currentBalanceDr ? currentBalanceDr :  0.00  }} Cr
               </span>
             </p>
             <br/>
@@ -145,18 +162,10 @@
             <h6 class="row p-footer">
               <span class="col-sm-4">Closing Balance:</span>
               <span class="col-sm-4">
-                {{
-                  ledgerData.type === "Dr" && ledgerData
-                    ? " ₹ " + parseFloat(ledgerData.balance).toFixed(2) + " Dr"
-                    : " ₹ 0.00"
-                }}
+                ₹ {{ closingBalanceCr ? closingBalanceCr :  0.00  }} Dr
               </span>
               <span class="col-sm-4">
-                {{
-                  ledgerData.type === "Cr" && ledgerData
-                    ? " ₹ " + parseFloat(ledgerData.balance).toFixed(2) + " Cr"
-                    : " ₹ 0.00"
-                }}
+                ₹ {{ closingBalanceDr ? closingBalanceDr :  0.00  }} Cr
               </span>
             </h6>
           </div>
@@ -234,16 +243,60 @@ export default {
   components: {
     VueEditableGrid,
   },
+  validations: {
+    range: {
+      required
+    },
+    formData: {
+      from_date: {
+        required
+      },
+      to_date: {
+        required
+      }
+    }
+  },
+  watch: {
+    range (newRange) {
+      this.formData.from_date = moment(newRange).startOf('year').toString()
+      this.formData.to_date = moment(newRange).endOf('year').toString()
+    }
+  },
   data() {
     return {
       isLoading: false,
       title: "Display Account Ledger",
       displayArray: [],
       ledgerData: "",
-      masterData: "",
+      // masterData: "",
       currentTotalCredit: 0,
       currentTotalDebit: 0,
-      totalQuantity: 0,
+      // totalQuantity: 0,
+      range: new Date(),
+      dateRange: [
+        'Today',
+        'This Week',
+        'This Month',
+        'This Quarter',
+        'This Year',
+        'Previous Week',
+        'Previous Month',
+        'Previous Quarter',
+        'Previous Year',
+        'Custom'
+      ],
+      selectedRange: 'This Month',
+      formData: {
+        from_date: moment().startOf('month').toString(),
+        to_date: moment().endOf('month').toString()
+      },
+      inventorySum: 0,
+      totalOpeningBalanceDr: 0,
+      totalOpeningBalanceCr: 0,
+      currentBalanceCr: 0,
+      currentBalanceDr: 0,
+      closingBalanceCr: 0,
+      closingBalanceDr: 0,
     };
   },
   created() {
@@ -254,17 +307,31 @@ export default {
     ...mapActions("ledger", ["fetchLedgerDisplay"]),
     async loadEditData() {
       this.isLoading=true;
-      let response = await this.fetchLedgerDisplay(this.$route.params.id);
+      let data = {
+          formData: {
+            from_date: moment(this.formData.from_date).format('DD/MM/YYYY'),
+            to_date: moment(this.formData.to_date).format('DD/MM/YYYY'),
+          },
+          id: this.$route.params.id
+      };
+      let response = await this.fetchLedgerDisplay({'id': data.id, 'params': data.formData});
       this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
-      this.masterData = response.data.account_master;
-      this.currentTotalCredit = this.ledgerData.credit;
-      this.currentTotalDebit = this.ledgerData.debit;
-      let quan = this.displayArray.filter(i => i.invoice)
-        .map(i => i.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b)).filter(i => i);
-      if (quan.length) {
-        this.totalQuantity = quan.reduce((a, c) =>  a + c);
-      }
+      // this.masterData = response.data.account_master;
+      this.inventorySum = response.data.inventory_sum;
+      this.totalOpeningBalanceDr = response.data.total_opening_balance_dr;
+      this.totalOpeningBalanceCr = response.data.total_opening_balance_cr;
+      this.currentBalanceCr = response.data.current_balance_cr;
+      this.currentBalanceDr = response.data.current_balance_dr;
+      this.closingBalanceCr = response.data.closing_balance_cr;
+      this.closingBalanceDr = response.data.closing_balance_dr;
+      // this.currentTotalCredit = this.ledgerData.credit;
+      // this.currentTotalDebit = this.ledgerData.debit;
+      // let quan = this.displayArray.filter(i => i.invoice)
+      //   .map(i => i.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b)).filter(i => i);
+      // if (quan.length) {
+      //   this.totalQuantity = quan.reduce((a, c) =>  a + c);
+      // }
       this.isLoading=false;
     },
     getFormattedDate(date) {
@@ -296,6 +363,67 @@ export default {
           return true
         }
       })
+    },
+    getThisDate (type, time) {
+      return moment()[type](time).toString()
+    },
+    getPreDate (type, time) {
+      return moment().subtract(1, time)[type](time).toString()
+    },
+    onChangeDateRange () {
+      switch (this.selectedRange) {
+        case 'Today':
+          this.formData.from_date = moment().toString()
+          this.formData.to_date = moment().toString()
+          break
+
+        case 'This Week':
+          this.formData.from_date = this.getThisDate('startOf', 'isoWeek')
+          this.formData.to_date = this.getThisDate('endOf', 'isoWeek')
+          break
+
+        case 'This Month':
+          this.formData.from_date = this.getThisDate('startOf', 'month')
+          this.formData.to_date = this.getThisDate('endOf', 'month')
+          break
+
+        case 'This Quarter':
+          this.formData.from_date = this.getThisDate('startOf', 'quarter')
+          this.formData.to_date = this.getThisDate('endOf', 'quarter')
+          break
+
+        case 'This Year':
+          this.formData.from_date = this.getThisDate('startOf', 'year')
+          this.formData.to_date = this.getThisDate('endOf', 'year')
+          break
+
+        case 'Previous Week':
+          this.formData.from_date = this.getPreDate('startOf', 'isoWeek')
+          this.formData.to_date = this.getPreDate('endOf', 'isoWeek')
+          break
+
+        case 'Previous Month':
+          this.formData.from_date = this.getPreDate('startOf', 'month')
+          this.formData.to_date = this.getPreDate('endOf', 'month')
+          break
+
+        case 'Previous Quarter':
+          this.formData.from_date = this.getPreDate('startOf', 'quarter')
+          this.formData.to_date = this.getPreDate('endOf', 'quarter')
+          break
+
+        case 'Previous Year':
+          this.formData.from_date = this.getPreDate('startOf', 'year')
+          this.formData.to_date = this.getPreDate('endOf', 'year')
+          break
+
+        default:
+          break
+      }
+      this.loadEditData()
+    },
+    setRangeToCustom () {
+      this.selectedRange = 'Custom'
     },
   },
 };
