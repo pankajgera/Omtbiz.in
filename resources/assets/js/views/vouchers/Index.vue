@@ -146,7 +146,7 @@
           show="debit"
         >
           <template slot-scope="row">
-            ₹ {{ row.debit }}
+            ₹ {{ numberWithCommas(row.debit) }}
           </template>
         </table-column>
         <table-column
@@ -154,7 +154,7 @@
           show="credit"
         >
           <template slot-scope="row">
-            ₹ {{ row.credit }}
+            ₹ {{ numberWithCommas(row.credit) }}
           </template>
         </table-column>
         <table-column
@@ -211,6 +211,7 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import GlobalMixin from '../../helpers/mixins.js';
 
 export default {
   components: {
@@ -218,6 +219,7 @@ export default {
     SatelliteIcon,
     BaseButton,
   },
+  mixins:[GlobalMixin],
   data () {
     return {
       id: null,
