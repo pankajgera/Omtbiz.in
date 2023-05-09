@@ -45,7 +45,6 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              name="party_name"
               :disabled="isDisabled || estimateSelected"
               :placeholder="$t('receipts.select_a_list')"
               label="name"

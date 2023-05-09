@@ -310,14 +310,6 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      focus: this.name==='party_name' ? true : false,
-    }
-  },
-  mounted() {
-    this.focusInput();
-  },
   computed: {
     isSingleLabelVisible () {
       return (
@@ -384,14 +376,7 @@ export default {
           : true)
       )
     }
-  },
-  methods:{
-    focusInput () {
-      if (this.focus) {
-        this.$refs.search.focus()
-      }
-    },
-  },
+  }
 }
 </script>
 <style>

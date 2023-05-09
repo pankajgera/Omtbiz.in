@@ -287,8 +287,144 @@ class ReportController extends Controller
         $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
 
-        //Update ledger related data
-        $response = AccountLedger::ledgerMutation($ledger, $from, $to);
+        $all_voucher_ids = Voucher::where('account_ledger_id', $request->ledger_id)->whereNotNull('related_voucher')->get();
+        $each_ids = null;
+        foreach ($all_voucher_ids as $each) {
+            if ($each_ids) {
+                $each_ids = $each_ids . ', ' . $each->related_voucher;
+            } else {
+                $each_ids = $each->related_voucher;
+            }
+        }
+        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
+        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
+            ->whereDate('date', '>=', $from)
+            ->whereDate('date', '<=', $to)
+            ->orderBy('date')
+            ->get();
+
+        $inventory_sum = 0;
+        $current_balance_cr = 0;
+        $current_balance_dr = 0;
+        $closing_balance_cr = 0;
+        $closing_balance_dr = 0;
+        $total_opening_balance_cr = 0;
+        $total_opening_balance_dr = 0;
+        $master = AccountMaster::where('id', $ledger->account_master_id)->first();
+        $master_opening_balance = $master->opening_balance;
+
+        foreach ($related_vouchers as $each) {
+            $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
+            $inventory_sum += $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0;
+            //we show cr to dr when we display
+            $current_balance_cr += $each->credit;
+            $current_balance_dr += $each->debit;
+        }
+
+        //Calculate Opening balance
+        $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
+            ->where('account', '!=', $ledger->account)
+            ->whereDate('date', '<', $from)
+            ->orderBy('date')
+            ->get(['id', 'debit', 'credit']);
+
+
+        foreach ($calc_opening_balance as $each) {
+            if ($each->debit) {
+                $total_opening_balance_dr += $each->debit;
+            }
+            if ($each->credit) {
+                $total_opening_balance_cr += $each->credit;
+            }
+        }
+
+        $sum_opening_current_cr = 0;
+        $sum_opening_current_dr = 0;
+        // --- 1. Calculate opening balance
+        //Total opening balance include previous dates
+        if ('Dr' === $master->type) {
+            $total_opening_balance_cr = $total_opening_balance_cr + $master_opening_balance;
+        } else {
+            $total_opening_balance_dr = $total_opening_balance_dr + $master_opening_balance;
+        }
+
+        //For dates, add/sub total_opening so we get only single opening
+        if ($total_opening_balance_cr > $total_opening_balance_dr) {
+            $total_opening_balance_cr = abs($total_opening_balance_cr - $total_opening_balance_dr);
+            $total_opening_balance_dr = 0;
+        } else if ($total_opening_balance_cr < $total_opening_balance_dr) {
+            $total_opening_balance_dr = abs($total_opening_balance_cr - $total_opening_balance_dr);
+            $total_opening_balance_cr = 0;
+        } else {
+            $total_opening_balance_cr = 0;
+            $total_opening_balance_dr = 0;
+        }
+
+        // --- 2. Calculate current balance
+        //Adding opening and current balance with total opening
+        $sum_opening_current_cr = $total_opening_balance_cr + $current_balance_cr;
+        $sum_opening_current_dr = $total_opening_balance_dr + $current_balance_dr;
+
+        // --- 3. Calculate closing balance
+        if ($sum_opening_current_cr > $sum_opening_current_dr) {
+            $closing_balance_cr = abs($sum_opening_current_cr - $sum_opening_current_dr);
+            $closing_balance_dr = 0;
+        } else if ($sum_opening_current_cr < $sum_opening_current_dr) {
+            $closing_balance_dr = abs($sum_opening_current_dr - $sum_opening_current_cr);
+            $closing_balance_cr = 0;
+        } else {
+            $closing_balance_cr = 0;
+            $closing_balance_dr = 0;
+        }
+
+        $vouchers_debit_sum = $all_voucher_ids->sum('debit');
+        $vouchers_credit_sum = $all_voucher_ids->sum('credit');
+
+        $opening_balance = $ledger->accountMaster->opening_balance;
+        $calc_balance = $ledger->balance;
+        $calc_type = $ledger->type;
+        $calc_total = 0;
+
+        //Calculate total balance, type, debit/credit and update it in ledger
+        if ($vouchers_debit_sum > $vouchers_credit_sum) {
+            $calc_total = $vouchers_debit_sum - $vouchers_credit_sum;
+            $calc_type = 'Dr';
+        } else {
+            $calc_total = $vouchers_credit_sum - $vouchers_debit_sum;
+            $calc_type = 'Cr';
+        }
+        if ('Dr' === $ledger->accountMaster->type) {
+            if ('Dr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance = $calc_total - $opening_balance;
+                    $calc_type = 'Cr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Dr';
+                }
+            }
+        } else {
+            if ('Cr' === $calc_type) {
+                $calc_balance = $calc_total + $opening_balance;
+            } else {
+                if ($calc_total > $opening_balance) {
+                    $calc_balance  = $calc_total - $opening_balance;
+                    $calc_type = 'Dr';
+                } else {
+                    $calc_balance = $opening_balance - $calc_total;
+                    $calc_type = 'Cr';
+                }
+            }
+        }
+        $ledger->update([
+            'type' => $calc_type,
+            'credit' => $vouchers_credit_sum,
+            'debit' => $vouchers_debit_sum,
+            'balance' => $calc_balance,
+        ]);
 
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
@@ -311,20 +447,20 @@ class ReportController extends Controller
             ->get();
 
         view()->share([
-            'ledgerType' => $response['calc_type'],
+            'ledgerType' => $calc_type,
             'ledger' => $ledger,
-            'related_vouchers' => $response['related_vouchers'],
+            'related_vouchers' => $related_vouchers,
             'colorSettings' => $colorSettings,
             'company' => $company,
             'from_date' => $from_date,
             'to_date' => $to_date,
-            'inventory_sum' => $response['inventory_sum'],
-            'total_opening_balance_dr' => $response['total_opening_balance_dr'],
-            'total_opening_balance_cr' => $response['total_opening_balance_cr'],
-            'current_balance_cr' => $response['current_balance_cr'],
-            'current_balance_dr' => $response['current_balance_dr'],
-            'closing_balance_cr' => $response['closing_balance_cr'],
-            'closing_balance_dr' => $response['closing_balance_dr'],
+            'inventory_sum' => $inventory_sum,
+            'total_opening_balance_dr' => $total_opening_balance_dr,
+            'total_opening_balance_cr' => $total_opening_balance_cr,
+            'current_balance_cr' => $current_balance_cr,
+            'current_balance_dr' => $current_balance_dr,
+            'closing_balance_cr' => $closing_balance_cr,
+            'closing_balance_dr' => $closing_balance_dr,
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers');
