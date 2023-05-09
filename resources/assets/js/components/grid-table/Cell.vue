@@ -354,6 +354,7 @@ export default {
 
 <style lang="scss" scoped>
 @import './variables';
+
 .cell {
   padding: 0 $cell-side-paddings;
   position: relative;

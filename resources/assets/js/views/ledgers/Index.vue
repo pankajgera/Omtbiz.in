@@ -238,7 +238,7 @@
           show="debit"
         >
           <template slot-scope="row" v-if="row.type === 'Dr'">
-            ₹ {{ numberWithCommas(row.balance) }}
+            ₹ {{ row.balance }}
           </template>
         </table-column>
         <table-column
@@ -246,7 +246,7 @@
           show="credit"
         >
           <template slot-scope="row" v-if="row.type === 'Cr'">
-            ₹ {{ numberWithCommas(row.balance) }}
+            ₹ {{ row.balance }}
           </template>
         </table-column>
 
@@ -302,7 +302,6 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
-import GlobalMixin from '../../helpers/mixins.js';
 import moment from 'moment'
 
 export default {
@@ -311,7 +310,6 @@ export default {
     SatelliteIcon,
     BaseButton,
   },
-  mixins:[GlobalMixin],
   data () {
     return {
       id: null,
@@ -383,7 +381,6 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
-    
     async fetchData ({ page, filter, sort }) {
       let data = {
         account: this.filters.account !== null ? this.filters.account : '',
