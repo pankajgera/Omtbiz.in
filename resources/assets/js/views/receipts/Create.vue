@@ -79,6 +79,9 @@
                     :max="15"
                     name="amount"
                   />
+                <div v-if="formData.amount">
+                  ₹ {{ numberWithCommas(formData.amount) }}
+                </div>
                 <div v-if="$v.formData.amount.$error">
                   <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
@@ -161,11 +164,12 @@ import { mapActions, mapGetters } from 'vuex'
 import MultiSelect from 'vue-multiselect'
 import { validationMixin } from 'vuelidate'
 import moment from 'moment'
+import GlobalMixin from '../../helpers/mixins.js';
 const { required, between, maxLength, numeric } = require('vuelidate/lib/validators')
 
 export default {
   components: { MultiSelect },
-  mixins: [validationMixin],
+  mixins: [validationMixin, GlobalMixin],
   data () {
     return {
       formData: {

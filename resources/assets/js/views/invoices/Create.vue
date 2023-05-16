@@ -45,6 +45,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
+              :name="'edit' === urlMode ? 'party' : 'party_name'"
               :disabled="isDisabled || estimateSelected"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
@@ -424,6 +425,7 @@ export default {
       showAddNewInventory: true,
       showEndOfList: false,
       estimateSelected: false,
+      urlMode: null,
     }
   },
   validations () {
@@ -536,6 +538,9 @@ export default {
         this.newInvoice.discount_val = (this.newInvoice.discount * newValue)
       }
     }
+  },
+  mounted() {
+    this.urlMode = window.location.pathname.split('/')[3];
   },
   created () {
     this.loadData()
