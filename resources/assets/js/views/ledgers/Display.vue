@@ -141,20 +141,20 @@
             <p class="row p-footer">
               <span class="col-sm-4">Opening Balance:</span>
               <span class="col-sm-4">
-                ₹ {{ totalOpeningBalanceCr ? totalOpeningBalanceCr :  0.00  }} Dr
+                ₹ {{ totalOpeningBalanceCr ? numberWithCommas(totalOpeningBalanceCr) :  0.00  }} Dr
               </span>
               <span class="col-sm-4">
-                ₹ {{ totalOpeningBalanceDr ? totalOpeningBalanceDr :  0.00  }} Cr
+                ₹ {{ totalOpeningBalanceDr ? numberWithCommas(totalOpeningBalanceDr) :  0.00  }} Cr
               </span>
             </p>
             <br/>
             <p class="row p-footer">
               <span class="col-sm-4">Current Total:</span>
               <span class="col-sm-4">
-                ₹ {{ currentBalanceCr ? currentBalanceCr :  0.00  }} Dr
+                ₹ {{ currentBalanceCr ? numberWithCommas(currentBalanceCr) :  0.00  }} Dr
               </span>
               <span class="col-sm-4">
-                ₹ {{ currentBalanceDr ? currentBalanceDr :  0.00  }} Cr
+                ₹ {{ currentBalanceDr ? numberWithCommas(currentBalanceDr) :  0.00  }} Cr
               </span>
             </p>
             <br/>
@@ -162,10 +162,10 @@
             <h6 class="row p-footer">
               <span class="col-sm-4">Closing Balance:</span>
               <span class="col-sm-4">
-                ₹ {{ closingBalanceCr ? closingBalanceCr :  0.00  }} Dr
+                ₹ {{ closingBalanceCr ? numberWithCommas(closingBalanceCr) :  0.00  }} Dr
               </span>
               <span class="col-sm-4">
-                ₹ {{ closingBalanceDr ? closingBalanceDr :  0.00  }} Cr
+                ₹ {{ closingBalanceDr ? numberWithCommas(closingBalanceDr) :  0.00  }} Cr
               </span>
             </h6>
           </div>
