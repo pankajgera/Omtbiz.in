@@ -184,7 +184,7 @@
         >
           <template slot-scope="row">
             <span>{{ $t('estimates.amount') }}</span>
-             	₹ {{ numberWithCommas((row.total).toFixed(2)) }}
+             	₹ {{ (row.total).toFixed(2) }}
           </template>
         </table-column>
         <table-column
@@ -308,7 +308,7 @@
         >
           <template slot-scope="row">
             <span>{{ $t('estimates.amount') }}</span>
-             	₹ {{ numberWithCommas((row.total).toFixed(2)) }}
+             	₹ {{ (row.total).toFixed(2) }}
           </template>
         </table-column>
         <table-column
@@ -347,14 +347,12 @@ import { mapActions, mapGetters } from 'vuex'
 import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'
 import moment from 'moment'
 import BaseButton from '../../components/base/BaseButton'
-import GlobalMixin from '../../helpers/mixins.js';
 
 export default {
   components: {
     'moon-walker-icon': MoonWalkerIcon,
     BaseButton,
   },
-  mixins:[GlobalMixin],
   data () {
     return {
       showFilters: false,

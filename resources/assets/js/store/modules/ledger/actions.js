@@ -22,9 +22,9 @@ export const fetchLedger = ({ commit, dispatch }, id) => {
   })
 }
 
-export const fetchLedgerDisplay = ({ commit, dispatch }, params) => {
+export const fetchLedgerDisplay = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/ledgers/${params.id}/display`, {params}).then((response) => {
+    window.axios.get(`/api/ledgers/${id}/display`).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)

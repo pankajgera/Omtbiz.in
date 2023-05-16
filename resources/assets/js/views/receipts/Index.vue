@@ -180,11 +180,7 @@
           :label="$t('receipts.amount')"
           width="20%"
           show="amount"
-        >
-        <template slot-scope="row">
-            ₹ {{ numberWithCommas(row.amount) }}
-          </template>
-          </table-column>
+        />
         <table-column
           :sortable="false"
           :filterable="false"
@@ -225,14 +221,12 @@ import { mapActions, mapGetters } from 'vuex'
 import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'
 import moment from 'moment'
 import BaseButton from '../../components/base/BaseButton'
-import GlobalMixin from '../../helpers/mixins.js';
 
 export default {
   components: {
     'moon-walker-icon': MoonWalkerIcon,
     BaseButton,
   },
-  mixins:[GlobalMixin],
   data () {
     return {
       sundryDebtorsList: [],
