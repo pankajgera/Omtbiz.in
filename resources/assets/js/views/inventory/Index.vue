@@ -171,7 +171,7 @@
           show="price"
         >
           <template slot-scope="row">
-            ₹ {{ row.price }}
+            ₹ {{ numberWithCommas(row.price) }}
           </template>
         </table-column>
         <table-column
@@ -228,13 +228,14 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
-
+import GlobalMixin from '../../helpers/mixins.js';
 export default {
   components: {
     DotIcon,
     SatelliteIcon,
     BaseButton,
   },
+  mixins:[GlobalMixin],
   data () {
     return {
       id: null,
