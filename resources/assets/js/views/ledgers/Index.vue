@@ -238,7 +238,7 @@
           show="debit"
         >
           <template slot-scope="row" v-if="row.type === 'Dr'">
-            ₹ {{ row.balance }}
+            ₹ {{ numberWithCommas(row.balance) }}
           </template>
         </table-column>
         <table-column
@@ -246,7 +246,7 @@
           show="credit"
         >
           <template slot-scope="row" v-if="row.type === 'Cr'">
-            ₹ {{ row.balance }}
+            ₹ {{ numberWithCommas(row.balance) }}
           </template>
         </table-column>
 
@@ -303,13 +303,14 @@ import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
 import moment from 'moment'
-
+import GlobalMixin from '../../helpers/mixins.js';
 export default {
   components: {
     DotIcon,
     SatelliteIcon,
     BaseButton,
   },
+  mixins:[GlobalMixin],
   data () {
     return {
       id: null,
