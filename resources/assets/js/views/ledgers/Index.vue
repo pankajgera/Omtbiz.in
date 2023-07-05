@@ -302,9 +302,8 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
-import GlobalMixin from '../../helpers/mixins.js';
 import moment from 'moment'
-
+import GlobalMixin from '../../helpers/mixins.js';
 export default {
   components: {
     DotIcon,
@@ -383,7 +382,6 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
-    
     async fetchData ({ page, filter, sort }) {
       let data = {
         account: this.filters.account !== null ? this.filters.account : '',

@@ -178,7 +178,7 @@
         >
           <template slot-scope="row">
             <span>{{ $t('invoices.amount') }}</span>
-             	₹ {{ numberWithCommas((row.total).toFixed(2)) }}
+            ₹ {{ numberWithCommas((row.total).toFixed(2)) }}
           </template>
         </table-column>
         <table-column
@@ -220,7 +220,6 @@ import { mapActions, mapGetters } from 'vuex'
 import MoonWalkerIcon from '../../../js/components/icon/MoonwalkerIcon'
 import moment from 'moment'
 import GlobalMixin from '../../helpers/mixins.js';
-
 export default {
   components: {
     'moon-walker-icon': MoonWalkerIcon

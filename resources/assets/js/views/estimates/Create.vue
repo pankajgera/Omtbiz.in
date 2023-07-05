@@ -30,7 +30,6 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              name="party_name"
               :disabled="$route.name === 'estimates.edit'"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
