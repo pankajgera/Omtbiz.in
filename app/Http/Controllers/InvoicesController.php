@@ -134,11 +134,11 @@ class InvoicesController extends Controller
 
             //Check reference_number
             $reference_number = $request->reference_number;
-            $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
-                ->where('account_master_id', '!=', $request->debtors['id'])->first();
-            if (! empty($find_reference_number)) {
-                $reference_number = intval($reference_number) + 1;
-            }
+            // $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
+            //     ->where('account_master_id', '!=', $request->debtors['id'])->first();
+            // if (! empty($find_reference_number)) {
+            //     $reference_number = intval($reference_number) + 1;
+            // }
 
             if (! $reference_number || ! $number_attributes['invoice_number']) {
                 abort(500);
