@@ -761,6 +761,30 @@ export default {
         this.isLoading = false
       }, 1000)
     },
+    async printInvoice() {
+      //print invoice
+      this.siteURL = `/reports/invoice/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          this.reset();
+        }
+      })
+    },
+    async printSlip() {
+      //print slip
+      this.siteURL = `/reports/slip/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          this.reset();
+        }
+      })
+    },
     async showInvoicePopup (invoice_id) {
       swal({
         title: this.$t('invoices.invoice_report_title'),
@@ -770,15 +794,8 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.siteURL = `/reports/invoice/${invoice_id}`
-          this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-          printJS({
-            printable: this.url,
-            type: 'pdf',
-            onPrintDialogClose: () => {
-              this.reset();
-            }
-          })
+          await this.printInvoice;
+          await this.printSlip;
         } else {
           this.reset()
         }
