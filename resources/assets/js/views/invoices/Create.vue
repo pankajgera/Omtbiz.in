@@ -757,9 +757,35 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        window.location.reload()
         this.isLoading = false
+        window.location.reload()
       }, 1000)
+    },
+    printInvoice(invoice_id) {
+      //print invoice
+      this.siteURL = `/reports/invoice/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          //this.reset();
+          this.isLoading = false
+          this.printSlip(invoice_id)
+        }
+      })
+    },
+    printSlip(invoice_id) {
+      //print slip
+      this.siteURL = `/reports/slip/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          this.reset();
+        }
+      })
     },
     async showInvoicePopup (invoice_id) {
       swal({
@@ -770,15 +796,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.siteURL = `/reports/invoice/${invoice_id}`
-          this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-          printJS({
-            printable: this.url,
-            type: 'pdf',
-            onPrintDialogClose: () => {
-              this.reset();
-            }
-          })
+          this.printInvoice(invoice_id)
         } else {
           this.reset()
         }

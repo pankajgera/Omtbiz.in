@@ -4,18 +4,15 @@ namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Conversation;
 use carbon\carbon;
-use App\Models\MemberLoan;
 use App\Models\Address;
 use App\Models\Payment;
 use App\Models\Company;
 use App\Notifications\MailResetPasswordNotification;
 use Spatie\MediaLibrary\HasMedia;
-use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Exception;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class User extends Authenticatable implements HasMedia
@@ -23,6 +20,7 @@ class User extends Authenticatable implements HasMedia
     use HasApiTokens;
     use Notifiable;
     use InteractsWithMedia;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -40,7 +38,8 @@ class User extends Authenticatable implements HasMedia
         'facebook_id',
         'google_id',
         'github_id',
-        'group_id'
+        'group_id',
+        'deleted_at'
     ];
 
     /**
@@ -66,7 +65,7 @@ class User extends Authenticatable implements HasMedia
      * Find the user instance for the given username.
      *
      * @param  string  $username
-     * @return \App\User
+     * @return User
      */
     public function findForPassport($username)
     {
@@ -241,22 +240,6 @@ class User extends Authenticatable implements HasMedia
     public static function deleteCustomer($id)
     {
         $customer = self::find($id);
-
-        if ($customer->estimates()->exists()) {
-            $customer->estimates()->delete();
-        }
-
-        if ($customer->invoices()->exists()) {
-            $customer->invoices()->delete();
-        }
-
-        if ($customer->payments()->exists()) {
-            $customer->payments()->delete();
-        }
-
-        if ($customer->addresses()->exists()) {
-            $customer->addresses()->delete();
-        }
 
         $customer->delete();
 
