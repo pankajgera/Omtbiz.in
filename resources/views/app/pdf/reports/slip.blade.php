@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Invoice Report</title>
+    <title>{{ 'slip - ' . $invoice_number }}</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
@@ -11,13 +11,16 @@
             border-collapse: collapse;
         }
         p {
-            font-size: 40px;
+            font-size: 15px;
+            text-decoration: underline;
         }
-        p span{
-            font-size: 30px;
+        span{
+            font-size: 20px;
+            padding-bottom: 15px;
         }
         @page {
             size: landscape letter;
+            size: 4in 4in;
         }
     </style>
 </head>
@@ -26,12 +29,12 @@
     <table style=" width: 100% !important;">
         <tr>
             <td class="border">
-                <p class="total-title">Party Name <span
-                        style="float:right;">{{ $party_name }}</span></p>
-                <p class="total-title">Invoice Number<span
-                        style="float:right;">{{ $invoice_number }}</span></p>
-                <p class="total-title">Reference Number <span
-                        style="float:right;">{{ $reference_number }}</span></p>
+                <p class="total-title">Party Name </p>
+                <span>{{ $party_name }}</span>
+                <p class="total-title">Invoice Number </p>
+                <span>{{ $invoice_number }}</span>
+                <p class="total-title">Reference Number </p>
+                <span>{{ $reference_number }}</span>
             </td>
         </tr>
     </table>
