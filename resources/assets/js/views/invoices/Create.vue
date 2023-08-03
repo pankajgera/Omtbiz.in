@@ -757,11 +757,11 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        window.location.reload()
         this.isLoading = false
+        window.location.reload()
       }, 1000)
     },
-    async printInvoice() {
+    printInvoice(invoice_id) {
       //print invoice
       this.siteURL = `/reports/invoice/${invoice_id}`
       this.url = `${this.siteURL}?company_id=${this.user.company_id}`
@@ -769,11 +769,13 @@ export default {
         printable: this.url,
         type: 'pdf',
         onPrintDialogClose: () => {
-          this.reset();
+          //this.reset();
+          this.isLoading = false
+          this.printSlip(invoice_id)
         }
       })
     },
-    async printSlip() {
+    printSlip(invoice_id) {
       //print slip
       this.siteURL = `/reports/slip/${invoice_id}`
       this.url = `${this.siteURL}?company_id=${this.user.company_id}`
@@ -794,8 +796,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          await this.printInvoice;
-          await this.printSlip;
+          this.printInvoice(invoice_id)
         } else {
           this.reset()
         }
