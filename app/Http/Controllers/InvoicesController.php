@@ -134,11 +134,18 @@ class InvoicesController extends Controller
 
             //Check reference_number
             $reference_number = $request->reference_number;
-            // $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
-            //     ->where('account_master_id', '!=', $request->debtors['id'])->first();
-            // if (! empty($find_reference_number)) {
-            //     $reference_number = intval($reference_number) + 1;
-            // }
+            $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
+                ->where('account_master_id', '!=', $request->debtors['id'])->first();
+            if (! empty($find_reference_number)) {
+                $find_existing_day_invoice = Invoice::where('reference_number', '=', $reference_number)
+                    ->where('account_master_id', '=', $request->debtors['id'])->first();
+                //Found invoice with same reference number
+                if ($find_existing_day_invoice) {
+                    $reference_number = $find_existing_day_invoice->reference_number;
+                } else {
+                    $reference_number = intval($reference_number) + 1;
+                }
+            }
 
             if (! $reference_number || ! $number_attributes['invoice_number']) {
                 abort(500);
@@ -744,7 +751,7 @@ class InvoicesController extends Controller
         $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
             ->whereCompany($request->header('company'))
             ->where('account_master_id', $request->id)
-            ->orderBy('id', 'asc')->first();
+            ->orderBy('id', 'asc')->firstOrFail();
 
         return response()->json([
             'invoice' => $find_today_first_invoice
