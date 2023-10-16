@@ -741,10 +741,16 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
-        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
-            ->whereCompany($request->header('company'))
-            ->where('account_master_id', $request->id)
-            ->orderBy('id', 'asc')->first();
+        try {
+            $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
+                ->whereCompany($request->header('company'))
+                ->where('account_master_id', $request->id)
+                ->orderBy('id', 'asc')->firstOrFail();
+        } catch (Exception $e) {
+            return response()->json([
+                'invoice' => null,
+            ]);
+        }
 
         return response()->json([
             'invoice' => $find_today_first_invoice

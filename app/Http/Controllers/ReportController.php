@@ -557,4 +557,25 @@ class ReportController extends Controller
 
         return $pdf->stream();
     }
+
+    /**
+     * Invoice slip report
+     *
+     * @param Request $request
+     * @param string|integer $id
+     * @return void
+     */
+    public function slipReport(Request $request, $id)
+    {
+        $invoice = Invoice::with(['master'])->where('id', $id)->first();
+        view()->share([
+            'party_name' => $invoice->master->name,
+            'invoice_number' => $invoice->invoice_number,
+            'reference_number' => $invoice->reference_number,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.reports.slip');
+
+        return $pdf->stream();
+    }
 }
