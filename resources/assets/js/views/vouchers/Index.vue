@@ -31,7 +31,7 @@
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label class="form-label"> {{ $tc('vouchers.name') }} </label>
             <base-input
               v-model.trim="filters.name"
@@ -40,7 +40,7 @@
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-4">
+          <div class="col-sm-3">
             <label class="form-label"> {{ $tc('vouchers.groups') }} </label>
             <base-input
               v-model="filters.groups"
@@ -48,6 +48,26 @@
               name="groups"
               autocomplete="off"
             />
+          </div>
+          <div class="col-sm-3">
+              <div class="from">
+                <label>{{ $t('general.from') }}</label>
+                <base-date-picker
+                  v-model="filters.from_date"
+                  :calendar-button="true"
+                  calendar-button-icon="calendar"
+                />
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="to">
+              <label>{{ $t('general.to') }}</label>
+              <base-date-picker
+                v-model="filters.to_date"
+                :calendar-button="true"
+                calendar-button-icon="calendar"
+              />
+            </div>
           </div>
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
@@ -136,7 +156,7 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
+            <router-link :to="{path: `vouchers/${row.id}/edit`}">
               {{ row.account }}
             </router-link>
           </template>
@@ -212,6 +232,7 @@ import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
 import GlobalMixin from '../../helpers/mixins.js';
+import moment from 'moment'
 export default {
   components: {
     DotIcon,
@@ -239,6 +260,8 @@ export default {
       filters: {
         name: '',
         groups: '',
+        from_date: '',
+        to_date: '',
       },
       index: null
     }
@@ -300,6 +323,8 @@ export default {
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
         groups: this.filters.groups !== null ? this.filters.groups : '',
+        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
+        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -331,6 +356,8 @@ export default {
       this.filters = {
         name: '',
         groups: '',
+        from_date: '',
+        to_date: ''
       }
 
       this.$nextTick(() => {
