@@ -775,7 +775,7 @@ export default {
         onPrintDialogClose: () => {
           //this.reset();
           this.isLoading = false
-          this.printSlip(invoice_id)
+          // this.printSlip(invoice_id)
         }
       })
     },
