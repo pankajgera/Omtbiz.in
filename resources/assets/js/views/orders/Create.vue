@@ -104,7 +104,7 @@
               :currency="currency"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'orders'"
-              :inventory-list="inventoryList"
+              :inventory-list="inventoryListBind"
               :inventory-negative="inventoryNegative"
               @remove="removeInventory"
               @update="updateInventoryBounce"
@@ -317,6 +317,9 @@ export default {
         return true
       }
       return false
+    },
+    inventoryListBind() {
+      return this.$store.state.inventory.inventories
     }
   },
   watch: {
