@@ -4,7 +4,7 @@
     <input
       ref="baseInput"
       v-model="inputValue"
-      :id="id"
+      :id="name ? name : placeholder + id"
       :type="toggleType"
       :disabled="disabled"
       :readonly="readOnly"
@@ -36,7 +36,7 @@ export default {
   props: {
     id: {
       type: String,
-      default: ''
+      default: Math.random().toString()
     },
     name: {
       type: String,

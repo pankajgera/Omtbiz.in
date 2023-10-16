@@ -33,6 +33,11 @@ Route::get('/ping', [
     'uses' => 'UsersController@ping'
 ]);
 
+Route::get('/logout', [
+    'as' => 'logout',
+    'uses' => 'Auth\AccessTokensController@destroy'
+]);
+
 // Country, State & City
 //----------------------------------
 
