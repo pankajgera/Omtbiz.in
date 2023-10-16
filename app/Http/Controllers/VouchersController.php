@@ -22,6 +22,8 @@ class VouchersController extends Controller
             'groups',
             'orderByField',
             'orderBy',
+            'from_date',
+            'to_date'
         ]))
             ->whereCompany($request->header('company'))
             ->with(['accountMaster'])
