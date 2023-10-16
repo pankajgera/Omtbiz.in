@@ -374,7 +374,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1100);
+    }, 1500);
   },
   methods: {
     ...mapActions('modal', [
@@ -398,7 +398,7 @@ export default {
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
-        limit: 1000,
+        limit: 50,
         filter: {},
         orderByField: '',
         orderBy: ''

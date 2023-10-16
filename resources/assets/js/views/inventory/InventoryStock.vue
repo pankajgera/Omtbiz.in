@@ -24,9 +24,9 @@
           </base-button>
         </div>
       </div>
-    
+
       </div>
-     
+
       <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
@@ -43,11 +43,11 @@
           <div class="col-sm-3">
             <label class="form-label"> {{ $tc('items.item_name') }} </label>
             <base-input
-              v-model.trim="filters.item_name"
+              v-model.trim="filters.name"
               type="text"
-              name="item_name"
+              name="name"
               autocomplete="off"
-              @input="setFilter('item_name')"
+              @input="setFilter('name')"
             />
           </div>
           <div class="col-sm-2">
@@ -117,7 +117,7 @@
               No Record Found..
             </td></tr>
           </table>
-        
+
         </div>
       </div>
     </div>
@@ -140,7 +140,7 @@ export default {
       filtersApplied: false,
       filters: {
         worker_name: '',
-        item_name: '',
+        name: '',
         from_date: '',
         to_date: ''
       },
@@ -148,7 +148,7 @@ export default {
   },
   computed: {
     applyFilter() {
-        if (this.filters.worker_name || this.filters.from_date ||  this.filters.to_date ||  this.filters.item_name) {
+        if (this.filters.worker_name || this.filters.from_date ||  this.filters.to_date ||  this.filters.name) {
           return true;
         }
         return false;
@@ -165,12 +165,12 @@ export default {
       this.loadInventoryStock()
     },
     clearFilter () {
-    
+
        this.filtersApplied = false;
       this.showFilters=false;
       this.filters = {
         worker_name: '',
-        item_name: '',
+        name: '',
         from_date: '',
         to_date: ''
       }
@@ -200,7 +200,7 @@ export default {
     async loadInventoryStock (filter) {
       let data = {
         worker_name: this.filters.worker_name ? this.filters.worker_name : '',
-        item_name: this.filters.item_name ? this.filters.item_name : '',
+        name: this.filters.name ? this.filters.name : '',
         from_date: this.filters.from_date ? moment(this.filters.from_date).format('DD/MM/YYYY') : '',
         to_date: this.filters.to_date ? moment(this.filters.to_date).format('DD/MM/YYYY') : '',
         filterBy: this.applyFilter,

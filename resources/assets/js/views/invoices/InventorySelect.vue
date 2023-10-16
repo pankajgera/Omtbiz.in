@@ -125,7 +125,7 @@ export default {
         orderByField: '',
         orderBy: '',
         page: 1,
-        limit: 1000,
+        limit: 50,
       }
       this.loading = true
       await this.fetchAllInventory(data)
