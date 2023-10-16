@@ -124,7 +124,7 @@
               :currency="currency"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'estimate'"
-              :inventory-list="inventoryList"
+              :inventory-list="inventoryListBind"
               :inventory-negative="inventoryNegative"
               @remove="removeInventory"
               @update="updateInventoryBounce"
@@ -360,6 +360,9 @@ export default {
         invent = this.newEstimate.items
       }
       return invent
+    },
+    inventoryListBind() {
+      return this.$store.state.inventory.inventories
     }
   },
   watch: {

@@ -117,11 +117,7 @@ export default {
     },
     async searchInventory (search) {
       let data = {
-        filter: {
-          name: search,
-          unit: '',
-          price: ''
-        },
+        name: search,
         orderByField: '',
         orderBy: '',
         page: 1,
