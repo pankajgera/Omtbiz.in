@@ -148,7 +148,7 @@
               :discount-per-inventory="discountPerInventory"
               :is-disable="$route.query.d === 'true'"
               :inventory-type="'invoice'"
-              :inventory-list="inventoryList"
+              :inventory-list="inventoryListBind"
               :inventory-negative="inventoryNegative"
               :is-edit="$route.name === 'invoices.edit'"
               @remove="removeInventory"
@@ -530,6 +530,9 @@ export default {
     },
     inventoryBind() {
       return this.newInvoice.inventories
+    },
+    inventoryListBind() {
+      return this.$store.state.inventory.inventories
     }
   },
   watch: {
@@ -588,6 +591,7 @@ export default {
       await this.fetchAllInventory({
         limit: 50,
         filter: {},
+        name: '',
         orderByField: '',
         orderBy: ''
       }).then(resp => {
