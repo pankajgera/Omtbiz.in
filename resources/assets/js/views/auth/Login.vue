@@ -136,16 +136,12 @@ export default {
         switch (role) {
             case 'admin':
                 return this.$router.push('/invoices/create')
-                break;
             case 'accountant':
                 return this.$router.push('/invoices/create')
-                break;
             case 'dispatch':
                 return this.$router.push('/dispatch/create')
-                break;
             case 'estimate':
                 return this.$router.push('/estimates/create')
-                break;
             default:
                 return this.$router.push('/')
         }
