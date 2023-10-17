@@ -9,6 +9,31 @@
               {{ $t('settings.add-user.section_description') }}
             </p>
           </div>
+          <!-- <div class="row mb-4">
+            <div class="col-md-6">
+              <label class="input-label">{{ $tc('settings.add-user.profile_picture') }}</label>
+              <div id="pick-avatar" class="image-upload-box avatar-upload">
+                <div class="overlay">
+                  <font-awesome-icon class="white-icon" icon="camera"/>
+                </div>
+                <img v-if="previewAvatar" :src="previewAvatar" class="preview-logo">
+                <div v-if="!previewAvatar" class="upload-content">
+                  <font-awesome-icon class="upload-icon" icon="cloud-upload-alt"/>
+                  <p class="upload-text"> {{ $tc('general.choose_file') }} </p>
+                </div>
+              </div>
+            </div>
+            <avatar-cropper
+              :labels="{ submit: 'submit', cancel: 'Cancle'}"
+              :cropper-options="cropperOptions"
+              :output-options="cropperOutputOptions"
+              :output-quality="0.8"
+              :upload-handler="cropperHandler"
+              trigger="#pick-avatar"
+              @changed="setFileObject"
+              @error="handleUploadError"
+            />
+          </div> -->
           <div class="row">
             <div class="col-md-6 mb-4 form-group">
               <label class="input-label">{{ $tc('settings.add-user.name') }}</label>
