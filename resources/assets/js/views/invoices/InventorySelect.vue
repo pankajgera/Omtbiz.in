@@ -75,7 +75,7 @@ export default {
         id: 0,
         name: "End of List",
         price: "0",
-        quantity: "0",
+        quantity: 0,
         sale_price: 0,
         unit: "pc",
       })

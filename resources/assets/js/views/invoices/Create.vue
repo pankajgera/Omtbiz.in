@@ -550,7 +550,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1500);
+    }, 500);
   },
   methods: {
     ...mapActions('modal', [
@@ -569,7 +569,13 @@ export default {
     ]),
     totalQuantity(inventory){
       if (inventory.length) {
-        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
+        let invent = 0
+        inventory.forEach((i) => {
+          if (i.quantity) {
+            invent += i.quantity
+          }
+        });
+        return invent;
       }
       return 0
     },

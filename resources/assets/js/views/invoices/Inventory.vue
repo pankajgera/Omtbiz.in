@@ -298,7 +298,7 @@ export default {
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
-            maxQuantityAvailable = newValue;
+            maxQuantityAvailable = parseInt(newValue);
           }
 
         }
@@ -312,14 +312,11 @@ export default {
           }).then(async (success) => {
             if (success) {
               let id = this.invoiceItem.id ? this.invoiceItem.id : this.invoiceItem.inventory_id;
-              //this.invoiceItem.quantity = null
               window.open('/inventory/' + id + '/edit', '_blank').focus()
-            } else {
-              //this.invoiceItem.quantity = null
             }
           })
         } else {
-          this.invoiceItem.quantity = newValue
+          this.invoiceItem.quantity = parseInt(newValue)
         }
         this.updatingInput = 'quantity'
       }

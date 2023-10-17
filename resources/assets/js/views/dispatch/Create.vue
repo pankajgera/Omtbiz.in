@@ -220,8 +220,12 @@ export default {
       }
     },
     invoiceWithAmount ({ invoice_number, due_amount, master}) {
-      if (this.invoice.length) {
-        let count = this.invoice.filter(i => i.account_master_id === master.id).length;
+      let invoiceArr = this.invoice;
+      if (! invoiceArr.length) {
+        invoiceArr = this.invoiceList
+      }
+      if (invoiceArr) {
+        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;
         return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
       }
     },
