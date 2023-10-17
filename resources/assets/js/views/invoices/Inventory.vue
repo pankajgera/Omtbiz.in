@@ -298,7 +298,7 @@ export default {
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
-            maxQuantityAvailable = newValue;
+            maxQuantityAvailable = parseInt(newValue);
           }
 
         }
@@ -319,7 +319,7 @@ export default {
             }
           })
         } else {
-          this.invoiceItem.quantity = newValue
+          this.invoiceItem.quantity = parseInt(newValue)
         }
         this.updatingInput = 'quantity'
       }
