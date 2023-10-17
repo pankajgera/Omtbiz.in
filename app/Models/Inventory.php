@@ -72,8 +72,8 @@ class Inventory extends Model
     {
         $filters = collect($filters);
 
-        if ($filters->get('name')) {
-            $query->whereName($filters->get('name'));
+        if ($filters->get('item_name')) {
+            $query->whereName($filters->get('item_name'));
         }
         if ($filters->get('worker_name')) {
             $query->whereWorkerName($filters->get('worker_name'));

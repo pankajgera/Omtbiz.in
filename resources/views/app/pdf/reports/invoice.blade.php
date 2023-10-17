@@ -90,7 +90,7 @@ function numberTowords($num)
 <html lang="en">
 
 <head>
-    <title>{{ 'invoice - ' . $invoice->invoice_number }}</title>
+    <title>Invoice Report</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
