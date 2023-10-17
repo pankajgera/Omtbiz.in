@@ -117,11 +117,15 @@ export default {
     },
     async searchInventory (search) {
       let data = {
-        name: search,
+        filter: {
+          name: search,
+          unit: '',
+          price: ''
+        },
         orderByField: '',
         orderBy: '',
         page: 1,
-        limit: 50,
+        limit: 1000,
       }
       this.loading = true
       await this.fetchAllInventory(data)

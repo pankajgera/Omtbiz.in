@@ -104,7 +104,7 @@
               :currency="currency"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'orders'"
-              :inventory-list="inventoryListBind"
+              :inventory-list="inventoryList"
               :inventory-negative="inventoryNegative"
               @remove="removeInventory"
               @update="updateInventoryBounce"
@@ -317,9 +317,6 @@ export default {
         return true
       }
       return false
-    },
-    inventoryListBind() {
-      return this.$store.state.inventory.inventories
     }
   },
   watch: {
@@ -334,7 +331,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1500);
+    }, 1100);
   },
   methods: {
     ...mapActions('modal', [
@@ -358,7 +355,7 @@ export default {
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
-        limit: 50,
+        limit: 1000,
         filter: {},
         orderByField: '',
         orderBy: ''

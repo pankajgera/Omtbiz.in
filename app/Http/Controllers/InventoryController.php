@@ -22,12 +22,14 @@ class InventoryController extends Controller
     {
         try {
             $limit = $request->has('limit') ? $request->limit : 20;
+
             $inventories = Inventory::applyFilters($request->only([
                 'name',
                 'orderByField',
                 'orderBy',
             ]))
                 ->whereCompany($request->header('company'))
+                ->orderBy('id', 'desc')
                 ->paginate($limit);
 
             foreach ($inventories as $each) {
@@ -259,8 +261,8 @@ class InventoryController extends Controller
                     return $query->where('int.worker_name', 'LIKE', '%'.$searchBy.'%');
                 });
             }
-            if (! empty($request->name)) {
-                $searchBy = $request->input('name');
+            if (! empty($request->item_name)) {
+                $searchBy = $request->input('item_name');
                 $query=  $query->where(function ($query) use ($searchBy) {
                     return $query->where('inv.name', 'LIKE', '%'.$searchBy.'%');
                 });

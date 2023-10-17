@@ -148,7 +148,7 @@
               :discount-per-inventory="discountPerInventory"
               :is-disable="$route.query.d === 'true'"
               :inventory-type="'invoice'"
-              :inventory-list="inventoryListBind"
+              :inventory-list="inventoryList"
               :inventory-negative="inventoryNegative"
               :is-edit="$route.name === 'invoices.edit'"
               @remove="removeInventory"
@@ -530,9 +530,6 @@ export default {
     },
     inventoryBind() {
       return this.newInvoice.inventories
-    },
-    inventoryListBind() {
-      return this.$store.state.inventory.inventories
     }
   },
   watch: {
@@ -550,7 +547,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1500);
+    }, 500);
   },
   methods: {
     ...mapActions('modal', [
@@ -589,9 +586,8 @@ export default {
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
-        limit: 50,
+        limit: 1000,
         filter: {},
-        name: '',
         orderByField: '',
         orderBy: ''
       }).then(resp => {
@@ -761,35 +757,9 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        this.isLoading = false
         window.location.reload()
+        this.isLoading = false
       }, 1000)
-    },
-    printInvoice(invoice_id) {
-      //print invoice
-      this.siteURL = `/reports/invoice/${invoice_id}`
-      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-      printJS({
-        printable: this.url,
-        type: 'pdf',
-        onPrintDialogClose: () => {
-          //this.reset();
-          this.isLoading = false
-          // this.printSlip(invoice_id)
-        }
-      })
-    },
-    printSlip(invoice_id) {
-      //print slip
-      this.siteURL = `/reports/slip/${invoice_id}`
-      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-      printJS({
-        printable: this.url,
-        type: 'pdf',
-        onPrintDialogClose: () => {
-          this.reset();
-        }
-      })
     },
     async showInvoicePopup (invoice_id) {
       swal({
@@ -800,7 +770,15 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.printInvoice(invoice_id)
+          this.siteURL = `/reports/invoice/${invoice_id}`
+          this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+          printJS({
+            printable: this.url,
+            type: 'pdf',
+            onPrintDialogClose: () => {
+              this.reset();
+            }
+          })
         } else {
           this.reset()
         }
