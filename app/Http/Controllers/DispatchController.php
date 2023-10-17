@@ -338,7 +338,7 @@ class DispatchController extends Controller
         $invoices = Invoice::with('master')
             ->whereCompany($request->header('company'))
             ->orderBy('id', 'desc')
-            ->limit(100)
+            ->limit(200)
             ->get();
 
         return response()->json([
