@@ -576,10 +576,6 @@ export default {
           }
         });
         return invent;
-        // console.log(inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + parseInt(b)), inventory)
-        // let invent = inventory.filter(i => parseInt(i.quantity)).map(i => parseInt(i.quantity));
-        // console.log(invent)
-        // return invent.reduce((a,b) => a + parseInt(b))
       }
       return 0
     },
