@@ -57,12 +57,6 @@ Route::group(['prefix' => 'reports'], function () {
         'as' => 'get.invoice',
         'uses' => 'ReportController@invoiceReport'
     ]);
-
-    // report for slip
-    Route::get('/slip/{id}', [
-        'as' => 'get.slip',
-        'uses' => 'ReportController@slipReport'
-    ]);
 });
 
 // download pdf with a unique_hash $id
