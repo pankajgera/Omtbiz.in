@@ -72,6 +72,50 @@ class InvoicesController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulk(Request $request)
+    {
+        try {
+            $limit = 500;
+            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'master'])
+                ->join('users', 'users.id', '=', 'invoices.user_id')
+                ->applyFilters($request->only([
+                    'status',
+                    'paid_status',
+                    'customer_id',
+                    'invoice_number',
+                    'from_date',
+                    'to_date',
+                    'orderByField',
+                    'orderBy',
+                    'search',
+                ]))
+                ->whereCompany($request->header('company'), $request['filterBy'])
+                ->select('invoices.*', 'users.name')
+                ->orderBy('id', 'asc')
+                ->paginate($limit);
+
+            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+
+            $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+            $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
+            return response()->json([
+                'invoices' => $invoices,
+                'sundryDebtorsList' => $sundryDebtorsList,
+                'incomeIndirectLedgers' => $income_indirect_ledgers,
+                'expenseIndirectLedgers' => $expense_indirect_ledgers,
+                'invoiceTotalCount' => Invoice::count()
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while getting invoice index ', [$e]);
+        }
+        return response()->json(500);
+    }
+
+    /**
      * GET - Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\JsonResponse

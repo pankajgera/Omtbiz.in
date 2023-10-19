@@ -109,6 +109,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InvoicesController@referenceNumber'
     ]);
 
+    Route::get('/invoices/bulk', [
+        'as' => 'invoices.bulk',
+        'uses' => 'InvoicesController@bulk'
+    ]);
+
     Route::resource('invoices', 'InvoicesController');
 
     // Estimates
