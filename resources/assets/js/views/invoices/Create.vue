@@ -7,6 +7,11 @@
             {{ $t('invoices.title') }}
           </base-button>
         </router-link>
+        <router-link slot="item-title" class="ml-2 col-xs-2" to="/invoices/bulk">
+          <base-button size="large" icon="envelope" color="theme">
+            {{ $t('invoices.bulk_title') }}
+          </base-button>
+        </router-link>
       </div>
     </div>
     <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width">

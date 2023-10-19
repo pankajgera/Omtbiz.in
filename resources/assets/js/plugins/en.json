@@ -585,6 +585,7 @@
     "invoices": {
         "add": "Add :",
         "title": "Invoices",
+        "bulk_title": "Bulk Invoices",
         "invoices_list": "Invoices List",
         "days": "{days} Days",
         "months": "{months} Month",
