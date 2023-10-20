@@ -101,7 +101,7 @@ class Item extends Model
 
     public function dispatch()
     {
-        return $this->belongsTo(Dispatch::class, 'dispatch_id');
+        return $this->hasMany(Dispatch::class, 'id', 'dispatch_id');
     }
 
     public static function deleteItem($id)

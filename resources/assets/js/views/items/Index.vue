@@ -613,7 +613,14 @@ export default {
     },
     setIndex(index) {
       this.index = index
-    }
+    },
+    async clearCustomerSearch (removedOption, id) {
+      this.filters.customer = ''
+      this.refreshTable()
+    },
+    onSelectCustomer (customer) {
+      this.filters.customer = customer
+    },
   }
 }
 </script>
