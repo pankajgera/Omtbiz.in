@@ -227,7 +227,7 @@ export default {
   mixins:[GlobalMixin],
   data () {
     return {
-      showFilters: false,
+      showFilters: true,
       //currency: null,
     breadCrumbLinks:[
         {
@@ -342,6 +342,17 @@ export default {
       this.sundryDebtorsList = response.data.sundryDebtorsList
       this.filtered_count = response.data.invoices.total
       //this.currency = response.data.currency
+
+      if (! this.filters.customer || ! (this.filters.from_date || this.filters.to_date)) {
+        return {
+          data: [],
+          pagination: {
+            totalPages: 0,
+            currentPage: 1,
+            count: 0
+          }
+        }
+      }
 
       return {
         data: response.data.invoices.data,
