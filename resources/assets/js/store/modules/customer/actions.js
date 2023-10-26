@@ -108,15 +108,6 @@ export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
 }
 
 export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
-  // var config = {
-  //   method: 'post',
-  //   url: 'https://api.ultramsg.com/instance66542/messages/document',
-  //   headers: {
-  //     'Content-Type': 'application/x-www-form-urlencoded'
-  //   },
-  //   data : data
-  // };
-
   let processData = qs.stringify({
       "token": "kaonxaoeurktcgsy",
       "to": data.number,
