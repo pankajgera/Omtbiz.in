@@ -7,6 +7,11 @@
             {{ $t('invoices.title') }}
           </base-button>
         </router-link>
+        <router-link slot="item-title" class="ml-2 col-xs-2" to="/invoices/bulk">
+          <base-button size="large" icon="envelope" color="theme">
+            {{ $t('invoices.bulk_title') }}
+          </base-button>
+        </router-link>
       </div>
     </div>
     <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width">
@@ -148,7 +153,7 @@
               :discount-per-inventory="discountPerInventory"
               :is-disable="$route.query.d === 'true'"
               :inventory-type="'invoice'"
-              :inventory-list="inventoryList"
+              :inventory-list="inventoryListBind"
               :inventory-negative="inventoryNegative"
               :is-edit="$route.name === 'invoices.edit'"
               @remove="removeInventory"
@@ -530,6 +535,9 @@ export default {
     },
     inventoryBind() {
       return this.newInvoice.inventories
+    },
+    inventoryListBind() {
+      return this.$store.state.inventory.inventories
     }
   },
   watch: {
@@ -547,7 +555,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 500);
+    }, 1500);
   },
   methods: {
     ...mapActions('modal', [
@@ -566,7 +574,13 @@ export default {
     ]),
     totalQuantity(inventory){
       if (inventory.length) {
-        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
+        let invent = 0
+        inventory.forEach((i) => {
+          if (i.quantity) {
+            invent += i.quantity
+          }
+        });
+        return invent;
       }
       return 0
     },
@@ -586,8 +600,9 @@ export default {
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
-        limit: 1000,
+        limit: 50,
         filter: {},
+        name: '',
         orderByField: '',
         orderBy: ''
       }).then(resp => {
@@ -757,9 +772,35 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        window.location.reload()
         this.isLoading = false
+        window.location.reload()
       }, 1000)
+    },
+    printInvoice(invoice_id) {
+      //print invoice
+      this.siteURL = `/reports/invoice/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          //this.reset();
+          this.isLoading = false
+          // this.printSlip(invoice_id)
+        }
+      })
+    },
+    printSlip(invoice_id) {
+      //print slip
+      this.siteURL = `/reports/slip/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          this.reset();
+        }
+      })
     },
     async showInvoicePopup (invoice_id) {
       swal({
@@ -770,15 +811,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.siteURL = `/reports/invoice/${invoice_id}`
-          this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-          printJS({
-            printable: this.url,
-            type: 'pdf',
-            onPrintDialogClose: () => {
-              this.reset();
-            }
-          })
+          this.printInvoice(invoice_id)
         } else {
           this.reset()
         }

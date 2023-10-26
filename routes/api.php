@@ -33,6 +33,11 @@ Route::get('/ping', [
     'uses' => 'UsersController@ping'
 ]);
 
+Route::get('/logout', [
+    'as' => 'logout',
+    'uses' => 'Auth\AccessTokensController@destroy'
+]);
+
 // Country, State & City
 //----------------------------------
 
@@ -102,6 +107,11 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/invoices/reference', [
         'as' => 'invoices.reference',
         'uses' => 'InvoicesController@referenceNumber'
+    ]);
+
+    Route::get('/invoices/bulk', [
+        'as' => 'invoices.bulk',
+        'uses' => 'InvoicesController@bulk'
     ]);
 
     Route::resource('invoices', 'InvoicesController');
