@@ -157,7 +157,8 @@ export default {
   methods: {
      ...mapActions('customer', [
       'fetchLedgersReport',
-      'fetchVouchersReport'
+      'fetchVouchersReport',
+      'sendReportOnWhatsApp'
     ]),
     getThisDate (type, time) {
       return moment()[type](time).toString()
@@ -254,7 +255,9 @@ export default {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
       }
-      window.open("https://api.whatsapp.com/send/?phone=" +'+91'+ mobile + "&text=" + encodeURIComponent("http://omtbiz.in" + this.url))
+      let fileName = moment(this.formData.from_date).format('DD/MM/YYYY') + '-' + moment(this.formData.to_date).format('DD/MM/YYYY');
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.url})
+      // window.open("https://api.whatsapp.com/send/?phone=" +'+91'+ mobile + "&text=" + encodeURIComponent("http://omtbiz.in" + this.url))
     }
   }
 }
