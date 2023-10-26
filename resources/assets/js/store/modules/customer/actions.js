@@ -1,4 +1,5 @@
 import * as types from './mutation-types'
+import qs from 'qs';
 
 export const fetchCustomers = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
@@ -104,4 +105,32 @@ export const selectCustomer = ({ commit, dispatch, state }, data) => {
 
 export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
   commit(types.RESET_SELECTED_CUSTOMER)
+}
+
+export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
+  // var config = {
+  //   method: 'post',
+  //   url: 'https://api.ultramsg.com/instance66542/messages/document',
+  //   headers: {
+  //     'Content-Type': 'application/x-www-form-urlencoded'
+  //   },
+  //   data : data
+  // };
+
+  let processData = qs.stringify({
+      "token": "kaonxaoeurktcgsy",
+      "to": data.number,
+      "filename": data.fileName + '.pdf',
+      "document": data.filePath,
+      "caption": data.fileName
+  });
+  return new Promise((resolve, reject) => {
+    window.axios.post('https://api.ultramsg.com/instance66542/messages/document', processData)
+    .then((response) => {
+      console.log('response', response)
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
 }
