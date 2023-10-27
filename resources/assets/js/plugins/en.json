@@ -1076,6 +1076,8 @@
             "fiscal_year": "Financial Year",
             "date_format": "Date Format",
             "save": "Save",
+            "discount_per_item": "Discount Per Item",
+            "discount_setting_description": "Add Discount for each product.",
             "preference": "Preference | Preferences",
             "general_settings": "Default preferences for the system.",
             "updated_message": "Preferences updated successfully",

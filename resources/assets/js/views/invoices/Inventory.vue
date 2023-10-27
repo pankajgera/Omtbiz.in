@@ -218,9 +218,6 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters('inventories', [
-    //   'inventories'
-    // ]),
     ...mapGetters('modal', [
       'modalActive'
     ]),
@@ -290,17 +287,16 @@ export default {
       set: function (newValue) {
         let maxQuantityAvailable = 0;
         if(this.inventoryList.length) {
-          let quantity = parseInt(
-          this.inventoryList.find(i =>
-            i.name === this.invoiceItem.name &&
-            parseInt(i.price) === parseInt(this.invoiceItem.price)
-          ));
+          let quantity = parseInt(this.inventoryList.find(i =>
+              i.name === this.invoiceItem.name &&
+              parseInt(i.price) === parseInt(this.invoiceItem.price)
+            ));
+          console.log('quantity', quantity, newValue)
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
             maxQuantityAvailable = parseInt(newValue);
           }
-
         }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
