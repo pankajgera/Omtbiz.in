@@ -36,7 +36,7 @@ export default {
   props: {
     id: {
       type: String,
-      default: Math.random().toString()
+      default: ''
     },
     name: {
       type: String,
