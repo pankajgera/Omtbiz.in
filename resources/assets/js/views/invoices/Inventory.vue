@@ -282,7 +282,7 @@ export default {
     },
     inventoryQuantityBind: {
       get: function() {
-        return this.invoiceItem.quantity
+        return parseInt(this.invoiceItem.quantity)
       },
       set: function (newValue) {
         let maxQuantityAvailable = 0;
