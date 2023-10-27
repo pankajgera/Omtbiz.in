@@ -26,7 +26,8 @@
         "nyholm/psr7": "^1.4",
         "spatie/laravel-medialibrary": "^9.6.4",
         "spatie/laravel-permission": "^5.8",
-        "symfony/psr-http-message-bridge": "^2.0"
+        "symfony/psr-http-message-bridge": "^2.0",
+        "ultramsg/whatsapp-php-sdk": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

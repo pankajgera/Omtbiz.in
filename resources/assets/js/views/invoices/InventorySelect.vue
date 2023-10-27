@@ -109,9 +109,9 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
-    customLabel ({ name, sale_price }) {
+    customLabel ({ name, price, sale_price }) {
       if (name !== 'End of List') {
-        return `${name} - ₹${sale_price}`
+        return `${name} - ₹${price ? price : sale_price}`
       }
       return `${name}`
     },

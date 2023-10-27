@@ -218,9 +218,6 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters('inventories', [
-    //   'inventories'
-    // ]),
     ...mapGetters('modal', [
       'modalActive'
     ]),
@@ -260,10 +257,10 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.price = newValue
-          this.maxDiscount = this.invoiceItem.price
+          this.invoiceItem.price = parseInt(newValue)
+          this.maxDiscount = parseInt(newValue)
         } else {
-          this.invoiceItem.price = newValue
+          this.invoiceItem.price = parseInt(newValue)
         }
         this.updatingInput = 'price'
       }
@@ -274,33 +271,32 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.sale_price = newValue
-          this.maxDiscount = newValue
-          this.subtotal = newValue
+          this.invoiceItem.sale_price = parseInt(newValue)
+          this.maxDiscount = parseInt(newValue)
+          this.subtotal = parseInt(newValue)
         } else {
-          this.invoiceItem.sale_price = newValue
+          this.invoiceItem.sale_price = parseInt(newValue)
         }
         this.updatingInput = 'sale_price'
       }
     },
     inventoryQuantityBind: {
       get: function() {
-        return this.invoiceItem.quantity
+        return parseInt(this.invoiceItem.quantity)
       },
       set: function (newValue) {
         let maxQuantityAvailable = 0;
         if(this.inventoryList.length) {
-          let quantity = parseInt(
-          this.inventoryList.find(i =>
-            i.name === this.invoiceItem.name &&
-            parseInt(i.price) === parseInt(this.invoiceItem.price)
-          ));
+          let quantity = parseInt(this.inventoryList.find(i =>
+              i.name === this.invoiceItem.name &&
+              parseInt(i.price) === parseInt(this.invoiceItem.price)
+            ));
+          console.log('quantity', quantity, newValue)
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
             maxQuantityAvailable = parseInt(newValue);
           }
-
         }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({

@@ -555,7 +555,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1500);
+    }, 500);
   },
   methods: {
     ...mapActions('modal', [
