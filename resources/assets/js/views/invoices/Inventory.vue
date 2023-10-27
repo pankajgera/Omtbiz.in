@@ -257,10 +257,10 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.price = newValue
-          this.maxDiscount = this.invoiceItem.price
+          this.invoiceItem.price = parseInt(newValue)
+          this.maxDiscount = parseInt(newValue)
         } else {
-          this.invoiceItem.price = newValue
+          this.invoiceItem.price = parseInt(newValue)
         }
         this.updatingInput = 'price'
       }
@@ -271,11 +271,11 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.sale_price = newValue
-          this.maxDiscount = newValue
-          this.subtotal = newValue
+          this.invoiceItem.sale_price = parseInt(newValue)
+          this.maxDiscount = parseInt(newValue)
+          this.subtotal = parseInt(newValue)
         } else {
-          this.invoiceItem.sale_price = newValue
+          this.invoiceItem.sale_price = parseInt(newValue)
         }
         this.updatingInput = 'sale_price'
       }
