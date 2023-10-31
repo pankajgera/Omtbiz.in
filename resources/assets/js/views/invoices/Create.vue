@@ -784,7 +784,7 @@ export default {
         printable: this.url,
         type: 'pdf',
         onPrintDialogClose: () => {
-          //this.reset();
+          this.reset();
           this.isLoading = false
           // this.printSlip(invoice_id)
         }
