@@ -504,7 +504,7 @@ export default {
       this.draftCount = response.data.estimates_draft.total
       this.sentCount = response.data.sent_count
       this.current_page_count = this.estimatesDraft.length
-      console.log(this.sentCount, response.data.estimates_sent.total);
+      
       return {
         data: response.data.estimates_draft.data,
         pagination: {
