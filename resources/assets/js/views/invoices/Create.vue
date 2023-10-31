@@ -772,7 +772,6 @@ export default {
     },
     reset() {
       setTimeout(() => {
-        this.isLoading = false
         window.location.reload()
       }, 1000)
     },
@@ -785,7 +784,6 @@ export default {
         type: 'pdf',
         onPrintDialogClose: () => {
           this.reset();
-          this.isLoading = false
           // this.printSlip(invoice_id)
         }
       })
