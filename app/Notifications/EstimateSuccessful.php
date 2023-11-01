@@ -10,17 +10,17 @@ use Illuminate\Notifications\Notification;
 class EstimateSuccessful extends Notification
 {
     use Queueable;
-    public $user;
+    public $estimate;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($estimate)
     {
         //
-        $this->user = $user;
+        $this->estimate = $estimate;
     }
 
     /**
@@ -57,7 +57,10 @@ class EstimateSuccessful extends Notification
     public function toArray($notifiable)
     {
         return [
-            'user_id' => $this->user->id
+            'estimate_date' => $this->estimate->estimate_number,
+            'status' => $this->estimate->status,
+            'status' => $this->estimate->status,
+            'notes' => $this->estimate->notes,
         ];
     }
 }

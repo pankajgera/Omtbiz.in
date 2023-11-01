@@ -201,8 +201,8 @@ class EstimatesController extends Controller
         ])->find($estimate->id);
 
         // Notify user 
-        $user = Auth::user();
-        auth()->user()->notify(new EstimateSuccessful($user));
+        auth()->user()->notify(new EstimateSuccessful($estimate));
+        
         return response()->json([
             'estimate' => $estimate,
             'url' => url('/estimates/pdf/' . $estimate->unique_hash),

@@ -26,6 +26,29 @@
       </div>
     </a>
     <ul class="action-list">
+      <li class="notifications">
+        <v-dropdown :show-arrow="false">
+          <button
+            slot="activator"
+            href="#"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+            class="btn btn-success"
+          >
+          <font-awesome-icon icon="bell" class="dropdown-item-icon"/> <span class="badge bg-secondary">4</span>
+          </button>
+          <v-dropdown-item>
+            <div class="alert alert-primary" role="alert">
+              This is a primary alert—check it out!
+            </div>
+            <div v-for="(item,index) in listNotifications"
+            :key="index">
+            {{ item.id }}
+        </div>
+        </v-dropdown-item>
+        </v-dropdown>
+      </li>
       <li>
         <v-dropdown :show-arrow="false">
           <a
@@ -71,7 +94,10 @@ export default {
     },
     role() {
       return this.$store.state.user.currentUser.role
-    }
+    }, 
+    listNotifications() {
+      return this.$store.state.userProfile.notifications
+    },
   },
   created () {
     this.loadData()
@@ -94,3 +120,8 @@ export default {
   }
 }
 </script>
+<style>
+.notifications .dropdown-group .dropdown-container {
+  min-width: 23rem !important;
+}
+</style>
