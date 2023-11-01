@@ -63,7 +63,8 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapGetters('userProfile', [
-      'user'
+      'user',
+      'notifications'
     ]),
     profilePicture () {
       return '/images/default-avatar.jpg'
@@ -74,10 +75,12 @@ export default {
   },
   created () {
     this.loadData()
+    this.loadNotifications()
   },
   methods: {
     ...mapActions('userProfile', [
-      'loadData'
+      'loadData',
+      'loadNotifications',
     ]),
     ...mapActions({
       companySelect: 'changeCompany'

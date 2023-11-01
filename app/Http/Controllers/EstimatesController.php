@@ -18,7 +18,9 @@ use App\Models\Company;
 use App\Mail\EstimatePdf;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
+use App\Notifications\EstimateSuccessful;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class EstimatesController extends Controller
 {
@@ -198,6 +200,9 @@ class EstimatesController extends Controller
             'estimateTemplate',
         ])->find($estimate->id);
 
+        // Notify user 
+        $user = Auth::user();
+        auth()->user()->notify(new EstimateSuccessful($user));
         return response()->json([
             'estimate' => $estimate,
             'url' => url('/estimates/pdf/' . $estimate->unique_hash),
