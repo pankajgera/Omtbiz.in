@@ -207,6 +207,11 @@
                         </th>
                         <th>
                             <p class="table-column">
+                                Number
+                            </p>
+                        </th>
+                        <th>
+                            <p class="table-column">
                                 Quantity
                             </p>
                         </th>
@@ -234,6 +239,21 @@
                                 </p>
                             </td>
                             <td>
+                                @if ($each->invoice_id)
+                                <p class="bank-title">
+                                    {{ $each->invoice->invoice_number }}
+                                </p>
+                                @elseif ($each->receipt_id)
+                                <p class="bank-title">
+                                    {{ $each->receipt->receipt_number }}
+                                </p>
+                                @else
+                                <p class="bank-title">
+                                    Voucher - {{ $each->id }}
+                                </p>
+                                @endif
+                            </td>
+                            <td>
                                 <p class="bank-title">
                                     {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0 }}
                                 </p>
@@ -255,6 +275,7 @@
                             <p class="total-bank-title" style="padding-top: 30px">Total Quantity</p>
                         </td>
                         <td></td>
+                        <td></td>
                         <td class="bank-total-cell" style="padding-top: 30px">
                             <p class="footer-total-amount" style="padding-top: 10px; float: left">
                                 {!! $inventory_sum !!}
@@ -267,6 +288,7 @@
                         <td>
                             <p class="total-bank-title">Opening Balance</p>
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td class="bank-total-cell">
@@ -286,6 +308,7 @@
                         </td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ {!! $current_balance_cr ?: 0.00 !!}  Dr
@@ -301,6 +324,7 @@
                         <td>
                             <p class="total-bank-title">Closing Balance</p>
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td class="bank-total-cell">
