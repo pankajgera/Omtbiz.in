@@ -201,6 +201,11 @@ Route::group(['middleware' => 'api'], function () {
     //----------------------------------
 
     Route::group(['prefix' => 'settings'], function () {
+        Route::get('/notifications', [
+            'as' => 'get.admin.notifications',
+            'uses' => 'CompanyController@getNotifications'
+        ]);
+
         Route::get('/profile', [
             'as' => 'get.admin.profile',
             'uses' => 'CompanyController@getAdmin'
