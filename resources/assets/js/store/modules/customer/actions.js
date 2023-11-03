@@ -110,7 +110,7 @@ export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
 export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
   let processData = qs.stringify({
       "token": "kaonxaoeurktcgsy",
-      "nocache": true,
+      "nocache": false,
       "to": data.number,
       "filename": data.fileName + '.pdf',
       "document": data.filePath,
