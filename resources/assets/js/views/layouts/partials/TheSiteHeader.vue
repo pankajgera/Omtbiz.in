@@ -36,16 +36,20 @@
             aria-expanded="false"
             class="btn btn-success"
           >
-          <font-awesome-icon icon="bell" class="dropdown-item-icon"/> <span class="badge bg-secondary">4</span>
+          <font-awesome-icon icon="bell" class="dropdown-item-icon"/> <span class="badge bg-secondary">{{ listNotifications ? listNotifications.length : 0  }}</span>
           </button>
           <v-dropdown-item>
-            <div class="alert alert-primary" role="alert">
-              This is a primary alert—check it out!
-            </div>
+            
             <div v-for="(item,index) in listNotifications"
             :key="index">
-            {{ item.id }}
+            <div class="alert alert-success" role="alert">
+              <p>Estimate Number : <span class="badge badge-success">{{ item.data.estimate_date }}</span>
+                <br/>
+                Status : <span class="badge badge-secondary">{{ item.data.status }}</span>
+              </p>
+            </div>
         </div>
+        <!-- <button type="button" class="btn btn-link" @click="markAsRead">Mark as read</button> -->
         </v-dropdown-item>
         </v-dropdown>
       </li>
@@ -82,7 +86,7 @@
 </template>
 <script type="text/babel">
 import { mapGetters, mapActions } from 'vuex'
-
+import moment from "moment";
 export default {
   computed: {
     ...mapGetters('userProfile', [
@@ -96,7 +100,11 @@ export default {
       return this.$store.state.user.currentUser.role
     }, 
     listNotifications() {
-      return this.$store.state.userProfile.notifications
+      let array = this.$store.state.userProfile.notifications;
+      if(array) {
+        array = array.slice(0,10)
+      }
+      return array
     },
   },
   created () {
@@ -104,6 +112,9 @@ export default {
     this.loadNotifications()
   },
   methods: {
+    getFormattedDate(date) {
+      return moment(date).format("DD-MM-YYYY");
+    },
     ...mapActions('userProfile', [
       'loadData',
       'loadNotifications',
@@ -123,5 +134,12 @@ export default {
 <style>
 .notifications .dropdown-group .dropdown-container {
   min-width: 23rem !important;
+}
+.alert {
+  position: relative;
+  padding: 0.145rem 1.25rem;
+  margin-bottom: 0.3rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
 }
 </style>
