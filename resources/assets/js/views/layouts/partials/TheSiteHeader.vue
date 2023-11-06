@@ -43,9 +43,9 @@
             <div v-for="(item,index) in listNotifications"
             :key="index">
             <div class="alert alert-success" role="alert">
-              <p>Estimate Number : <span class="badge badge-success">{{ item.data.estimate_date }}</span>
-                <br/>
-                Status : <span class="badge badge-secondary">{{ item.data.status }}</span>
+              <p class="mb-1">Estimate Number : <span class="badge badge-success">{{ item.data.estimate_date }}</span>
+                <!-- <br/>
+                Status : <span class="badge badge-secondary">{{ item.data.status }}</span> -->
               </p>
             </div>
         </div>
