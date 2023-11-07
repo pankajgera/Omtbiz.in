@@ -139,7 +139,7 @@ function numberTowords($num)
             color: #040405;
         }
         .title {
-            margin-top: 60px;
+            margin-top: 20px;
             padding-left: 3px;
             font-style: normal;
             font-weight: normal;
@@ -228,7 +228,7 @@ function numberTowords($num)
             marign: 0 5px !important;
             padding: 0 5px !important;
         }
-        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 150px; }
+        header { position: fixed; top: -110px; right: 0; left: 0; background-color: rgb(233, 250, 255); height: 115px; }
         @page {
             margin: 120px 20px 20px 20px;
           }
@@ -256,8 +256,8 @@ function numberTowords($num)
             </tr>
         </table>
     </header>
-    <div style="margin-top: 40px;">
-        <table>
+    <div style="margin-top: 20px;">
+        <table style="width: 100% !important">
             <tbody>
                 <div class="main-container">
                     <div class="sub-container">
@@ -341,7 +341,7 @@ function numberTowords($num)
                 {{ numberTowords($total_amount) }}
             </p>
         </div>
-        <div style="margin: 10px 0px; position: fixed; bottom: 180px">
+        <div style="margin: 10px 0px; position: fixed; bottom: 20px">
             <p style="font-size: 12px; bottom: 0">
                 Remark: <br>
                 {{ $receipt->notes }}

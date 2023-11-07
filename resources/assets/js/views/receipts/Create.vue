@@ -150,6 +150,10 @@
                 >
                   {{ $t('receipts.save_receipt') }}
                 </base-button>
+                <br/>
+                <base-button v-if="isEdit" outline color="theme" class="report-button" @click="sendReports()">
+                  {{ $t('reports.send_report') }}
+                </base-button>
               </div>
             </div>
           </div>
@@ -197,6 +201,7 @@ export default {
       closingBalanceType: '',
       accountLedger: [],
       receiptMode: [],
+      siteURL: '',
     }
   },
   validations () {
@@ -314,6 +319,9 @@ export default {
       'updateReceipt',
       'fetchReceipt'
     ]),
+    ...mapActions('customer', [
+      'sendReportOnWhatsApp'
+    ]),
     async loadData () {
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
@@ -326,6 +334,8 @@ export default {
         this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)[0]
         this.accountLedger = response.data.account_ledger
         this.receiptMode = response.data.receipt_mode
+
+        this.siteURL = `/receipts/pdf/${this.formData.id}`
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
         }
@@ -419,6 +429,19 @@ export default {
           window.toastr['error'](err)
         }
       }
+    },
+    sendReports() {
+      if (!this.siteURL) {
+        window.toastr['error']('Receipt report url not found');
+      }
+      let mobile = this.accountLedger.find(i => i.id === this.formData.account_master_id).mobile_number;
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+      let fileName = moment(this.formData.receipt_date).format('DD/MM/YYYY');
+      console.log(fileName, mobile, "http://omtbiz.in" + this.siteURL)
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
     }
   }
 }
