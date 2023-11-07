@@ -95,6 +95,8 @@
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
+      <base-loader v-show="isRequestOngoing" class="table-loader" style="z-index: 9999; display: block; position: sticky;"/>
+
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
         <transition name="fade">
@@ -111,6 +113,7 @@
           </v-dropdown>
         </transition>
       </div>
+
       <div class="custom-control custom-checkbox">
         <input
           id="select-all"
@@ -444,6 +447,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
+          this.isRequestOngoing = true
           let res = await this.deleteMultipleInvoices()
           if (res.data.error === 'payment_attached') {
             window.toastr['error'](this.$t('invoices.payment_attached_message'), this.$t('general.action_failed'))
@@ -453,6 +457,7 @@ export default {
             this.$refs.table.refresh()
             this.filtersApplied = false
             this.resetSelectedInvoices()
+            this.isRequestOngoing = false
             window.toastr['success'](this.$tc('invoices.deleted_message', 2))
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
