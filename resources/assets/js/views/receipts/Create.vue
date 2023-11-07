@@ -451,7 +451,7 @@ export default {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
       }
-      let fileName = moment(this.formData.receipt_date).format('DD/MM/YYYY');
+      let fileName = 'Receipt - ' + moment(this.formData.receipt_date).format('DD/MM/YYYY');
       this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
       .then((val) => {
         setTimeout(() => {
