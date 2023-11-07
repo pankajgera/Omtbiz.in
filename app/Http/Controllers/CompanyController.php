@@ -42,8 +42,8 @@ class CompanyController extends Controller
      */
     public function getNotifications()
     {   
-        // dd(auth()->user()->notifications);
         return auth()->user()->notifications()
+        ->whereNull('read_at')
         ->orderBy('id', 'desc')
         ->limit(10)
         ->get();
