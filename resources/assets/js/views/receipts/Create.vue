@@ -382,9 +382,6 @@ export default {
           let response = await this.updateReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.updated_message'))
-            setTimeout(() => {
-              window.location.reload()
-            }, 2000)
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -410,9 +407,22 @@ export default {
           let response = await this.addReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.created_message'))
-            setTimeout(() => {
-              window.location.reload()
-            }, 2000)
+            this.siteURL = `/receipts/pdf/${response.data.receipt.id}`
+            window.swal({
+              title: 'Send Receipt',
+              text: 'Do you want to send receipt on whatsapp?',
+              icon: '/assets/icon/envelope-solid.svg',
+              buttons: true,
+              dangerMode: false
+            }).then(async (value) => {
+              if (value) {
+                this.sendReports()
+              } else {
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1000)
+              }
+            });
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -431,17 +441,24 @@ export default {
       }
     },
     sendReports() {
+      this.isLoading = true
       if (!this.siteURL) {
         window.toastr['error']('Receipt report url not found');
+        return;
       }
-      let mobile = this.accountLedger.find(i => i.id === this.formData.account_master_id).mobile_number;
+      let mobile = this.accountLedger.find(i => i.id === this.formData.list.id).mobile_number;
       if (!mobile) {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
       }
       let fileName = moment(this.formData.receipt_date).format('DD/MM/YYYY');
-      console.log(fileName, mobile, "http://omtbiz.in" + this.siteURL)
       this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
+      .then((val) => {
+        setTimeout(() => {
+          this.isLoading = false
+          window.location.reload()
+        }, 2000)
+      })
     }
   }
 }

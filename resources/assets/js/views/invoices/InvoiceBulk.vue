@@ -412,6 +412,7 @@ export default {
         dangerMode: true
       }).then(async (value) => {
         if (value) {
+          this.isRequestOngoing = true;
           let res = await this.deleteInvoice(this.id)
 
           if (res.data.success) {
@@ -424,7 +425,7 @@ export default {
             window.toastr['error'](this.$t('invoices.payment_attached_message'), this.$t('general.action_failed'))
             return true
           }
-
+          this.isRequestOngoing = false
           window.toastr['error'](res.data.error)
           return true
         }
