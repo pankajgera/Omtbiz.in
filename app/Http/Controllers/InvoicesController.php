@@ -341,7 +341,6 @@ class InvoicesController extends Controller
             if ($invoice) {
                 //Update estimate
                 if ($request->estimate) {
-                    // dd($request->estimate);
                     Estimate::where('id', $request->estimate['id'])->update([
                         'status' => 'SENT',
                         'reference_number' => $invoice->invoice_number,
@@ -360,7 +359,7 @@ class InvoicesController extends Controller
                             $notifi->update([
                                 'read_at' => Carbon::now()
                             ]);
-                            
+
                             break;
                         }
                     }
