@@ -57,8 +57,8 @@ class EstimateSuccessful extends Notification
     public function toArray($notifiable)
     {
         return [
-            'estimate_date' => $this->estimate->estimate_number,
-            'status' => $this->estimate->status,
+            'estimate_number' => $this->estimate->estimate_number,
+            'id' => $this->estimate->id,
             'status' => $this->estimate->status,
             'notes' => $this->estimate->notes,
         ];
