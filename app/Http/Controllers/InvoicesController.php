@@ -341,10 +341,29 @@ class InvoicesController extends Controller
             if ($invoice) {
                 //Update estimate
                 if ($request->estimate) {
+                    // dd($request->estimate);
                     Estimate::where('id', $request->estimate['id'])->update([
                         'status' => 'SENT',
                         'reference_number' => $invoice->invoice_number,
                     ]);
+
+                    // update notifications 
+                    $notifications = auth()->user()->notifications()
+                    ->whereNull('read_at')
+                    ->orderBy('id', 'desc')
+                    ->limit(10)
+                    ->get();
+
+                    foreach($notifications as $notifi) {
+                        $data = $notifi['data'];
+                        if($data['id'] === (int)$request->estimate['id']) {
+                            $notifi->update([
+                                'read_at' => Carbon::now()
+                            ]);
+                            
+                            break;
+                        }
+                    }
                 }
 
                 return response()->json([
