@@ -539,6 +539,8 @@ export default {
       this.addEstimate(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('estimates.created_message'))
+          let notificationSound = new Audio("/assets/ring.mp3");
+          notificationSound.play();
           this.reset()
         }
       }).catch((err) => {

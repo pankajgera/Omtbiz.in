@@ -11,6 +11,18 @@ export const loadData = ({ commit, dispatch, state }, id) => {
     })
 }
 
+export const loadNotifications = ({ commit, dispatch, state }, id) => {
+    return new Promise((resolve, reject) => {
+        window.axios.get(`/api/settings/notifications`).then((response) => {
+            commit(types.USER_NOFIFICATIONS, response.data)
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+
 export const editUser = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
         window.axios.put('/api/settings/profile', data).then((response) => {

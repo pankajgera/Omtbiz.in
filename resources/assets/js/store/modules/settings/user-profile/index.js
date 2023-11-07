@@ -3,7 +3,8 @@ import * as actions from './actions'
 import * as getters from './getters'
 
 const initialState = {
-  user: null
+  user: null,
+  notifications: null
 }
 
 export default {

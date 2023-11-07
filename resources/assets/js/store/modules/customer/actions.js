@@ -119,8 +119,22 @@ export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
   return new Promise((resolve, reject) => {
     window.axios.post('https://api.ultramsg.com/instance66542/messages/document', processData)
     .then((response) => {
-      console.log('response', response)
-      resolve(response)
+      if (response.status === 200 && !response.data?.error?.length) {
+        window.swal({
+          title: 'Success!',
+          text: 'Message sent on Whatsapp',
+          icon: '/assets/icon/envelope-solid.svg',
+          dangerMode: false
+        });
+        resolve(response)
+      } else {
+        window.swal({
+          title: 'Error!',
+          text: 'Error while sending message on whatsapp',
+          icon: '/assets/icon/envelope-solid.svg',
+          dangerMode: true
+        });
+      }
     }).catch((err) => {
       reject(err)
     })

@@ -380,7 +380,7 @@ class ReportController extends Controller
             $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
             $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
             $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
-            $vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+            $vouchers = Voucher::with(['invoice', 'receipt'])->whereIn('id', explode(',', $unique_ids))
                 ->where('account_master_id', '!=', $master->id)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)

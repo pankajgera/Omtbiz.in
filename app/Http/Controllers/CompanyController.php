@@ -21,6 +21,7 @@ use App\Models\CompanySetting;
 use Carbon\Carbon;
 use App\Jobs\EraseData;
 use Auth;
+use Notification;
 
 class CompanyController extends Controller
 {
@@ -31,6 +32,22 @@ class CompanyController extends Controller
     public function getAdmin()
     {
         return User::find(1);
+    }
+    
+    
+    
+    /**
+     * Retrive the Admin account.
+     * @return \App\Models\User
+     */
+    public function getNotifications()
+    {   
+        return auth()->user()->notifications()
+        ->whereNull('read_at')
+        ->orderBy('id', 'desc')
+        ->limit(10)
+        ->get();
+       
     }
 
     /**
