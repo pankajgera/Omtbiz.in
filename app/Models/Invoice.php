@@ -132,6 +132,16 @@ class Invoice extends Model
         return $prefix;
     }
 
+    public function getReferencePrefixAttribute()
+    {
+        $prefix = explode("-", $this->reference_number);
+        if (! count($prefix)) {
+            return $this->reference_number;
+        }
+        return $prefix[0];
+    }
+
+
     public function getFormattedCreatedAtAttribute($value)
     {
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);

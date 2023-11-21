@@ -33,21 +33,21 @@ class CompanyController extends Controller
     {
         return User::find(1);
     }
-    
-    
-    
+
+
+
     /**
      * Retrive the Admin account.
      * @return \App\Models\User
      */
     public function getNotifications()
-    {   
+    {
         return auth()->user()->notifications()
         ->whereNull('read_at')
         ->orderBy('id', 'desc')
         ->limit(10)
         ->get();
-       
+
     }
 
     /**
@@ -222,6 +222,9 @@ class CompanyController extends Controller
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $invoice_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
 
+        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
+        $reference_auto_generate = CompanySetting::getSetting('reference_auto_generate', $request->header('company'));
+
         $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
         $estimate_auto_generate  = CompanySetting::getSetting('estimate_auto_generate', $request->header('company'));
 
@@ -231,6 +234,8 @@ class CompanyController extends Controller
         return  response()->json([
             'invoice_prefix' => $invoice_prefix,
             'invoice_auto_generate' => $invoice_auto_generate,
+            'reference_prefix' => $reference_prefix,
+            'reference_auto_generate' => $reference_auto_generate,
             'estimate_prefix' => $estimate_prefix,
             'estimate_auto_generate' => $estimate_auto_generate,
             'payment_prefix' => $payment_prefix,
@@ -251,6 +256,12 @@ class CompanyController extends Controller
         if ($request->type == "INVOICES") {
             $sets = [
                 'invoice_prefix',
+            ];
+        }
+
+        if ($request->type == "REFERENCES") {
+            $sets = [
+                'reference_prefix',
             ];
         }
 

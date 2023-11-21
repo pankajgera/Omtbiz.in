@@ -997,14 +997,22 @@
 
             "invoices": {
                 "title": "Invoices",
-                "notes": "Notes",
                 "invoice_prefix": "Invoice Prefix",
                 "invoice_settings": "Invoice Settings",
                 "autogenerate_invoice_number": "Auto-generate Invoice Number",
                 "invoice_setting_description": "Disable this, If you don't wish to auto-generate invoice numbers each time you create a new invoice.",
                 "enter_invoice_prefix": "Enter invoice prefix",
-                "terms_and_conditions": "Terms and Conditions",
                 "invoice_setting_updated": "Invoice Setting updated successfully"
+            },
+
+            "references": {
+                "title": "References",
+                "reference_prefix": "Reference Prefix",
+                "reference_settings": "Reference Settings",
+                "autogenerate_reference_number": "Auto-generate Reference Number",
+                "reference_setting_description": "Disable this, If you don't wish to auto-generate reference numbers each time you create a new reference.",
+                "enter_reference_prefix": "Enter reference prefix",
+                "reference_setting_updated": "Reference Setting updated successfully"
             },
 
             "estimates": {
