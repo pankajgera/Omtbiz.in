@@ -123,6 +123,7 @@ class InvoicesController extends Controller
     public function create(Request $request)
     {
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
@@ -144,6 +145,7 @@ class InvoicesController extends Controller
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'invoice_prefix' => $invoice_prefix,
+            'reference_prefix' => $reference_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
             'incomeIndirectLedgers' => $income_indirect_ledgers,
             'expenseIndirectLedgers' => $expense_indirect_ledgers,
@@ -346,7 +348,7 @@ class InvoicesController extends Controller
                         'reference_number' => $invoice->invoice_number,
                     ]);
 
-                    // update notifications 
+                    // update notifications
                     $notifications = auth()->user()->notifications()
                     ->whereNull('read_at')
                     ->orderBy('id', 'desc')
@@ -419,6 +421,7 @@ class InvoicesController extends Controller
         $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
         $find_invoice_estimate = Estimate::where('reference_number', $invoice->invoice_number)->get();
@@ -439,6 +442,7 @@ class InvoicesController extends Controller
             'estimateList' => $estimateList,
             'InvoiceEstimate' => $find_invoice_estimate,
             'invoice_prefix' => $invoice_prefix,
+            'reference_prefix' => $reference_prefix,
             'inventory_negative' => ('YES' === $inventory_negative),
         ]);
     }

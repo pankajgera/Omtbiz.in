@@ -77,25 +77,27 @@
           <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
           <base-prefix-input
             v-model="invoiceNumAttribute"
+            icon="hashtag"
             :invalid="$v.invoiceNumAttribute.$error"
             :prefix="invoicePrefix"
-            icon="hashtag"
-            @input="$v.invoiceNumAttribute.$touch()"
             :prefix-width="55"
             :disabled="true"
+            @input="$v.invoiceNumAttribute.$touch()"
           />
           <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
         </div>
         <div class="col-md-4 col-sm-6 collapse-input">
           <label>{{ $t('invoices.ref_number') }}</label>
-          <base-input
-            v-model="newInvoice.reference_number"
-            :invalid="$v.newInvoice.reference_number.$error"
+          <base-prefix-input
+            v-model="referenceNumAttribute"
             icon="hashtag"
-            @input="$v.newInvoice.reference_number.$touch()"
+            :invalid="$v.referenceNumAttribute.$error"
+            :prefix="referencePrefix"
+            :prefix-width="55"
             :disabled="true"
+            @input="$v.referenceNumAttribute.$touch()"
           />
-          <div v-if="$v.newInvoice.reference_number.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
+          <div v-if="$v.referenceNumAttribute.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
         </div>
       </div>
       <div class="table-responsive">
@@ -414,6 +416,7 @@ export default {
       estimateDisabled: false,
       maxDiscount: 0,
       invoicePrefix: null,
+      referencePrefix: null,
       invoiceNumAttribute: null,
       role: this.$store.state.user.currentUser.role,
       sundryDebtorsList: [], //List of Sundry Debitor name
@@ -453,6 +456,9 @@ export default {
         }
       },
       invoiceNumAttribute: {
+        required
+      },
+      referenceNumAttribute: {
         required
       }
     }
@@ -538,6 +544,15 @@ export default {
     },
     inventoryListBind() {
       return this.$store.state.inventory.inventories
+    },
+    referenceNumAttribute: {
+      cache: false,
+      get() {
+        return this.newInvoice.reference_number
+      },
+      set(value) {
+        this.newInvoice.reference_number = value;
+      }
     }
   },
   watch: {
@@ -627,8 +642,9 @@ export default {
           this.selectedCurrency = this.defaultCurrency
           this.invoiceTemplates = response.data.invoiceTemplates
           this.invoicePrefix = response.data.invoice_prefix
+          this.referencePrefix = response.data.reference_prefix
           this.invoiceNumAttribute = response.data.invoiceNumber
-          this.newInvoice.debtors = response.data.sundryDebtorsList[0]
+=          this.newInvoice.debtors = response.data.sundryDebtorsList[0]
           this.incomeLedgerList = response.data.incomeIndirectLedgers
           this.expenseLedgerList = response.data.expenseIndirectLedgers
           if(response.data.InvoiceEstimate.length) {
@@ -637,16 +653,16 @@ export default {
           this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null
           this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null
           this.income_ledger_value = response.data.invoice.indirect_income_value ? response.data.invoice.indirect_income_value : 0
-          this.expense_ledger_value= response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0
-           response.data.estimateList.map(i => {
-          let obj = {}
-          let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
-          obj['id'] = i.id;
-          obj['total'] = i.total;
-          obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');
+          this.expense_ledger_value = response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0
+          response.data.estimateList.map(i => {
+            let obj = {}
+            let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
+            obj['id'] = i.id;
+            obj['total'] = i.total;
+            obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');
 
-          this.estimateList.push(obj)
-        })
+            this.estimateList.push(obj)
+          })
         }
         this.initLoading = false
         return
@@ -661,6 +677,7 @@ export default {
         this.newInvoice.invoice_date = response.data.invoice_today_date
         this.inventoryNegative = response.data.inventory_negative
         this.invoicePrefix = response.data.invoice_prefix
+        this.referencePrefix = response.data.reference_prefix
         this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
         this.incomeLedgerList = response.data.incomeIndirectLedgers
@@ -748,6 +765,7 @@ export default {
         return false
       }
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
+      this.newInvoice.reference_number = this.referencePrefix + '-' + this.invoiceNumAttribute
         // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
         // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
       let data = {
@@ -879,7 +897,7 @@ export default {
        this.newInvoice.reference_number = null;
        let response = await this.fetchReferenceNumber(data)
         if (response.data && response.data.invoice) {
-          this.newInvoice.reference_number = response.data.invoice.reference_number
+          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[1]
         } else {
           this.newInvoice.reference_number = this.invoiceNumAttribute
         }
@@ -906,6 +924,7 @@ export default {
       this.newInvoice = {
         invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),
         invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
+        reference_number: this.referencePrefix + '-' + this.invoiceNumAttribute,
         user_id: invoice.user_id,
         invoice_template_id: 1,
         sub_total: invoice.sub_total,
