@@ -599,6 +599,16 @@ export default {
       }
       return 0
     },
+    getUrlParameters() {
+            return decodeURI(window.location.search)
+                .replace('?', '')
+                .split('&')
+                .map(param => param.split('='))
+                .reduce((values, [key, value]) => {
+                    values[key] = value;
+                    return values;
+                }, {});
+      },
     selectFixed () {
       if (this.newInvoice.discount_type === 'fixed') {
         return
@@ -692,6 +702,14 @@ export default {
 
           this.estimateList.push(obj)
         })
+
+        // set estimate
+        let params = this.getUrlParameters();
+        if(params['id']) {
+          let estimate  = this.estimateList.filter(node => node.id===Number(params['id']));
+          this.newInvoice.estimate = estimate;
+          
+        }
       }
       this.initLoading = false
     },
