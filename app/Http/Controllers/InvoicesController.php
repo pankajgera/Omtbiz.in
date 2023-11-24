@@ -339,7 +339,7 @@ class InvoicesController extends Controller
             }
 
             $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
-
+            
             if ($invoice) {
                 //Update estimate
                 if ($request->estimate) {
