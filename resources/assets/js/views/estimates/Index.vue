@@ -596,6 +596,7 @@ export default {
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('estimates.deleted_message'))
+            window.location.reload();
             this.refreshTable()
             return true
           }

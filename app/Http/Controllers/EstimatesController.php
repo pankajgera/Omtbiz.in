@@ -309,6 +309,22 @@ class EstimatesController extends Controller
      */
     public function destroy($id)
     {
+         // update notifications
+         $notifications = auth()->user()->notifications()
+         ->whereNull('read_at')
+         ->orderBy('id', 'desc')
+         ->get();
+
+         foreach($notifications as $notifi) {
+             $data = $notifi['data'];
+             if($data['id'] === (int) $id) {
+                 $notifi->update([
+                     'read_at' => Carbon::now()
+                 ]);
+
+                 break;
+             }
+         }
         Estimate::deleteEstimate($id);
 
         return response()->json([
