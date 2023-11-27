@@ -603,15 +603,15 @@ export default {
       return 0
     },
     getUrlParameters() {
-            return decodeURI(window.location.search)
-                .replace('?', '')
-                .split('&')
-                .map(param => param.split('='))
-                .reduce((values, [key, value]) => {
-                    values[key] = value;
-                    return values;
-                }, {});
-      },
+      return decodeURI(window.location.search)
+          .replace('?', '')
+          .split('&')
+          .map(param => param.split('='))
+          .reduce((values, [key, value]) => {
+              values[key] = value;
+              return values;
+          }, {});
+    },
     selectFixed () {
       if (this.newInvoice.discount_type === 'fixed') {
         return

@@ -15,16 +15,16 @@
     <div class="row" >
       <div class="col-sm-12 mb-5">
       <base-button
-            v-show="ledgerData"
-            :outline="true"
-            :icon="['fas', 'print']"
-            color="theme"
-            size="large"
-            right-icon
-            @click="printData"
-          >
-            Print
-          </base-button>
+          v-show="ledgerData"
+          :outline="true"
+          :icon="['fas', 'print']"
+          color="theme"
+          size="large"
+          right-icon
+          @click="printData"
+        >
+          Print
+        </base-button>
       </div>
       <div class="col-sm-12 daysheet">
         <table-component
@@ -43,7 +43,8 @@
               </table-column>
               <table-column :label="$tc('daysheet.reference-number')" show="reference_number">
                 <template slot-scope="row">
-                  {{ row.reference_number }}
+                  <p v-if="row.reference_number && (-1 !== row.reference_number.indexOf('-'))">{{ row.reference_number.split('-')[2] }}</p>
+                  <p v-else>{{ row.reference_number }}</p>
                 </template>
               </table-column>
               <table-column
@@ -69,51 +70,51 @@
               :show-filter="false"
             table-class="table"
             >
-              <table-column
+              <!-- <table-column
                 :label="$tc('daysheet.lot')"
                 show="lot"
               >
                 <template slot-scope="row">
                   {{ row.lot }}
                 </template>
-              </table-column>
-              <table-column
+              </table-column> -->
+              <!-- <table-column
                 :label="$tc('daysheet.sign')"
                 show="lot"
               >
                 <template slot-scope="row">
 
                 </template>
-              </table-column>
+              </table-column> -->
               <table-column :label="$tc('daysheet.pm')" show="reference_number">
                 <template slot-scope="row">
                   {{ row.reference_number }}
                 </template>
               </table-column>
-              <table-column
+              <!-- <table-column
                 :label="$tc('daysheet.name')"
                 show="party"
               >
                 <template slot-scope="row">
                    {{ row.party }}
                 </template>
-              </table-column>
-               <table-column
+              </table-column> -->
+              <!-- <table-column
                 :label="$tc('daysheet.city')"
                 show="party"
               >
                 <template slot-scope="row">
 
                 </template>
-              </table-column>
-                <table-column
+              </table-column> -->
+              <!-- <table-column
                 :label="$tc('daysheet.transport')"
                 show="party"
               >
                 <template slot-scope="row">
 
                 </template>
-              </table-column>
+              </table-column> -->
             </table-component>
               </div>
               </div>
