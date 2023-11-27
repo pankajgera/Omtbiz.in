@@ -253,7 +253,13 @@ function numberTowords($num)
                     <p class="total-title">Estimate Number <span
                             style="float:right; font-size: 12px;">{{ $invoice->invoice_number }}</span></p>
                     <p class="total-title">Reference Number <span
-                        style="float:right; font-size: 12px;">{{ $invoice->reference_number }}</span></p>
+                        style="float:right; font-size: 12px;">
+                        @if( strpos( $invoice->reference_number, '-' ) !== false)
+                            {{explode('-', $invoice->reference_number)[2]}}
+                        @else
+                            {{$invoice->reference_number}}
+                        @endif
+                        </span></p>
                     <p class="total-title">Party Name <span
                             style="float:right; font-size: 12px;">{{ $invoice->master->name }}</span></p>
                 </td>
