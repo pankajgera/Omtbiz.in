@@ -787,7 +787,11 @@ export default {
         return false
       }
       this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
-      this.newInvoice.reference_number = this.referencePrefix + '-' + this.invoiceNumAttribute
+      if (this.newInvoice.reference_number && -1 !== this.newInvoice.reference_number.indexOf('-')) {
+        this.newInvoice.reference_number = this.referencePrefix + '-' + this.newInvoice.reference_number.split('-')[2]
+      } else {
+        this.newInvoice.reference_number = this.referencePrefix + '-' + this.invoiceNumAttribute
+      }
         // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
         // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
       let data = {
