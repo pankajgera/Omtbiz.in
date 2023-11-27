@@ -709,9 +709,10 @@ export default {
         // set estimate
         let params = this.getUrlParameters();
         if(params['id']) {
-          let estimate  = this.estimateList.filter(node => node.id===Number(params['id']));
+          let estimate  = this.estimateList.find(node => node.id===Number(params['id']));
           this.newInvoice.estimate = estimate;
-
+          this.estimateSelected = true;
+          this.getInvoiceFromEstimate(Number(params['id']))
         }
       }
       this.initLoading = false
@@ -932,8 +933,8 @@ export default {
       this.showEndOfList = false;
       this.showAddNewInventory = true;
     },
-    async getInvoiceFromEstimate() {
-      let resp = await this.getInvoiceEstimate(this.newInvoice.estimate.id)
+    async getInvoiceFromEstimate(id) {
+      let resp = await this.getInvoiceEstimate(id ? id :this.newInvoice.estimate.id)
       let invoice = resp.data.estimate
       let inventory = invoice.items.map(i => {
         i.sale_price = i.sale_price ? i.sale_price : i.price
