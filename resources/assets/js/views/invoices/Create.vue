@@ -390,6 +390,7 @@ export default {
       newInvoice: {
         invoice_date: null,
         invoice_number: null,
+        reference_number: null,
         user_id: null,
         invoice_template_id: 1,
         sub_total: null,
@@ -398,7 +399,6 @@ export default {
         discount_type: 'fixed',
         discount_val: 0,
         discount: 0,
-        reference_number: null,
         inventories: [{
           ...InvoiceStub,
         }],
@@ -548,6 +548,9 @@ export default {
     referenceNumAttribute: {
       cache: false,
       get() {
+        if (this.newInvoice.reference_number && -1 !== this.newInvoice.reference_number.indexOf('-')) {
+          return this.newInvoice.reference_number.split('-')[2]
+        }
         return this.newInvoice.reference_number
       },
       set(value) {
@@ -654,7 +657,7 @@ export default {
           this.invoicePrefix = response.data.invoice_prefix
           this.referencePrefix = response.data.reference_prefix
           this.invoiceNumAttribute = response.data.invoiceNumber
-=          this.newInvoice.debtors = response.data.sundryDebtorsList[0]
+          this.newInvoice.debtors = response.data.sundryDebtorsList[0]
           this.incomeLedgerList = response.data.incomeIndirectLedgers
           this.expenseLedgerList = response.data.expenseIndirectLedgers
           if(response.data.InvoiceEstimate.length) {
@@ -708,7 +711,7 @@ export default {
         if(params['id']) {
           let estimate  = this.estimateList.filter(node => node.id===Number(params['id']));
           this.newInvoice.estimate = estimate;
-          
+
         }
       }
       this.initLoading = false
@@ -915,7 +918,7 @@ export default {
        this.newInvoice.reference_number = null;
        let response = await this.fetchReferenceNumber(data)
         if (response.data && response.data.invoice) {
-          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[1]
+          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[2]
         } else {
           this.newInvoice.reference_number = this.invoiceNumAttribute
         }
@@ -952,7 +955,6 @@ export default {
         discount_val: 0,
         discount: 0,
         inventories: inventory,
-        reference_number: null,
         debtors: this.sundryDebtorsList.find(i => i.id === invoice.account_master_id),
         estimate: this.newInvoice.estimate
       };
