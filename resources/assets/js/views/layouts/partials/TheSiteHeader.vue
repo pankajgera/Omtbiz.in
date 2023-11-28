@@ -43,7 +43,8 @@
             <div v-for="(item,index) in listNotifications"
             :key="index">
             <div class="alert alert-success" role="alert">
-              <p class="mb-1">Estimate Number : <span class="badge badge-success">{{ item.data.estimate_number }}</span>
+             
+              <p class="mb-1"> <a :href="'/invoices/create?id='+item.data.id" class="bg-transparent">Estimate Number : <span class="badge badge-success">{{ item.data.estimate_number }}</span> </a>
                 <!-- <br/>
                 Status : <span class="badge badge-secondary">{{ item.data.status }}</span> -->
               </p>

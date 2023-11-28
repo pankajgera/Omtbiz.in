@@ -291,7 +291,6 @@ export default {
               i.name === this.invoiceItem.name &&
               parseInt(i.price) === parseInt(this.invoiceItem.price)
             ));
-          console.log('quantity', quantity, newValue)
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
