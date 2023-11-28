@@ -66,7 +66,6 @@ export const selectReceipt = ({ commit, receipt, state }, data) => {
 }
 
 export const updateReceipt = ({ commit, receipt, state }, data) => {
-  console.log(data);
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/receipts/${data.id}`, data.editData).then((response) => {
       resolve(response)
