@@ -43,8 +43,7 @@
               </table-column>
               <table-column :label="$tc('daysheet.reference-number')" show="reference_number">
                 <template slot-scope="row">
-                  <p v-if="row.reference_number && -1 !== row.reference_number.indexOf('-')">{{ row.reference_number.split('-')[2] }}</p>
-                  <p v-else>{{ row.reference_number }}</p>
+                  <p>{{ row.reference_number.split('-')[2] }}</p>
                 </template>
               </table-column>
               <table-column
