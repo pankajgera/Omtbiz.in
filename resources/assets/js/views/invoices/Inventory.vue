@@ -3,7 +3,7 @@
     <td colspan="5">
       <table class="full-width">
         <colgroup>
-          <col style="width: 40%;">
+          <col style="width: 35%;">
           <col style="width: 10%;">
           <col style="width: 15%;">
           <col style="width: 15%;" v-if="('orders' !== inventoryType)">
@@ -14,6 +14,7 @@
           <tr>
             <td class="">
               <div class="item-select-wrapper">
+                <div class="ml-2  pl-3 mt-2 weight-600">{{  index+ 1 }}</div>
                 <div class="sort-icon-wrapper handle">
                   <font-awesome-icon
                     class="sort-icon"
@@ -439,3 +440,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.weight-600 {
+  font-weight: 500;
+}
+</style>

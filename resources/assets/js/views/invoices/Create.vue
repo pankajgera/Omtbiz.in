@@ -337,6 +337,7 @@
   border: 1px solid #969696;
   border-radius: 5px;
 }
+
 input.base-prefix-input:disabled {
     background: rgba(59, 59, 59, 0.3) !important;
     border-color: rgba(118, 118, 118, 0.3) !important;
