@@ -43,7 +43,7 @@
               </table-column>
               <table-column :label="$tc('daysheet.reference-number')" show="reference_number">
                 <template slot-scope="row">
-                  <span>{{ row.reference_number.split('-')[2] }}</span>
+                  {{ row.reference_number.split('-')[2] }}
                 </template>
               </table-column>
               <table-column
@@ -87,7 +87,7 @@
               </table-column>
               <table-column :label="$tc('daysheet.pm')" show="reference_number">
                 <template slot-scope="row">
-                  <p>{{ row.reference_number.split('-')[2] }}</p>
+                  {{ row.reference_number.split('-')[2] }}
                 </template>
               </table-column>
               <table-column
