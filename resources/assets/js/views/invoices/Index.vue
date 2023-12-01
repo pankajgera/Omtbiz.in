@@ -353,6 +353,7 @@ export default {
       allCheckboxes.forEach(checkbox => {
         checkbox.checked = false;
       });
+      this.selectField = [];
       
       return {
         data: response.data.invoices.data,
