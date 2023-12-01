@@ -438,7 +438,7 @@ export default {
     async removeMultipleInvoices () {
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('invoices.confirm_delete', 2),
+        text: this.$tc('invoices.confirm_delete_2',this.selectField.length > 1 ?  2 :1, { 'count': this.selectField.length }),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
