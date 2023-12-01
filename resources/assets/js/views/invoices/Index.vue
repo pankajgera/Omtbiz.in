@@ -139,12 +139,13 @@
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
+                :ref="'myCheckbox'"
                 v-model="selectField"
                 :value="row.id"
                 type="checkbox"
                 class="custom-control-input"
               >
-              <label :for="row.id" class="custom-control-label"/>
+              <label :for="row.id" class="custom-control-label"> </label>
             </div>
           </template>
         </table-column>
@@ -253,7 +254,9 @@ export default {
       filterBy: false,
     }
   },
-
+  mounted() {
+    this.refreshTable();
+  },
   computed: {
      applyFilter() {
         if (this.filters.invoice_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
@@ -323,6 +326,7 @@ export default {
     refreshTable () {
       this.$refs.table.refresh()
     },
+   
     async fetchData ({ page, filter, sort }) {
       let data = {
         invoice_number: this.filters.invoice_number,
@@ -342,7 +346,16 @@ export default {
       this.sundryDebtorsList = response.data.sundryDebtorsList
       this.filtered_count = response.data.invoices.total
       //this.currency = response.data.currency
-
+      // Use querySelectorAll to select all checkboxes
+      const allCheckboxes = this.$el.querySelectorAll('input[type="checkbox"]');
+      
+      // Loop through checkboxes and uncheck them
+      allCheckboxes.forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      
+      // Clear the array holding the checked checkboxes' values
+      this.checkboxes = [];
       return {
         data: response.data.invoices.data,
         pagination: {
