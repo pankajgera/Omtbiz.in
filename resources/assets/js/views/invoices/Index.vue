@@ -354,8 +354,6 @@ export default {
         checkbox.checked = false;
       });
       
-      // Clear the array holding the checked checkboxes' values
-      this.checkboxes = [];
       return {
         data: response.data.invoices.data,
         pagination: {
