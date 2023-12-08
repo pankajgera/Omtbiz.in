@@ -654,7 +654,8 @@
             "type_inventory_description": "Type Item Description (optional)"
         },
         "payment_attached_message": "One of the selected invoices already have a payment attached to it. Make sure to delete the attached payments first in order to go ahead with the removal",
-        "confirm_delete": "You will not be able to recover this Invoice | You will not be able to recover these Invoices",
+        "confirm_delete": "You will not be able to recover this Invoice | You want to delete invoices.",
+        "confirm_delete_2": "You want to delete {count} invoice. | You want to delete {count} invoices.",
         "created_message": "Invoice created successfully",
         "updated_message": "Invoice updated successfully",
         "deleted_message": "Invoice deleted successfully | Invoices deleted successfully",
@@ -662,7 +663,8 @@
         "user_email_does_not_exist": "User email does not exist",
         "something_went_wrong": "something went wrong",
         "invalid_due_amount_message": "Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.",
-        "estimate-list": "Select Estimate"
+        "estimate-list": "Select Estimate",
+        "whatsapp": "Sent on whatsapp"
     },
     "credit_notes": {
         "title": "Credit Notes",

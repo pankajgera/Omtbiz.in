@@ -139,12 +139,13 @@
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
+                :ref="'myCheckbox'"
                 v-model="selectField"
                 :value="row.id"
                 type="checkbox"
                 class="custom-control-input"
               >
-              <label :for="row.id" class="custom-control-label"/>
+              <label :for="row.id" class="custom-control-label"> </label>
             </div>
           </template>
         </table-column>
@@ -203,6 +204,12 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
+                <div class="dropdown-item" @click="sendReports(row.id)" v-if="role === 'admin' || role === 'accountant'">
+                  <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" />
+                  {{ $t('invoices.whatsapp') }}
+                </div>
+              </v-dropdown-item>
+              <v-dropdown-item>
                 <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
@@ -253,7 +260,9 @@ export default {
       filterBy: false,
     }
   },
-
+  mounted() {
+    this.refreshTable();
+  },
   computed: {
      applyFilter() {
         if (this.filters.invoice_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
@@ -309,6 +318,7 @@ export default {
   methods: {
     ...mapActions('invoice', [
       'fetchInvoices',
+      'fetchInvoice',
       'getRecord',
       'selectInvoice',
       'resetSelectedInvoices',
@@ -318,11 +328,13 @@ export default {
       'setSelectAllState'
     ]),
     ...mapActions('customer', [
-      'fetchCustomers'
+      'fetchCustomers',
+      'sendReportOnWhatsApp'
     ]),
     refreshTable () {
       this.$refs.table.refresh()
     },
+
     async fetchData ({ page, filter, sort }) {
       let data = {
         invoice_number: this.filters.invoice_number,
@@ -342,6 +354,14 @@ export default {
       this.sundryDebtorsList = response.data.sundryDebtorsList
       this.filtered_count = response.data.invoices.total
       //this.currency = response.data.currency
+      // Use querySelectorAll to select all checkboxes
+      const allCheckboxes = this.$el.querySelectorAll('input[type="checkbox"]');
+
+      // Loop through checkboxes and uncheck them
+      allCheckboxes.forEach(checkbox => {
+        checkbox.checked = false;
+      });
+      this.selectField = [];
 
       return {
         data: response.data.invoices.data,
@@ -426,7 +446,7 @@ export default {
     async removeMultipleInvoices () {
       swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('invoices.confirm_delete', 2),
+        text: this.$tc('invoices.confirm_delete_2',this.selectField.length > 1 ?  2 :1, { 'count': this.selectField.length }),
         icon: '/assets/icon/trash-solid.svg',
         buttons: true,
         dangerMode: true
@@ -452,6 +472,33 @@ export default {
       this.filters.customer = ''
       this.refreshTable()
     },
+    async sendReports(invoice_id) {
+      let response = await this.fetchInvoice(invoice_id);
+      let invoice = response.data.invoice
+      if (!invoice) {
+        window.toastr['error']("Invoice not found for id - " + invoice_id)
+        return
+      }
+      this.isLoading = true
+      this.siteURL = `/invoices/pdf/${invoice.unique_hash}`
+      if (!response.data.sundryDebtorsList.length) {
+        window.toastr['error']("Sundry Debtors list is empty for invoice id - " + invoice_id)
+        return
+      }
+      let mobile = response.data.sundryDebtorsList.find(i => i.id === invoice.account_master_id).mobile_number;
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+      let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY');
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
+      .then((val) => {
+        setTimeout(() => {
+          this.isLoading = false
+          window.location.reload()
+        }, 2000)
+      })
+    }
   }
 }
 </script>

@@ -322,6 +322,10 @@
             type="submit">
             {{ $t('invoices.save_invoice') }}
           </base-button>
+          <br/>
+          <base-button v-if="this.$route.name === 'invoices.edit'" outline color="theme" class="report-button ml-2" @click="sendReports()">
+            {{ $t('reports.send_report') }}
+          </base-button>
         </div>
     </form>
     <base-loader v-else />
@@ -337,6 +341,7 @@
   border: 1px solid #969696;
   border-radius: 5px;
 }
+
 input.base-prefix-input:disabled {
     background: rgba(59, 59, 59, 0.3) !important;
     border-color: rgba(118, 118, 118, 0.3) !important;
@@ -587,6 +592,9 @@ export default {
       'updateInvoice',
       'fetchReferenceNumber',
     ]),
+    ...mapActions('customer', [
+      'sendReportOnWhatsApp'
+    ]),
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
@@ -658,6 +666,7 @@ export default {
           this.referencePrefix = response.data.reference_prefix
           this.invoiceNumAttribute = response.data.invoiceNumber
           this.newInvoice.debtors = response.data.sundryDebtorsList[0]
+          this.sundryDebtorsList = response.data.sundryDebtorsList
           this.incomeLedgerList = response.data.incomeIndirectLedgers
           this.expenseLedgerList = response.data.expenseIndirectLedgers
           if(response.data.InvoiceEstimate.length) {
@@ -963,6 +972,23 @@ export default {
 
       //set reference number
       this.searchDebtorRefNumber({'id': invoice.account_master_id})
+    },
+    sendReports() {
+      this.isLoading = true
+      this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`
+      let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+      let fileName = 'Invoice - ' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
+      .then((val) => {
+        setTimeout(() => {
+          this.isLoading = false
+          window.location.reload()
+        }, 2000)
+      })
     }
   }
 }

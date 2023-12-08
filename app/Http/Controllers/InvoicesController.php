@@ -54,7 +54,7 @@ class InvoicesController extends Controller
                 ->latest()
                 ->paginate($limit);
 
-            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
 
             $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
             $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
@@ -98,7 +98,7 @@ class InvoicesController extends Controller
                 ->orderBy('id', 'asc')
                 ->paginate($limit);
 
-            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
 
             $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
             $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
@@ -133,7 +133,7 @@ class InvoicesController extends Controller
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
         }
 
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
         $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
 
         $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
@@ -339,7 +339,7 @@ class InvoicesController extends Controller
             }
 
             $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
-            
+
             if ($invoice) {
                 //Update estimate
                 if ($request->estimate) {
@@ -419,7 +419,7 @@ class InvoicesController extends Controller
         ])->find($id);
         $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
         $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
-        $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance', 'mobile_number')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
         $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
