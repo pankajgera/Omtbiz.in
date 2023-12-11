@@ -245,13 +245,13 @@ function numberTowords($num)
         <table style=" width: 100% !important;">
             <tr>
                 <td class="border">
-                    <p class="sub-heading-text"> Invoice</p>
+                    <p class="sub-heading-text"> Estimate</p>
                     {{-- <p class="heading-text">
                         {{ $company->name }}
                     </p> --}}
                 </td>
                 <td class="border">
-                    <p class="total-title">Invoice Date <span
+                    <p class="total-title">Estimate Date <span
                             style="float:right; font-size: 12px;">{{ $invoice->invoice_date }}</span></p>
                     <p class="total-title">Estimate Number <span
                             style="float:right; font-size: 12px;">{{ $invoice->invoice_number }}</span></p>
