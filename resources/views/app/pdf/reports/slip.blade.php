@@ -31,7 +31,7 @@
             <td class="border">
                 <p class="total-title">Party Name </p>
                 <span>{{ $party_name }}</span>
-                <p class="total-title">Invoice Number </p>
+                <p class="total-title">Estimate Number </p>
                 <span>{{ $invoice_number }}</span>
                 <p class="total-title">Reference Number </p>
                 <span>{{ $reference_number }}</span>
