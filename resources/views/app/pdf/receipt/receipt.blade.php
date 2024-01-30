@@ -351,7 +351,7 @@ function numberTowords($num)
                     <td style="width: 50%">
                         <p style="font-size: 12px;">
                             <u> Declaration: </u> <br>
-                            We declare that this invoice shows the actual
+                            We declare that this receipt shows the actual
                             price of the goods described and that all
                             particulars are true and correct
                         </p>
