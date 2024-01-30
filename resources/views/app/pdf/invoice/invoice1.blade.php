@@ -388,7 +388,7 @@ function numberTowords($num)
                     <td style="width: 50%">
                         <p style="font-size: 12px;">
                             <u> Declaration: </u> <br>
-                            We declare that this invoice shows the actual
+                            We declare that this estimate shows the actual
                             price of the goods described and that all
                             particulars are true and correct
                         </p>
@@ -400,7 +400,7 @@ function numberTowords($num)
                     </td>
                 </tr>
             </table>
-            <p style="font-size: 10px; bottom: 0px; margin: 0; padding: 0">This is a Computer Generated Invoice</p>
+            <p style="font-size: 10px; bottom: 0px; margin: 0; padding: 0">This is a Computer Generated Estimate</p>
         </div>
     </footer>
 </body>
