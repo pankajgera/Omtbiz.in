@@ -16,3 +16,5 @@ docker-compose.yaml
 npm-debug.log
 _ide_helper.php
 .env
+public/assets/.DS_Store
+public/assets/css/.DS_Store
