@@ -879,6 +879,7 @@
             "date": "Date",
             "amount": "Amount",
             "to_date": "To Date",
+            "till_date": "Till Date",
             "from_date": "From Date",
             "date_range": "Select Date Range",
             "ledgers": "Select Ledgers"
