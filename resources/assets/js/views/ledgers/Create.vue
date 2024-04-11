@@ -104,8 +104,10 @@ export default {
         return true
       }
       return false
-    }
+    },
+    
   },
+  
   created () {
     if (this.isEdit) {
       this.loadEditData()

@@ -27,6 +27,8 @@ class AccountMastersController extends Controller
             ->latest()
             ->paginate($limit);
 
+            
+
         return response()->json([
             'masters' => $masters,
         ]);
@@ -36,8 +38,10 @@ class AccountMastersController extends Controller
     {
         $master = AccountMaster::find($id);
         $master->state = State::where('name', $master->state)->first();
+        $ledger = AccountLedger::where('account_master_id', $master->id)->where('account', $master->name)->first();
         return response()->json([
             'master' => $master,
+            'ledger' => $ledger,
         ]);
     }
 
@@ -71,6 +75,8 @@ class AccountMastersController extends Controller
             $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
             $ledger->balance = $request->opening_balance;
             $ledger->short_narration = null;
+            $ledger->credits = $request->credits;
+            $ledger->credits_date = $request->credits_date;
             $ledger->account_master_id = $master->id;
             $ledger->company_id = $request->header('company');
             $ledger->save();
@@ -113,6 +119,8 @@ class AccountMastersController extends Controller
             $ledger->date = Carbon::now('Asia/Kolkata');
             $ledger->type = $request->type;
             $ledger->account = $request->name;
+            $ledger->credits = $request->credits;
+            $ledger->credits_date = $request->credits_date;
             $ledger->debit = 'Dr' === $request->type ? $request->opening_balance : 0;
             $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
             $ledger->balance = $request->opening_balance;

@@ -162,6 +162,9 @@ class AccountLedgersController extends Controller
      */
     public function store(Request $request)
     {
+        echo "<pre>";
+        print_r($request);
+        die;
         try {
             $ledger = new AccountLedger();
             $ledger->date = $request->date;
@@ -171,6 +174,8 @@ class AccountLedgersController extends Controller
             $ledger->credit = $request->credit;
             $ledger->balance = $request->balance;
             $ledger->short_narration = $request->short_narration;
+            $ledger->credits = $request->credits;
+            $ledger->credits_date = $request->credits_date;
             $ledger->company_id = $request->header('company');
             $ledger->save();
 
@@ -204,6 +209,8 @@ class AccountLedgersController extends Controller
             $ledger->debit = $request->debit;
             $ledger->credit = $request->credit;
             $ledger->balance = $request->balance;
+            $ledger->credits = $request->credits;
+            $ledger->credits_date = $request->credits_date;
             $ledger->short_narration = $request->short_narration;
             $ledger->company_id = $request->header('company');
             $ledger->save();

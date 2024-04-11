@@ -21,6 +21,7 @@ use App\Models\Inventory;
 use App\Notifications\EstimateSuccessful;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AccountLedger;
 
 class EstimatesController extends Controller
 {
@@ -33,7 +34,16 @@ class EstimatesController extends Controller
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 10;
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')
+        ->select('id', 'name', 'opening_balance')
+        ->get();
+
+        $sundryDebtorsListIds = $sundryDebtorsList->pluck('id');
+
+        $sundryDebtorsCreditsList = AccountLedger::whereIn('account_master_id', $sundryDebtorsListIds)
+            ->select('id', 'credits','credits_date')
+            ->get();
+
         $estimates_inprogress = Estimate::where('status', 'DRAFT')->with([
             'items',
             'master'

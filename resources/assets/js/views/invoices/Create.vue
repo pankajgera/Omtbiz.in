@@ -945,6 +945,7 @@ export default {
     },
     async getInvoiceFromEstimate(id) {
       let resp = await this.getInvoiceEstimate(id ? id :this.newInvoice.estimate.id)
+      console.log(resp);
       let invoice = resp.data.estimate
       let inventory = invoice.items.map(i => {
         i.sale_price = i.sale_price ? i.sale_price : i.price

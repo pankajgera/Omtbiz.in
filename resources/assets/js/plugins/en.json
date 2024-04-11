@@ -249,7 +249,9 @@
         "confirm_delete": "You will not be able to recover this Ledger | You will not be able to recover these Ledger",
         "created_message": "Master created successfully",
         "updated_message": "Master updated successfully",
-        "deleted_message": "Master deleted successfully | Ledger deleted successfully"
+        "deleted_message": "Master deleted successfully | Ledger deleted successfully",
+        "credits" : "Credits",
+        "credits_date" : "Credits Date"
     },
     "groups": {
         "name": "Name",
