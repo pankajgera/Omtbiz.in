@@ -327,9 +327,9 @@
             {{ $t('reports.send_report') }}
           </base-button>
         </div>
-    </form>
-    <base-loader v-else />
-  </div>
+      </form>
+      <!-- <base-loader v-else /> -->
+    </div>
 </template>
 <style scoped>
 .invoice-create-page .invoice-foot .invoice-total {
@@ -581,6 +581,7 @@ export default {
     }, 500);
   },
   methods: {
+    
     ...mapActions('modal', [
       'openModal'
     ]),
@@ -655,6 +656,7 @@ export default {
         } else {
           this.isDisabled = false
         }
+        
         if (response.data) {
           this.newInvoice = response.data.invoice
           this.inventoryNegative = response.data.inventory_negative
@@ -704,7 +706,6 @@ export default {
         this.sundryDebtorsList = response.data.sundryDebtorsList
         this.incomeLedgerList = response.data.incomeIndirectLedgers
         this.expenseLedgerList = response.data.expenseIndirectLedgers
-
         response.data.estimateList.map(i => {
           let obj = {}
           let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
@@ -817,7 +818,7 @@ export default {
         this.submitUpdate(data)
         return
       }
-
+      console.log(data);
       this.submitSave(data)
     },
     reset() {
@@ -878,9 +879,14 @@ export default {
         }
       }).catch((err) => {
         this.isLoading = false
-        if (err) {
+        if (err.response && err.response.status === 400) {
           window.toastr['error'](err)
           return true
+        }else if(err.response && err.response.status === 402) {
+          window.toastr['error']('Insufficient credits')
+        }
+        else if(err.response && err.response.status === 403) {
+          window.toastr['error']('Insufficient credits Date')
         }
       })
     },
@@ -945,7 +951,6 @@ export default {
     },
     async getInvoiceFromEstimate(id) {
       let resp = await this.getInvoiceEstimate(id ? id :this.newInvoice.estimate.id)
-      console.log(resp);
       let invoice = resp.data.estimate
       let inventory = invoice.items.map(i => {
         i.sale_price = i.sale_price ? i.sale_price : i.price
@@ -975,6 +980,7 @@ export default {
       this.searchDebtorRefNumber({'id': invoice.account_master_id})
     },
     sendReports() {
+    
       this.isLoading = true
       this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`
       let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;

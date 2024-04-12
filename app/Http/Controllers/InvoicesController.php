@@ -54,8 +54,10 @@ class InvoicesController extends Controller
                 ->latest()
                 ->paginate($limit);
 
-            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
-
+                $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')
+                ->select('id', 'name', 'opening_balance', 'mobile_number')
+                ->get();
+            
             $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
             $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
             return response()->json([
@@ -63,7 +65,7 @@ class InvoicesController extends Controller
                 'sundryDebtorsList' => $sundryDebtorsList,
                 'incomeIndirectLedgers' => $income_indirect_ledgers,
                 'expenseIndirectLedgers' => $expense_indirect_ledgers,
-                'invoiceTotalCount' => Invoice::count()
+                'invoiceTotalCount' => Invoice::count(),
             ]);
         } catch (Exception $e) {
             Log::error('Error while getting invoice index ', [$e]);
@@ -191,6 +193,38 @@ class InvoicesController extends Controller
             }
 
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+            
+
+            
+
+
+
+
+            //check if credits are sufficient
+            $company_id = (int) $request->header('company');
+            $account_master_id = (int) $request->debtors['id'];
+            $total_amount = (int) ($request->total);
+
+
+            $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)
+            ->where('company_id', $company_id)
+            ->first();
+
+            $total_credits = $dr_account_ledger->credits;
+            $credit_date = Carbon::createFromFormat('Y-m-d', $dr_account_ledger->credits_date);
+
+            if($total_credits < $total_amount) {
+                throw new Exception('Insufficient credits',402);
+            }
+
+            // // Calculate the difference in hours
+            $diffInHours = $credit_date->diffInHours($invoice_date);
+            $insufficientCredits24Hours = false;
+
+            if ($diffInHours < 0) {
+                throw new Exception('Insufficient date', 403);
+            } 
+
 
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
@@ -260,9 +294,7 @@ class InvoicesController extends Controller
                     'type' => 'Cr',
                 ]);
             }
-            $company_id = (int) $request->header('company');
-            $account_master_id = (int) $request->debtors['id'];
-            $total_amount = (int) ($request->total);
+            
 
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account->id,
@@ -275,17 +307,17 @@ class InvoicesController extends Controller
                 'credit' => $total_amount,
                 'balance' => $total_amount,
             ]);
-            $dr_account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->debtors['name'],
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'debit' => $total_amount,
-                'type' => 'Dr',
-                'credit' => 0,
-                'balance' => $total_amount,
-            ]);
+            // $dr_account_ledger = AccountLedger::firstOrCreate([
+            //     'account_master_id' => $account_master_id,
+            //     'account' => $request->debtors['name'],
+            //     'company_id' => $company_id,
+            // ], [
+            //     'date' => Carbon::now()->toDateTimeString(),
+            //     'debit' => $total_amount,
+            //     'type' => 'Dr',
+            //     'credit' => 0,
+            //     'balance' => $total_amount,
+            // ]);
 
             //Handle vouchers
             //Add journal entry
@@ -329,6 +361,7 @@ class InvoicesController extends Controller
             $dr_account_ledger->update([
                 'debit' => $dr_account_ledger->debit + $total_amount,
                 'balance' => $dr_account_ledger->balance + $total_amount,
+                'credits' => $dr_account_ledger->credits - $total_amount,
             ]);
             foreach ($voucher as $key => $each) {
                 if ($key < substr_count($voucher_ids, ',') + 1) {
@@ -378,7 +411,7 @@ class InvoicesController extends Controller
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
-            ], 400);
+            ], $e->getCode() ?: 400);
         }
     }
 
@@ -832,9 +865,17 @@ class InvoicesController extends Controller
     public function getInvoiceEstimate(Request $request, Estimate $estimate)
     {
         $data = Estimate::with('items')->where('id', $estimate->id)->first();
+        
 
         return response()->json([
             'estimate' => $data
         ]);
     }
+
+
+
 }
+
+
+
+

@@ -40,9 +40,7 @@ class EstimatesController extends Controller
 
         $sundryDebtorsListIds = $sundryDebtorsList->pluck('id');
 
-        $sundryDebtorsCreditsList = AccountLedger::whereIn('account_master_id', $sundryDebtorsListIds)
-            ->select('id', 'credits','credits_date')
-            ->get();
+        
 
         $estimates_inprogress = Estimate::where('status', 'DRAFT')->with([
             'items',

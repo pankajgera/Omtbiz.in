@@ -356,6 +356,7 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('masters', 'AccountMastersController');
 
+
     // Account Groups
     //----------------------------------
     Route::post('/groups/delete', [

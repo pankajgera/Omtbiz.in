@@ -251,7 +251,9 @@
         "updated_message": "Master updated successfully",
         "deleted_message": "Master deleted successfully | Ledger deleted successfully",
         "credits" : "Credits",
+        "button_label" : "View Credits",
         "credits_date" : "Credits Date"
+        
     },
     "groups": {
         "name": "Name",

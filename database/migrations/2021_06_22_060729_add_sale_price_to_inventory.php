@@ -13,12 +13,12 @@ class AddSalePriceToInventory extends Migration
      */
     public function up()
     {
-        Schema::table('invoice_items', function (Blueprint $table) {
-            $table->bigInteger('sale_price')->unsigned()->default(0)->after('price');
-        });
-        Schema::table('inventories', function (Blueprint $table) {
-            $table->bigInteger('sale_price')->unsigned()->default(0)->after('price');
-        });
+        // Schema::table('invoice_items', function (Blueprint $table) {
+        //     $table->bigInteger('sale_price')->unsigned()->default(0)->after('price');
+        // });
+        // Schema::table('inventories', function (Blueprint $table) {
+        //     $table->bigInteger('sale_price')->unsigned()->default(0)->after('price');
+        // });
     }
 
     /**
