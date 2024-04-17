@@ -387,7 +387,7 @@ export default {
   components: {
     InvoiceInventory,
     MultiSelect,
-    draggable
+    draggable,
   },
   mixins: [validationMixin],
   data () {
@@ -545,6 +545,7 @@ export default {
       }
     },
     inventoryBind() {
+      console.log(this.newInvoice)
       return this.newInvoice.inventories
     },
     inventoryListBind() {
@@ -582,9 +583,6 @@ export default {
   },
   methods: {
     
-    ...mapActions('modal', [
-      'openModal'
-    ]),
     ...mapActions('invoice', [
       'addInvoice',
       'fetchCreateInvoice',
@@ -596,9 +594,18 @@ export default {
     ...mapActions('customer', [
       'sendReportOnWhatsApp'
     ]),
+    ...mapActions('modal', [
+      'openModal'
+    ]),
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    openInventoryModal ($title) {
+      this.openModal({
+        'title': $title,
+        'componentName': 'CreditsOverrideModal'
+      })
+    },
     totalQuantity(inventory){
       if (inventory.length) {
         let invent = 0
@@ -882,11 +889,6 @@ export default {
         if (err.response && err.response.status === 400) {
           window.toastr['error'](err)
           return true
-        }else if(err.response && err.response.status === 402) {
-          window.toastr['error']('Insufficient credits')
-        }
-        else if(err.response && err.response.status === 403) {
-          window.toastr['error']('Insufficient credits Date')
         }
       })
     },
@@ -996,7 +998,8 @@ export default {
           window.location.reload()
         }, 2000)
       })
-    }
+    },
+    
   }
 }
 </script>

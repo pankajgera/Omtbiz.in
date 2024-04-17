@@ -13,6 +13,7 @@ use PDF;
 use Carbon\Carbon;
 use App\Models\AccountGroup;
 use App\Models\AccountLedger;
+use App\Models\Credits;
 use App\Models\AccountMaster;
 use App\Models\Estimate;
 use App\Models\EstimateItem;
@@ -334,6 +335,67 @@ class ReportController extends Controller
 
         return $pdf->stream();
     }
+    public function CreditsReport($hash, Request $request)
+    {
+        $company = Company::where('unique_hash', $hash)->first();
+        $ledger = AccountLedger::findOrFail($request->ledger_id);
+        $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
+        $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
+
+        //Update ledger related data
+        $response = AccountLedger::ledgerMutation($ledger, $from, $to);
+        $responseCredits = Credits::where('account_ledger_id', $request->ledger_id)->get();
+
+        $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
+        $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
+        $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date)->format($dateFormat);
+
+        $latestCreditEntry = Credits::where('account_ledger_id', $ledger->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $colors = [
+            'primary_text_color',
+            'heading_text_color',
+            'section_heading_text_color',
+            'border_color',
+            'body_text_color',
+            'footer_text_color',
+            'footer_total_color',
+            'footer_bg_color',
+            'date_text_color'
+        ];
+
+        $colorSettings = CompanySetting::whereIn('option', $colors)
+            ->whereCompany($company->id)
+            ->get();
+
+        view()->share([
+            'ledgerType' => $response['calc_type'],
+            'ledger' => $ledger,
+            'related_vouchers' => $response['related_vouchers'],
+            'colorSettings' => $colorSettings,
+            'company' => $company,
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'inventory_sum' => $response['inventory_sum'],
+            'total_opening_balance_dr' => $response['total_opening_balance_dr'],
+            'total_opening_balance_cr' => $response['total_opening_balance_cr'],
+            'current_balance_cr' => $response['current_balance_cr'],
+            'current_balance_dr' => $response['current_balance_dr'],
+            'closing_balance_cr' => $response['closing_balance_cr'],
+            'closing_balance_dr' => $response['closing_balance_dr'],
+            'due_amount' => $latestCreditEntry ? $latestCreditEntry->due_amount : 0,
+            'responseCredits' => $responseCredits,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.reports.credits');
+        if ($request->has('download')) {
+            return $pdf->download();
+        }
+
+        return $pdf->stream();
+    }
 
     /**
      * Ledger in customer report
@@ -350,6 +412,22 @@ class ReportController extends Controller
             'ledgers' => $ledgers,
         ]);
     }
+    public function getCreditsLedgersInReport(Request $request)
+{
+    $ledgerIds = Credits::pluck('account_ledger_id')->toArray();
+
+    $ledgers = AccountLedger::with(['accountMaster'])
+        ->where('company_id', $request->header('company'))
+        ->whereIn('id', $ledgerIds)
+        ->orderBy('account', 'asc')
+        ->get();
+
+
+    return response()->json([
+        'ledgers' => $ledgers,
+    ]);
+}
+
 
     /**
      * Bank report

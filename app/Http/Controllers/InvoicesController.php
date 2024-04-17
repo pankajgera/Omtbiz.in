@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\Item;
+use App\Models\Credits;
 use App\Mail\invoicePdf;
 use App\Models\AccountLedger;
 use App\Models\Dispatch;
@@ -212,18 +213,46 @@ class InvoicesController extends Controller
 
             $total_credits = $dr_account_ledger->credits;
             $credit_date = Carbon::createFromFormat('Y-m-d', $dr_account_ledger->credits_date);
+            $credit_date_format = Carbon::parse($credit_date)->startOfDay();
+            $invoice_date_format = Carbon::parse($invoice_date)->startOfDay();
+            $latestCreditEntry = Credits::where('account_ledger_id', $dr_account_ledger->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+            \Log::info($latestCreditEntry);
 
+            $due_amount = $latestCreditEntry ? $latestCreditEntry->due_amount : 0;
+            $due = $due_amount;
+            
             if($total_credits < $total_amount) {
-                throw new Exception('Insufficient credits',402);
+                $dummy = $total_credits;
+                $dr_account_ledger->credits = 0;
+                $due = $due_amount + ($total_amount - $dummy);
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'credits' => -($total_credits),
+                    'credits_date' => $dr_account_ledger->credits_date,
+                    'due_amount' => $due,
+                ]);
+            }
+            else if($invoice_date_format > $credit_date_format) {
+                $dummy = $total_credits;
+                $due = $due_amount - $total_amount;
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'credits' => $total_credits,
+                    'credits_date' => $dr_account_ledger->credits_date,
+                    'due_amount' => $due,
+                ]);
+            }else {
+                $dr_account_ledger->credits = $dr_account_ledger->credits - $total_amount;
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'credits' => -($total_amount),
+                    'credits_date' => $dr_account_ledger->credits_date,
+                    'due_amount' => $due,
+                ]);
             }
 
-            // // Calculate the difference in hours
-            $diffInHours = $credit_date->diffInHours($invoice_date);
-            $insufficientCredits24Hours = false;
-
-            if ($diffInHours < 0) {
-                throw new Exception('Insufficient date', 403);
-            } 
 
 
             $invoice = Invoice::create([
@@ -361,7 +390,6 @@ class InvoicesController extends Controller
             $dr_account_ledger->update([
                 'debit' => $dr_account_ledger->debit + $total_amount,
                 'balance' => $dr_account_ledger->balance + $total_amount,
-                'credits' => $dr_account_ledger->credits - $total_amount,
             ]);
             foreach ($voucher as $key => $each) {
                 if ($key < substr_count($voucher_ids, ',') + 1) {

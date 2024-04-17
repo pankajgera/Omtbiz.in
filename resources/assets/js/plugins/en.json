@@ -898,6 +898,7 @@
             "date_range": "Select Date Range"
         }
     },
+    
     "settings": {
         "menu_title": {
             "account_settings": "Account Settings",
@@ -1432,5 +1433,9 @@
         "address_maxlength": "Address should not be greater than 255 characters.",
         "ref_number_required": "Reference number is required.",
         "prefix_maxlength": "Prefix should not be greater than 5 characters."
+    },
+    "credits" : {
+        "credits" : "Credits",
+        "title" : "Credits"
     }
 }

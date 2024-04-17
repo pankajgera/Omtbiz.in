@@ -111,16 +111,7 @@
           </template>
         </table-column>
         <table-column :label="$t('masters.groups')" show="groups" />
-        <table-column :label="$t('masters.credits')">
-          <template v-slot:default="row">
-            <template v-if="row && row.groups === 'Sundry Debtors'">
-              <button class="border-0" @click="getDebtorCredits(row.id)">{{ $t('masters.button_label') }}</button>
-            </template>
-            <template v-else>
-              {{ '-' }}
-            </template>
-          </template>
-        </table-column>
+
         <table-column :key="Math.random()" :sortable="false" :filterable="false" cell-class="action-dropdown">
           <template slot-scope="row">
             <span> {{ $t('masters.action') }} </span>
@@ -141,6 +132,15 @@
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
+              </v-dropdown-item>
+              <v-dropdown-item>
+
+                <router-link class="border-0 dropdown-item" :to="{ path: `masters/${row.id}/credit` }"
+                  v-if="row && row.groups === 'Sundry Debtors'">
+                  <font-awesome-icon icon="credit-card" class="dropdown-item-icon" />
+                  {{ $t('masters.button_label') }}
+                </router-link>
+
               </v-dropdown-item>
             </v-dropdown>
           </template>
@@ -219,7 +219,7 @@ export default {
         groups: '',
       },
       index: null,
-      isSundryDebtor : false,
+      isSundryDebtor: false,
     }
   },
   computed: {
@@ -229,6 +229,7 @@ export default {
       'totalMasters',
       'selectAllField'
     ]),
+    
     showEmptyScreen() {
       return !this.totalMasters && !this.isRequestOngoing && !this.filtersApplied
     },
@@ -272,9 +273,7 @@ export default {
       'deleteMultipleMasters',
       'setSelectAllState'
     ]),
-    getDebtorCredits(id) {
-      
-    },
+    
     refreshTable() {
       this.$refs.table.refresh()
     },

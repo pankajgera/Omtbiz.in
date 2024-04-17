@@ -8,6 +8,7 @@ use App\Models\Invoice;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Exception;
+use App\Models\Credits;
 use Illuminate\Http\Request;
 use Log;
 
@@ -162,9 +163,7 @@ class AccountLedgersController extends Controller
      */
     public function store(Request $request)
     {
-        echo "<pre>";
-        print_r($request);
-        die;
+        
         try {
             $ledger = new AccountLedger();
             $ledger->date = $request->date;
@@ -178,6 +177,14 @@ class AccountLedgersController extends Controller
             $ledger->credits_date = $request->credits_date;
             $ledger->company_id = $request->header('company');
             $ledger->save();
+
+
+            $creditsStore = Credits::create([
+                'account_ledger_id' => $ledger->id,
+                'credits' => ($ledger->credits),
+                'credits_date' => $ledger->credits_date,
+                'due_amount' => 0,
+            ]);
 
             $ledger = AccountLedger::find($ledger->id);
 

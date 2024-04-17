@@ -8,6 +8,7 @@ use App\Models\AccountMaster;
 use App\Models\State;
 use App\Models\Voucher;
 use Carbon\Carbon;
+use App\Models\Credits;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -81,6 +82,16 @@ class AccountMastersController extends Controller
             $ledger->company_id = $request->header('company');
             $ledger->save();
 
+            $creditsStore = Credits::create([
+                'account_ledger_id' => $ledger->id,
+                'credits' => +($ledger->credits),
+                'credits_date' => $ledger->credits_date,
+                'due_amount' => 0,
+            ]);
+
+
+            
+
             return response()->json([
                 'master' => $master,
             ]);
@@ -103,7 +114,26 @@ class AccountMastersController extends Controller
     {
         try {
             $master = AccountMaster::find($id);
-            $ledger = AccountLedger::where('account_master_id', $master->id)->where('account', $master->name)->first();
+            $ledger = AccountLedger::where('account_master_id', $master->id)
+                ->where('account', $master->name)
+                ->first();
+
+            $latestCreditEntry = Credits::where('account_ledger_id', $ledger->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+
+            $due_amount = $latestCreditEntry ? $latestCreditEntry->due_amount : 0;
+
+            if ((int) $ledger->credits != (int) $request->credits) {
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $ledger->id,
+                    'credits' => +($request->credits),
+                    'credits_date' => $request->credits_date,
+                    'due_amount' => $due_amount,
+                ]);
+            }
+
 
             $master->name = $request->name;
             $master->mobile_number = $request->mobile_number;
@@ -131,6 +161,9 @@ class AccountMastersController extends Controller
 
             //Update ledger name in vouchers
             $ledger_vouchers = Voucher::where('account_ledger_id', $ledger->id)->get();
+
+
+            
             foreach ($ledger_vouchers as $voucher) {
                 $voucher->update([
                     'account' => $request->name,
@@ -212,4 +245,6 @@ class AccountMastersController extends Controller
             'name_exists' => $name_exists,
         ]);
     }
+
+
 }
