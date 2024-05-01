@@ -97,7 +97,7 @@
               </table-column>
               <table-column :label="$t('ledgers.voucher_id')" show="id">
                 <template slot-scope="row">
-                  {{ row.id }}
+                  {{ row.invoice_id }}
                 </template>
               </table-column>
               <table-column
@@ -315,6 +315,7 @@ export default {
           id: this.$route.params.id
       };
       let response = await this.fetchLedgerDisplay({'id': data.id, 'params': data.formData});
+      console.log(response.data)
       this.displayArray = response.data.vouchers;
       this.ledgerData = response.data.ledger;
       // this.masterData = response.data.account_master;

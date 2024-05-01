@@ -33,6 +33,9 @@
           <li class="tab">
             <router-link class="tab-link" to="/reports/customers">{{ $t('reports.customers.customers') }}</router-link>
           </li>
+          <li class="tab">
+            <router-link class="tab-link" to="/reports/credits">{{ $t('credits.title') }}</router-link>
+          </li>
           <!-- <li class="tab">
             <router-link class="tab-link" to="/reports/banks">{{ $t('reports.banks.banks') }}</router-link>
           </li> -->
@@ -54,7 +57,12 @@ export default {
       if (newValue === '/reports') {
         this.$router.push('/reports/customers')
       }
-    }
+    },
+    '$route.path' (newValue) {
+      if (newValue === '/reports') {
+        this.$router.push('/reports/credits')
+      }
+    },
   },
   created () {
     if (this.$route.path === '/reports') {

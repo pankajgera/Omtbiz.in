@@ -6,9 +6,13 @@ use App\Models\User;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Receipt extends Model
 {
+    use softDeletes;
+
     public const RECEIPT_MODE_CHECK = 'CHECK';
     public const RECEIPT_MODE_OTHER = 'OTHER';
     public const RECEIPT_MODE_CASH = 'CASH';

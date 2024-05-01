@@ -16,6 +16,8 @@ class AccountMaster extends Model
         'opening_balance',
         'type',
         'mobile_number',
+        'credits',
+        'credits_date',
     ];
 
     public function scopeWhereName($query, $name)

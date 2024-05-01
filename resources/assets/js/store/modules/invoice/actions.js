@@ -221,3 +221,5 @@ export const selectCustomer = ({ commit, dispatch, state }, id) => {
 export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
   commit(types.RESET_SELECTED_CUSTOMER)
 }
+
+
