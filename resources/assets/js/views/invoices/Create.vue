@@ -327,9 +327,9 @@
             {{ $t('reports.send_report') }}
           </base-button>
         </div>
-    </form>
-    <base-loader v-else />
-  </div>
+      </form>
+      <!-- <base-loader v-else /> -->
+    </div>
 </template>
 <style scoped>
 .invoice-create-page .invoice-foot .invoice-total {
@@ -387,7 +387,7 @@ export default {
   components: {
     InvoiceInventory,
     MultiSelect,
-    draggable
+    draggable,
   },
   mixins: [validationMixin],
   data () {
@@ -545,6 +545,7 @@ export default {
       }
     },
     inventoryBind() {
+      console.log(this.newInvoice)
       return this.newInvoice.inventories
     },
     inventoryListBind() {
@@ -581,9 +582,7 @@ export default {
     }, 500);
   },
   methods: {
-    ...mapActions('modal', [
-      'openModal'
-    ]),
+    
     ...mapActions('invoice', [
       'addInvoice',
       'fetchCreateInvoice',
@@ -595,9 +594,18 @@ export default {
     ...mapActions('customer', [
       'sendReportOnWhatsApp'
     ]),
+    ...mapActions('modal', [
+      'openModal'
+    ]),
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    openInventoryModal ($title) {
+      this.openModal({
+        'title': $title,
+        'componentName': 'CreditsOverrideModal'
+      })
+    },
     totalQuantity(inventory){
       if (inventory.length) {
         let invent = 0
@@ -655,6 +663,7 @@ export default {
         } else {
           this.isDisabled = false
         }
+        
         if (response.data) {
           this.newInvoice = response.data.invoice
           this.inventoryNegative = response.data.inventory_negative
@@ -704,7 +713,6 @@ export default {
         this.sundryDebtorsList = response.data.sundryDebtorsList
         this.incomeLedgerList = response.data.incomeIndirectLedgers
         this.expenseLedgerList = response.data.expenseIndirectLedgers
-
         response.data.estimateList.map(i => {
           let obj = {}
           let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
@@ -817,7 +825,7 @@ export default {
         this.submitUpdate(data)
         return
       }
-
+      console.log(data);
       this.submitSave(data)
     },
     reset() {
@@ -878,7 +886,7 @@ export default {
         }
       }).catch((err) => {
         this.isLoading = false
-        if (err) {
+        if (err.response && err.response.status === 400) {
           window.toastr['error'](err)
           return true
         }
@@ -974,6 +982,7 @@ export default {
       this.searchDebtorRefNumber({'id': invoice.account_master_id})
     },
     sendReports() {
+    
       this.isLoading = true
       this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`
       let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;
@@ -989,7 +998,8 @@ export default {
           window.location.reload()
         }, 2000)
       })
-    }
+    },
+    
   }
 }
 </script>
