@@ -123,39 +123,96 @@ class InvoicesController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    // public function create(Request $request)
+    // {
+    //     $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+    //     $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
+    //     $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
+    //     $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
+    //     $nextInvoiceNumberAttribute = null;
+    //     $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
+
+    //     if ($invoice_num_auto_generate == "YES") {
+    //         $nextInvoiceNumberAttribute = $nextInvoiceNumber;
+    //     }
+
+    //     \Log::info($invoice_prefix);
+
+    //     $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
+    //     $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
+
+    //     $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+    //     $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
+
+    //     return response()->json([
+    //         'invoice_today_date' => Carbon::now()->toDateString(),
+    //         'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
+    //         'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
+    //         'invoiceTemplates' => InvoiceTemplate::all(),
+    //         'invoice_prefix' => $invoice_prefix,
+    //         'reference_prefix' => $reference_prefix,
+    //         'sundryDebtorsList' => $sundryDebtorsList,
+    //         'incomeIndirectLedgers' => $income_indirect_ledgers,
+    //         'expenseIndirectLedgers' => $expense_indirect_ledgers,
+    //         'estimateList' => $estimateList,
+    //         'inventory_negative' => ('YES' === $inventory_negative),
+    //     ]);
+    // }
     public function create(Request $request)
-    {
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
-        $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
-        $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
-        $nextInvoiceNumberAttribute = null;
-        $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
+{
+    $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
 
-        if ($invoice_num_auto_generate == "YES") {
-            $nextInvoiceNumberAttribute = $nextInvoiceNumber;
-        }
+    $existingPrefixes = Invoice::where('invoice_number', 'like', $invoice_prefix . '-%')->pluck('invoice_number');
+    
+    // Extract the prefix number (e.g., 'EST2023-0010' -> '0010')
+    $prefixNumber = explode('-', $invoice_prefix)[1];
 
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
-        $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
+    if ($existingPrefixes->isEmpty()) {
+        // If no invoices exist with this prefix, start from '00001'
+        $nextInvoiceNumber = '00001';
+    } else {
+        // Find the highest existing invoice number and increment it
+        $highestNumber = $existingPrefixes->map(function ($number) use ($invoice_prefix) {
+            return intval(substr($number, strrpos($number, '-') + 1));
+        })->max();
 
-        $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
-        $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
-
-        return response()->json([
-            'invoice_today_date' => Carbon::now()->toDateString(),
-            'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
-            'invoiceTemplates' => InvoiceTemplate::all(),
-            'invoice_prefix' => $invoice_prefix,
-            'reference_prefix' => $reference_prefix,
-            'sundryDebtorsList' => $sundryDebtorsList,
-            'incomeIndirectLedgers' => $income_indirect_ledgers,
-            'expenseIndirectLedgers' => $expense_indirect_ledgers,
-            'estimateList' => $estimateList,
-            'inventory_negative' => ('YES' === $inventory_negative),
-        ]);
+        $nextInvoiceNumber = str_pad($highestNumber + 1, strlen($prefixNumber), '0', STR_PAD_LEFT);
     }
+
+    // Rest of your code remains the same
+    $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
+    $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
+    $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
+    $nextInvoiceNumberAttribute = null;
+
+    if ($invoice_num_auto_generate == "YES") {
+        $nextInvoiceNumberAttribute = $nextInvoiceNumber;
+    }
+
+    \Log::info($invoice_prefix);
+
+    $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
+    $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
+
+    $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+    $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
+
+    return response()->json([
+        'invoice_today_date' => Carbon::now()->toDateString(),
+        'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
+        'nextInvoiceNumber' =>  $nextInvoiceNumber,
+        'invoiceTemplates' => InvoiceTemplate::all(),
+        'invoice_prefix' => $invoice_prefix,
+        'reference_prefix' => $reference_prefix,
+        'sundryDebtorsList' => $sundryDebtorsList,
+        'incomeIndirectLedgers' => $income_indirect_ledgers,
+        'expenseIndirectLedgers' => $expense_indirect_ledgers,
+        'estimateList' => $estimateList,
+        'inventory_negative' => ('YES' === $inventory_negative),
+    ]);
+}
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -167,6 +224,7 @@ class InvoicesController extends Controller
     {
         try {
             $number_attributes['invoice_number'] = $request->invoice_number;
+            \Log::info($number_attributes['invoice_number']);
             Validator::make($number_attributes, [
                 'invoice_number' => 'required'
             ])->validate();
@@ -218,7 +276,6 @@ class InvoicesController extends Controller
             $latestCreditEntry = Credits::where('account_ledger_id', $dr_account_ledger->id)
             ->orderBy('created_at', 'desc')
             ->first();
-            \Log::info($latestCreditEntry);
 
             $due_amount = $latestCreditEntry ? $latestCreditEntry->due_amount : 0;
             $due = $due_amount;
