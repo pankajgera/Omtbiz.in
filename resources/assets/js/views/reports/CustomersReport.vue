@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="row report-fields-container">
-        <div class="col-md-6 report-field-container">
+        <div class="col-md-6 report-field-container" v-if="selectedRange !== 'Till Date'">
           <label class="report-label">{{ $t('reports.customers.from_date') }}</label>
           <base-date-picker
             v-model="formData.from_date"
@@ -41,7 +41,7 @@
           <span v-if="$v.formData.from_date.$error && !$v.formData.from_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
         <div class="col-md-6 report-field-container">
-          <label class="report-label">{{ $t('reports.customers.to_date') }}</label>
+          <label class="report-label">{{ selectedRange !== 'Till Date' ? $t('reports.customers.to_date') : $t('reports.customers.till_date') }}</label>
           <base-date-picker
             v-model="formData.to_date"
             :invalid="$v.formData.to_date.$error"
@@ -86,6 +86,7 @@ export default {
       range: new Date(),
       dateRange: [
         'Today',
+        'Till Date',
         'This Week',
         'This Month',
         'This Quarter',
@@ -173,6 +174,12 @@ export default {
           this.formData.to_date = moment().toString()
           break
 
+        case 'Till Date':
+          let ledgerStartDate = this.ledgersArr.find(i => i.account === this.ledger)?.date;
+          this.formData.from_date = ledgerStartDate
+          this.formData.to_date = moment().toString()
+          break
+
         case 'This Week':
           this.formData.from_date = this.getThisDate('startOf', 'isoWeek')
           this.formData.to_date = this.getThisDate('endOf', 'isoWeek')
@@ -256,7 +263,7 @@ export default {
         return
       }
       let fileName = moment(this.formData.from_date).format('DD/MM/YYYY') + '-' + moment(this.formData.to_date).format('DD/MM/YYYY');
-      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.url})
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.url})
       // window.open("https://api.whatsapp.com/send/?phone=" +'+91'+ mobile + "&text=" + encodeURIComponent("http://omtbiz.in" + this.url))
     }
   }

@@ -981,8 +981,9 @@ export default {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
       }
+
       let fileName = 'Invoice - ' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');
-      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
       .then((val) => {
         setTimeout(() => {
           this.isLoading = false
