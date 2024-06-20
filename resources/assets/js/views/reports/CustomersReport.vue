@@ -263,7 +263,7 @@ export default {
         return
       }
       let fileName = moment(this.formData.from_date).format('DD/MM/YYYY') + '-' + moment(this.formData.to_date).format('DD/MM/YYYY');
-      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.url})
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.url})
       // window.open("https://api.whatsapp.com/send/?phone=" +'+91'+ mobile + "&text=" + encodeURIComponent("http://omtbiz.in" + this.url))
     }
   }
