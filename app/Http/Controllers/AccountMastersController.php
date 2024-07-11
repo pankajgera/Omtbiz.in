@@ -12,12 +12,14 @@ use Exception;
 use Illuminate\Http\Request;
 use Log;
 
+use function PHPSTORM_META\type;
+
 class AccountMastersController extends Controller
 {
     public function index(Request $request)
     {
         $masters = [];
-        dd('ss', $request->has('limit') , $request->limit, typeof($request->limit));
+        dd('ss', $request->has('limit') , $request->limit, gettype($request->limit));
         if ($request->has('limit') && $request->limit === false) {
             $masters = AccountMaster::orderBy('name')->get();
         } else {
