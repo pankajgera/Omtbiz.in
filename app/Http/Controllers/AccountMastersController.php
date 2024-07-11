@@ -17,7 +17,7 @@ class AccountMastersController extends Controller
     public function index(Request $request)
     {
         $masters = [];
-        dd('ss', $request->has('limit') && $request->limit === false);
+        dd('ss', $request->has('limit') , $request->limit, typeof($request->limit));
         if ($request->has('limit') && $request->limit === false) {
             $masters = AccountMaster::orderBy('name')->get();
         } else {
