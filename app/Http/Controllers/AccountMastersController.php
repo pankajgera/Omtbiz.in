@@ -16,14 +16,19 @@ class AccountMastersController extends Controller
 {
     public function index(Request $request)
     {
-        $masters = AccountMaster::applyFilters($request->only([
-            'name',
-            'groups',
-            'orderByField',
-            'orderBy',
-        ]))
-            ->latest()
-            ->paginate();
+        $masters = [];
+        if (! $request->limit) {
+            $masters = AccountMaster::query()->orderBy('name')->get();
+        } else {
+            $masters = AccountMaster::applyFilters($request->only([
+                'name',
+                'groups',
+                'orderByField',
+                'orderBy',
+            ]))
+                ->latest()
+                ->paginate();
+        }
 
         return response()->json([
             'masters' => $masters,

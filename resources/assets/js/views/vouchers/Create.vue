@@ -166,7 +166,7 @@ export default {
       })
     },
     async loadMasters () {
-      let response = await this.fetchMasters()
+      let response = await this.fetchMasters({limit: false})
       this.masterData = response.data.masters.data
     },
     validateSubmitVoucher() {
