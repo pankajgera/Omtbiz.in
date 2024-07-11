@@ -18,7 +18,8 @@ class AccountMastersController extends Controller
     {
         $masters = [];
         if ($request->has('limit') && $request->limit === false) {
-            $masters = AccountMaster::orderBy('name')->all();
+            dd('ss');
+            $masters = AccountMaster::orderBy('name')->get();
         } else {
             $masters = AccountMaster::applyFilters($request->only([
                 'name',
