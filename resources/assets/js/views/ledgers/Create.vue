@@ -136,7 +136,7 @@ export default {
       this.formData = response.data.ledger
     },
     async loadMasters () {
-      let response = await this.fetchMasters({limit: 500})
+      let response = await this.fetchMasters()
       this.masterData = response.data.masters.data
     },
     async submitLedger () {
