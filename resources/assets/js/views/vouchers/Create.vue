@@ -167,7 +167,7 @@ export default {
     },
     async loadMasters () {
       let response = await this.fetchMasters({limit: false})
-      this.masterData = response.data.masters.data
+      this.masterData = response.data.masters
     },
     validateSubmitVoucher() {
       if (this.alreadySubmitted) {

@@ -137,7 +137,7 @@ export default {
     },
     async loadMasters () {
       let response = await this.fetchMasters({limit: false})
-      this.masterData = response.data.masters.data
+      this.masterData = response.data.masters
     },
     async submitLedger () {
       this.$v.formData.$touch()
