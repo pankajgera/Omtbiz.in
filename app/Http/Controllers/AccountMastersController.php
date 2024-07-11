@@ -17,8 +17,8 @@ class AccountMastersController extends Controller
     public function index(Request $request)
     {
         $masters = [];
-        if (! $request->limit) {
-            $masters = AccountMaster::query()->orderBy('name')->get();
+        if ($request->has('limit') && $request->limit === false) {
+            $masters = AccountMaster::orderBy('name')->all();
         } else {
             $masters = AccountMaster::applyFilters($request->only([
                 'name',
@@ -27,7 +27,7 @@ class AccountMastersController extends Controller
                 'orderBy',
             ]))
                 ->latest()
-                ->paginate();
+                ->paginate(15);
         }
 
         return response()->json([
