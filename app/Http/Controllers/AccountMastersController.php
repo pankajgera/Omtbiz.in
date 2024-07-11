@@ -16,8 +16,6 @@ class AccountMastersController extends Controller
 {
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 50;
-
         $masters = AccountMaster::applyFilters($request->only([
             'name',
             'groups',
@@ -25,7 +23,7 @@ class AccountMastersController extends Controller
             'orderBy',
         ]))
             ->latest()
-            ->paginate($limit);
+            ->paginate();
 
         return response()->json([
             'masters' => $masters,
