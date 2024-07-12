@@ -134,9 +134,10 @@ class AccountLedgersController extends Controller
     public function display(Request $request, $id)
     {
         $form = $request->params;
+        \Log::info('$form', [$form, $form->from_date, str_replace('/', '-', json_decode($form->from_date))]);
         $ledger = AccountLedger::findOrFail($id);
-        $from = Carbon::parse(str_replace('/', '-', json_decode($form)->from_date))->startOfDay();
-        $to = Carbon::parse(str_replace('/', '-', json_decode($form)->to_date))->endOfDay();
+        $from = Carbon::parse(str_replace('/', '-', json_decode($form->from_date)))->startOfDay();
+        $to = Carbon::parse(str_replace('/', '-', json_decode($form->to_date)))->endOfDay();
 
         //Update ledger related data
         $response = AccountLedger::ledgerMutation($ledger, $from, $to);
