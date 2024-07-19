@@ -12,20 +12,26 @@ use Exception;
 use Illuminate\Http\Request;
 use Log;
 
+use function PHPSTORM_META\type;
+
 class AccountMastersController extends Controller
 {
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 50;
+        $masters = [];
 
-        $masters = AccountMaster::applyFilters($request->only([
-            'name',
-            'groups',
-            'orderByField',
-            'orderBy',
-        ]))
-            ->latest()
-            ->paginate($limit);
+        if ($request->has('limit') && $request->limit === 'false') {
+            $masters = AccountMaster::orderBy('name')->get();
+        } else {
+            $masters = AccountMaster::applyFilters($request->only([
+                'name',
+                'groups',
+                'orderByField',
+                'orderBy',
+            ]))
+                ->latest()
+                ->paginate(15);
+        }
 
         return response()->json([
             'masters' => $masters,
