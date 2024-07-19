@@ -198,7 +198,6 @@
               <dot-icon />
             </a>
             <v-dropdown-item>
-
               <router-link :to="{path: `banks/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}

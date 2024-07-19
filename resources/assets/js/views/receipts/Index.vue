@@ -156,7 +156,7 @@
           show="receipt_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: role==='admin' ? `receipts/${row.id}/edit?d=true` : `receipts/${row.id}/view`}" class="dropdown-item">
+            <router-link :to="{path: role==='admin' ? `receipts/${row.id}/edit?d=true` : `receipts/${row.id}/view`}">
                {{ row.receipt_number }}
               </router-link>
           </template>
