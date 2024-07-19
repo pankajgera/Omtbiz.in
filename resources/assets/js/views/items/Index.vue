@@ -143,7 +143,7 @@
             show="party_name"
           >
             <template slot-scope="row">
-              <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
+              <router-link :to="{path: `bill-ty/${row.id}/edit`}">
                 {{ row.party_name ? row.party_name : row.name }}
                 </router-link>
             </template>

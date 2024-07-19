@@ -158,7 +158,7 @@
           show="order_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `orders/${row.id}/edit?d=true`}" class="dropdown-item">
+            <router-link :to="{path: `orders/${row.id}/edit?d=true`}">
                {{ row.order_number }}
               </router-link>
           </template>

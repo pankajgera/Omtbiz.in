@@ -228,7 +228,7 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `ledgers/${row.id}/display`}" class="dropdown-item">
+            <router-link :to="{path: `ledgers/${row.id}/display`}">
                {{ row.account }}
               </router-link>
           </template>

@@ -154,7 +154,7 @@
           show="invoice_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}" class="dropdown-item">
+            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}">
                {{ row.invoice_number }}
               </router-link>
           </template>

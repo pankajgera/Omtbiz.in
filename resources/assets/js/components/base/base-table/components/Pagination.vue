@@ -123,6 +123,6 @@ export default {
   padding: 0.5rem 0.75rem !important;
 }
 .pagination .page-item a:hover {
-  cursor:pointer !important;
+  cursor: pointer !important;
 }
 </style>
