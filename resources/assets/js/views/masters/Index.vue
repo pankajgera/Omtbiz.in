@@ -158,7 +158,7 @@
           show="name"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `masters/${row.id}/edit`}" class="dropdown-item">
+            <router-link :to="{path: `masters/${row.id}/edit`}">
               {{ row.name }}
               </router-link>
           </template>
