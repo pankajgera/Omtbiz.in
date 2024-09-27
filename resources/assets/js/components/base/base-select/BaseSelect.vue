@@ -395,10 +395,10 @@ export default {
 }
 </script>
 <style>
-.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon::after {
+.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag .multiselect__tag-icon::after {
   color:#000 !important
 }
-.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag {
+.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {
    color:#000 !important
 }
 </style>

@@ -112,7 +112,7 @@
     }
 }
 
-.btn-crater {
+.btn-omtbiz {
     width: 148px;
     height: 45px;
     border-radius: 5px;
@@ -125,15 +125,15 @@
     }
 }
 
-.btn-crater:focus {
+.btn-omtbiz:focus {
     outline: 10px auto #e37a7a;
 }
 
-.btn-crater:disabled {
+.btn-omtbiz:disabled {
     opacity: 0.5;
 }
 
-.btn-crater-default {
+.btn-omtbiz-default {
     color: #FFFFFF;
     background: $ls-color-primary;
     border: 1px solid $ls-color-primary;
@@ -143,11 +143,11 @@
     }
 }
 
-.btn-crater-default:hover {
+.btn-omtbiz-default:hover {
     background: #635BF2;
 }
 
-.btn-crater-hollow {
+.btn-omtbiz-hollow {
     border: 1px solid $ls-color-primary;
     color: $ls-color-primary;
     background: #ffffff;
@@ -157,7 +157,7 @@
     }
 }
 
-.btn-crater-hollow:hover {
+.btn-omtbiz-hollow:hover {
     opacity: 0.9;
     color: $ls-color-primary;
 }
