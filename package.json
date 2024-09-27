@@ -9,8 +9,6 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "browser-sync": "^3.0.3",
-    "browser-sync-webpack-plugin": "^2.3.0",
     "cross-env": "^5.1",
     "css-loader": "^6.8.1",
     "eslint": "^8.0.1",
