@@ -54,27 +54,29 @@ window.Ls = Ls
 global.$ = global.jQuery = require('jquery')
 
 window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest'
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization': '',
+    'company': 0,
 }
 
 /**
  * Interceptors
  */
-
-window.axios.interceptors.request.use(function(config) {
+global.axios.interceptors.request.use(function(config) {
     // Do something before request is sent
     const AUTH_TOKEN = Ls.get('auth.token')
     if (AUTH_TOKEN) {
-        config.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`
+        config.headers.set('Authorization', `Bearer ${AUTH_TOKEN}`)
     }
 
     const companyId = Ls.get('selectedCompany')
     if (companyId) {
-        config.headers.common['company'] = companyId
+        config.headers.set('company', companyId)
     }
 
     return config
 }, function(error) {
+  console.error(error)
     // Do something with request error
     return Promise.reject(error)
 })
