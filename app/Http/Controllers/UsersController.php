@@ -81,7 +81,7 @@ class UsersController extends Controller
     public function ping()
     {
         return response()->json([
-            'success' => 'crater-self-hosted'
+            'success' => 'omtbiz-self-hosted'
         ]);
     }
 
