@@ -1,7 +1,6 @@
 
 
 export const fetchCredits = ({ commit, dispatch, state }, id) => {
-  console.log(id)
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/credits/${id}/credit`).then((response) => {
       resolve(response)
@@ -14,7 +13,6 @@ export const fetchCredits = ({ commit, dispatch, state }, id) => {
 export const fetchLedgersReport = ({ commit, dispatch }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/reports/ledger`).then((response) => {
-      console.log(response);
       resolve(response)
     }).catch((err) => {
       reject(err)

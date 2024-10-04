@@ -87,7 +87,6 @@ export default {
       try {
         const response = await this.fetchCredits(this.$route.params.id);
         this.credits = response.data;
-        console.log(this.credits)
       } catch (error) {
         console.error('Error fetching debtor credits:', error);
       }

@@ -58,7 +58,7 @@ class InvoicesController extends Controller
                 $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')
                 ->select('id', 'name', 'opening_balance', 'mobile_number')
                 ->get();
-            
+
             $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
             $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
             return response()->json([
@@ -211,9 +211,9 @@ class InvoicesController extends Controller
             }
 
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
-            
 
-            
+
+
 
 
 
@@ -239,7 +239,7 @@ class InvoicesController extends Controller
 
             $due_amount = $latestCreditEntry ? $latestCreditEntry->due_amount : 0;
             $due = $due_amount;
-            
+
             if($total_credits < $total_amount) {
                 $dummy = $total_credits;
                 $dr_account_ledger->credits = 0;
@@ -340,7 +340,7 @@ class InvoicesController extends Controller
                     'type' => 'Cr',
                 ]);
             }
-            
+
 
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account->id,
@@ -353,17 +353,17 @@ class InvoicesController extends Controller
                 'credit' => $total_amount,
                 'balance' => $total_amount,
             ]);
-            // $dr_account_ledger = AccountLedger::firstOrCreate([
-            //     'account_master_id' => $account_master_id,
-            //     'account' => $request->debtors['name'],
-            //     'company_id' => $company_id,
-            // ], [
-            //     'date' => Carbon::now()->toDateTimeString(),
-            //     'debit' => $total_amount,
-            //     'type' => 'Dr',
-            //     'credit' => 0,
-            //     'balance' => $total_amount,
-            // ]);
+            $dr_account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => $total_amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $total_amount,
+            ]);
 
             //Handle vouchers
             //Add journal entry
@@ -910,7 +910,7 @@ class InvoicesController extends Controller
     public function getInvoiceEstimate(Request $request, Estimate $estimate)
     {
         $data = Estimate::with('items')->where('id', $estimate->id)->first();
-        
+
 
         return response()->json([
             'estimate' => $data

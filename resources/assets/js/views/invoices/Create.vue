@@ -545,7 +545,6 @@ export default {
       }
     },
     inventoryBind() {
-      console.log(this.newInvoice)
       return this.newInvoice.inventories
     },
     inventoryListBind() {
@@ -582,7 +581,7 @@ export default {
     }, 500);
   },
   methods: {
-    
+
     ...mapActions('invoice', [
       'addInvoice',
       'fetchCreateInvoice',
@@ -663,7 +662,7 @@ export default {
         } else {
           this.isDisabled = false
         }
-        
+
         if (response.data) {
           this.newInvoice = response.data.invoice
           this.inventoryNegative = response.data.inventory_negative
@@ -825,7 +824,6 @@ export default {
         this.submitUpdate(data)
         return
       }
-      console.log(data);
       this.submitSave(data)
     },
     reset() {
@@ -982,7 +980,7 @@ export default {
       this.searchDebtorRefNumber({'id': invoice.account_master_id})
     },
     sendReports() {
-    
+
       this.isLoading = true
       this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`
       let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;
@@ -1000,7 +998,7 @@ export default {
         }, 2000)
       })
     },
-    
+
   }
 }
 </script>
