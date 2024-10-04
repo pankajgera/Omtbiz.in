@@ -154,7 +154,7 @@
           show="invoice_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}" class="dropdown-item">
+            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}">
                {{ row.invoice_number }}
               </router-link>
           </template>
@@ -491,7 +491,7 @@ export default {
         return
       }
       let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY');
-      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: "http://omtbiz.in" + this.siteURL})
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
       .then((val) => {
         setTimeout(() => {
           this.isLoading = false

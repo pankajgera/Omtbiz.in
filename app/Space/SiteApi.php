@@ -11,14 +11,14 @@ trait SiteApi
 
     protected static function getRemote($url, $data = array())
     {
-        $base = 'https://craterapp.com/';
+        $base = 'https://omtbizapp.com/';
 
         $client = new Client(['verify' => false, 'base_uri' => $base]);
 
         $headers['headers'] = array(
             'Accept'        => 'application/json',
             'Referer'       => url('/'),
-            'crater'        => Setting::getSetting('version')
+            'omtbiz'        => Setting::getSetting('version')
         );
 
         $data['http_errors'] = false;

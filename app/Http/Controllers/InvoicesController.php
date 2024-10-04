@@ -123,14 +123,31 @@ class InvoicesController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function create(Request $request)
     {
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+
+    $existingPrefixes = Invoice::where('invoice_number', 'like', $invoice_prefix . '-%')->pluck('invoice_number');
+
+    // Extract the prefix number (e.g., 'EST2023-0010' -> '0010')
+    $prefixNumber = explode('-', $invoice_prefix)[1];
+
+    if ($existingPrefixes->isEmpty()) {
+        // If no invoices exist with this prefix, start from '00001'
+        $nextInvoiceNumber = '00001';
+    } else {
+        // Find the highest existing invoice number and increment it
+        $highestNumber = $existingPrefixes->map(function ($number) use ($invoice_prefix) {
+            return intval(substr($number, strrpos($number, '-') + 1));
+        })->max();
+
+        $nextInvoiceNumber = str_pad($highestNumber + 1, strlen($prefixNumber), '0', STR_PAD_LEFT);
+    }
         $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
-        $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
 
         if ($invoice_num_auto_generate == "YES") {
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
@@ -145,7 +162,7 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
+            'nextInvoiceNumber' =>  $nextInvoiceNumber,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'invoice_prefix' => $invoice_prefix,
             'reference_prefix' => $reference_prefix,

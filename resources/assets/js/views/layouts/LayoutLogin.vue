@@ -18,12 +18,12 @@
         </h1>
 
         <p>
-          {{ $t('layout_login.crater_help') }}<br>
+          {{ $t('layout_login.omtbiz_help') }}<br>
         </p>
 
         <!-- <div class="content-bottom"/> -->
         <div class="page-copyright">
-            <p>{{ $t('layout_login.copyright_crater') }}</p>
+            <p>{{ $t('layout_login.copyright_omtbiz') }}</p>
           </div>
       </div>
     </div>
@@ -42,7 +42,7 @@ export default {
     setLayoutClasses () {
       let body = $('body')
       body.removeClass()
-      body.addClass('login-page login-1 skin-crater')
+      body.addClass('login-page login-1 skin-omtbiz')
     }
   },
   onRouteChange () {

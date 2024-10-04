@@ -105,7 +105,7 @@
         </table-column>
         <table-column :label="$t('masters.name')" show="name">
           <template slot-scope="row">
-            <router-link :to="{ path: `masters/${row.id}/edit` }" class="dropdown-item">
+            <router-link :to="{path: `masters/${row.id}/edit`}">
               {{ row.name }}
             </router-link>
           </template>
@@ -229,7 +229,7 @@ export default {
       'totalMasters',
       'selectAllField'
     ]),
-    
+
     showEmptyScreen() {
       return !this.totalMasters && !this.isRequestOngoing && !this.filtersApplied
     },
@@ -273,7 +273,7 @@ export default {
       'deleteMultipleMasters',
       'setSelectAllState'
     ]),
-    
+
     refreshTable() {
       this.$refs.table.refresh()
     },
