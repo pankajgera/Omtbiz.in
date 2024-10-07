@@ -186,7 +186,7 @@
         <div class="sub-container">
             <div>
                 <p class="heading-text">
-                    {{ $ledger->account }}
+                    {{ $ledger->account }} (Estimate)
                     <p class="heading-date-range">
                         {{ $from_date }} - {{ $to_date }}
                     </p>
