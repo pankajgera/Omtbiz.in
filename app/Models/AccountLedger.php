@@ -17,7 +17,9 @@ class AccountLedger extends Model
         'credit',
         'balance',
         'short_narration',
-        'company_id'
+        'company_id',
+        'credits',
+        'credits_date',
     ];
 
     public function accountMaster()

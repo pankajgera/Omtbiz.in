@@ -14,6 +14,7 @@ import BasePopup from './popup/BasePopup.vue'
 import CustomerSelectPopup from './popup/CustomerSelectPopup.vue'
 
 import InventoryModal from './modal/InventoryModal.vue'
+import CreditsOverrideModal from './modal/CreditsOverrideModal.vue'
 import IncreasePriceModal from './modal/IncreasePriceModal.vue'
 
 import {TableColumn, TableComponent} from './base-table/index'
@@ -40,5 +41,6 @@ Vue.component('base-popup', BasePopup)
 Vue.component('customer-select-popup', CustomerSelectPopup)
 
 Vue.component('inventory-modal', InventoryModal)
+Vue.component('credits-overrid-modal', CreditsOverrideModal)
 Vue.component('increase-price-modal', IncreasePriceModal)
 Vue.component('group-modal', GroupModal)

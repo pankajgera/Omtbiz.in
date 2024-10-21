@@ -97,7 +97,7 @@
               </table-column>
               <table-column :label="$t('ledgers.voucher_id')" show="id">
                 <template slot-scope="row">
-                  {{ row.id }}
+                  {{ row.invoice_id }}
                 </template>
               </table-column>
               <table-column

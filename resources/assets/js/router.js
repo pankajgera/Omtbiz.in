@@ -76,6 +76,7 @@ import SalesReports from './views/reports/SalesReports'
 import ExpensesReport from './views/reports/ExpensesReport'
 import ProfitLossReport from './views/reports/ProfitLossReport'
 import CustomersReport from './views/reports/CustomersReport.vue'
+import CreditsReport from './views/reports/CreditsReport.vue'
 import ReportLayout from './views/reports/layout/Index.vue'
 import BanksReport from './views/reports/BanksReport.vue'
 
@@ -128,6 +129,14 @@ import BankCreate from './views/bank/Create.vue'
 // Dispatch
 import DispatchIndex from './views/dispatch/Index.vue'
 import DispatchCreate from './views/dispatch/Create.vue'
+
+
+// Credit History
+import CreditIndex from './views/credithistory/Index.vue'
+
+
+// Credits History
+import CreditsHistory from './views/credithistory/Index.vue'
 
 Vue.use(VueRouter)
 
@@ -240,6 +249,12 @@ const routes = [
                 path: 'masters/:id/edit',
                 name: 'masters.edit',
                 component: MastersCreate,
+                meta: ['admin', 'accountant']
+            },
+            {
+                path: 'masters/:id/credit',
+                name: 'masters.credit',
+                component: CreditIndex,
                 meta: ['admin', 'accountant']
             },
 
@@ -503,6 +518,11 @@ const routes = [
                       meta: ['admin', 'accountant']
                     },
                     {
+                      path: 'credits',
+                      component: CreditsReport,
+                      meta: ['admin', 'accountant']
+                    },
+                    {
                       path: 'banks',
                       component: BanksReport,
                       meta: ['admin', 'accountant']
@@ -674,8 +694,15 @@ const routes = [
                         component: Notifications,
                         meta: ['admin']
                     },
+                    
                 ]
             },
+            {
+                path: 'credits-history/:id',
+                name: 'credits-history',
+                component: CreditsHistory,
+                meta: ['admin', 'accountant']
+            }
         ]
     },
 

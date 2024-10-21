@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Models\Item;
+use App\Models\Credits;
 use App\Mail\invoicePdf;
 use App\Models\AccountLedger;
 use App\Models\Dispatch;
@@ -54,7 +55,9 @@ class InvoicesController extends Controller
                 ->latest()
                 ->paginate($limit);
 
-            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
+                $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')
+                ->select('id', 'name', 'opening_balance', 'mobile_number')
+                ->get();
 
             $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
             $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
@@ -63,7 +66,7 @@ class InvoicesController extends Controller
                 'sundryDebtorsList' => $sundryDebtorsList,
                 'incomeIndirectLedgers' => $income_indirect_ledgers,
                 'expenseIndirectLedgers' => $expense_indirect_ledgers,
-                'invoiceTotalCount' => Invoice::count()
+                'invoiceTotalCount' => Invoice::count(),
             ]);
         } catch (Exception $e) {
             Log::error('Error while getting invoice index ', [$e]);
@@ -120,14 +123,31 @@ class InvoicesController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+
     public function create(Request $request)
     {
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+
+    $existingPrefixes = Invoice::where('invoice_number', 'like', $invoice_prefix . '-%')->pluck('invoice_number');
+
+    // Extract the prefix number (e.g., 'EST2023-0010' -> '0010')
+    $prefixNumber = explode('-', $invoice_prefix)[1];
+
+    if ($existingPrefixes->isEmpty()) {
+        // If no invoices exist with this prefix, start from '00001'
+        $nextInvoiceNumber = '00001';
+    } else {
+        // Find the highest existing invoice number and increment it
+        $highestNumber = $existingPrefixes->map(function ($number) use ($invoice_prefix) {
+            return intval(substr($number, strrpos($number, '-') + 1));
+        })->max();
+
+        $nextInvoiceNumber = str_pad($highestNumber + 1, strlen($prefixNumber), '0', STR_PAD_LEFT);
+    }
         $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
-        $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
 
         if ($invoice_num_auto_generate == "YES") {
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
@@ -142,7 +162,7 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
+            'nextInvoiceNumber' =>  $nextInvoiceNumber,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'invoice_prefix' => $invoice_prefix,
             'reference_prefix' => $reference_prefix,
@@ -191,6 +211,66 @@ class InvoicesController extends Controller
             }
 
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+
+
+
+
+
+
+
+            //check if credits are sufficient
+            $company_id = (int) $request->header('company');
+            $account_master_id = (int) $request->debtors['id'];
+            $total_amount = (int) ($request->total);
+
+
+            $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)
+            ->where('company_id', $company_id)
+            ->first();
+
+            $total_credits = $dr_account_ledger->credits;
+            $credit_date = Carbon::createFromFormat('Y-m-d', $dr_account_ledger->credits_date);
+            $credit_date_format = Carbon::parse($credit_date)->startOfDay();
+            $invoice_date_format = Carbon::parse($invoice_date)->startOfDay();
+            $latestCreditEntry = Credits::where('account_ledger_id', $dr_account_ledger->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+            \Log::info($latestCreditEntry);
+
+            $due_amount = $latestCreditEntry ? $latestCreditEntry->due_amount : 0;
+            $due = $due_amount;
+
+            if($total_credits < $total_amount) {
+                $dummy = $total_credits;
+                $dr_account_ledger->credits = 0;
+                $due = $due_amount + ($total_amount - $dummy);
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'credits' => -($total_credits),
+                    'credits_date' => $dr_account_ledger->credits_date,
+                    'due_amount' => $due,
+                ]);
+            }
+            else if($invoice_date_format > $credit_date_format) {
+                $dummy = $total_credits;
+                $due = $due_amount - $total_amount;
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'credits' => $total_credits,
+                    'credits_date' => $dr_account_ledger->credits_date,
+                    'due_amount' => $due,
+                ]);
+            }else {
+                $dr_account_ledger->credits = $dr_account_ledger->credits - $total_amount;
+                $creditsStore = Credits::create([
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'credits' => -($total_amount),
+                    'credits_date' => $dr_account_ledger->credits_date,
+                    'due_amount' => $due,
+                ]);
+            }
+
+
 
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
@@ -260,9 +340,7 @@ class InvoicesController extends Controller
                     'type' => 'Cr',
                 ]);
             }
-            $company_id = (int) $request->header('company');
-            $account_master_id = (int) $request->debtors['id'];
-            $total_amount = (int) ($request->total);
+
 
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account->id,
@@ -378,7 +456,7 @@ class InvoicesController extends Controller
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
                 'error' => $e->getMessage(),
-            ], 400);
+            ], $e->getCode() ?: 400);
         }
     }
 
@@ -833,8 +911,16 @@ class InvoicesController extends Controller
     {
         $data = Estimate::with('items')->where('id', $estimate->id)->first();
 
+
         return response()->json([
             'estimate' => $data
         ]);
     }
+
+
+
 }
+
+
+
+
