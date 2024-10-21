@@ -184,7 +184,7 @@ class AccountLedger extends Model
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
         $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
-            ->where('account', '!=', $ledger->account)
+            ->where('account_ledger_id', '!=', $ledger->id)
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
             ->orderBy('date')
@@ -210,7 +210,7 @@ class AccountLedger extends Model
 
         //Calculate Opening balance
         $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
-            ->where('account', '!=', $ledger->account)
+            ->where('account_ledger_id', '!=', $ledger->id)
             ->whereDate('date', '<', $from)
             ->orderBy('date')
             ->get(['id', 'debit', 'credit']);
