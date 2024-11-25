@@ -189,9 +189,9 @@
           <template slot-scope="row">
             <span>{{ $t('receipts.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
