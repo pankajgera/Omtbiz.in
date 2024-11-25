@@ -27,5 +27,6 @@
 <script type="text/javascript" src="{{mix('/assets/js/app.js')}}"></script>
 <script type="text/javascript" src="/assets/js/print.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/assets/css/print.min.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/font-poppins.css">
 </body>
 </html>
