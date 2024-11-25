@@ -20,12 +20,14 @@ import InvoiceTemplate from './InvoiceTemplate'
 import CustomerModal from './CustomerModal'
 import CategoryModal from './CategoryModal'
 import InventoryModal from './InventoryModal'
+import CreditsOverrideModal from './CreditsOverrideModal'
 import IncreasePriceModal from './IncreasePriceModal'
 import GroupModal from './GroupModal'
 
 export default {
   components: {
     InventoryModal,
+    CreditsOverrideModal,
     IncreasePriceModal,
     EstimateTemplate,
     InvoiceTemplate,
