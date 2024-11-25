@@ -194,9 +194,9 @@
         <template slot-scope="row">
           <span> {{ $t('vouchers.action') }} </span>
           <v-dropdown>
-            <a slot="activator" href="#">
+            <span slot="activator" href="#">
               <dot-icon />
-            </a>
+            </span>
             <v-dropdown-item>
 
               <router-link :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">

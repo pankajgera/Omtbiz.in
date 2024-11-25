@@ -223,9 +223,9 @@
         <template slot-scope="row">
           <span> {{ $t('dispatch.action') }} </span>
           <v-dropdown>
-            <a slot="activator" href="#">
+            <span slot="activator" href="#">
               <dot-icon />
-            </a>
+            </span>
             <v-dropdown-item>
               <div @click="singleDispatch(row.id)" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'circle']" class="dropdown-item-icon" />
@@ -414,9 +414,9 @@
         <template slot-scope="row">
           <span> {{ $t('dispatch.action') }} </span>
           <v-dropdown>
-            <a slot="activator" href="#">
+            <span slot="activator" href="#">
               <dot-icon />
-            </a>
+            </span>
             <v-dropdown-item>
               <router-link :to="{path: `dispatch/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />

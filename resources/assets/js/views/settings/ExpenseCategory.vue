@@ -49,9 +49,9 @@
           <template slot-scope="row">
             <span>{{ $t('settings.expense_category.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="EditCategory(row.id)">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
