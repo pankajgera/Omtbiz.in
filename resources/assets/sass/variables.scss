@@ -6,9 +6,9 @@ $fa-css-prefix: icon-fa !default;
 // Colors
 // -------------------------
 
-$crater-theme:              #f54c4c;
-$crater-theme--light:       #e37a7a;
-$crater-theme--very-light:  rgba(88, 81, 216, 0.2);
+$omtbiz-theme:              #f54c4c;
+$omtbiz-theme--light:       #e37a7a;
+$omtbiz-theme--very-light:  rgba(88, 81, 216, 0.2);
 $gray--very-light:          #F9FBFF;
 $gray--light:               #dddddd;
 $gray:                      #B9C1D1;
@@ -43,9 +43,9 @@ $success-light:                 #D5EED0;
 // Theme Colors
 // -------------------------
 
-$ls-color-primary:              $crater-theme;
-$ls-color-primary--light:       $crater-theme--light;
-$ls-color-primary--very-light:  $crater-theme--very-light;
+$ls-color-primary:              $omtbiz-theme;
+$ls-color-primary--light:       $omtbiz-theme--light;
+$ls-color-primary--very-light:  $omtbiz-theme--very-light;
 
 
 // Gradients
@@ -69,7 +69,7 @@ $shadow-outline: 0 0 0 3px rgba(66, 153, 225, 0.5);
 // -------------------------
 
 $white: #fff;
-$brand-primary:             $crater-theme;
+$brand-primary:             $omtbiz-theme;
 $brand-secondary:           $ls-color-black;
 $brand-success:             $ls-color-green;
 $brand-info:                $ls-color-light-blue;

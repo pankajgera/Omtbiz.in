@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <title>Profit & Loss Report</title>
-    {{-- <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet"> --}}
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";

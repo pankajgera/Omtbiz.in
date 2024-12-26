@@ -171,6 +171,7 @@ class AccessTokensController extends Controller
 			'access_token' => $data->access_token,
             'expires_in' => $data->expires_in,
             'role' => $user->role,
+            'company' => $user->company_id,
 		];
 
 		return response($content, $response->getStatusCode())->cookie(

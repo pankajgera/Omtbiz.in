@@ -202,9 +202,9 @@
           <template slot-scope="row">
             <span>{{ $t('orders.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -332,9 +332,9 @@
           <template slot-scope="row">
             <span>{{ $t('orders.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <!-- <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>

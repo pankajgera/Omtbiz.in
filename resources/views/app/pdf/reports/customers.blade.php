@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <title>Customers Report</title>
-    {{-- <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet"> --}}
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
@@ -186,7 +185,7 @@
         <div class="sub-container">
             <div>
                 <p class="heading-text">
-                    {{ $ledger->account }}
+                    {{ $ledger->account }} (Estimate)
                     <p class="heading-date-range">
                         {{ $from_date }} - {{ $to_date }}
                     </p>

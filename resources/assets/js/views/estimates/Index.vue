@@ -45,7 +45,7 @@
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
-        
+
           </div>
           <div class="filter-date">
             <div class="from pr-3">
@@ -195,9 +195,9 @@
           <template slot-scope="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'estimate' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -319,9 +319,9 @@
           <template slot-scope="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
@@ -504,7 +504,7 @@ export default {
       this.draftCount = response.data.estimates_draft.total
       this.sentCount = response.data.sent_count
       this.current_page_count = this.estimatesDraft.length
-      
+
       return {
         data: response.data.estimates_draft.data,
         pagination: {
@@ -512,7 +512,7 @@ export default {
           currentPage: page,
           count: response.data.draft_count
         }
-       
+
       }
     },
     async fetchDataSent ({ page, filter, sort }) {

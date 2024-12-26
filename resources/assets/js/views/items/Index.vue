@@ -185,9 +185,9 @@
             <template slot-scope="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
-                <a slot="activator" href="#">
+                <span slot="activator" href="#">
                   <dot-icon />
-                </a>
+                </span>
                 <v-dropdown-item>
 
                   <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
@@ -311,9 +311,9 @@
             <template slot-scope="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
-                <a slot="activator" href="#">
+                <span slot="activator" href="#">
                   <dot-icon />
-                </a>
+                </span>
                 <v-dropdown-item>
                   <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                     <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />

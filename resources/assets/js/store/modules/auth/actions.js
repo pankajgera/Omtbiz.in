@@ -14,6 +14,7 @@ export const login = ({ commit, dispatch, state }, data) => {
             let token = response.data.access_token
             Ls.set('auth.token', token)
             Ls.set('role', response.data.role)
+            Ls.set('selectedCompany', response.data.company)
             commit('user/' + userTypes.RESET_CURRENT_USER, null, { root: true })
             commit(rootTypes.UPDATE_APP_LOADING_STATUS, false, { root: true })
             commit(types.AUTH_SUCCESS, token)
@@ -39,7 +40,6 @@ export const refreshToken = ({ commit, dispatch, state }) => {
         let data = {
             token: Ls.get('auth.token')
         }
-        console.log('REFRESH ACTION')
         axios.post('/api/auth/refresh_token', data).then((response) => {
             let token = response.data.data.token
             Ls.set('auth.token', token)

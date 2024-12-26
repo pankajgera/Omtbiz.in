@@ -1,5 +1,6 @@
-import * as types from './mutation-types'
+import * as types from './mutation-types';
 import qs from 'qs';
+
 
 export const fetchCustomers = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
@@ -109,7 +110,7 @@ export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
 
 export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
   let processData = qs.stringify({
-      "token": "kaonxaoeurktcgsy",
+      "token": process.env.MIX_WHATSAPP_TOKEN,
       "nocache": true,
       "to": data.number,
       "filename": data.fileName + '.pdf',
