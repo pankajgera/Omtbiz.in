@@ -168,6 +168,7 @@ export default {
       return moment().subtract(1, time)[type](time).toString()
     },
     onChangeDateRange () {
+      console.log('this.selectedRange', this.selectedRange)
       switch (this.selectedRange) {
         case 'Today':
           this.formData.from_date = moment().toString()
@@ -175,8 +176,7 @@ export default {
           break
 
         case 'Till Date':
-          let ledgerStartDate = this.ledgersArr.find(i => i.account === this.ledger)?.date;
-          this.formData.from_date = ledgerStartDate
+          this.formData.from_date = this.getThisDate('startOf', 'month')
           this.formData.to_date = moment().toString()
           break
 
