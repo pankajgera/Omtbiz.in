@@ -168,7 +168,6 @@ export default {
       return moment().subtract(1, time)[type](time).toString()
     },
     onChangeDateRange () {
-      console.log('this.selectedRange', this.selectedRange)
       switch (this.selectedRange) {
         case 'Today':
           this.formData.from_date = moment().toString()
@@ -176,8 +175,8 @@ export default {
           break
 
         case 'Till Date':
-          this.formData.from_date = this.getThisDate('startOf', 'month')
-          this.formData.to_date = moment().toString()
+          this.formData.from_date = moment(this.formData.to_date).startOf('month').toString()
+          this.formData.to_date = moment(this.formData.to_date).toString()
           break
 
         case 'This Week':
@@ -235,7 +234,10 @@ export default {
     async getReports (isDownload = false) {
       this.$v.range.$touch()
       this.$v.formData.$touch()
-
+      if (this.selectedRange === 'Till Date') {
+        this.formData.from_date = moment(this.formData.to_date).startOf('month').toString()
+        this.formData.to_date = moment(this.formData.to_date).toString()
+      }
       if (this.$v.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
