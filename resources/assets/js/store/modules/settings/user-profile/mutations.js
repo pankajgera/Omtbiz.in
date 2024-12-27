@@ -5,6 +5,10 @@ export default {
     state.user = data
   },
 
+  [types.USER_NOFIFICATIONS] (state, data) {
+    state.notifications = data
+  },
+
   [types.UPDATE_USER] (state, data) {
     state.user = data
   },

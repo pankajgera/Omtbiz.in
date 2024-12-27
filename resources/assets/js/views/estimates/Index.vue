@@ -45,7 +45,7 @@
               @select="onSelectCustomer"
               @deselect="clearCustomerSearch"
             />
-        
+
           </div>
           <div class="filter-date">
             <div class="from pr-3">
@@ -101,7 +101,7 @@
     <div v-show="!showEmptyScreenDraft" class="table-container">
       <div class="table-actions mt-5">
         <h4>Pending Estimates</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesDraft.length }}</b> {{ $t('general.of') }} <b>{{ draftCount }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ current_page_count }}</b> {{ $t('general.of') }} <b>{{ draftCount }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -195,9 +195,9 @@
           <template slot-scope="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'estimate' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -319,9 +319,9 @@
           <template slot-scope="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
                 <router-link :to="{path: `estimates/${row.id}/view`}" class="dropdown-item">
                   <font-awesome-icon icon="eye" class="dropdown-item-icon" />
@@ -357,6 +357,7 @@ export default {
   data () {
     return {
       showFilters: false,
+      current_page_count: 0,
       breadCrumbLinks:[
         {
           url:'dashboard',
@@ -501,7 +502,9 @@ export default {
       this.isRequestOngoing = false
       this.sundryDebtorsList = response.data.sundryDebtorsList
       this.draftCount = response.data.estimates_draft.total
-      this.sentCount = response.data.estimates_sent.total
+      this.sentCount = response.data.sent_count
+      this.current_page_count = this.estimatesDraft.length
+
       return {
         data: response.data.estimates_draft.data,
         pagination: {
@@ -509,6 +512,7 @@ export default {
           currentPage: page,
           count: response.data.draft_count
         }
+
       }
     },
     async fetchDataSent ({ page, filter, sort }) {
@@ -592,6 +596,7 @@ export default {
 
           if (res.data.success) {
             window.toastr['success'](this.$tc('estimates.deleted_message'))
+            window.location.reload();
             this.refreshTable()
             return true
           }

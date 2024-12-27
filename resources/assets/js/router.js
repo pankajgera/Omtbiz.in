@@ -44,6 +44,7 @@ import BillCreate from './views/raw-bill/Create.vue'
 // Invoices
 import InvoiceIndex from './views/invoices/Index.vue'
 import InvoiceCreate from './views/invoices/Create.vue'
+import InvoiceBulk from './views/invoices/InvoiceBulk.vue'
 import InvoiceView from './views/invoices/View.vue'
 
 // Payments
@@ -381,6 +382,12 @@ const routes = [
                 component: InvoiceCreate,
                 meta: ['admin', 'accountant']
             },
+            {
+              path: 'invoices/bulk',
+              name: 'invoices.bulk',
+              component: InvoiceBulk,
+              meta: ['admin', 'accountant']
+          },
             {
                 path: 'invoices/:id/view',
                 name: 'invoices.view',

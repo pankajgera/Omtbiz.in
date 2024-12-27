@@ -111,7 +111,7 @@ export default {
           {
             title: "navigation.receipts",
             icon: "credit-card",
-            route: "/receipts",
+            route: "/receipts/create",
             meta: ["admin", "accountant"],
           },
           {

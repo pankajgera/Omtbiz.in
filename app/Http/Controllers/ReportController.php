@@ -380,7 +380,7 @@ class ReportController extends Controller
             $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
             $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
             $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
-            $vouchers = Voucher::whereIn('id', explode(',', $unique_ids))
+            $vouchers = Voucher::with(['invoice', 'receipt'])->whereIn('id', explode(',', $unique_ids))
                 ->where('account_master_id', '!=', $master->id)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)
@@ -554,6 +554,27 @@ class ReportController extends Controller
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.estimate');
+
+        return $pdf->stream();
+    }
+
+    /**
+     * Invoice slip report
+     *
+     * @param Request $request
+     * @param string|integer $id
+     * @return void
+     */
+    public function slipReport(Request $request, $id)
+    {
+        $invoice = Invoice::with(['master'])->where('id', $id)->first();
+        view()->share([
+            'party_name' => $invoice->master->name,
+            'invoice_number' => $invoice->invoice_number,
+            'reference_number' => $invoice->reference_number,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.reports.slip');
 
         return $pdf->stream();
     }

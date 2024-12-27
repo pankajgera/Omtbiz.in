@@ -54,7 +54,51 @@ class InvoicesController extends Controller
                 ->latest()
                 ->paginate($limit);
 
-            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
+
+            $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
+            $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
+            return response()->json([
+                'invoices' => $invoices,
+                'sundryDebtorsList' => $sundryDebtorsList,
+                'incomeIndirectLedgers' => $income_indirect_ledgers,
+                'expenseIndirectLedgers' => $expense_indirect_ledgers,
+                'invoiceTotalCount' => Invoice::count()
+            ]);
+        } catch (Exception $e) {
+            Log::error('Error while getting invoice index ', [$e]);
+        }
+        return response()->json(500);
+    }
+
+    /**
+     * Display a listing of the resource.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bulk(Request $request)
+    {
+        try {
+            $limit = 500;
+            $invoices = Invoice::with(['inventories', 'user', 'invoiceTemplate', 'master'])
+                ->join('users', 'users.id', '=', 'invoices.user_id')
+                ->applyFilters($request->only([
+                    'status',
+                    'paid_status',
+                    'customer_id',
+                    'invoice_number',
+                    'from_date',
+                    'to_date',
+                    'orderByField',
+                    'orderBy',
+                    'search',
+                ]))
+                ->whereCompany($request->header('company'), $request['filterBy'])
+                ->select('invoices.*', 'users.name')
+                ->orderBy('id', 'asc')
+                ->paginate($limit);
+
+            $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
 
             $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
             $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
@@ -79,6 +123,7 @@ class InvoicesController extends Controller
     public function create(Request $request)
     {
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
@@ -88,7 +133,7 @@ class InvoicesController extends Controller
             $nextInvoiceNumberAttribute = $nextInvoiceNumber;
         }
 
-        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
         $estimateList = Estimate::where('company_id', $request->header('company'))->where('status', '!=', 'SENT')->select('id', 'estimate_number', 'total', 'account_master_id')->get();
 
         $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
@@ -100,6 +145,7 @@ class InvoicesController extends Controller
             'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
             'invoiceTemplates' => InvoiceTemplate::all(),
             'invoice_prefix' => $invoice_prefix,
+            'reference_prefix' => $reference_prefix,
             'sundryDebtorsList' => $sundryDebtorsList,
             'incomeIndirectLedgers' => $income_indirect_ledgers,
             'expenseIndirectLedgers' => $expense_indirect_ledgers,
@@ -301,6 +347,24 @@ class InvoicesController extends Controller
                         'status' => 'SENT',
                         'reference_number' => $invoice->invoice_number,
                     ]);
+
+                    // update notifications
+                    $notifications = auth()->user()->notifications()
+                    ->whereNull('read_at')
+                    ->orderBy('id', 'desc')
+                    ->limit(10)
+                    ->get();
+
+                    foreach($notifications as $notifi) {
+                        $data = $notifi['data'];
+                        if($data['id'] === (int)$request->estimate['id']) {
+                            $notifi->update([
+                                'read_at' => Carbon::now()
+                            ]);
+
+                            break;
+                        }
+                    }
                 }
 
                 return response()->json([
@@ -355,8 +419,9 @@ class InvoicesController extends Controller
         ])->find($id);
         $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
         $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
-        $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance')->get();
+        $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance', 'mobile_number')->get();
         $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
+        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
         $find_invoice_estimate = Estimate::where('reference_number', $invoice->invoice_number)->get();
@@ -377,6 +442,7 @@ class InvoicesController extends Controller
             'estimateList' => $estimateList,
             'InvoiceEstimate' => $find_invoice_estimate,
             'invoice_prefix' => $invoice_prefix,
+            'reference_prefix' => $reference_prefix,
             'inventory_negative' => ('YES' === $inventory_negative),
         ]);
     }
@@ -741,10 +807,16 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
-        $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
-            ->whereCompany($request->header('company'))
-            ->where('account_master_id', $request->id)
-            ->orderBy('id', 'asc')->first();
+        try {
+            $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
+                ->whereCompany($request->header('company'))
+                ->where('account_master_id', $request->id)
+                ->orderBy('id', 'asc')->firstOrFail();
+        } catch (Exception $e) {
+            return response()->json([
+                'invoice' => null,
+            ]);
+        }
 
         return response()->json([
             'invoice' => $find_today_first_invoice

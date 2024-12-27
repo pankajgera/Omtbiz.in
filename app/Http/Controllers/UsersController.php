@@ -81,14 +81,13 @@ class UsersController extends Controller
     public function ping()
     {
         return response()->json([
-            'success' => 'crater-self-hosted'
+            'success' => 'omtbiz-self-hosted'
         ]);
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -138,7 +137,6 @@ class UsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(UserRequest $request)
     {
@@ -177,7 +175,6 @@ class UsersController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -196,7 +193,6 @@ class UsersController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
     public function edit($id)
     {
@@ -220,7 +216,6 @@ class UsersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update($id, UserRequest $request)
     {
@@ -264,7 +259,6 @@ class UsersController extends Controller
      * Remove the specified User along side all his/her resources (ie. Estimates, Invoices, Payments and Addresses)
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
@@ -284,7 +278,6 @@ class UsersController extends Controller
      * Remove a list of Users along side all their resources (ie. Estimates, Invoices, Payments and Addresses)
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function delete(Request $request)
     {

@@ -4,7 +4,7 @@
     <input
       ref="baseInput"
       v-model="inputValue"
-      :id="id"
+      :id="name ? name : placeholder + id"
       :type="toggleType"
       :disabled="disabled"
       :readonly="readOnly"

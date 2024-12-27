@@ -95,8 +95,11 @@ class ItemsController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $item = Item::with(['dispatch', 'images'])->find($id);
-
+        $item = Item::with(['images'])->where('id', $id)->first();
+        $all_dispatch = Dispatch::whereIn('id', explode(',', $item->dispatch_id))->get();
+        if (0 < count($all_dispatch)) {
+            $item['dispatch'] = $all_dispatch;
+        }
         return response()->json([
             'item' => $item,
         ]);

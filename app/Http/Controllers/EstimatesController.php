@@ -18,7 +18,9 @@ use App\Models\Company;
 use App\Mail\EstimatePdf;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
+use App\Notifications\EstimateSuccessful;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class EstimatesController extends Controller
 {
@@ -198,6 +200,9 @@ class EstimatesController extends Controller
             'estimateTemplate',
         ])->find($estimate->id);
 
+        // Notify user 
+        auth()->user()->notify(new EstimateSuccessful($estimate));
+        
         return response()->json([
             'estimate' => $estimate,
             'url' => url('/estimates/pdf/' . $estimate->unique_hash),
@@ -304,6 +309,22 @@ class EstimatesController extends Controller
      */
     public function destroy($id)
     {
+         // update notifications
+         $notifications = auth()->user()->notifications()
+         ->whereNull('read_at')
+         ->orderBy('id', 'desc')
+         ->get();
+
+         foreach($notifications as $notifi) {
+             $data = $notifi['data'];
+             if($data['id'] === (int) $id) {
+                 $notifi->update([
+                     'read_at' => Carbon::now()
+                 ]);
+
+                 break;
+             }
+         }
         Estimate::deleteEstimate($id);
 
         return response()->json([

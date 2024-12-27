@@ -19,7 +19,7 @@ class Updater
         $data = null;
         $path = null;
 
-        $url = 'https://craterapp.com/downloads/file/'.$version.'?type=update';
+        $url = 'https://omtbizapp.com/downloads/file/'.$version.'?type=update';
 
         $response = static::getRemote($url, ['timeout' => 100, 'track_redirects' => true]);
 
@@ -72,7 +72,7 @@ class Updater
             // Delete zip file
             File::delete($file);
 
-            if (!File::copyDirectory($temp_path2.'/Crater', base_path())) {
+            if (!File::copyDirectory($temp_path2.'/omtbiz', base_path())) {
                 return false;
             }
 
@@ -115,7 +115,7 @@ class Updater
     public static function checkForUpdate()
     {
         $data = null;
-        $url = 'https://craterapp.com/downloads/check/latest/'. Setting::getSetting('version') . '?type=update';
+        $url = 'https://omtbizapp.com/downloads/check/latest/'. Setting::getSetting('version') . '?type=update';
 
         $response = static::getRemote($url, ['timeout' => 100, 'track_redirects' => true]);
 

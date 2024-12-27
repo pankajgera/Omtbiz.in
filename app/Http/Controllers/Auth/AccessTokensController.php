@@ -113,7 +113,6 @@ class AccessTokensController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request)
     {
@@ -127,7 +126,7 @@ class AccessTokensController extends Controller
 
         $accessToken->revoke();
 
-        return response()->json(null, 200);
+        return redirect('/login');
     }
 
 	/**
@@ -172,6 +171,7 @@ class AccessTokensController extends Controller
 			'access_token' => $data->access_token,
             'expires_in' => $data->expires_in,
             'role' => $user->role,
+            'company' => $user->company_id,
 		];
 
 		return response($content, $response->getStatusCode())->cookie(

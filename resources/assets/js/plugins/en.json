@@ -585,6 +585,7 @@
     "invoices": {
         "add": "Add :",
         "title": "Invoices",
+        "bulk_title": "Bulk Invoices",
         "invoices_list": "Invoices List",
         "days": "{days} Days",
         "months": "{months} Month",
@@ -653,7 +654,8 @@
             "type_inventory_description": "Type Item Description (optional)"
         },
         "payment_attached_message": "One of the selected invoices already have a payment attached to it. Make sure to delete the attached payments first in order to go ahead with the removal",
-        "confirm_delete": "You will not be able to recover this Invoice | You will not be able to recover these Invoices",
+        "confirm_delete": "You will not be able to recover this Invoice | You want to delete invoices.",
+        "confirm_delete_2": "You want to delete {count} invoice. | You want to delete {count} invoices.",
         "created_message": "Invoice created successfully",
         "updated_message": "Invoice updated successfully",
         "deleted_message": "Invoice deleted successfully | Invoices deleted successfully",
@@ -661,7 +663,8 @@
         "user_email_does_not_exist": "User email does not exist",
         "something_went_wrong": "something went wrong",
         "invalid_due_amount_message": "Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.",
-        "estimate-list": "Select Estimate"
+        "estimate-list": "Select Estimate",
+        "whatsapp": "Sent on whatsapp"
     },
     "credit_notes": {
         "title": "Credit Notes",
@@ -876,6 +879,7 @@
             "date": "Date",
             "amount": "Amount",
             "to_date": "To Date",
+            "till_date": "Till Date",
             "from_date": "From Date",
             "date_range": "Select Date Range",
             "ledgers": "Select Ledgers"
@@ -996,14 +1000,22 @@
 
             "invoices": {
                 "title": "Invoices",
-                "notes": "Notes",
                 "invoice_prefix": "Invoice Prefix",
                 "invoice_settings": "Invoice Settings",
                 "autogenerate_invoice_number": "Auto-generate Invoice Number",
                 "invoice_setting_description": "Disable this, If you don't wish to auto-generate invoice numbers each time you create a new invoice.",
                 "enter_invoice_prefix": "Enter invoice prefix",
-                "terms_and_conditions": "Terms and Conditions",
                 "invoice_setting_updated": "Invoice Setting updated successfully"
+            },
+
+            "references": {
+                "title": "References",
+                "reference_prefix": "Reference Prefix",
+                "reference_settings": "Reference Settings",
+                "autogenerate_reference_number": "Auto-generate Reference Number",
+                "reference_setting_description": "Disable this, If you don't wish to auto-generate reference numbers each time you create a new reference.",
+                "enter_reference_prefix": "Enter reference prefix",
+                "reference_setting_updated": "Reference Setting updated successfully"
             },
 
             "estimates": {
@@ -1075,6 +1087,8 @@
             "fiscal_year": "Financial Year",
             "date_format": "Date Format",
             "save": "Save",
+            "discount_per_item": "Discount Per Item",
+            "discount_setting_description": "Add Discount for each product.",
             "preference": "Preference | Preferences",
             "general_settings": "Default preferences for the system.",
             "updated_message": "Preferences updated successfully",
@@ -1377,11 +1391,11 @@
         }
     },
     "layout_login": {
-        "copyright_crater": "Copyright @ Omtbiz - 2022",
+        "copyright_omtbiz": "Copyright @ Omtbiz - 2024",
         "super_simple_invoicing": "Super Simple Invoicing",
         "for_freelancer": "for Freelancers &",
         "small_businesses": "Small Businesses ",
-        "crater_help": ""
+        "omtbiz_help": ""
     },
     "validation": {
         "invalid_url": "Invalid url (ex: http://www.omtbiz.com)",

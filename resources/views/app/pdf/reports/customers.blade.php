@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <title>Customers Report</title>
-    {{-- <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet"> --}}
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
@@ -186,7 +185,7 @@
         <div class="sub-container">
             <div>
                 <p class="heading-text">
-                    {{ $ledger->account }}
+                    {{ $ledger->account }} (Estimate)
                     <p class="heading-date-range">
                         {{ $from_date }} - {{ $to_date }}
                     </p>
@@ -203,6 +202,11 @@
                         <th>
                             <p class="table-column">
                                 Particulars
+                            </p>
+                        </th>
+                        <th>
+                            <p class="table-column">
+                                Number
                             </p>
                         </th>
                         <th>
@@ -234,6 +238,21 @@
                                 </p>
                             </td>
                             <td>
+                                @if ($each->invoice_id)
+                                <p class="bank-title">
+                                    {{ $each->invoice->invoice_number }}
+                                </p>
+                                @elseif ($each->receipt_id)
+                                <p class="bank-title">
+                                    {{ $each->receipt->receipt_number }}
+                                </p>
+                                @else
+                                <p class="bank-title">
+                                    Voucher - {{ $each->id }}
+                                </p>
+                                @endif
+                            </td>
+                            <td>
                                 <p class="bank-title">
                                     {{ $each->invoice && $each->invoice->inventories ? $each->invoice->inventories->sum('quantity') : 0 }}
                                 </p>
@@ -255,6 +274,7 @@
                             <p class="total-bank-title" style="padding-top: 30px">Total Quantity</p>
                         </td>
                         <td></td>
+                        <td></td>
                         <td class="bank-total-cell" style="padding-top: 30px">
                             <p class="footer-total-amount" style="padding-top: 10px; float: left">
                                 {!! $inventory_sum !!}
@@ -267,6 +287,7 @@
                         <td>
                             <p class="total-bank-title">Opening Balance</p>
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td class="bank-total-cell">
@@ -286,6 +307,7 @@
                         </td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td class="bank-total-cell">
                             <p class="footer-total-amount">
                                 ₹ {!! $current_balance_cr ?: 0.00 !!}  Dr
@@ -301,6 +323,7 @@
                         <td>
                             <p class="total-bank-title">Closing Balance</p>
                         </td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td class="bank-total-cell">

@@ -150,6 +150,10 @@
                 >
                   {{ $t('receipts.save_receipt') }}
                 </base-button>
+                <br/>
+                <base-button v-if="isEdit" outline color="theme" class="report-button" @click="sendReports()">
+                  {{ $t('reports.send_report') }}
+                </base-button>
               </div>
             </div>
           </div>
@@ -197,6 +201,7 @@ export default {
       closingBalanceType: '',
       accountLedger: [],
       receiptMode: [],
+      siteURL: '',
     }
   },
   validations () {
@@ -314,6 +319,9 @@ export default {
       'updateReceipt',
       'fetchReceipt'
     ]),
+    ...mapActions('customer', [
+      'sendReportOnWhatsApp'
+    ]),
     async loadData () {
       if (this.isEdit) {
         let response = await this.fetchReceipt(this.$route.params.id)
@@ -326,6 +334,8 @@ export default {
         this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)[0]
         this.accountLedger = response.data.account_ledger
         this.receiptMode = response.data.receipt_mode
+
+        this.siteURL = `/receipts/pdf/${this.formData.id}`
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
         }
@@ -372,9 +382,6 @@ export default {
           let response = await this.updateReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.updated_message'))
-            setTimeout(() => {
-              window.location.reload()
-            }, 2000)
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -400,9 +407,22 @@ export default {
           let response = await this.addReceipt(data)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.created_message'))
-            setTimeout(() => {
-              window.location.reload()
-            }, 2000)
+            this.siteURL = `/receipts/pdf/${response.data.receipt.id}`
+            window.swal({
+              title: 'Send Receipt',
+              text: 'Do you want to send receipt on whatsapp?',
+              icon: '/assets/icon/envelope-solid.svg',
+              buttons: true,
+              dangerMode: false
+            }).then(async (value) => {
+              if (value) {
+                this.sendReports()
+              } else {
+                setTimeout(() => {
+                  window.location.reload()
+                }, 1000)
+              }
+            });
             return true
           }
           if (response.data.error === 'invalid_amount') {
@@ -419,6 +439,26 @@ export default {
           window.toastr['error'](err)
         }
       }
+    },
+    sendReports() {
+      this.isLoading = true
+      if (!this.siteURL) {
+        window.toastr['error']('Receipt report url not found');
+        return;
+      }
+      let mobile = this.accountLedger.find(i => i.id === this.formData.list.id).mobile_number;
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+      let fileName = 'Receipt - ' + moment(this.formData.receipt_date).format('DD/MM/YYYY');
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
+      .then((val) => {
+        setTimeout(() => {
+          this.isLoading = false
+          window.location.reload()
+        }, 2000)
+      })
     }
   }
 }

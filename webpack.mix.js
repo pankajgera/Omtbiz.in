@@ -19,7 +19,7 @@ mix.webpackConfig({
  */
 
 mix.js('resources/assets/js/app.js', 'public/assets/js/').vue()
-  .sass('resources/assets/sass/crater.scss', 'public/assets/css/')
+  .sass('resources/assets/sass/omtbiz.scss', 'public/assets/css/')
 
 
 if (!mix.inProduction()) {

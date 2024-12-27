@@ -254,7 +254,7 @@ class FrontendController extends Controller
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
         $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
-            ->where('account', '!=', $ledger->account)
+            ->where('account_ledger_id', '!=', $ledger->id)
             ->orderBy('date')
             ->get();
 

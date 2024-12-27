@@ -5,6 +5,9 @@
         <li class="tab" @click="setActiveTab('INVOICES')">
           <a :class="['tab-link', {'a-active': activeTab === 'INVOICES'}]" href="#">{{ $t('settings.customization.invoices.title') }}</a>
         </li>
+        <li class="tab" @click="setActiveTab('REFERENCES')">
+          <a :class="['tab-link', {'a-active': activeTab === 'REFERENCES'}]" href="#">{{ $t('settings.customization.references.title') }}</a>
+        </li>
         <li class="tab" @click="setActiveTab('ESTIMATES')">
           <a :class="['tab-link', {'a-active': activeTab === 'ESTIMATES'}]" href="#">{{ $t('settings.customization.estimates.title') }}</a>
         </li>
@@ -59,6 +62,59 @@
                 <div class="right ml-15">
                   <p class="box-title">  {{ $t('settings.customization.invoices.autogenerate_invoice_number') }} </p>
                   <p class="box-desc">  {{ $t('settings.customization.invoices.invoice_setting_description') }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+
+      <!-- Reference Tab -->
+      <transition name="fade-customize">
+        <div v-if="activeTab === 'REFERENCES'" class="reference-tab">
+          <form action="" class="form-section" @submit.prevent="updateReferenceSetting">
+            <div class="row">
+              <div class="col-md-12 mb-4">
+                <label class="input-label">{{ $t('settings.customization.references.reference_prefix') }}</label>
+                <base-input
+                  v-model="references.reference_prefix"
+                  :invalid="$v.references.reference_prefix.$error"
+                  @input="$v.references.reference_prefix.$touch()"
+                  @keyup="changeToUppercase('REFERENCES')"
+                />
+                <span v-show="!$v.references.reference_prefix.required" class="text-danger mt-1">{{ $t('validation.required') }}</span>
+                <span v-if="!$v.references.reference_prefix.maxLength" class="text-danger">{{ $t('validation.prefix_maxlength') }}</span>
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-12">
+                <base-button
+                  icon="save"
+                  color="theme"
+                  type="submit"
+                >
+                  {{ $t('settings.customization.save') }}
+                </base-button>
+              </div>
+            </div>
+            <hr>
+          </form>
+          <div class="col-md-12 mt-3">
+            <div class="page-header">
+              <h3 class="page-title">
+                {{ $t('settings.customization.references.reference_settings') }}
+              </h3>
+              <div class="flex-box">
+                <div class="left">
+                  <base-switch
+                    v-model="referenceAutogenerate"
+                    class="btn-switch"
+                    @change="setReferenceSetting"
+                  />
+                </div>
+                <div class="right ml-15">
+                  <p class="box-title">  {{ $t('settings.customization.references.autogenerate_reference_number') }} </p>
+                  <p class="box-desc">  {{ $t('settings.customization.references.reference_setting_description') }} </p>
                 </div>
               </div>
             </div>
@@ -185,17 +241,17 @@ export default {
     return {
       activeTab: 'INVOICES',
       invoiceAutogenerate: false,
+      referenceAutogenerate: false,
       estimateAutogenerate: false,
       paymentAutogenerate: false,
       invoices: {
         invoice_prefix: null,
-        invoice_notes: null,
-        invoice_terms_and_conditions: null
+      },
+      references: {
+        reference_prefix: null,
       },
       estimates: {
         estimate_prefix: null,
-        estimate_notes: null,
-        estimate_terms_and_conditions: null
       },
       payments: {
         payment_prefix: null
@@ -211,6 +267,12 @@ export default {
   validations: {
     invoices: {
       invoice_prefix: {
+        required,
+        maxLength: maxLength(12),
+      }
+    },
+    references: {
+      reference_prefix: {
         required,
         maxLength: maxLength(12),
       }
@@ -244,6 +306,16 @@ export default {
         window.toastr['success'](this.$t('general.setting_updated'))
       }
     },
+    async setReferenceSetting () {
+      let data = {
+        key: 'reference_auto_generate',
+        value: this.referenceAutogenerate ? 'YES' : 'NO'
+      }
+      let response = await window.axios.put('/api/settings/update-setting', data)
+      if (response.data) {
+        window.toastr['success'](this.$t('general.setting_updated'))
+      }
+    },
     async setEstimateSetting () {
       let data = {
         key: 'estimate_auto_generate',
@@ -257,6 +329,11 @@ export default {
     changeToUppercase (currentTab) {
       if (currentTab === 'INVOICES') {
         this.invoices.invoice_prefix = this.invoices.invoice_prefix.toUpperCase()
+        return true
+      }
+
+      if (currentTab === 'REFERENCES') {
+        this.references.reference_prefix = this.references.reference_prefix.toUpperCase()
         return true
       }
 
@@ -285,17 +362,20 @@ export default {
 
       if (res.data) {
         this.invoices.invoice_prefix = res.data.invoice_prefix
-        this.invoices.invoice_notes = res.data.invoice_notes
-        this.invoices.invoice_terms_and_conditions = res.data.invoice_terms_and_conditions
+        this.references.reference_prefix = res.data.reference_prefix
         this.estimates.estimate_prefix = res.data.estimate_prefix
-        this.estimates.estimate_notes = res.data.estimate_notes
-        this.estimates.estimate_terms_and_conditions = res.data.estimate_terms_and_conditions
         this.payments.payment_prefix = res.data.payment_prefix
 
         if (res.data.invoice_auto_generate === 'YES') {
           this.invoiceAutogenerate = true
         } else {
           this.invoiceAutogenerate = false
+        }
+
+        if (res.data.reference_auto_generate === 'YES') {
+          this.referenceAutogenerate = true
+        } else {
+          this.referenceAutogenerate = false
         }
 
         if (res.data.estimate_auto_generate === 'YES') {
@@ -322,6 +402,19 @@ export default {
 
       if (this.updateSetting(data)) {
         window.toastr['success'](this.$t('settings.customization.invoices.invoice_setting_updated'))
+      }
+    },
+    async updateReferenceSetting () {
+      this.$v.references.$touch()
+
+      if (this.$v.references.$invalid) {
+        return false
+      }
+
+      let data = {type: 'REFERENCES', ...this.references}
+
+      if (this.updateSetting(data)) {
+        window.toastr['success'](this.$t('settings.customization.references.reference_setting_updated'))
       }
     },
     async updateEstimateSetting () {

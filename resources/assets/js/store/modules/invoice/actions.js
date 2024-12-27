@@ -12,6 +12,18 @@ export const fetchInvoices = ({ commit, dispatch, state }, params) => {
   })
 }
 
+export const fetchBulkInvoices = ({ commit, dispatch, state }, params) => {
+  return new Promise((resolve, reject) => {
+    window.axios.get(`/api/invoices/bulk`, {params}).then((response) => {
+      commit(types.SET_INVOICES, response.data.invoices.data)
+      commit(types.SET_TOTAL_INVOICES, response.data.invoiceTotalCount)
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const fetchCreateInvoice = ({ commit, dispatch, state }) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/invoices/create`).then((response) => {

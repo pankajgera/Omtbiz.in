@@ -153,7 +153,7 @@
           show="name"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `inventory/${row.id}/edit`}" class="dropdown-item">
+            <router-link :to="{path: `inventory/${row.id}/edit`}">
                {{ row.name }}
               </router-link>
           </template>
@@ -191,9 +191,9 @@
         <template slot-scope="row">
           <span> {{ $t('inventory.action') }} </span>
           <v-dropdown>
-            <a slot="activator" href="#">
+            <span slot="activator" href="#">
               <dot-icon />
-            </a>
+            </span>
             <v-dropdown-item>
 
               <router-link :to="{path: `inventory/${row.id}/edit`}" class="dropdown-item">

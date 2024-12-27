@@ -90,7 +90,7 @@ function numberTowords($num)
 <html lang="en">
 
 <head>
-    <title>Invoice Report</title>
+    <title>{{ 'invoice - ' . $invoice->invoice_number }}</title>
     <style type="text/css">
         body {
             font-family: "DejaVu Sans";
@@ -245,15 +245,21 @@ function numberTowords($num)
         <table style=" width: 100% !important;">
             <tr>
                 <td class="border">
-                    <p class="sub-heading-text"> Invoice</p>
+                    <p class="sub-heading-text"> Estimate</p>
                 </td>
                 <td class="border">
-                    <p class="total-title">Invoice Date <span
+                    <p class="total-title">Estimate Date <span
                             style="float:right; font-size: 12px;">{{ $invoice->invoice_date }}</span></p>
-                    <p class="total-title">Invoice Number <span
+                    <p class="total-title">Estimate Number <span
                             style="float:right; font-size: 12px;">{{ $invoice->invoice_number }}</span></p>
                     <p class="total-title">Reference Number <span
-                        style="float:right; font-size: 12px;">{{ $invoice->reference_number }}</span></p>
+                        style="float:right; font-size: 12px;">
+                        @if( strpos( $invoice->reference_number, '-' ) !== false)
+                            {{explode('-', $invoice->reference_number)[2]}}
+                        @else
+                            {{$invoice->reference_number}}
+                        @endif
+                        </span></p>
                     <p class="total-title">Party Name <span
                             style="float:right; font-size: 12px;">{{ $invoice->master->name }}</span></p>
                 </td>
@@ -385,7 +391,7 @@ function numberTowords($num)
                     <td style="width: 50%">
                         <p style="font-size: 12px;">
                             <u> Declaration: </u> <br>
-                            We declare that this invoice shows the actual
+                            We declare that this estimate shows the actual
                             price of the goods described and that all
                             particulars are true and correct
                         </p>
@@ -397,7 +403,7 @@ function numberTowords($num)
                     </td>
                 </tr>
             </table>
-            <p style="font-size: 10px; bottom: 0px; margin: 0; padding: 0">This is a Computer Generated Invoice</p>
+            <p style="font-size: 10px; bottom: 0px; margin: 0; padding: 0">This is a Computer Generated Estimate</p>
         </div>
     </footer>
 </body>

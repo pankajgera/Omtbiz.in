@@ -220,8 +220,12 @@ export default {
       }
     },
     invoiceWithAmount ({ invoice_number, due_amount, master}) {
-      if (this.invoice.length) {
-        let count = this.invoice.filter(i => i.account_master_id === master.id).length;
+      let invoiceArr = this.invoice;
+      if (! invoiceArr.length) {
+        invoiceArr = this.invoiceList
+      }
+      if (invoiceArr) {
+        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;
         return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
       }
     },
@@ -247,7 +251,7 @@ export default {
             ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],
             scanStyles: true,
             targetStyles: ['*'],
-            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-crater .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'
+            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'
           })
     },
     async loadEditData () {

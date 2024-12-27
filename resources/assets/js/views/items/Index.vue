@@ -143,7 +143,7 @@
             show="party_name"
           >
             <template slot-scope="row">
-              <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
+              <router-link :to="{path: `bill-ty/${row.id}/edit`}">
                 {{ row.party_name ? row.party_name : row.name }}
                 </router-link>
             </template>
@@ -185,9 +185,9 @@
             <template slot-scope="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
-                <a slot="activator" href="#">
+                <span slot="activator" href="#">
                   <dot-icon />
-                </a>
+                </span>
                 <v-dropdown-item>
 
                   <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
@@ -311,9 +311,9 @@
             <template slot-scope="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
-                <a slot="activator" href="#">
+                <span slot="activator" href="#">
                   <dot-icon />
-                </a>
+                </span>
                 <v-dropdown-item>
                   <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                     <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -613,7 +613,14 @@ export default {
     },
     setIndex(index) {
       this.index = index
-    }
+    },
+    async clearCustomerSearch (removedOption, id) {
+      this.filters.customer = ''
+      this.refreshTable()
+    },
+    onSelectCustomer (customer) {
+      this.filters.customer = customer
+    },
   }
 }
 </script>

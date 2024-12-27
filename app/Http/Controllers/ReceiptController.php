@@ -77,7 +77,7 @@ class ReceiptController extends Controller
             $nextReceiptNumberAttribute = $nextReceiptNumber;
         }
 
-        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
+        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type', 'mobile_number')->get();
 
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
@@ -87,6 +87,7 @@ class ReceiptController extends Controller
                 $obj->id = $master->id;
                 $obj->balance = isset($ledger) ? $ledger->balance : 0;
                 $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+                $obj->mobile_number = $master->mobile_number;
                 array_push($account_ledger, $obj);
             }
         }
@@ -265,17 +266,20 @@ class ReceiptController extends Controller
     {
         $receipt = Receipt::with('user', 'invoice')->find($id);
 
-        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type')->get();
+        $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type', 'mobile_number')->get();
 
         $account_ledger = [];
         foreach ($usersOfSundryDebitors as $master) {
-            $ledger = AccountLedger::where('account_master_id', $master->id)->first();
+            $ledger = AccountLedger::where('company_id', $request->header('company'))
+                ->where('account_master_id', $master->id)
+                ->first();
             if ($ledger) {
                 $obj = new stdClass();
                 $obj->id = $master->id;
                 $obj->name = $ledger->account;
                 $obj->balance = isset($ledger) ? $ledger->balance : 0;
                 $obj->type = isset($ledger) ? $ledger->type : 'Cr';
+                $obj->mobile_number = $master->mobile_number;
                 array_push($account_ledger, $obj);
             }
         }

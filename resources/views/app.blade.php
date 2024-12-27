@@ -3,7 +3,7 @@
 <head>
     <title>Omtbiz</title>
     <script src="/assets/js/pace.js"></script>
-    <link href="{{mix("/assets/css/crater.css")}}" rel="stylesheet" type="text/css">
+    <link href="{{mix("/assets/css/omtbiz.css")}}" rel="stylesheet" type="text/css">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
@@ -17,7 +17,7 @@
     <meta name="theme-color" content="#ffffff">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
-<body class="layout-default skin-crater">
+<body class="layout-default skin-omtbiz">
 <div id="app" class="template-container">
     <div class="mobile-menu-overlay" @click.prevent="onOverlayClick"></div>
     <transition name="fade" mode="out-in">
@@ -27,5 +27,6 @@
 <script type="text/javascript" src="{{mix('/assets/js/app.js')}}"></script>
 <script type="text/javascript" src="/assets/js/print.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/assets/css/print.min.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/font-poppins.css">
 </body>
 </html>

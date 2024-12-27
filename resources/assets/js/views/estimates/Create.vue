@@ -124,7 +124,7 @@
               :currency="currency"
               :discount-per-inventory="discountPerInventory"
               :inventory-type="'estimate'"
-              :inventory-list="inventoryList"
+              :inventory-list="inventoryListBind"
               :inventory-negative="inventoryNegative"
               @remove="removeInventory"
               @update="updateInventoryBounce"
@@ -360,6 +360,9 @@ export default {
         invent = this.newEstimate.items
       }
       return invent
+    },
+    inventoryListBind() {
+      return this.$store.state.inventory.inventories
     }
   },
   watch: {
@@ -374,7 +377,7 @@ export default {
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
       this.updateInventory(data);
-    }, 1100);
+    }, 1500);
   },
   methods: {
     ...mapActions('modal', [
@@ -398,7 +401,7 @@ export default {
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
-        limit: 1000,
+        limit: 50,
         filter: {},
         orderByField: '',
         orderBy: ''
@@ -536,6 +539,8 @@ export default {
       this.addEstimate(data).then((res) => {
         if (res.data) {
           window.toastr['success'](this.$t('estimates.created_message'))
+          let notificationSound = new Audio("/assets/ring.mp3");
+          notificationSound.play();
           this.reset()
         }
       }).catch((err) => {

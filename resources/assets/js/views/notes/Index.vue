@@ -193,9 +193,9 @@
           <template slot-scope="row">
             <span id="no-print-option"> {{ $t('notes.action') }} </span>
             <v-dropdown>
-              <a slot="activator" href="#">
+              <span slot="activator" href="#">
                 <dot-icon />
-              </a>
+              </span>
               <v-dropdown-item>
 
                 <router-link :to="{path: `notes/${row.id}/edit`}" class="dropdown-item">

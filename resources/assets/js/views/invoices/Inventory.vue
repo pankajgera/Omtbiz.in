@@ -14,6 +14,7 @@
           <tr>
             <td class="">
               <div class="item-select-wrapper">
+                <div class="ml-2  pl-3 mt-2 weight-600">{{  index+ 1 }}</div>
                 <div class="sort-icon-wrapper handle">
                   <font-awesome-icon
                     class="sort-icon"
@@ -218,9 +219,6 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters('inventories', [
-    //   'inventories'
-    // ]),
     ...mapGetters('modal', [
       'modalActive'
     ]),
@@ -260,10 +258,10 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.price = newValue
-          this.maxDiscount = this.invoiceItem.price
+          this.invoiceItem.price = parseInt(newValue)
+          this.maxDiscount = parseInt(newValue)
         } else {
-          this.invoiceItem.price = newValue
+          this.invoiceItem.price = parseInt(newValue)
         }
         this.updatingInput = 'price'
       }
@@ -274,33 +272,31 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.sale_price = newValue
-          this.maxDiscount = newValue
-          this.subtotal = newValue
+          this.invoiceItem.sale_price = parseInt(newValue)
+          this.maxDiscount = parseInt(newValue)
+          this.subtotal = parseInt(newValue)
         } else {
-          this.invoiceItem.sale_price = newValue
+          this.invoiceItem.sale_price = parseInt(newValue)
         }
         this.updatingInput = 'sale_price'
       }
     },
     inventoryQuantityBind: {
       get: function() {
-        return this.invoiceItem.quantity
+        return parseInt(this.invoiceItem.quantity)
       },
       set: function (newValue) {
         let maxQuantityAvailable = 0;
         if(this.inventoryList.length) {
-          let quantity = parseInt(
-          this.inventoryList.find(i =>
-            i.name === this.invoiceItem.name &&
-            parseInt(i.price) === parseInt(this.invoiceItem.price)
-          ));
+          let quantity = parseInt(this.inventoryList.find(i =>
+              i.name === this.invoiceItem.name &&
+              parseInt(i.price) === parseInt(this.invoiceItem.price)
+            ));
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
-            maxQuantityAvailable = newValue;
+            maxQuantityAvailable = parseInt(newValue);
           }
-
         }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
           swal({
@@ -312,14 +308,11 @@ export default {
           }).then(async (success) => {
             if (success) {
               let id = this.invoiceItem.id ? this.invoiceItem.id : this.invoiceItem.inventory_id;
-              //this.invoiceItem.quantity = null
               window.open('/inventory/' + id + '/edit', '_blank').focus()
-            } else {
-              //this.invoiceItem.quantity = null
             }
           })
         } else {
-          this.invoiceItem.quantity = newValue
+          this.invoiceItem.quantity = parseInt(newValue)
         }
         this.updatingInput = 'quantity'
       }
@@ -447,3 +440,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.weight-600 {
+  font-weight: 500;
+}
+</style>
