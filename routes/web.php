@@ -44,6 +44,10 @@ Route::group(['prefix' => 'reports'], function () {
         'as' => 'get.customers',
         'uses' => 'ReportController@customersReport'
     ]);
+    Route::get('/credits/{hash}', [
+        'as' => 'get.customers',
+        'uses' => 'ReportController@CreditsReport'
+    ]);
 
     // report for banks
     //----------------------------------
@@ -103,3 +107,8 @@ Route::get('/expenses/{id}/receipt/{hash}', [
 Route::get('/{vue?}', function () {
     return view('app');
 })->where('vue', '[\/\w\.-]*')->name('home')->middleware('install');
+
+
+
+
+

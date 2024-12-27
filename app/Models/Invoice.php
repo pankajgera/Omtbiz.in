@@ -7,9 +7,12 @@ use App\Models\InvoiceTemplate;
 use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
+    use softDeletes;
+    
     public const STATUS_PAID = 'PAID';
     public const DISPATCH = 'DISPATCH';
     public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
