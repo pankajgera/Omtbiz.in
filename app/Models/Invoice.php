@@ -58,18 +58,24 @@ class Invoice extends Model
         'formattedDueDate'
     ];
 
-    public static function getNextInvoiceNumber($invoice_prefix, $company_id)
+    public static function getNextInvoiceNumber($value, $company_id)
     {
         // Get the last created order
-        $lastInvoice = Invoice::orderBy('created_at', 'desc')->where('invoice_number', 'like', $invoice_prefix . '-%')->where('company_id', $company_id)->first();
+        $lastOrder = Invoice::orderBy('created_at', 'desc')->where('company_id', $company_id)->first();
 
-        if (empty($lastInvoice)) {
+        if (!$lastOrder) {
             // We get here if there is no order at all
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-", $lastInvoice->invoice_number);
-            $number = $number[2];
+            $order_number = $lastOrder->invoice_number;
+            $invoice_prefix = CompanySetting::where('company_id', $company_id)->where('option', 'invoice_prefix')->first()->value;
+            if (substr($lastOrder->invoice_number, 0, 12) !== $invoice_prefix) {
+                $number = '000000';
+            } else {
+                $number = explode('-', $order_number);
+                $number = $number[2];
+            }
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001
