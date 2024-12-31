@@ -68,8 +68,14 @@ class Invoice extends Model
             // If there is no number set it to 0, which will be 1 at the end.
             $number = 0;
         } else {
-            $number = explode("-", $lastOrder->invoice_number);
-            $number = $number[2];
+            $order_number = $lastOrder->invoice_number;
+            $invoice_prefix = CompanySetting::where('company_id', $company_id)->where('option', 'invoice_prefix')->first()->value;
+            if (substr($lastOrder->invoice_number, 0, 12) !== $invoice_prefix) {
+                $number = '000000';
+            } else {
+                $number = explode('-', $order_number);
+                $number = $number[2];
+            }
         }
         // If we have ORD000001 in the database then we only want the number
         // So the substr returns this 000001
