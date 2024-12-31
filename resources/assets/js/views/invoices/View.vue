@@ -11,11 +11,11 @@
           </base-button>
         </router-link>
         <v-dropdown :close-on-select="false" align="left" class="filter-container">
-          <a slot="activator" href="#">
+          <span slot="activator" href="#">
             <base-button color="theme">
               <font-awesome-icon icon="ellipsis-h" />
             </base-button>
-          </a>
+          </span>
           <v-dropdown-item>
             <router-link :to="{path: `/invoices/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -46,11 +46,11 @@
           aria-label="First group"
         >
           <v-dropdown :close-on-select="false" align="left" class="filter-container">
-            <a slot="activator" href="#">
+            <span slot="activator" href="#">
               <base-button class="inv-button inv-filter-fields-btn" color="default" size="medium">
                 <font-awesome-icon icon="filter" />
               </base-button>
-            </a>
+            </span>
 
             <div class="filter-items">
               <input
