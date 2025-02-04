@@ -15,7 +15,7 @@ class WhatsappController extends Controller
         }
         $data = $request->data;
         $params = array(
-            'token' => config('app.whatsapp_token'),
+            'token' => config('omtbiz.whatsapp_token'),
             'to' => $data->number,
             'filename' => $data->fileName . '.pdf',
             'document' =>  $data->filePath,
@@ -23,7 +23,7 @@ class WhatsappController extends Controller
         );
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.ultramsg.com/".config('app.whatsapp_instance_id')."/messages/document",
+            CURLOPT_URL => "https://api.ultramsg.com/".config('omtbiz.whatsapp_instance_id')."/messages/document",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
