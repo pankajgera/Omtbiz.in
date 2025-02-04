@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request as Psr7Request;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -15,35 +13,43 @@ class WhatsappController extends Controller
             return response()->json(['error' => 'Whatsapp only works in the production.']);
         }
 
-        // $params = array(
-        //     'token' => config('omtbiz.whatsapp_token'),
-        //     'to' => $request->number,
-        //     'filename' => $request->fileName . '.pdf',
-        //     'document' =>  $request->filePath,
-        //     'caption' => $request->fileName
-        // );
+        $params = array(
+            'token' => config('omtbiz.whatsapp_token'),
+            'to' => $request->number,
+            'filename' => $request->fileName . '.pdf',
+            'document' =>  $request->filePath,
+            'caption' => $request->fileName
+        );
+        Log::info('Sending request to create pdf', [
+            'params' => $params,
+        ]);
 
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.ultramsg.com/".config('omtbiz.whatsapp_instance_id')."/messages/document",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => http_build_query($params),
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded"
+            ),
+        ));
 
-        $params=array(
-            'token' => '2k9fbxoja78jqcxh',
-            'to' => '+919649408735',
-            'filename' => 'hello.pdf',
-            'document' => 'http://85.31.236.157/invoices/pdf/nCcRdMqhmtcG3vMVcf9n6pROpNjj2kutRQlPsEZcaXhKjCY59JxoD5yJCly9',
-            'caption' => 'document caption'
-            );
-            Log::info('Sending request to create pdf', [
-                'params' => $params,
-            ]);
-            $client = new Client();
-            $headers = [
-              'Content-Type' => 'application/x-www-form-urlencoded'
-            ];
-            $options = ['form_params' =>$params ];
-            $request = new Psr7Request('POST', 'https://api.ultramsg.com/instance66542/messages/document', $headers);
-            $res = $client->sendAsync($request, $options)->wait();
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
 
+        curl_close($curl);
 
-            return response()->json(['success' => $res->getBody()]);
-
+        if ($err) {
+            return response()->json(['error' => $response]);
+        } else {
+            return response()->json(['success' => $response]);
+        }
     }
 }
