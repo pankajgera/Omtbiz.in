@@ -11,7 +11,7 @@ class WhatsappController extends Controller
         if (config('app.env') !== 'production') {
             return response()->json(['error' => 'Whatsapp only works in the production.']);
         }
-
+        dd($request->number);
         $params = array(
             'token' => config('omtbiz.whatsapp_token'),
             'to' => $request->number,
