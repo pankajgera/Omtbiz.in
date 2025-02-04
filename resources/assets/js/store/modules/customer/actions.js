@@ -128,7 +128,6 @@ export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
             icon: '/assets/icon/envelope-solid.svg',
             dangerMode: true
           });
-          reject('Error while sending message on whatsapp')
         }
       }).catch((err) => {
         reject(err)
