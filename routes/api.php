@@ -457,7 +457,7 @@ Route::group(['middleware' => 'api'], function () {
     Route::resource('dispatch', 'DispatchController');
 
 
-    Route::post('/whatsapp-send-pdf', [
+    Route::get('/whatsapp-send-pdf', [
         'as' => 'whatsapp',
         'uses' => 'WhatsappController@sendPdf'
     ]);

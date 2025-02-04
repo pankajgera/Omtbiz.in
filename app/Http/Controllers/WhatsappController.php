@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Space\Updater;
-use App\Models\Space\SiteApi;
 
 class WhatsappController extends Controller
 {
