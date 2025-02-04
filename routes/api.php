@@ -356,6 +356,9 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('masters', 'AccountMastersController');
 
+    
+
+
     // Account Groups
     //----------------------------------
     Route::post('/groups/delete', [
@@ -411,6 +414,7 @@ Route::group(['middleware' => 'api'], function () {
 
     //Get ledgers for report
     Route::get('reports/ledgers', 'ReportController@getLedgersInReport');
+    Route::get('reports/ledger', 'ReportController@getCreditsLedgersInReport');
 
 
     // Banks
@@ -455,4 +459,11 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::resource('dispatch', 'DispatchController');
+
+
+    // Credits
+    Route::get('/credits/{id}/credit', [
+        'as' => 'masters.credit',
+        'uses' => 'CreditsController@getHistory'
+    ]);
 });

@@ -59,6 +59,17 @@
                   <span v-if="!$v.formData.groups.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
+              <div v-if="isSundryDebtor">
+                <div class="form-group">
+                  <label class="control-label">{{ $t('masters.credits') }}</label>
+                  <base-input v-model.trim="formData.credits" focus :type="'number'" :max="12" :min="8"
+                    name="credits" />
+                </div>
+                <div class="form-group">
+                  <label class="control-label">{{ $t('masters.credits_date') }}</label>
+                  <base-input v-model.trim="formData.credits_date" focus :type="'date'" name="credits_date" />
+                </div>
+              </div>
               <div class="form-group">
                 <label for="address">{{ $t('masters.address') }}</label>
                 <base-text-area
@@ -71,6 +82,7 @@
                   <span v-if="!$v.formData.address.maxLength" class="text-danger">{{ $t('validation.address_maxlength') }}</span>
                 </div>
               </div>
+
               <div class="form-group">
                 <label class="input-label">{{ $tc('masters.state') }}</label><span class="text-danger"> * </span>
                 <base-select
@@ -183,6 +195,8 @@ export default {
         opening_balance: 0,
         type: 'Dr',
         mobile_number: '',
+        credits: '',
+        credits_date: '',
       },
       groupOptions: [],
       selectedGroup: '',
@@ -205,6 +219,9 @@ export default {
         this.formData.state = val
       }
     },
+    isSundryDebtor() {
+    return this.formData.groups === 'Sundry Debtors';
+  }
   },
   created () {
     this.loadGroups()
@@ -260,6 +277,9 @@ export default {
     async loadEditData () {
       let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
+      this.formData.groups = response.data.master.groups
+      this.formData.credits = response.data.ledger.credits
+      this.formData.credits_date = response.data.ledger.credits_date
       this.selectedGroup = this.formData.groups
     },
     async checkName() {
