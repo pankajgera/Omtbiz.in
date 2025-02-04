@@ -11,14 +11,13 @@ class WhatsappController extends Controller
         if (config('app.env') !== 'production') {
             return response()->json(['error' => 'Whatsapp only works in the production.']);
         }
-        $data = $request->data;
-        dd($request, $request->data);
+
         $params = array(
             'token' => config('omtbiz.whatsapp_token'),
-            'to' => $data->number,
-            'filename' => $data->fileName . '.pdf',
-            'document' =>  $data->filePath,
-            'caption' => $data->fileName
+            'to' => $request->number,
+            'filename' => $request->fileName . '.pdf',
+            'document' =>  $request->filePath,
+            'caption' => $request->fileName
         );
         $curl = curl_init();
         curl_setopt_array($curl, array(
