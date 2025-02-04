@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WhatsappController extends Controller
 {
@@ -11,7 +12,7 @@ class WhatsappController extends Controller
         if (config('app.env') !== 'production') {
             return response()->json(['error' => 'Whatsapp only works in the production.']);
         }
-        dd($request->number);
+
         $params = array(
             'token' => config('omtbiz.whatsapp_token'),
             'to' => $request->number,
@@ -19,6 +20,10 @@ class WhatsappController extends Controller
             'document' =>  $request->filePath,
             'caption' => $request->fileName
         );
+        Log::info('Sending request to create pdf', [
+            'params' => $params,
+        ]);
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.ultramsg.com/".config('omtbiz.whatsapp_instance_id')."/messages/document",
