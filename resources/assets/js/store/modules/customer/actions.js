@@ -111,7 +111,7 @@ export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
 export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
 
   return new Promise((resolve, reject) => {
-    window.axios.get(`/api/whatsapp-send-pdf`, data)
+    window.axios.post(`/api/whatsapp-send-pdf`, data)
       .then((response) => {
         if (response.status === 200 && !response.data?.error?.length) {
           window.swal({
