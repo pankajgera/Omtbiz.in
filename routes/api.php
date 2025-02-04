@@ -459,6 +459,6 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::post('/whatsapp-send-pdf', [
         'as' => 'whatsapp',
-        'uses' => 'WhatsappController@sendPdf',
+        'uses' => 'WhatsappController@sendPdf'
     ]);
 });

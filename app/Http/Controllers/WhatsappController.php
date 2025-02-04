@@ -34,7 +34,7 @@ class WhatsappController extends Controller
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => http_build_query($params),
             CURLOPT_HTTPHEADER => array(
-            "content-type: application/x-www-form-urlencoded"
+                "content-type: application/x-www-form-urlencoded"
             ),
         ));
 
