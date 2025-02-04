@@ -118,6 +118,7 @@ export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
       "caption": data.fileName
   });
   const instanceId = process.env.WHATSAPP_INSTANCE_ID
+  console.log(instanceId, processData)
   return new Promise((resolve, reject) => {
     if (process.env.APP_ENV !== 'production') {
       reject('Whatsapp is only allow in the production.')
