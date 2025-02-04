@@ -117,27 +117,31 @@ export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
       "document": data.filePath,
       "caption": data.fileName
   });
+  const instanceId = process.env.WHATSAPP_INSTANCE_ID
   return new Promise((resolve, reject) => {
-    window.axios.post('https://api.ultramsg.com/instance66542/messages/document', processData)
-    .then((response) => {
-      if (response.status === 200 && !response.data?.error?.length) {
-        window.swal({
-          title: 'Success!',
-          text: 'Message sent on Whatsapp',
-          icon: '/assets/icon/envelope-solid.svg',
-          dangerMode: false
-        });
-        resolve(response)
-      } else {
-        window.swal({
-          title: 'Error!',
-          text: 'Error while sending message on whatsapp',
-          icon: '/assets/icon/envelope-solid.svg',
-          dangerMode: true
-        });
-      }
-    }).catch((err) => {
-      reject(err)
-    })
+    if (process.env.APP_ENV !== 'production') {
+      reject('Whatsapp is only allow in the production.')
+    }
+    window.axios.post('https://api.ultramsg.com/'+instanceId+'/messages/document', processData)
+      .then((response) => {
+        if (response.status === 200 && !response.data?.error?.length) {
+          window.swal({
+            title: 'Success!',
+            text: 'Message sent on Whatsapp',
+            icon: '/assets/icon/envelope-solid.svg',
+            dangerMode: false
+          });
+          resolve(response)
+        } else {
+          window.swal({
+            title: 'Error!',
+            text: 'Error while sending message on whatsapp',
+            icon: '/assets/icon/envelope-solid.svg',
+            dangerMode: true
+          });
+        }
+      }).catch((err) => {
+        reject(err)
+      })
   })
 }
