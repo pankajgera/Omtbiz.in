@@ -109,21 +109,9 @@ export const resetSelectedCustomer = ({ commit, dispatch, state }, data) => {
 }
 
 export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
-  let processData = qs.stringify({
-      "token": process.env.MIX_WHATSAPP_TOKEN,
-      "nocache": true,
-      "to": data.number,
-      "filename": data.fileName + '.pdf',
-      "document": data.filePath,
-      "caption": data.fileName
-  });
-  const instanceId = process.env.WHATSAPP_INSTANCE_ID
-  console.log(instanceId, processData)
+
   return new Promise((resolve, reject) => {
-    if (process.env.APP_ENV !== 'production') {
-      reject('Whatsapp is only allow in the production.')
-    }
-    window.axios.post('https://api.ultramsg.com/'+instanceId+'/messages/document', processData)
+    window.axios.post(`/api/whatsapp-send-pdf`, data)
       .then((response) => {
         if (response.status === 200 && !response.data?.error?.length) {
           window.swal({
@@ -140,6 +128,7 @@ export const sendReportOnWhatsApp = ({ commit, dispatch, state}, data) => {
             icon: '/assets/icon/envelope-solid.svg',
             dangerMode: true
           });
+          reject('Error while sending message on whatsapp')
         }
       }).catch((err) => {
         reject(err)
