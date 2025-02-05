@@ -17,11 +17,13 @@ class WhatsappController extends Controller
             'token' => config('omtbiz.whatsapp_token'),
             'to' => $request->number,
             'filename' => $request->fileName.'.pdf',
-            'document' =>  $request->filePath,
+            'document' => $request->filePath,
             'caption' => $request->fileName
         );
         Log::info('Sending request to create pdf', [
-            'params' => $params,
+            'to' => $request->number,
+            'filename' => $request->fileName.'.pdf',
+            'document' => $request->filePath,
         ]);
 
         $curl = curl_init();
@@ -39,9 +41,9 @@ class WhatsappController extends Controller
         $err = curl_error($curl);
 
         curl_close($curl);
-
+        dd($response, $err);
         if ($err) {
-            return response()->json(['error' => $response]);
+            return response()->json(['error' => $err]);
         } else {
             return response()->json(['success' => $response]);
         }
