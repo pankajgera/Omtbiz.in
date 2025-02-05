@@ -115,7 +115,7 @@ class FrontendController extends Controller
             ->first();
 
         $labels = [];
-
+dd($invoice);
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
 
         $company = Company::find($invoice->company_id);

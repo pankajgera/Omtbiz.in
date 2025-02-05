@@ -41,7 +41,6 @@ class WhatsappController extends Controller
         $err = curl_error($curl);
 
         curl_close($curl);
-        dd($response, $err);
         if ($err) {
             return response()->json(['error' => $err]);
         } else {
