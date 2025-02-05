@@ -238,7 +238,7 @@ class FrontendController extends Controller
             'user',
             'invoiceTemplate',
         ])->where('unique_hash', $id)->first();
-dd($invoice);
+
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
         $company = Company::where('id', $invoice->company_id)->first();
         $ledger = AccountLedger::findOrFail($invoice->account_master_id);

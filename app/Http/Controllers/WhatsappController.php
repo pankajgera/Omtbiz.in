@@ -13,11 +13,27 @@ class WhatsappController extends Controller
             return response()->json(['error' => 'Whatsapp only works in the production.']);
         }
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $request->filePath);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Ignore SSL verification if needed
+
+        $pdfContent = curl_exec($ch);
+        $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpStatus !== 200 || $pdfContent === false) {
+            die("Failed to fetch the file. HTTP Status: $httpStatus");
+        }
+
+        // Pdf Convert to Base64
+        $base64 = base64_encode($pdfContent);
+
         $params = array(
             'token' => config('omtbiz.whatsapp_token'),
             'to' => $request->number,
             'filename' => $request->fileName.'.pdf',
-            'document' => $request->filePath,
+            'document' => $base64,
             'caption' => $request->fileName
         );
         Log::info('Sending request to create pdf', [
