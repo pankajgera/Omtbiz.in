@@ -472,6 +472,7 @@ class ReportController extends Controller
      */
     public function invoiceReport(Request $request, $id)
     {
+        dd("HAHAH");
         $company = Company::findOrFail($request->company_id);
         $colors = [
             'primary_text_color',
