@@ -233,7 +233,6 @@ class FrontendController extends Controller
      */
     public function getInvoicePdf($id)
     {
-        dd("HERE");
         $invoice = Invoice::with([
             'inventories',
             'user',
