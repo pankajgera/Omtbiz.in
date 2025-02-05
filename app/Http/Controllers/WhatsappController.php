@@ -16,7 +16,7 @@ class WhatsappController extends Controller
         $params = array(
             'token' => config('omtbiz.whatsapp_token'),
             'to' => $request->number,
-            'filename' => $request->fileName . '.pdf',
+            'filename' => $request->fileName.'.pdf',
             'document' =>  $request->filePath,
             'caption' => $request->fileName
         );

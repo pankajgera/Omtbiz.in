@@ -982,7 +982,7 @@ export default {
         return
       }
 
-      let fileName = 'Invoice - ' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');
+      let fileName = 'Invoice-' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');
       this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
       .then((val) => {
         setTimeout(() => {
