@@ -241,7 +241,7 @@ class FrontendController extends Controller
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
         $company = Company::where('id', $invoice->company_id)->first();
-        $ledger = AccountLedger::findOrFail($invoice->account_master_id);
+        $ledger = AccountLedger::where('account_master_id', $invoice->account_master_id)->first();
 
         $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)->whereNotNull('related_voucher')->get();
         $each_ids = null;
