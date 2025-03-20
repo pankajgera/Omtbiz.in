@@ -14,6 +14,7 @@ use App\Models\EstimateTemplate;
 use App\Mail\EstimateViewed;
 use App\Mail\InvoiceViewed;
 use App\Models\AccountLedger;
+use App\Models\AccountMaster;
 use App\Models\EstimateItem;
 use App\Models\InvoiceItem;
 use App\Models\Receipt;
@@ -241,7 +242,8 @@ class FrontendController extends Controller
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
         $company = Company::where('id', $invoice->company_id)->first();
-        $ledger = AccountLedger::findOrFail($invoice->account_master_id);
+        $master = AccountMaster::find($invoice->account_master_id);
+        $ledger = AccountLedger::where('account_master_id', $master->id)->where('account', $master->name)->first();
 
         $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)->whereNotNull('related_voucher')->get();
         $each_ids = null;
