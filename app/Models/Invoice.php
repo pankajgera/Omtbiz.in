@@ -12,22 +12,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Invoice extends Model
 {
     use softDeletes;
-    
+
     public const STATUS_PAID = 'PAID';
     public const DISPATCH = 'DISPATCH';
     public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'invoice_date',
-        'due_date'
-    ];
-
     protected $casts = [
         'total' => 'integer',
         'sub_total' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'invoice_date' => 'datetime',
+        'due_date' => 'datetime'
     ];
 
     protected $fillable = [

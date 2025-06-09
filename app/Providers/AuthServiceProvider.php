@@ -22,10 +22,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
-
         Passport::cookie('access_token_'.env('APP_ENV'));
-        Passport::routes();
         Passport::personalAccessTokensExpireIn(now()->addYears(10));
         Passport::withoutCookieSerialization();
     }

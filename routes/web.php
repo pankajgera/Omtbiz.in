@@ -106,7 +106,7 @@ Route::get('/expenses/{id}/receipt/{hash}', [
 // -------------------------------------------------
 Route::get('/{vue?}', function () {
     return view('app');
-})->where('vue', '[\/\w\.-]*')->name('home')->middleware('install');
+})->where('vue', '[\/\w\.-]*')->name('base')->middleware('install');
 
 
 
