@@ -86,17 +86,17 @@ class Estimate extends Model
 
     public function items()
     {
-        return $this->hasMany('App\Models\EstimateItem');
+        return $this->hasMany(\App\Models\EstimateItem::class);
     }
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(\App\Models\User::class);
     }
 
     public function estimateTemplate()
     {
-        return $this->belongsTo('App\Models\EstimateTemplate');
+        return $this->belongsTo(\App\Models\EstimateTemplate::class);
     }
 
     public function getEstimateNumAttribute()
