@@ -256,9 +256,9 @@ class ExpensesController extends Controller
                 $filename = $media->getPath();
                 $type = \File::mimeType($imagePath);
 
-                $headers = array(
+                $headers = [
                     'Content-Type' => $type,
-                );
+                ];
 
                 $response = \Response::download($imagePath, $media->file_name);
                 ob_end_clean();

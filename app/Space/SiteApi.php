@@ -9,17 +9,17 @@ use App\Models\Setting;
 trait SiteApi
 {
 
-    protected static function getRemote($url, $data = array())
+    protected static function getRemote($url, $data = [])
     {
         $base = 'https://omtbizapp.com/';
 
         $client = new Client(['verify' => false, 'base_uri' => $base]);
 
-        $headers['headers'] = array(
+        $headers['headers'] = [
             'Accept'        => 'application/json',
             'Referer'       => url('/'),
             'omtbiz'        => Setting::getSetting('version')
-        );
+        ];
 
         $data['http_errors'] = false;
 

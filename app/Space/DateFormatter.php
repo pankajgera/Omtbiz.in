@@ -45,11 +45,11 @@ class DateFormatter
         $new = [];
 
         foreach (static::$formats as $format) {
-            $new[] = array(
+            $new[] = [
                 "display_date" => Carbon::now()->format($format['carbon_format']) ,
                 "carbon_format_value" => $format['carbon_format'],
                 "moment_format_value" => $format['moment_format']
-            );
+            ];
         }
 
         return $new;

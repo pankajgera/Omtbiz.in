@@ -1,6 +1,6 @@
 <?php
 
-$env = $app->detectEnvironment(array(
-    'local' => array('omtbiz.mac'),
-    'production' => array('13.232.192.109'),
-));
+$env = $app->detectEnvironment([
+    'local' => ['omtbiz.mac'],
+    'production' => ['13.232.192.109'],
+]);

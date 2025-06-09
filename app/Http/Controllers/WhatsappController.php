@@ -29,13 +29,13 @@ class WhatsappController extends Controller
         // Pdf Convert to Base64
         $base64 = base64_encode($pdfContent);
 
-        $params = array(
+        $params = [
             'token' => config('omtbiz.whatsapp_token'),
             'to' => $request->number,
             'filename' => $request->fileName.'.pdf',
             'document' => $base64,
             'caption' => $request->fileName
-        );
+        ];
         Log::info('Sending request to create pdf', [
             'to' => $request->number,
             'filename' => $request->fileName.'.pdf',
@@ -43,7 +43,7 @@ class WhatsappController extends Controller
         ]);
 
         $curl = curl_init();
-        curl_setopt_array($curl, array(
+        curl_setopt_array($curl, [
             CURLOPT_URL => "https://api.ultramsg.com/".config('omtbiz.whatsapp_instance_id')."/messages/document",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => "POST",
@@ -51,7 +51,7 @@ class WhatsappController extends Controller
             CURLOPT_HTTPHEADER => [
                 'Content-Type: application/json',
             ],
-        ));
+        ]);
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
