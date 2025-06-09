@@ -15,7 +15,11 @@ class Receipt extends Model
     public const RECEIPT_MODE_CREDIT_CARD = 'CREDIT_CARD';
     public const RECEIPT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
 
-    protected $dates = ['created_at', 'updated_at', 'receipt_date'];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'receipt_date' => 'datetime',
+    ];
 
     protected $fillable = [
         'user_id',
