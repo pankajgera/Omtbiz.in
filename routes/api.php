@@ -356,7 +356,7 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('masters', 'AccountMastersController');
 
-    
+
 
 
     // Account Groups
@@ -460,6 +460,11 @@ Route::group(['middleware' => 'api'], function () {
 
     Route::resource('dispatch', 'DispatchController');
 
+
+    Route::post('/whatsapp-send-pdf', [
+        'as' => 'whatsapp',
+        'uses' => 'WhatsappController@sendPdf'
+    ]);
 
     // Credits
     Route::get('/credits/{id}/credit', [

@@ -11,14 +11,6 @@ class Orders extends Model
     protected $table = 'orders';
     public const DRAFT = 'DRAFT';
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'order_date',
-        'expiry_date'
-    ];
-
     protected $appends = [
         'formattedExpiryDate',
         'formattedOrderDate'
@@ -42,6 +34,11 @@ class Orders extends Model
     protected $casts = [
         'total' => 'integer',
         'sub_total' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'order_date' => 'datetime',
+        'expiry_date' => 'datetime'
     ];
 
     public static function getNextOrderNumber($value, $company_id)
