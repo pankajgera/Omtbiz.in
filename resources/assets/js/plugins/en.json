@@ -249,7 +249,11 @@
         "confirm_delete": "You will not be able to recover this Ledger | You will not be able to recover these Ledger",
         "created_message": "Master created successfully",
         "updated_message": "Master updated successfully",
-        "deleted_message": "Master deleted successfully | Ledger deleted successfully"
+        "deleted_message": "Master deleted successfully | Ledger deleted successfully",
+        "credits" : "Credits",
+        "button_label" : "View Credits",
+        "credits_date" : "Credits Date"
+        
     },
     "groups": {
         "name": "Name",
@@ -894,6 +898,7 @@
             "date_range": "Select Date Range"
         }
     },
+    
     "settings": {
         "menu_title": {
             "account_settings": "Account Settings",
@@ -1428,5 +1433,9 @@
         "address_maxlength": "Address should not be greater than 255 characters.",
         "ref_number_required": "Reference number is required.",
         "prefix_maxlength": "Prefix should not be greater than 5 characters."
+    },
+    "credits" : {
+        "credits" : "Credits",
+        "title" : "Credits"
     }
 }
