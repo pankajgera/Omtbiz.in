@@ -21,7 +21,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/vue-fontawesome": "^0.1.10",
+    "@fortawesome/vue-fontawesome": "^3.0.0",
     "@popperjs/core": "^2.9.2",
     "autoprefixer": "10.4.5",
     "axios": "^1.7.7",
