@@ -101,7 +101,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-const { required, minLength, numeric, maxLength, minValue } = require('vuelidate/lib/validators')
+const { required, minLength, maxLength, minValue, helpers } = require('vuelidate/lib/validators')
+const decimal = helpers.regex('decimal', /^\d+(\.\d+)?$/)
 export default {
   mixins: [validationMixin],
   data () {
@@ -138,7 +139,7 @@ export default {
       },
       price: {
         required,
-        numeric,
+        decimal,
         minValue: minValue(0.1),
         maxLength: maxLength(20)
       },
