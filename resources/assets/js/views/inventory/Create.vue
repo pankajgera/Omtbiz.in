@@ -47,6 +47,7 @@
                   focus
                   :invalid="$v.formData.quantity.$error"
                   type="number"
+                  step="0.01"
                   min="0"
                   name="quantity"
                   :disabled="isEdit"

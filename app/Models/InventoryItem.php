@@ -15,6 +15,10 @@ class InventoryItem extends Model
         'unit',
     ];
 
+    protected $casts = [
+        'quantity' => 'float',
+    ];
+
     public function inventory()
     {
         return $this->belongsTo(Inventory::class);

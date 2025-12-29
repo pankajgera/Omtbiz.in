@@ -17,6 +17,7 @@
       :accept="fileInput==='image' ? 'image/*' : ''"
       :capture="fileInput==='image' ? 'camera' : ''"
       :min="type === 'number' ? 0 : null"
+      :step="step"
       :maxlength="type === 'number' ? max : null"
       @input="handleInput"
       @change="handleChange"
@@ -100,6 +101,10 @@ export default {
     },
     max: {
       type: Number,
+      default: null
+    },
+    step: {
+      type: [Number, String],
       default: null
     }
   },

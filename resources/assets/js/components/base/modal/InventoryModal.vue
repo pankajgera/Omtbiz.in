@@ -44,7 +44,8 @@
             <base-input
                 v-model="formData.quantity"
                 :invalid="$v.formData.quantity.$error"
-                type="text"
+                type="number"
+                step="0.01"
                 name="quantity"
                 @input="$v.formData.quantity.$touch()"
               />

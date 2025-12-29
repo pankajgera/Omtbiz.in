@@ -14,6 +14,10 @@ class Inventory extends Model
         'quantity',
     ];
 
+    protected $casts = [
+        'quantity' => 'float',
+    ];
+
     public function inventoryItem()
     {
         return $this->hasMany(InventoryItem::class, 'inventory_id');

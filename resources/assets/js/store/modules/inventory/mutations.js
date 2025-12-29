@@ -18,7 +18,7 @@ export default {
       inventories.map((each) => {
         const existing = filterResponse.map(ss => ss.name).indexOf(each.name)
         if(-1 < existing) {
-          filterResponse[existing].quantity = parseInt(filterResponse[existing].quantity) + parseInt(each.quantity)
+          filterResponse[existing].quantity = parseFloat(filterResponse[existing].quantity) + parseFloat(each.quantity)
           filterResponse[existing].price = (parseInt(filterResponse[existing].price) + parseInt(each.price))/2
         } else {
           filterResponse.push(each)

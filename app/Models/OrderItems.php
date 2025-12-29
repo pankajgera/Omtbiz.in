@@ -20,6 +20,7 @@ class OrderItems extends Model
         'price' => 'integer',
         'total' => 'integer',
         'quantity' => 'float',
+        'remaining_quantity' => 'float',
     ];
 
     public function order()

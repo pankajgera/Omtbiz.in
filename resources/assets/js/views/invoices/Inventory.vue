@@ -46,6 +46,7 @@
                 v-model="inventoryQuantityBind"
                 :invalid="$v.invoiceItem.quantity.$error"
                 type="number"
+                step="0.01"
                 small
                 :disabled="isDisable || disabled"
                 @blur="$v.invoiceItem.quantity.$touch()"
@@ -283,7 +284,7 @@ export default {
     },
     inventoryQuantityBind: {
       get: function() {
-        return parseInt(this.invoiceItem.quantity)
+        return parseFloat(this.invoiceItem.quantity)
       },
       set: function (newValue) {
         let maxQuantityAvailable = 0;
@@ -295,7 +296,7 @@ export default {
           if(quantity) {
             maxQuantityAvailable = quantity.quantity;
           } else {
-            maxQuantityAvailable = parseInt(newValue);
+            maxQuantityAvailable = parseFloat(newValue);
           }
         }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
@@ -312,7 +313,7 @@ export default {
             }
           })
         } else {
-          this.invoiceItem.quantity = parseInt(newValue)
+          this.invoiceItem.quantity = parseFloat(newValue)
         }
         this.updatingInput = 'quantity'
       }

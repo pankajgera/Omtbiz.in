@@ -352,7 +352,7 @@ export default {
     ]),
     totalQuantity(inventory){
       if (inventory.length) {
-        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
+        return inventory.map(i => parseFloat(i.quantity)).reduce((a,b) => a + b)
       }
       return 0
     },

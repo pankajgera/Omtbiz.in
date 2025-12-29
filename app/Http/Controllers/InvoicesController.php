@@ -239,7 +239,7 @@ class InvoicesController extends Controller
 
                 $inventory_id = $inventory->id;
                 //Reset inventory quantity
-                $quantity_used = (int) ($inventory->quantity);
+                $quantity_used = (float) ($inventory->quantity);
                 $invent = Inventory::where('id', $inventory->inventory_id)->first();
                 $invent->update([
                     'quantity' => $invent->quantity - $quantity_used,
@@ -530,7 +530,7 @@ class InvoicesController extends Controller
             //Reset inventory quantity
             //Add, if quantity is reduce in the existing invoice item
             //Subtract, if quantity is add in the existing invoice item
-            $request_item_quantity = (int) ($req['quantity']);
+            $request_item_quantity = (float) ($req['quantity']);
             if ($req['invoice_id']) {
                 $invent = Inventory::where('id', $req['inventory_id'])->first();
                 $existing_invoice_item = InvoiceItem::find($req['id']);

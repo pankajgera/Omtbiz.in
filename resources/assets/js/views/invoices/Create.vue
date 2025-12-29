@@ -772,7 +772,7 @@ export default {
         if (!findItem) {
           return;
         }
-        let maxQuantityAvailable = parseInt(findItem.quantity);
+        let maxQuantityAvailable = parseFloat(findItem.quantity);
         if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
           swal({
             title: this.$t('invoices.out_of_stock'),
