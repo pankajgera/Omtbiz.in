@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Validator;
 use App\Models\Voucher;
+use App\Services\NumberSequenceService;
 use Exception;
 
 class InvoicesController extends Controller
@@ -122,15 +123,17 @@ class InvoicesController extends Controller
      */
     public function create(Request $request)
     {
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
         $invoice_num_auto_generate = CompanySetting::getSetting('invoice_auto_generate', $request->header('company'));
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $nextInvoiceNumberAttribute = null;
-        $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
+        $sequence = NumberSequenceService::getNextSequence(
+            (int) $request->header('company'),
+            Carbon::now('Asia/Kolkata')
+        );
+        $nextInvoiceNumber = $sequence['invoice_number'];
 
         if ($invoice_num_auto_generate == "YES") {
-            $nextInvoiceNumberAttribute = $nextInvoiceNumber;
+            $nextInvoiceNumberAttribute = $sequence['suffix'];
         }
 
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'mobile_number')->get();
@@ -142,10 +145,10 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice_today_date' => Carbon::now()->toDateString(),
             'nextInvoiceNumberAttribute' => $nextInvoiceNumberAttribute,
-            'nextInvoiceNumber' =>  $invoice_prefix . '-' . $nextInvoiceNumber,
+            'nextInvoiceNumber' =>  $nextInvoiceNumber,
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'invoice_prefix' => $invoice_prefix,
-            'reference_prefix' => $reference_prefix,
+            'invoice_prefix' => $sequence['prefix'],
+            'reference_prefix' => '',
             'sundryDebtorsList' => $sundryDebtorsList,
             'incomeIndirectLedgers' => $income_indirect_ledgers,
             'expenseIndirectLedgers' => $expense_indirect_ledgers,
@@ -168,37 +171,39 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
-            //Check if same invoice number is already present
-            //if YES, then add 1 to this invoice number
-            $invoice_number = $number_attributes['invoice_number'];
-            $find_invoice = Invoice::where('invoice_number', '=', $invoice_number)->first();
-            if (! empty($find_invoice)) {
-                $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-                $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
-                $number_attributes['invoice_number'] = $invoice_prefix . '-' . $nextInvoiceNumber;
-            }
-
-            //Check reference_number
-            $reference_number = $request->reference_number;
-            // $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
-            //     ->where('account_master_id', '!=', $request->debtors['id'])->first();
-            // if (! empty($find_reference_number)) {
-            //     $reference_number = intval($reference_number) + 1;
-            // }
-
-            if (! $reference_number || ! $number_attributes['invoice_number']) {
-                abort(500);
-            }
-
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+            $company_id = (int) $request->header('company');
+            $sequence = NumberSequenceService::getNextSequence(
+                $company_id,
+                Carbon::createFromFormat('Y-m-d', $invoice_date, 'Asia/Kolkata')
+            );
+            while (
+                Invoice::where('invoice_number', $sequence['invoice_number'])->exists()
+                || Estimate::where('estimate_number', $sequence['invoice_number'])->exists()
+            ) {
+                [$series, $left, $right] = NumberSequenceService::incrementSequence(
+                    $sequence['series'],
+                    $sequence['left'],
+                    $sequence['right']
+                );
+                $sequence = NumberSequenceService::buildSequence($sequence['year'], $series, $left, $right);
+            }
+            $reference_number = NumberSequenceService::getReferenceNumberForAccount(
+                $company_id,
+                $request->debtors['id'],
+                Carbon::createFromFormat('Y-m-d', $invoice_date, 'Asia/Kolkata')
+            );
+            if (! $reference_number) {
+                $reference_number = $sequence['reference_number'];
+            }
 
             $invoice = Invoice::create([
                 'invoice_date' => $invoice_date,
                 //'due_date' => $due_date,
-                'invoice_number' => $number_attributes['invoice_number'],
+                'invoice_number' => $sequence['invoice_number'],
                 'reference_number' => $reference_number,
                 'user_id' => $request->user_id,
-                'company_id' => $request->header('company'),
+                'company_id' => $company_id,
                 'invoice_template_id' => $request->invoice_template_id,
                 'status' => Invoice::TO_BE_DISPATCH,
                 'paid_status' => Invoice::STATUS_PAID,
@@ -345,7 +350,6 @@ class InvoicesController extends Controller
                 if ($request->estimate) {
                     Estimate::where('id', $request->estimate['id'])->update([
                         'status' => 'SENT',
-                        'reference_number' => $invoice->invoice_number,
                     ]);
 
                     // update notifications
@@ -420,16 +424,15 @@ class InvoicesController extends Controller
         $income_indirect_ledgers = AccountMaster::where('groups', 'like', 'Income (Indirect)')->select('id', 'name', 'opening_balance')->get();
         $expense_indirect_ledgers = AccountMaster::where('groups', 'like', 'Expenses (Indirect)')->select('id', 'name', 'opening_balance')->get();
         $sundryDebtorsList = AccountMaster::where('id', $invoice->account_master_id)->select('id', 'name', 'opening_balance', 'mobile_number')->get();
-        $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-        $reference_prefix = CompanySetting::getSetting('reference_prefix', $request->header('company'));
+        $invoice_prefix = $invoice->getInvoicePrefixAttribute() . '-';
+        $reference_prefix = '';
         $inventory_negative = CompanySetting::getSetting('allow_negative_inventory', $request->header('company'));
         $estimateList = Estimate::where('company_id', $request->header('company'))->select('id', 'estimate_number', 'total')->get();
-        $find_invoice_estimate = Estimate::where('reference_number', $invoice->invoice_number)->get();
+        $find_invoice_estimate = Estimate::where('reference_number', $invoice->reference_number)->get();
         if (0 < count($find_invoice_estimate)) {
             $estimateList = $find_invoice_estimate;
         }
-        $number = explode("-", $invoice->invoice_number);
-        $number = $number[2];
+        $number = $invoice->getInvoiceNumAttribute();
 
         return response()->json([
             'invoiceNumber' =>   $number,
@@ -807,19 +810,20 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
-        try {
-            $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
-                ->whereCompany($request->header('company'))
-                ->where('account_master_id', $request->id)
-                ->orderBy('id', 'asc')->firstOrFail();
-        } catch (Exception $e) {
+        $referenceNumber = NumberSequenceService::getReferenceNumberForAccount(
+            (int) $request->header('company'),
+            (int) $request->id,
+            Carbon::now('Asia/Kolkata')
+        );
+
+        if (! $referenceNumber) {
             return response()->json([
-                'invoice' => null,
+                'reference_number' => null,
             ]);
         }
 
         return response()->json([
-            'invoice' => $find_today_first_invoice
+            'reference_number' => $referenceNumber,
         ]);
     }
 

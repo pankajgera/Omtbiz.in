@@ -21,6 +21,7 @@ use App\Models\Inventory;
 use App\Notifications\EstimateSuccessful;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Services\NumberSequenceService;
 
 class EstimatesController extends Controller
 {
@@ -91,14 +92,17 @@ class EstimatesController extends Controller
      */
     public function create(Request $request): JsonResponse
     {
-        $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
         $estimate_num_auto_generate = CompanySetting::getSetting('estimate_auto_generate', $request->header('company'));
 
         $nextEstimateNumberAttribute = null;
-        $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix, $request->header('company'));
+        $sequence = NumberSequenceService::getNextSequence(
+            (int) $request->header('company'),
+            Carbon::now('Asia/Kolkata')
+        );
+        $nextEstimateNumber = $sequence['invoice_number'];
 
         if ($estimate_num_auto_generate == "YES") {
-            $nextEstimateNumberAttribute = $nextEstimateNumber;
+            $nextEstimateNumberAttribute = $sequence['suffix'];
         }
 
         $customers = User::where('role', 'customer')->get();
@@ -109,10 +113,10 @@ class EstimatesController extends Controller
             'estimate_today_date' => Carbon::now()->toDateString(),
             'customers' => $customers,
             'nextEstimateNumberAttribute' => $nextEstimateNumberAttribute,
-            'nextEstimateNumber' => $estimate_prefix . '-' . $nextEstimateNumber,
+            'nextEstimateNumber' => $nextEstimateNumber,
             'estimateTemplates' => EstimateTemplate::all(),
             'shareable_link' => '',
-            'estimate_prefix' => $estimate_prefix,
+            'estimate_prefix' => $sequence['prefix'],
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
@@ -132,24 +136,39 @@ class EstimatesController extends Controller
             'estimate_number' => 'required'
         ])->validate();
 
-        //Check if same estimate number is already present
-        //if YES, then add 1 to this estimate number
-        $find_estimate = Estimate::where('estimate_number', '=', $estimate_number)->first();
-        if (! empty($find_estimate)) {
-            $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
-            $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix, $request->header('company'));
-            $number_attributes['estimate_number'] = $estimate_prefix . '-' . $nextEstimateNumber;
-        }
-
         $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
         $status = Estimate::DRAFT;
+        $company_id = (int) $request->header('company');
+        $sequence = NumberSequenceService::getNextSequence(
+            $company_id,
+            Carbon::createFromFormat('d/m/Y', $request->estimate_date, 'Asia/Kolkata')
+        );
+        while (
+            Invoice::where('invoice_number', $sequence['invoice_number'])->exists()
+            || Estimate::where('estimate_number', $sequence['invoice_number'])->exists()
+        ) {
+            [$series, $left, $right] = NumberSequenceService::incrementSequence(
+                $sequence['series'],
+                $sequence['left'],
+                $sequence['right']
+            );
+            $sequence = NumberSequenceService::buildSequence($sequence['year'], $series, $left, $right);
+        }
+        $reference_number = NumberSequenceService::getReferenceNumberForAccount(
+            $company_id,
+            $request->debtors['id'],
+            Carbon::createFromFormat('d/m/Y', $request->estimate_date, 'Asia/Kolkata')
+        );
+        if (! $reference_number) {
+            $reference_number = $sequence['reference_number'];
+        }
 
         $estimate = Estimate::create([
             'estimate_date' => $estimate_date,
             'expiry_date' => $estimate_date,
-            'estimate_number' => $number_attributes['estimate_number'],
+            'estimate_number' => $sequence['invoice_number'],
             'user_id' => $request->user_id,
-            'company_id' => $request->header('company'),
+            'company_id' => $company_id,
             'estimate_template_id' => $request->estimate_template_id,
             'status' => $status,
             'sub_total' => $request->sub_total,
@@ -157,6 +176,7 @@ class EstimatesController extends Controller
             'notes' => $request->notes,
             'unique_hash' => str_random(60),
             'account_master_id' => $request->debtors['id'],
+            'reference_number' => $reference_number,
         ]);
 
         $estimateItems = $request->items;
@@ -255,7 +275,7 @@ class EstimatesController extends Controller
             'estimate' => $estimate,
             'estimateTemplates' => EstimateTemplate::all(),
             'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash),
-            'estimate_prefix' => $estimate->getEstimatePrefixAttribute(),
+            'estimate_prefix' => $estimate->getEstimatePrefixAttribute() . '-',
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }

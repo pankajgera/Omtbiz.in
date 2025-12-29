@@ -25,7 +25,6 @@ class ChangeMoneyColumnsToDecimal extends Migration
         Schema::table('invoice_items', function (Blueprint $table) {
             $table->decimal('price', 15, 2)->change();
             $table->decimal('sale_price', 15, 2)->change();
-            $table->decimal('discount_val', 15, 2)->change();
             $table->decimal('tax', 15, 2)->change();
             $table->decimal('total', 15, 2)->change();
         });
@@ -33,18 +32,11 @@ class ChangeMoneyColumnsToDecimal extends Migration
         Schema::table('estimate_items', function (Blueprint $table) {
             $table->decimal('price', 15, 2)->change();
             $table->decimal('sale_price', 15, 2)->change();
-            $table->decimal('discount_val', 15, 2)->nullable()->change();
             $table->decimal('tax', 15, 2)->change();
             $table->decimal('total', 15, 2)->change();
         });
 
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->decimal('price', 15, 2)->nullable()->change();
-            $table->decimal('total', 15, 2)->nullable()->change();
-        });
-
         Schema::table('invoices', function (Blueprint $table) {
-            $table->decimal('discount_val', 15, 2)->nullable()->change();
             $table->decimal('sub_total', 15, 2)->change();
             $table->decimal('total', 15, 2)->change();
             $table->decimal('tax', 15, 2)->change();
@@ -52,14 +44,9 @@ class ChangeMoneyColumnsToDecimal extends Migration
         });
 
         Schema::table('estimates', function (Blueprint $table) {
-            $table->decimal('discount_val', 15, 2)->nullable()->change();
             $table->decimal('sub_total', 15, 2)->change();
             $table->decimal('total', 15, 2)->change();
             $table->decimal('tax', 15, 2)->change();
-        });
-
-        Schema::table('taxes', function (Blueprint $table) {
-            $table->decimal('amount', 15, 2)->change();
         });
 
         Schema::table('expenses', function (Blueprint $table) {

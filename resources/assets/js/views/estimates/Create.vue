@@ -484,7 +484,7 @@ export default {
       if (!this.checkValid()) {
         return false
       }
-      this.newEstimate.estimate_number = this.estimatePrefix + '-' + this.estimateNumAttribute
+      this.newEstimate.estimate_number = this.estimatePrefix + this.estimateNumAttribute
 
       let data = {
         ...this.newEstimate,

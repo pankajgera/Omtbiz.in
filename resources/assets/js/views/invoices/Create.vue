@@ -93,7 +93,7 @@
             icon="hashtag"
             :invalid="$v.referenceNumAttribute.$error"
             :prefix="referencePrefix"
-            :prefix-width="55"
+            :prefix-width="0"
             :disabled="true"
             @input="$v.referenceNumAttribute.$touch()"
           />
@@ -553,9 +553,6 @@ export default {
     referenceNumAttribute: {
       cache: false,
       get() {
-        if (this.newInvoice.reference_number && -1 !== this.newInvoice.reference_number.indexOf('-')) {
-          return this.newInvoice.reference_number.split('-')[2]
-        }
         return this.newInvoice.reference_number
       },
       set(value) {
@@ -795,9 +792,7 @@ export default {
       if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {
         return false
       }
-      this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
-      this.newInvoice.reference_number = this.referencePrefix + '-' + this.newInvoice.reference_number
-
+      this.newInvoice.invoice_number = this.invoicePrefix + this.invoiceNumAttribute
         // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
         // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
       let data = {
@@ -928,8 +923,8 @@ export default {
     async searchDebtorRefNumber(data) {
        this.newInvoice.reference_number = null;
        let response = await this.fetchReferenceNumber(data)
-        if (response.data && response.data.invoice) {
-          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[2]
+        if (response.data && response.data.reference_number) {
+          this.newInvoice.reference_number = response.data.reference_number
         } else {
           this.newInvoice.reference_number = this.invoiceNumAttribute
         }
@@ -955,8 +950,8 @@ export default {
       //set invoice data
       this.newInvoice = {
         invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),
-        invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
-        reference_number: this.referencePrefix + '-' + this.invoiceNumAttribute,
+        invoice_number: this.invoicePrefix + this.invoiceNumAttribute,
+        reference_number: this.invoiceNumAttribute,
         user_id: invoice.user_id,
         invoice_template_id: 1,
         sub_total: invoice.sub_total,
