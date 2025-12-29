@@ -131,10 +131,14 @@ export default {
   computed: {
     price: {
       get: function () {
-        return this.formData.price / 100
+        return this.formData.price
       },
       set: function (newValue) {
-        this.formData.price = newValue * 100
+        if (parseFloat(newValue) > 0) {
+          this.formData.price = parseFloat(newValue)
+        } else {
+          this.formData.price = newValue
+        }
       }
     },
     isEdit () {

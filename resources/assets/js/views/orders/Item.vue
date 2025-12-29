@@ -190,7 +190,7 @@ export default {
         if (this.item.discount_type === 'percentage') {
           this.item.discount_val = (this.subtotal * newValue) / 100
         } else {
-          this.item.discount_val = newValue * 100
+          this.item.discount_val = newValue
         }
 
         this.item.discount = newValue
@@ -201,15 +201,11 @@ export default {
     },
     price: {
       get: function () {
-        if (parseFloat(this.item.price) > 0) {
-          return this.item.price / 100
-        }
-
         return this.item.price
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.item.price = newValue * 100
+          this.item.price = parseFloat(newValue)
           this.maxDiscount = this.item.price
         } else {
           this.item.price = newValue
@@ -288,7 +284,7 @@ export default {
         return
       }
 
-      this.item.discount_val = this.item.discount * 100
+      this.item.discount_val = this.item.discount
       this.item.discount_type = 'fixed'
     },
     selectPercentage () {

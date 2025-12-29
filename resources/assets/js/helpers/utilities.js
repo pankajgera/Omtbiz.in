@@ -42,8 +42,6 @@ export default {
       currency = {precision: 2, thousand_separator: ',', decimal_separator: '.', symbol: '$'}
     }
 
-    amount = amount / 100
-
     let {precision, decimal_separator, thousand_separator, symbol} = currency
 
     try {
@@ -67,8 +65,6 @@ export default {
     if (!currency) {
       currency = {precision: 2, thousand_separator: ',', decimal_separator: '.', symbol: '$'}
     }
-
-    amount = amount / 100
 
     let {precision, decimal_separator, thousand_separator, symbol} = currency
 

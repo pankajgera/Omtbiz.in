@@ -43,8 +43,10 @@ class Estimate extends Model
     ];
 
     protected $casts = [
-        'total' => 'integer',
-        'sub_total' => 'integer',
+        'total' => 'float',
+        'sub_total' => 'float',
+        'tax' => 'float',
+        'discount_val' => 'float',
     ];
 
     public static function getNextEstimateNumber($value, $company_id)

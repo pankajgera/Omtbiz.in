@@ -241,7 +241,7 @@ export default {
         return this.formData.amount
       },
       set: function (newValue) {
-        if (0 > parseInt(newValue)) {
+        if (0 > parseFloat(newValue)) {
           this.formData.amount = 0
         } else {
           this.formData.amount = newValue
@@ -332,7 +332,7 @@ export default {
         this.paymentMethod = response.data.payment_method
         this.formData.payment_mode = this.paymentMethod.find(i => i.name === this.formData.payment_mode)
         if (response.data.payment.invoice !== null) {
-          this.maxPayableAmount = parseInt(response.data.payment.amount) + parseInt(response.data.payment.invoice.due_amount)
+          this.maxPayableAmount = parseFloat(response.data.payment.amount) + parseFloat(response.data.payment.invoice.due_amount)
           this.invoice = response.data.payment.invoice
         }
       } else {

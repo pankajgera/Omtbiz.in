@@ -66,6 +66,7 @@
                   focus
                   :invalid="$v.formData.price.$error"
                   type="number"
+                  step="0.01"
                   min="0"
                   name="price"
                 />
@@ -82,6 +83,7 @@
                   v-model.trim="formData.sale_price"
                   focus
                   type="number"
+                  step="0.01"
                   min="0"
                   name="sale_price"
                 />

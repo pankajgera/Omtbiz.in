@@ -317,7 +317,7 @@ export default {
       let data = {
         search: this.filters.name !== null ? this.filters.name : '',
         unit: this.filters.unit !== null ? this.filters.unit.name : '',
-        price: this.filters.price * 100,
+        price: this.filters.price,
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page

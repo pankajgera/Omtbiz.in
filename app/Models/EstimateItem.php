@@ -19,8 +19,11 @@ class EstimateItem extends Model
     ];
 
     protected $casts = [
-        'price' => 'integer',
-        'total' => 'integer',
+        'price' => 'float',
+        'sale_price' => 'float',
+        'discount_val' => 'float',
+        'tax' => 'float',
+        'total' => 'float',
         'quantity' => 'float',
     ];
 

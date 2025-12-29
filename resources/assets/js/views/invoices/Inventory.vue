@@ -84,6 +84,7 @@
                     :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
                     type="number"
+                    step="0.01"
                   />
                   <div v-if="$v.invoiceItem.sale_price.$error">
                     <span v-if="!$v.invoiceItem.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
@@ -229,10 +230,10 @@ export default {
     subtotal: {
       cache: false,
       get: function () {
-        return parseInt(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price) * this.invoiceItem.quantity
+        return parseFloat(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price) * this.invoiceItem.quantity
       },
       set: function (newValue) {
-        return parseInt(newValue ? newValue : this.invoiceItem.price) * this.invoiceItem.quantity
+        return parseFloat(newValue ? newValue : this.invoiceItem.price) * this.invoiceItem.quantity
       }
     },
     discount: {
@@ -259,10 +260,10 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.price = parseInt(newValue)
-          this.maxDiscount = parseInt(newValue)
+          this.invoiceItem.price = parseFloat(newValue)
+          this.maxDiscount = parseFloat(newValue)
         } else {
-          this.invoiceItem.price = parseInt(newValue)
+          this.invoiceItem.price = newValue
         }
         this.updatingInput = 'price'
       }
@@ -273,11 +274,11 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.sale_price = parseInt(newValue)
-          this.maxDiscount = parseInt(newValue)
-          this.subtotal = parseInt(newValue)
+          this.invoiceItem.sale_price = parseFloat(newValue)
+          this.maxDiscount = parseFloat(newValue)
+          this.subtotal = parseFloat(newValue)
         } else {
-          this.invoiceItem.sale_price = parseInt(newValue)
+          this.invoiceItem.sale_price = newValue
         }
         this.updatingInput = 'sale_price'
       }
@@ -289,12 +290,12 @@ export default {
       set: function (newValue) {
         let maxQuantityAvailable = 0;
         if(this.inventoryList.length) {
-          let quantity = parseInt(this.inventoryList.find(i =>
-              i.name === this.invoiceItem.name &&
-              parseInt(i.price) === parseInt(this.invoiceItem.price)
-            ));
-          if(quantity) {
-            maxQuantityAvailable = quantity.quantity;
+          let match = this.inventoryList.find(i =>
+            i.name === this.invoiceItem.name &&
+            parseFloat(i.price) === parseFloat(this.invoiceItem.price)
+          );
+          if (match) {
+            maxQuantityAvailable = parseFloat(match.quantity);
           } else {
             maxQuantityAvailable = parseFloat(newValue);
           }

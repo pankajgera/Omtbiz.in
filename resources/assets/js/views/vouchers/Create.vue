@@ -155,8 +155,8 @@ export default {
         obj['type'] = each.type
         obj['account'] = each.account,
         obj['account_id'] = each.account_master_id,
-        obj['credit'] = parseInt(each.credit),
-        obj['debit'] = parseInt(each.debit),
+        obj['credit'] = parseFloat(each.credit),
+        obj['debit'] = parseFloat(each.debit),
         obj['total_debit'] = 0,
         obj['total_credit'] = 0,
         obj['balance'] = 0,

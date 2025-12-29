@@ -43,8 +43,6 @@ function clean_slug($string)
  */
 function format_money_pdf($money, $currency = null)
 {
-    $money = $money / 100;
-
     if (!$currency) {
         $currency = Currency::findOrFail(CompanySetting::getSetting('currency', 1));
     }

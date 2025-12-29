@@ -487,13 +487,13 @@ export default {
         return this.subtotal - this.newInvoice.discount_val
       }
       if (this.income_ledger_value && !this.expense_ledger_value) {
-        return  this.subtotal + parseInt(this.income_ledger_value)
+        return  this.subtotal + parseFloat(this.income_ledger_value)
       }
       if (!this.income_ledger_value && this.expense_ledger_value) {
-        return  this.subtotal - parseInt(this.expense_ledger_value)
+        return  this.subtotal - parseFloat(this.expense_ledger_value)
       }
       if (this.income_ledger_value && this.expense_ledger_value) {
-        return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)
+        return this.subtotal + parseFloat(this.income_ledger_value) - parseFloat(this.expense_ledger_value)
       }
       return this.subtotal
     },
@@ -767,7 +767,7 @@ export default {
       this.newInvoice.inventories.map(selectedItem => {
         let findItem = this.inventoryList.find(i =>
             i.name === selectedItem.name &&
-            parseInt(i.price) === parseInt(selectedItem.price)
+            parseFloat(i.price) === parseFloat(selectedItem.price)
           );
         if (!findItem) {
           return;

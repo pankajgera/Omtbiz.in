@@ -207,10 +207,14 @@ export default {
   computed: {
     amount: {
       get: function () {
-        return this.formData.amount / 100
+        return this.formData.amount
       },
       set: function (newValue) {
-        this.formData.amount = newValue * 100
+        if (parseFloat(newValue) > 0) {
+          this.formData.amount = parseFloat(newValue)
+        } else {
+          this.formData.amount = newValue
+        }
       }
     },
     isEdit () {

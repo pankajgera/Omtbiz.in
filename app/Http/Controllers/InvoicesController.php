@@ -262,7 +262,7 @@ class InvoicesController extends Controller
             }
             $company_id = (int) $request->header('company');
             $account_master_id = (int) $request->debtors['id'];
-            $total_amount = (int) ($request->total);
+            $total_amount = (float) $request->total;
 
             $account_ledger = AccountLedger::firstOrCreate([
                 'account_master_id' => $sale_account->id,
@@ -460,9 +460,9 @@ class InvoicesController extends Controller
         $oldAmount = $invoice->total;
 
         if ($oldAmount != $request->total) {
-            $oldAmount = (int)round($request->total) - (int)$oldAmount;
+            $oldAmount = round((float) $request->total, 2) - (float) $oldAmount;
         } else {
-            $oldAmount = 0;
+            $oldAmount = 0.0;
         }
 
         $invoice->due_amount = ($invoice->due_amount + $oldAmount);
@@ -495,7 +495,7 @@ class InvoicesController extends Controller
         $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
         $company_id = (int) $request->header('company');
         $account_master_id = (int) $request->debtors['id'];
-        $total_amount = (int) ($request->total);
+        $total_amount = (float) $request->total;
         $account_ledger = AccountLedger::firstOrCreate([
             'account_master_id' => $sale_account_id,
             'account' => 'Sales',

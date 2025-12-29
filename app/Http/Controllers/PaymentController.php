@@ -112,7 +112,7 @@ class PaymentController extends Controller
     public function store(PaymentRequest $request)
     {
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
-        $req_amount = (int)$request->amount;
+        $req_amount = (float) $request->amount;
 
         $payment_status = 'Draft';
 
@@ -293,9 +293,9 @@ class PaymentController extends Controller
         $oldAmount = $payment->amount;
 
         if ($request->has('invoice_id') && $request->invoice_id && ($oldAmount != $request->amount)) {
-            $amount = (int)$request->amount - (int)$oldAmount;
+            $amount = (float) $request->amount - (float) $oldAmount;
             $invoice = Invoice::find($request->invoice_id);
-            $invoice->due_amount = (int)$invoice->due_amount - (int)$amount;
+            $invoice->due_amount = (float) $invoice->due_amount - (float) $amount;
 
             if ($invoice->due_amount < 0) {
                 return response()->json([
@@ -356,7 +356,7 @@ class PaymentController extends Controller
 
         if ($payment->invoice_id != null) {
             $invoice = Invoice::find($payment->invoice_id);
-            $invoice->due_amount = ((int)$invoice->due_amount + (int)$payment->amount);
+            $invoice->due_amount = (float) $invoice->due_amount + (float) $payment->amount;
             $invoice->paid_status = Invoice::STATUS_PAID;
             $invoice->status = Invoice::TO_BE_DISPATCH;
             $invoice->save();
@@ -381,7 +381,7 @@ class PaymentController extends Controller
 
             if ($payment->invoice_id != null) {
                 $invoice = Invoice::find($payment->invoice_id);
-                $invoice->due_amount = ((int)$invoice->due_amount + (int)$payment->amount);
+                $invoice->due_amount = (float) $invoice->due_amount + (float) $payment->amount;
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();

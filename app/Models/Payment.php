@@ -35,6 +35,10 @@ class Payment extends Model
         'formattedPaymentDate'
     ];
 
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
 
     private function strposX($haystack, $needle, $number)
     {

@@ -17,6 +17,8 @@ class InventoryItem extends Model
 
     protected $casts = [
         'quantity' => 'float',
+        'price' => 'float',
+        'sale_price' => 'float',
     ];
 
     public function inventory()
