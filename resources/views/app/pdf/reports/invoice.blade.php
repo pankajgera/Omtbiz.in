@@ -285,7 +285,7 @@ function numberTowords($num)
                                 </td>
                                 <td style="width: 10%">
                                     <p class="td-header">
-                                        Quantity
+                                        Meter
                                     </p>
                                 </td>
                                 <td style="width: 20%">
@@ -333,7 +333,7 @@ function numberTowords($num)
                                 <td style="width: 40%"></td>
                                 <td style="width: 10%">
                                     <p style="font-size: 12px;">
-                                        Total Quantity: {{ str_replace('.00', '', $total_quantity) }}
+                                        Total Meter: {{ str_replace('.00', '', $total_quantity) }}
                                     </p>
                                 </td>
                                 <td style="width: 20%">

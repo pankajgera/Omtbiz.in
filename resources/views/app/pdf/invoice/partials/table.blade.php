@@ -2,7 +2,7 @@
     <tr class="main-table-header">
         <th class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">#</th>
         <th width="30%" class="ItemTableHeader" style="text-align: left; color: #55547A; padding-left: 0px">Items</th>
-        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Quantity</th>
+        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Meter</th>
         <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Price</th>
         <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A;">Amount</th>
     </tr>

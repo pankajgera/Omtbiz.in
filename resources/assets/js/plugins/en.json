@@ -296,7 +296,7 @@
         "created_message": "Display created successfully",
         "updated_message": "Display updated successfully",
         "deleted_message": "Display deleted successfully | Displays deleted successfully",
-        "inventory_item_quantity": "Quantity"
+        "inventory_item_quantity": "Meter"
     },
     "daybook": {
         "title": "Day Book",
@@ -311,7 +311,7 @@
         "price": "Price",
         "date_of_creation": "Date Of Creation",
         "action": "Action",
-        "quantity": "Quantity",
+        "quantity": "Meter",
         "add_daybook": "Add Day Book",
         "save_daybook": "Save Day Book",
         "update_daybook": "Update Day Book",
@@ -340,7 +340,7 @@
         "created_message": "Day Book created successfully",
         "updated_message": "Day Book updated successfully",
         "deleted_message": "Day Book deleted successfully | Day Books deleted successfully",
-        "inventory_item_quantity": "Item Quantity"
+        "inventory_item_quantity": "Item Meter"
     },
     "daysheet": {
        "city" : "City",
@@ -451,7 +451,7 @@
         "inventory": {
             "title": "Item Title",
             "description": "Description",
-            "quantity": "Quantity",
+            "quantity": "Meter",
             "price": "Cost Price",
             "sale_price": "Sale Price",
             "total": "Total",
@@ -471,7 +471,7 @@
         "item": {
             "title": "Item Title",
             "description": "Description",
-            "quantity": "Quantity",
+            "quantity": "Meter",
             "price": "Price",
             "total": "Total",
             "sub_total": "Sub Total",
@@ -479,7 +479,7 @@
             "select_an_item": "Type or click to select an item",
             "type_item_description": "Type Item Description (optional)"
         },
-        "quantity": "Quantity",
+        "quantity": "Meter",
         "view": "View"
     },
     "orders": {
@@ -498,7 +498,7 @@
         "ref_no": "REF NO.",
         "number": "NUMBER",
         "due_amount": "AMOUNT DUE",
-        "remaining_quantity": "Remaining Quantity",
+        "remaining_quantity": "Remaining Meter",
         "partially_paid": "Partially Paid",
         "total": "Total",
         "sub_total": "Sub Total",
@@ -551,7 +551,7 @@
         "inventory": {
             "title": "Item Title",
             "description": "Description",
-            "quantity": "Quantity",
+            "quantity": "Meter",
             "price": "Cost Price",
             "sale_price": "Sale Price",
             "total": "Total",
@@ -571,7 +571,7 @@
         "item": {
             "title": "Item Title",
             "description": "Description",
-            "quantity": "Quantity",
+            "quantity": "Meter",
             "price": "Price",
             "total": "Total",
             "sub_total": "Sub Total",
@@ -579,7 +579,7 @@
             "select_an_item": "Type or click to select an item",
             "type_item_description": "Type Item Description (optional)"
         },
-        "quantity": "Quantity",
+        "quantity": "Meter",
         "view": "View"
     },
     "invoices": {
@@ -591,7 +591,7 @@
         "months": "{months} Month",
         "years": "{years} Year",
         "out_of_stock": "Out of stock",
-        "update_inventory_quantity": "Max quantity available is {max}, do you want to update the quantity.",
+        "update_inventory_quantity": "Max meter available is {max}, do you want to update the meter.",
         "all": "All",
         "paid": "Paid",
         "unpaid": "Unpaid",
@@ -615,7 +615,7 @@
         "action": "Action",
         "notes": "Notes",
         "view": "View",
-        "quantity": "Quantity",
+        "quantity": "Meter",
         "send_invoice": "Send Invoice",
         "invoice_template": "Invoice Template",
         "template": "Template",
@@ -644,7 +644,7 @@
         "inventory": {
             "title": "Item Title",
             "description": "Description",
-            "quantity": "Quantity",
+            "quantity": "Meter",
             "price": "Cost Price",
             "sale_price": "Sale Price",
             "total": "Total",
@@ -680,7 +680,7 @@
         "item": {
             "title": "Item Title",
             "description": "Description",
-            "quantity": "Quantity",
+            "quantity": "Meter",
             "price": "Price",
             "total": "Total",
             "sub_total": "Sub Total"
@@ -1266,7 +1266,7 @@
         "rate": "Rate",
         "average": "Average",
         "per_price": "Per Price",
-        "quantity": "Quantity",
+        "quantity": "Meter",
         "inventory_attached_message": "Cannot delete an inventory which is already in use",
         "confirm_delete": "You will not be able to recover this Inventory | You will not be able to recover these Inventory",
         "created_message": "Inventory created successfully",
@@ -1413,11 +1413,11 @@
         "characters_only": "Characters Only.",
         "password_incorrect": "Passwords must be identical",
         "password_length": "Password must be {count} character long.",
-        "qty_must_greater_than_zero": "Quantity must be greater than zero.",
+        "qty_must_greater_than_zero": "Meter must be greater than zero.",
         "price_greater_than_zero": "Price must be greater than zero.",
         "payment_greater_than_zero": "Payment must be greater than   zero.",
         "payment_greater_than_due_amount": "Entered Payment is more than due amount of this invoice.",
-        "quantity_maxlength": "Quantity should not be greater than 20 digits.",
+        "quantity_maxlength": "Meter should not be greater than 20 digits.",
         "price_maxlength": "Price should not be greater than 20 digits.",
         "price_minvalue": "Price should be greater than 0.",
         "amount_maxlength": "Amount should not be greater than 20 digits.",
