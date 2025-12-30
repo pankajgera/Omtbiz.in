@@ -28,6 +28,8 @@ class Invoice extends Model
         'tax' => 'float',
         'discount_val' => 'float',
         'due_amount' => 'float',
+        'indirect_income_value' => 'float',
+        'indirect_expense_value' => 'float',
     ];
 
     protected $fillable = [

@@ -226,10 +226,11 @@
             <div>
               <base-input
                 style="width:100px"
-                :disabled="this.income_ledger===null || !incomeLedgerList.length"
+                :disabled="isDisabled"
                 v-model="income_ledger_value"
                 type="number"
                 min="0"
+                step="0.01"
                 input-class="item-discount"
               />
             </div>
@@ -256,10 +257,11 @@
            </div>
            <base-input
               style="width:100px"
-              :disabled="this.expense_ledger===null || !expenseLedgerList.length"
+              :disabled="isDisabled"
               v-model="expense_ledger_value"
               type="number"
               min="0"
+              step="0.01"
               input-class="item-discount"
               />
         </div>
@@ -811,9 +813,9 @@ export default {
         total: this.total,
         user_id: this.user.id,
         income_ledger: this.income_ledger,
-        income_ledger_value: this.income_ledger_value ? this.income_ledger_value : 0,
+        income_ledger_value: this.income_ledger_value ? parseFloat(this.income_ledger_value) : 0,
         expense_ledger:  this.expense_ledger,
-        expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,
+        expense_ledger_value: this.expense_ledger_value ? parseFloat(this.expense_ledger_value) : 0,
         invoice_template_id: this.getTemplateId,
       }
 
