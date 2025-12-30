@@ -76,6 +76,7 @@
             <label class="form-label"> {{ $tc('bills.price') }} </label>
             <base-input
               v-model="filters.price"
+              format-second-last-decimal
               type="text"
               name="name"
               autocomplete="off"

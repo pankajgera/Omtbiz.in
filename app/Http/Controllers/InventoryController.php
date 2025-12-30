@@ -79,20 +79,23 @@ class InventoryController extends Controller
             throw new Exception('Price cannot be null');
         }
         try {
+            $normalized_quantity = normalize_second_last_decimal($request->quantity);
+            $normalized_price = normalize_second_last_decimal($request->price);
+            $normalized_sale_price = normalize_second_last_decimal($request->sale_price ?? $request->price);
             $find_inventory = Inventory::where('name', $request->name)->where('company_id', $request->header('company'))->first();
             if (empty($find_inventory)) {
                 $inventory = new Inventory();
                 $inventory->name = $request->name;
-                $inventory->quantity = $request->quantity;
+                $inventory->quantity = $normalized_quantity;
                 $inventory->company_id = $request->header('company');
                 $inventory->save();
 
                 $items = new InventoryItem();
                 $items->inventory_id = $inventory->id;
                 $items->worker_name = $request->worker_name;
-                $items->quantity = $request->quantity;
-                $items->price = $request->price;
-                $items->sale_price = $request->sale_price ?? $request->price;
+                $items->quantity = $normalized_quantity;
+                $items->price = $normalized_price;
+                $items->sale_price = $normalized_sale_price;
                 $items->unit = $request->unit;
                 $items->save();
 
@@ -108,14 +111,14 @@ class InventoryController extends Controller
                 $items = new InventoryItem();
                 $items->inventory_id = $find_inventory->id;
                 $items->worker_name = $request->worker_name;
-                $items->quantity = $request->quantity;
-                $items->price = $request->price;
-                $items->sale_price = $request->sale_price ?? $request->price;
+                $items->quantity = $normalized_quantity;
+                $items->price = $normalized_price;
+                $items->sale_price = $normalized_sale_price;
                 $items->unit = $request->unit;
                 $items->save();
 
-                if ($find_inventory->quantity !==  $request->quantity) {
-                    $find_inventory->updateInventoryQuantity($request->quantity);
+                if ($find_inventory->quantity !==  $normalized_quantity) {
+                    $find_inventory->updateInventoryQuantity($normalized_quantity);
                 }
                 return response()->json([
                     'inventory' => $find_inventory,
@@ -141,6 +144,8 @@ class InventoryController extends Controller
             throw new Exception('Price cannot be null');
         }
         try {
+            $normalized_price = normalize_second_last_decimal($request->price);
+            $normalized_sale_price = normalize_second_last_decimal($request->sale_price);
             $inventory = Inventory::find($id);
             $inventory->name = $request->name;
             $inventory->company_id = $request->header('company');
@@ -150,8 +155,8 @@ class InventoryController extends Controller
             $items = InventoryItem::where('inventory_id', $inventory->id)->orderBy('id', 'desc')->first();
             $items->worker_name = $request->worker_name;
             //$items->quantity = $request->quantity;
-            $items->price = $request->price;
-            $items->sale_price = $request->sale_price;
+            $items->price = $normalized_price;
+            $items->sale_price = $normalized_sale_price;
             $items->unit = $request->unit;
             $items->save();
 
@@ -225,12 +230,14 @@ class InventoryController extends Controller
      */
     public function increasePrice(Request $request)
     {
+        $normalized_price = normalize_second_last_decimal($request->price);
+        $normalized_sale_price = normalize_second_last_decimal($request->sale_price);
         $inventory = Inventory::whereIn('id', $request->selected_ids)->get();
 
         foreach ($inventory as $each) {
             InventoryItem::where('id', $each->id)->orderBy('id', 'desc')->update([
-                'price' => $request->price,
-                'sale_price' => $request->sale_price,
+                'price' => $normalized_price,
+                'sale_price' => $normalized_sale_price,
             ]);
         }
         return response()->json([

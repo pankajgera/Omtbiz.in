@@ -62,3 +62,37 @@ function format_money_pdf($money, $currency = null)
     }
     return $currency_with_symbol;
 }
+
+/**
+ * Normalize a numeric string by placing a decimal before the last digit.
+ *
+ * @param mixed $value
+ * @return mixed
+ */
+function normalize_second_last_decimal($value)
+{
+    if ($value === null || $value === '') {
+        return $value;
+    }
+
+    $string = (string) $value;
+    $is_negative = false;
+
+    if (strlen($string) && $string[0] === '-') {
+        $is_negative = true;
+        $string = substr($string, 1);
+    }
+
+    $digits = preg_replace('/\D+/', '', $string);
+    if ($digits === '') {
+        return $value;
+    }
+
+    if (strlen($digits) === 1) {
+        $formatted = '0.' . $digits;
+    } else {
+        $formatted = substr($digits, 0, -1) . '.' . substr($digits, -1);
+    }
+
+    return $is_negative ? '-' . $formatted : $formatted;
+}

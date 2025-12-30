@@ -9,6 +9,7 @@
                 ref="price"
                 v-model.trim="price"
                 :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                format-second-last-decimal
                 type="text"
                 name="price"
               />
@@ -27,6 +28,7 @@
                 ref="sale_price"
                 v-model.trim="sale_price"
                 :class="{'invalid' : $v.formData.sale_price.$error, 'input-field': true}"
+                format-second-last-decimal
                 type="text"
                 name="sale_price"
               />

@@ -106,6 +106,10 @@ export default {
     step: {
       type: [Number, String],
       default: null
+    },
+    formatSecondLastDecimal: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -142,6 +146,9 @@ export default {
       } else {
         this.inputValue = this.value
       }
+      if (this.formatSecondLastDecimal) {
+        this.inputValue = this.normalizeSecondLastDecimal(this.inputValue)
+      }
     },
     focus () {
       this.focusInput()
@@ -166,7 +173,32 @@ export default {
         this.$emit('keyup', this.inputValue)
     },
     handleFocusOut (e) {
+        if (this.formatSecondLastDecimal) {
+          const formatted = this.normalizeSecondLastDecimal(this.inputValue)
+          if (formatted !== this.inputValue) {
+            this.inputValue = formatted
+            this.$emit('input', this.inputValue)
+          }
+        }
         this.$emit('blur', this.inputValue)
+    },
+    normalizeSecondLastDecimal (value) {
+      if (value === null || value === undefined || value === '') {
+        return value
+      }
+
+      const stringValue = String(value)
+      const isNegative = stringValue.trim().startsWith('-')
+      const digits = stringValue.replace(/\D+/g, '')
+
+      if (!digits) {
+        return value
+      }
+
+      const padded = digits.length === 1 ? `0${digits}` : digits
+      const formatted = `${padded.slice(0, -1)}.${padded.slice(-1)}`
+
+      return isNegative ? `-${formatted}` : formatted
     }
   }
 }

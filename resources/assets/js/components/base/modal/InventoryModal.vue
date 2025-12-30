@@ -27,6 +27,7 @@
             <base-input
                 v-model.trim="price"
                 :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                format-second-last-decimal
                 type="text"
                 name="price"
               />
@@ -44,6 +45,7 @@
             <base-input
                 v-model="formData.quantity"
                 :invalid="$v.formData.quantity.$error"
+                format-second-last-decimal
                 type="number"
                 step="0.01"
                 name="quantity"

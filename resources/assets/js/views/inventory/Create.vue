@@ -46,6 +46,7 @@
                   v-model.trim="formData.quantity"
                   focus
                   :invalid="$v.formData.quantity.$error"
+                  format-second-last-decimal
                   type="number"
                   step="0.01"
                   min="0"
@@ -65,6 +66,7 @@
                   v-model.trim="formData.price"
                   focus
                   :invalid="$v.formData.price.$error"
+                  format-second-last-decimal
                   type="number"
                   step="0.01"
                   min="0"
@@ -82,6 +84,7 @@
                 <base-input
                   v-model.trim="formData.sale_price"
                   focus
+                  format-second-last-decimal
                   type="number"
                   step="0.01"
                   min="0"

@@ -184,6 +184,8 @@ class EstimatesController extends Controller
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
+            $estimateItem['quantity'] = normalize_second_last_decimal($estimateItem['quantity']);
+            $estimateItem['price'] = normalize_second_last_decimal($estimateItem['price']);
 
             $item = $estimate->items()->create($estimateItem);
         }
@@ -305,6 +307,8 @@ class EstimatesController extends Controller
         foreach ($estimateItems as $estimateItem) {
             $estimateItem['company_id'] = $request->header('company');
             $estimateItem['type'] = 'estimate';
+            $estimateItem['quantity'] = normalize_second_last_decimal($estimateItem['quantity']);
+            $estimateItem['price'] = normalize_second_last_decimal($estimateItem['price']);
 
             $item = $estimate->items()->create($estimateItem);
         }
