@@ -215,7 +215,6 @@
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
-                :disabled="isDisabled || !incomeLedgerList.length"
                 :placeholder="$t('receipts.select_a_list')"
                 label="name"
                 track-by="id"
@@ -226,7 +225,6 @@
             <div>
               <base-input
                 style="width:100px"
-                :disabled="isDisabled"
                 v-model="income_ledger_value"
                 type="number"
                 min="0"
@@ -248,7 +246,6 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="isDisabled || !expenseLedgerList.length"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
               track-by="id"
@@ -257,7 +254,6 @@
            </div>
            <base-input
               style="width:100px"
-              :disabled="isDisabled"
               v-model="expense_ledger_value"
               type="number"
               min="0"
