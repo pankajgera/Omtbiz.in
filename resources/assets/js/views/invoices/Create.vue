@@ -198,11 +198,11 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.sub_total') }}</label>
             <label class="invoice-amount">
-              ₹ {{ subtotal }}
+              <span v-html="$utils.formatMoney(subtotal, currency)" />
             </label>
 
           </div>
-          <div class="section" v-if="incomeLedgerList.length">
+          <div class="section">
             <div class="row align-items-center">
               <div class="pl-3">
               <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
@@ -215,7 +215,7 @@
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
-                :disabled="isDisabled"
+                :disabled="isDisabled || !incomeLedgerList.length"
                 :placeholder="$t('receipts.select_a_list')"
                 label="name"
                 track-by="id"
@@ -226,7 +226,7 @@
             <div>
               <base-input
                 style="width:100px"
-                :disabled="this.income_ledger===null"
+                :disabled="this.income_ledger===null || !incomeLedgerList.length"
                 v-model="income_ledger_value"
                 type="number"
                 min="0"
@@ -234,7 +234,7 @@
               />
             </div>
           </div>
-          <div class="section" v-if="expenseLedgerList.length">
+          <div class="section">
            <div class="row align-items-center">
             <div class="pl-3 mb-2">
              <label class="form-label"><strong>{{ $t('invoices.less') }}</strong></label>
@@ -247,7 +247,7 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="isDisabled"
+              :disabled="isDisabled || !expenseLedgerList.length"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
               track-by="id"
@@ -256,7 +256,7 @@
            </div>
            <base-input
               style="width:100px"
-              :disabled="this.expense_ledger===null"
+              :disabled="this.expense_ledger===null || !expenseLedgerList.length"
               v-model="expense_ledger_value"
               type="number"
               min="0"
@@ -304,7 +304,7 @@
           <div class="section border-top mt-3">
             <label class="invoice-label">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>
             <label class="invoice-amount total">
-              ₹ {{ total }}
+              <span v-html="$utils.formatMoney(total, currency)" />
             </label>
           </div>
         </div>
@@ -483,29 +483,31 @@ export default {
       return this.selectedCurrency
     },
     subtotalWithDiscount () {
+      let total = this.subtotal
       if (this.newInvoice.discount_val) {
-        return this.subtotal - this.newInvoice.discount_val
+        total = this.subtotal - this.newInvoice.discount_val
       }
       if (this.income_ledger_value && !this.expense_ledger_value) {
-        return  this.subtotal + parseFloat(this.income_ledger_value)
+        total = this.subtotal + parseFloat(this.income_ledger_value)
       }
       if (!this.income_ledger_value && this.expense_ledger_value) {
-        return  this.subtotal - parseFloat(this.expense_ledger_value)
+        total = this.subtotal - parseFloat(this.expense_ledger_value)
       }
       if (this.income_ledger_value && this.expense_ledger_value) {
-        return this.subtotal + parseFloat(this.income_ledger_value) - parseFloat(this.expense_ledger_value)
+        total = this.subtotal + parseFloat(this.income_ledger_value) - parseFloat(this.expense_ledger_value)
       }
-      return this.subtotal
+      return this.roundMoney(total)
     },
     total () {
-      return this.subtotalWithDiscount
+      return this.roundMoney(this.subtotalWithDiscount)
     },
     subtotal () {
       let inventory = this.newInvoice.inventories;
       if (inventory.length) {
-        return inventory.reduce(function (a, b) {
-                return a + b['total']
-              }, 0)
+        const sum = inventory.reduce(function (a, b) {
+          return a + b['total']
+        }, 0)
+        return this.roundMoney(sum)
       }
 
       return 0
@@ -595,6 +597,13 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    roundMoney (value) {
+      const amount = Number(value)
+      if (Number.isNaN(amount)) {
+        return 0
+      }
+      return Math.round((amount + Number.EPSILON) * 100) / 100
+    },
     totalQuantity(inventory){
       if (inventory.length) {
         let invent = 0

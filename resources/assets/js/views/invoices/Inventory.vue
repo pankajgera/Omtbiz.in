@@ -136,9 +136,7 @@
             </td>
             <td class="text-left">
               <div class="item-amount" v-if="('orders' !== inventoryType)">
-                <span>
-                   ₹ {{ total }}
-                </span>
+                <span v-html="$utils.formatMoney(total, currency)" />
 
                 <div class="remove-icon-wrapper">
                   <font-awesome-icon
@@ -233,10 +231,12 @@ export default {
     subtotal: {
       cache: false,
       get: function () {
-        return parseFloat(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price) * this.invoiceItem.quantity
+        const price = parseFloat(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price)
+        return this.roundMoney(price * this.invoiceItem.quantity)
       },
       set: function (newValue) {
-        return parseFloat(newValue ? newValue : this.invoiceItem.price) * this.invoiceItem.quantity
+        const price = parseFloat(newValue ? newValue : this.invoiceItem.price)
+        return this.roundMoney(price * this.invoiceItem.quantity)
       }
     },
     discount: {
@@ -441,6 +441,13 @@ export default {
     },
     showEndList(val) {
       this.$emit('endlist', true)
+    },
+    roundMoney (value) {
+      const amount = Number(value)
+      if (Number.isNaN(amount)) {
+        return 0
+      }
+      return Math.round((amount + Number.EPSILON) * 100) / 100
     }
   }
 }

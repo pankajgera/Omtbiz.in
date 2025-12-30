@@ -166,14 +166,14 @@
           <div class="section">
             <label class="estimate-label">{{ $t('estimates.sub_total') }}</label>
             <label class="estimate-amount">
-              ₹ {{ subtotal }}
+              <span v-html="$utils.formatMoney(subtotal, currency)" />
             </label>
           </div>
 
           <div class="section border-top mt-3">
             <label class="estimate-label">{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label>
             <label class="estimate-amount total">
-              ₹ {{ total }}
+              <span v-html="$utils.formatMoney(total, currency)" />
             </label>
           </div>
         </div>
@@ -311,13 +311,14 @@ export default {
       return this.selectedCurrency
     },
     subtotalWithDiscount () {
+      let total = this.subtotal
       if (this.newEstimate.discount_val) {
-        return this.subtotal - this.newEstimate.discount_val
+        total = this.subtotal - this.newEstimate.discount_val
       }
-      return this.subtotal
+      return this.roundMoney(total)
     },
     total () {
-      return this.subtotalWithDiscount
+      return this.roundMoney(this.subtotalWithDiscount)
     },
     subtotal () {
       let inventory = this.newEstimate.items
@@ -325,9 +326,10 @@ export default {
         inventory = this.newEstimate.items
       }
       if (inventory && inventory.length) {
-        return inventory.reduce(function (a, b) {
-                return a + b['total']
-              }, 0)
+        const sum = inventory.reduce(function (a, b) {
+          return a + b['total']
+        }, 0)
+        return this.roundMoney(sum)
       }
       return 0
     },
@@ -393,6 +395,13 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    roundMoney (value) {
+      const amount = Number(value)
+      if (Number.isNaN(amount)) {
+        return 0
+      }
+      return Math.round((amount + Number.EPSILON) * 100) / 100
+    },
     totalQuantity(inventory){
       if (inventory.length) {
         return inventory.map(i => parseFloat(i.quantity)).reduce((a,b) => a + b)
