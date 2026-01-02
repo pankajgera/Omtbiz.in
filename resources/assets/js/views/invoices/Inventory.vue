@@ -45,7 +45,7 @@
                 :name="'inventoryQuantity'+index"
                 v-model="inventoryQuantityBind"
                 :invalid="$v.invoiceItem.quantity.$error"
-                format-second-last-decimal
+                format-two-decimals
                 type="number"
                 step="0.01"
                 small
@@ -62,7 +62,7 @@
                    <base-input
                     v-model.trim="price"
                     :class="{'invalid' : $v.invoiceItem.price.$error, 'input-field': true}"
-                    format-second-last-decimal
+                    format-two-decimals
                     type="text"
                     name="price"
                     :disabled="true"
@@ -85,7 +85,7 @@
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
-                    format-second-last-decimal
+                    format-two-decimals
                     type="number"
                     step="0.01"
                   />

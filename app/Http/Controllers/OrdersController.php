@@ -151,8 +151,8 @@ class OrdersController extends Controller
         foreach ($request->order_items as $orderItem) {
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
-            $orderItem['quantity'] = normalize_second_last_decimal($orderItem['quantity']);
-            $orderItem['price'] = normalize_second_last_decimal($orderItem['price']);
+            $orderItem['quantity'] = normalize_two_decimal($orderItem['quantity']);
+            $orderItem['price'] = normalize_two_decimal($orderItem['price']);
             $item = $order->orderItems()->create($orderItem);
         }
 
@@ -238,8 +238,8 @@ class OrdersController extends Controller
         foreach ($orderItems as $orderItem) {
             $orderItem['company_id'] = $request->header('company');
             $orderItem['type'] = 'order';
-            $orderItem['quantity'] = normalize_second_last_decimal($orderItem['quantity']);
-            $orderItem['price'] = normalize_second_last_decimal($orderItem['price']);
+            $orderItem['quantity'] = normalize_two_decimal($orderItem['quantity']);
+            $orderItem['price'] = normalize_two_decimal($orderItem['price']);
             $item = $order->orderItems()->create($orderItem);
         }
 

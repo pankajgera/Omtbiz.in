@@ -96,3 +96,44 @@ function normalize_second_last_decimal($value)
 
     return $is_negative ? '-' . $formatted : $formatted;
 }
+
+/**
+ * Normalize a numeric value to 2 decimal places.
+ *
+ * @param mixed $value
+ * @return mixed
+ */
+function normalize_two_decimal($value)
+{
+    if ($value === null || $value === '') {
+        return $value;
+    }
+
+    $string = str_replace([',', ' '], '', (string) $value);
+    if ($string === '') {
+        return $value;
+    }
+
+    $is_negative = $string[0] === '-';
+    $unsigned = $is_negative ? substr($string, 1) : $string;
+
+    if (is_numeric($unsigned) && strpos($unsigned, '.') !== false) {
+        $formatted = number_format((float) $unsigned, 2, '.', '');
+        return $is_negative ? '-' . $formatted : $formatted;
+    }
+
+    $digits = preg_replace('/\D+/', '', $unsigned);
+    if ($digits === '') {
+        return $value;
+    }
+
+    if (strlen($digits) === 1) {
+        $formatted = '0.0' . $digits;
+    } elseif (strlen($digits) === 2) {
+        $formatted = '0.' . $digits;
+    } else {
+        $formatted = substr($digits, 0, -2) . '.' . substr($digits, -2);
+    }
+
+    return $is_negative ? '-' . $formatted : $formatted;
+}

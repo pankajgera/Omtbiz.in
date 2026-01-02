@@ -240,9 +240,9 @@ class InvoicesController extends Controller
             foreach ($invoiceInventories as $invoiceInventory) {
                 $invoiceInventory['company_id'] = $request->header('company');
                 $invoiceInventory['type'] = 'invoice';
-                $invoiceInventory['quantity'] = normalize_second_last_decimal($invoiceInventory['quantity']);
-                $invoiceInventory['price'] = normalize_second_last_decimal($invoiceInventory['price']);
-                $invoiceInventory['sale_price'] = normalize_second_last_decimal($invoiceInventory['sale_price'] ?? $invoiceInventory['price']);
+                $invoiceInventory['quantity'] = normalize_two_decimal($invoiceInventory['quantity']);
+                $invoiceInventory['price'] = normalize_two_decimal($invoiceInventory['price']);
+                $invoiceInventory['sale_price'] = normalize_two_decimal($invoiceInventory['sale_price'] ?? $invoiceInventory['price']);
                 $inventory = $invoice->inventories()->create($invoiceInventory);
 
                 $inventory_id = $inventory->id;
@@ -530,9 +530,9 @@ class InvoicesController extends Controller
         foreach ($requestInvoiceItems as $req) {
             $req['company_id'] = $request->header('company');
             $req['type'] = 'invoice';
-            $req['quantity'] = normalize_second_last_decimal($req['quantity']);
-            $req['price'] = normalize_second_last_decimal($req['price']);
-            $req['sale_price'] = normalize_second_last_decimal($req['sale_price'] ?? $req['price']);
+            $req['quantity'] = normalize_two_decimal($req['quantity']);
+            $req['price'] = normalize_two_decimal($req['price']);
+            $req['sale_price'] = normalize_two_decimal($req['sale_price'] ?? $req['price']);
             $total_invoice_items_amount = $total_invoice_items_amount + $req['total'];
             $new_invoice_item = null;
 

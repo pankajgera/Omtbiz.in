@@ -62,7 +62,7 @@
                 <base-input
                   v-model.trim="formData.per_price"
                   focus
-                  format-second-last-decimal
+                  format-two-decimals
                   type="text"
                   name="per_price"
                 />

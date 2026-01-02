@@ -79,9 +79,9 @@ class InventoryController extends Controller
             throw new Exception('Price cannot be null');
         }
         try {
-            $normalized_quantity = normalize_second_last_decimal($request->quantity);
-            $normalized_price = normalize_second_last_decimal($request->price);
-            $normalized_sale_price = normalize_second_last_decimal($request->sale_price ?? $request->price);
+            $normalized_quantity = normalize_two_decimal($request->quantity);
+            $normalized_price = normalize_two_decimal($request->price);
+            $normalized_sale_price = normalize_two_decimal($request->sale_price ?? $request->price);
             $find_inventory = Inventory::where('name', $request->name)->where('company_id', $request->header('company'))->first();
             if (empty($find_inventory)) {
                 $inventory = new Inventory();
@@ -144,8 +144,8 @@ class InventoryController extends Controller
             throw new Exception('Price cannot be null');
         }
         try {
-            $normalized_price = normalize_second_last_decimal($request->price);
-            $normalized_sale_price = normalize_second_last_decimal($request->sale_price);
+            $normalized_price = normalize_two_decimal($request->price);
+            $normalized_sale_price = normalize_two_decimal($request->sale_price);
             $inventory = Inventory::find($id);
             $inventory->name = $request->name;
             $inventory->company_id = $request->header('company');
@@ -230,8 +230,8 @@ class InventoryController extends Controller
      */
     public function increasePrice(Request $request)
     {
-        $normalized_price = normalize_second_last_decimal($request->price);
-        $normalized_sale_price = normalize_second_last_decimal($request->sale_price);
+        $normalized_price = normalize_two_decimal($request->price);
+        $normalized_sale_price = normalize_two_decimal($request->sale_price);
         $inventory = Inventory::whereIn('id', $request->selected_ids)->get();
 
         foreach ($inventory as $each) {

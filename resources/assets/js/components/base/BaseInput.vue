@@ -19,6 +19,7 @@
       :min="type === 'number' ? 0 : null"
       :step="step"
       :maxlength="type === 'number' ? max : null"
+      @focus="handleFocusIn"
       @input="handleInput"
       @change="handleChange"
       @keyup="handleKeyupEnter"
@@ -110,13 +111,18 @@ export default {
     formatSecondLastDecimal: {
       type: Boolean,
       default: false
+    },
+    formatTwoDecimals: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
     return {
       inputValue: this.value,
       focus: this.name==='account' ? true : false,
-      showPass: false
+      showPass: false,
+      isFocused: false
     }
   },
   computed: {
@@ -148,6 +154,8 @@ export default {
       }
       if (this.formatSecondLastDecimal) {
         this.inputValue = this.normalizeSecondLastDecimal(this.inputValue)
+      } else if (this.formatTwoDecimals && !this.isFocused) {
+        this.inputValue = this.normalizeTwoDecimals(this.inputValue)
       }
     },
     focus () {
@@ -172,9 +180,19 @@ export default {
     handleKeyupEnter (e) {
         this.$emit('keyup', this.inputValue)
     },
+    handleFocusIn (e) {
+        this.isFocused = true
+    },
     handleFocusOut (e) {
+        this.isFocused = false
         if (this.formatSecondLastDecimal) {
           const formatted = this.normalizeSecondLastDecimal(this.inputValue)
+          if (formatted !== this.inputValue) {
+            this.inputValue = formatted
+            this.$emit('input', this.inputValue)
+          }
+        } else if (this.formatTwoDecimals) {
+          const formatted = this.normalizeTwoDecimals(this.inputValue)
           if (formatted !== this.inputValue) {
             this.inputValue = formatted
             this.$emit('input', this.inputValue)
@@ -197,6 +215,40 @@ export default {
 
       const padded = digits.length === 1 ? `0${digits}` : digits
       const formatted = `${padded.slice(0, -1)}.${padded.slice(-1)}`
+
+      return isNegative ? `-${formatted}` : formatted
+    },
+    normalizeTwoDecimals (value) {
+      if (value === null || value === undefined || value === '') {
+        return value
+      }
+
+      const stringValue = String(value).replace(/,/g, '').trim()
+      const isNegative = stringValue.startsWith('-')
+      const unsignedValue = isNegative ? stringValue.slice(1) : stringValue
+
+      if (typeof value === 'number' || unsignedValue.includes('.')) {
+        const numericValue = parseFloat(unsignedValue)
+        if (Number.isNaN(numericValue)) {
+          return value
+        }
+        const formatted = numericValue.toFixed(2)
+        return isNegative ? `-${formatted}` : formatted
+      }
+
+      const digits = unsignedValue.replace(/\D+/g, '')
+      if (!digits) {
+        return value
+      }
+
+      let formatted = ''
+      if (digits.length === 1) {
+        formatted = `0.0${digits}`
+      } else if (digits.length === 2) {
+        formatted = `0.${digits}`
+      } else {
+        formatted = `${digits.slice(0, -2)}.${digits.slice(-2)}`
+      }
 
       return isNegative ? `-${formatted}` : formatted
     }
