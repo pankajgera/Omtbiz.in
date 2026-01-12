@@ -130,7 +130,7 @@ class ItemsController extends Controller
         $item->unit = $request->unit;
         $item->description = $request->description;
         $item->company_id = $request->header('company');
-        $item->price = $request->price;
+        $item->price = normalize_two_decimal($request->price);
         $item->status = 'Draft';
         $item->dispatch_id = implode(', ', $request->dispatch_id);
         $item->save();
@@ -173,7 +173,7 @@ class ItemsController extends Controller
         $item->date = $date;
         $item->unit = $request->unit;
         $item->description = $request->description;
-        $item->price = $request->price;
+        $item->price = normalize_two_decimal($request->price);
         $item->dispatch_id = $request->dispatch_id;
         $item->status = 'Sent';
         $item->save();

@@ -43,6 +43,10 @@ class Receipt extends Model
         'formattedReceiptDate'
     ];
 
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
 
     private function strposX($haystack, $needle, $number)
     {

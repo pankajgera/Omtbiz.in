@@ -18,13 +18,18 @@ class Invoice extends Model
     public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
     protected $casts = [
-        'total' => 'integer',
-        'sub_total' => 'integer',
+        'total' => 'float',
+        'sub_total' => 'float',
+        'tax' => 'float',
+        'discount_val' => 'float',
+        'due_date' => 'datetime',
+        'due_amount' => 'float',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
         'invoice_date' => 'datetime',
-        'due_date' => 'datetime'
+        'indirect_income_value' => 'float',
+        'indirect_expense_value' => 'float',
     ];
 
     protected $fillable = [

@@ -20,7 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Passport::cookie('access_token_'.env('APP_ENV'));
         Passport::personalAccessTokensExpireIn(now()->addYears(10));

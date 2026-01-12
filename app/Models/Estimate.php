@@ -38,9 +38,11 @@ class Estimate extends Model
     protected $casts = [
         'total' => 'integer',
         'sub_total' => 'integer',
+        'tax' => 'float',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
+        'discount_val' => 'float',
         'estimate_date' => 'datetime',
         'expiry_date' => 'datetime'
     ];
