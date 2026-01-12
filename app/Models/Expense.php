@@ -27,6 +27,10 @@ class Expense extends Model implements HasMedia
         'receipt'
     ];
 
+    protected $casts = [
+        'amount' => 'float',
+    ];
+
     public function category()
     {
         return $this->belongsTo(ExpenseCategory::class, 'expense_category_id');

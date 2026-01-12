@@ -27,6 +27,7 @@
             <base-input
                 v-model.trim="price"
                 :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                format-two-decimals
                 type="text"
                 name="price"
               />
@@ -101,7 +102,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, minLength, numeric, maxLength, minValue } from 'vuelidate/lib/validators';
+const { required, minLength, maxLength, minValue } = require('vuelidate/lib/validators')
+const decimal = (value) => {
+  if (value === null || value === undefined || value === '') {
+    return true
+  }
+  return /^\d+(\.\d+)?$/.test(String(value))
+}
 export default {
   mixins: [validationMixin],
   data () {
@@ -138,7 +145,7 @@ export default {
       },
       price: {
         required,
-        numeric,
+        decimal,
         minValue: minValue(0.1),
         maxLength: maxLength(20)
       },
@@ -150,10 +157,14 @@ export default {
   computed: {
     price: {
       get: function () {
-        return this.formData.price / 100
+        return this.formData.price
       },
       set: function (newValue) {
-        this.formData.price = newValue * 100
+        if (parseFloat(newValue) > 0) {
+          this.formData.price = parseFloat(newValue)
+        } else {
+          this.formData.price = newValue
+        }
       }
     },
     ...mapGetters('modal', [

@@ -46,7 +46,9 @@
                   v-model.trim="formData.quantity"
                   focus
                   :invalid="$v.formData.quantity.$error"
+                  format-two-decimals
                   type="number"
+                  step="0.01"
                   min="0"
                   name="quantity"
                   :disabled="isEdit"
@@ -64,7 +66,9 @@
                   v-model.trim="formData.price"
                   focus
                   :invalid="$v.formData.price.$error"
+                  format-two-decimals
                   type="number"
+                  step="0.01"
                   min="0"
                   name="price"
                 />
@@ -80,7 +84,9 @@
                 <base-input
                   v-model.trim="formData.sale_price"
                   focus
+                  format-two-decimals
                   type="number"
+                  step="0.01"
                   min="0"
                   name="sale_price"
                 />

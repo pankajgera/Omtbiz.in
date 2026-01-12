@@ -111,7 +111,7 @@ class DashboardController extends Controller
                 [$startDate->format('Y-m-d'), $start->format('Y-m-d')]
             )
             ->sum('amount');
-        $netProfit = (int)$totalReceipts - (int)$totalExpenses;
+        $netProfit = (float) $totalReceipts - (float) $totalExpenses;
 
         $chartData = [
             'months'        => $months,

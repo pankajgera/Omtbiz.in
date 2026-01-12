@@ -240,7 +240,7 @@ export default {
         return this.formData.amount
       },
       set: function (newValue) {
-        if (0 > parseInt(newValue)) {
+        if (0 > parseFloat(newValue)) {
           this.formData.amount = 0
         } else {
           this.formData.amount = newValue
@@ -336,7 +336,7 @@ export default {
 
         this.siteURL = `/receipts/pdf/${this.formData.id}`
         if (response.data.receipt.invoice !== null) {
-          this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
+          this.maxPayableAmount = parseFloat(response.data.receipt.amount) + parseFloat(response.data.receipt.invoice.due_amount)
         }
       } else {
         let response = await this.fetchCreateReceipt()

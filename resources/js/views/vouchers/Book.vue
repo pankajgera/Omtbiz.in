@@ -65,7 +65,7 @@
                 show="quantity"
               >
                 <template slot-scope="row">
-                  {{ row.invoice ? row.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b) : 0 }}
+                  {{ row.invoice ? row.invoice.inventories.map(k => parseFloat(k.quantity)).reduce((a, b) => a + b) : 0 }}
                 </template>
               </table-column>
               <table-column :label="$t('ledgers.debit')" show="debit">
@@ -224,7 +224,7 @@ export default {
       this.currentTotalCredit = this.ledgerData.credit;
       this.currentTotalDebit = this.ledgerData.debit;
       let quan = this.displayArray.filter(i => i.invoice)
-        .map(i => i.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b)).filter(i => i);
+        .map(i => i.invoice.inventories.map(k => parseFloat(k.quantity)).reduce((a, b) => a + b)).filter(i => i);
       if (quan.length) {
         this.totalQuantity = quan.reduce((a, c) =>  a + c);
       }

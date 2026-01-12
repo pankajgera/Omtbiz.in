@@ -234,7 +234,7 @@
           show="quantity"
         >
         <template slot-scope="row">
-             {{ parseInt(row.quantity) }}
+             {{ parseFloat(row.quantity) }}
           </template>
         </table-column>
         <table-column

@@ -9,6 +9,7 @@
                 ref="price"
                 v-model.trim="price"
                 :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
+                format-two-decimals
                 type="text"
                 name="price"
               />
@@ -27,6 +28,7 @@
                 ref="sale_price"
                 v-model.trim="sale_price"
                 :class="{'invalid' : $v.formData.sale_price.$error, 'input-field': true}"
+                format-two-decimals
                 type="text"
                 name="sale_price"
               />
@@ -79,7 +81,13 @@ div.hide-select-header div.multiselect__tags input.multiselect__input{
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, minLength, numeric, maxLength, minValue } from 'vuelidate/lib/validators';
+const { required, minLength, maxLength, minValue } = require('vuelidate/lib/validators')
+const decimal = (value) => {
+  if (value === null || value === undefined || value === '') {
+    return true
+  }
+  return /^\d+(\.\d+)?$/.test(String(value))
+}
 export default {
   mixins: [validationMixin],
   data () {
@@ -98,13 +106,13 @@ export default {
     formData: {
       price: {
         required,
-        numeric,
+        decimal,
         minValue: minValue(0.1),
         maxLength: maxLength(20)
       },
       sale_price: {
         required,
-        numeric,
+        decimal,
         minValue: minValue(0.1),
         maxLength: maxLength(20)
       },

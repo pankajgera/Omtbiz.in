@@ -2,7 +2,7 @@
     <tr class="main-table-header">
         <th class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">#</th>
         <th width="30%" class="ItemTableHeader" style="text-align: left; color: #55547A; padding-left: 0px">Items</th>
-        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Quantity</th>
+        <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Meter</th>
         <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A; padding-right: 20px">Price</th>
         <th width="25%" class="ItemTableHeader" style="text-align: right; color: #55547A;">Amount</th>
     </tr>
@@ -24,10 +24,10 @@
                 {{ $item->quantity }}
             </td>
             <td class="inv-item items" style="text-align: right; color: #040405; padding-right: 20px">
-                ₹ {!! $item->price / 100 !!}
+                ₹ {!! $item->price !!}
             </td>
             <td class="inv-item items" style="text-align: right; color: #040405;">
-                ₹ {!! $item->total / 100 !!}
+                ₹ {!! $item->total !!}
             </td>
         </tr>
         @php
@@ -48,7 +48,7 @@
         </td>
         <td class="no-border total-border-right items padd8"
             style="padding-right:10px; font-weight: 500; text-align: right; font-size:12px;  padding-top:20px; color: #5851DB">
-            ₹ {!! $invoice->total / 100 !!}
+            ₹ {!! $invoice->total !!}
         </td>
     </tr>
 </table>

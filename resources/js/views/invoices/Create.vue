@@ -93,7 +93,7 @@
             icon="hashtag"
             :invalid="$v.referenceNumAttribute.$error"
             :prefix="referencePrefix"
-            :prefix-width="55"
+            :prefix-width="0"
             :disabled="true"
             @input="$v.referenceNumAttribute.$touch()"
           />
@@ -198,11 +198,11 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.sub_total') }}</label>
             <label class="invoice-amount">
-              ₹ {{ subtotal }}
+              <span v-html="$utils.formatMoney(subtotal, currency)" />
             </label>
 
           </div>
-          <div class="section" v-if="incomeLedgerList.length">
+          <div class="section">
             <div class="row align-items-center">
               <div class="pl-3">
               <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
@@ -215,7 +215,6 @@
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
-                :disabled="isDisabled"
                 :placeholder="$t('receipts.select_a_list')"
                 label="name"
                 track-by="id"
@@ -226,15 +225,15 @@
             <div>
               <base-input
                 style="width:100px"
-                :disabled="this.income_ledger===null"
                 v-model="income_ledger_value"
                 type="number"
                 min="0"
+                step="0.01"
                 input-class="item-discount"
               />
             </div>
           </div>
-          <div class="section" v-if="expenseLedgerList.length">
+          <div class="section">
            <div class="row align-items-center">
             <div class="pl-3 mb-2">
              <label class="form-label"><strong>{{ $t('invoices.less') }}</strong></label>
@@ -247,7 +246,6 @@
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
-              :disabled="isDisabled"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
               track-by="id"
@@ -256,10 +254,10 @@
            </div>
            <base-input
               style="width:100px"
-              :disabled="this.expense_ledger===null"
               v-model="expense_ledger_value"
               type="number"
               min="0"
+              step="0.01"
               input-class="item-discount"
               />
         </div>
@@ -304,7 +302,7 @@
           <div class="section border-top mt-3">
             <label class="invoice-label">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>
             <label class="invoice-amount total">
-              ₹ {{ total }}
+              <span v-html="$utils.formatMoney(total, currency)" />
             </label>
           </div>
         </div>
@@ -482,29 +480,31 @@ export default {
       return this.selectedCurrency
     },
     subtotalWithDiscount () {
+      let total = this.subtotal
       if (this.newInvoice.discount_val) {
-        return this.subtotal - this.newInvoice.discount_val
+        total = this.subtotal - this.newInvoice.discount_val
       }
       if (this.income_ledger_value && !this.expense_ledger_value) {
-        return  this.subtotal + parseInt(this.income_ledger_value)
+        total = this.subtotal + parseFloat(this.income_ledger_value)
       }
       if (!this.income_ledger_value && this.expense_ledger_value) {
-        return  this.subtotal - parseInt(this.expense_ledger_value)
+        total = this.subtotal - parseFloat(this.expense_ledger_value)
       }
       if (this.income_ledger_value && this.expense_ledger_value) {
-        return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)
+        total = this.subtotal + parseFloat(this.income_ledger_value) - parseFloat(this.expense_ledger_value)
       }
-      return this.subtotal
+      return this.roundMoney(total)
     },
     total () {
-      return this.subtotalWithDiscount
+      return this.roundMoney(this.subtotalWithDiscount)
     },
     subtotal () {
       let inventory = this.newInvoice.inventories;
       if (inventory.length) {
-        return inventory.reduce(function (a, b) {
-                return a + b['total']
-              }, 0)
+        const sum = inventory.reduce(function (a, b) {
+          return a + b['total']
+        }, 0)
+        return this.roundMoney(sum)
       }
 
       return 0
@@ -552,9 +552,6 @@ export default {
     referenceNumAttribute: {
       cache: false,
       get() {
-        if (this.newInvoice.reference_number && -1 !== this.newInvoice.reference_number.indexOf('-')) {
-          return this.newInvoice.reference_number.split('-')[2]
-        }
         return this.newInvoice.reference_number
       },
       set(value) {
@@ -597,6 +594,13 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
+    roundMoney (value) {
+      const amount = Number(value)
+      if (Number.isNaN(amount)) {
+        return 0
+      }
+      return Math.round((amount + Number.EPSILON) * 100) / 100
+    },
     totalQuantity(inventory){
       if (inventory.length) {
         let invent = 0
@@ -766,12 +770,12 @@ export default {
       this.newInvoice.inventories.map(selectedItem => {
         let findItem = this.inventoryList.find(i =>
             i.name === selectedItem.name &&
-            parseInt(i.price) === parseInt(selectedItem.price)
+            parseFloat(i.price) === parseFloat(selectedItem.price)
           );
         if (!findItem) {
           return;
         }
-        let maxQuantityAvailable = parseInt(findItem.quantity);
+        let maxQuantityAvailable = parseFloat(findItem.quantity);
         if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
           swal({
             title: this.$t('invoices.out_of_stock'),
@@ -794,9 +798,7 @@ export default {
       if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {
         return false
       }
-      this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
-      this.newInvoice.reference_number = this.referencePrefix + '-' + this.newInvoice.reference_number
-
+      this.newInvoice.invoice_number = this.invoicePrefix + this.invoiceNumAttribute
         // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
         // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
       let data = {
@@ -806,9 +808,9 @@ export default {
         total: this.total,
         user_id: this.user.id,
         income_ledger: this.income_ledger,
-        income_ledger_value: this.income_ledger_value ? this.income_ledger_value : 0,
+        income_ledger_value: this.income_ledger_value ? parseFloat(this.income_ledger_value) : 0,
         expense_ledger:  this.expense_ledger,
-        expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,
+        expense_ledger_value: this.expense_ledger_value ? parseFloat(this.expense_ledger_value) : 0,
         invoice_template_id: this.getTemplateId,
       }
 
@@ -927,8 +929,8 @@ export default {
     async searchDebtorRefNumber(data) {
        this.newInvoice.reference_number = null;
        let response = await this.fetchReferenceNumber(data)
-        if (response.data && response.data.invoice) {
-          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[2]
+        if (response.data && response.data.reference_number) {
+          this.newInvoice.reference_number = response.data.reference_number
         } else {
           this.newInvoice.reference_number = this.invoiceNumAttribute
         }
@@ -954,8 +956,8 @@ export default {
       //set invoice data
       this.newInvoice = {
         invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),
-        invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
-        reference_number: this.referencePrefix + '-' + this.invoiceNumAttribute,
+        invoice_number: this.invoicePrefix + this.invoiceNumAttribute,
+        reference_number: this.invoiceNumAttribute,
         user_id: invoice.user_id,
         invoice_template_id: 1,
         sub_total: invoice.sub_total,

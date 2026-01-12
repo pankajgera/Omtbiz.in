@@ -183,7 +183,7 @@
           width="20%"
         >
           <template slot-scope="row">
-            {{ row.order_items.reduce((i, j) => i + parseInt(j.quantity), 0) }}
+            {{ row.order_items.reduce((i, j) => i + parseFloat(j.quantity), 0) }}
           </template>
         </table-column>
         <table-column
@@ -191,7 +191,7 @@
           width="20%"
         >
           <template slot-scope="row">
-            {{ row.order_items.reduce((i, j) => i + parseInt(j.remaining_quantity), 0) }}
+            {{ row.order_items.reduce((i, j) => i + parseFloat(j.remaining_quantity), 0) }}
           </template>
         </table-column>
         <table-column
@@ -313,7 +313,7 @@
           width="20%"
         >
         <template slot-scope="row">
-            {{ row.order_items.reduce((i, j) => i + parseInt(j.quantity), 0) }}
+            {{ row.order_items.reduce((i, j) => i + parseFloat(j.quantity), 0) }}
           </template>
         </table-column>
         <table-column
@@ -321,7 +321,7 @@
           width="20%"
         >
           <template slot-scope="row">
-            {{ row.order_items.reduce((i, j) => i + parseInt(j.remaining_quantity), 0) }}
+            {{ row.order_items.reduce((i, j) => i + parseFloat(j.remaining_quantity), 0) }}
           </template>
         </table-column>
         <table-column

@@ -275,7 +275,7 @@ function numberTowords($num)
                                 </td>
                                 <td style="width: 10%">
                                     <p class="td-header">
-                                        Quantity
+                                        Meter
                                     </p>
                                 </td>
                                 <td style="width: 20%">

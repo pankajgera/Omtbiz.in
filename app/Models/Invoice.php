@@ -23,8 +23,13 @@ class Invoice extends Model
     ];
 
     protected $casts = [
-        'total' => 'integer',
-        'sub_total' => 'integer',
+        'total' => 'float',
+        'sub_total' => 'float',
+        'tax' => 'float',
+        'discount_val' => 'float',
+        'due_amount' => 'float',
+        'indirect_income_value' => 'float',
+        'indirect_expense_value' => 'float',
     ];
 
     protected $fillable = [

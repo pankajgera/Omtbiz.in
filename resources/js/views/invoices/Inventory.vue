@@ -45,7 +45,9 @@
                 :name="'inventoryQuantity'+index"
                 v-model="inventoryQuantityBind"
                 :invalid="$v.invoiceItem.quantity.$error"
+                format-two-decimals
                 type="number"
+                step="0.01"
                 small
                 :disabled="isDisable || disabled"
                 @blur="$v.invoiceItem.quantity.$touch()"
@@ -60,6 +62,7 @@
                    <base-input
                     v-model.trim="price"
                     :class="{'invalid' : $v.invoiceItem.price.$error, 'input-field': true}"
+                    format-two-decimals
                     type="text"
                     name="price"
                     :disabled="true"
@@ -82,7 +85,9 @@
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
+                    format-two-decimals
                     type="number"
+                    step="0.01"
                   />
                   <div v-if="$v.invoiceItem.sale_price.$error">
                     <span v-if="!$v.invoiceItem.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
@@ -131,9 +136,7 @@
             </td>
             <td class="text-left">
               <div class="item-amount" v-if="('orders' !== inventoryType)">
-                <span>
-                   ₹ {{ total }}
-                </span>
+                <span v-html="$utils.formatMoney(total, currency)" />
 
                 <div class="remove-icon-wrapper">
                   <font-awesome-icon
@@ -227,10 +230,12 @@ export default {
     subtotal: {
       cache: false,
       get: function () {
-        return parseInt(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price) * this.invoiceItem.quantity
+        const price = parseFloat(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price)
+        return this.roundMoney(price * this.invoiceItem.quantity)
       },
       set: function (newValue) {
-        return parseInt(newValue ? newValue : this.invoiceItem.price) * this.invoiceItem.quantity
+        const price = parseFloat(newValue ? newValue : this.invoiceItem.price)
+        return this.roundMoney(price * this.invoiceItem.quantity)
       }
     },
     discount: {
@@ -257,10 +262,10 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.price = parseInt(newValue)
-          this.maxDiscount = parseInt(newValue)
+          this.invoiceItem.price = parseFloat(newValue)
+          this.maxDiscount = parseFloat(newValue)
         } else {
-          this.invoiceItem.price = parseInt(newValue)
+          this.invoiceItem.price = newValue
         }
         this.updatingInput = 'price'
       }
@@ -271,30 +276,30 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.sale_price = parseInt(newValue)
-          this.maxDiscount = parseInt(newValue)
-          this.subtotal = parseInt(newValue)
+          this.invoiceItem.sale_price = parseFloat(newValue)
+          this.maxDiscount = parseFloat(newValue)
+          this.subtotal = parseFloat(newValue)
         } else {
-          this.invoiceItem.sale_price = parseInt(newValue)
+          this.invoiceItem.sale_price = newValue
         }
         this.updatingInput = 'sale_price'
       }
     },
     inventoryQuantityBind: {
       get: function() {
-        return parseInt(this.invoiceItem.quantity)
+        return parseFloat(this.invoiceItem.quantity)
       },
       set: function (newValue) {
         let maxQuantityAvailable = 0;
         if(this.inventoryList.length) {
-          let quantity = parseInt(this.inventoryList.find(i =>
-              i.name === this.invoiceItem.name &&
-              parseInt(i.price) === parseInt(this.invoiceItem.price)
-            ));
-          if(quantity) {
-            maxQuantityAvailable = quantity.quantity;
+          let match = this.inventoryList.find(i =>
+            i.name === this.invoiceItem.name &&
+            parseFloat(i.price) === parseFloat(this.invoiceItem.price)
+          );
+          if (match) {
+            maxQuantityAvailable = parseFloat(match.quantity);
           } else {
-            maxQuantityAvailable = parseInt(newValue);
+            maxQuantityAvailable = parseFloat(newValue);
           }
         }
         if (maxQuantityAvailable < newValue && !this.inventoryNegative && 'orders' !== this.inventoryType && 'estimate' !== this.inventoryType) {
@@ -311,7 +316,7 @@ export default {
             }
           })
         } else {
-          this.invoiceItem.quantity = parseInt(newValue)
+          this.invoiceItem.quantity = parseFloat(newValue)
         }
         this.updatingInput = 'quantity'
       }
@@ -435,6 +440,13 @@ export default {
     },
     showEndList(val) {
       this.$emit('endlist', true)
+    },
+    roundMoney (value) {
+      const amount = Number(value)
+      if (Number.isNaN(amount)) {
+        return 0
+      }
+      return Math.round((amount + Number.EPSILON) * 100) / 100
     }
   }
 }

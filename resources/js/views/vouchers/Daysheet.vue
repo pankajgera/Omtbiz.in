@@ -43,7 +43,7 @@
               </table-column>
               <table-column :label="$tc('daysheet.reference-number')" show="reference_number">
                 <template slot-scope="row">
-                  {{ row.reference_number.split('-')[2] }}
+                  {{ row.reference_number }}
                 </template>
               </table-column>
               <table-column
@@ -87,7 +87,7 @@
               </table-column>
               <table-column :label="$tc('daysheet.pm')" show="reference_number">
                 <template slot-scope="row">
-                  {{ row.reference_number.split('-')[2] }}
+                  {{ row.reference_number }}
                 </template>
               </table-column>
               <table-column
@@ -163,7 +163,9 @@ export default {
     async loadEditData() {
       let response = await this.fetchLedgerDaysheet(this.$route.params.id);
         this.isLoading = false
-        this.ledgerData = response.data.ledger.sort((a, b) => { return a.reference_number - b.reference_number});
+        this.ledgerData = response.data.ledger.sort((a, b) => {
+          return String(a.reference_number).localeCompare(String(b.reference_number));
+        });
     },
     printData() {
       printJS({

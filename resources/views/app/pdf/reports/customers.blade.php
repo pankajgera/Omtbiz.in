@@ -211,7 +211,7 @@
                         </th>
                         <th>
                             <p class="table-column">
-                                Quantity
+                                Meter
                             </p>
                         </th>
                         <th>
@@ -271,7 +271,7 @@
                     @endforeach
                     <tr>
                         <td>
-                            <p class="total-bank-title" style="padding-top: 30px">Total Quantity</p>
+                            <p class="total-bank-title" style="padding-top: 30px">Total Meter</p>
                         </td>
                         <td></td>
                         <td></td>

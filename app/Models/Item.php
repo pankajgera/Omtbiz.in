@@ -23,7 +23,7 @@ class Item extends Model
     ];
 
     protected $casts = [
-        'price' => 'integer',
+        'price' => 'float',
     ];
 
     public function scopeWhereSearch($query, $search)
