@@ -6,16 +6,24 @@ use App\Models\User;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Receipt extends Model
 {
+    use softDeletes;
+
     public const RECEIPT_MODE_CHECK = 'CHECK';
     public const RECEIPT_MODE_OTHER = 'OTHER';
     public const RECEIPT_MODE_CASH = 'CASH';
     public const RECEIPT_MODE_CREDIT_CARD = 'CREDIT_CARD';
     public const RECEIPT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
 
-    protected $dates = ['created_at', 'updated_at', 'receipt_date'];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'receipt_date' => 'datetime',
+    ];
 
     protected $fillable = [
         'user_id',
@@ -33,6 +41,10 @@ class Receipt extends Model
     protected $appends = [
         'formattedCreatedAt',
         'formattedReceiptDate'
+    ];
+
+    protected $casts = [
+        'amount' => 'float',
     ];
 
 

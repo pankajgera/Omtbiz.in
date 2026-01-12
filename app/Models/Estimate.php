@@ -13,13 +13,6 @@ class Estimate extends Model
     public const SENT = 'SENT';
     public const COMPLETED = 'COMPLETED';
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'estimate_date',
-        'expiry_date'
-    ];
 
     protected $appends = [
         'formattedExpiryDate',
@@ -45,6 +38,13 @@ class Estimate extends Model
     protected $casts = [
         'total' => 'integer',
         'sub_total' => 'integer',
+        'tax' => 'float',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'discount_val' => 'float',
+        'estimate_date' => 'datetime',
+        'expiry_date' => 'datetime'
     ];
 
     public static function getNextEstimateNumber($value, $company_id)

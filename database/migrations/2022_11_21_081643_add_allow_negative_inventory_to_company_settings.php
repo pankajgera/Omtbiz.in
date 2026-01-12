@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class AddAllowNegativeInventoryToCompanySettings extends Migration
 {
@@ -15,9 +16,26 @@ class AddAllowNegativeInventoryToCompanySettings extends Migration
      */
     public function up()
     {
-        DB::statement("INSERT INTO
-            `company_settings` (`id`, `option`, `value`, `company_id`, `created_at`, `updated_at`)
-            VALUES
-            (".intval(CompanySetting::max('id') + 1).", 'allow_negative_inventory', 'NO', '1', '2022-11-20 11:11:11', '2022-11-20 11:11:11')");
+        $companyIds = DB::table('companies')->pluck('id');
+        if ($companyIds->isEmpty()) {
+            return;
+        }
+
+        $now = Carbon::now();
+        foreach ($companyIds as $companyId) {
+            $exists = CompanySetting::where('option', 'allow_negative_inventory')
+                ->where('company_id', $companyId)
+                ->exists();
+            if ($exists) {
+                continue;
+            }
+            CompanySetting::create([
+                'option' => 'allow_negative_inventory',
+                'value' => 'NO',
+                'company_id' => $companyId,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
     }
 }

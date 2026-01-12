@@ -23,7 +23,7 @@ use Carbon\Carbon;
 
 class FrontendController extends Controller
 {
-    public function home()
+    public function base()
     {
         return view('front.index');
     }

@@ -6,25 +6,30 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\InvoiceTemplate;
 use App\Models\Payment;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 
 class Invoice extends Model
 {
+    use SoftDeletes;
+
     public const STATUS_PAID = 'PAID';
     public const DISPATCH = 'DISPATCH';
     public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
 
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-        'invoice_date',
-        'due_date'
-    ];
-
     protected $casts = [
-        'total' => 'integer',
-        'sub_total' => 'integer',
+        'total' => 'float',
+        'sub_total' => 'float',
+        'tax' => 'float',
+        'discount_val' => 'float',
+        'due_date' => 'datetime',
+        'due_amount' => 'float',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'invoice_date' => 'datetime',
+        'indirect_income_value' => 'float',
+        'indirect_expense_value' => 'float',
     ];
 
     protected $fillable = [

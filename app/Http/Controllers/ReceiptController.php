@@ -114,7 +114,7 @@ class ReceiptController extends Controller
     {
         $receipt_number = explode("-", $request->receipt_number);
         $number_attributes['receipt_number'] = $receipt_number[0] . '-' . sprintf('%06d', intval($receipt_number[1]));
-        $req_amount = (int)$request->amount;
+        $req_amount = (float) $request->amount;
 
         Validator::make($number_attributes, [
             'receipt_number' => 'required|unique:receipts,receipt_number'
@@ -355,7 +355,7 @@ class ReceiptController extends Controller
 
         if ($receipt->invoice_id != null) {
             $invoice = Invoice::find($receipt->invoice_id);
-            $invoice->due_amount = ((int)$invoice->due_amount + (int)$receipt->amount);
+            $invoice->due_amount = (float) $invoice->due_amount + (float) $receipt->amount;
             $invoice->paid_status = Invoice::STATUS_PAID;
             $invoice->status = Invoice::TO_BE_DISPATCH;
             $invoice->save();
@@ -385,7 +385,7 @@ class ReceiptController extends Controller
 
             if ($receipt->invoice_id != null) {
                 $invoice = Invoice::find($receipt->invoice_id);
-                $invoice->due_amount = ((int)$invoice->due_amount + (int)$receipt->amount);
+                $invoice->due_amount = (float) $invoice->due_amount + (float) $receipt->amount;
                 $invoice->paid_status = Invoice::STATUS_PAID;
                 $invoice->status = Invoice::TO_BE_DISPATCH;
                 $invoice->save();

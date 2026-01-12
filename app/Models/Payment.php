@@ -15,7 +15,11 @@ class Payment extends Model
     public const PAYMENT_MODE_CREDIT_CARD = 'CREDIT_CARD';
     public const PAYMENT_MODE_BANK_TRANSFER = 'BANK_TRANSFER';
 
-    protected $dates = ['created_at', 'updated_at', 'payment_date'];
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'payment_date' => 'datetime',
+    ];
 
     protected $fillable = [
         'user_id',
@@ -33,6 +37,10 @@ class Payment extends Model
     protected $appends = [
         'formattedCreatedAt',
         'formattedPaymentDate'
+    ];
+
+    protected $casts = [
+        'amount' => 'float',
     ];
 
 
