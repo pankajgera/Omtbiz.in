@@ -57,20 +57,23 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
+      if (!this.$slots.default) {
+        this.hasChild = false
+      }
       this.setDropdownPosition()
       window.addEventListener('resize', e => {
         if (this.toggle === true) {
           this.setDropdownPosition()
         }
       })
-      if (!this.$slots.default) {
-        this.hasChild = false
-      }
       this.toggle = false
     })
   },
   methods: {
     setDropdownPosition () {
+      if (!this.$refs.dropdownItems) {
+        return
+      }
       let rect = this.$refs.dropdownItems.getBoundingClientRect()
 
       let offsetPos = rect.width - this.$el.offsetWidth

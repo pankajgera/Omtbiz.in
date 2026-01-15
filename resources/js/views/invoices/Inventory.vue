@@ -230,7 +230,7 @@ export default {
     subtotal: {
       cache: false,
       get: function () {
-        const price = parseFloat(this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price)
+        const price = parseFloat(this.invoiceItem.sale_price ?? this.invoiceItem.price)
         return this.roundMoney(price * this.invoiceItem.quantity)
       },
       set: function (newValue) {
@@ -272,16 +272,32 @@ export default {
     },
     sale_price: {
       get: function () {
-        return this.invoiceItem.sale_price ? this.invoiceItem.sale_price : this.invoiceItem.price
+        if (this.invoiceItem.sale_price === null || this.invoiceItem.sale_price === undefined) {
+          return this.invoiceItem.price
+        }
+        return this.invoiceItem.sale_price
       },
       set: function (newValue) {
-        if (parseFloat(newValue) > 0) {
-          const rounded = this.roundToSingleDecimal(newValue)
+        if (newValue === '' || newValue === null || newValue === undefined) {
+          this.invoiceItem.sale_price = newValue
+          this.updatingInput = 'sale_price'
+          return
+        }
+
+        const parsed = parseFloat(newValue)
+        if (Number.isNaN(parsed)) {
+          this.invoiceItem.sale_price = newValue
+          this.updatingInput = 'sale_price'
+          return
+        }
+
+        if (parsed > 0) {
+          const rounded = this.roundToSingleDecimal(parsed)
           this.invoiceItem.sale_price = rounded
           this.maxDiscount = rounded
           this.subtotal = rounded
         } else {
-          this.invoiceItem.sale_price = newValue
+          this.invoiceItem.sale_price = parsed
         }
         this.updatingInput = 'sale_price'
       }
@@ -317,7 +333,11 @@ export default {
             }
           })
         } else {
-          this.invoiceItem.quantity = this.roundToSingleDecimal(newValue)
+          if (newValue === '' || newValue === null || newValue === undefined) {
+            this.invoiceItem.quantity = newValue
+          } else {
+            this.invoiceItem.quantity = this.roundToSingleDecimal(newValue)
+          }
         }
         this.updatingInput = 'quantity'
       }
@@ -398,7 +418,7 @@ export default {
 
       this.invoiceItem.name = newItem.name
       this.invoiceItem.price = newItem.price
-      this.invoiceItem.sale_price = newItem.sale_price
+      this.invoiceItem.sale_price = newItem.sale_price !== null && newItem.sale_price !== undefined
         ? this.roundToSingleDecimal(newItem.sale_price)
         : newItem.price
       this.invoiceItem.inventory_id = newItem.id
