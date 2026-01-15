@@ -1,0 +1,28 @@
+{
+  "resources/js/app.js": {
+    "file": "assets/app-DACZ2oUF.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-CvPeRA89.css"
+    ],
+    "assets": [
+      "assets/bill-DjYBpJY5.png",
+      "assets/tick-BkKo8A3q.png"
+    ]
+  },
+  "resources/js/assets/img/bill.png": {
+    "file": "assets/bill-DjYBpJY5.png",
+    "src": "resources/js/assets/img/bill.png"
+  },
+  "resources/js/assets/img/tick.png": {
+    "file": "assets/tick-BkKo8A3q.png",
+    "src": "resources/js/assets/img/tick.png"
+  },
+  "resources/sass/omtbiz.scss": {
+    "file": "assets/omtbiz-BQaGd8ng.css",
+    "src": "resources/sass/omtbiz.scss",
+    "isEntry": true
+  }
+}
