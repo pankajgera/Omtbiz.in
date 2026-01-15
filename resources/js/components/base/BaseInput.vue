@@ -156,13 +156,13 @@ export default {
       } else {
         this.inputValue = this.value
       }
-      if (this.formatSecondLastDecimal) {
-        this.inputValue = this.normalizeSecondLastDecimal(this.inputValue)
-      } else if (!this.isFocused) {
-        if (this.formatOneDecimal) {
-          this.inputValue = this.normalizeOneDecimal(this.inputValue)
+      if (!this.isFocused) {
+        if (this.formatSecondLastDecimal) {
+          this.inputValue = this.normalizeSecondLastDecimal(this.value)
+        } else if (this.formatOneDecimal) {
+          this.inputValue = this.normalizeOneDecimal(this.value)
         } else if (this.formatTwoDecimals) {
-          this.inputValue = this.normalizeTwoDecimals(this.inputValue)
+          this.inputValue = this.normalizeTwoDecimals(this.value)
         }
       }
     },
@@ -199,19 +199,17 @@ export default {
           this.inputValue = formatted
           this.$emit('input', this.inputValue)
         }
-      } else {
-        if (this.formatOneDecimal) {
-          const formatted = this.normalizeOneDecimal(this.inputValue)
-          if (formatted !== this.inputValue) {
-            this.inputValue = formatted
-            this.$emit('input', this.inputValue)
-          }
-        } else if (this.formatTwoDecimals) {
-          const formatted = this.normalizeTwoDecimals(this.inputValue)
-          if (formatted !== this.inputValue) {
-            this.inputValue = formatted
-            this.$emit('input', this.inputValue)
-          }
+      } else if (this.formatOneDecimal) {
+        const formatted = this.normalizeOneDecimal(this.inputValue)
+        if (formatted !== this.inputValue) {
+          this.inputValue = formatted
+          this.$emit('input', this.inputValue)
+        }
+      } else if (this.formatTwoDecimals) {
+        const formatted = this.normalizeTwoDecimals(this.inputValue)
+        if (formatted !== this.inputValue) {
+          this.inputValue = formatted
+          this.$emit('input', this.inputValue)
         }
       }
       this.$emit('blur', this.inputValue)
@@ -221,9 +219,27 @@ export default {
         return value
       }
 
+      if (typeof value === 'number') {
+        if (Number.isNaN(value)) {
+          return value
+        }
+        return value.toFixed(1)
+      }
+
       const stringValue = String(value)
       const isNegative = stringValue.trim().startsWith('-')
-      const digits = stringValue.replace(/\D+/g, '')
+      const unsignedValue = isNegative ? stringValue.trim().slice(1) : stringValue.trim()
+
+      if (unsignedValue.includes('.')) {
+        const numericValue = parseFloat(unsignedValue)
+        if (Number.isNaN(numericValue)) {
+          return value
+        }
+        const formatted = numericValue.toFixed(1)
+        return isNegative ? `-${formatted}` : formatted
+      }
+
+      const digits = unsignedValue.replace(/\D+/g, '')
 
       if (!digits) {
         return value

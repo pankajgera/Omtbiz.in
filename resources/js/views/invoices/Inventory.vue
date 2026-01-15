@@ -45,7 +45,7 @@
                 :name="'inventoryQuantity'+index"
                 v-model="inventoryQuantityBind"
                 :invalid="$v.invoiceItem.quantity.$error"
-                format-one-decimal
+                format-second-last-decimal
                 type="number"
                 step="0.1"
                 small
@@ -85,7 +85,7 @@
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
-                    format-one-decimal
+                    format-second-last-decimal
                     type="number"
                     step="0.1"
                   />
@@ -284,6 +284,12 @@ export default {
           return
         }
 
+        if (typeof newValue === 'string' && !newValue.includes('.')) {
+          this.invoiceItem.sale_price = newValue
+          this.updatingInput = 'sale_price'
+          return
+        }
+
         const parsed = parseFloat(newValue)
         if (Number.isNaN(parsed)) {
           this.invoiceItem.sale_price = newValue
@@ -304,7 +310,7 @@ export default {
     },
     inventoryQuantityBind: {
       get: function() {
-        return parseFloat(this.invoiceItem.quantity)
+        return this.invoiceItem.quantity
       },
       set: function (newValue) {
         let maxQuantityAvailable = 0;
@@ -334,6 +340,8 @@ export default {
           })
         } else {
           if (newValue === '' || newValue === null || newValue === undefined) {
+            this.invoiceItem.quantity = newValue
+          } else if (typeof newValue === 'string' && !newValue.includes('.')) {
             this.invoiceItem.quantity = newValue
           } else {
             this.invoiceItem.quantity = this.roundToSingleDecimal(newValue)
