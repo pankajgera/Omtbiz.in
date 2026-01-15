@@ -45,9 +45,9 @@
                 :name="'inventoryQuantity'+index"
                 v-model="inventoryQuantityBind"
                 :invalid="$v.invoiceItem.quantity.$error"
-                format-two-decimals
+                format-one-decimal
                 type="number"
-                step="0.01"
+                step="0.1"
                 small
                 :disabled="isDisable || disabled"
                 @blur="$v.invoiceItem.quantity.$touch()"
@@ -81,13 +81,13 @@
                     ref="inventoryPrice"
                     :id="'inventoryPrice'+index"
                     :key="'inventoryPrice'+index"
-                    :name="'inventoryPrice'+index"
+                   :name="'inventoryPrice'+index"
                     v-model.trim="sale_price"
                     :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
-                    format-two-decimals
+                    format-one-decimal
                     type="number"
-                    step="0.01"
+                    step="0.1"
                   />
                   <div v-if="$v.invoiceItem.sale_price.$error">
                     <span v-if="!$v.invoiceItem.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
@@ -276,9 +276,10 @@ export default {
       },
       set: function (newValue) {
         if (parseFloat(newValue) > 0) {
-          this.invoiceItem.sale_price = parseFloat(newValue)
-          this.maxDiscount = parseFloat(newValue)
-          this.subtotal = parseFloat(newValue)
+          const rounded = this.roundToSingleDecimal(newValue)
+          this.invoiceItem.sale_price = rounded
+          this.maxDiscount = rounded
+          this.subtotal = rounded
         } else {
           this.invoiceItem.sale_price = newValue
         }
@@ -316,7 +317,7 @@ export default {
             }
           })
         } else {
-          this.invoiceItem.quantity = parseFloat(newValue)
+          this.invoiceItem.quantity = this.roundToSingleDecimal(newValue)
         }
         this.updatingInput = 'quantity'
       }
@@ -397,7 +398,9 @@ export default {
 
       this.invoiceItem.name = newItem.name
       this.invoiceItem.price = newItem.price
-      this.invoiceItem.sale_price = newItem.sale_price ? newItem.sale_price : newItem.price
+      this.invoiceItem.sale_price = newItem.sale_price
+        ? this.roundToSingleDecimal(newItem.sale_price)
+        : newItem.price
       this.invoiceItem.inventory_id = newItem.id
       this.invoiceItem.description = newItem.description
       this.updatingInput = 'quantity'
@@ -441,12 +444,19 @@ export default {
     showEndList(val) {
       this.$emit('endlist', true)
     },
+    roundToSingleDecimal (value) {
+      const amount = Number(value)
+      if (Number.isNaN(amount)) {
+        return 0
+      }
+      return Math.round((amount + Number.EPSILON) * 10) / 10
+    },
     roundMoney (value) {
       const amount = Number(value)
       if (Number.isNaN(amount)) {
         return 0
       }
-      return Math.round((amount + Number.EPSILON) * 100) / 100
+      return Math.round((amount + Number.EPSILON) * 10) / 10
     }
   }
 }

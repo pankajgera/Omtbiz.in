@@ -115,6 +115,10 @@ export default {
     formatTwoDecimals: {
       type: Boolean,
       default: false
+    },
+    formatOneDecimal: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -154,8 +158,12 @@ export default {
       }
       if (this.formatSecondLastDecimal) {
         this.inputValue = this.normalizeSecondLastDecimal(this.inputValue)
-      } else if (this.formatTwoDecimals && !this.isFocused) {
-        this.inputValue = this.normalizeTwoDecimals(this.inputValue)
+      } else if (!this.isFocused) {
+        if (this.formatOneDecimal) {
+          this.inputValue = this.normalizeOneDecimal(this.inputValue)
+        } else if (this.formatTwoDecimals) {
+          this.inputValue = this.normalizeTwoDecimals(this.inputValue)
+        }
       }
     },
     focus () {
@@ -185,8 +193,15 @@ export default {
     },
     handleFocusOut (e) {
         this.isFocused = false
-        if (this.formatSecondLastDecimal) {
-          const formatted = this.normalizeSecondLastDecimal(this.inputValue)
+      if (this.formatSecondLastDecimal) {
+        const formatted = this.normalizeSecondLastDecimal(this.inputValue)
+        if (formatted !== this.inputValue) {
+          this.inputValue = formatted
+          this.$emit('input', this.inputValue)
+        }
+      } else {
+        if (this.formatOneDecimal) {
+          const formatted = this.normalizeOneDecimal(this.inputValue)
           if (formatted !== this.inputValue) {
             this.inputValue = formatted
             this.$emit('input', this.inputValue)
@@ -198,7 +213,8 @@ export default {
             this.$emit('input', this.inputValue)
           }
         }
-        this.$emit('blur', this.inputValue)
+      }
+      this.$emit('blur', this.inputValue)
     },
     normalizeSecondLastDecimal (value) {
       if (value === null || value === undefined || value === '') {
@@ -250,6 +266,23 @@ export default {
         formatted = `${digits.slice(0, -2)}.${digits.slice(-2)}`
       }
 
+      return isNegative ? `-${formatted}` : formatted
+    },
+    normalizeOneDecimal (value) {
+      if (value === null || value === undefined || value === '') {
+        return value
+      }
+
+      const stringValue = String(value).replace(/,/g, '').trim()
+      const isNegative = stringValue.startsWith('-')
+      const unsignedValue = isNegative ? stringValue.slice(1) : stringValue
+
+      const numericValue = parseFloat(unsignedValue)
+      if (Number.isNaN(numericValue)) {
+        return value
+      }
+
+      const formatted = numericValue.toFixed(1)
       return isNegative ? `-${formatted}` : formatted
     }
   }

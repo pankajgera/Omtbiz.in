@@ -599,7 +599,7 @@ export default {
       if (Number.isNaN(amount)) {
         return 0
       }
-      return Math.round((amount + Number.EPSILON) * 100) / 100
+      return Math.round((amount + Number.EPSILON) * 10) / 10
     },
     totalQuantity(inventory){
       if (inventory.length) {
@@ -609,7 +609,7 @@ export default {
             invent += i.quantity
           }
         });
-        return invent;
+        return this.roundMoney(invent);
       }
       return 0
     },
