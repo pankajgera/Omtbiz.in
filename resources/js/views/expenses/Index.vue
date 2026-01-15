@@ -223,7 +223,7 @@ import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
 import { mapActions, mapGetters } from 'vuex'
 import ObservatoryIcon from '../../components/icon/ObservatoryIcon'
 import MultiSelect from 'vue-multiselect'
-import moment, { invalid } from 'moment'
+import moment from 'moment'
 
 export default {
   components: {

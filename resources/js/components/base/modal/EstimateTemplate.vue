@@ -17,7 +17,7 @@
           <img
             v-if="selectedTemplate === template.id"
             class="check-icon"
-            src="/assets/img/tick.png"
+            src="@/assets/img/tick.png"
           >
         </div>
       </div>

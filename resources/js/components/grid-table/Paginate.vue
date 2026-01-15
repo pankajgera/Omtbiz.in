@@ -1,18 +1,33 @@
-<template lang="pug">
+<template>
   <div class="grid-paginate">
-      <div class="grid-paginate-item grid-page-count">
-          <span class="grid-paginate-item">Show</span>
-          <select v-model.number="count" :value="pageCount">
-              <option value="10">10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="40">40</option>
-              <option value="50">50</option>
-          </select>
-      </div>
-      <span class="grid-paginate-item grid-page-current">Page {{ page + 1 }} of {{ pages }}</span><span class="grid-paginate-item grid-page-rows">Rows: {{ totalRows }}</span>
-      <button class="grid-paginate-item grid-paginate-button" type="button" @click="prev" :disabled="page === 0">Prev</button>
-      <button class="grid-paginate-item grid-paginate-button" type="button" @click="next" :disabled="page + 1 === pages">Next</button>
+    <div class="grid-paginate-item grid-page-count">
+      <span class="grid-paginate-item">Show</span>
+      <select v-model.number="count" :value="pageCount">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="40">40</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <span class="grid-paginate-item grid-page-current">Page {{ page + 1 }} of {{ pages }}</span>
+    <span class="grid-paginate-item grid-page-rows">Rows: {{ totalRows }}</span>
+    <button
+      class="grid-paginate-item grid-paginate-button"
+      type="button"
+      @click="prev"
+      :disabled="page === 0"
+    >
+      Prev
+    </button>
+    <button
+      class="grid-paginate-item grid-paginate-button"
+      type="button"
+      @click="next"
+      :disabled="page + 1 === pages"
+    >
+      Next
+    </button>
   </div>
 </template>
 
