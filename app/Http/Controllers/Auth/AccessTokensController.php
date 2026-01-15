@@ -140,7 +140,7 @@ class AccessTokensController extends Controller
 		$response = $this->proxy->postJson('oauth/token', [
 			'client_id' => config('auth.proxy.client_id'),
 			'client_secret' => config('auth.proxy.client_secret'),
-			'grant_type' => config('auth.proxy.grant_type'),
+			'grant_type' => config('auth.proxy.grant_type') ?: 'password',
 			'username' => $request->username,
 			'password' => $request->password,
 			'scopes' => '[*]'

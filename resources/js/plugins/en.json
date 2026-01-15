@@ -1391,7 +1391,7 @@
         }
     },
     "layout_login": {
-        "copyright_omtbiz": "Copyright @ Omtbiz - {{year}}",
+        "copyright_omtbiz": "Copyright @ Omtbiz - {year}",
         "super_simple_invoicing": "Super Simple Invoicing",
         "for_freelancer": "for Freelancers &",
         "small_businesses": "Small Businesses ",
