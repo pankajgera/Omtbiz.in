@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.esm.js'
 import VueI18n from 'vue-i18n'
 import en from './en.json'
 

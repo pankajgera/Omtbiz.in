@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.esm.js'
 
 Vue.directive('click-outside', {
   bind: function (el, binding, vnode) {

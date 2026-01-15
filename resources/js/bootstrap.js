@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue/dist/vue.esm.js'
 import VueRouter from 'vue-router'
 import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
