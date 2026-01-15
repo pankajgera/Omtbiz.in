@@ -116,6 +116,10 @@ export default {
       type: Boolean,
       default: false
     },
+    formatFixedTwoDecimals: {
+      type: Boolean,
+      default: false
+    },
     formatOneDecimal: {
       type: Boolean,
       default: false
@@ -159,6 +163,8 @@ export default {
       if (!this.isFocused) {
         if (this.formatSecondLastDecimal) {
           this.inputValue = this.normalizeSecondLastDecimal(this.value)
+        } else if (this.formatFixedTwoDecimals) {
+          this.inputValue = this.normalizeFixedTwoDecimals(this.value)
         } else if (this.formatOneDecimal) {
           this.inputValue = this.normalizeOneDecimal(this.value)
         } else if (this.formatTwoDecimals) {
@@ -195,6 +201,12 @@ export default {
         this.isFocused = false
       if (this.formatSecondLastDecimal) {
         const formatted = this.normalizeSecondLastDecimal(this.inputValue)
+        if (formatted !== this.inputValue) {
+          this.inputValue = formatted
+          this.$emit('input', this.inputValue)
+        }
+      } else if (this.formatFixedTwoDecimals) {
+        const formatted = this.normalizeFixedTwoDecimals(this.inputValue)
         if (formatted !== this.inputValue) {
           this.inputValue = formatted
           this.$emit('input', this.inputValue)
@@ -282,6 +294,23 @@ export default {
         formatted = `${digits.slice(0, -2)}.${digits.slice(-2)}`
       }
 
+      return isNegative ? `-${formatted}` : formatted
+    },
+    normalizeFixedTwoDecimals (value) {
+      if (value === null || value === undefined || value === '') {
+        return value
+      }
+
+      const stringValue = String(value).replace(/,/g, '').trim()
+      const isNegative = stringValue.startsWith('-')
+      const unsignedValue = isNegative ? stringValue.slice(1) : stringValue
+      const numericValue = parseFloat(unsignedValue)
+
+      if (Number.isNaN(numericValue)) {
+        return value
+      }
+
+      const formatted = numericValue.toFixed(2)
       return isNegative ? `-${formatted}` : formatted
     },
     normalizeOneDecimal (value) {

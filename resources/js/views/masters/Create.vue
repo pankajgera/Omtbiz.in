@@ -107,6 +107,8 @@
                         focus
                         type="number"
                         name="opening_balance"
+                        step="0.1"
+                        format-second-last-decimal
                         @input="formData.opening_balance"
                       />
                     </div>
