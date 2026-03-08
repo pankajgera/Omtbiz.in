@@ -63,7 +63,7 @@
 
 <script type="text/babel">
 import { validationMixin } from 'vuelidate'
-import { required, email, sameAs, minLength } from 'vuelidate/lib/validators';
+import { required, email, sameAs, minLength } from '@vuelidate/validators';
 export default {
   mixins: [validationMixin],
   data () {

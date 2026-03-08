@@ -234,7 +234,7 @@
 </template>
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, maxLength, alpha } from 'vuelidate/lib/validators';
+import { required, maxLength, alpha } from '@vuelidate/validators';
 export default {
   mixins: [validationMixin],
   data () {

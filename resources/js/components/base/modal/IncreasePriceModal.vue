@@ -79,7 +79,7 @@ div.hide-select-header div.multiselect__tags input.multiselect__input{
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, minLength, numeric, maxLength, minValue } from 'vuelidate/lib/validators';
+import { required, minLength, numeric, maxLength, minValue } from '@vuelidate/validators';
 export default {
   mixins: [validationMixin],
   data () {

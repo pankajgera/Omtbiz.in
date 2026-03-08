@@ -1,32 +1,41 @@
-import Vue from 'vue'
+export function registerDirectives (app) {
+  app.directive('click-outside', {
+    beforeMount (el, binding) {
+      const handler = function (event) {
+        if (!(el === event.target || el.contains(event.target))) {
+          if (typeof binding.value === 'function') {
+            binding.value(event)
+          }
+        }
+      }
+      el.__clickOutsideHandler__ = handler
+      document.body.addEventListener('click', handler)
+    },
+    unmounted (el) {
+      document.body.removeEventListener('click', el.__clickOutsideHandler__)
+      delete el.__clickOutsideHandler__
+    }
+  })
 
-Vue.directive('click-outside', {
-  bind: function (el, binding, vnode) {
-    el.event = function (event) {
-      // here I check that click was outside the el and his childrens
-      if (!(el === event.target || el.contains(event.target))) {
-        // and if it did, call method provided in attribute value
-        vnode.context[binding.expression](event)
+  app.directive('autoresize', {
+    mounted (el) {
+      el.style.height = el.scrollHeight + 'px'
+      el.style.overflowY = 'hidden'
+      el.style.resize = 'none'
+      const onInput = function () {
+        this.style.height = 'auto'
+        this.style.height = this.scrollHeight + 'px'
+        this.scrollTop = this.scrollHeight
+        window.scrollTo(window.scrollLeft, this.scrollTop + this.scrollHeight)
+      }
+      el.__autoResizeHandler__ = onInput
+      el.addEventListener('input', onInput, false)
+    },
+    unmounted (el) {
+      if (el.__autoResizeHandler__) {
+        el.removeEventListener('input', el.__autoResizeHandler__, false)
+        delete el.__autoResizeHandler__
       }
     }
-    document.body.addEventListener('click', el.event)
-  },
-  unbind: function (el) {
-    document.body.removeEventListener('click', el.event)
-  }
-})
-
-Vue.directive('autoresize', {
-  inserted: function (el) {
-    el.style.height = el.scrollHeight + 'px'
-    el.style.overflow.y = 'hidden'
-    el.style.resize = 'none'
-    function OnInput () {
-      this.style.height = 'auto'
-      this.style.height = (this.scrollHeight) + 'px'
-      this.scrollTop = this.scrollHeight
-      window.scrollTo(window.scrollLeft, (this.scrollTop + this.scrollHeight))
-    }
-    el.addEventListener('input', OnInput, false)
-  }
-})
+  })
+}

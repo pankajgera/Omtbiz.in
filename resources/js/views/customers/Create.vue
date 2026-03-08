@@ -321,7 +321,7 @@ import { mapActions, mapGetters } from 'vuex'
 import MultiSelect from 'vue-multiselect'
 import { validationMixin } from 'vuelidate'
 import AddressStub from '../../stub/address'
-import { required, minLength, email, url, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, email, url, maxLength } from '@vuelidate/validators';
 export default {
   components: { MultiSelect },
   mixins: [validationMixin],

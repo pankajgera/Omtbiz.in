@@ -161,14 +161,12 @@
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
 import GroupSelect from './GroupSelect'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, maxLength } from '@vuelidate/validators';
 export default {
   components: {
     GroupSelect
   },
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   data () {
     return {
       isLoading: false,

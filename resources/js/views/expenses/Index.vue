@@ -219,11 +219,11 @@
 </template>
 
 <script>
-import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
+import { SweetModal, SweetModalTab } from 'sweet-modal-vue-3'
 import { mapActions, mapGetters } from 'vuex'
 import ObservatoryIcon from '../../components/icon/ObservatoryIcon'
 import MultiSelect from 'vue-multiselect'
-import moment, { invalid } from 'moment'
+import moment from 'moment'
 
 export default {
   components: {

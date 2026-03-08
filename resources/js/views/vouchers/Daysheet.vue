@@ -136,7 +136,7 @@ import {
   numeric,
   minValue,
   maxLength,
-} from 'vuelidate/lib/validators';
+} from '@vuelidate/validators';
 // Vue editable grid component and styles
 import VueEditableGrid from "../../components/grid-table/VueEditableGrid";
 import "../../components/grid-table/VueEditableGrid.css";

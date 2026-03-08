@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import store from './store/index.js'
 
 /*
@@ -128,8 +127,6 @@ import BankCreate from './views/bank/Create.vue'
 // Dispatch
 import DispatchIndex from './views/dispatch/Index.vue'
 import DispatchCreate from './views/dispatch/Create.vue'
-
-Vue.use(VueRouter)
 
 const routes = [
     /*
@@ -680,12 +677,12 @@ const routes = [
     },
 
     //  DEFAULT ROUTE
-    { path: '*', component: NotFoundPage }
+    { path: '/:pathMatch(.*)*', component: NotFoundPage }
 ]
 
-const router = new VueRouter({
+const router = createRouter({
+    history: createWebHistory(),
     routes,
-    mode: 'history',
     linkActiveClass: 'active'
 })
 

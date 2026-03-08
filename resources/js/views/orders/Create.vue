@@ -210,7 +210,7 @@ import OrderStub from '../../stub/order'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
-import { required, between, maxLength, numeric } from 'vuelidate/lib/validators';
+import { required, between, maxLength, numeric } from '@vuelidate/validators';
 export default {
   components: {
     MultiSelect,

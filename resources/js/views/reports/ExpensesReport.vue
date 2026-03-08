@@ -59,7 +59,7 @@
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
-import { required } from 'vuelidate/lib/validators';
+import { required } from '@vuelidate/validators';
 export default {
   mixins: [validationMixin],
   data () {

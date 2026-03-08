@@ -20,9 +20,11 @@
 <body class="layout-default skin-omtbiz">
 <div id="app" class="template-container">
     <div class="mobile-menu-overlay" @click.prevent="onOverlayClick"></div>
-    <transition name="fade" mode="out-in">
-        <router-view></router-view>
-    </transition>
+    <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+            <component :is="Component"></component>
+        </transition>
+    </router-view>
 </div>
 <script type="text/javascript" src="/assets/js/print.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/assets/css/print.min.css">

@@ -92,30 +92,36 @@
       <div class="col col-12 col-md-12 col-lg-12">
         <div class="card">
           <h5 class="p-3">Inventory Item</h5>
-            <table class="p-3 m-3" ref="inventoryStock" v-if="inventoryItems.length > 0">
-            <tr>
-              <th>Item</th>
-              <th>Worker Name</th>
-              <th>Quantity</th>
-              <th>Sale Price</th>
-              <th>Unit</th>
-              <th>Item Used</th>
-              <th>Date/Time</th>
-            </tr>
-            <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.name}}</a></td>
-              <td>{{each.worker_name ? each.worker_name : '-'}}</td>
-              <td>{{each.quantity}}</td>
-              <td>₹ {{each.sale_price}}</td>
-              <td>{{each.unit}}</td>
-              <td>{{each.item_count}}</td>
-              <td>{{each.date_time}}</td>
-            </tr>
+          <table class="p-3 m-3" ref="inventoryStock" v-if="inventoryItems.length > 0">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Worker Name</th>
+                <th>Quantity</th>
+                <th>Sale Price</th>
+                <th>Unit</th>
+                <th>Item Used</th>
+                <th>Date/Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
+                <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.name}}</a></td>
+                <td>{{each.worker_name ? each.worker_name : '-'}}</td>
+                <td>{{each.quantity}}</td>
+                <td>₹ {{each.sale_price}}</td>
+                <td>{{each.unit}}</td>
+                <td>{{each.item_count}}</td>
+                <td>{{each.date_time}}</td>
+              </tr>
+            </tbody>
           </table>
-          <table  class="p-3 m-3"  v-else>
-            <tr><td colspan="7">
-              No Record Found..
-            </td></tr>
+          <table class="p-3 m-3" v-else>
+            <tbody>
+              <tr><td colspan="7">
+                No Record Found..
+              </td></tr>
+            </tbody>
           </table>
 
         </div>
@@ -128,9 +134,7 @@ import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 export default {
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   data () {
     return {
       isLoading: false,

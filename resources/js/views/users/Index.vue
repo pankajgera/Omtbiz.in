@@ -195,7 +195,7 @@
 </template>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { SweetModal, SweetModalTab } from 'sweet-modal-vue'
+import { SweetModal, SweetModalTab } from 'sweet-modal-vue-3'
 import DotIcon from '../../components/icon/DotIcon'
 import AstronautIcon from '../../components/icon/AstronautIcon'
 import BaseButton from '../../../js/components/base/BaseButton'

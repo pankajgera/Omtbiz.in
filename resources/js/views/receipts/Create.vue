@@ -169,7 +169,7 @@ import MultiSelect from 'vue-multiselect'
 import { validationMixin } from 'vuelidate'
 import moment from 'moment'
 import GlobalMixin from '../../helpers/mixins.js';
-import { required, between, maxLength, numeric } from 'vuelidate/lib/validators';
+import { required, between, maxLength, numeric } from '@vuelidate/validators';
 export default {
   components: { MultiSelect },
   mixins: [validationMixin, GlobalMixin],

@@ -1,16 +1,12 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Vuex from 'vuex'
-import Vuelidate from 'vuelidate'
-import money from 'v-money'
+import { VMoney } from 'v-money3'
 import VueExpandableImage from 'vue-expandable-image'
 import axios from 'axios'
 import $ from 'jquery'
 import _ from 'lodash'
 import toastr from 'toastr'
-import '../plugins/vue-font-awesome'
-import './helpers/directives'
-import './components/base'
+import { registerFontAwesome } from '../plugins/vue-font-awesome'
+import { registerDirectives } from './helpers/directives'
+import { registerBaseComponents } from './components/base'
 import Ls from './services/ls'
 import store from './store/index.js'
 import VDropdown from './components/dropdown/VDropdown.vue'
@@ -23,90 +19,68 @@ import CategoryModal from './components/base/modal/CategoryModal.vue'
 /**
  * Global css plugins
  */
-import 'vue-tabs-component/docs/resources/tabs-component.css'
-Vue.use(Vuelidate)
-Vue.use(VueExpandableImage)
 
-window._ = _
-/**
- * Vue is a modern JavaScript library for building interactive web interfaces
- * using reactive data binding and reusable components. Vue's API is clean
- * and simple, leaving you to focus on building your next great project.
- */
+export function setupBootstrap (app) {
+  window._ = _
+  window.axios = axios
+  window.Ls = Ls
+  window.$ = window.jQuery = $
 
-window.Vue = Vue
-
-/**
- * We'll register a HTTP interceptor to attach the "CSRF" header to each of
- * the outgoing requests issued by this application. The CSRF middleware
- * included with Laravel will automatically verify the header's value.
- */
-
-window.axios = axios
-window.Ls = Ls
-window.$ = window.jQuery = $
-
-window.axios.defaults.headers.common = {
+  window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'Authorization': '',
     'company': 0,
-}
+  }
 
-/**
- * Interceptors
- */
-window.axios.interceptors.request.use(function(config) {
-    // Do something before request is sent
+  window.axios.interceptors.request.use(function (config) {
     const AUTH_TOKEN = Ls.get('auth.token')
     if (AUTH_TOKEN) {
-        config.headers.set('Authorization', `Bearer ${AUTH_TOKEN}`)
+      config.headers.set('Authorization', `Bearer ${AUTH_TOKEN}`)
     }
 
     const companyId = Ls.get('selectedCompany')
     if (companyId) {
-        config.headers.set('company', companyId)
+      config.headers.set('company', companyId)
     }
 
     return config
-}, function(error) {
-  console.error(error)
-    // Do something with request error
+  }, function (error) {
+    console.error(error)
     return Promise.reject(error)
-})
+  })
 
-/**
- * Global Axios Response Interceptor
- */
-
-window.axios.interceptors.response.use(undefined, function(err) {
-    // Do something with request error
+  window.axios.interceptors.response.use(undefined, function (err) {
     return new Promise((resolve, reject) => {
-        if (err.response.data.error === 'invalid_credentials') {
-            window.toastr['error']('Invalid Credentials')
-        }
-        if (err.response.data && (err.response.statusText === 'Unauthorized' || err.response.data === ' Unauthorized.')) {
-            store.dispatch('auth/logout', true)
-        } else {
-            throw err
-        }
+      if (err.response.data.error === 'invalid_credentials') {
+        window.toastr['error']('Invalid Credentials')
+      }
+      if (err.response.data && (err.response.statusText === 'Unauthorized' || err.response.data === ' Unauthorized.')) {
+        store.dispatch('auth/logout', true)
+      } else {
+        throw err
+      }
     })
-})
+  })
 
-/**
- * Global plugins
- */
-window.toastr = toastr
+  window.toastr = toastr
 
-Vue.use(VueRouter)
-Vue.use(Vuex)
+  registerFontAwesome(app)
+  registerDirectives(app)
+  registerBaseComponents(app)
 
-// register directive v-money and component <money>
-Vue.use(money, { precision: 2 })
+  app.directive('money', VMoney)
 
-Vue.component('v-dropdown', VDropdown)
-Vue.component('v-dropdown-item', VDropdownItem)
-Vue.component('v-dropdown-divider', VDropdownDivider)
+  if (VueExpandableImage && typeof VueExpandableImage.install === 'function') {
+    app.use(VueExpandableImage)
+  } else {
+    app.component('expandable-image', VueExpandableImage)
+  }
 
-Vue.component('dot-icon', DotIcon)
-Vue.component('customer-modal', CustomerModal)
-Vue.component('category-modal', CategoryModal)
+  app.component('v-dropdown', VDropdown)
+  app.component('v-dropdown-item', VDropdownItem)
+  app.component('v-dropdown-divider', VDropdownDivider)
+
+  app.component('dot-icon', DotIcon)
+  app.component('customer-modal', CustomerModal)
+  app.component('category-modal', CategoryModal)
+}

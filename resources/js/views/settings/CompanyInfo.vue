@@ -153,7 +153,7 @@ import ImageBox from '../components/ImageBox.vue'
 import AvatarCropper from 'vue-avatar-cropper'
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
-import { required, email, maxLength, minLength, number } from 'vuelidate/lib/validators';
+import { required, email, maxLength, minLength, numeric } from '@vuelidate/validators';
 export default {
   components: { AvatarCropper, IconUpload, ImageBox },
   mixins: [validationMixin],

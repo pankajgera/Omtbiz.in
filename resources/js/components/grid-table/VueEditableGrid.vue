@@ -24,40 +24,41 @@
                     </th>
                 </tr>
             </thead>
-            <tbody ref="body">
-                <div :style=' { "min-height": `${rowDataPage.length * itemHeight}px` }'>
-                    <tr
-                        class="gridrow"
-                        v-for="(row, rowIndex) in visibleRows"
-                        :key="row[rowDataKey]"
-                        :style='{ "grid-template-columns": gridTemplateColumns, transform: `translateY(${(itemHeight * rowIndex) + ((itemHeight * offsetRows))}px)`, height: `${itemHeight}px` }'
-                    >
-                        <cell
-                            v-for="(column, columnIndex) in columnDefs"
-                            :ref="`cell`"
-                            :key="$route.name === 'vouchers.edit' ? columnIndex + row.account_id : 'each-' + columnIndex + rowIndex"
-                            :column="column"
-                            :row="row"
-                            :columnIndex="columnIndex"
-                            :rowIndex="offsetRows + rowIndex"
-                            :selStart="selStart"
-                            :selEnd="selEnd"
-                            :cellEditing="cellEditing"
-                            :cellsWithErrors="cellsWithErrors"
-                            :onlyBorder="onlyBorder"
-                            :masterOptions="masterOptions"
-                            :placeholder="column.placeholder"
-                            @click="selectCell(offsetRows + rowIndex, columnIndex, $event)"
-                            @dblclick="tryEdit(row, column, offsetRows + rowIndex, columnIndex)"
-                            @edited="cellEdited"
-                            @link-clicked="linkClicked(row, column, offsetRows + rowIndex, columnIndex)"
-                            @contextmenu="contextMenu(row, column, rowIndex, columnIndex, $event)"
-                            @mousedown="startSelection(offsetRows + rowIndex, columnIndex, $event)"
-                            @mouseover="onSelection(offsetRows + rowIndex, columnIndex)"
-                            @mouseup="stopSelection"
-                        ></cell>
-                    </tr>
-                </div>
+            <tbody
+                ref="body"
+                :style='{ "min-height": `${rowDataPage.length * itemHeight}px` }'
+            >
+                <tr
+                    class="gridrow"
+                    v-for="(row, rowIndex) in visibleRows"
+                    :key="row[rowDataKey]"
+                    :style='{ "grid-template-columns": gridTemplateColumns, transform: `translateY(${(itemHeight * rowIndex) + ((itemHeight * offsetRows))}px)`, height: `${itemHeight}px` }'
+                >
+                    <cell
+                        v-for="(column, columnIndex) in columnDefs"
+                        :ref="`cell`"
+                        :key="$route.name === 'vouchers.edit' ? columnIndex + row.account_id : 'each-' + columnIndex + rowIndex"
+                        :column="column"
+                        :row="row"
+                        :columnIndex="columnIndex"
+                        :rowIndex="offsetRows + rowIndex"
+                        :selStart="selStart"
+                        :selEnd="selEnd"
+                        :cellEditing="cellEditing"
+                        :cellsWithErrors="cellsWithErrors"
+                        :onlyBorder="onlyBorder"
+                        :masterOptions="masterOptions"
+                        :placeholder="column.placeholder"
+                        @click="selectCell(offsetRows + rowIndex, columnIndex, $event)"
+                        @dblclick="tryEdit(row, column, offsetRows + rowIndex, columnIndex)"
+                        @edited="cellEdited"
+                        @link-clicked="linkClicked(row, column, offsetRows + rowIndex, columnIndex)"
+                        @contextmenu="contextMenu(row, column, rowIndex, columnIndex, $event)"
+                        @mousedown="startSelection(offsetRows + rowIndex, columnIndex, $event)"
+                        @mouseover="onSelection(offsetRows + rowIndex, columnIndex)"
+                        @mouseup="stopSelection"
+                    ></cell>
+                </tr>
             </tbody>
         </table>
         <textarea class="hidde" ref="tmp"></textarea>

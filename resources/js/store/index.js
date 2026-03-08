@@ -1,5 +1,4 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 
 import * as getters from './getters'
 import mutations from './mutations'
@@ -38,13 +37,11 @@ import banks from './modules/banks'
 import dispatch from './modules/disptach'
 import orders from './modules/orders'
 
-Vue.use(Vuex)
-
 const initialState = {
     isAppLoaded: false
 }
 
-export default new Vuex.Store({
+export default createStore({
     strict: false,
     state: initialState,
     getters,

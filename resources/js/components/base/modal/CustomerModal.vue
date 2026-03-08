@@ -325,12 +325,12 @@
 </template>
 
 <script>
-import { Tabs, Tab } from 'vue-tabs-component'
+import { Tabs, Tab } from 'vue3-tabs-component'
 import MultiSelect from 'vue-multiselect'
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 import AddressStub from '../../../stub/address'
-import { required, minLength, email, numeric, url, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, email, numeric, url, maxLength } from '@vuelidate/validators';
 export default {
   components: {
     'tabs': Tabs,

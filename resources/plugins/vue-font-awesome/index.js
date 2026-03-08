@@ -61,8 +61,6 @@ import {
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import Vue from 'vue'
-
 library.add(
   far,
   faUser,
@@ -126,4 +124,6 @@ library.add(
   faCircle
 )
 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
+export function registerFontAwesome (app) {
+  app.component('font-awesome-icon', FontAwesomeIcon)
+}

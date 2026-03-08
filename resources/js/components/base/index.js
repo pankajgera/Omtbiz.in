@@ -18,27 +18,28 @@ import IncreasePriceModal from './modal/IncreasePriceModal.vue'
 
 import {TableColumn, TableComponent} from './base-table/index'
 import GroupModal from './modal/GroupModal.vue'
-import Vue from 'vue'
 
-Vue.component('base-button', BaseButton)
-Vue.component('item-modal', ItemModal)
-Vue.component('base-modal', BaseModal)
-Vue.component('base-date-picker', BaseDatePicker)
-Vue.component('base-input', BaseInput)
-Vue.component('base-switch', BaseSwitch)
-Vue.component('base-text-area', BaseTextArea)
-Vue.component('base-loader', BaseLoader)
-Vue.component('base-prefix-input', BasePrefixInput)
+export function registerBaseComponents (app) {
+  app.component('base-button', BaseButton)
+  app.component('item-modal', ItemModal)
+  app.component('base-modal', BaseModal)
+  app.component('base-date-picker', BaseDatePicker)
+  app.component('base-input', BaseInput)
+  app.component('base-switch', BaseSwitch)
+  app.component('base-text-area', BaseTextArea)
+  app.component('base-loader', BaseLoader)
+  app.component('base-prefix-input', BasePrefixInput)
 
-Vue.component('table-component', TableComponent)
-Vue.component('table-column', TableColumn)
+  app.component('table-component', TableComponent)
+  app.component('table-column', TableColumn)
 
-Vue.component('base-select', BaseSelect)
-Vue.component('base-customer-select', BaseCustomerSelect)
+  app.component('base-select', BaseSelect)
+  app.component('base-customer-select', BaseCustomerSelect)
 
-Vue.component('base-popup', BasePopup)
-Vue.component('customer-select-popup', CustomerSelectPopup)
+  app.component('base-popup', BasePopup)
+  app.component('customer-select-popup', CustomerSelectPopup)
 
-Vue.component('inventory-modal', InventoryModal)
-Vue.component('increase-price-modal', IncreasePriceModal)
-Vue.component('group-modal', GroupModal)
+  app.component('inventory-modal', InventoryModal)
+  app.component('increase-price-modal', IncreasePriceModal)
+  app.component('group-modal', GroupModal)
+}

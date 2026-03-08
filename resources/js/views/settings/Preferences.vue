@@ -147,7 +147,7 @@
 import MultiSelect from 'vue-multiselect'
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
-import { required } from 'vuelidate/lib/validators';
+import { required } from '@vuelidate/validators';
 export default {
   components: { MultiSelect },
   mixins: [validationMixin],

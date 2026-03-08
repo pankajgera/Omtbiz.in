@@ -59,7 +59,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, maxLength } from '@vuelidate/validators';
 export default {
   mixins: [validationMixin],
   data () {

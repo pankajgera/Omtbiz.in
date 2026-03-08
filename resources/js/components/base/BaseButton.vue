@@ -85,6 +85,11 @@ export default {
       type: String,
       required: false,
       default: 'button'
+    },
+    isCustomStyle: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   computed: {

@@ -125,16 +125,14 @@
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import { required, minLength, numeric, minValue, maxLength } from 'vuelidate/lib/validators';
-import VueTimepicker from 'vue2-timepicker'
-import 'vue2-timepicker/dist/VueTimepicker.css'
-import getTime from 'date-fns/fp/getTime/index'
+import { required, minLength, numeric, minValue, maxLength } from '@vuelidate/validators';
+import VueTimepicker from 'vue3-timepicker'
+import 'vue3-timepicker/dist/VueTimepicker.css'
+import getTime from 'date-fns/fp/getTime'
 
 export default {
   components: { VueTimepicker },
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   data () {
     return {
       isLoading: false,

@@ -92,9 +92,7 @@ import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   data () {
     return {
       isLoading: false,

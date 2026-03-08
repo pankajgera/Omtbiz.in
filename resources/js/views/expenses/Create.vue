@@ -148,7 +148,7 @@ import MultiSelect from 'vue-multiselect'
 import moment from 'moment'
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-import { required, minValue, maxLength } from 'vuelidate/lib/validators';
+import { required, minValue, maxLength } from '@vuelidate/validators';
 export default {
   components: {
     MultiSelect

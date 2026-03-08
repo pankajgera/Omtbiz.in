@@ -131,11 +131,9 @@ input[type="file"]
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
-import { required, minLength, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, maxLength } from '@vuelidate/validators';
 export default {
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   data () {
     return {
       isLoading: false,

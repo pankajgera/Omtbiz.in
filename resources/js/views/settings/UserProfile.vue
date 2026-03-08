@@ -107,7 +107,7 @@
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
 import AvatarCropper from 'vue-avatar-cropper'
-import { required, requiredIf, sameAs, email, minLength } from 'vuelidate/lib/validators';
+import { required, requiredIf, sameAs, email, minLength } from '@vuelidate/validators';
 export default {
   components: { AvatarCropper },
   mixins: [validationMixin],

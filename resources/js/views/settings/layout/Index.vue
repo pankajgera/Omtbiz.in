@@ -20,11 +20,13 @@
         </ol>
       </div>
       <div class="col-lg-9">
-        <transition
-          name="fade"
-          mode="out-in">
-          <router-view/>
-        </transition>
+        <router-view v-slot="{ Component }">
+          <transition
+            name="fade"
+            mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>

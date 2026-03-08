@@ -119,26 +119,30 @@
         <div class="card">
           <h5 class="p-3">Related Inventory</h5>
           <table class="p-3 m-3">
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Worker Name</th>
-              <th>Quantity</th>
-              <th>Cost Price</th>
-              <th>Sale Price</th>
-              <th>Unit</th>
-              <th>Date/Time</th>
-            </tr>
-            <tr v-for="(each, index) in relatedInventories" :key="index">
-              <td>{{each.id}}</td>
-              <td>{{formData.name}}</td>
-              <td>{{each.worker_name}}</td>
-              <td>{{each.quantity}}</td>
-              <td>{{each.price}}</td>
-              <td>{{each.sale_price}}</td>
-              <td>{{each.unit}}</td>
-              <td>{{each.date_time}}</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Worker Name</th>
+                <th>Quantity</th>
+                <th>Cost Price</th>
+                <th>Sale Price</th>
+                <th>Unit</th>
+                <th>Date/Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(each, index) in relatedInventories" :key="index">
+                <td>{{each.id}}</td>
+                <td>{{formData.name}}</td>
+                <td>{{each.worker_name}}</td>
+                <td>{{each.quantity}}</td>
+                <td>{{each.price}}</td>
+                <td>{{each.sale_price}}</td>
+                <td>{{each.unit}}</td>
+                <td>{{each.date_time}}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -153,11 +157,9 @@ div.hide-select-header div.multiselect__tags input.multiselect__input{
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
-import { required, minLength, numeric, minValue, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, numeric, minValue, maxLength } from '@vuelidate/validators';
 export default {
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   data () {
     return {
       isLoading: false,

@@ -126,7 +126,7 @@ import { validationMixin } from 'vuelidate'
 import { mapGetters } from 'vuex'
 import OrderStub from '../../stub/order'
 import ItemSelect from './ItemSelect'
-import { required, minValue, between, maxLength } from 'vuelidate/lib/validators';
+import { required, minValue, between, maxLength } from '@vuelidate/validators';
 export default {
   components: {
     ItemSelect

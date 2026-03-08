@@ -5,7 +5,7 @@
         <div class="box-wrapper">
           <div class="logo-main">
             <img
-                src="/assets/img/bill.png"
+                src="@/assets/img/bill.png"
                 alt="Omtbiz Logo">
           </div>
           <router-view></router-view>
@@ -43,10 +43,10 @@ export default {
       let body = $('body')
       body.removeClass()
       body.addClass('login-page login-1 skin-omtbiz')
+    },
+    onRouteChange () {
+      $('body').removeClass('login-page')
     }
-  },
-  onRouteChange () {
-    $('body').removeClass('login-page')
   }
 }
 </script>

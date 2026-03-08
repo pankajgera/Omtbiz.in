@@ -381,7 +381,7 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import Guid from 'guid'
-import { required, between, maxLength, numeric } from 'vuelidate/lib/validators';
+import { required, between, maxLength, numeric } from '@vuelidate/validators';
 export default {
   components: {
     InvoiceInventory,

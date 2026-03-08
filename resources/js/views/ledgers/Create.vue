@@ -53,9 +53,7 @@ import VueEditableGrid from '../../components/grid-table/VueEditableGrid'
 import '../../components/grid-table/VueEditableGrid.css'
 
 export default {
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   components: {
     VueEditableGrid
   },

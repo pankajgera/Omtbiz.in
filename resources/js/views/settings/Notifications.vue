@@ -58,7 +58,7 @@
 </template>
 <script>
 import { validationMixin } from 'vuelidate'
-import { required, email } from 'vuelidate/lib/validators';
+import { required, email } from '@vuelidate/validators';
 export default {
 
   mixins: [validationMixin],

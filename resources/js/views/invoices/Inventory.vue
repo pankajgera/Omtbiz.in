@@ -156,7 +156,7 @@ import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 import InvoiceStub from '../../stub/invoice'
 import InventorySelect from './InventorySelect'
-import { required, minValue, between, maxLength, requiredIf } from 'vuelidate/lib/validators';
+import { required, minValue, between, maxLength, requiredIf } from '@vuelidate/validators';
 export default {
   components: {
     InventorySelect

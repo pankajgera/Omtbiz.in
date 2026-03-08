@@ -127,7 +127,7 @@ import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
 import InvoiceStub from '../../stub/invoice'
 import ItemSelect from './ItemSelect'
-import { required, minValue, between, maxLength } from 'vuelidate/lib/validators';
+import { required, minValue, between, maxLength } from '@vuelidate/validators';
 export default {
   components: {
     ItemSelect

@@ -72,15 +72,13 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
-import { required, minLength, numeric, minValue, maxLength } from 'vuelidate/lib/validators';
+import { required, minLength, numeric, minValue, maxLength } from '@vuelidate/validators';
 // Vue editable grid component and styles
 import VueEditableGrid from '../../components/grid-table/VueEditableGrid'
 import '../../components/grid-table/VueEditableGrid.css'
 
 export default {
-  mixins: {
-    validationMixin
-  },
+  mixins: [validationMixin],
   components: {
     VueEditableGrid
   },

@@ -816,7 +816,7 @@
         "enter_email": "Enter email",
         "enter_password": "Enter Password",
         "retype_password": "Retype Password",
-        "login_placeholder": "mail@example.com"
+        "login_placeholder": "mail\\@example.com"
     },
     "reports": {
         "title": "Report",
@@ -1391,7 +1391,7 @@
         }
     },
     "layout_login": {
-        "copyright_omtbiz": "Copyright @ Omtbiz - 2024",
+        "copyright_omtbiz": "Copyright © Omtbiz - 2024",
         "super_simple_invoicing": "Super Simple Invoicing",
         "for_freelancer": "for Freelancers &",
         "small_businesses": "Small Businesses ",

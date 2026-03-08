@@ -18,7 +18,6 @@
       :capture="fileInput==='image' ? 'camera' : ''"
       :min="type === 'number' ? 0 : null"
       :maxlength="type === 'number' ? max : null"
-      @input="handleInput"
       @change="handleChange"
       @keyup="handleKeyupEnter"
       @keydown.enter.prevent
@@ -33,6 +32,9 @@
 
 <script>
 export default {
+  compatConfig: {
+    COMPONENT_V_MODEL: false
+  },
   props: {
     id: {
       type: String,
@@ -49,6 +51,10 @@ export default {
     tabIndex: {
       type: String,
       default: ''
+    },
+    modelValue: {
+      type: [String, Number, File],
+      default: undefined
     },
     value: {
       type: [String, Number, File],
@@ -105,12 +111,24 @@ export default {
   },
   data () {
     return {
-      inputValue: this.value,
       focus: this.name==='account' ? true : false,
       showPass: false
     }
   },
   computed: {
+    inputValue: {
+      get () {
+        const current = this.modelValue !== undefined ? this.modelValue : this.value
+        if (this.type === 'number' && current) {
+          return current.toString().replace('-', '')
+        }
+        return current
+      },
+      set (value) {
+        this.$emit('update:modelValue', value)
+        this.$emit('input', value)
+      }
+    },
     isFieldValid () {
       return this.invalid
     },
@@ -128,16 +146,6 @@ export default {
     }
   },
   watch: {
-    value () {
-      if ('number' === this.type && this.value) {
-        this.inputValue = (this.value).toString().replace('-', '')
-        // if (this.max && this.value!==null && this.value!=='') {
-        //   this.inputValue = this.value.slice(0, this.max)
-        // }
-      } else {
-        this.inputValue = this.value
-      }
-    },
     focus () {
       this.focusInput()
     }
@@ -150,9 +158,6 @@ export default {
       if (this.focus) {
         this.$refs.baseInput.focus()
       }
-    },
-    handleInput (e) {
-        this.$emit('input', this.inputValue)
     },
     handleChange (e) {
         this.$emit('change', this.inputValue)
