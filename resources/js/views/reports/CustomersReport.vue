@@ -12,7 +12,7 @@
             :show-labels="false"
             @input="getReports"
           />
-          <span v-if="$v.range.$error && !$v.range.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="vRange.$error && !vRange.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
       </div>
       <div class="row">
@@ -25,7 +25,7 @@
             :show-labels="false"
             @input="onChangeDateRange"
           />
-          <span v-if="$v.range.$error && !$v.range.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="vRange.$error && !vRange.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
       </div>
       <div class="row report-fields-container">
@@ -33,23 +33,23 @@
           <label class="report-label">{{ $t('reports.customers.from_date') }}</label>
           <base-date-picker
             v-model="formData.from_date"
-            :invalid="$v.formData.from_date.$error"
+            :invalid="vFormData.from_date.$error"
             :calendar-button="true"
             calendar-button-icon="calendar"
-            @change="$v.formData.from_date.$touch()"
+            @change="vFormData.from_date.$touch()"
           />
-          <span v-if="$v.formData.from_date.$error && !$v.formData.from_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="vFormData.from_date.$error && !vFormData.from_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
         <div class="col-md-6 report-field-container">
           <label class="report-label">{{ selectedRange !== 'Till Date' ? $t('reports.customers.to_date') : $t('reports.customers.till_date') }}</label>
           <base-date-picker
             v-model="formData.to_date"
-            :invalid="$v.formData.to_date.$error"
+            :invalid="vFormData.to_date.$error"
             :calendar-button="true"
             calendar-button-icon="calendar"
-            @change="$v.formData.to_date.$touch()"
+            @change="vFormData.to_date.$touch()"
           />
-          <span v-if="$v.formData.to_date.$error && !$v.formData.to_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="vFormData.to_date.$error && !vFormData.to_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
       </div>
       <div class="row report-submit-button-container">
@@ -122,6 +122,18 @@ export default {
     }
   },
   computed: {
+    vRange () {
+      return this.$v?.range || { $error: false, required: true, $touch: () => {} }
+    },
+    vFormData () {
+      return this.$v?.formData || {
+        $error: false,
+        $invalid: false,
+        $touch: () => {},
+        from_date: { $error: false, required: true, $touch: () => {} },
+        to_date: { $error: false, required: true, $touch: () => {} }
+      }
+    },
     ...mapGetters('company', [
       'getSelectedCompany'
     ]),
@@ -231,13 +243,13 @@ export default {
       return data
     },
     async getReports (isDownload = false) {
-      this.$v.range.$touch()
-      this.$v.formData.$touch()
+      this.vRange.$touch()
+      this.vFormData.$touch()
       if (this.selectedRange === 'Till Date') {
         this.formData.from_date = moment(this.formData.to_date).startOf('month').toString()
         this.formData.to_date = moment(this.formData.to_date).toString()
       }
-      if (this.$v.$invalid) {
+      if (this.$v?.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }

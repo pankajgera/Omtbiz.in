@@ -5,6 +5,7 @@
     }
 
     font-family: $base-font-family;
+    box-sizing: border-box;
 }
 
 // Disable Outline on focus
@@ -119,6 +120,8 @@
     font-family: poppins;
     font-weight: 600;
     font-size: 15px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
 
     .btn-label {
         margin: 0 0 0 0;
@@ -126,7 +129,8 @@
 }
 
 .btn-omtbiz:focus {
-    outline: 10px auto #e37a7a;
+    outline: none;
+    box-shadow: 0 0 0 0.15rem rgba(227, 122, 122, 0.35);
 }
 
 .btn-omtbiz:disabled {

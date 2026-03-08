@@ -14,6 +14,7 @@ import swal from 'sweetalert'
 import { setupBootstrap } from './bootstrap'
 import Header from './components/Header.vue'
 import mitt from 'mitt'
+import { validationMixin } from './compat/vuelidate'
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -55,6 +56,7 @@ app.use(router)
 app.use(store)
 app.use(i18n)
 setupBootstrap(app)
+app.mixin(validationMixin)
 
 app.config.globalProperties.$utils = utils
 app.config.globalProperties.$swal = swal

@@ -9,6 +9,9 @@
     align-items: center;
     white-space: nowrap;
     line-height: 14px;
+    margin: 4px 6px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
 
     &.btn-lg {
         height: 45px;

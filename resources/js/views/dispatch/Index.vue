@@ -115,17 +115,17 @@
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>To Be Dispatch</h4>
         <base-button
-            v-show="toBeDispatchedData"
-            :outline="true"
-            :icon="['fas', 'print']"
-            color="theme"
-            size="large"
-            :style="['position: absolute',' margin-right: 5%']"
-            right-icon
-            @click="printToBeDispatch"
-          >
-            Print
-          </base-button>
+          v-show="toBeDispatchedData"
+          :outline="true"
+          :icon="['fas', 'print']"
+          color="theme"
+          size="large"
+          class="dispatch-print-button"
+          right-icon
+          @click="printToBeDispatch"
+        >
+          Print
+        </base-button>
         <transition name="fade">
           <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -312,17 +312,18 @@
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>Dispatched</h4>
-          <base-button
-            v-show="dipatchedCompletedData"
-            :outline="true"
-            :icon="['fas', 'print']"
-            color="theme"
-            size="large"
-            right-icon
-            @click="printDispatched"
-          >
-            Print
-          </base-button>
+        <base-button
+          v-show="dipatchedCompletedData"
+          :outline="true"
+          :icon="['fas', 'print']"
+          color="theme"
+          size="large"
+          class="dispatch-print-button"
+          right-icon
+          @click="printDispatched"
+        >
+          Print
+        </base-button>
         <transition name="fade">
           <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">

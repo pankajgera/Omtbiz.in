@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-       <div class="col-xs-2 mr-2">
+        <div class="col-xs-2 mr-2">
           <base-button
             :outline="true"
             color="theme"

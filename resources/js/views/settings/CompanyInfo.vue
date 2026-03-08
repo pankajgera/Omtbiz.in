@@ -245,15 +245,24 @@ export default {
     async setInitialData () {
       let response = await this.loadData()
       this.isFetchingData = true
-      this.formData.name = response.data.user.company.name
-      this.formData.address_street_1 = response.data.user.addresses[0].address_street_1
-      this.formData.address_street_2 = response.data.user.addresses[0].address_street_2
-      this.formData.zip = response.data.user.addresses[0].zip
-      this.formData.phone = response.data.user.phone
-      this.formData.state = response.data.user.addresses[0].state
-      this.formData.city = response.data.user.addresses[0].city
-      this.country = response.data.user.addresses[0].country
-      this.previewLogo = response.data.user.company.logo
+      const user = response?.data?.user
+      if (!user) {
+        window.toastr?.['error']?.('Oops! User data is unavailable.')
+        this.isFetchingData = false
+        return
+      }
+      const company = user.company || {}
+      const address = Array.isArray(user.addresses) ? (user.addresses[0] || {}) : {}
+
+      this.formData.name = company.name || ''
+      this.formData.address_street_1 = address.address_street_1 || ''
+      this.formData.address_street_2 = address.address_street_2 || ''
+      this.formData.zip = address.zip || ''
+      this.formData.phone = user.phone || ''
+      this.formData.state = address.state || ''
+      this.formData.city = address.city || ''
+      this.country = address.country || null
+      this.previewLogo = company.logo || null
     },
     async updateCompany () {
       this.$v.formData.$touch()

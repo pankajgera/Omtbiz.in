@@ -26,13 +26,13 @@
                 <label class="form-label">{{ $t('receipts.date') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
                   v-model="formData.receipt_date"
-                  :invalid="$v.formData.receipt_date.$error"
+                  :invalid="vFormData.receipt_date.$error"
                   :calendar-button="true"
                   calendar-button-icon="calendar"
-                  @change="$v.formData.receipt_date.$touch()"
+                  @change="vFormData.receipt_date.$touch()"
                 />
-                <div v-if="$v.formData.receipt_date.$error">
-                  <span v-if="!$v.formData.receipt_date.required" class="text-danger">{{ $t('validation.required') }}</span>
+                <div v-if="vFormData.receipt_date.$error">
+                  <span v-if="!vFormData.receipt_date.required" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
             </div>
@@ -40,15 +40,15 @@
               <div class="form-group">
                 <label class="form-label">{{ $t('receipts.receipt_number') }}</label><span class="text-danger"> *</span>
                 <base-prefix-input
-                  :invalid="$v.receiptNumAttribute.$error"
+                  :invalid="vReceiptNumAttribute.$error"
                   v-model.trim="receiptNumAttribute"
                   :prefix="receiptPrefix"
                   :disabled="isEdit"
-                  @input="$v.receiptNumAttribute.$touch()"
+                  @input="vReceiptNumAttribute.$touch()"
                 />
-                <div v-if="$v.receiptNumAttribute.$error">
-                  <span v-if="!$v.receiptNumAttribute.required" class="text-danger">{{ $tc('validation.required') }}</span>
-                  <span v-if="!$v.receiptNumAttribute.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
+                <div v-if="vReceiptNumAttribute.$error">
+                  <span v-if="!vReceiptNumAttribute.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                  <span v-if="!vReceiptNumAttribute.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
                 </div>
               </div>
             </div>
@@ -56,7 +56,7 @@
               <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
               <base-select
                 v-model="formData.list"
-                :invalid="$v.formData.list.$error"
+                :invalid="vFormData.list.$error"
                 :options="sundryDebtorList"
                 :searchable="true"
                 :show-labels="false"
@@ -65,8 +65,8 @@
                 track-by="id"
                 :disabled="isEdit"
               />
-              <div v-if="$v.formData.list.$error">
-                <span v-if="!$v.formData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <div v-if="vFormData.list.$error">
+                <span v-if="!vFormData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
             <div class="col-sm-6">
@@ -74,7 +74,7 @@
                 <label class="form-label">{{ $t('receipts.amount') }}</label><span class="text-danger"> *</span>
                  <base-input
                     v-model.trim="formData.amount"
-                    :class="{'invalid' : $v.formData.amount.$error, 'input-field': true}"
+                    :class="{'invalid' : vFormData.amount.$error, 'input-field': true}"
                     type="number"
                     :max="15"
                     name="amount"
@@ -82,8 +82,8 @@
                 <div v-if="formData.amount">
                   ₹ {{ numberWithCommas(formData.amount) }}
                 </div>
-                <div v-if="$v.formData.amount.$error">
-                  <span v-if="!$v.formData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
+                <div v-if="vFormData.amount.$error">
+                  <span v-if="!vFormData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
             </div>
@@ -95,12 +95,12 @@
                   :options="getReceiptMode"
                   :searchable="true"
                   :show-labels="false"
-                  :class="{'invalid' : $v.formData.receipt_mode.$error}"
+                  :class="{'invalid' : vFormData.receipt_mode.$error}"
                   :placeholder="$t('receipts.select_receipt_mode')"
                   :disabled="isEdit"
                 />
-                <div v-if="$v.formData.receipt_mode.$error">
-                  <span v-if="!$v.formData.receipt_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                <div v-if="vFormData.receipt_mode.$error">
+                  <span v-if="!vFormData.receipt_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
                 </div>
               </div>
             </div>
@@ -226,6 +226,20 @@ export default {
     }
   },
   computed: {
+    vReceiptNumAttribute () {
+      return this.$v?.receiptNumAttribute || { $error: false, required: true, numeric: true, $touch: () => {} }
+    },
+    vFormData () {
+      return this.$v?.formData || {
+        $error: false,
+        $invalid: false,
+        $touch: () => {},
+        receipt_date: { $error: false, required: true, $touch: () => {} },
+        list: { $error: false, required: true, $touch: () => {} },
+        amount: { $error: false, required: true, $touch: () => {} },
+        receipt_mode: { $error: false, required: true, $touch: () => {} }
+      }
+    },
     ...mapGetters('currency', [
       'defaultCurrencyForInput'
     ]),
@@ -359,8 +373,8 @@ export default {
       this.maxPayableAmount = parseFloat(data.data.invoice.due_amount).toFixed(2)
     },
     async submitReceiptData () {
-      this.$v.formData.$touch()
-      if (this.$v.formData.$invalid) {
+      this.vFormData.$touch()
+      if (this.vFormData.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }

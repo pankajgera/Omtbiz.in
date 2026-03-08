@@ -38,51 +38,51 @@
             <label class="input-label">{{ $tc('settings.account_settings.name') }}</label>
             <base-input
               v-model="formData.name"
-              :invalid="$v.formData.name.$error"
+              :invalid="vFormData.name.$error"
               :placeholder="$t('settings.user_profile.name')"
-              @input="$v.formData.name.$touch()"
+              @input="vFormData.name.$touch()"
             />
-            <div v-if="$v.formData.name.$error">
-              <span v-if="!$v.formData.name.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            <div v-if="vFormData.name.$error">
+              <span v-if="!vFormData.name.required" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
           </div>
           <div class="col-md-6 mb-4 form-group">
             <label class="input-label">{{ $tc('settings.account_settings.email') }}</label>
             <base-input
               v-model="formData.email"
-              :invalid="$v.formData.email.$error"
+              :invalid="vFormData.email.$error"
               :placeholder="$t('settings.user_profile.email')"
-              @input="$v.formData.email.$touch()"
+              @input="vFormData.email.$touch()"
             />
-            <div v-if="$v.formData.email.$error">
-              <span v-if="!$v.formData.email.required" class="text-danger">{{ $tc('validation.required') }}</span>
-              <span v-if="!$v.formData.email.email" class="text-danger">{{ $tc('validation.email_incorrect') }}</span>
+            <div v-if="vFormData.email.$error">
+              <span v-if="!vFormData.email.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <span v-if="!vFormData.email.email" class="text-danger">{{ $tc('validation.email_incorrect') }}</span>
             </div>
           </div>
           <div class="col-md-6 mb-4 form-group">
             <label class="input-label">{{ $tc('settings.account_settings.password') }}</label>
             <base-input
               v-model="formData.password"
-              :invalid="$v.formData.password.$error"
+              :invalid="vFormData.password.$error"
               :placeholder="$t('settings.user_profile.password')"
               type="password"
-              @input="$v.formData.password.$touch()"
+              @input="vFormData.password.$touch()"
             />
-            <div v-if="$v.formData.password.$error">
-              <span v-if="!$v.formData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.formData.password.$params.minLength.min, {count: $v.formData.password.$params.minLength.min}) }} </span>
+            <div v-if="vFormData.password.$error">
+              <span v-if="!vFormData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', vFormData.password.$params.minLength.min, {count: vFormData.password.$params.minLength.min}) }} </span>
             </div>
           </div>
           <div class="col-md-6 mb-4 form-group">
             <label class="input-label">{{ $tc('settings.account_settings.confirm_password') }}</label>
             <base-input
               v-model="formData.confirm_password"
-              :invalid="$v.formData.confirm_password.$error"
+              :invalid="vFormData.confirm_password.$error"
               :placeholder="$t('settings.user_profile.confirm_password')"
               type="password"
-              @input="$v.formData.confirm_password.$touch()"
+              @input="vFormData.confirm_password.$touch()"
             />
-            <div v-if="$v.formData.confirm_password.$error">
-              <span v-if="!$v.formData.confirm_password.sameAsPassword" class="text-danger">{{ $tc('validation.password_incorrect') }}</span>
+            <div v-if="vFormData.confirm_password.$error">
+              <span v-if="!vFormData.confirm_password.sameAsPassword" class="text-danger">{{ $tc('validation.password_incorrect') }}</span>
             </div>
           </div>
         </div>
@@ -153,6 +153,17 @@ export default {
     }
   },
   computed: {
+    vFormData () {
+      return this.$v?.formData || {
+        $error: false,
+        $invalid: false,
+        $touch: () => {},
+        name: { $error: false, required: true, $touch: () => {} },
+        email: { $error: false, required: true, email: true, $touch: () => {} },
+        password: { $error: false, minLength: true, $touch: () => {}, $params: { minLength: { min: 0 } } },
+        confirm_password: { $error: false, sameAsPassword: true, $touch: () => {} }
+      }
+    },
     isRequired () {
       if (!this.formData.password) {
         return false
@@ -189,7 +200,7 @@ export default {
       this.previewAvatar = '/images/default-avatar.jpg'
     },
     async updateUserData () {
-      this.$v.formData.$touch()
+      this.vFormData.$touch()
       if (this.$v.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true

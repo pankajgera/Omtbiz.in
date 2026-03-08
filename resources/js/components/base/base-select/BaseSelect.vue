@@ -163,6 +163,9 @@ import pointerMixin from './pointerMixin'
 
 export default {
   name: 'vue-multiselect',
+  compatConfig: {
+    COMPONENT_V_MODEL: false
+  },
   mixins: [multiselectMixin, pointerMixin],
   props: {
     /**
