@@ -469,7 +469,7 @@ export default {
     this.fetchCustomers()
     this.fetchData()
   },
-  destroyed () {
+  unmounted() {
     if (this.selectAllField) {
       this.selectAllOrders()
     }

@@ -115,16 +115,16 @@
                     >
                       {{ invoiceItem.discount_type == 'fixed' ? currency.symbol : '%' }}
                     </button>
-                    <v-dropdown-inventory>
+                    <v-dropdown-item>
                       <a class="dropdown-inventory" href="#" @click.prevent="selectFixed" >
                         {{ $t('general.fixed') }}
                       </a>
-                    </v-dropdown-inventory>
-                    <v-dropdown-inventory>
+                    </v-dropdown-item>
+                    <v-dropdown-item>
                       <a class="dropdown-inventory" href="#" @click.prevent="selectPercentage">
                         {{ $t('general.percentage') }}
                       </a>
-                    </v-dropdown-inventory>
+                    </v-dropdown-item>
                   </v-dropdown>
                 </div>
               </div>
@@ -230,7 +230,8 @@ export default {
   },
   computed: {
     vInvoiceItem () {
-      return this.$v?.invoiceItem || this._fallbackVInvoiceItem
+      const v = this.$v && this.$v.value ? this.$v.value : this.$v
+      return (v && v.invoiceItem) || this._fallbackVInvoiceItem
     },
     ...mapGetters('modal', [
       'modalActive'

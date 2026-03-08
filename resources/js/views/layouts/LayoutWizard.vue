@@ -15,7 +15,7 @@ export default {
     this.setLayoutBackground()
   },
 
-  destroyed () {
+  unmounted() {
     document.body.style.backgroundColor = '#EBF1FA'
   },
   methods: {

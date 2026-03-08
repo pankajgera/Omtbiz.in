@@ -608,7 +608,7 @@ export default {
       deep: true
     }
   },
-  destroyed () {
+  unmounted() {
     if (this.selectAllField) {
       this.selectAllDispatch()
     }

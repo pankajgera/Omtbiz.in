@@ -113,7 +113,7 @@ export default {
       this.setData()
     }
   },
-  destroyed () {
+  unmounted() {
 
   },
   methods: {

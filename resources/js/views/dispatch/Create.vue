@@ -181,7 +181,7 @@ export default {
       minute: "2-digit",
     });
   },
-  destroyed() {
+  unmounted() {
     this.resetSelectedDispatch()
     this.resetSelectedToBeDispatch()
   },

@@ -19,7 +19,7 @@ export default {
   mounted () {
     this.setLayoutClasses()
   },
-  destroyed () {
+  unmounted() {
     $('body').removeClass('page-error-404')
   },
   methods: {

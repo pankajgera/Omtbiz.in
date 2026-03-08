@@ -310,7 +310,7 @@ export default {
   created () {
     this.fetchCustomers()
   },
-  destroyed () {
+  unmounted() {
     if (this.selectAllField) {
       this.selectAllInvoices()
     }

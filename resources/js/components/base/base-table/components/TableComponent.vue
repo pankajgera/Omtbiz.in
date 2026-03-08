@@ -221,9 +221,10 @@ export default {
 
   async mounted () {
     this.sort.fieldName = this.sortBy
-    const columnComponents = this.$slots.default
-      .filter(column => column.componentInstance)
-      .map(column => column.componentInstance)
+    const slotNodes = this.$slots.default ? this.$slots.default() : []
+    const columnComponents = slotNodes
+      .map(node => node.component && node.component.proxy)
+      .filter(Boolean)
 
     this.columns = columnComponents.map(column => new Column(column))
 
