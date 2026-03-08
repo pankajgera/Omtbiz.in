@@ -25,6 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Passport::cookie('access_token_'.env('APP_ENV'));
+        Passport::enablePasswordGrant();
         // Passport::routes(); // Removed in Passport v11+
         Passport::personalAccessTokensExpireIn(now()->addYears(10));
         Passport::withoutCookieSerialization();

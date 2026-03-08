@@ -32,6 +32,9 @@
 </style>
 <script>
 export default {
+  compatConfig: {
+    COMPONENT_V_MODEL: false
+  },
   props: {
     prefix: {
       type: String,
@@ -41,6 +44,10 @@ export default {
     icon: {
       type: String,
       default: null
+    },
+    modelValue: {
+      type: [String, Number, File],
+      default: undefined
     },
     value: {
       type: [String, Number, File],
@@ -60,22 +67,20 @@ export default {
       default: false,
     }
   },
-  data () {
-    return {
-      inputValue: this.value
-    }
-  },
-  watch: {
-    'value' () {
-      this.inputValue = this.value
+  computed: {
+    inputValue: {
+      get () {
+        return this.modelValue !== undefined ? this.modelValue : this.value
+      },
+      set (value) {
+        this.$emit('update:modelValue', value)
+        this.$emit('input', value)
+      }
     }
   },
   methods: {
     focusInput () {
       this.$refs.basePrefixInput.focus()
-    },
-    handleInput (e) {
-      this.$emit('input', this.inputValue)
     },
     handleChange (e) {
       this.$emit('change', this.inputValue)

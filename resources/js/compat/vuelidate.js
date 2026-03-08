@@ -4,7 +4,15 @@ export { useVuelidate }
 export * from '@vuelidate/core'
 
 export const validationMixin = {
-  setup () {
-    return { $v: useVuelidate() }
+  data () {
+    return { _vuelidate: null }
+  },
+  beforeCreate () {
+    this._vuelidate = useVuelidate(undefined, undefined, { currentVueInstance: this })
+  },
+  computed: {
+    $v () {
+      return this._vuelidate || {}
+    }
   }
 }

@@ -15,6 +15,9 @@
 
 <script>
 export default {
+  compatConfig: {
+    COMPONENT_V_MODEL: false
+  },
   props: {
     rows: {
       type: String,
@@ -23,6 +26,10 @@ export default {
     cols: {
       type: String,
       default: '10'
+    },
+    modelValue: {
+      type: String,
+      default: undefined
     },
     value: {
       type: String,
@@ -49,25 +56,21 @@ export default {
       default: ''
     }
   },
-  data () {
-    return {
-      inputValue: this.value
-    }
-  },
   computed: {
+    inputValue: {
+      get () {
+        return this.modelValue !== undefined ? this.modelValue : this.value
+      },
+      set (value) {
+        this.$emit('update:modelValue', value)
+        this.$emit('input', value)
+      }
+    },
     isFieldValid () {
       return this.invalid
     }
   },
-  watch: {
-    'value' () {
-      this.inputValue = this.value
-    }
-  },
   methods: {
-    handleInput (e) {
-      this.$emit('input', this.inputValue)
-    },
     handleChange (e) {
       this.$emit('change', this.inputValue)
     },

@@ -23,15 +23,15 @@
                 </div>
                 <inventory-select
                   ref="inventorySelect"
-                  :invalid="$v.invoiceItem.name.$error"
-                  :invalid-description="$v.invoiceItem.description.$error"
+                  :invalid="vInvoiceItem.name.$error"
+                  :invalid-description="vInvoiceItem.description.$error"
                   :inventory="inventoryList"
                   :is-disable="isDisable"
                   :picked-inventory="inventoryData"
                   @search="searchVal"
                   @select="onSelectInventory"
                   @deselect="deselectInventory"
-                  @onDesriptionInput="$v.invoiceItem.description.$touch()"
+                  @onDesriptionInput="vInvoiceItem.description.$touch()"
                   @onSelectInventory="isSelected = true"
                   @endlist="showEndList"
                 />
@@ -44,14 +44,14 @@
                 :key="'inventoryQuantity'+index"
                 :name="'inventoryQuantity'+index"
                 v-model="inventoryQuantityBind"
-                :invalid="$v.invoiceItem.quantity.$error"
+                :invalid="vInvoiceItem.quantity.$error"
                 type="number"
                 small
                 :disabled="isDisable || disabled"
-                @blur="$v.invoiceItem.quantity.$touch()"
+                @blur="vInvoiceItem.quantity.$touch()"
               />
-              <div v-if="$v.invoiceItem.quantity.$error">
-                <span v-if="!$v.invoiceItem.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
+              <div v-if="vInvoiceItem.quantity.$error">
+                <span v-if="!vInvoiceItem.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
               </div>
             </td>
             <td class="text-left" v-if="('orders' !== inventoryType)">
@@ -59,13 +59,13 @@
                 <div class="flex-fillbd-highlight">
                    <base-input
                     v-model.trim="price"
-                    :class="{'invalid' : $v.invoiceItem.price.$error, 'input-field': true}"
+                    :class="{'invalid' : vInvoiceItem.price.$error, 'input-field': true}"
                     type="text"
                     name="price"
                     :disabled="true"
                   />
-                  <div v-if="$v.invoiceItem.price.$error">
-                    <span v-if="!$v.invoiceItem.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
+                  <div v-if="vInvoiceItem.price.$error">
+                    <span v-if="!vInvoiceItem.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
                   </div>
                 </div>
 
@@ -80,12 +80,12 @@
                     :key="'inventoryPrice'+index"
                     :name="'inventoryPrice'+index"
                     v-model.trim="sale_price"
-                    :class="{'invalid' : $v.invoiceItem.sale_price.$error, 'input-field': true}"
+                    :class="{'invalid' : vInvoiceItem.sale_price.$error, 'input-field': true}"
                     :disabled="isDisable || disabled"
                     type="number"
                   />
-                  <div v-if="$v.invoiceItem.sale_price.$error">
-                    <span v-if="!$v.invoiceItem.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
+                  <div v-if="vInvoiceItem.sale_price.$error">
+                    <span v-if="!vInvoiceItem.sale_price.maxLength" class="text-danger">{{ $t('validation.sale_price_maxlength') }}</span>
                   </div>
                 </div>
 
@@ -99,10 +99,10 @@
                 >
                   <base-input
                     v-model="discount"
-                    :invalid="$v.invoiceItem.discount_val.$error"
+                    :invalid="vInvoiceItem.discount_val.$error"
                     input-class="item-discount"
                     :disabled="isDisable || disabled"
-                    @input="$v.invoiceItem.discount_val.$touch()"
+                    @input="vInvoiceItem.discount_val.$touch()"
                   />
                   <v-dropdown :show-arrow="false" theme-light>
                     <button
@@ -209,6 +209,17 @@ export default {
   },
   data () {
     return {
+      _fallbackVInvoiceItem: {
+        $error: false,
+        $invalid: false,
+        $touch: () => {},
+        name: { $error: false, required: true, $touch: () => {} },
+        description: { $error: false, maxLength: true, $touch: () => {} },
+        quantity: { $error: false, maxLength: true, $touch: () => {} },
+        price: { $error: false, maxLength: true, $touch: () => {} },
+        sale_price: { $error: false, maxLength: true, $touch: () => {} },
+        discount_val: { $error: false, $touch: () => {} }
+      },
       isClosePopup: false,
       inventorySelect: null,
       invoiceItem: {...this.inventoryData},
@@ -218,6 +229,9 @@ export default {
     }
   },
   computed: {
+    vInvoiceItem () {
+      return this.$v?.invoiceItem || this._fallbackVInvoiceItem
+    },
     ...mapGetters('modal', [
       'modalActive'
     ]),
@@ -426,7 +440,7 @@ export default {
       this.$emit('remove', this.index)
     },
     validateInventory () {
-      this.$v.invoiceItem.$touch()
+      this.vInvoiceItem.$touch()
       if (this.invoiceItem !== null) {
         this.$emit('inventoryValidate', this.index, !this.$v.$invalid)
       } else {

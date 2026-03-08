@@ -3,7 +3,7 @@
  * include Vue and Vue Resource. This gives a great starting point for
  * building robust, powerful web applications using Vue and Laravel.
  */
-import { createApp } from 'vue'
+import { createApp, configureCompat } from 'vue'
 import router from './router.js'
 import Plugin from './helpers/plugin'
 import store from './store/index'
@@ -20,6 +20,14 @@ import mitt from 'mitt'
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+configureCompat({
+  RENDER_FUNCTION: 'suppress-warning',
+  WATCH_ARRAY: 'suppress-warning',
+  ATTR_ENUMERATED_COERCION: 'suppress-warning',
+  INSTANCE_ATTRS_CLASS_STYLE: 'suppress-warning',
+  ATTR_FALSE_VALUE: 'suppress-warning'
+})
+
 const app = createApp({
   computed: {
     ...mapGetters([
@@ -33,6 +41,15 @@ const app = createApp({
   }
 })
 
+app.config.compatConfig = {
+  COMPONENT_V_MODEL: 'suppress-warning',
+  RENDER_FUNCTION: 'suppress-warning',
+  ATTR_ENUMERATED_COERCION: 'suppress-warning',
+  WATCH_ARRAY: 'suppress-warning',
+  INSTANCE_ATTRS_CLASS_STYLE: 'suppress-warning',
+  ATTR_FALSE_VALUE: 'suppress-warning'
+}
+
 app.component('Header', Header)
 app.use(router)
 app.use(store)
@@ -41,6 +58,8 @@ setupBootstrap(app)
 
 app.config.globalProperties.$utils = utils
 app.config.globalProperties.$swal = swal
+app.config.globalProperties.$tc = (...args) => i18n.global.t(...args)
+app.config.compilerOptions.whitespace = 'condense'
 
 const hub = mitt()
 window.hub = {

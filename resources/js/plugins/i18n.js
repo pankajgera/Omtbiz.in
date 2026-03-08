@@ -3,6 +3,7 @@ import en from './en.json'
 
 const i18n = createI18n({
   legacy: true,
+  globalInjection: true,
   locale: 'en',
   messages: {
     en,

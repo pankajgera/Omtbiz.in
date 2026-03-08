@@ -44,7 +44,7 @@
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setInvoiceDebtor"
-              :invalid="$v.newInvoice.debtors.$error"
+              :invalid="vNewInvoice.debtors.$error"
               :options="sundryDebtorsList"
               :required="'required'"
               :searchable="true"
@@ -56,8 +56,8 @@
               label="name"
               track-by="id"
             />
-            <div v-if="$v.newInvoice.debtors.$error">
-              <span v-if="!$v.newInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            <div v-if="vNewInvoice.debtors.$error">
+              <span v-if="!vNewInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
         </div>
         <div class="col-md-4 col-sm-6 collapse-input">
@@ -68,36 +68,36 @@
             data-date=""
             data-date-format="DD/MM/YYYY"
             class="base-prefix-input"
-            @change="$v.newInvoice.invoice_date.$touch()"
+            @change="vNewInvoice.invoice_date.$touch()"
             :disabled="isDisabled"
           />
-          <span v-if="$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="vNewInvoice.invoice_date.$error && !vNewInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
         <div class="col-md-4 col-sm-6 collapse-input">
           <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
           <base-prefix-input
             v-model="invoiceNumAttribute"
             icon="hashtag"
-            :invalid="$v.invoiceNumAttribute.$error"
+            :invalid="vInvoiceNumAttribute.$error"
             :prefix="invoicePrefix"
             :prefix-width="55"
             :disabled="true"
-            @input="$v.invoiceNumAttribute.$touch()"
+            @input="vInvoiceNumAttribute.$touch()"
           />
-          <span v-show="$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
+          <span v-show="vInvoiceNumAttribute.$error && !vInvoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
         </div>
         <div class="col-md-4 col-sm-6 collapse-input">
           <label>{{ $t('invoices.ref_number') }}</label>
           <base-prefix-input
             v-model="referenceNumAttribute"
             icon="hashtag"
-            :invalid="$v.referenceNumAttribute.$error"
+            :invalid="vReferenceNumAttribute.$error"
             :prefix="referencePrefix"
             :prefix-width="55"
             :disabled="true"
-            @input="$v.referenceNumAttribute.$touch()"
+            @input="vReferenceNumAttribute.$touch()"
           />
-          <div v-if="$v.referenceNumAttribute.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
+          <div v-if="vReferenceNumAttribute.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
         </div>
       </div>
       <div class="table-responsive">
@@ -144,11 +144,11 @@
               </th>
             </tr>
           </thead>
-          <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
+          <tbody>
             <invoice-inventory
               v-for="(each, index) in inventoryBind"
               ref="invoiceInventory"
-              :key="each.name+index+each.quantity"
+              :key="inventoryKey(each, index)"
               :index="index"
               :inventory-data="each"
               :currency="currency"
@@ -163,7 +163,7 @@
               @inventoryValidate="checkInventoryData"
               @endlist="showEndList"
             />
-          </draggable>
+          </tbody>
         </table>
       </div>
       <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="isDisabled" @click="addInventory">
@@ -181,10 +181,10 @@
             v-model="newInvoice.notes"
             rows="3"
             cols="50"
-            @input="$v.newInvoice.notes.$touch()"
+            @input="vNewInvoice.notes.$touch()"
           />
-          <div v-if="$v.newInvoice.notes.$error">
-            <span v-if="!$v.newInvoice.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
+          <div v-if="vNewInvoice.notes.$error">
+            <span v-if="!vNewInvoice.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
           </div>
         </div>
 
@@ -272,9 +272,9 @@
             >
               <base-input
                 v-model="discount"
-                :invalid="$v.newInvoice.discount_val.$error"
+                :invalid="vNewInvoice.discount_val.$error"
                 input-class="item-discount"
-                @input="$v.newInvoice.discount_val.$touch()"
+                @input="vNewInvoice.discount_val.$touch()"
               />
               <v-dropdown :show-arrow="false">
                 <button
@@ -468,6 +468,24 @@ export default {
     }
   },
   computed: {
+    vInvoiceNumAttribute () {
+      return this.$v?.invoiceNumAttribute || { $error: false, required: true, $touch: () => {} }
+    },
+    vReferenceNumAttribute () {
+      return this.$v?.referenceNumAttribute || { $error: false, required: true, $touch: () => {} }
+    },
+    vNewInvoice () {
+      return this.$v?.newInvoice || {
+        $error: false,
+        $invalid: false,
+        $touch: () => {},
+        debtors: { $error: false, required: true, $touch: () => {} },
+        invoice_date: { $error: false, required: true, $touch: () => {} },
+        notes: { $error: false, maxLength: true, $touch: () => {} },
+        discount_val: { $error: false, $touch: () => {} },
+        reference_number: { $error: false, required: true, $touch: () => {} }
+      }
+    },
     ...mapGetters('currency', [
       'defaultCurrency'
     ]),
@@ -911,7 +929,7 @@ export default {
       this.newInvoice.inventories[index].valid = isValid
     },
     checkValid () {
-      this.$v.newInvoice.$touch()
+      this.vNewInvoice.$touch()
       window.hub.$emit('checkInventory')
       let isValid = true
       this.newInvoice.inventories.forEach((each) => {
@@ -919,7 +937,7 @@ export default {
           isValid = false
         }
       })
-      if (this.$v.newInvoice.$invalid === false && isValid === true) {
+      if (this.vNewInvoice.$invalid === false && isValid === true) {
         isValid = true
       }
       return isValid
@@ -989,6 +1007,10 @@ export default {
           window.location.reload()
         }, 2000)
       })
+    }
+    ,
+    inventoryKey (item, index) {
+      return item.id || item.inventory_id || item.name || index
     }
   }
 }
