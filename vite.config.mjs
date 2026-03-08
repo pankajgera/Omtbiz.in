@@ -64,4 +64,30 @@ export default defineConfig(({ mode }) => ({
             },
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                quietDeps: true,
+                silenceDeprecations: ['import', 'color-functions', 'global-builtin', 'if-function', 'slash-div'],
+                logger: {
+                    warn(message, options) {
+                        const deprecationType = options?.deprecationType?.id;
+                        if (
+                            deprecationType === 'import' ||
+                            deprecationType === 'color-functions' ||
+                            deprecationType === 'global-builtin' ||
+                            deprecationType === 'if-function' ||
+                            deprecationType === 'slash-div'
+                        ) {
+                            return;
+                        }
+                        if (typeof message === 'string' && message.includes('Sass @import rules are deprecated')) {
+                            return;
+                        }
+                        console.warn(message);
+                    },
+                },
+            },
+        },
+    },
 }));

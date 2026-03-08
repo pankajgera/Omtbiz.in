@@ -27,22 +27,26 @@
         <div class="card">
           <h5 class="p-3">Inwards</h5>
           <table class="p-3 m-3">
-            <tr>
-              <th>Item</th>
-              <th>Worker Name</th>
-              <th>Quantity</th>
-              <th>Sale Price</th>
-              <th>Unit</th>
-              <th>Date/Time</th>
-            </tr>
-            <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-              <td>{{each.name}}</td>
-              <td>{{each.worker_name ? each.worker_name : '-'}}</td>
-              <td>{{each.quantity}}</td>
-              <td>₹ {{each.sale_price}}</td>
-              <td>{{each.unit}}</td>
-              <td>{{each.date_time}}</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Worker Name</th>
+                <th>Quantity</th>
+                <th>Sale Price</th>
+                <th>Unit</th>
+                <th>Date/Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
+                <td>{{each.name}}</td>
+                <td>{{each.worker_name ? each.worker_name : '-'}}</td>
+                <td>{{each.quantity}}</td>
+                <td>₹ {{each.sale_price}}</td>
+                <td>{{each.unit}}</td>
+                <td>{{each.date_time}}</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>
@@ -52,25 +56,33 @@
         <div class="card">
           <h5 class="p-3">Outwards</h5>
           <table class="p-3 m-3" v-if="invoiceItems.length">
-            <tr>
-              <th>Invoice Number</th>
-              <th>Party Name</th>
-              <th>Quantity</th>
-              <th>Sale Price</th>
-              <th>Total</th>
-              <th>Date/Time</th>
-            </tr>
-            <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
-              <td><a style="color:blue" :href="`/invoices/${each.invoice_id}/edit`">{{each.invoice_number}}</a></td>
-              <td>{{each.party_name}}</td>
-              <td>{{each.quantity}}</td>
-              <td>₹ {{each.sale_price}}</td>
-              <td>₹ {{each.total}}</td>
-              <td>{{each.date_time}}</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Invoice Number</th>
+                <th>Party Name</th>
+                <th>Quantity</th>
+                <th>Sale Price</th>
+                <th>Total</th>
+                <th>Date/Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(each, index) in invoiceItems" :key="index" style="border-top: 1px solid;">
+                <td><a style="color:blue" :href="`/invoices/${each.invoice_id}/edit`">{{each.invoice_number}}</a></td>
+                <td>{{each.party_name}}</td>
+                <td>{{each.quantity}}</td>
+                <td>₹ {{each.sale_price}}</td>
+                <td>₹ {{each.total}}</td>
+                <td>{{each.date_time}}</td>
+              </tr>
+            </tbody>
           </table>
           <table v-else>
-              <p class="ml-4">No invoice item found with this inventory</p>
+            <tbody>
+              <tr><td colspan="6">
+                <p class="ml-4">No invoice item found with this inventory</p>
+              </td></tr>
+            </tbody>
           </table>
         </div>
       </div>
