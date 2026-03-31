@@ -406,7 +406,15 @@ export default {
         try {
           let response = await this.addReceipt(data)
           if (response.data.success) {
-            window.toastr['success'](this.$t('receipts.created_message'))
+            const receiptStatus = response.data.receipt && response.data.receipt.receipt_status
+            const isPendingApproval = receiptStatus === 'To Be Approved'
+            window.toastr['success'](isPendingApproval ? this.$t('receipts.submitted_for_approval_message') : this.$t('receipts.created_message'))
+            if (isPendingApproval) {
+              setTimeout(() => {
+                window.location.reload()
+              }, 1000)
+              return true
+            }
             this.siteURL = `/receipts/pdf/${response.data.receipt.id}`
             window.swal({
               title: 'Send Receipt',

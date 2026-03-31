@@ -115,6 +115,12 @@ export default {
             meta: ["admin", "accountant"],
           },
           {
+            title: "navigation.receipt_approvals",
+            icon: "check-circle",
+            route: "/receipts/approvals",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.payments",
             icon: "credit-card",
             route: "/payments",

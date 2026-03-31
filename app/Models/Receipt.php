@@ -9,6 +9,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Receipt extends Model
 {
+    public const STATUS_DRAFT = 'Draft';
+    public const STATUS_DONE = 'Done';
+    public const STATUS_TO_BE_APPROVED = 'To Be Approved';
+    public const STATUS_DECLINED = 'Declined';
+
     public const RECEIPT_MODE_CHECK = 'CHECK';
     public const RECEIPT_MODE_OTHER = 'OTHER';
     public const RECEIPT_MODE_CASH = 'CASH';
@@ -137,6 +142,11 @@ class Receipt extends Model
         return $query->where('receipts.receipt_mode', $receiptMode);
     }
 
+    public function scopeReceiptStatus($query, $receiptStatus)
+    {
+        return $query->where('receipts.receipt_status', $receiptStatus);
+    }
+
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);
@@ -179,6 +189,10 @@ class Receipt extends Model
 
         if ($filters->get('receipt_mode')) {
             $query->receiptMode($filters->get('receipt_mode'));
+        }
+
+        if ($filters->get('receipt_status')) {
+            $query->receiptStatus($filters->get('receipt_status'));
         }
 
         if ($filters->get('customer_id')) {

@@ -75,6 +75,26 @@ export const updateReceipt = ({ commit, receipt, state }, data) => {
   })
 }
 
+export const approveReceipt = ({ commit, receipt, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/${id}/approve`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const declineReceipt = ({ commit, receipt, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/${id}/decline`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const deleteReceipt = ({ commit, receipt, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/receipts/${id}`).then((response) => {
