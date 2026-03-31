@@ -264,6 +264,10 @@ class ReceiptController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $receipt = Receipt::with('user', 'invoice')->find($id);
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type', 'mobile_number')->get();
@@ -306,6 +310,10 @@ class ReceiptController extends Controller
      */
     public function update(ReceiptRequest $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
         $receipt = Receipt::find($id);
@@ -351,6 +359,10 @@ class ReceiptController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $receipt = Receipt::find($id);
 
         if ($receipt->invoice_id != null) {
@@ -380,6 +392,10 @@ class ReceiptController extends Controller
      */
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         foreach ($request->id as $id) {
             $receipt = Receipt::find($id);
 

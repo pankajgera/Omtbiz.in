@@ -99,7 +99,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ vouchers.length }}</b> {{ $t('general.of') }} <b>{{ totalVouchers }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedVouchers.length" :show-arrow="false">
+          <v-dropdown v-if="role === 'admin' && selectedVouchers.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -156,9 +156,10 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `vouchers/${row.id}/edit`}">
+            <router-link v-if="role === 'admin'" :to="{path: `vouchers/${row.id}/edit`}">
               {{ row.account }}
             </router-link>
+            <span v-else>{{ row.account }}</span>
           </template>
         </table-column>
         <table-column
@@ -199,14 +200,14 @@
             </span>
             <v-dropdown-item>
 
-              <router-link :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
+              <router-link v-if="role === 'admin'" :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}
               </router-link>
 
             </v-dropdown-item>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeVouchers(row.id)">
+              <div v-if="role === 'admin'" class="dropdown-item" @click="removeVouchers(row.id)">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -263,7 +264,8 @@ export default {
         from_date: '',
         to_date: '',
       },
-      index: null
+      index: null,
+      role: this.$store.state.user.currentUser.role
     }
   },
   computed: {

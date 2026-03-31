@@ -100,7 +100,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedInvoices.length" :show-arrow="false">
+          <v-dropdown v-if="role === 'admin' && selectedInvoices.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -156,7 +156,7 @@
           show="invoice_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}" class="dropdown-item">
+            <router-link :to="{path: role === 'admin' ? `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}` : `invoices/${row.id}/view`}" class="dropdown-item">
                {{ row.invoice_number }}
               </router-link>
           </template>
@@ -196,7 +196,7 @@
                 <dot-icon />
               </span>
               <v-dropdown-item>
-                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
+                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -206,7 +206,7 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin' || role === 'accountant'">
+                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
