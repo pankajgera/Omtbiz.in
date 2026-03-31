@@ -141,19 +141,37 @@
             </div>
             <div class="col-sm-12">
               <div class="form-group collapse-button-container">
-                <base-button
-                  :loading="isLoading"
-                  icon="save"
-                  color="theme"
-                  type="submit"
-                  class="collapse-button"
-                >
-                  {{ $t('receipts.save_receipt') }}
-                </base-button>
-                <br/>
-                <base-button v-if="isEdit" outline color="theme" class="report-button" @click="sendReports()">
-                  {{ $t('reports.send_report') }}
-                </base-button>
+                <div class="receipt-action-row">
+                  <base-button
+                    :loading="isLoading"
+                    icon="save"
+                    color="theme"
+                    type="submit"
+                    class="collapse-button"
+                  >
+                    {{ $t('receipts.save_receipt') }}
+                  </base-button>
+                  <base-button
+                    v-if="isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'"
+                    color="theme"
+                    class="report-button"
+                    @click="approveCurrentReceipt"
+                  >
+                    {{ $t('receipts.approve_receipt') }}
+                  </base-button>
+                  <base-button
+                    v-if="isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'"
+                    outline
+                    color="danger"
+                    class="report-button"
+                    @click="declineCurrentReceipt"
+                  >
+                    {{ $t('receipts.decline_receipt') }}
+                  </base-button>
+                  <base-button v-if="isEdit" outline color="theme" class="report-button" @click="sendReports()">
+                    {{ $t('reports.send_report') }}
+                  </base-button>
+                </div>
               </div>
             </div>
           </div>
@@ -317,7 +335,9 @@ export default {
       'fetchCreateReceipt',
       'addReceipt',
       'updateReceipt',
-      'fetchReceipt'
+      'fetchReceipt',
+      'approveReceipt',
+      'declineReceipt'
     ]),
     ...mapActions('customer', [
       'sendReportOnWhatsApp'
@@ -467,7 +487,30 @@ export default {
           window.location.reload()
         }, 2000)
       })
+    },
+    async approveCurrentReceipt () {
+      let response = await this.approveReceipt(this.$route.params.id)
+      if (response.data.success) {
+        this.formData.receipt_status = response.data.receipt.receipt_status
+        window.toastr['success'](this.$t('receipts.approved_message'))
+      }
+    },
+    async declineCurrentReceipt () {
+      let response = await this.declineReceipt(this.$route.params.id)
+      if (response.data.success) {
+        this.formData.receipt_status = response.data.receipt.receipt_status
+        window.toastr['success'](this.$t('receipts.declined_message'))
+      }
     }
   }
 }
 </script>
+
+<style scoped>
+.receipt-action-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+</style>
