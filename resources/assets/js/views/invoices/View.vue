@@ -17,11 +17,11 @@
             </base-button>
           </span>
           <v-dropdown-item>
-            <router-link :to="{path: `/invoices/${$route.params.id}/edit`}" class="dropdown-item">
+            <router-link v-if="isAdmin" :to="{path: `/invoices/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
-            <div class="dropdown-item" @click="removeInvoice($route.params.id)">
+            <div v-if="isAdmin" class="dropdown-item" @click="removeInvoice($route.params.id)">
               <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
               {{ $t('general.delete') }}
             </div>
@@ -133,6 +133,9 @@ export default {
     }
   },
   computed: {
+    isAdmin () {
+      return this.$store.state.user.currentUser.role === 'admin'
+    },
     getOrderBy () {
       if (this.searchData.orderBy === 'asc' || this.searchData.orderBy == null) {
         return true

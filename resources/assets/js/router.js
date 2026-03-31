@@ -284,7 +284,7 @@ const routes = [
                 path: 'vouchers/:id/edit',
                 name: 'vouchers.edit',
                 component: VouchersCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
             {
               path: 'vouchers/:id/book',
@@ -398,7 +398,7 @@ const routes = [
                 path: 'invoices/:id/edit',
                 name: 'invoices.edit',
                 component: InvoiceCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             // Payments
@@ -424,7 +424,7 @@ const routes = [
                 path: 'payments/:id/edit',
                 name: 'payments.edit',
                 component: PaymentCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             //Receipt

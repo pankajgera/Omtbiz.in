@@ -38,6 +38,10 @@ class VouchersController extends Controller
 
     public function edit(Request $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $voucher = Voucher::where('related_voucher', 'like', '%' . $id . '%')->select([
             'id',
             'type',
@@ -62,6 +66,14 @@ class VouchersController extends Controller
      */
     public function store(Request $request)
     {
+        $isEditRequest = collect($request->all())->contains(function ($entry) {
+            return is_array($entry) && !empty($entry['is_edit']);
+        });
+
+        if ($isEditRequest && ($response = $this->adminOnlyResponse())) {
+            return $response;
+        }
+
         $ledger = '';
         $ledger_ids = [];
         $voucher_ids = '';
@@ -166,6 +178,10 @@ class VouchersController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $data = Voucher::deleteVoucher($id);
 
         if (!$data) {
@@ -188,6 +204,10 @@ class VouchersController extends Controller
      */
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $vouchers = [];
         foreach ($request->id as $id) {
             $voucher = Voucher::deleteVoucher($id);

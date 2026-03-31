@@ -101,7 +101,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ total_counts }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedReceipts && selectedReceipts.length" :show-arrow="false">
+          <v-dropdown v-if="role === 'admin' && selectedReceipts && selectedReceipts.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>

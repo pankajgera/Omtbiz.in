@@ -412,6 +412,10 @@ class InvoicesController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $invoice = Invoice::with([
             'inventories',
             'user',
@@ -456,6 +460,10 @@ class InvoicesController extends Controller
      */
     public function update(Requests\InvoicesRequest $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $invoice = Invoice::findOrFail($id);
         $oldAmount = $invoice->total;
 
@@ -671,6 +679,10 @@ class InvoicesController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $invoice = Invoice::find($id);
 
         if ($invoice->payments()->exists() && $invoice->payments()->count() > 0) {
@@ -708,6 +720,10 @@ class InvoicesController extends Controller
      */
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         foreach ($request->id as $id) {
             $invoice = Invoice::find($id);
 
