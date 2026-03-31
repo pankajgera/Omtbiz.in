@@ -193,6 +193,14 @@ Route::group(['middleware' => 'api'], function () {
         'as' => 'receipts.delete',
         'uses' => 'ReceiptController@delete'
     ]);
+    Route::post('/receipts/{id}/approve', [
+        'as' => 'receipts.approve',
+        'uses' => 'ReceiptController@approve'
+    ]);
+    Route::post('/receipts/{id}/decline', [
+        'as' => 'receipts.decline',
+        'uses' => 'ReceiptController@decline'
+    ]);
 
     Route::resource('receipts', 'ReceiptController');
 

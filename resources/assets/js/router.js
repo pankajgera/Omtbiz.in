@@ -435,6 +435,13 @@ const routes = [
               meta: ['admin', 'accountant']
             },
             {
+                path: 'receipts/approvals',
+                name: 'receipts.approvals',
+                component: ReceiptIndex,
+                meta: ['admin'],
+                props: { approvalMode: true }
+            },
+            {
                 path: 'receipts/:id/create',
                 name: 'invoice.receipts.create',
                 component: ReceiptCreate,

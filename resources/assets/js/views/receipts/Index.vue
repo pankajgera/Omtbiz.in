@@ -1,7 +1,7 @@
 <template>
   <div class="items receipt-index-page main-content">
     <div class="page-header">
-      <Header :title="$tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
+      <Header :title="approvalMode ? $t('receipts.approvals_title') : $tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalReceipts || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
@@ -14,7 +14,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div>
+        <div v-if="!approvalMode">
           <router-link slot="item-title" to="/receipts/create">
             <base-button
               size="large"
@@ -71,6 +71,16 @@
               v-model="filters.receipt_number"
               icon="hashtag"/>
           </div>
+          <div class="filter-receipt">
+            <label>{{ $t('receipts.receipt_status') }}</label>
+            <base-select
+              v-model="filters.receipt_status"
+              :options="receiptStatusOptions"
+              :show-labels="false"
+              :searchable="false"
+              :allow-empty="true"
+            />
+          </div>
         </div>
         <label class="clear-filter" @click="clearFilter">{{ $t('general.clear_all') }}</label>
       </div>
@@ -79,12 +89,12 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <moon-walker-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('receipts.no_receipts') }}</label>
+        <label class="col title">{{ approvalMode ? $t('receipts.no_receipts_pending_approval') : $t('receipts.no_receipts') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('receipts.list_of_receipts') }}</label>
+        <label class="description col mt-1" align="center">{{ approvalMode ? $t('receipts.list_of_receipts_pending_approval') : $t('receipts.list_of_receipts') }}</label>
       </div>
-      <div class="btn-container">
+      <div v-if="!approvalMode" class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -182,6 +192,11 @@
           show="amount"
         />
         <table-column
+          :label="$t('receipts.receipt_status')"
+          width="20%"
+          show="receipt_status"
+        />
+        <table-column
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown no-click"
@@ -208,6 +223,16 @@
                   {{ $t('general.delete') }}
                 </div>
               </v-dropdown-item>
+              <v-dropdown-item v-if="role === 'admin' && row.receipt_status === 'To Be Approved'">
+                <div class="dropdown-item" @click="approveReceiptAction(row.id)">
+                  <font-awesome-icon :icon="['fas', 'check']" class="dropdown-item-icon" />
+                  {{ $t('receipts.approve_receipt') }}
+                </div>
+                <div class="dropdown-item" @click="declineReceiptAction(row.id)">
+                  <font-awesome-icon :icon="['fas', 'times']" class="dropdown-item-icon" />
+                  {{ $t('receipts.decline_receipt') }}
+                </div>
+              </v-dropdown-item>
             </v-dropdown>
           </template>
         </table-column>
@@ -223,6 +248,12 @@ import moment from 'moment'
 import BaseButton from '../../components/base/BaseButton'
 
 export default {
+  props: {
+    approvalMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     'moon-walker-icon': MoonWalkerIcon,
     BaseButton,
@@ -240,7 +271,7 @@ export default {
         },
         {
           url:'#',
-          title:this.$tc('receipts.receipt', 2)
+          title:this.approvalMode ? this.$t('receipts.approvals_title') : this.$tc('receipts.receipt', 2)
         }
       ],
       status: [
@@ -270,16 +301,18 @@ export default {
       filters: {
         receipt_number: '',
         customer: '',
+        receipt_status: '',
         status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
         to_date: ''
       },
+      receiptStatusOptions: ['Draft', 'To Be Approved', 'Done', 'Declined'],
       role: this.$store.state.user.currentUser.role
     }
   },
   computed: {
       applyFilter() {
-        if (this.filters.receipt_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        if (this.filters.receipt_number || this.filters.customer || this.filters.receipt_status || this.filters.from_date || this.filters.to_date) {
         return true;
       } return false;
     },
@@ -338,6 +371,8 @@ export default {
       'selectAllReceipts',
       'deleteReceipt',
       'deleteMultipleReceipts',
+      'approveReceipt',
+      'declineReceipt',
       'sendEmail',
       'setSelectAllState'
     ]),
@@ -377,6 +412,7 @@ export default {
       let data = {
         receipt_number: this.filters.receipt_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
+        receipt_status: this.approvalMode ? 'To Be Approved' : this.filters.receipt_status,
         status: '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
@@ -421,6 +457,7 @@ export default {
       this.filters = {
         receipt_number: '',
         customer: '',
+        receipt_status: '',
         status: '',
         from_date: '',
         to_date: ''
@@ -505,6 +542,40 @@ export default {
     async clearStatusSearch (removedOption, id) {
       this.filters.status = ''
       this.refreshTable()
+    },
+    async approveReceiptAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_approve'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.approveReceipt(id)
+          if (response.data.success) {
+            window.toastr['success'](this.$t('receipts.approved_message'))
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    async declineReceiptAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_decline'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.declineReceipt(id)
+          if (response.data.success) {
+            window.toastr['success'](this.$t('receipts.declined_message'))
+            this.refreshTable()
+          }
+        }
+      })
     }
   }
 }
