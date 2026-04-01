@@ -343,6 +343,72 @@ class ReceiptController extends Controller
         ]);
     }
 
+    public function approveMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? $request->id : [];
+        $processed = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $receipt = Receipt::whereCompany($request->header('company'))->find($id);
+            if (!$receipt || $receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            try {
+                $this->postReceiptVouchersAndJournal($receipt);
+                $receipt->update([
+                    'receipt_status' => Receipt::STATUS_DONE,
+                ]);
+                $processed[] = $id;
+            } catch (Exception $e) {
+                Log::error('Error while approving receipt in bulk', [$e]);
+                $skipped[] = $id;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
+        ]);
+    }
+
+    public function declineMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? $request->id : [];
+        $processed = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $receipt = Receipt::whereCompany($request->header('company'))->find($id);
+            if (!$receipt || $receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            $receipt->update([
+                'receipt_status' => Receipt::STATUS_DECLINED,
+            ]);
+            $processed[] = $id;
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
+        ]);
+    }
+
     /**
      * Remove the specified receipt with vouchers
      *

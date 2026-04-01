@@ -201,6 +201,14 @@ Route::group(['middleware' => 'api'], function () {
         'as' => 'receipts.decline',
         'uses' => 'ReceiptController@decline'
     ]);
+    Route::post('/receipts/approve-multiple', [
+        'as' => 'receipts.approve-multiple',
+        'uses' => 'ReceiptController@approveMultiple'
+    ]);
+    Route::post('/receipts/decline-multiple', [
+        'as' => 'receipts.decline-multiple',
+        'uses' => 'ReceiptController@declineMultiple'
+    ]);
 
     Route::resource('receipts', 'ReceiptController');
 
