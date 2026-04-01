@@ -43,7 +43,7 @@
               </table-column>
               <table-column :label="$tc('daysheet.reference-number')" show="reference_number">
                 <template slot-scope="row">
-                  {{ row.reference_number.split('-')[2] }}
+                  {{ formatReferenceNumber(row.reference_number) }}
                 </template>
               </table-column>
               <table-column
@@ -79,7 +79,7 @@
               </table-column>
               <table-column
                 :label="$tc('daysheet.sign')"
-                show="lot"
+                show="sign"
               >
                 <template slot-scope="row">
 
@@ -87,12 +87,12 @@
               </table-column>
               <table-column :label="$tc('daysheet.pm')" show="reference_number">
                 <template slot-scope="row">
-                  {{ row.reference_number.split('-')[2] }}
+                  {{ formatReferenceNumber(row.reference_number) }}
                 </template>
               </table-column>
               <table-column
                 :label="$tc('daysheet.name')"
-                show="party"
+                show="name"
               >
                 <template slot-scope="row">
                    {{ row.party }}
@@ -100,7 +100,7 @@
               </table-column>
                <table-column
                 :label="$tc('daysheet.city')"
-                show="party"
+                show="city"
               >
                 <template slot-scope="row">
 
@@ -108,7 +108,7 @@
               </table-column>
                 <table-column
                 :label="$tc('daysheet.transport')"
-                show="party"
+                show="transport"
               >
                 <template slot-scope="row">
 
@@ -163,7 +163,16 @@ export default {
     async loadEditData() {
       let response = await this.fetchLedgerDaysheet(this.$route.params.id);
         this.isLoading = false
-        this.ledgerData = response.data.ledger.sort((a, b) => { return a.reference_number - b.reference_number});
+        this.ledgerData = response.data.ledger.sort((a, b) => {
+          return this.formatReferenceNumber(a.reference_number).localeCompare(this.formatReferenceNumber(b.reference_number))
+        });
+    },
+    formatReferenceNumber (referenceNumber) {
+      if (!referenceNumber) {
+        return '-'
+      }
+      const parts = referenceNumber.split('-')
+      return parts.length >= 3 ? parts[2] : referenceNumber
     },
     printData() {
       printJS({
