@@ -95,6 +95,26 @@ export const declineReceipt = ({ commit, receipt, state }, id) => {
   })
 }
 
+export const approveMultipleReceipts = ({ commit, receipt, state }) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/approve-multiple`, { 'id': state.selectedReceipts }).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const declineMultipleReceipts = ({ commit, receipt, state }) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/decline-multiple`, { 'id': state.selectedReceipts }).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const deleteReceipt = ({ commit, receipt, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/receipts/${id}`).then((response) => {

@@ -306,6 +306,7 @@ class ReceiptController extends Controller
             $receipt->update([
                 'receipt_status' => Receipt::STATUS_DONE,
             ]);
+            $whatsappResult = $this->sendReceiptOnWhatsapp($receipt);
         } catch (Exception $e) {
             Log::error('Error while approving receipt', [$e]);
             return response()->json([
@@ -316,6 +317,8 @@ class ReceiptController extends Controller
         return response()->json([
             'receipt' => $receipt->fresh(),
             'success' => true,
+            'whatsapp_sent' => $whatsappResult['sent'],
+            'whatsapp_error' => $whatsappResult['error'],
         ]);
     }
 
@@ -340,6 +343,82 @@ class ReceiptController extends Controller
         return response()->json([
             'receipt' => $receipt->fresh(),
             'success' => true,
+        ]);
+    }
+
+    public function approveMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? $request->id : [];
+        $processed = [];
+        $skipped = [];
+        $whatsappFailed = [];
+
+        foreach ($ids as $id) {
+            $receipt = Receipt::whereCompany($request->header('company'))->find($id);
+            if (!$receipt || $receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            try {
+                $this->postReceiptVouchersAndJournal($receipt);
+                $receipt->update([
+                    'receipt_status' => Receipt::STATUS_DONE,
+                ]);
+                $processed[] = $id;
+
+                $whatsappResult = $this->sendReceiptOnWhatsapp($receipt);
+                if (!$whatsappResult['sent']) {
+                    $whatsappFailed[] = [
+                        'id' => $id,
+                        'error' => $whatsappResult['error'],
+                    ];
+                }
+            } catch (Exception $e) {
+                Log::error('Error while approving receipt in bulk', [$e]);
+                $skipped[] = $id;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
+            'whatsapp_failed' => $whatsappFailed,
+        ]);
+    }
+
+    public function declineMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? $request->id : [];
+        $processed = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $receipt = Receipt::whereCompany($request->header('company'))->find($id);
+            if (!$receipt || $receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            $receipt->update([
+                'receipt_status' => Receipt::STATUS_DECLINED,
+            ]);
+            $processed[] = $id;
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
         ]);
     }
 
@@ -506,5 +585,25 @@ class ReceiptController extends Controller
         }
 
         return null;
+    }
+
+    private function sendReceiptOnWhatsapp(Receipt $receipt)
+    {
+        $accountMaster = AccountMaster::find($receipt->account_master_id);
+        if (!$accountMaster || !$accountMaster->mobile_number) {
+            return [
+                'sent' => false,
+                'error' => 'mobile_number_not_found',
+            ];
+        }
+
+        $fileName = 'Receipt - ' . Carbon::parse($receipt->receipt_date)->format('d/m/Y');
+        $filePath = url('/receipts/pdf/' . $receipt->id);
+
+        return WhatsappController::sendPdfMessage(
+            $accountMaster->mobile_number,
+            $fileName,
+            $filePath
+        );
     }
 }

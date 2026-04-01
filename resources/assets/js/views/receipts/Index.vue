@@ -116,6 +116,18 @@
               {{ $t('general.actions') }}
             </span>
             <v-dropdown-item>
+              <div class="dropdown-item" @click="approveMultipleReceiptsAction">
+                <font-awesome-icon :icon="['fas', 'check']" class="dropdown-item-icon" />
+                {{ $t('receipts.approve_receipt') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="declineMultipleReceiptsAction">
+                <font-awesome-icon :icon="['fas', 'times']" class="dropdown-item-icon" />
+                {{ $t('receipts.decline_receipt') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleReceipts">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
@@ -373,6 +385,8 @@ export default {
       'deleteMultipleReceipts',
       'approveReceipt',
       'declineReceipt',
+      'approveMultipleReceipts',
+      'declineMultipleReceipts',
       'sendEmail',
       'setSelectAllState'
     ]),
@@ -555,6 +569,9 @@ export default {
           let response = await this.approveReceipt(id)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.approved_message'))
+            if (response.data.whatsapp_sent === false) {
+              window.toastr['warning'](`Approved, but WhatsApp failed: ${response.data.whatsapp_error || 'unknown_error'}`)
+            }
             this.refreshTable()
           }
         }
@@ -572,6 +589,59 @@ export default {
           let response = await this.declineReceipt(id)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.declined_message'))
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    async approveMultipleReceiptsAction () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_approve'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.approveMultipleReceipts()
+          if (response.data.success) {
+            const processedCount = response.data.processed ? response.data.processed.length : 0
+            const skippedCount = response.data.skipped ? response.data.skipped.length : 0
+            if (processedCount > 0) {
+              window.toastr['success'](`${processedCount} receipt(s) approved successfully`)
+            }
+            if (skippedCount > 0) {
+              window.toastr['warning'](`${skippedCount} receipt(s) were skipped (not pending approval)`)
+            }
+            if (response.data.whatsapp_failed && response.data.whatsapp_failed.length > 0) {
+              window.toastr['warning'](`${response.data.whatsapp_failed.length} approved receipt(s) could not be sent on WhatsApp`)
+            }
+            this.resetSelectedReceipts()
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    async declineMultipleReceiptsAction () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_decline'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.declineMultipleReceipts()
+          if (response.data.success) {
+            const processedCount = response.data.processed ? response.data.processed.length : 0
+            const skippedCount = response.data.skipped ? response.data.skipped.length : 0
+            if (processedCount > 0) {
+              window.toastr['success'](`${processedCount} receipt(s) declined successfully`)
+            }
+            if (skippedCount > 0) {
+              window.toastr['warning'](`${skippedCount} receipt(s) were skipped (not pending approval)`)
+            }
+            this.resetSelectedReceipts()
             this.refreshTable()
           }
         }
