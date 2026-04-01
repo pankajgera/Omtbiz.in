@@ -493,6 +493,9 @@ export default {
       if (response.data.success) {
         this.formData.receipt_status = response.data.receipt.receipt_status
         window.toastr['success'](this.$t('receipts.approved_message'))
+        if (response.data.whatsapp_sent === false) {
+          window.toastr['warning'](`Approved, but WhatsApp failed: ${response.data.whatsapp_error || 'unknown_error'}`)
+        }
       }
     },
     async declineCurrentReceipt () {

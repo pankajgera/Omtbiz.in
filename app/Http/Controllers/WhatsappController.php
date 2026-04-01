@@ -64,27 +64,62 @@ class WhatsappController extends Controller
         //     return response()->json(['success' => $response]);
         // }
 
-        $client = new Client();
+        $result = self::sendPdfMessage(
+            $request->number,
+            $request->fileName,
+            $request->filePath
+        );
+
+        if ($result['sent']) {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['error' => $result['error']]);
+    }
+
+    public static function sendPdfMessage($number, $fileName, $filePath)
+    {
         $apiKey = config('omtbiz.whatsapp_token');
+        if (!$apiKey) {
+            return [
+                'sent' => false,
+                'error' => 'whatsapp_token_not_configured',
+            ];
+        }
+
+        $client = new Client();
         $url = 'https://www.wasenderapi.com/api/send-message';
 
         try {
-            $response = $client->post($url, [
+            $client->post($url, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $apiKey,
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
                 ],
                 'json' => [
-                    'to' => $request->number,
-                    'text' => $request->fileName.'.pdf',
-                    'documentUrl' => $request->filePath,
+                    'to' => $number,
+                    'text' => $fileName . '.pdf',
+                    'documentUrl' => $filePath,
                 ]
             ]);
 
-            return response()->json(['success' => $response]);
-        } catch (\GuzzleHttp\Exception\RequestException $e) {
-            return response()->json(['error' => $e->getMessage()]);
+            return [
+                'sent' => true,
+                'error' => null,
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error while sending pdf on whatsapp', [
+                'number' => $number,
+                'file_name' => $fileName,
+                'file_path' => $filePath,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [
+                'sent' => false,
+                'error' => $e->getMessage(),
+            ];
         }
     }
 }

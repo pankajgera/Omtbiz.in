@@ -569,6 +569,9 @@ export default {
           let response = await this.approveReceipt(id)
           if (response.data.success) {
             window.toastr['success'](this.$t('receipts.approved_message'))
+            if (response.data.whatsapp_sent === false) {
+              window.toastr['warning'](`Approved, but WhatsApp failed: ${response.data.whatsapp_error || 'unknown_error'}`)
+            }
             this.refreshTable()
           }
         }
@@ -609,6 +612,9 @@ export default {
             }
             if (skippedCount > 0) {
               window.toastr['warning'](`${skippedCount} receipt(s) were skipped (not pending approval)`)
+            }
+            if (response.data.whatsapp_failed && response.data.whatsapp_failed.length > 0) {
+              window.toastr['warning'](`${response.data.whatsapp_failed.length} approved receipt(s) could not be sent on WhatsApp`)
             }
             this.resetSelectedReceipts()
             this.refreshTable()
