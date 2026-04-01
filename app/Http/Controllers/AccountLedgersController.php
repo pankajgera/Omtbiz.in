@@ -276,12 +276,16 @@ class AccountLedgersController extends Controller
         $all_voucher_ids = Voucher::whereCompany($request->header('company'))
             ->where('date', Carbon::now()->format('Y-m-d'))
             ->where('account', '!=', 'Sales')
+            ->whereNotNull('invoice_id')
             ->groupBy('account_ledger_id')
             ->get();
 
         $ledgers = [];
         foreach ($all_voucher_ids as $each) {
-            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)->where('date', Carbon::now()->format('Y-m-d'))->count();
+            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)
+                ->where('date', Carbon::now()->format('Y-m-d'))
+                ->whereNotNull('invoice_id')
+                ->count();
             $each['lot'] = $lot;
             $each['party'] = $each->account;
             $invoice = $each->invoice_id ? Invoice::find($each->invoice_id) : null;
