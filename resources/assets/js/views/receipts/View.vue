@@ -10,7 +10,7 @@
             </base-button>
           </span>
           <v-dropdown-item>
-            <router-link v-if="isAdmin" :to="{path: `/receipts/${$route.params.id}/edit`}" class="dropdown-item">
+            <router-link v-if="canEdit" :to="{path: `/receipts/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
@@ -139,6 +139,10 @@ export default {
     }
   },
   computed: {
+    canEdit () {
+      const role = this.$store.state.user.currentUser.role
+      return role === 'admin' || role === 'accountant'
+    },
     isAdmin () {
       return this.$store.state.user.currentUser.role === 'admin'
     },

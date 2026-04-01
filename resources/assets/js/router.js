@@ -451,7 +451,7 @@ const routes = [
                 path: 'receipts/:id/edit',
                 name: 'receipts.edit',
                 component: ReceiptCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'receipts',
