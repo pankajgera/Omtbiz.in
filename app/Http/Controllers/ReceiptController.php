@@ -194,7 +194,7 @@ class ReceiptController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        if ($response = $this->adminOnlyResponse()) {
+        if ($response = $this->adminOrAccountantOnlyResponse()) {
             return $response;
         }
 
@@ -240,7 +240,7 @@ class ReceiptController extends Controller
      */
     public function update(ReceiptRequest $request, $id)
     {
-        if ($response = $this->adminOnlyResponse()) {
+        if ($response = $this->adminOrAccountantOnlyResponse()) {
             return $response;
         }
 
@@ -250,7 +250,9 @@ class ReceiptController extends Controller
         $oldAmount = $receipt->amount;
 
         $receipt->receipt_date = $receipt_date;
-        $receipt->receipt_status = $request->receipt_status;
+        if (Auth::user()->isAdmin()) {
+            $receipt->receipt_status = $request->receipt_status;
+        }
         $receipt->user_id = $request->user_id;
         $receipt->amount = $request->amount;
         $receipt->notes = $request->notes;
@@ -491,5 +493,18 @@ class ReceiptController extends Controller
                 'related_voucher' => $voucher_ids,
             ]);
         }
+    }
+
+    private function adminOrAccountantOnlyResponse()
+    {
+        $user = auth()->user();
+
+        if (!$user || (!$user->isAdmin() && !$user->isAccountant())) {
+            return response()->json([
+                'error' => 'admin_or_accountant_only',
+            ], 403);
+        }
+
+        return null;
     }
 }

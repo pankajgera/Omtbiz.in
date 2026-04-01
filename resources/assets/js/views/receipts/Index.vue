@@ -166,7 +166,7 @@
           show="receipt_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: role==='admin' ? `receipts/${row.id}/edit?d=true` : `receipts/${row.id}/view`}">
+            <router-link :to="{path: (role === 'admin' || role === 'accountant') ? `receipts/${row.id}/edit?d=true` : `receipts/${row.id}/view`}">
                {{ row.receipt_number }}
               </router-link>
           </template>
@@ -208,7 +208,7 @@
                 <dot-icon />
               </span>
               <v-dropdown-item>
-                <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
