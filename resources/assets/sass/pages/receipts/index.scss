@@ -57,6 +57,18 @@
         margin-top: 28px;
     }
 
+    .receipt-number-link {
+        color: $ls-color-primary;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover,
+        &:focus {
+            color: darken($ls-color-primary, 8%);
+        }
+    }
+
     @media(max-width: $large-breakpoint ) {
         .filter-container {
             flex-direction: column;

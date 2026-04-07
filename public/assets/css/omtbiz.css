@@ -17886,10 +17886,8 @@ fieldset[disabled] .multiselect {
   display: flex;
   justify-content: space-between;
 }
-.receipt-index-page .filter-customer {
-  margin-right: 40px;
-  flex: 1;
-}
+.receipt-index-page .filter-customer,
+.receipt-index-page .filter-receipt,
 .receipt-index-page .filter-status {
   margin-right: 40px;
   flex: 1;
@@ -17906,25 +17904,31 @@ fieldset[disabled] .multiselect {
 .receipt-index-page .filter-date .to {
   flex: 1;
 }
-.receipt-index-page .filter-order {
-  flex: 1;
+.receipt-index-page .filter-status {
+  margin-right: 0;
 }
 .receipt-index-page .dashed {
   border: 1px solid #B9C1D1;
   width: 10px;
   margin-top: 28px;
 }
+.receipt-index-page .receipt-number-link {
+  color: #f54c4c;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.receipt-index-page .receipt-number-link:hover, .receipt-index-page .receipt-number-link:focus {
+  color: #f32525;
+}
 @media (max-width: 1240px) {
   .receipt-index-page .filter-container {
     flex-direction: column;
   }
-  .receipt-index-page .filter-order {
-    margin-right: 40px;
-  }
   .receipt-index-page .filter-customer,
-.receipt-index-page .filter-status,
 .receipt-index-page .filter-date,
-.receipt-index-page .filter-order {
+.receipt-index-page .filter-receipt,
+.receipt-index-page .filter-status {
     margin-bottom: 10px;
     margin-right: 0px;
   }
