@@ -56,6 +56,11 @@ export const setSelectAllState = ({ commit, receipt, state }, data) => {
   commit(types.SET_SELECT_ALL_STATE, data)
 }
 
+export const resetSelectedReceipts = ({ commit }) => {
+  commit(types.RESET_SELECTED_RECEIPT)
+  commit(types.SET_SELECT_ALL_STATE, false)
+}
+
 export const selectReceipt = ({ commit, receipt, state }, data) => {
   commit(types.SET_SELECTED_RECEIPTS, data)
   if (state.selectedReceipts.length === state.receipts.length) {

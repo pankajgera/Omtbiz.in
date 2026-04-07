@@ -2,7 +2,7 @@
   <div class="items receipt-index-page main-content">
     <div class="page-header">
       <Header :title="approvalMode ? $t('receipts.approvals_title') : $tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalReceipts || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -71,7 +71,7 @@
               v-model="filters.receipt_number"
               icon="hashtag"/>
           </div>
-          <div class="filter-receipt">
+          <div class="filter-status">
             <label>{{ $t('receipts.receipt_status') }}</label>
             <base-select
               v-model="filters.receipt_status"
