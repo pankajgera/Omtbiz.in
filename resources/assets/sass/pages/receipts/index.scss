@@ -58,14 +58,14 @@
     }
 
     .receipt-number-link {
-        color: $ls-primary;
+        color: $ls-color-primary;
         font-weight: 700;
         text-decoration: underline;
         text-underline-offset: 2px;
 
         &:hover,
         &:focus {
-            color: darken($ls-primary, 8%);
+            color: darken($ls-color-primary, 8%);
         }
     }
 
