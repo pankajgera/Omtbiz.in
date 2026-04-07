@@ -178,9 +178,14 @@
           show="receipt_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: (role === 'admin' || role === 'accountant') ? `receipts/${row.id}/edit?d=true` : `receipts/${row.id}/view`}">
-               {{ row.receipt_number }}
-              </router-link>
+            <a
+              :href="getReceiptLink(row)"
+              class="receipt-number-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ row.receipt_number }}
+            </a>
           </template>
         </table-column>
         <table-column
@@ -646,6 +651,13 @@ export default {
           }
         }
       })
+    },
+    getReceiptLink (row) {
+      const path = (this.role === 'admin' || this.role === 'accountant')
+        ? `/receipts/${row.id}/edit?d=true`
+        : `/receipts/${row.id}/view`
+
+      return this.$router.resolve({ path }).href
     }
   }
 }
