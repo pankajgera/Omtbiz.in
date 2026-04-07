@@ -27,11 +27,8 @@
         justify-content: space-between;
     }
 
-    .filter-customer {
-        margin-right: 40px;
-        flex: 1;
-    }
-
+    .filter-customer,
+    .filter-receipt,
     .filter-status {
         margin-right: 40px;
         flex: 1;
@@ -50,8 +47,8 @@
         }
     }
 
-    .filter-order {
-        flex: 1;
+    .filter-status {
+        margin-right: 0;
     }
 
     .dashed {
@@ -65,14 +62,10 @@
             flex-direction: column;
         }
 
-        .filter-order {
-            margin-right: 40px;
-        }
-
         .filter-customer,
-        .filter-status,
         .filter-date,
-        .filter-order {
+        .filter-receipt,
+        .filter-status {
             margin-bottom: 10px;
             margin-right: 0px;
         }
