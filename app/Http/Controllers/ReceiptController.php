@@ -352,10 +352,11 @@ class ReceiptController extends Controller
             return $response;
         }
 
-        $ids = is_array($request->id) ? $request->id : [];
+        $ids = is_array($request->id) ? array_values(array_unique($request->id)) : [];
         $processed = [];
         $skipped = [];
         $whatsappFailed = [];
+        $approvedReceipts = [];
 
         foreach ($ids as $id) {
             $receipt = Receipt::whereCompany($request->header('company'))->find($id);
@@ -370,17 +371,20 @@ class ReceiptController extends Controller
                     'receipt_status' => Receipt::STATUS_DONE,
                 ]);
                 $processed[] = $id;
-
-                $whatsappResult = $this->sendReceiptOnWhatsapp($receipt);
-                if (!$whatsappResult['sent']) {
-                    $whatsappFailed[] = [
-                        'id' => $id,
-                        'error' => $whatsappResult['error'],
-                    ];
-                }
+                $approvedReceipts[] = $receipt->fresh();
             } catch (Exception $e) {
                 Log::error('Error while approving receipt in bulk', [$e]);
                 $skipped[] = $id;
+            }
+        }
+
+        foreach ($approvedReceipts as $approvedReceipt) {
+            $whatsappResult = $this->sendReceiptOnWhatsapp($approvedReceipt);
+            if (!$whatsappResult['sent']) {
+                $whatsappFailed[] = [
+                    'id' => $approvedReceipt->id,
+                    'error' => $whatsappResult['error'],
+                ];
             }
         }
 
@@ -597,7 +601,7 @@ class ReceiptController extends Controller
             ];
         }
 
-        $fileName = 'Receipt - ' . Carbon::parse($receipt->receipt_date)->format('d/m/Y');
+        $fileName = 'Receipt ' . $receipt->receipt_number . ' - ' . Carbon::parse($receipt->receipt_date)->format('d-m-Y');
         $filePath = url('/receipts/pdf/' . $receipt->id);
 
         return WhatsappController::sendPdfMessage(
