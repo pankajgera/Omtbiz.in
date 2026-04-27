@@ -17,7 +17,7 @@
                 class="my-grid-class"
                 ref="grid"
                 id="mygrid"
-                :column-defs="columnDefs"
+                :column-defs="gridColumnDefs"
                 :row-data="rows"
                 row-data-key='voucherId'
                 :master-options="masterDataBind"
@@ -43,6 +43,7 @@
                       width="400"
                       class="form-control description-input mb-3"
                       v-model="short_narration"
+                      :disabled="isReadOnly"
                       id="narration-voucher"
                       placeholder="Type Short Narration (optional)" />
                   </div>
@@ -50,14 +51,15 @@
                     <label>{{ $t('vouchers.date') }}</label><span class="text-danger"> * </span>
                     <base-date-picker
                       v-model="date"
+                      :disabled="isReadOnly"
                       :calendar-button="true"
                       calendar-button-icon="calendar"
                     />
                   </div>
               </div>
               </div>
-              <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
+              <button v-if="!isReadOnly" @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
+              <button v-if="!isReadOnly" @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
             </div>
         </div>
       </div>
@@ -114,11 +116,27 @@ export default {
     }
   },
   computed: {
+    userRole () {
+      return this.$store.state.user.currentUser.role
+    },
     isEdit() {
       if (this.$route.name === 'vouchers.edit') {
           return true
         }
         return false
+    },
+    isReadOnly () {
+      return this.isEdit && this.userRole === 'accountant'
+    },
+    gridColumnDefs () {
+      if (!this.isReadOnly) {
+        return this.columnDefs
+      }
+
+      return this.columnDefs.map((column) => ({
+        ...column,
+        editable: false
+      }))
     },
     masterDataBind() {
       var row = this.rows
@@ -170,6 +188,10 @@ export default {
       this.masterData = response.data.masters
     },
     validateSubmitVoucher() {
+      if (this.isReadOnly) {
+        return
+      }
+
       if (this.alreadySubmitted) {
         swal({
           title: this.$t('general.are_you_sure'),
@@ -187,6 +209,10 @@ export default {
       }
     },
     async submitVoucher () {
+      if (this.isReadOnly) {
+        return false
+      }
+
       let rows = this.rows
       rows = rows.filter(each => each['account'] !== '');
       let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c);
@@ -243,6 +269,10 @@ export default {
       }
     },
     cellUpdated($event) {
+      if (this.isReadOnly) {
+        return
+      }
+
       let rows = this.rows
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')
       {
@@ -277,6 +307,10 @@ export default {
       }
     },
     rowSelected($event) {
+      if (this.isReadOnly) {
+        return
+      }
+
       if($event.rowData && $event.rowData.type === 'Cr') {
         $event.rowData.debit = null;
       } else if ($event.rowData && $event.rowData.type === 'Dr') {
@@ -292,6 +326,10 @@ export default {
       }
     },
     addNewRow(typ = null, sum = null) {
+      if (this.isReadOnly) {
+        return
+      }
+
       let deb = typ == 'Dr' ? sum : null
       let cred = typ == 'Cr' ? sum : null
       this.rows.push({

@@ -13,6 +13,7 @@
             ref="select"
             v-model="selectTypeBind"
             :options="setOptions"
+            :disabled="disableInput"
             :searchable="true"
             :show-labels="false"
             :allow-empty="false"
@@ -28,6 +29,7 @@
             ref="select"
             v-model="selectAccountBind"
             :options="setOptions"
+            :disabled="disableInput"
             :searchable="true"
             :show-labels="false"
             :allow-empty="false"
@@ -218,6 +220,19 @@ export default {
     },
     disableInput() {
       let bool = false
+      const isAccountantVoucherView =
+        this.$route &&
+        this.$route.name === 'vouchers.edit' &&
+        window.Ls &&
+        window.Ls.get('role') === 'accountant'
+
+      if (isAccountantVoucherView && (this.column.field === 'debit' || this.column.field === 'credit')) {
+        return true
+      }
+      if (isAccountantVoucherView && (this.column.field === 'type' || this.column.field === 'account')) {
+        return true
+      }
+
       if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
         this.rowValue = null
         this.value = null
