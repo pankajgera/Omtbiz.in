@@ -207,6 +207,12 @@
 
             </v-dropdown-item>
             <v-dropdown-item>
+              <div v-if="role === 'admin' || role === 'accountant'" class="dropdown-item" @click="sendVoucherOnWhatsapp(row)">
+                <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" />
+                {{ $t('invoices.whatsapp') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
               <div v-if="role === 'admin'" class="dropdown-item" @click="removeVouchers(row.id)">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
@@ -269,6 +275,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('company', [
+      'getSelectedCompany'
+    ]),
     ...mapGetters('voucher', [
       'vouchers',
       'selectedVouchers',
@@ -317,6 +326,9 @@ export default {
       'deleteVoucher',
       'deleteMultipleVouchers',
       'setSelectAllState'
+    ]),
+    ...mapActions('customer', [
+      'sendReportOnWhatsApp'
     ]),
     refreshTable () {
       this.$refs.table.refresh()
@@ -418,6 +430,27 @@ export default {
             window.toastr['error'](res.data.message)
           }
         }
+      })
+    },
+    async sendVoucherOnWhatsapp (row) {
+      if (!this.getSelectedCompany || !this.getSelectedCompany.unique_hash) {
+        window.toastr['error']('Company not selected')
+        return
+      }
+
+      let mobile = row.account_master && row.account_master.mobile_number
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+
+      let fileName = 'Voucher - ' + moment(row.date).format('DD/MM/YYYY')
+      let filePath = `${window.location.origin}/reports/voucher/${this.getSelectedCompany.unique_hash}/${row.id}`
+
+      this.sendReportOnWhatsApp({
+        fileName: fileName,
+        number: mobile,
+        filePath: filePath
       })
     },
     setIndex(index) {

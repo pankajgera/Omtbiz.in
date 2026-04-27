@@ -63,6 +63,12 @@ Route::group(['prefix' => 'reports'], function () {
         'as' => 'get.slip',
         'uses' => 'ReportController@slipReport'
     ]);
+
+    // report for voucher
+    Route::get('/voucher/{hash}/{id}', [
+        'as' => 'get.voucher',
+        'uses' => 'ReportController@voucherReport'
+    ]);
 });
 
 // download pdf with a unique_hash $id

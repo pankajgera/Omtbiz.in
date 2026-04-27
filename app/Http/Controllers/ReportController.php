@@ -578,4 +578,53 @@ class ReportController extends Controller
 
         return $pdf->stream();
     }
+
+    /**
+     * Voucher report
+     *
+     * @param string $hash
+     * @param int $id
+     * @return void
+     */
+    public function voucherReport($hash, $id)
+    {
+        $company = Company::where('unique_hash', $hash)->firstOrFail();
+
+        $voucher = Voucher::with(['accountMaster'])
+            ->whereCompany($company->id)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        $voucherIds = collect(explode(',', (string) $voucher->related_voucher))
+            ->map(function ($each) {
+                return trim($each);
+            })
+            ->filter()
+            ->values();
+
+        if ($voucherIds->isEmpty()) {
+            $voucherIds = collect([$voucher->id]);
+        }
+
+        $vouchers = Voucher::with(['accountMaster'])
+            ->whereCompany($company->id)
+            ->whereIn('id', $voucherIds->toArray())
+            ->orderBy('id')
+            ->get();
+
+        $totalDebit = $vouchers->sum('debit');
+        $totalCredit = $vouchers->sum('credit');
+
+        view()->share([
+            'voucher' => $voucher,
+            'vouchers' => $vouchers,
+            'total_debit' => $totalDebit,
+            'total_credit' => $totalCredit,
+            'company' => $company,
+        ]);
+
+        $pdf = PDF::loadView('app.pdf.reports.voucher');
+
+        return $pdf->stream();
+    }
 }
