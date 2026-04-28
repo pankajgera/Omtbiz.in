@@ -56,6 +56,7 @@ import PaymentCreate from './views/payments/Create.vue'
 import ReceiptCreate from './views/receipts/Create.vue'
 import ReceiptIndex from './views/receipts/Index.vue'
 import ReceiptView from './views/receipts/View.vue'
+import DeletedReceipts from './views/receipts/Deleted.vue'
 
 // Estimates
 import EstimateIndex from './views/estimates/Index.vue'
@@ -447,6 +448,12 @@ const routes = [
                 component: ReceiptIndex,
                 meta: ['admin'],
                 props: { approvalMode: true }
+            },
+            {
+                path: 'receipts/deleted',
+                name: 'receipts.deleted',
+                component: DeletedReceipts,
+                meta: ['admin']
             },
             {
                 path: 'receipts/:id/create',

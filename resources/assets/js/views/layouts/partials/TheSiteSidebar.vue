@@ -3,18 +3,40 @@
     <div class="sidebar-body scroll-pane">
       <div class="side-nav">
         <div v-for="(menuItems, index) in menu" :key="index" class="menu-group">
-          <router-link
+          <div
             v-for="(item, index1) in menuItems.filter((i) =>
               i.meta.includes(role)
             )"
             :key="index1"
-            :to="item.route"
-            class="menu-item"
-            @click.native="Toggle"
           >
-            <font-awesome-icon :icon="item.icon" class="icon menu-icon" />
-            <span class="ml-3 menu-text">{{ $t(item.title) }}</span>
-          </router-link>
+            <router-link
+              v-if="!item.children"
+              :to="item.route"
+              class="menu-item"
+              @click.native="Toggle"
+            >
+              <font-awesome-icon :icon="item.icon" class="icon menu-icon" />
+              <span class="ml-3 menu-text">{{ $t(item.title) }}</span>
+            </router-link>
+            <div v-else class="menu-item menu-item-parent" @click="toggleParent(item)">
+              <font-awesome-icon :icon="item.icon" class="icon menu-icon" />
+              <span class="ml-3 menu-text">{{ $t(item.title) }}</span>
+              <font-awesome-icon
+                :icon="isParentOpen(item) ? 'chevron-down' : 'chevron-right'"
+                class="menu-expand-icon"
+              />
+            </div>
+            <router-link
+              v-if="isParentOpen(item)"
+              v-for="(child, childIndex) in (item.children || []).filter((c) => c.meta.includes(role))"
+              :key="`${index1}-${childIndex}`"
+              :to="child.route"
+              class="menu-item menu-item-child"
+              @click.native="Toggle"
+            >
+              <span class="ml-3 menu-text">{{ $t(child.title) }}</span>
+            </router-link>
+          </div>
         </div>
       </div>
       <button type="button"  @click="showModal" class="btn ml-5 mb-3 btn-default">
@@ -52,6 +74,19 @@
   top:30%;
   left:10px;
 }
+.sidebar-left .menu-item-parent {
+  cursor: pointer;
+  position: relative;
+}
+.sidebar-left .menu-item-child {
+  padding-left: 58px;
+}
+.sidebar-left .menu-expand-icon {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  color: #666;
+}
 </style>
 <script type="text/babel">
 import {VueAdvancedCalculator} from 'vue-advanced-calculator'
@@ -64,6 +99,7 @@ export default {
   data() {
     return {
       sidebar: "sidebar",
+      openParents: {},
       menu: [
         [
           {
@@ -95,12 +131,6 @@ export default {
             icon: "file-alt",
             route: "/invoices/create",
             meta: ["admin", "accountant"],
-          },
-          {
-            title: "navigation.deleted_invoices",
-            icon: "trash",
-            route: "/invoices/deleted",
-            meta: ["admin"],
           },
           {
             title: "navigation.dispatch",
@@ -156,6 +186,23 @@ export default {
             route: "/reports",
             meta: ["admin", "accountant"],
           },
+          {
+            title: "navigation.restore",
+            icon: "trash",
+            meta: ["admin"],
+            children: [
+              {
+                title: "navigation.invoice",
+                route: "/invoices/deleted",
+                meta: ["admin"],
+              },
+              {
+                title: "navigation.receipt",
+                route: "/receipts/deleted",
+                meta: ["admin"],
+              },
+            ],
+          },
           // {
           //   title: 'navigation.bills',
           //   icon: 'star',
@@ -207,6 +254,16 @@ export default {
     this.update();
   },
   methods: {
+    isParentOpen(item) {
+      if (this.openParents[item.title] !== undefined) {
+        return this.openParents[item.title];
+      }
+      return (item.children || []).some(child => child.route === this.$route.path);
+    },
+    toggleParent(item) {
+      const currentState = this.isParentOpen(item);
+      this.$set(this.openParents, item.title, !currentState);
+    },
     Toggle() {
       this.$utils.toggleSidebar();
     },

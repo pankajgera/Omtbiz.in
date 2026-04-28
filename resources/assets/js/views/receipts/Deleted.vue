@@ -1,37 +1,37 @@
 <template>
-  <div class="invoice-index-page invoices main-content">
+  <div class="main-content receipts">
     <div class="page-header">
-      <Header :title="$t('invoices.deleted_title')" :bread-crumb-links="breadCrumbLinks" />
+      <Header :title="$t('receipts.deleted_title')" :bread-crumb-links="breadCrumbLinks" />
     </div>
 
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <moon-walker-icon class="mt-5 mb-4" />
       <div class="row" align="center">
-        <label class="col title">{{ $t('invoices.no_deleted_invoices') }}</label>
+        <label class="col title">{{ $t('receipts.no_deleted_receipts') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('invoices.list_of_deleted_invoices') }}</label>
+        <label class="description col mt-1" align="center">{{ $t('receipts.list_of_deleted_receipts') }}</label>
       </div>
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
       </div>
 
       <table-component
         ref="table"
         :show-filter="false"
         :data="fetchData"
-        table-class="table"
+        table-class="table mt-5"
       >
         <table-column
-          :label="$t('invoices.number')"
+          :label="$t('receipts.receipt_number')"
           width="75%"
-          show="invoice_number"
+          show="receipt_number"
         />
         <table-column
-          :label="$t('invoices.action')"
+          :label="$t('receipts.action')"
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown no-click"
@@ -42,7 +42,7 @@
               size="small"
               :outline="true"
               color="theme"
-              @click="restoreInvoice(row.id)"
+              @click="restoreReceipt(row.id)"
             >
               {{ $t('general.restore') }}
             </base-button>
@@ -62,7 +62,7 @@ export default {
   },
   data () {
     return {
-      invoices: [],
+      receipts: [],
       isRequestOngoing: true,
       filtered_count: 0,
       breadCrumbLinks: [
@@ -72,7 +72,7 @@ export default {
         },
         {
           url: '#',
-          title: this.$t('invoices.deleted_title')
+          title: this.$t('receipts.deleted_title')
         }
       ]
     }
@@ -92,25 +92,25 @@ export default {
       }
 
       this.isRequestOngoing = true
-      const response = await window.axios.get('/api/invoices/deleted', { params })
+      const response = await window.axios.get('/api/receipts/deleted', { params })
       this.isRequestOngoing = false
 
-      this.invoices = response.data.invoices.data
-      this.filtered_count = response.data.invoices.total
+      this.receipts = response.data.receipts.data
+      this.filtered_count = response.data.receipts.total
 
       return {
-        data: response.data.invoices.data,
+        data: response.data.receipts.data,
         pagination: {
-          totalPages: response.data.invoices.last_page,
-          currentPage: response.data.invoices.current_page,
-          count: response.data.invoices.count
+          totalPages: response.data.receipts.last_page,
+          currentPage: response.data.receipts.current_page,
+          count: response.data.receipts.count
         }
       }
     },
-    async restoreInvoice (id) {
+    async restoreReceipt (id) {
       const confirmed = await swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$t('invoices.restore_confirm'),
+        text: this.$t('receipts.restore_confirm'),
         icon: '/assets/icon/check-circle-solid.svg',
         buttons: true,
         dangerMode: false
@@ -120,9 +120,9 @@ export default {
         return
       }
 
-      const response = await window.axios.post(`/api/invoices/${id}/restore`)
+      const response = await window.axios.post(`/api/receipts/${id}/restore`)
       if (response.data && response.data.success) {
-        window.toastr['success'](this.$t('invoices.restored_message'))
+        window.toastr['success'](this.$t('receipts.restored_message'))
         this.$refs.table.refresh()
         return
       }

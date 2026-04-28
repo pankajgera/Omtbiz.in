@@ -203,6 +203,14 @@ Route::group(['middleware' => 'api'], function () {
         'as' => 'receipts.delete',
         'uses' => 'ReceiptController@delete'
     ]);
+    Route::get('/receipts/deleted', [
+        'as' => 'receipts.deleted',
+        'uses' => 'ReceiptController@deleted'
+    ]);
+    Route::post('/receipts/{id}/restore', [
+        'as' => 'receipts.restore',
+        'uses' => 'ReceiptController@restore'
+    ]);
     Route::post('/receipts/{id}/approve', [
         'as' => 'receipts.approve',
         'uses' => 'ReceiptController@approve'
