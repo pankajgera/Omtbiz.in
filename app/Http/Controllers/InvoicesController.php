@@ -755,6 +755,64 @@ class InvoicesController extends Controller
         ]);
     }
 
+    /**
+     * Display soft-deleted invoices (admin only).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleted(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $limit = $request->has('limit') ? $request->limit : 20;
+        $companyId = $request->header('company');
+
+        $invoices = Invoice::onlyTrashed()
+            ->where('company_id', $companyId)
+            ->select('id', 'invoice_number', 'deleted_at')
+            ->orderBy('deleted_at', 'desc')
+            ->paginate($limit);
+
+        return response()->json([
+            'invoices' => $invoices,
+            'invoiceTotalCount' => Invoice::onlyTrashed()->where('company_id', $companyId)->count(),
+        ]);
+    }
+
+    /**
+     * Restore a soft-deleted invoice (admin only).
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restore(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $invoice = Invoice::onlyTrashed()
+            ->where('company_id', $request->header('company'))
+            ->where('id', $id)
+            ->first();
+
+        if (! $invoice) {
+            return response()->json([
+                'error' => 'invoice_not_found',
+            ], 404);
+        }
+
+        $invoice->restore();
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
 
 
     /**

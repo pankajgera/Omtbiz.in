@@ -46,6 +46,7 @@ import InvoiceIndex from './views/invoices/Index.vue'
 import InvoiceCreate from './views/invoices/Create.vue'
 import InvoiceBulk from './views/invoices/InvoiceBulk.vue'
 import InvoiceView from './views/invoices/View.vue'
+import DeletedInvoices from './views/invoices/Deleted.vue'
 
 // Payments
 import PaymentsIndex from './views/payments/Index.vue'
@@ -388,6 +389,12 @@ const routes = [
               component: InvoiceBulk,
               meta: ['admin', 'accountant']
           },
+            {
+                path: 'invoices/deleted',
+                name: 'invoices.deleted',
+                component: DeletedInvoices,
+                meta: ['admin']
+            },
             {
                 path: 'invoices/:id/view',
                 name: 'invoices.view',

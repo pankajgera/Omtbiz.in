@@ -97,6 +97,12 @@ export default {
             meta: ["admin", "accountant"],
           },
           {
+            title: "navigation.deleted_invoices",
+            icon: "trash",
+            route: "/invoices/deleted",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.dispatch",
             icon: "file",
             route: "/dispatch",

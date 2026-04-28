@@ -22,7 +22,8 @@
         "ledger": "Display",
         "voucher": "Voucher",
         "dispatch": "Dispatch",
-        "orders": "Orders"
+        "orders": "Orders",
+        "deleted_invoices": "Deleted Invoices"
     },
     "general": {
         "yes": "Yes",
@@ -73,6 +74,7 @@
         "select_a_status": "Select a status",
         "search": "Search",
         "are_you_sure": "Are you sure?",
+        "restore": "Restore",
         "list_is_empty": "List is empty.",
         "four_zero_four": "404",
         "you_got_lost": "Whoops! You got Lost!",
@@ -665,7 +667,12 @@
         "something_went_wrong": "something went wrong",
         "invalid_due_amount_message": "Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.",
         "estimate-list": "Select Estimate",
-        "whatsapp": "Sent on whatsapp"
+        "whatsapp": "Sent on whatsapp",
+        "deleted_title": "Deleted Invoices",
+        "no_deleted_invoices": "No deleted invoices yet!",
+        "list_of_deleted_invoices": "This section will contain the list of deleted invoices.",
+        "restore_confirm": "Do you want to restore this invoice?",
+        "restored_message": "Invoice restored successfully"
     },
     "credit_notes": {
         "title": "Credit Notes",
