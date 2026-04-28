@@ -46,6 +46,7 @@ import InvoiceIndex from './views/invoices/Index.vue'
 import InvoiceCreate from './views/invoices/Create.vue'
 import InvoiceBulk from './views/invoices/InvoiceBulk.vue'
 import InvoiceView from './views/invoices/View.vue'
+import DeletedInvoices from './views/invoices/Deleted.vue'
 
 // Payments
 import PaymentsIndex from './views/payments/Index.vue'
@@ -55,6 +56,7 @@ import PaymentCreate from './views/payments/Create.vue'
 import ReceiptCreate from './views/receipts/Create.vue'
 import ReceiptIndex from './views/receipts/Index.vue'
 import ReceiptView from './views/receipts/View.vue'
+import DeletedReceipts from './views/receipts/Deleted.vue'
 
 // Estimates
 import EstimateIndex from './views/estimates/Index.vue'
@@ -284,7 +286,7 @@ const routes = [
                 path: 'vouchers/:id/edit',
                 name: 'vouchers.edit',
                 component: VouchersCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
               path: 'vouchers/:id/book',
@@ -389,6 +391,12 @@ const routes = [
               meta: ['admin', 'accountant']
           },
             {
+                path: 'invoices/deleted',
+                name: 'invoices.deleted',
+                component: DeletedInvoices,
+                meta: ['admin']
+            },
+            {
                 path: 'invoices/:id/view',
                 name: 'invoices.view',
                 component: InvoiceView,
@@ -440,6 +448,12 @@ const routes = [
                 component: ReceiptIndex,
                 meta: ['admin'],
                 props: { approvalMode: true }
+            },
+            {
+                path: 'receipts/deleted',
+                name: 'receipts.deleted',
+                component: DeletedReceipts,
+                meta: ['admin']
             },
             {
                 path: 'receipts/:id/create',
