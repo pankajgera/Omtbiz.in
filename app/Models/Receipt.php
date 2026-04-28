@@ -15,7 +15,7 @@ class Receipt extends Model
     public const STATUS_DONE = 'Done';
     public const STATUS_TO_BE_APPROVED = 'To Be Approved';
     public const STATUS_DECLINED = 'Declined';
-    use softDeletes;
+    use SoftDeletes;
 
     public const RECEIPT_MODE_CHECK = 'CHECK';
     public const RECEIPT_MODE_OTHER = 'OTHER';

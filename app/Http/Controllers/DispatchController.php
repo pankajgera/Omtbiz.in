@@ -337,6 +337,7 @@ class DispatchController extends Controller
     {
         $invoices = Invoice::with('master')
             ->whereCompany($request->header('company'))
+            ->whereNull('deleted_at')
             ->orderBy('id', 'desc')
             ->limit(200)
             ->get();

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
-    use softDeletes;
+    use SoftDeletes;
     
     public const STATUS_PAID = 'PAID';
     public const DISPATCH = 'DISPATCH';
