@@ -6,9 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Log;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Voucher extends Model
 {
+    use SoftDeletes;
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'date',
+    ];
+
     protected $fillable = [
         'type',
         'date',
@@ -138,6 +148,13 @@ class Voucher extends Model
             return false;
         }
         $voucher = self::find($id);
+
+        // In bulk delete, a voucher can already be deleted when its related
+        // group was removed in a previous loop iteration.
+        if (!$voucher) {
+            return true;
+        }
+
         $related_voucher = Voucher::where('related_voucher', $voucher->related_voucher)->get();
         foreach($related_voucher as $each) {
             $each->delete();

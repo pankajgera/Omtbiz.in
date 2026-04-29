@@ -122,6 +122,7 @@ import VouchersCreate from './views/vouchers/Create.vue'
 import VouchersBook from './views/vouchers/Book.vue'
 import VouchersDaysheet from './views/vouchers/Daysheet.vue'
 import VouchersDaybook from './views/vouchers/Daybook.vue'
+import DeletedVouchers from './views/vouchers/Deleted.vue'
 
 // bank
 import BankIndex from './views/bank/Index.vue'
@@ -305,6 +306,12 @@ const routes = [
               name: 'vouchers.daysheet',
               component: VouchersDaysheet,
               meta: ['admin', 'accountant']
+            },
+            {
+              path: 'vouchers/deleted',
+              name: 'vouchers.deleted',
+              component: DeletedVouchers,
+              meta: ['admin']
             },
 
             //Raw bill

@@ -231,6 +231,69 @@ class VouchersController extends Controller
     }
 
     /**
+     * Display soft-deleted vouchers (admin only).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleted(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $limit = $request->has('limit') ? $request->limit : 20;
+        $companyId = $request->header('company');
+
+        $vouchers = Voucher::onlyTrashed()
+            ->where('company_id', $companyId)
+            ->where('voucher_type', 'Voucher')
+            ->select('id', 'account', 'deleted_at')
+            ->orderBy('deleted_at', 'desc')
+            ->paginate($limit);
+
+        return response()->json([
+            'vouchers' => $vouchers,
+            'total' => Voucher::onlyTrashed()
+                ->where('company_id', $companyId)
+                ->where('voucher_type', 'Voucher')
+                ->count(),
+        ]);
+    }
+
+    /**
+     * Restore a soft-deleted voucher (admin only).
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restore(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $voucher = Voucher::onlyTrashed()
+            ->where('company_id', $request->header('company'))
+            ->where('voucher_type', 'Voucher')
+            ->where('id', $id)
+            ->first();
+
+        if (! $voucher) {
+            return response()->json([
+                'error' => 'voucher_not_found',
+            ], 404);
+        }
+
+        $voucher->restore();
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
      * Get day book ledgers
      */
     public function getDaybook(Request $request)
