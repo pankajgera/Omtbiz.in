@@ -425,6 +425,16 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'VouchersController@delete'
     ]);
 
+    Route::get('/vouchers/deleted', [
+        'as' => 'vouchers.deleted',
+        'uses' => 'VouchersController@deleted'
+    ]);
+
+    Route::post('/vouchers/{id}/restore', [
+        'as' => 'vouchers.restore',
+        'uses' => 'VouchersController@restore'
+    ]);
+
     Route::post('/vouchers/update', 'VouchersController@update');
 
     Route::get('/vouchers/{id}/book', [

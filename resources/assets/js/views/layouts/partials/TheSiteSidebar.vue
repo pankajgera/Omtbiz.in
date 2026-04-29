@@ -201,6 +201,11 @@ export default {
                 route: "/receipts/deleted",
                 meta: ["admin"],
               },
+              {
+                title: "navigation.voucher",
+                route: "/vouchers/deleted",
+                meta: ["admin"],
+              },
             ],
           },
           // {
