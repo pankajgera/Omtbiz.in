@@ -13,14 +13,14 @@ class CreateCompanySettingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('company_settings', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('option');
-            $table->string('value');
-            $table->integer('company_id')->unsigned()->nullable();
-            $table->foreign('company_id')->references('id')->on('companies');
-            $table->timestamps();
-        });
+        // Schema::create('company_settings', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->string('option');
+        //     $table->string('value');
+        //     $table->integer('company_id')->unsigned()->nullable();
+        //     $table->foreign('company_id')->references('id')->on('companies');
+        //     $table->timestamps();
+        // });
     }
 
     /**
