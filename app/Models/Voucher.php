@@ -148,6 +148,13 @@ class Voucher extends Model
             return false;
         }
         $voucher = self::find($id);
+
+        // In bulk delete, a voucher can already be deleted when its related
+        // group was removed in a previous loop iteration.
+        if (!$voucher) {
+            return true;
+        }
+
         $related_voucher = Voucher::where('related_voucher', $voucher->related_voucher)->get();
         foreach($related_voucher as $each) {
             $each->delete();
