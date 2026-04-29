@@ -33,9 +33,12 @@ export const addVoucher = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const deleteVoucher = ({ commit, dispatch, state }, id) => {
+export const deleteVoucher = ({ commit, dispatch, state }, payload) => {
+  const id = (typeof payload === 'object') ? payload.id : payload
+  const deleteType = (typeof payload === 'object' && payload.deleteType) ? payload.deleteType : 'soft'
+
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/vouchers/${id}`).then((response) => {
+    window.axios.delete(`/api/vouchers/${id}`, { data: { delete_type: deleteType } }).then((response) => {
       commit(types.DELETE_VOUCHER, response.data)
       resolve(response)
     }).catch((err) => {
@@ -44,9 +47,11 @@ export const deleteVoucher = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const deleteMultipleVouchers = ({ commit, dispatch, state }, id) => {
+export const deleteMultipleVouchers = ({ commit, dispatch, state }, payload = {}) => {
+  const deleteType = payload.deleteType || 'soft'
+
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/vouchers/delete`, {'id': state.selectedVouchers}).then((response) => {
+    window.axios.post(`/api/vouchers/delete`, {'id': state.selectedVouchers, 'delete_type': deleteType}).then((response) => {
       commit(types.DELETE_MULTIPLE_VOUCHERS, state.selectedVouchers)
       resolve(response)
     }).catch((err) => {

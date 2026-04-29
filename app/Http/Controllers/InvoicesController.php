@@ -677,11 +677,14 @@ class InvoicesController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($response = $this->adminOnlyResponse()) {
             return $response;
         }
+
+        $deleteType = $request->get('delete_type', 'soft');
+        $isHardDelete = ('hard' === $deleteType);
 
         $invoice = Invoice::find($id);
 
@@ -693,7 +696,7 @@ class InvoicesController extends Controller
 
         $vouchers = Voucher::where('invoice_id', $invoice->id)->get();
         foreach ($vouchers as $each) {
-            $each->delete();
+            $isHardDelete ? $each->forceDelete() : $each->delete();
         }
 
         $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
@@ -705,7 +708,11 @@ class InvoicesController extends Controller
             ]);
         }
 
-        $invoice = Invoice::destroy($id);
+        if ($isHardDelete) {
+            $invoice->forceDelete();
+        } else {
+            $invoice->delete();
+        }
 
         return response()->json([
             'success' => true
@@ -724,8 +731,15 @@ class InvoicesController extends Controller
             return $response;
         }
 
+        $deleteType = $request->get('delete_type', 'soft');
+        $isHardDelete = ('hard' === $deleteType);
+
         foreach ($request->id as $id) {
             $invoice = Invoice::find($id);
+
+            if (! $invoice) {
+                continue;
+            }
 
             if ($invoice->payments()->exists() && $invoice->payments()->count() > 0) {
                 return response()->json([
@@ -735,7 +749,7 @@ class InvoicesController extends Controller
 
             $vouchers = Voucher::where('invoice_id', $id)->get();
             foreach ($vouchers as $each) {
-                $each->delete();
+                $isHardDelete ? $each->forceDelete() : $each->delete();
             }
 
             $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
@@ -747,7 +761,11 @@ class InvoicesController extends Controller
                 ]);
             }
 
-            $invoice = Invoice::destroy($id);
+            if ($isHardDelete) {
+                $invoice->forceDelete();
+            } else {
+                $invoice->delete();
+            }
 
         }
         return response()->json([

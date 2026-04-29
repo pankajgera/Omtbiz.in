@@ -413,60 +413,80 @@ export default {
     },
     async removeInvoice (id) {
       this.id = id
-      swal({
+      const deleteType = await swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('invoices.confirm_delete'),
+        text: this.$t('invoices.choose_delete_type'),
         icon: '/assets/icon/trash-solid.svg',
-        buttons: true,
+        buttons: {
+          cancel: this.$t('general.cancel'),
+          soft: {
+            text: this.$t('invoices.soft_delete'),
+            value: 'soft'
+          },
+          hard: {
+            text: this.$t('invoices.hard_delete'),
+            value: 'hard'
+          }
+        },
         dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          let res = await this.deleteInvoice(this.id)
+      })
 
-          if (res.data.success) {
-            window.toastr['success'](this.$tc('invoices.deleted_message'))
-            this.$refs.table.refresh()
-            return true
-          }
+      if (deleteType) {
+        let res = await this.deleteInvoice({ id: this.id, deleteType })
 
-          if (res.data.error === 'payment_attached') {
-            window.toastr['error'](this.$t('invoices.payment_attached_message'), this.$t('general.action_failed'))
-            return true
-          }
-
-          window.toastr['error'](res.data.error)
+        if (res.data.success) {
+          window.toastr['success'](this.$tc('invoices.deleted_message'))
+          this.$refs.table.refresh()
           return true
         }
 
-        this.$refs.table.refresh()
-        this.filtersApplied = false
-        this.resetSelectedInvoices()
-      })
+        if (res.data.error === 'payment_attached') {
+          window.toastr['error'](this.$t('invoices.payment_attached_message'), this.$t('general.action_failed'))
+          return true
+        }
+
+        window.toastr['error'](res.data.error)
+        return true
+      }
+
+      this.$refs.table.refresh()
+      this.filtersApplied = false
+      this.resetSelectedInvoices()
     },
     async removeMultipleInvoices () {
-      swal({
+      const deleteType = await swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('invoices.confirm_delete_2',this.selectField.length > 1 ?  2 :1, { 'count': this.selectField.length }),
+        text: this.$t('invoices.choose_delete_type_bulk'),
         icon: '/assets/icon/trash-solid.svg',
-        buttons: true,
+        buttons: {
+          cancel: this.$t('general.cancel'),
+          soft: {
+            text: this.$t('invoices.soft_delete'),
+            value: 'soft'
+          },
+          hard: {
+            text: this.$t('invoices.hard_delete'),
+            value: 'hard'
+          }
+        },
         dangerMode: true
-      }).then(async (value) => {
-        if (value) {
-          let res = await this.deleteMultipleInvoices()
-          if (res.data.error === 'payment_attached') {
-            window.toastr['error'](this.$t('invoices.payment_attached_message'), this.$t('general.action_failed'))
-            return true
-          }
-          if (res.data) {
-            this.$refs.table.refresh()
-            this.filtersApplied = false
-            this.resetSelectedInvoices()
-            window.toastr['success'](this.$tc('invoices.deleted_message', 2))
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
-          }
-        }
       })
+
+      if (deleteType) {
+        let res = await this.deleteMultipleInvoices({ deleteType })
+        if (res.data.error === 'payment_attached') {
+          window.toastr['error'](this.$t('invoices.payment_attached_message'), this.$t('general.action_failed'))
+          return true
+        }
+        if (res.data) {
+          this.$refs.table.refresh()
+          this.filtersApplied = false
+          this.resetSelectedInvoices()
+          window.toastr['success'](this.$tc('invoices.deleted_message', 2))
+        } else if (res.data.error) {
+          window.toastr['error'](res.data.message)
+        }
+      }
     },
     async clearCustomerSearch (removedOption, id) {
       this.filters.customer = ''

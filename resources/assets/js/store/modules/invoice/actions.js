@@ -109,9 +109,12 @@ export const addInvoice = ({ commit, dispatch, state }, data) => {
   })
 }
 
-export const deleteInvoice = ({ commit, dispatch, state }, id) => {
+export const deleteInvoice = ({ commit, dispatch, state }, payload) => {
+  const id = (typeof payload === 'object') ? payload.id : payload
+  const deleteType = (typeof payload === 'object' && payload.deleteType) ? payload.deleteType : 'soft'
+
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/invoices/${id}`).then((response) => {
+    window.axios.delete(`/api/invoices/${id}`, { data: { delete_type: deleteType } }).then((response) => {
       if (response.data.error) {
         resolve(response)
       } else {
@@ -124,9 +127,11 @@ export const deleteInvoice = ({ commit, dispatch, state }, id) => {
   })
 }
 
-export const deleteMultipleInvoices = ({ commit, dispatch, state }, id) => {
+export const deleteMultipleInvoices = ({ commit, dispatch, state }, payload = {}) => {
+  const deleteType = payload.deleteType || 'soft'
+
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/invoices/delete`, {'id': state.selectedInvoices}).then((response) => {
+    window.axios.post(`/api/invoices/delete`, {'id': state.selectedInvoices, 'delete_type': deleteType}).then((response) => {
       if (response.data.error) {
         resolve(response)
       } else {

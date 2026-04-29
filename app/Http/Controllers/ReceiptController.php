@@ -432,13 +432,20 @@ class ReceiptController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($response = $this->adminOnlyResponse()) {
             return $response;
         }
 
+        $deleteType = $request->get('delete_type', 'soft');
+        $isHardDelete = ('hard' === $deleteType);
         $receipt = Receipt::find($id);
+        if (! $receipt) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
 
         $vouchers = Voucher::where('receipt_id', $id)->get();
 
@@ -451,10 +458,10 @@ class ReceiptController extends Controller
         }
 
         foreach($vouchers as $each) {
-            $each->delete();
+            $isHardDelete ? $each->forceDelete() : $each->delete();
         }
 
-        $receipt->delete();
+        $isHardDelete ? $receipt->forceDelete() : $receipt->delete();
 
         return response()->json([
             'success' => true
@@ -472,8 +479,13 @@ class ReceiptController extends Controller
             return $response;
         }
 
+        $deleteType = $request->get('delete_type', 'soft');
+        $isHardDelete = ('hard' === $deleteType);
         foreach ($request->id as $id) {
             $receipt = Receipt::find($id);
+            if (! $receipt) {
+                continue;
+            }
             $vouchers = Voucher::where('receipt_id', $id)->get();
 
             if ($receipt->invoice_id != null && $vouchers->isNotEmpty()) {
@@ -485,10 +497,10 @@ class ReceiptController extends Controller
             }
 
             foreach($vouchers as $each) {
-                $each->delete();
+                $isHardDelete ? $each->forceDelete() : $each->delete();
             }
 
-            $receipt->delete();
+            $isHardDelete ? $receipt->forceDelete() : $receipt->delete();
         }
 
         return response()->json([
