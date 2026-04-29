@@ -99,6 +99,16 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'InvoicesController@delete'
     ]);
 
+    Route::get('/invoices/deleted', [
+        'as' => 'invoices.deleted',
+        'uses' => 'InvoicesController@deleted'
+    ]);
+
+    Route::post('/invoices/{id}/restore', [
+        'as' => 'invoices.restore',
+        'uses' => 'InvoicesController@restore'
+    ]);
+
     Route::get('/invoices/estimate/{estimate}', [
         'as' => 'estimate',
         'uses' => 'InvoicesController@getInvoiceEstimate'
@@ -192,6 +202,14 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/receipts/delete', [
         'as' => 'receipts.delete',
         'uses' => 'ReceiptController@delete'
+    ]);
+    Route::get('/receipts/deleted', [
+        'as' => 'receipts.deleted',
+        'uses' => 'ReceiptController@deleted'
+    ]);
+    Route::post('/receipts/{id}/restore', [
+        'as' => 'receipts.restore',
+        'uses' => 'ReceiptController@restore'
     ]);
     Route::post('/receipts/{id}/approve', [
         'as' => 'receipts.approve',

@@ -218,7 +218,7 @@ class ReceiptController extends Controller
             }
         }
 
-        $receipt_mode = AccountMaster::where('groups', 'Bank Accounts')->where('groups', 'Cash-in-Hand')->get();
+        $receipt_mode = AccountMaster::whereIn('groups', ['Bank Accounts', 'Cash-in-Hand'])->get();
 
         return response()->json([
             'nextReceiptNumber' => $receipt->getReceiptNumAttribute(),
@@ -493,6 +493,64 @@ class ReceiptController extends Controller
 
         return response()->json([
             'success' => true
+        ]);
+    }
+
+    /**
+     * Display soft-deleted receipts (admin only).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleted(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $limit = $request->has('limit') ? $request->limit : 20;
+        $companyId = $request->header('company');
+
+        $receipts = Receipt::onlyTrashed()
+            ->where('company_id', $companyId)
+            ->select('id', 'receipt_number', 'deleted_at')
+            ->orderBy('deleted_at', 'desc')
+            ->paginate($limit);
+
+        return response()->json([
+            'receipts' => $receipts,
+            'total' => Receipt::onlyTrashed()->where('company_id', $companyId)->count(),
+        ]);
+    }
+
+    /**
+     * Restore a soft-deleted receipt (admin only).
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function restore(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $receipt = Receipt::onlyTrashed()
+            ->where('company_id', $request->header('company'))
+            ->where('id', $id)
+            ->first();
+
+        if (! $receipt) {
+            return response()->json([
+                'error' => 'receipt_not_found',
+            ], 404);
+        }
+
+        $receipt->restore();
+
+        return response()->json([
+            'success' => true,
         ]);
     }
 

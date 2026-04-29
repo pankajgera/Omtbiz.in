@@ -5,6 +5,7 @@
         "calculator": "Calculator",
         "items": "Bill-ty",
         "bills": "Raw Bill",
+        "invoice": "Invoice",
         "invoices": "Invoices",
         "expenses": "Expenses",
         "estimates": "Estimates",
@@ -22,7 +23,9 @@
         "ledger": "Display",
         "voucher": "Voucher",
         "dispatch": "Dispatch",
-        "orders": "Orders"
+        "orders": "Orders",
+        "receipt": "Receipt",
+        "restore": "Restore"
     },
     "general": {
         "yes": "Yes",
@@ -73,6 +76,7 @@
         "select_a_status": "Select a status",
         "search": "Search",
         "are_you_sure": "Are you sure?",
+        "restore": "Restore",
         "list_is_empty": "List is empty.",
         "four_zero_four": "404",
         "you_got_lost": "Whoops! You got Lost!",
@@ -665,7 +669,12 @@
         "something_went_wrong": "something went wrong",
         "invalid_due_amount_message": "Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.",
         "estimate-list": "Select Estimate",
-        "whatsapp": "Sent on whatsapp"
+        "whatsapp": "Sent on whatsapp",
+        "deleted_title": "Deleted Invoices",
+        "no_deleted_invoices": "No deleted invoices yet!",
+        "list_of_deleted_invoices": "This section will contain the list of deleted invoices.",
+        "restore_confirm": "Do you want to restore this invoice?",
+        "restored_message": "Invoice restored successfully"
     },
     "credit_notes": {
         "title": "Credit Notes",
@@ -769,7 +778,12 @@
         "deleted_message": "Receipt deleted successfully | Receipts deleted successfully",
         "invalid_amount_message": "Receipt amount is invalid",
         "receipt_greater_than_due_amount": "Receipt amount is greater than Due amount",
-        "receipt_greater_than_zero": "Receipt amount should be greater than 0"
+        "receipt_greater_than_zero": "Receipt amount should be greater than 0",
+        "deleted_title": "Deleted Receipts",
+        "no_deleted_receipts": "No deleted receipts yet!",
+        "list_of_deleted_receipts": "This section will contain the list of deleted receipts.",
+        "restore_confirm": "Do you want to restore this receipt?",
+        "restored_message": "Receipt restored successfully"
     },
     "expenses": {
         "title": "Expenses",

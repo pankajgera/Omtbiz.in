@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Receipt extends Model
 {
@@ -13,6 +15,7 @@ class Receipt extends Model
     public const STATUS_DONE = 'Done';
     public const STATUS_TO_BE_APPROVED = 'To Be Approved';
     public const STATUS_DECLINED = 'Declined';
+    use SoftDeletes;
 
     public const RECEIPT_MODE_CHECK = 'CHECK';
     public const RECEIPT_MODE_OTHER = 'OTHER';

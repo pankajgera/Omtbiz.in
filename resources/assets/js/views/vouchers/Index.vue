@@ -156,7 +156,10 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link v-if="role === 'admin'" :to="{path: `vouchers/${row.id}/edit`}">
+            <router-link v-if="role === 'admin'" :to="{ name: 'vouchers.edit', params: { id: row.id } }">
+              {{ row.account }}
+            </router-link>
+            <router-link v-else-if="role === 'accountant'" :to="{ name: 'vouchers.edit', params: { id: row.id } }">
               {{ row.account }}
             </router-link>
             <span v-else>{{ row.account }}</span>
@@ -200,9 +203,13 @@
             </span>
             <v-dropdown-item>
 
-              <router-link v-if="role === 'admin'" :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
+              <router-link v-if="role === 'admin'" :to="{ name: 'vouchers.edit', params: { id: row.id } }" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}
+              </router-link>
+              <router-link v-else-if="role === 'accountant'" :to="{ name: 'vouchers.edit', params: { id: row.id } }" class="dropdown-item">
+                <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                {{ $t('invoices.view') }}
               </router-link>
 
             </v-dropdown-item>

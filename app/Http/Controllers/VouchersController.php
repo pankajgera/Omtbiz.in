@@ -38,8 +38,11 @@ class VouchersController extends Controller
 
     public function edit(Request $request, $id)
     {
-        if ($response = $this->adminOnlyResponse()) {
-            return $response;
+        $user = auth()->user();
+        if (!$user || (!$user->isAdmin() && !$user->isAccountant())) {
+            return response()->json([
+                'error' => 'admin_or_accountant_only',
+            ], 403);
         }
 
         $voucher = Voucher::where('related_voucher', 'like', '%' . $id . '%')->select([
