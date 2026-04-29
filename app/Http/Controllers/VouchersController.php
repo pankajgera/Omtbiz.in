@@ -179,13 +179,14 @@ class VouchersController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         if ($response = $this->adminOnlyResponse()) {
             return $response;
         }
 
-        $data = Voucher::deleteVoucher($id);
+        $deleteType = $request->get('delete_type', 'soft');
+        $data = Voucher::deleteVoucher($id, $deleteType);
 
         if (!$data) {
             return response()->json([
@@ -211,9 +212,10 @@ class VouchersController extends Controller
             return $response;
         }
 
+        $deleteType = $request->get('delete_type', 'soft');
         $vouchers = [];
         foreach ($request->id as $id) {
-            $voucher = Voucher::deleteVoucher($id);
+            $voucher = Voucher::deleteVoucher($id, $deleteType);
             if (!$voucher) {
                 array_push($vouchers, $id);
             }

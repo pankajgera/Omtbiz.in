@@ -120,9 +120,12 @@ export const declineMultipleReceipts = ({ commit, receipt, state }) => {
   })
 }
 
-export const deleteReceipt = ({ commit, receipt, state }, id) => {
+export const deleteReceipt = ({ commit, receipt, state }, payload) => {
+  const id = (typeof payload === 'object') ? payload.id : payload
+  const deleteType = (typeof payload === 'object' && payload.deleteType) ? payload.deleteType : 'soft'
+
   return new Promise((resolve, reject) => {
-    window.axios.delete(`/api/receipts/${id}`).then((response) => {
+    window.axios.delete(`/api/receipts/${id}`, { data: { delete_type: deleteType } }).then((response) => {
       commit(types.DELETE_RECEIPT, id)
       resolve(response)
     }).catch((err) => {
@@ -131,9 +134,11 @@ export const deleteReceipt = ({ commit, receipt, state }, id) => {
   })
 }
 
-export const deleteMultipleReceipts = ({ commit, receipt, state }, id) => {
+export const deleteMultipleReceipts = ({ commit, receipt, state }, payload = {}) => {
+  const deleteType = payload.deleteType || 'soft'
+
   return new Promise((resolve, reject) => {
-    window.axios.post(`/api/receipts/delete`, {'id': state.selectedReceipts}).then((response) => {
+    window.axios.post(`/api/receipts/delete`, {'id': state.selectedReceipts, 'delete_type': deleteType}).then((response) => {
       commit(types.DELETE_MULTIPLE_RECEIPTS, state.selectedReceipts)
       resolve(response)
     }).catch((err) => {

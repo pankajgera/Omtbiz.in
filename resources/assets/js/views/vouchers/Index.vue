@@ -383,49 +383,69 @@ export default {
     },
     async removeVouchers (id) {
       this.id = id
-      swal({
+      const deleteType = await swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('vouchers.confirm_delete'),
+        text: this.$t('vouchers.choose_delete_type'),
         icon: '/assets/icon/trash-solid.svg',
-        buttons: true,
+        buttons: {
+          cancel: this.$t('general.cancel'),
+          soft: {
+            text: this.$t('vouchers.soft_delete'),
+            value: 'soft'
+          },
+          hard: {
+            text: this.$t('vouchers.hard_delete'),
+            value: 'hard'
+          }
+        },
         dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let res = await this.deleteVoucher(this.id)
-          if (res.data.success) {
-            window.toastr['success'](this.$tc('vouchers.deleted_message', 1))
-            this.$refs.table.refresh()
-            return true
-          }
+      })
 
-          if (res.data.error === 'voucher_attached') {
-            window.toastr['error'](this.$tc('vouchers.voucher_attached_message'), this.$t('general.action_failed'))
-            return true
-          }
-
-          window.toastr['error'](res.data.message)
+      if (deleteType) {
+        let res = await this.deleteVoucher({ id: this.id, deleteType })
+        if (res.data.success) {
+          window.toastr['success'](this.$tc('vouchers.deleted_message', 1))
+          this.$refs.table.refresh()
           return true
         }
-      })
+
+        if (res.data.error === 'voucher_attached') {
+          window.toastr['error'](this.$tc('vouchers.voucher_attached_message'), this.$t('general.action_failed'))
+          return true
+        }
+
+        window.toastr['error'](res.data.message)
+        return true
+      }
     },
     async removeMultipleVouchers () {
-      swal({
+      const deleteType = await swal({
         title: this.$t('general.are_you_sure'),
-        text: this.$tc('vouchers.confirm_delete', 2),
+        text: this.$t('vouchers.choose_delete_type_bulk'),
         icon: '/assets/icon/trash-solid.svg',
-        buttons: true,
-        dangerMode: true
-      }).then(async (willDelete) => {
-        if (willDelete) {
-          let res = await this.deleteMultipleVouchers()
-          if (res.data.success) {
-            window.toastr['success'](this.$tc('vouchers.deleted_message', 2))
-            this.$refs.table.refresh()
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
+        buttons: {
+          cancel: this.$t('general.cancel'),
+          soft: {
+            text: this.$t('vouchers.soft_delete'),
+            value: 'soft'
+          },
+          hard: {
+            text: this.$t('vouchers.hard_delete'),
+            value: 'hard'
           }
-        }
+        },
+        dangerMode: true
       })
+
+      if (deleteType) {
+        let res = await this.deleteMultipleVouchers({ deleteType })
+        if (res.data.success) {
+          window.toastr['success'](this.$tc('vouchers.deleted_message', 2))
+          this.$refs.table.refresh()
+        } else if (res.data.error) {
+          window.toastr['error'](res.data.message)
+        }
+      }
     },
     setIndex(index) {
       this.index = index

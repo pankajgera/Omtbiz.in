@@ -140,8 +140,9 @@ class Voucher extends Model
     }
 
 
-    public static function deleteVoucher($id)
+    public static function deleteVoucher($id, $deleteType = 'soft')
     {
+        $isHardDelete = ('hard' === $deleteType);
         $find_vouchers = Voucher::where('voucher_type', '!=', 'Voucher')->where('id', $id)->exists();
         if ($find_vouchers) {
             Log::error('Voucher used in invoice/receipt/payment, so we cannnot delete this it. ID ' . $id);
@@ -157,7 +158,7 @@ class Voucher extends Model
 
         $related_voucher = Voucher::where('related_voucher', $voucher->related_voucher)->get();
         foreach($related_voucher as $each) {
-            $each->delete();
+            $isHardDelete ? $each->forceDelete() : $each->delete();
         }
         return true;
     }
