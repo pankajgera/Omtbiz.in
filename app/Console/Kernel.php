@@ -1,6 +1,7 @@
 <?php
 namespace App\Console;
 
+use App\Jobs\PurgeSoftDeletedFinanceData;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -27,6 +28,9 @@ class Kernel extends ConsoleKernel
             ->daily();
 
         $schedule->command('check:estimates:status')
+            ->daily();
+
+        $schedule->job(new PurgeSoftDeletedFinanceData())
             ->daily();
     }
 
