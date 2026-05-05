@@ -541,6 +541,9 @@ export default {
         } catch (e) {
           failedCount++
         }
+
+        // Keep a fixed delay between every bulk whatsapp notification.
+        await new Promise(resolve => setTimeout(resolve, 10000))
       }
 
       if (successCount) {
