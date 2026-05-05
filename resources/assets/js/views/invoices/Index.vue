@@ -98,17 +98,28 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="role === 'admin' && selectedInvoices.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleInvoices">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
+          <div v-if="selectedInvoices.length" class="d-flex align-items-center">
+            <base-button
+              v-if="role === 'accountant' && selectedInvoices.length > 1"
+              color="theme"
+              size="small"
+              class="mr-2"
+              @click="sendMultipleReports"
+            >
+              {{ $t('invoices.send_selected_whatsapp') }}
+            </base-button>
+            <v-dropdown v-if="role === 'admin'" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleInvoices">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </div>
         </transition>
       </div>
       <div class="custom-control custom-checkbox">
@@ -492,12 +503,62 @@ export default {
       }
       let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY');
       this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
-      .then((val) => {
+      .then(() => {
         setTimeout(() => {
           this.isLoading = false
-          window.location.reload()
+          this.refreshTable()
         }, 2000)
       })
+    },
+    async sendMultipleReports () {
+      if (this.selectedInvoices.length < 2) {
+        return
+      }
+
+      let successCount = 0
+      let failedCount = 0
+
+      for (const invoiceId of this.selectedInvoices) {
+        try {
+          let response = await this.fetchInvoice(invoiceId)
+          let invoice = response.data.invoice
+          if (!invoice || !response.data.sundryDebtorsList || !response.data.sundryDebtorsList.length) {
+            failedCount++
+            continue
+          }
+
+          let ledger = response.data.sundryDebtorsList.find(i => i.id === invoice.account_master_id)
+          let mobile = ledger ? ledger.mobile_number : null
+          if (!mobile) {
+            failedCount++
+            continue
+          }
+
+          let siteURL = `/invoices/pdf/${invoice.unique_hash}`
+          let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY')
+          let whatsappResponse = await window.axios.post('/api/whatsapp-send-pdf', {
+            fileName,
+            number: mobile,
+            filePath: window.location.origin + siteURL
+          })
+
+          if (whatsappResponse.status === 200 && !whatsappResponse.data?.error) {
+            successCount++
+          } else {
+            failedCount++
+          }
+        } catch (e) {
+          failedCount++
+        }
+      }
+
+      if (successCount) {
+        window.toastr['success'](`${successCount} invoice(s) sent on WhatsApp`)
+      }
+
+      if (failedCount) {
+        window.toastr['warning'](`${failedCount} invoice(s) could not be sent on WhatsApp`)
+      }
     }
   }
 }
