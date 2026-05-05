@@ -284,7 +284,7 @@ const routes = [
                 path: 'vouchers/:id/edit',
                 name: 'vouchers.edit',
                 component: VouchersCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
               path: 'vouchers/:id/book',
