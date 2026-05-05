@@ -215,7 +215,7 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="sendReports(row.id)" v-if="role === 'admin' || role === 'accountant'">
+                <div class="dropdown-item" @click="sendReports(row)" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" />
                   {{ $t('invoices.whatsapp') }}
                 </div>
@@ -329,7 +329,6 @@ export default {
   methods: {
     ...mapActions('invoice', [
       'fetchInvoices',
-      'fetchInvoice',
       'getRecord',
       'selectInvoice',
       'resetSelectedInvoices',
@@ -483,20 +482,14 @@ export default {
       this.filters.customer = ''
       this.refreshTable()
     },
-    async sendReports(invoice_id) {
-      let response = await this.fetchInvoice(invoice_id);
-      let invoice = response.data.invoice
+    async sendReports(invoice) {
       if (!invoice) {
-        window.toastr['error']("Invoice not found for id - " + invoice_id)
+        window.toastr['error']("Invoice not found.")
         return
       }
       this.isLoading = true
       this.siteURL = `/invoices/pdf/${invoice.unique_hash}`
-      if (!response.data.sundryDebtorsList.length) {
-        window.toastr['error']("Sundry Debtors list is empty for invoice id - " + invoice_id)
-        return
-      }
-      let mobile = response.data.sundryDebtorsList.find(i => i.id === invoice.account_master_id).mobile_number;
+      let mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null
       if (!mobile) {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
@@ -517,18 +510,16 @@ export default {
 
       let successCount = 0
       let failedCount = 0
+      const selectedInvoiceRows = this.invoices.filter(i => this.selectedInvoices.includes(i.id))
 
-      for (const invoiceId of this.selectedInvoices) {
+      for (const invoice of selectedInvoiceRows) {
         try {
-          let response = await this.fetchInvoice(invoiceId)
-          let invoice = response.data.invoice
-          if (!invoice || !response.data.sundryDebtorsList || !response.data.sundryDebtorsList.length) {
+          if (!invoice) {
             failedCount++
             continue
           }
 
-          let ledger = response.data.sundryDebtorsList.find(i => i.id === invoice.account_master_id)
-          let mobile = ledger ? ledger.mobile_number : null
+          let mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null
           if (!mobile) {
             failedCount++
             continue
