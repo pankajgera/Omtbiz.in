@@ -104,9 +104,11 @@
               color="theme"
               size="small"
               class="mr-2"
+              :loading="isBulkWhatsappSending"
+              :disabled="isBulkWhatsappSending"
               @click="sendMultipleReports"
             >
-              {{ $t('invoices.send_selected_whatsapp') }}
+              {{ isBulkWhatsappSending ? $t('invoices.sending_selected_whatsapp') : $t('invoices.send_selected_whatsapp') }}
             </base-button>
             <v-dropdown v-if="role === 'admin'" :show-arrow="false">
               <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -260,6 +262,8 @@ export default {
       filtersApplied: false,
       isRequestOngoing: true,
       filtered_count: 0,
+      isLoading: false,
+      isBulkWhatsappSending: false,
       filters: {
         invoice_number: '',
         customer: '',
@@ -504,54 +508,59 @@ export default {
       })
     },
     async sendMultipleReports () {
-      if (this.selectedInvoices.length < 2) {
+      if (this.selectedInvoices.length < 2 || this.isBulkWhatsappSending) {
         return
       }
 
+      this.isBulkWhatsappSending = true
       let successCount = 0
       let failedCount = 0
       const selectedInvoiceRows = this.invoices.filter(i => this.selectedInvoices.includes(i.id))
 
-      for (const invoice of selectedInvoiceRows) {
-        try {
-          if (!invoice) {
+      try {
+        for (const invoice of selectedInvoiceRows) {
+          try {
+            if (!invoice) {
+              failedCount++
+              continue
+            }
+
+            let mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null
+            if (!mobile) {
+              failedCount++
+              continue
+            }
+
+            let siteURL = `/invoices/pdf/${invoice.unique_hash}`
+            let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY')
+            let whatsappResponse = await window.axios.post('/api/whatsapp-send-pdf', {
+              fileName,
+              number: mobile,
+              filePath: window.location.origin + siteURL
+            })
+
+            if (whatsappResponse.status === 200 && !whatsappResponse.data?.error) {
+              successCount++
+            } else {
+              failedCount++
+            }
+          } catch (e) {
             failedCount++
-            continue
           }
 
-          let mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null
-          if (!mobile) {
-            failedCount++
-            continue
-          }
-
-          let siteURL = `/invoices/pdf/${invoice.unique_hash}`
-          let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY')
-          let whatsappResponse = await window.axios.post('/api/whatsapp-send-pdf', {
-            fileName,
-            number: mobile,
-            filePath: window.location.origin + siteURL
-          })
-
-          if (whatsappResponse.status === 200 && !whatsappResponse.data?.error) {
-            successCount++
-          } else {
-            failedCount++
-          }
-        } catch (e) {
-          failedCount++
+          // Keep a fixed delay between every bulk whatsapp notification.
+          await new Promise(resolve => setTimeout(resolve, 10000))
         }
 
-        // Keep a fixed delay between every bulk whatsapp notification.
-        await new Promise(resolve => setTimeout(resolve, 10000))
-      }
+        if (successCount) {
+          window.toastr['success'](`${successCount} invoice(s) sent on WhatsApp`)
+        }
 
-      if (successCount) {
-        window.toastr['success'](`${successCount} invoice(s) sent on WhatsApp`)
-      }
-
-      if (failedCount) {
-        window.toastr['warning'](`${failedCount} invoice(s) could not be sent on WhatsApp`)
+        if (failedCount) {
+          window.toastr['warning'](`${failedCount} invoice(s) could not be sent on WhatsApp`)
+        }
+      } finally {
+        this.isBulkWhatsappSending = false
       }
     }
   }
