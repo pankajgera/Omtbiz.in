@@ -19,10 +19,12 @@ use App\Models\Dispatch;
 use App\Models\Estimate;
 use App\Models\InventoryItem;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Validator;
 use App\Models\Voucher;
 use Exception;
+use Illuminate\Database\QueryException;
 
 class InvoicesController extends Controller
 {
@@ -168,15 +170,13 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
-            //Check if same invoice number is already present
-            //if YES, then add 1 to this invoice number
-            $invoice_number = $number_attributes['invoice_number'];
-            $find_invoice = Invoice::where('invoice_number', '=', $invoice_number)->first();
-            if (! empty($find_invoice)) {
-                $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $request->header('company'));
-                $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoice_prefix, $request->header('company'));
-                $number_attributes['invoice_number'] = $invoice_prefix . '-' . $nextInvoiceNumber;
-            }
+            $companyId = (int) $request->header('company');
+            $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $companyId);
+            $number_attributes['invoice_number'] = $this->getNextAvailableInvoiceNumber(
+                $number_attributes['invoice_number'],
+                $companyId,
+                $invoice_prefix
+            );
 
             //Check reference_number
             $reference_number = $request->reference_number;
@@ -191,28 +191,38 @@ class InvoicesController extends Controller
             }
 
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+            $invoice = DB::transaction(function () use ($request, $number_attributes, $reference_number, $invoice_date, $companyId, $invoice_prefix) {
+                // Lock latest invoice row for this company to serialize auto-number generation across concurrent requests.
+                Invoice::where('company_id', $companyId)->orderBy('id', 'desc')->lockForUpdate()->first();
 
-            $invoice = Invoice::create([
-                'invoice_date' => $invoice_date,
-                //'due_date' => $due_date,
-                'invoice_number' => $number_attributes['invoice_number'],
-                'reference_number' => $reference_number,
-                'user_id' => $request->user_id,
-                'company_id' => $request->header('company'),
-                'invoice_template_id' => $request->invoice_template_id,
-                'status' => Invoice::TO_BE_DISPATCH,
-                'paid_status' => Invoice::STATUS_PAID,
-                'sub_total' => $request->sub_total,
-                'total' => $request->total,
-                'due_amount' => $request->total,
-                'notes' => $request->notes,
-                'indirect_income' =>  $request->income_ledger ? $request->income_ledger['name'] : null,
-                'indirect_income_value' => $request->income_ledger_value,
-                'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
-                'indirect_expense_value' => $request->expense_ledger_value,
-                'unique_hash' => str_random(60),
-                'account_master_id' => $request->debtors['id'],
-            ]);
+                $finalInvoiceNumber = $this->getNextAvailableInvoiceNumber(
+                    $number_attributes['invoice_number'],
+                    $companyId,
+                    $invoice_prefix
+                );
+
+                return Invoice::create([
+                    'invoice_date' => $invoice_date,
+                    //'due_date' => $due_date,
+                    'invoice_number' => $finalInvoiceNumber,
+                    'reference_number' => $reference_number,
+                    'user_id' => $request->user_id,
+                    'company_id' => $companyId,
+                    'invoice_template_id' => $request->invoice_template_id,
+                    'status' => Invoice::TO_BE_DISPATCH,
+                    'paid_status' => Invoice::STATUS_PAID,
+                    'sub_total' => $request->sub_total,
+                    'total' => $request->total,
+                    'due_amount' => $request->total,
+                    'notes' => $request->notes,
+                    'indirect_income' =>  $request->income_ledger ? $request->income_ledger['name'] : null,
+                    'indirect_income_value' => $request->income_ledger_value,
+                    'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
+                    'indirect_expense_value' => $request->expense_ledger_value,
+                    'unique_hash' => str_random(60),
+                    'account_master_id' => $request->debtors['id'],
+                ]);
+            }, 3);
 
             //Added dispatch bill
             $dispatch = new Dispatch();
@@ -260,7 +270,7 @@ class InvoicesController extends Controller
                     'type' => 'Cr',
                 ]);
             }
-            $company_id = (int) $request->header('company');
+            $company_id = $companyId;
             $account_master_id = (int) $request->debtors['id'];
             $total_amount = (int) ($request->total);
 
@@ -374,12 +384,40 @@ class InvoicesController extends Controller
             }
 
             return response()->json(204);
+        } catch (QueryException $e) {
+            Log::error('Database error while storing invoice ', [$e]);
+            return response()->json([
+                'error' => 'Unable to create invoice. Please try again.',
+            ], 500);
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
+                'error' => 'Unable to create invoice. Please try again.',
+            ], 500);
         }
+    }
+
+    private function getNextAvailableInvoiceNumber($requestedInvoiceNumber, $companyId, $invoicePrefix)
+    {
+        $invoiceNumber = $requestedInvoiceNumber;
+        $attempt = 0;
+        $maxAttempts = 5;
+
+        while ($attempt < $maxAttempts) {
+            $exists = Invoice::where('company_id', $companyId)
+                ->where('invoice_number', $invoiceNumber)
+                ->exists();
+
+            if (! $exists) {
+                return $invoiceNumber;
+            }
+
+            $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoicePrefix, $companyId);
+            $invoiceNumber = $invoicePrefix . '-' . $nextInvoiceNumber;
+            $attempt++;
+        }
+
+        throw new Exception('Failed to generate a unique invoice number.');
     }
 
     /**
