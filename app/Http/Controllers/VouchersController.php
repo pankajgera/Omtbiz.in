@@ -17,8 +17,9 @@ class VouchersController extends Controller
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 20;
+        $voucherStatus = $request->get('voucher_status');
 
-        $vouchers = Voucher::applyFilters($request->only([
+        $vouchersQuery = Voucher::applyFilters($request->only([
             'name',
             'groups',
             'voucher_status',
@@ -30,8 +31,18 @@ class VouchersController extends Controller
             ->whereCompany($request->header('company'))
             ->with(['accountMaster'])
             ->where('voucher_type', 'Voucher')
-            ->latest()
-            ->paginate($limit);
+            ->latest();
+
+        // By default, keep pending-approval vouchers out of main list.
+        // Approval list explicitly sends voucher_status=To Be Approved.
+        if (!$voucherStatus) {
+            $vouchersQuery->where(function ($query) {
+                $query->whereNull('voucher_status')
+                    ->orWhere('voucher_status', '!=', Voucher::STATUS_TO_BE_APPROVED);
+            });
+        }
+
+        $vouchers = $vouchersQuery->paginate($limit);
 
         return response()->json([
             'vouchers' => $vouchers,

@@ -1,7 +1,7 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-      <Header :title="approvalMode ? $t('vouchers.approvals_title') : $tc('vouchers.voucher', 2)" :bread-crumb-links="breadCrumbLinks">
+      <Header :title="isApprovalMode ? $t('vouchers.approvals_title') : $tc('vouchers.voucher', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalVouchers || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
@@ -14,7 +14,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div v-if="role === 'admin' && !approvalMode" class="mr-4 mb-3 mb-sm-0">
+        <div v-if="role === 'admin' && !isApprovalMode" class="mr-4 mb-3 mb-sm-0">
           <router-link :to="{ name: 'vouchers.approvals' }">
             <base-button
               :outline="true"
@@ -25,7 +25,7 @@
             </base-button>
           </router-link>
         </div>
-        <div v-if="!approvalMode">
+        <div v-if="!isApprovalMode">
         <router-link slot="item-title" to="vouchers/create">
           <base-button
             color="theme"
@@ -88,12 +88,12 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <satellite-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ approvalMode ? $t('vouchers.no_vouchers_pending_approval') : $t('vouchers.no_vouchers') }}</label>
+        <label class="col title">{{ isApprovalMode ? $t('vouchers.no_vouchers_pending_approval') : $t('vouchers.no_vouchers') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ approvalMode ? $t('vouchers.list_of_vouchers_pending_approval') : $t('vouchers.list_of_vouchers') }}</label>
+        <label class="description col mt-1" align="center">{{ isApprovalMode ? $t('vouchers.list_of_vouchers_pending_approval') : $t('vouchers.list_of_vouchers') }}</label>
       </div>
-      <div v-if="!approvalMode" class="btn-container">
+      <div v-if="!isApprovalMode" class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -120,7 +120,7 @@
                 {{ $t('general.delete') }}
               </div>
             </v-dropdown-item>
-            <v-dropdown-item v-if="approvalMode">
+            <v-dropdown-item v-if="isApprovalMode">
               <div class="dropdown-item" @click="approveMultipleVouchersAction">
                 <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
                 {{ $t('vouchers.approve_voucher') }}
@@ -297,7 +297,7 @@ export default {
       },
       {
         url:'#',
-        title:this.approvalMode ? this.$t('vouchers.approvals_title') : this.$tc('vouchers.voucher')
+        title:this.$route.name === 'vouchers.approvals' ? this.$t('vouchers.approvals_title') : this.$tc('vouchers.voucher')
       }
     ],
       filters: {
@@ -317,6 +317,9 @@ export default {
       'totalVouchers',
       'selectAllField'
     ]),
+    isApprovalMode () {
+      return this.$route.name === 'vouchers.approvals'
+    },
     showEmptyScreen () {
       return !this.totalVouchers && !this.isRequestOngoing && !this.filtersApplied
     },
@@ -344,7 +347,13 @@ export default {
     filters: {
       handler: 'setFilters',
       deep: true
+    },
+    '$route.name' () {
+      this.updateBreadCrumbTitle()
     }
+  },
+  mounted () {
+    this.updateBreadCrumbTitle()
   },
   destroyed () {
     if (this.selectAllField) {
@@ -372,7 +381,7 @@ export default {
         groups: this.filters.groups !== null ? this.filters.groups : '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
-        voucher_status: this.approvalMode ? 'To Be Approved' : '',
+        voucher_status: this.isApprovalMode ? 'To Be Approved' : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -519,6 +528,13 @@ export default {
     },
     setIndex(index) {
       this.index = index
+    },
+    updateBreadCrumbTitle () {
+      if (this.breadCrumbLinks && this.breadCrumbLinks[1]) {
+        this.breadCrumbLinks[1].title = this.isApprovalMode
+          ? this.$t('vouchers.approvals_title')
+          : this.$tc('vouchers.voucher')
+      }
     }
   }
 }
