@@ -14,6 +14,17 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
+        <div v-if="role === 'admin' && !approvalMode" class="mr-4 mb-3 mb-sm-0">
+          <router-link :to="{ name: 'vouchers.approvals' }">
+            <base-button
+              :outline="true"
+              color="theme"
+              size="large"
+            >
+              {{ $t('vouchers.need_approval') }}
+            </base-button>
+          </router-link>
+        </div>
         <div v-if="!approvalMode">
         <router-link slot="item-title" to="vouchers/create">
           <base-button

@@ -384,6 +384,7 @@
         "updated_message": "Account Voucher updated successfully",
         "deleted_message": "Account Voucher deleted successfully | Account Vouchers deleted successfully",
         "approve_voucher": "Approve Voucher",
+        "need_approval": "Need Approval",
         "confirm_approve": "Do you want to approve this voucher?",
         "approved_message": "Voucher approved successfully",
         "submitted_for_approval_message": "Voucher submitted for admin approval",
