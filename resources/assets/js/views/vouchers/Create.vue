@@ -253,7 +253,8 @@ export default {
         this.isLoading = true
         let response = await this.addVoucher(rows)
         if (response.data) {
-          window.toastr['success'](this.$tc('vouchers.created_message'))
+          const isPendingApproval = this.userRole !== 'admin'
+          window.toastr['success'](isPendingApproval ? this.$t('vouchers.submitted_for_approval_message') : this.$tc('vouchers.created_message'))
           this.isLoading = false
           this.alreadySubmitted = true;
           setTimeout(() => {

@@ -406,6 +406,22 @@ Route::group(['middleware' => 'api'], function () {
         'as' => 'vouchers.delete',
         'uses' => 'VouchersController@delete'
     ]);
+    Route::post('/vouchers/{id}/approve', [
+        'as' => 'vouchers.approve',
+        'uses' => 'VouchersController@approve'
+    ]);
+    Route::post('/vouchers/{id}/decline', [
+        'as' => 'vouchers.decline',
+        'uses' => 'VouchersController@decline'
+    ]);
+    Route::post('/vouchers/approve-multiple', [
+        'as' => 'vouchers.approve-multiple',
+        'uses' => 'VouchersController@approveMultiple'
+    ]);
+    Route::post('/vouchers/decline-multiple', [
+        'as' => 'vouchers.decline-multiple',
+        'uses' => 'VouchersController@declineMultiple'
+    ]);
 
     Route::post('/vouchers/update', 'VouchersController@update');
 

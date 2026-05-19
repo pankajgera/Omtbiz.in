@@ -271,8 +271,16 @@ const routes = [
             // Voucher
             {
               path: 'vouchers',
+              name: 'vouchers.index',
               component: VouchersIndex,
               meta: ['admin', 'accountant']
+            },
+            {
+              path: 'vouchers/approvals',
+              name: 'vouchers.approvals',
+              component: VouchersIndex,
+              meta: ['admin'],
+              props: { approvalMode: true }
             },
             {
                 path: 'vouchers/create',

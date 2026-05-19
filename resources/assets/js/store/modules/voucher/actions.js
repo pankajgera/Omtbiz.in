@@ -33,6 +33,46 @@ export const addVoucher = ({ commit, dispatch, state }, data) => {
   })
 }
 
+export const approveVoucher = ({ commit, dispatch, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/vouchers/${id}/approve`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const declineVoucher = ({ commit, dispatch, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/vouchers/${id}/decline`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const approveMultipleVouchers = ({ commit, dispatch, state }) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/vouchers/approve-multiple`, { 'id': state.selectedVouchers }).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const declineMultipleVouchers = ({ commit, dispatch, state }) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/vouchers/decline-multiple`, { 'id': state.selectedVouchers }).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
 export const deleteVoucher = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/vouchers/${id}`).then((response) => {

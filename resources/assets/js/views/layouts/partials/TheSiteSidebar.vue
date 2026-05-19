@@ -133,6 +133,12 @@ export default {
             meta: ["admin", "accountant"],
           },
           {
+            title: "navigation.voucher_approvals",
+            icon: "check-circle",
+            route: "/vouchers/approvals",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.notes",
             icon: "envelope",
             route: "/notes",

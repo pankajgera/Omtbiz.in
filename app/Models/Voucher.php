@@ -9,6 +9,10 @@ use Log;
 
 class Voucher extends Model
 {
+    public const STATUS_DONE = 'Done';
+    public const STATUS_TO_BE_APPROVED = 'To Be Approved';
+    public const STATUS_DECLINED = 'Declined';
+
     protected $fillable = [
         'type',
         'date',
@@ -23,6 +27,7 @@ class Voucher extends Model
         'invoice_id',
         'invoice_item_id',
         'voucher_type',
+        'voucher_status',
         'receipt_id',
         'payment_id',
     ];
@@ -65,6 +70,11 @@ class Voucher extends Model
     public function scopeWhereCreditAmount($query, $credit)
     {
         return $query->where('credit', 'LIKE', '%' . $credit . '%');
+    }
+
+    public function scopeVoucherStatus($query, $voucherStatus)
+    {
+        return $query->where('voucher_status', $voucherStatus);
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -112,6 +122,10 @@ class Voucher extends Model
         if ($filters->get('groups')) {
             $master_ids = AccountMaster::where('groups', 'LIKE', '%' . $filters->get('groups') . '%')->pluck('id')->toArray();
             $query->whereIn('account_master_id', $master_ids);
+        }
+
+        if ($filters->get('voucher_status')) {
+            $query->voucherStatus($filters->get('voucher_status'));
         }
 
         if ($filters->get('debit')) {
