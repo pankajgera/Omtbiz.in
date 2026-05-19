@@ -360,7 +360,8 @@ export default {
       'deleteMultipleVouchers',
       'setSelectAllState',
       'approveVoucher',
-      'approveMultipleVouchers'
+      'approveMultipleVouchers',
+      'declineVoucher'
     ]),
     refreshTable () {
       this.$refs.table.refresh()
@@ -494,6 +495,23 @@ export default {
           let response = await this.approveMultipleVouchers()
           if (response.data && response.data.success) {
             window.toastr['success'](this.$t('vouchers.approved_message'))
+            this.$refs.table.refresh()
+          }
+        }
+      })
+    },
+    async declineVoucherAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('vouchers.confirm_decline'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (declined) => {
+        if (declined) {
+          let response = await this.declineVoucher(id)
+          if (response.data && response.data.success) {
+            window.toastr['success'](this.$t('vouchers.declined_message'))
             this.$refs.table.refresh()
           }
         }
