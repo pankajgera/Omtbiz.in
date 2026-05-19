@@ -89,14 +89,15 @@ class VouchersController extends Controller
 
                 // If accountLedger is already present then update
                 // Credit and Debit with balance with 'type'
+                $ledgerPresent = AccountLedger::whereCompany($request->header('company'))
+                    ->where([
+                        'account' => $each['account'],
+                        'account_master_id' => $each['account_id'],
+                    ])->first();
                 $ledger = null;
-                if ($isAdmin) {
-                    $ledgerPresent = AccountLedger::whereCompany($request->header('company'))
-                        ->where([
-                            'account' => $each['account'],
-                            'account_master_id' => $each['account_id'],
-                        ])->first();
-                    if (!empty($ledgerPresent)) {
+
+                if (!empty($ledgerPresent)) {
+                    if ($isAdmin) {
                         $updateCredit = 0;
                         $updateDebit = 0;
                         if ('Cr' === $each['type']) {
@@ -106,19 +107,20 @@ class VouchersController extends Controller
                             $updateDebit = $ledgerPresent->debit + $each['debit'];
                             $ledgerPresent->update(['debit' => $updateDebit, 'balance' => $updateDebit]);
                         }
-                        $ledger = $ledgerPresent;
-                    } else {
-                        $ledger = AccountLedger::create([
-                            'account' => $each['account'],
-                            'account_master_id' => $each['account_id'],
-                            'type' => $each['type'],
-                            'debit' => $each['debit'] ?? 0,
-                            'credit' => $each['credit'] ?? 0,
-                            'balance' => $each['balance'],
-                            'date' => $each['date'],
-                            'company_id' => $request->header('company')
-                        ]);
                     }
+                    $ledger = $ledgerPresent;
+                } else {
+                    $ledger = AccountLedger::create([
+                        'account' => $each['account'],
+                        'account_master_id' => $each['account_id'],
+                        'type' => $each['type'],
+                        // For pending approvals, create ledger shell with zero values.
+                        'debit' => $isAdmin ? ($each['debit'] ?? 0) : 0,
+                        'credit' => $isAdmin ? ($each['credit'] ?? 0) : 0,
+                        'balance' => $isAdmin ? ($each['balance'] ?? 0) : 0,
+                        'date' => $each['date'],
+                        'company_id' => $request->header('company')
+                    ]);
                 }
 
                 $voucher = null;
@@ -127,7 +129,7 @@ class VouchersController extends Controller
                         'company_id' => $request->header('company'),
                         'id' => $each['id'],
                     ])->update([
-                        'account_ledger_id' => $ledger ? $ledger->id : $each['account_ledger_id'],
+                        'account_ledger_id' => $ledger->id,
                         'account_master_id' => $each['account_id'],
                         'type' => $each['type'],
                         'account' => $each['account'],
@@ -140,7 +142,7 @@ class VouchersController extends Controller
                     $voucher = Voucher::find($each['id']);
                 } else {
                     $voucher = Voucher::create([
-                        'account_ledger_id' => $ledger ? $ledger->id : null,
+                        'account_ledger_id' => $ledger->id,
                         'account_master_id' => $each['account_id'],
                         'type' => $each['type'],
                         'account' => $each['account'],
@@ -154,9 +156,7 @@ class VouchersController extends Controller
                     ]);
                 }
 
-                if ($ledger) {
-                    array_push($ledger_ids, $ledger->id);
-                }
+                array_push($ledger_ids, $ledger->id);
                 if (!empty($voucher_ids)) {
                     $voucher_ids = $voucher_ids . ', ' . $voucher->id;
                 } else {
