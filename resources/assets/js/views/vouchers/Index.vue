@@ -226,6 +226,12 @@
               </div>
             </v-dropdown-item>
             <v-dropdown-item>
+              <div v-if="role === 'admin' && row.voucher_status === 'To Be Approved'" class="dropdown-item" @click="declineVoucherAction(row.id)">
+                <font-awesome-icon icon="times-circle" class="dropdown-item-icon" />
+                {{ $t('vouchers.decline_voucher') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
               <div v-if="role === 'admin'" class="dropdown-item" @click="removeVouchers(row.id)">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}

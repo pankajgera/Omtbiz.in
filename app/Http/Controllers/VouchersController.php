@@ -465,13 +465,17 @@ class VouchersController extends Controller
             return;
         }
 
+        $balance = 'Cr' === $voucher->type
+            ? ($voucher->credit ?? 0)
+            : ($voucher->debit ?? 0);
+
         $ledger = AccountLedger::create([
             'account' => $voucher->account,
             'account_master_id' => $voucher->account_master_id,
             'type' => $voucher->type,
             'debit' => $voucher->debit ?? 0,
             'credit' => $voucher->credit ?? 0,
-            'balance' => 0,
+            'balance' => $balance,
             'date' => $voucher->date,
             'company_id' => $companyId
         ]);
