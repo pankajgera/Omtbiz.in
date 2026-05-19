@@ -9,6 +9,7 @@
             )"
             :key="index1"
             :to="item.route"
+            :exact="!!item.exact"
             class="menu-item"
             @click.native="Toggle"
           >
@@ -130,6 +131,7 @@ export default {
             title: "navigation.voucher",
             icon: "file-alt",
             route: "/vouchers",
+            exact: true,
             meta: ["admin", "accountant"],
           },
           {
