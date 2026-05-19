@@ -350,6 +350,15 @@ export default {
     },
     '$route.name' () {
       this.updateBreadCrumbTitle()
+      this.filtersApplied = false
+      if (this.selectAllField) {
+        this.selectAllVouchers()
+      }
+      this.$nextTick(() => {
+        if (this.$refs.table) {
+          this.$refs.table.refresh()
+        }
+      })
     }
   },
   mounted () {
@@ -381,6 +390,7 @@ export default {
         groups: this.filters.groups !== null ? this.filters.groups : '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
+        approval_mode: this.isApprovalMode,
         voucher_status: this.isApprovalMode ? 'To Be Approved' : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
