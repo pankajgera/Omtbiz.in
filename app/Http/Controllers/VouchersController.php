@@ -18,6 +18,7 @@ class VouchersController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 20;
         $voucherStatus = $request->get('voucher_status');
+        $approvalMode = filter_var($request->get('approval_mode'), FILTER_VALIDATE_BOOLEAN);
 
         $vouchersQuery = Voucher::applyFilters($request->only([
             'name',
@@ -35,7 +36,9 @@ class VouchersController extends Controller
 
         // By default, keep pending-approval vouchers out of main list.
         // Approval list explicitly sends voucher_status=To Be Approved.
-        if (!$voucherStatus) {
+        if ($approvalMode) {
+            $vouchersQuery->where('voucher_status', Voucher::STATUS_TO_BE_APPROVED);
+        } elseif (!$voucherStatus) {
             $vouchersQuery->where(function ($query) {
                 $query->whereNull('voucher_status')
                     ->orWhere('voucher_status', '!=', Voucher::STATUS_TO_BE_APPROVED);
