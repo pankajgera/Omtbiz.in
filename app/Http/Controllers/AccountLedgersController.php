@@ -37,6 +37,7 @@ class AccountLedgersController extends Controller
         foreach ($ledgers as $ledger) {
             $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
                 ->whereCompany($request->header('company'))
+                ->visibleOutsideApproval()
                 ->whereNotNull('related_voucher')
                 ->get();
             $each_ids = null;
@@ -51,10 +52,13 @@ class AccountLedgersController extends Controller
             $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
                 ->where('account_ledger_id', '!=', $ledger->id)
                 ->whereCompany($request->header('company'))
+                ->visibleOutsideApproval()
                 ->orderBy('date', 'desc')
                 ->get();
             //Update balance according to 'debit' or 'credit'
-            $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)->get();
+            $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)
+                ->visibleOutsideApproval()
+                ->get();
 
             $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
 
@@ -277,6 +281,7 @@ class AccountLedgersController extends Controller
             ->where('date', Carbon::now()->format('Y-m-d'))
             ->where('account', '!=', 'Sales')
             ->whereNotNull('invoice_id')
+            ->visibleOutsideApproval()
             ->groupBy('account_ledger_id')
             ->get();
 
@@ -285,6 +290,7 @@ class AccountLedgersController extends Controller
             $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)
                 ->where('date', Carbon::now()->format('Y-m-d'))
                 ->whereNotNull('invoice_id')
+                ->visibleOutsideApproval()
                 ->count();
             $each['lot'] = $lot;
             $each['party'] = $each->account;

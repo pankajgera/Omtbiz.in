@@ -173,7 +173,10 @@ class AccountLedger extends Model
 
     public static function ledgerMutation($ledger, $from, $to)
     {
-        $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)->whereNotNull('related_voucher')->get();
+        $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
+            ->visibleOutsideApproval()
+            ->whereNotNull('related_voucher')
+            ->get();
         $each_ids = null;
         foreach ($all_voucher_ids as $each) {
             if ($each_ids) {
@@ -185,6 +188,7 @@ class AccountLedger extends Model
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
         $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
             ->where('account_ledger_id', '!=', $ledger->id)
+            ->visibleOutsideApproval()
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
             ->orderBy('date')
@@ -211,6 +215,7 @@ class AccountLedger extends Model
         //Calculate Opening balance
         $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
             ->where('account_ledger_id', '!=', $ledger->id)
+            ->visibleOutsideApproval()
             ->whereDate('date', '<', $from)
             ->orderBy('date')
             ->get(['id', 'debit', 'credit']);
