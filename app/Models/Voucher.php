@@ -77,6 +77,17 @@ class Voucher extends Model
         return $query->where('voucher_status', $voucherStatus);
     }
 
+    public function scopeVisibleOutsideApproval($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('voucher_type', '!=', 'Voucher')
+                ->orWhere(function ($inner) {
+                    $inner->where('voucher_type', 'Voucher')
+                        ->where('voucher_status', self::STATUS_DONE);
+                });
+        });
+    }
+
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
         $query->orderBy($orderByField, $orderBy);

@@ -268,6 +268,7 @@ class VouchersController extends Controller
             'from_date',
             'to_date'
         ]))->whereCompany($request->header('company'), $request['filterBy'])
+            ->visibleOutsideApproval()
             ->get();
 
         $voucher = [];
@@ -293,6 +294,7 @@ class VouchersController extends Controller
     {
         $related_vouchers = Voucher::whereRaw("find_in_set(" . $id . ",related_voucher)")
             ->whereCompany($request->header('company'))
+            ->visibleOutsideApproval()
             ->where('updated_at', '>', Carbon::today())
             ->where('updated_at', '<', Carbon::tomorrow())
             ->get();
