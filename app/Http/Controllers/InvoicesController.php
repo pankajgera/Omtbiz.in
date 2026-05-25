@@ -401,7 +401,7 @@ class InvoicesController extends Controller
     {
         $invoiceNumber = $requestedInvoiceNumber;
         $attempt = 0;
-        $maxAttempts = 5;
+        $maxAttempts = 20;
 
         while ($attempt < $maxAttempts) {
             $exists = Invoice::where('company_id', $companyId)
@@ -412,12 +412,28 @@ class InvoicesController extends Controller
                 return $invoiceNumber;
             }
 
-            $nextInvoiceNumber = Invoice::getNextInvoiceNumber($invoicePrefix, $companyId);
-            $invoiceNumber = $invoicePrefix . '-' . $nextInvoiceNumber;
+            $invoiceNumber = $this->buildInvoiceNumberFromMaxSuffix($companyId, $invoicePrefix, $attempt + 1);
             $attempt++;
         }
 
-        throw new Exception('Failed to generate a unique invoice number.');
+        // Last-resort fallback: keep invoice creation non-blocking even in pathological collision cases.
+        return sprintf(
+            '%s-%06d',
+            $invoicePrefix,
+            (int) (microtime(true) * 1000000) % 1000000
+        );
+    }
+
+    private function buildInvoiceNumberFromMaxSuffix($companyId, $invoicePrefix, $offset = 1)
+    {
+        $maxSuffix = Invoice::where('company_id', $companyId)
+            ->where('invoice_number', 'like', $invoicePrefix . '-%')
+            ->selectRaw("MAX(CAST(SUBSTRING_INDEX(invoice_number, '-', -1) AS UNSIGNED)) as max_suffix")
+            ->value('max_suffix');
+
+        $nextSuffix = ((int) $maxSuffix) + max(1, (int) $offset);
+
+        return $invoicePrefix . '-' . sprintf('%06d', $nextSuffix);
     }
 
     /**
