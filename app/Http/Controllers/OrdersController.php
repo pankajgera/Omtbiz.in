@@ -12,6 +12,7 @@ use App\Models\AccountMaster;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class OrdersController extends Controller
 {
@@ -144,7 +145,7 @@ class OrdersController extends Controller
             'company_id' => $request->header('company'),
             'status' => $status,
             'notes' => $request->notes,
-            'unique_hash' => str_random(60),
+            'unique_hash' => Str::random(60),
             'account_master_id' => $request->debtors['id'],
         ]);
 

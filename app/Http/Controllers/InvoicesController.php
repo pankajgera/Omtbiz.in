@@ -25,6 +25,7 @@ use Validator;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Str;
 
 class InvoicesController extends Controller
 {
@@ -219,7 +220,7 @@ class InvoicesController extends Controller
                     'indirect_income_value' => $request->income_ledger_value,
                     'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
                     'indirect_expense_value' => $request->expense_ledger_value,
-                    'unique_hash' => str_random(60),
+                    'unique_hash' => Str::random(60),
                     'account_master_id' => $request->debtors['id'],
                 ]);
             }, 3);

@@ -8,6 +8,7 @@ use Image;
 use Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Item extends Model
 {
@@ -134,7 +135,7 @@ class Item extends Model
     {
         //make an Intervention Image object
         $image = Image::make($request_image);
-        $fileName = str_random(30) . '-' . time() . '.jpg';
+        $fileName = Str::random(30) . '-' . time() . '.jpg';
 
         // store our uploaded file in our uploads folder
         // set our results to have our asset path

@@ -21,6 +21,7 @@ use App\Models\Inventory;
 use App\Notifications\EstimateSuccessful;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class EstimatesController extends Controller
 {
@@ -155,7 +156,7 @@ class EstimatesController extends Controller
             'sub_total' => $request->sub_total,
             'total' => $request->total,
             'notes' => $request->notes,
-            'unique_hash' => str_random(60),
+            'unique_hash' => Str::random(60),
             'account_master_id' => $request->debtors['id'],
         ]);
 
