@@ -67,6 +67,16 @@
               />
               <span v-show="$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
             </div>
+            <div class="col collapse-input">
+              <label>{{ $t('estimates.ref_number') }}</label>
+              <base-prefix-input
+                v-model="referenceNumAttribute"
+                :prefix="estimatePrefix"
+                icon="hashtag"
+                :prefix-width="55"
+                :disabled="true"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -245,6 +255,7 @@ export default {
       newEstimate: {
         estimate_date: null,
         estimate_number: null,
+        reference_number: null,
         user_id: null,
         estimate_template_id: 1,
         sub_total: null,
@@ -350,7 +361,10 @@ export default {
         return this.newEstimate.debtors
       },
       set(value) {
-        //this.searchDebtorRefNumber(value)
+        this.searchDebtorRefNumber({
+          id: value && value.id ? value.id : value,
+          estimate_date: this.newEstimate.estimate_date
+        })
         this.newEstimate.debtors = value
       },
     },
@@ -363,12 +377,32 @@ export default {
     },
     inventoryListBind() {
       return this.$store.state.inventory.inventories
+    },
+    referenceNumAttribute: {
+      cache: false,
+      get() {
+        if (this.newEstimate.reference_number && -1 !== this.newEstimate.reference_number.indexOf('-')) {
+          return this.newEstimate.reference_number.split('-').pop()
+        }
+        return this.newEstimate.reference_number
+      },
+      set(value) {
+        this.newEstimate.reference_number = value
+      }
     }
   },
   watch: {
     subtotal (newValue) {
       if (this.newEstimate.discount_type === 'percentage') {
         this.newEstimate.discount_val = (this.newEstimate.discount * newValue)
+      }
+    },
+    'newEstimate.estimate_date' () {
+      if (this.newEstimate.debtors && this.$route.name !== 'estimates.edit') {
+        this.searchDebtorRefNumber({
+          id: this.newEstimate.debtors.id ? this.newEstimate.debtors.id : this.newEstimate.debtors,
+          estimate_date: this.newEstimate.estimate_date
+        })
       }
     }
   },
@@ -423,6 +457,7 @@ export default {
           this.estimateTemplates = response.data.estimateTemplates
           this.estimatePrefix = response.data.estimate_prefix
           this.estimateNumAttribute = response.data.estimateNumber
+          this.newEstimate.reference_number = response.data.estimate.reference_number
           this.newEstimate.debtors = response.data.sundryDebtorsList[0]
         }
         this.initLoading = false
@@ -439,6 +474,7 @@ export default {
         this.inventoryNegative = response.data.inventory_negative
         this.estimatePrefix = response.data.estimate_prefix
         this.estimateNumAttribute = response.data.nextEstimateNumberAttribute
+        this.newEstimate.reference_number = response.data.nextEstimateNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
       }
       this.initLoading = false
@@ -485,6 +521,7 @@ export default {
         return false
       }
       this.newEstimate.estimate_number = this.estimatePrefix + '-' + this.estimateNumAttribute
+      this.newEstimate.reference_number = this.estimatePrefix + '-' + this.referenceNumAttribute
 
       let data = {
         ...this.newEstimate,
@@ -594,6 +631,18 @@ export default {
         isValid = true
       }
       return isValid
+    },
+    async searchDebtorRefNumber(data) {
+      this.newEstimate.reference_number = this.estimateNumAttribute
+      let response = await this.fetchReferenceNumber({
+        ...data,
+        estimate_date: data.estimate_date ? data.estimate_date : this.newEstimate.estimate_date
+      })
+      if (response.data && response.data.estimate) {
+        this.newEstimate.reference_number = response.data.estimate.reference_number.split('-').pop()
+      } else {
+        this.newEstimate.reference_number = this.estimateNumAttribute
+      }
     },
     showEndList(val) {
       this.showAddNewInventory = !val;

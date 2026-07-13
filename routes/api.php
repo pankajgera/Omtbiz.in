@@ -134,6 +134,11 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'EstimatesController@store'
     ]);
 
+    Route::post('/estimates/reference', [
+        'as' => 'estimates.reference',
+        'uses' => 'EstimatesController@referenceNumber'
+    ]);
+
     Route::resource('estimates', 'EstimatesController');
 
 
@@ -148,6 +153,11 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/orders/create-invoice', [
         'as' => 'orders.create-invoice',
         'uses' => 'OrdersController@store'
+    ]);
+
+    Route::post('/orders/reference', [
+        'as' => 'orders.reference',
+        'uses' => 'OrdersController@referenceNumber'
     ]);
 
     Route::resource('orders', 'OrdersController');
