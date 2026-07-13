@@ -937,16 +937,18 @@ export default {
       return isValid
     },
     async searchDebtorRefNumber(data) {
-       this.newInvoice.reference_number = null;
-       let response = await this.fetchReferenceNumber({
-         ...data,
-         invoice_date: data.invoice_date ? data.invoice_date : this.newInvoice.invoice_date
-       })
+      this.newInvoice.reference_number = this.invoiceNumAttribute
+      try {
+        let response = await this.fetchReferenceNumber({
+          ...data,
+          invoice_date: data.invoice_date ? data.invoice_date : this.newInvoice.invoice_date
+        })
         if (response.data && response.data.invoice) {
           this.newInvoice.reference_number = response.data.invoice.reference_number.split('-').pop()
-        } else {
-          this.newInvoice.reference_number = this.invoiceNumAttribute
         }
+      } catch (err) {
+        this.newInvoice.reference_number = this.invoiceNumAttribute
+      }
     },
     showEndList(val) {
       this.showAddNewInventory = !val;

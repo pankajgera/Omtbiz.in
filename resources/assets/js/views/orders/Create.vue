@@ -577,13 +577,15 @@ export default {
     },
     async searchDebtorRefNumber(data) {
       this.newOrder.reference_number = this.orderNumAttribute
-      let response = await this.fetchReferenceNumber({
-        ...data,
-        order_date: data.order_date ? data.order_date : this.newOrder.order_date
-      })
-      if (response.data && response.data.order) {
-        this.newOrder.reference_number = response.data.order.reference_number.split('-').pop()
-      } else {
+      try {
+        let response = await this.fetchReferenceNumber({
+          ...data,
+          order_date: data.order_date ? data.order_date : this.newOrder.order_date
+        })
+        if (response.data && response.data.order) {
+          this.newOrder.reference_number = response.data.order.reference_number.split('-').pop()
+        }
+      } catch (err) {
         this.newOrder.reference_number = this.orderNumAttribute
       }
     },

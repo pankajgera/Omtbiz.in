@@ -634,13 +634,15 @@ export default {
     },
     async searchDebtorRefNumber(data) {
       this.newEstimate.reference_number = this.estimateNumAttribute
-      let response = await this.fetchReferenceNumber({
-        ...data,
-        estimate_date: data.estimate_date ? data.estimate_date : this.newEstimate.estimate_date
-      })
-      if (response.data && response.data.estimate) {
-        this.newEstimate.reference_number = response.data.estimate.reference_number.split('-').pop()
-      } else {
+      try {
+        let response = await this.fetchReferenceNumber({
+          ...data,
+          estimate_date: data.estimate_date ? data.estimate_date : this.newEstimate.estimate_date
+        })
+        if (response.data && response.data.estimate) {
+          this.newEstimate.reference_number = response.data.estimate.reference_number.split('-').pop()
+        }
+      } catch (err) {
         this.newEstimate.reference_number = this.estimateNumAttribute
       }
     },
