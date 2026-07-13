@@ -67,6 +67,16 @@
               />
               <span v-show="$v.orderNumAttribute.$error && !$v.orderNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
             </div>
+            <div class="col collapse-input">
+              <label>{{ $t('orders.ref_number') }}</label>
+              <base-prefix-input
+                v-model="referenceNumAttribute"
+                :prefix="orderPrefix"
+                icon="hashtag"
+                :prefix-width="55"
+                :disabled="true"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -224,6 +234,7 @@ export default {
       newOrder: {
         order_date: null,
         order_number: null,
+        reference_number: null,
         user_id: null,
         order_template_id: 1,
         sub_total: null,
@@ -232,7 +243,6 @@ export default {
         discount_type: 'fixed',
         discount_val: 0,
         discount: 0,
-        //reference_number: null,
         order_items: [{
           ...OrderStub,
         }],
@@ -301,7 +311,10 @@ export default {
         return this.newOrder.debtors
       },
       set(value) {
-        //this.searchDebtorRefNumber(value)
+        this.searchDebtorRefNumber({
+          id: value && value.id ? value.id : value,
+          order_date: this.newOrder.order_date
+        })
         this.newOrder.debtors = value
       },
     },
@@ -320,12 +333,32 @@ export default {
     },
     inventoryListBind() {
       return this.$store.state.inventory.inventories
+    },
+    referenceNumAttribute: {
+      cache: false,
+      get() {
+        if (this.newOrder.reference_number && -1 !== this.newOrder.reference_number.indexOf('-')) {
+          return this.newOrder.reference_number.split('-').pop()
+        }
+        return this.newOrder.reference_number
+      },
+      set(value) {
+        this.newOrder.reference_number = value
+      }
     }
   },
   watch: {
     subtotal (newValue) {
       if (this.newOrder.discount_type === 'percentage') {
         this.newOrder.discount_val = (this.newOrder.discount * newValue)
+      }
+    },
+    'newOrder.order_date' () {
+      if (this.newOrder.debtors && !this.isEdit) {
+        this.searchDebtorRefNumber({
+          id: this.newOrder.debtors.id ? this.newOrder.debtors.id : this.newOrder.debtors,
+          order_date: this.newOrder.order_date
+        })
       }
     }
   },
@@ -378,6 +411,7 @@ export default {
           this.selectedCurrency = this.defaultCurrency
           this.orderPrefix = response.data.order_prefix
           this.orderNumAttribute = response.data.orderNumber
+          this.newOrder.reference_number = response.data.order.reference_number
           this.newOrder.debtors = response.data.sundryDebtorsList[0]
         }
         this.initLoading = false
@@ -393,6 +427,7 @@ export default {
         this.inventoryNegative = response.data.inventory_negative
         this.orderPrefix = response.data.order_prefix
         this.orderNumAttribute = response.data.nextOrderNumberAttribute
+        this.newOrder.reference_number = response.data.nextOrderNumberAttribute
         this.sundryDebtorsList = response.data.sundryDebtorsList
       }
       this.initLoading = false
@@ -431,6 +466,7 @@ export default {
         return false
       }
       this.newOrder.order_number = this.orderPrefix + '-' + this.orderNumAttribute
+      this.newOrder.reference_number = this.orderPrefix + '-' + this.referenceNumAttribute
 
       let data = {
         ...this.newOrder,
@@ -538,6 +574,20 @@ export default {
         isValid = true
       }
       return isValid
+    },
+    async searchDebtorRefNumber(data) {
+      this.newOrder.reference_number = this.orderNumAttribute
+      try {
+        let response = await this.fetchReferenceNumber({
+          ...data,
+          order_date: data.order_date ? data.order_date : this.newOrder.order_date
+        })
+        if (response.data && response.data.order) {
+          this.newOrder.reference_number = response.data.order.reference_number.split('-').pop()
+        }
+      } catch (err) {
+        this.newOrder.reference_number = this.orderNumAttribute
+      }
     },
     showEndList(val) {
       this.showAddNewInventory = !val;
