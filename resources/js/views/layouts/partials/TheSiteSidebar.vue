@@ -18,6 +18,7 @@
           </router-link>
         </div>
       </nav>
+    </div>
       <button type="button" @click="showModal" class="calculator-button" aria-label="Open calculator" title="Calculator">
         <font-awesome-icon icon="calculator" />
       </button>
@@ -36,7 +37,6 @@
     </div>
   </div>
 </div>
-    </div>
   </div>
 </template>
 <script type="text/babel">

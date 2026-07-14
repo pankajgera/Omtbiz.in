@@ -162,12 +162,42 @@ textarea {
 }
 
 .sidebar-left {
+    display: flex;
+    flex-direction: column;
     top: 64px;
     width: 248px;
     height: calc(100% - 64px);
     padding: 12px 10px;
+    overflow: hidden;
     background: var(--ui-sidebar);
     border-right: 1px solid #171a1f;
+}
+
+.sidebar-left .sidebar-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: auto;
+    padding: 0 2px 12px 0;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    overscroll-behavior-y: contain;
+    scrollbar-color: #687281 transparent;
+    scrollbar-gutter: stable;
+    touch-action: pan-y;
+}
+
+.sidebar-left .sidebar-body::-webkit-scrollbar:vertical {
+    width: 10px;
+}
+
+.sidebar-left .sidebar-body::-webkit-scrollbar-thumb {
+    background: #687281;
+    border: 2px solid var(--ui-sidebar);
+    border-radius: 6px;
+}
+
+.sidebar-left .sidebar-body::-webkit-scrollbar-track {
+    background: transparent;
 }
 
 .sidebar-left .menu-group {
@@ -216,11 +246,12 @@ textarea {
 }
 
 .calculator-button {
+    flex: 0 0 40px;
     display: grid;
     place-items: center;
     width: 40px;
     height: 40px;
-    margin: 10px 12px 4px;
+    margin: 8px 12px 0;
     color: #fff;
     background: transparent;
     border: 1px solid #454d59;
