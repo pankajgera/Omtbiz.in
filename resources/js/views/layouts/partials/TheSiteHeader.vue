@@ -1,22 +1,18 @@
 <template>
   <header class="site-header">
-    <a href="/" class="brand-main">
+    <router-link to="/invoices/create" class="brand-main" aria-label="Omtbiz home">
       <img
         id="logo-white"
         src="@/assets/img/bill.png"
         alt="Omtbiz Logo"
-        class="d-none d-md-inline"
       >
-      <img
-        id="logo-mobile"
-        src="@/assets/img/bill.png"
-        alt="Laraspace Logo"
-        class="d-md-none">
-    </a>
+      <span class="brand-name">Omtbiz</span>
+    </router-link>
 
-    <a
-      href="#"
+    <button
+      type="button"
       class="nav-toggle"
+      aria-label="Toggle navigation"
       @click="onNavToggle"
     >
       <div class="hamburger hamburger--arrowturn">
@@ -24,19 +20,20 @@
           <div class="hamburger-inner"/>
         </div>
       </div>
-    </a>
+    </button>
     <ul class="action-list">
       <li class="notifications">
         <v-dropdown :show-arrow="false">
           <button
             slot="activator"
-            href="#"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
-            class="btn btn-success"
+            aria-label="Notifications"
+            class="header-icon-button"
           >
-          <font-awesome-icon icon="bell" class="dropdown-item-icon"/> <span class="badge bg-secondary">{{ listNotifications ? listNotifications.length : 0  }}</span>
+          <font-awesome-icon icon="bell" class="dropdown-item-icon"/>
+          <span class="notification-count">{{ listNotifications ? listNotifications.length : 0 }}</span>
           </button>
           <v-dropdown-item>
             
@@ -62,6 +59,7 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false"
+            aria-label="Open user menu"
             class="avatar"
           >
             <img :src="profilePicture" alt="Avatar">
@@ -132,15 +130,3 @@ export default {
   }
 }
 </script>
-<style>
-.notifications .dropdown-group .dropdown-container {
-  min-width: 23rem !important;
-}
-.alert {
-  position: relative;
-  padding: 0.145rem 1.25rem;
-  margin-bottom: 0.3rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-}
-</style>

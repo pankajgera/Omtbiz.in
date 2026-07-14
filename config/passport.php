@@ -17,6 +17,8 @@ return [
 
     'public_key' => env('PASSPORT_PUBLIC_KEY'),
 
+    'keys_path' => env('PASSPORT_KEYS_PATH'),
+
     /*
     |--------------------------------------------------------------------------
     | Client UUIDs

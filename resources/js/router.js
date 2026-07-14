@@ -11,13 +11,12 @@ import store from './store/index.js'
 import LayoutBasic from './views/layouts/LayoutBasic.vue'
 import LayoutLogin from './views/layouts/LayoutLogin.vue'
 
-// Auth
-import Login from './views/auth/Login.vue'
-import ForgotPassword from './views/auth/ForgotPassword.vue'
-import ResetPassword from './views/auth/ResetPassword.vue'
-import Register from './views/auth/Register.vue'
-
-import NotFoundPage from './views/errors/404.vue'
+// Route views are lazy-loaded so the initial bundle only contains the active workflow.
+const Login = () => import('./views/auth/Login.vue')
+const ForgotPassword = () => import('./views/auth/ForgotPassword.vue')
+const ResetPassword = () => import('./views/auth/ResetPassword.vue')
+const Register = () => import('./views/auth/Register.vue')
+const NotFoundPage = () => import('./views/errors/404.vue')
 
 /*
  |--------------------------------------------------------------------------
@@ -25,108 +24,103 @@ import NotFoundPage from './views/errors/404.vue'
  |--------------------------------------------------------------------------|
  */
 
-// Dashbord
-//import Dashboard from './views/dashboard/Dashboard.vue'
-
 // Customers
-import CustomerIndex from './views/customers/Index.vue'
-import CustomerCreate from './views/customers/Create.vue'
+const CustomerIndex = () => import('./views/customers/Index.vue')
+const CustomerCreate = () => import('./views/customers/Create.vue')
 
 // Items
-import ItemsIndex from './views/items/Index.vue'
-import ItemCreate from './views/items/Create.vue'
+const ItemsIndex = () => import('./views/items/Index.vue')
+const ItemCreate = () => import('./views/items/Create.vue')
 
 // Raw Bill
-import BillIndex from './views/raw-bill/Index.vue'
-import BillCreate from './views/raw-bill/Create.vue'
+const BillIndex = () => import('./views/raw-bill/Index.vue')
+const BillCreate = () => import('./views/raw-bill/Create.vue')
 
 // Invoices
-import InvoiceIndex from './views/invoices/Index.vue'
-import InvoiceCreate from './views/invoices/Create.vue'
-import InvoiceBulk from './views/invoices/InvoiceBulk.vue'
-import InvoiceView from './views/invoices/View.vue'
+const InvoiceIndex = () => import('./views/invoices/Index.vue')
+const InvoiceCreate = () => import('./views/invoices/Create.vue')
+const InvoiceBulk = () => import('./views/invoices/InvoiceBulk.vue')
+const InvoiceView = () => import('./views/invoices/View.vue')
 
 // Payments
-import PaymentsIndex from './views/payments/Index.vue'
-import PaymentCreate from './views/payments/Create.vue'
+const PaymentsIndex = () => import('./views/payments/Index.vue')
+const PaymentCreate = () => import('./views/payments/Create.vue')
 
-//Receipt
-import ReceiptCreate from './views/receipts/Create.vue'
-import ReceiptIndex from './views/receipts/Index.vue'
-import ReceiptView from './views/receipts/View.vue'
+// Receipt
+const ReceiptCreate = () => import('./views/receipts/Create.vue')
+const ReceiptIndex = () => import('./views/receipts/Index.vue')
+const ReceiptView = () => import('./views/receipts/View.vue')
 
 // Estimates
-import EstimateIndex from './views/estimates/Index.vue'
-import EstimateCreate from './views/estimates/Create.vue'
-import EstimateView from './views/estimates/View.vue'
+const EstimateIndex = () => import('./views/estimates/Index.vue')
+const EstimateCreate = () => import('./views/estimates/Create.vue')
+const EstimateView = () => import('./views/estimates/View.vue')
 
 // Orders
-import OrderIndex from './views/orders/Index.vue'
-import OrderCreate from './views/orders/Create.vue'
-import OrderView from './views/orders/View.vue'
-
+const OrderIndex = () => import('./views/orders/Index.vue')
+const OrderCreate = () => import('./views/orders/Create.vue')
+const OrderView = () => import('./views/orders/View.vue')
 
 // Expenses
-import ExpensesIndex from './views/expenses/Index'
-import ExpenseCreate from './views/expenses/Create.vue'
+const ExpensesIndex = () => import('./views/expenses/Index.vue')
+const ExpenseCreate = () => import('./views/expenses/Create.vue')
 
 // Report
-import SalesReports from './views/reports/SalesReports'
-import ExpensesReport from './views/reports/ExpensesReport'
-import ProfitLossReport from './views/reports/ProfitLossReport'
-import CustomersReport from './views/reports/CustomersReport.vue'
-import ReportLayout from './views/reports/layout/Index.vue'
-import BanksReport from './views/reports/BanksReport.vue'
+const SalesReports = () => import('./views/reports/SalesReports.vue')
+const ExpensesReport = () => import('./views/reports/ExpensesReport.vue')
+const ProfitLossReport = () => import('./views/reports/ProfitLossReport.vue')
+const CustomersReport = () => import('./views/reports/CustomersReport.vue')
+const ReportLayout = () => import('./views/reports/layout/Index.vue')
+const BanksReport = () => import('./views/reports/BanksReport.vue')
 
 // Users
-import UserIndex from './views/users/Index.vue'
-import UserCreate from './views/users/Create.vue'
+const UserIndex = () => import('./views/users/Index.vue')
+const UserCreate = () => import('./views/users/Create.vue')
 
 // Settings
-import SettingsLayout from './views/settings/layout/Index.vue'
-import CompanyInfo from './views/settings/CompanyInfo.vue'
-import Customization from './views/settings/Customization.vue'
-import Notifications from './views/settings/Notifications.vue'
-import Calculator from './views/settings/Calculator.vue'
-import Preferences from './views/settings/Preferences.vue'
-import UserProfile from './views/settings/UserProfile.vue'
-import ExpenseCategory from './views/settings/ExpenseCategory.vue'
-import MailConfig from './views/settings/MailConfig.vue'
-//import UpdateApp from './views/settings/UpdateApp.vue'
+const SettingsLayout = () => import('./views/settings/layout/Index.vue')
+const CompanyInfo = () => import('./views/settings/CompanyInfo.vue')
+const Customization = () => import('./views/settings/Customization.vue')
+const Notifications = () => import('./views/settings/Notifications.vue')
+const Calculator = () => import('./views/settings/Calculator.vue')
+const Preferences = () => import('./views/settings/Preferences.vue')
+const UserProfile = () => import('./views/settings/UserProfile.vue')
+const ExpenseCategory = () => import('./views/settings/ExpenseCategory.vue')
+const MailConfig = () => import('./views/settings/MailConfig.vue')
 
 // notes
-import NotesIndex from './views/notes/Index.vue'
-import NotesCreate from './views/notes/Create.vue'
+const NotesIndex = () => import('./views/notes/Index.vue')
+const NotesCreate = () => import('./views/notes/Create.vue')
 
 // inventory
-import InventoryIndex from './views/inventory/Index.vue'
-import InventoryCreate from './views/inventory/Create.vue'
-import InventoryStock from './views/inventory/InventoryStock.vue'
-import InvoiceStock from './views/inventory/InvoiceStock.vue'
+const InventoryIndex = () => import('./views/inventory/Index.vue')
+const InventoryCreate = () => import('./views/inventory/Create.vue')
+const InventoryStock = () => import('./views/inventory/InventoryStock.vue')
+const InvoiceStock = () => import('./views/inventory/InvoiceStock.vue')
 
 // Account Master
-import MastersIndex from './views/masters/Index.vue'
-import MastersCreate from './views/masters/Create.vue'
+const MastersIndex = () => import('./views/masters/Index.vue')
+const MastersCreate = () => import('./views/masters/Create.vue')
 
 // Account Ledgers
-import LedgersIndex from './views/ledgers/Index.vue'
-import LedgersCreate from './views/ledgers/Create.vue'
-import LedgersDisplay from './views/ledgers/Display.vue'
+const LedgersIndex = () => import('./views/ledgers/Index.vue')
+const LedgersCreate = () => import('./views/ledgers/Create.vue')
+const LedgersDisplay = () => import('./views/ledgers/Display.vue')
 
 // Vouchers
-import VouchersIndex from './views/vouchers/Index.vue'
-import VouchersCreate from './views/vouchers/Create.vue'
-import VouchersBook from './views/vouchers/Book.vue'
-import VouchersDaysheet from './views/vouchers/Daysheet.vue'
-import VouchersDaybook from './views/vouchers/Daybook.vue'
+const VouchersIndex = () => import('./views/vouchers/Index.vue')
+const VouchersCreate = () => import('./views/vouchers/Create.vue')
+const VouchersBook = () => import('./views/vouchers/Book.vue')
+const VouchersDaysheet = () => import('./views/vouchers/Daysheet.vue')
+const VouchersDaybook = () => import('./views/vouchers/Daybook.vue')
 
 // bank
-import BankIndex from './views/bank/Index.vue'
-import BankCreate from './views/bank/Create.vue'
+const BankIndex = () => import('./views/bank/Index.vue')
+const BankCreate = () => import('./views/bank/Create.vue')
 
 // Dispatch
-import DispatchIndex from './views/dispatch/Index.vue'
-import DispatchCreate from './views/dispatch/Create.vue'
+const DispatchIndex = () => import('./views/dispatch/Index.vue')
+const DispatchCreate = () => import('./views/dispatch/Create.vue')
 
 const routes = [
     /*

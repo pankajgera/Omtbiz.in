@@ -24,6 +24,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        if ($keysPath = config('passport.keys_path')) {
+            Passport::loadKeysFrom($keysPath);
+        }
+
         Passport::cookie('access_token_'.env('APP_ENV'));
         Passport::enablePasswordGrant();
         // Passport::routes(); // Removed in Passport v11+

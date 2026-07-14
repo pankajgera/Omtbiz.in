@@ -3,9 +3,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Proxy\HttpKernelProxy;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
+use Symfony\Component\HttpFoundation\Response;
 use Validator;
 use Hash;
 use App\Models\User;
@@ -161,7 +161,7 @@ class AccessTokensController extends Controller
 	/**
 	 * Return a successful response for requesting an api token.
 	 *
-	 * @param \Illuminate\Http\Response $response
+	 * @param \Symfony\Component\HttpFoundation\Response $response
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function sendSuccessResponse(Response $response, $user)

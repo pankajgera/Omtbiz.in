@@ -56,7 +56,8 @@ import {
   faRocket,
   faCamera,
   faClock,
-  faCircle
+  faCircle,
+  faCalculator
 } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -121,7 +122,8 @@ library.add(
   faRocket,
   faCamera,
   faClock,
-  faCircle
+  faCircle,
+  faCalculator
 )
 
 export function registerFontAwesome (app) {

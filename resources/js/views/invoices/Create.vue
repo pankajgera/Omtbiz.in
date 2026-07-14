@@ -1,30 +1,30 @@
 <template>
   <div class="invoice-create-page main-content">
-    <div class="page-header">
-      <div class="page-actions row">
-        <router-link slot="item-title" class="col-xs-2" to="/invoices">
-          <base-button size="large" icon="envelope" color="theme">
-            {{ $t('invoices.title') }}
-          </base-button>
-        </router-link>
-        <router-link slot="item-title" class="ml-2 col-xs-2" to="/invoices/bulk">
-          <base-button size="large" icon="envelope" color="theme">
-            {{ $t('invoices.bulk_title') }}
-          </base-button>
-        </router-link>
-      </div>
-    </div>
-    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width">
-      <div class="page-header">
+    <div class="page-header invoice-page-header">
+      <div class="page-heading-copy">
         <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
-        <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }} </h3>
+        <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }}</h3>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $tc('invoices.invoice', 2) }}</router-link></li>
           <li v-if="$route.name === 'invoices.edit'" class="breadcrumb-item">{{ $t('invoices.edit_invoice') }}</li>
           <li v-else class="breadcrumb-item">{{ $t('invoices.new_invoice') }}</li>
         </ol>
       </div>
-      <div class="row invoice-input-group">
+      <div class="page-actions invoice-view-actions">
+        <router-link slot="item-title" to="/invoices">
+          <base-button icon="file-alt" color="theme" outline>
+            {{ $t('invoices.title') }}
+          </base-button>
+        </router-link>
+        <router-link slot="item-title" to="/invoices/bulk">
+          <base-button icon="copy" color="theme">
+            {{ $t('invoices.bulk_title') }}
+          </base-button>
+        </router-link>
+      </div>
+    </div>
+    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width">
+      <section class="row invoice-input-group invoice-details-panel" aria-label="Invoice details">
         <div class="col-md-6 invoice-customer-container mb-2">
           <label class="form-label">{{ $t('invoices.estimate-list') }}</label>
             <base-select
@@ -99,8 +99,9 @@
           />
           <div v-if="vReferenceNumAttribute.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
         </div>
-      </div>
-      <div class="table-responsive">
+      </section>
+      <section class="invoice-items-panel" aria-label="Invoice items">
+      <div class="table-responsive invoice-table-scroll">
         <table class="table item-table">
           <colgroup>
             <col style="width: 40%;">
@@ -173,9 +174,10 @@
       <button v-if="showEndOfList" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
         End Of List
       </button>
+      </section>
 
-      <div class="invoice-foot">
-        <div>
+      <div class="invoice-foot invoice-summary-grid">
+        <div class="invoice-notes-panel">
           <label>{{ $t('invoices.notes') }}</label>
           <base-text-area
             v-model="newInvoice.notes"
@@ -309,7 +311,7 @@
           </div>
         </div>
       </div>
-      <div class="page-actions row" style="margin-left: 3px">
+      <div class="invoice-form-actions">
           <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
@@ -331,47 +333,6 @@
     <base-loader v-else />
   </div>
 </template>
-<style scoped>
-.invoice-create-page .invoice-foot .invoice-total {
-  display: flex;
-  flex-direction: column;
-  background: #ffffff;
-  min-width: 590px;
-  padding: 15px 20px;
-  border: 1px solid #969696;
-  border-radius: 5px;
-}
-
-input.base-prefix-input:disabled {
-    background: rgba(59, 59, 59, 0.3) !important;
-    border-color: rgba(118, 118, 118, 0.3) !important;
-}
-.add-invoice-item{
-  border: 0px
-}
-.add-invoice-item:focus {
-  border: 1px solid salmon
-}
-.table-responsive {
-  overflow-x: inherit ;
-}
-@media screen and (max-width:400px) {
-  .heading-1 {
-    padding: 5px 180px;
-  }
-  .table-responsive {
-    overflow-x: auto !important;
-  }
-  .multiselect__content-wrapper {
-    overflow-x: visible !important;
-  }
-}
-@media screen and (min-width: 768px) and (max-width: 1030px) {
-  .ipad-width {
-    width: 133%;
-  }
-}
-</style>
 <script>
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'

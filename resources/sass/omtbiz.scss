@@ -73,10 +73,8 @@
 @import 'pages/estimates/view.scss';
 @import 'pages/expenses';
 @import 'pages/payments';
-@import 'pages/settings.scss';
 @import 'pages/reports.scss';
 @import 'pages/customers';
-@import 'pages/payments.scss';
 @import 'pages/items.scss';
 @import 'pages/statuses.scss';
 @import 'pages/order/create';
@@ -85,3 +83,5 @@
 @import 'pages/receipts/create.scss';
 @import 'pages/receipts/index.scss';
 @import 'pages/receipts/view.scss';
+// Modern responsive overrides. Keep this last while legacy screens are migrated.
+@import 'modern';
