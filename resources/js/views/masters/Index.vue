@@ -168,7 +168,6 @@
           show="groups"
         />
         <table-column
-          :key="Math.random()"
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"

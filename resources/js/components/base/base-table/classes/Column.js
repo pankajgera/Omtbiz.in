@@ -1,7 +1,7 @@
 import { pick } from '../helpers'
 
 export default class Column {
-  constructor (columnComponent) {
+  constructor (columnComponent, id) {
     const properties = pick(columnComponent, [
       'show', 'label', 'dataType', 'sortable', 'sortBy', 'filterable',
       'filterOn', 'hidden', 'formatter', 'cellClass', 'headerClass', 'sortAs'
@@ -11,7 +11,9 @@ export default class Column {
       this[property] = columnComponent[property]
     }
 
-    this.template = columnComponent.$scopedSlots.default
+    this.id = id
+    this.template = (columnComponent.$scopedSlots && columnComponent.$scopedSlots.default) ||
+      columnComponent.$slots.default
   }
 
   isFilterable () {

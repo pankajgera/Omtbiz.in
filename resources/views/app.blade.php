@@ -2,6 +2,17 @@
 <html lang="en">
 <head>
     <title>Omtbiz</title>
+    <script>
+        (function () {
+            var storedTheme = window.localStorage.getItem('omtbiz-theme');
+            var theme = storedTheme === 'light' || storedTheme === 'dark'
+                ? storedTheme
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+        })();
+    </script>
     <script src="/assets/js/pace.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet">
@@ -13,9 +24,9 @@
     <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#f4f6f8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/js/app.js', 'resources/sass/omtbiz.scss'])
+    @vite(['resources/js/app.js', 'resources/sass/omtbiz.scss', 'resources/css/tailwind.css'])
 </head>
 <body class="layout-default skin-omtbiz">
 <div id="app" class="template-container">

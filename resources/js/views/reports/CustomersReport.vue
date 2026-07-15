@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div class="col-md-4 reports-tab-container">
+  <div class="row tw:items-start">
+    <div class="col-md-4 reports-tab-container report-filters-container">
       <div class="row">
         <div class="col-md-12 mb-3">
           <label class="report-label">{{ $t('reports.customers.ledgers') }}</label>
@@ -64,9 +64,18 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-8 reports-tab-container">
-      <iframe :src="getReportUrl" class="reports-frame-style"/>
-      <a class="base-button btn btn-primary btn-lg report-view-button" @click="viewReportsPDF">
+    <div class="col-sm-8 reports-tab-container report-preview-container">
+      <iframe
+        v-if="getReportUrl"
+        :src="getReportUrl"
+        :title="$t('reports.customers.report_preview')"
+        class="reports-frame-style"
+      />
+      <div v-else class="report-preview-empty" role="status">
+        <font-awesome-icon icon="file-pdf" class="report-preview-icon"/>
+        <p>{{ $t('reports.customers.select_ledger_preview') }}</p>
+      </div>
+      <a v-if="getReportUrl" class="base-button btn btn-primary btn-lg report-view-button" @click="viewReportsPDF">
         <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" /> <span>{{ $t('reports.view_pdf') }}</span>
       </a>
     </div>
@@ -164,7 +173,6 @@ export default {
   },
   mounted () {
     this.siteURL = `/reports/customers/${this.getSelectedCompany.unique_hash}`
-    this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
   },
   methods: {
      ...mapActions('customer', [
@@ -239,6 +247,9 @@ export default {
     },
     async viewReportsPDF () {
       let data = await this.getReports()
+      if (!data) {
+        return false
+      }
       window.open(this.getReportUrl, '_blank')
       return data
     },
@@ -251,19 +262,24 @@ export default {
       }
       if (this.$v?.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
-        return true
+        return false
       }
-      this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${this.ledgersArr.find(i => i.account === this.ledger).id}`
+
+      const selectedLedger = this.ledgersArr.find(i => i.account === this.ledger)
+      if (!selectedLedger) {
+        window.toastr['error'](this.$t('reports.customers.select_ledger_preview'))
+        return false
+      }
+
+      this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${selectedLedger.id}`
       return true
     },
-    downloadReport () {
-      if (!this.getReports()) {
+    async downloadReport () {
+      if (!await this.getReports()) {
         return false
       }
       window.open(this.getReportUrl + '&download=true')
-      setTimeout(() => {
-        this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
-      }, 200)
+      return true
     },
     async loadLedgers () {
       let response = await this.fetchLedgersReport()

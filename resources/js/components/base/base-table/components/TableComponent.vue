@@ -24,7 +24,7 @@
           <tr>
             <table-column-header
               v-for="column in columns"
-              :key="column.show || column.show"
+              :key="column.id"
               :sort="sort"
               :column="column"
               @click="changeSorting"
@@ -100,8 +100,16 @@ export default {
     filterNoResults: { default: () => settings.filterNoResults }
   },
 
+  provide () {
+    return {
+      tableComponent: this
+    }
+  },
+
   data: () => ({
     columns: [],
+    columnComponents: [],
+    columnWatchStops: new Map(),
     rows: [],
     filter: '',
     sort: {
@@ -221,25 +229,49 @@ export default {
 
   async mounted () {
     this.sort.fieldName = this.sortBy
-    const slotNodes = this.$slots.default ? this.$slots.default() : []
-    const columnComponents = slotNodes
-      .map(node => node.component && node.component.proxy)
-      .filter(Boolean)
-
-    this.columns = columnComponents.map(column => new Column(column))
-
-    columnComponents.forEach(columnCom => {
-      Object.keys(columnCom.$options.props).forEach(prop =>
-        columnCom.$watch(prop, () => {
-          this.columns = columnComponents.map(column => new Column(column))
-        })
-      )
-    })
-
     await this.mapDataToRows()
   },
 
   methods: {
+    registerColumn (columnComponent) {
+      if (this.columnComponents.includes(columnComponent)) {
+        return
+      }
+
+      this.columnComponents.push(columnComponent)
+
+      const watchStops = Object.keys(columnComponent.$options.props || {}).map(prop =>
+        columnComponent.$watch(prop, this.syncColumns)
+      )
+
+      this.columnWatchStops.set(columnComponent, watchStops)
+      this.syncColumns()
+    },
+
+    unregisterColumn (columnComponent) {
+      const columnIndex = this.columnComponents.indexOf(columnComponent)
+
+      if (columnIndex === -1) {
+        return
+      }
+
+      const watchStops = this.columnWatchStops.get(columnComponent) || []
+      watchStops.forEach(stop => stop())
+      this.columnWatchStops.delete(columnComponent)
+      this.columnComponents.splice(columnIndex, 1)
+      this.syncColumns()
+    },
+
+    syncColumns () {
+      this.columns = this.columnComponents.map(
+        (column, index) => new Column(column, index)
+      )
+
+      this.rows.forEach(row => {
+        row.columns = this.columns
+      })
+    },
+
     async pageChange (page) {
       this.pagination.currentPage = page
 

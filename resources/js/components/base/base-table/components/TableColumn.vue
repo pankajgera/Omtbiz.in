@@ -9,6 +9,12 @@
 <script>
 import settings from '../settings'
 export default {
+  inject: {
+    tableComponent: {
+      default: null
+    }
+  },
+
   props: {
     show: { required: false, type: String },
     label: { default: null, type: String },
@@ -27,6 +33,18 @@ export default {
 
     cellClass: { default: settings.cellClass },
     headerClass: { default: settings.headerClass },
+  },
+
+  mounted () {
+    if (this.tableComponent) {
+      this.tableComponent.registerColumn(this)
+    }
+  },
+
+  beforeUnmount () {
+    if (this.tableComponent) {
+      this.tableComponent.unregisterColumn(this)
+    }
   }
 }
 </script>

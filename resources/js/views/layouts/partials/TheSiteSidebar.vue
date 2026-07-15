@@ -1,8 +1,8 @@
 <template>
-  <div class="sidebar-left">
-    <div class="sidebar-body scroll-pane">
+  <div class="sidebar-left tw:flex tw:flex-col tw:border-r tw:border-line tw:bg-sidebar tw:text-sidebar-ink">
+    <div class="sidebar-body scroll-pane tw:min-h-0 tw:flex-1 tw:overflow-y-auto">
       <nav class="side-nav" aria-label="Primary navigation">
-        <div v-for="(menuItems, index) in menu" :key="index" class="menu-group">
+        <div v-for="(menuItems, index) in menu" :key="index" class="menu-group tw:space-y-1">
           <router-link
             v-for="(item, index1) in menuItems.filter((i) =>
               i.meta.includes(role)
@@ -10,16 +10,16 @@
             :key="index1"
             :to="item.route"
             :exact="!!item.exact"
-            class="menu-item"
+            class="menu-item tw:flex tw:min-h-10 tw:items-center tw:gap-3 tw:rounded-md tw:px-3 tw:py-2 tw:text-sm tw:font-medium tw:text-sidebar-ink tw:no-underline tw:transition-colors tw:hover:bg-sidebar-hover tw:hover:text-sidebar-ink tw:focus-visible:bg-sidebar-hover"
             @click.native="Toggle"
           >
             <font-awesome-icon :icon="item.icon" class="icon menu-icon" />
-            <span class="ml-3 menu-text">{{ $t(item.title) }}</span>
+            <span class="menu-text tw:text-inherit tw:no-underline">{{ $t(item.title) }}</span>
           </router-link>
         </div>
       </nav>
     </div>
-      <button type="button" @click="showModal" class="calculator-button" aria-label="Open calculator" title="Calculator">
+      <button type="button" @click="showModal" class="calculator-button tw:grid tw:size-10 tw:place-items-center tw:self-start tw:rounded-md tw:border tw:border-line tw:bg-transparent tw:text-sidebar-ink tw:hover:bg-sidebar-hover" aria-label="Open calculator" title="Calculator">
         <font-awesome-icon icon="calculator" />
       </button>
        <div v-if="calculatorOpen" class="modal calculator-modal" id="showModal" role="dialog" aria-modal="true" aria-labelledby="calculator-title">

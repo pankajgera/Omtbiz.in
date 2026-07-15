@@ -1,17 +1,17 @@
 <template>
-  <header class="site-header">
-    <router-link to="/invoices/create" class="brand-main" aria-label="Omtbiz home">
+  <header class="site-header tw:flex tw:h-16 tw:items-center tw:gap-2 tw:border-b tw:border-line tw:bg-surface tw:px-3 tw:text-ink tw:shadow-sm tw:sm:gap-4 tw:sm:px-4 tw:lg:px-5">
+    <router-link to="/invoices/create" class="brand-main tw:flex tw:items-center tw:gap-2.5 tw:text-ink tw:no-underline" aria-label="Omtbiz home">
       <img
         id="logo-white"
         src="@/assets/img/bill.png"
         alt="Omtbiz Logo"
       >
-      <span class="brand-name">Omtbiz</span>
+      <span class="brand-name tw:text-lg tw:font-bold tw:text-ink">Omtbiz</span>
     </router-link>
 
     <button
       type="button"
-      class="nav-toggle"
+      class="nav-toggle tw:grid tw:size-10 tw:place-items-center tw:rounded-md tw:border tw:border-line tw:bg-surface-muted tw:text-ink"
       aria-label="Toggle navigation"
       @click="onNavToggle"
     >
@@ -21,7 +21,20 @@
         </div>
       </div>
     </button>
-    <ul class="action-list">
+    <ul class="action-list tw:ml-auto tw:flex tw:items-center tw:gap-2">
+      <li class="theme-switch">
+        <button
+          type="button"
+          role="switch"
+          :aria-checked="isDarkTheme"
+          :aria-label="themeLabel"
+          :title="themeLabel"
+          class="header-icon-button tw:grid tw:size-10 tw:place-items-center tw:rounded-md tw:border tw:border-line tw:bg-surface tw:text-ink-muted tw:transition-colors tw:hover:bg-surface-hover tw:hover:text-ink tw:dark:text-amber-300"
+          @click="onThemeToggle"
+        >
+          <font-awesome-icon :icon="isDarkTheme ? 'sun' : 'moon'" />
+        </button>
+      </li>
       <li class="notifications">
         <v-dropdown :show-arrow="false">
           <button
@@ -30,7 +43,7 @@
             aria-haspopup="true"
             aria-expanded="false"
             aria-label="Notifications"
-            class="header-icon-button"
+            class="header-icon-button tw:grid tw:size-10 tw:place-items-center tw:rounded-md tw:border tw:border-line tw:bg-surface tw:text-ink-muted tw:transition-colors tw:hover:bg-surface-hover tw:hover:text-ink"
           >
           <font-awesome-icon icon="bell" class="dropdown-item-icon"/>
           <span class="notification-count">{{ listNotifications ? listNotifications.length : 0 }}</span>
@@ -86,7 +99,13 @@
 <script type="text/babel">
 import { mapGetters, mapActions } from 'vuex'
 import moment from "moment";
+import { getActiveTheme, handleStoredThemeChange, toggleTheme } from '../../../helpers/theme'
 export default {
+  data () {
+    return {
+      theme: getActiveTheme()
+    }
+  },
   computed: {
     ...mapGetters('userProfile', [
       'user',
@@ -105,10 +124,22 @@ export default {
       }
       return array
     },
+    isDarkTheme () {
+      return this.theme === 'dark'
+    },
+    themeLabel () {
+      return this.isDarkTheme ? 'Switch to light mode' : 'Switch to dark mode'
+    }
   },
   created () {
     this.loadData()
     this.loadNotifications()
+  },
+  mounted () {
+    window.addEventListener('storage', this.onThemeStorage)
+  },
+  beforeUnmount () {
+    window.removeEventListener('storage', this.onThemeStorage)
   },
   methods: {
     getFormattedDate(date) {
@@ -126,6 +157,12 @@ export default {
     ]),
     onNavToggle () {
       this.$utils.toggleSidebar()
+    },
+    onThemeToggle () {
+      this.theme = toggleTheme()
+    },
+    onThemeStorage (event) {
+      this.theme = handleStoredThemeChange(event)
     }
   }
 }

@@ -57,7 +57,9 @@ import {
   faCamera,
   faClock,
   faCircle,
-  faCalculator
+  faCalculator,
+  faMoon,
+  faSun
 } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -123,7 +125,9 @@ library.add(
   faCamera,
   faClock,
   faCircle,
-  faCalculator
+  faCalculator,
+  faMoon,
+  faSun
 )
 
 export function registerFontAwesome (app) {

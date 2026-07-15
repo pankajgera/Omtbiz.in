@@ -1,5 +1,5 @@
 <template>
-  <div class="profit-loss-reports reports main-content">
+  <div class="profit-loss-reports reports main-content tw:bg-canvas tw:text-ink">
     <div class="page-header">
       <h3 class="page-title"> {{ $tc('reports.report', 2) }}</h3>
       <ol class="breadcrumb">
@@ -29,9 +29,9 @@
     <div class="row">
       <div class="col-sm-12">
         <!-- Tabs -->
-        <ul class="tabs">
+        <ul class="tabs tw:border-line">
           <li class="tab">
-            <router-link class="tab-link" to="/reports/customers">{{ $t('reports.customers.customers') }}</router-link>
+            <router-link class="tab-link tw:no-underline" to="/reports/customers">{{ $t('reports.customers.customers') }}</router-link>
           </li>
           <!-- <li class="tab">
             <router-link class="tab-link" to="/reports/banks">{{ $t('reports.banks.banks') }}</router-link>

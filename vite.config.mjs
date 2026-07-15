@@ -1,16 +1,18 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
+import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig(({ mode }) => ({
     publicDir: 'public',
     plugins: [
         laravel({
-            input: ['resources/js/app.js', 'resources/sass/omtbiz.scss'],
+            input: ['resources/js/app.js', 'resources/sass/omtbiz.scss', 'resources/css/tailwind.css'],
             refresh: true,
         }),
         vue(),
+        tailwindcss(),
     ],
     define: {
         __VUE_OPTIONS_API__: true,

@@ -12,7 +12,7 @@
             </li>
         </ol>
     </div>
-    <div class="d-flex flex-wrap">
+    <div class="header-actions d-flex flex-wrap tw:gap-2">
         <slot></slot>
     </div>
   </div>

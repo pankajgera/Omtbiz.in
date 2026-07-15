@@ -1,38 +1,62 @@
 <template>
-  <nav v-if="shouldShowPagination">
-    <ul class="pagination justify-content-center">
-      <li :class="{ disabled: pagination.currentPage === 1 }">
-        <a
-          :class="{ disabled: pagination.currentPage === 1 }"
-          @click="pageClicked( pagination.currentPage - 1 )"
-        >
-          <i class="left chevron icon">«</i>
-        </a>
+  <nav v-if="shouldShowPagination" class="table-pagination" aria-label="Table pagination">
+    <ul class="pagination">
+      <li :class="{ disabled: pagination.currentPage === 1 }" class="page-item">
+        <button
+          :disabled="pagination.currentPage === 1"
+          class="page-link pagination-control"
+          type="button"
+          aria-label="Previous page"
+          @click="pageClicked(pagination.currentPage - 1)"
+        >&lsaquo;</button>
       </li>
       <li v-if="hasFirst" :class="{ active: isActive(1) }" class="page-item">
-        <a class="page-link" @click="pageClicked(1)">1</a>
+        <button
+          :aria-current="isActive(1) ? 'page' : undefined"
+          class="page-link"
+          type="button"
+          @click="pageClicked(1)"
+        >1</button>
       </li>
-      <li v-if="hasFirstEllipsis"><span class="pagination-ellipsis">&hellip;</span></li>
-      <li v-for="page in pages" :key="page" :class="{ active: isActive(page), disabled: page === '...' }" class="page-item">
-        <a class="page-link" @click="pageClicked(page)">{{ page }}</a>
+      <li v-if="hasFirstEllipsis" class="page-item pagination-gap">
+        <span class="page-link pagination-ellipsis">&hellip;</span>
       </li>
-      <li v-if="hasLastEllipsis"><span class="pagination-ellipsis">&hellip;</span></li>
       <li
-        v-if="hasLast"
-        :class="{ active: isActive(this.pagination.totalPages) }"
+        v-for="page in pages"
+        :key="page"
+        :class="{ active: isActive(page) }"
         class="page-item"
       >
-        <a class="page-link" @click="pageClicked(pagination.totalPages)">
-          {{ pagination.totalPages }}
-        </a>
+        <button
+          :aria-current="isActive(page) ? 'page' : undefined"
+          class="page-link"
+          type="button"
+          @click="pageClicked(page)"
+        >{{ page }}</button>
       </li>
-      <li>
-        <a
-          :class="{ disabled: pagination.currentPage === pagination.totalPages }"
-          @click="pageClicked( pagination.currentPage + 1 )"
-        >
-          <i class="right chevron icon">»</i>
-        </a>
+      <li v-if="hasLastEllipsis" class="page-item pagination-gap">
+        <span class="page-link pagination-ellipsis">&hellip;</span>
+      </li>
+      <li
+        v-if="hasLast"
+        :class="{ active: isActive(pagination.totalPages) }"
+        class="page-item"
+      >
+        <button
+          :aria-current="isActive(pagination.totalPages) ? 'page' : undefined"
+          class="page-link"
+          type="button"
+          @click="pageClicked(pagination.totalPages)"
+        >{{ pagination.totalPages }}</button>
+      </li>
+      <li :class="{ disabled: pagination.currentPage === pagination.totalPages }" class="page-item">
+        <button
+          :disabled="pagination.currentPage === pagination.totalPages"
+          class="page-link pagination-control"
+          type="button"
+          aria-label="Next page"
+          @click="pageClicked(pagination.currentPage + 1)"
+        >&rsaquo;</button>
       </li>
     </ul>
   </nav>
@@ -55,19 +79,20 @@ export default {
     },
 
     hasFirst () {
-      return this.pagination.currentPage >= 4 || this.pagination.totalPages < 10
+      return this.pagination.totalPages > 1
     },
 
     hasLast () {
-      return this.pagination.currentPage <= this.pagination.totalPages - 3 || this.pagination.totalPages < 10
+      return this.pagination.totalPages > 2
     },
 
     hasFirstEllipsis () {
-      return this.pagination.currentPage >= 4 && this.pagination.totalPages >= 10
+      return this.pages.length > 0 && this.pages[0] > 2
     },
 
     hasLastEllipsis () {
-      return this.pagination.currentPage <= this.pagination.totalPages - 3 && this.pagination.totalPages >= 10
+      const lastPage = this.pages[this.pages.length - 1]
+      return this.pages.length > 0 && lastPage < this.pagination.totalPages - 1
     },
 
     shouldShowPagination () {
@@ -82,32 +107,39 @@ export default {
       return this.pagination.totalPages > 1
     }
   },
+
   methods: {
     isActive (page) {
       const currentPage = this.pagination.currentPage || 1
-
       return currentPage === page
     },
+
     pageClicked (page) {
-      if (page === '...' ||
-            page === this.pagination.currentPage ||
-            page > this.pagination.totalPages ||
-            page < 1) {
+      if (page === this.pagination.currentPage ||
+          page > this.pagination.totalPages ||
+          page < 1) {
         return
       }
+
       this.$emit('pageChange', page)
     },
 
     pageLinks () {
       const pages = []
+      const totalPages = this.pagination.totalPages
+      const currentPage = this.pagination.currentPage || 1
+      let left = Math.max(2, currentPage - 2)
+      let right = Math.min(totalPages - 1, currentPage + 2)
 
-      let left = 2
-      let right = this.pagination.totalPages - 1
-
-      if (this.pagination.totalPages >= 10) {
-        left = Math.max(1, this.pagination.currentPage - 2)
-        right = Math.min(this.pagination.currentPage + 2, this.pagination.totalPages)
+      if (totalPages <= 7) {
+        left = 2
+        right = totalPages - 1
+      } else if (currentPage <= 3) {
+        right = 5
+      } else if (currentPage >= totalPages - 2) {
+        left = totalPages - 4
       }
+
       for (let i = left; i <= right; i++) {
         pages.push(i)
       }
@@ -116,13 +148,4 @@ export default {
     }
   }
 }
-
 </script>
-<style scoped>
-.pagination .page-item a {
-  padding: 0.5rem 0.75rem !important;
-}
-.pagination .page-item a:hover {
-  cursor: pointer !important;
-}
-</style>

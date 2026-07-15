@@ -9,6 +9,7 @@
     "production": "vite build"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.2",
     "@vitejs/plugin-vue": "^6.0.4",
     "@vue/compiler-sfc": "^3.5.29",
     "eslint": "^10.0.3",
@@ -16,6 +17,7 @@
     "laravel-vite-plugin": "^2.1.0",
     "pug": "^3.0.3",
     "sass": "^1.97.3",
+    "tailwindcss": "^4.3.2",
     "vite": "^7.3.1",
     "vue-eslint-parser": "^10.4.0"
   },
@@ -30,7 +32,6 @@
     "@vue/compat": "^3.5.29",
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
-    "autoprefixer": "^10.4.27",
     "axios": "^1.13.6",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",

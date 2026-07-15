@@ -15,6 +15,9 @@ import { setupBootstrap } from './bootstrap'
 import Header from './components/Header.vue'
 import mitt from 'mitt'
 import { validationMixin } from './compat/vuelidate'
+import { applyTheme, getPreferredTheme } from './helpers/theme'
+
+applyTheme(getPreferredTheme())
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

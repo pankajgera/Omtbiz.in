@@ -1,7 +1,10 @@
 <template>
-  <tr class="item-row invoice-item-row">
-    <td colspan="5">
-      <table class="full-width">
+  <tr class="item-row invoice-item-row tw:border-b tw:border-line tw:bg-surface">
+    <td
+      :colspan="discountPerInventory === 'YES' && inventoryType !== 'orders' ? 6 : (inventoryType === 'orders' ? 4 : 5)"
+      class="tw:p-0"
+    >
+      <table class="full-width tw:w-full tw:table-fixed">
         <colgroup>
           <col style="width: 40%;">
           <col style="width: 10%;">
@@ -11,15 +14,22 @@
           <col style="width: 15%;" v-if="('orders' !== inventoryType)">
         </colgroup>
         <tbody>
-          <tr>
-            <td class="">
-              <div class="item-select-wrapper">
-                <div class="ml-2  pl-3 mt-2 weight-600">{{  index+ 1 }}</div>
-                <div class="sort-icon-wrapper handle">
-                  <font-awesome-icon
-                    class="sort-icon"
-                    icon="grip-vertical"
-                  />
+          <tr class="tw:bg-surface">
+            <td class="tw:align-middle tw:px-4 tw:py-4">
+              <div class="item-select-wrapper tw:grid tw:grid-cols-[2rem_minmax(0,1fr)] tw:items-start tw:gap-3">
+                <div class="item-order-control tw:flex tw:flex-col tw:items-center tw:gap-1">
+                  <span class="weight-600 tw:text-xs tw:text-ink-muted">{{ index + 1 }}</span>
+                  <button
+                    type="button"
+                    class="sort-icon-wrapper handle tw:grid tw:size-7 tw:place-items-center tw:rounded-md tw:border-0 tw:bg-transparent tw:text-ink-muted tw:hover:bg-surface-hover tw:hover:text-ink"
+                    aria-label="Reorder item"
+                    title="Reorder item"
+                  >
+                    <font-awesome-icon
+                      class="sort-icon"
+                      icon="grip-vertical"
+                    />
+                  </button>
                 </div>
                 <inventory-select
                   ref="inventorySelect"
@@ -37,7 +47,7 @@
                 />
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-right tw:align-middle tw:px-2 tw:py-4">
               <base-input
                 ref="inventoryQuantity"
                 :id="'inventoryQuantity'+index"
@@ -54,7 +64,7 @@
                 <span v-if="!vInvoiceItem.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
               </div>
             </td>
-            <td class="text-left" v-if="('orders' !== inventoryType)">
+            <td class="text-left tw:align-middle tw:px-2 tw:py-4" v-if="('orders' !== inventoryType)">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
@@ -71,7 +81,7 @@
 
               </div>
             </td>
-            <td class="text-left" v-if="('orders' !== inventoryType)">
+            <td class="text-left tw:align-middle tw:px-2 tw:py-4" v-if="('orders' !== inventoryType)">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
@@ -91,7 +101,7 @@
 
               </div>
             </td>
-            <td v-if="discountPerInventory === 'YES' && ('orders' !== inventoryType)">
+            <td class="tw:align-middle tw:px-2 tw:py-4" v-if="discountPerInventory === 'YES' && ('orders' !== inventoryType)">
               <div class="d-flex flex-column bd-highlight">
                 <div
                   class="btn-group flex-fill bd-highlight"
@@ -129,19 +139,24 @@
                 </div>
               </div>
             </td>
-            <td class="text-left">
-              <div class="item-amount" v-if="('orders' !== inventoryType)">
-                <span>
+            <td class="text-left tw:align-middle tw:px-3 tw:py-4">
+              <div class="item-amount tw:flex tw:items-center tw:justify-end tw:gap-2" v-if="('orders' !== inventoryType)">
+                <span class="tw:whitespace-nowrap tw:text-ink">
                    ₹ {{ total }}
                 </span>
 
-                <div class="remove-icon-wrapper">
+                <button
+                  type="button"
+                  class="remove-icon-wrapper tw:grid tw:size-8 tw:place-items-center tw:rounded-md tw:text-ink-muted tw:hover:bg-surface-hover tw:hover:text-red-500"
+                  aria-label="Remove item"
+                  title="Remove item"
+                  @click="removeInventory"
+                >
                   <font-awesome-icon
                     class="remove-icon"
                     icon="trash-alt"
-                    @click="removeInventory"
                   />
-                </div>
+                </button>
               </div>
             </td>
           </tr>

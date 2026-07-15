@@ -61,19 +61,23 @@
       </div>
     </transition>
 
-    <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
-      <satellite-icon class="mt-5 mb-4"/>
+    <div
+      v-cloak
+      v-show="showEmptyScreen"
+      class="col-xs-1 no-data-info tw:flex tw:min-h-80 tw:w-full tw:flex-col tw:items-center tw:justify-center tw:px-4 tw:py-10 tw:text-center tw:sm:min-h-96"
+      align="center"
+    >
+      <satellite-icon class="empty-state-icon tw:mb-5"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('items.no_items') }}</label>
+        <label class="col title tw:m-0 tw:text-base tw:font-semibold tw:text-ink">{{ $t('items.no_items') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('items.list_of_items') }}</label>
+        <label class="description col tw:mt-1 tw:max-w-md tw:text-sm tw:text-ink-muted" align="center">{{ $t('items.list_of_items') }}</label>
       </div>
-      <div class="btn-container">
+      <div class="btn-container tw:mt-4">
         <base-button
           :outline="true"
           color="theme"
-          class="mt-3"
           size="large"
           @click="$router.push('bill-ty/create')"
         >
@@ -177,7 +181,6 @@
             </template>
           </table-column>
           <table-column
-            :key="Math.random()"
             :sortable="false"
             :filterable="false"
             cell-class="action-dropdown"
@@ -303,7 +306,6 @@
             </template>
           </table-column>
           <table-column
-            :key="Math.random()"
             :sortable="false"
             :filterable="false"
             cell-class="action-dropdown"

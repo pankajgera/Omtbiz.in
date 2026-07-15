@@ -1,13 +1,6 @@
 <template>
-  <div class="base-loader">
-    <div class="spinner"/>
-    <div class="overlay">
-      <div class="loader-inner ball-scale-ripple-multiple">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
+  <div class="base-loader" role="status" aria-live="polite" aria-label="Loading">
+    <div class="spinner" aria-hidden="true"/>
   </div>
 </template>
 <script>

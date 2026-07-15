@@ -1,6 +1,6 @@
 <template>
-  <div class="invoice-create-page main-content">
-    <div class="page-header invoice-page-header">
+  <div class="invoice-create-page main-content tw:min-h-screen tw:bg-canvas tw:text-ink">
+    <div class="page-header invoice-page-header tw:mb-6 tw:flex tw:flex-col tw:items-start tw:justify-between tw:gap-4 tw:md:flex-row">
       <div class="page-heading-copy">
         <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
         <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }}</h3>
@@ -10,7 +10,7 @@
           <li v-else class="breadcrumb-item">{{ $t('invoices.new_invoice') }}</li>
         </ol>
       </div>
-      <div class="page-actions invoice-view-actions">
+      <div class="page-actions invoice-view-actions tw:flex tw:w-full tw:flex-wrap tw:gap-2 tw:md:w-auto tw:md:justify-end">
         <router-link slot="item-title" to="/invoices">
           <base-button icon="file-alt" color="theme" outline>
             {{ $t('invoices.title') }}
@@ -23,9 +23,9 @@
         </router-link>
       </div>
     </div>
-    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width">
-      <section class="row invoice-input-group invoice-details-panel" aria-label="Invoice details">
-        <div class="col-md-6 invoice-customer-container mb-2">
+    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width tw:w-full">
+      <section class="row invoice-input-group invoice-details-panel tw:grid tw:grid-cols-1 tw:gap-4 tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:md:grid-cols-2 tw:xl:grid-cols-12" aria-label="Invoice details">
+        <div class="col-md-6 invoice-customer-container mb-2 tw:w-full tw:max-w-none tw:xl:col-span-6">
           <label class="form-label">{{ $t('invoices.estimate-list') }}</label>
             <base-select
               v-model="setEstimate"
@@ -40,7 +40,7 @@
               track-by="id"
             />
         </div>
-        <div class="col-md-6 invoice-customer-container mb-2">
+        <div class="col-md-6 invoice-customer-container mb-2 tw:w-full tw:max-w-none tw:xl:col-span-6">
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setInvoiceDebtor"
@@ -60,7 +60,7 @@
               <span v-if="!vNewInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
         </div>
-        <div class="col-md-4 col-sm-6 collapse-input">
+        <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
           <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
           <input
             v-model="newInvoice.invoice_date"
@@ -73,7 +73,7 @@
           />
           <span v-if="vNewInvoice.invoice_date.$error && !vNewInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
-        <div class="col-md-4 col-sm-6 collapse-input">
+        <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
           <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
           <base-prefix-input
             v-model="invoiceNumAttribute"
@@ -86,7 +86,7 @@
           />
           <span v-show="vInvoiceNumAttribute.$error && !vInvoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
         </div>
-        <div class="col-md-4 col-sm-6 collapse-input">
+        <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
           <label>{{ $t('invoices.ref_number') }}</label>
           <base-prefix-input
             v-model="referenceNumAttribute"
@@ -100,8 +100,8 @@
           <div v-if="vReferenceNumAttribute.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
         </div>
       </section>
-      <section class="invoice-items-panel" aria-label="Invoice items">
-      <div class="table-responsive invoice-table-scroll">
+      <section class="invoice-items-panel tw:overflow-hidden tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:shadow-sm" aria-label="Invoice items">
+      <div class="table-responsive invoice-table-scroll tw:w-full tw:overflow-x-auto">
         <table class="table item-table">
           <colgroup>
             <col style="width: 40%;">
@@ -167,7 +167,7 @@
           </tbody>
         </table>
       </div>
-      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item" :disabled="isDisabled" @click="addInventory">
+      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item tw:flex tw:min-h-12 tw:w-full tw:items-center tw:justify-center tw:border-0 tw:border-t tw:border-line tw:bg-surface-muted tw:text-accent tw:hover:bg-surface-hover" :disabled="isDisabled" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>
@@ -176,8 +176,8 @@
       </button>
       </section>
 
-      <div class="invoice-foot invoice-summary-grid">
-        <div class="invoice-notes-panel">
+      <div class="invoice-foot invoice-summary-grid tw:grid tw:grid-cols-1 tw:items-start tw:gap-4 tw:py-6 tw:xl:grid-cols-[minmax(0,1fr)_minmax(22rem,32rem)] tw:xl:gap-6">
+        <div class="invoice-notes-panel tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:sm:p-5">
           <label>{{ $t('invoices.notes') }}</label>
           <base-text-area
             v-model="newInvoice.notes"
@@ -190,7 +190,7 @@
           </div>
         </div>
 
-        <div class="invoice-total">
+        <div class="invoice-total tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:sm:p-5">
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
@@ -311,7 +311,7 @@
           </div>
         </div>
       </div>
-      <div class="invoice-form-actions">
+      <div class="invoice-form-actions tw:flex tw:flex-wrap tw:justify-end tw:gap-2 tw:pb-4">
           <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
