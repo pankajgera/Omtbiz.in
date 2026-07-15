@@ -530,14 +530,16 @@ a:has(button):focus {
 
 .notes-table .notes-selection-column,
 .masters-table .masters-selection-column,
-.inventory-table .inventory-selection-column {
+.inventory-table .inventory-selection-column,
+.users-table .users-selection-column {
     width: 7.5rem;
     padding-right: 0.75rem !important;
 }
 
 .notes-table .notes-action-column,
 .masters-table .masters-action-column,
-.inventory-table .inventory-action-column {
+.inventory-table .inventory-action-column,
+.users-table .users-action-column {
     width: 3.5rem;
     padding-left: 0.5rem !important;
 }
@@ -571,7 +573,8 @@ a:has(button):focus {
 
 .notes-select-all-label,
 .masters-select-all-label,
-.inventory-select-all-label {
+.inventory-select-all-label,
+.users-select-all-label {
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
@@ -586,7 +589,8 @@ a:has(button):focus {
 
 .notes-checkbox,
 .masters-checkbox,
-.inventory-checkbox {
+.inventory-checkbox,
+.users-checkbox {
     width: 1.125rem;
     height: 1.125rem;
     flex: 0 0 1.125rem;
@@ -597,7 +601,8 @@ a:has(button):focus {
 
 .notes-checkbox:focus-visible,
 .masters-checkbox:focus-visible,
-.inventory-checkbox:focus-visible {
+.inventory-checkbox:focus-visible,
+.users-checkbox:focus-visible {
     outline: 3px solid var(--ui-focus);
     outline-offset: 2px;
 }
@@ -635,7 +640,8 @@ a:has(button):focus {
 
 .skin-omtbiz .notes-table-component .dropdown-container .dropdown-group-item .dropdown-item,
 .skin-omtbiz .masters-table-component .dropdown-container .dropdown-group-item .dropdown-item,
-.skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item {
+.skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item,
+.skin-omtbiz .users-table-component .dropdown-container .dropdown-group-item .dropdown-item {
     display: flex;
     width: 100%;
     align-items: center;
@@ -651,7 +657,9 @@ a:has(button):focus {
 .skin-omtbiz .masters-table-component .dropdown-container .dropdown-group-item .dropdown-item:hover,
 .skin-omtbiz .masters-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible,
 .skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item:hover,
-.skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible {
+.skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible,
+.skin-omtbiz .users-table-component .dropdown-container .dropdown-group-item .dropdown-item:hover,
+.skin-omtbiz .users-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible {
     color: var(--ui-text) !important;
     background-color: var(--ui-surface-hover) !important;
     box-shadow: inset 3px 0 0 var(--ui-primary);
@@ -663,7 +671,9 @@ a:has(button):focus {
 .skin-omtbiz .masters-table-component .dropdown-container .dropdown-group-item .dropdown-item:hover .dropdown-item-icon,
 .skin-omtbiz .masters-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible .dropdown-item-icon,
 .skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item:hover .dropdown-item-icon,
-.skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible .dropdown-item-icon {
+.skin-omtbiz .inventory-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible .dropdown-item-icon,
+.skin-omtbiz .users-table-component .dropdown-container .dropdown-group-item .dropdown-item:hover .dropdown-item-icon,
+.skin-omtbiz .users-table-component .dropdown-container .dropdown-group-item .dropdown-item:focus-visible .dropdown-item-icon {
     color: var(--ui-primary) !important;
 }
 
@@ -781,7 +791,8 @@ a:has(button):focus {
 
     .notes-table td[data-label]::before,
     .masters-table td[data-label]::before,
-    .inventory-table td[data-label]::before {
+    .inventory-table td[data-label]::before,
+    .users-table td[data-label]::before {
         display: block;
         margin-bottom: 0.375rem;
         color: var(--ui-text-muted);

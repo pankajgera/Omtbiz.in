@@ -30,9 +30,11 @@ export default {
         state.users.splice(index, 1)
     },
     [types.DELETE_MULTIPLE_USERS](state, selectedUsers) {
-        selectedUsers.forEach((user) => {
-            let index = state.users.findIndex(_cust => _cust.id === user.id)
-            state.users.splice(index, 1)
+        selectedUsers.forEach((userId) => {
+            let index = state.users.findIndex(user => user.id === userId)
+            if (index !== -1) {
+                state.users.splice(index, 1)
+            }
         })
         state.selectedUsers = []
     },

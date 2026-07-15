@@ -107,89 +107,93 @@
         </transition>
       </div>
 
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all"
-          v-model="selectAllFieldStatus"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllUsers"
-        >
-        <label for="select-all" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
+      <div class="table-component users-table-component">
+        <div class="table-component__table-wrapper">
+          <base-loader v-if="isRequestOngoing" class="table-loader" />
+
+          <table class="table-component__table table users-table">
+            <caption class="table-component__table__caption">
+              {{ $tc('users.user', 2) }}
+            </caption>
+            <thead class="table-component__table__head">
+              <tr>
+                <th class="users-selection-column" scope="col">
+                  <label class="users-select-all-label" for="select-all-users">
+                    <input
+                      id="select-all-users"
+                      v-model="selectAllFieldStatus"
+                      type="checkbox"
+                      class="users-checkbox"
+                      @change="selectAllUsers"
+                    >
+                    <span>{{ $t('general.select_all') }}</span>
+                  </label>
+                </th>
+                <th scope="col">{{ $t('users.display_name') }}</th>
+                <th scope="col">{{ $t('users.email') }}</th>
+                <th scope="col">{{ $t('users.role') }}</th>
+                <th scope="col">{{ $t('users.added_on') }}</th>
+                <th class="users-action-column" scope="col">
+                  <span class="sr-only">{{ $t('users.action') }}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="table-component__table__body">
+              <tr v-for="user in users" :key="user.id">
+                <td class="users-selection-column">
+                  <input
+                    :id="`user-${user.id}`"
+                    v-model="selectField"
+                    :value="user.id"
+                    :aria-label="`Select ${user.name}`"
+                    type="checkbox"
+                    class="users-checkbox"
+                  >
+                </td>
+                <td :data-label="$t('users.display_name')">
+                  <router-link :to="{ path: `users/${user.id}/edit` }">
+                    {{ user.name }}
+                  </router-link>
+                </td>
+                <td :data-label="$t('users.email')">{{ user.email }}</td>
+                <td :data-label="$t('users.role')">{{ user.role }}</td>
+                <td :data-label="$t('users.added_on')">{{ user.formattedCreatedAt }}</td>
+                <td class="action-dropdown users-action-column">
+                  <v-dropdown :show-arrow="false">
+                    <template #activator>
+                      <button class="table-row-menu" type="button" :aria-label="$t('users.action')">
+                        <dot-icon />
+                      </button>
+                    </template>
+                    <v-dropdown-item>
+                      <router-link :to="{ path: `users/${user.id}/edit` }" class="dropdown-item">
+                        <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                        {{ $t('general.edit') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item>
+                      <button class="dropdown-item" type="button" @click="removeUser(user.id)">
+                        <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                        {{ $t('general.delete') }}
+                      </button>
+                    </v-dropdown-item>
+                  </v-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-if="!users.length && !isRequestOngoing" class="table-component__message">
+          There are no matching rows
+        </div>
+
+        <table-pagination
+          v-if="pagination.totalPages > 1 && !isRequestOngoing"
+          :pagination="pagination"
+          @pageChange="loadUsers"
+        />
       </div>
-
-      <table-component
-        ref="table"
-        :show-filter="false"
-        :data="fetchData"
-        table-class="table"
-      >
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
-              <input
-                :id="row.id"
-                v-model="selectField"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label" />
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('users.display_name')"
-          show="name"
-        />
-        <table-column
-          :label="$t('users.email')"
-          show="email"
-        />
-        <table-column
-          :label="$t('users.role')"
-          show="role"
-        />
-        <table-column
-          :label="$t('users.added_on')"
-          sort-as="created_at"
-          show="formattedCreatedAt"
-        />
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-          <template slot-scope="row">
-            <span> {{ $t('users.action') }} </span>
-            <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
-              <v-dropdown-item>
-
-                <router-link :to="{path: `users/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
-                  {{ $t('general.edit') }}
-                </router-link>
-
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="removeUser(row.id)">
-                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                  {{ $t('general.delete') }}
-                </div>
-              </v-dropdown-item>
-            </v-dropdown>
-          </template>
-        </table-column>
-      </table-component>
     </div>
   </div>
 </template>
@@ -199,6 +203,8 @@ import { SweetModal, SweetModalTab } from 'sweet-modal-vue-3'
 import DotIcon from '../../components/icon/DotIcon'
 import AstronautIcon from '../../components/icon/AstronautIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import BaseLoader from '../../components/base/BaseLoader'
+import TablePagination from '../../components/base/base-table/components/Pagination'
 
 export default {
   components: {
@@ -206,13 +212,21 @@ export default {
     AstronautIcon,
     SweetModal,
     SweetModalTab,
-    BaseButton
+    BaseButton,
+    BaseLoader,
+    TablePagination
   },
   data () {
     return {
       showFilters: false,
       filtersApplied: false,
       isRequestOngoing: true,
+      userRequestId: 0,
+      pagination: {
+        totalPages: 0,
+        currentPage: 1,
+        count: 0
+      },
       filters: {
         display_name: '',
         email: '',
@@ -226,13 +240,14 @@ export default {
         },
         {
           url:'#',
-          title:this.$tc('user.user', 2)
+          title:this.$tc('users.user', 2)
         }
       ],
     }
   },
   mounted () {
-    this.loadRoles();
+    this.loadRoles()
+    this.loadUsers()
   },
   computed: {
     showEmptyScreen () {
@@ -271,6 +286,10 @@ export default {
     }
   },
   unmounted() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+
     if (this.selectAllField) {
       this.selectAllUsers()
     }
@@ -286,27 +305,36 @@ export default {
       'fetchRolesAndCompanies'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      return this.loadUsers(1)
     },
-    async fetchData ({ page, filter, sort }) {
+    async loadUsers (page = 1) {
+      const requestId = ++this.userRequestId
       let data = {
         display_name: this.filters.display_name,
         email: this.filters.email,
         role: this.filters.role,
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        orderByField: 'created_at',
+        orderBy: 'desc',
         page
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchUsers(data)
-      this.isRequestOngoing = false
+      try {
+        const response = await this.fetchUsers(data)
 
-      return {
-        data: response.data.users.data,
-        pagination: {
-          totalPages: response.data.users.last_page,
-          currentPage: page
+        if (requestId !== this.userRequestId) {
+          return
+        }
+
+        const usersPage = response.data.users
+        this.pagination = {
+          totalPages: usersPage.last_page,
+          currentPage: usersPage.current_page || page,
+          count: this.users.length
+        }
+      } finally {
+        if (requestId === this.userRequestId) {
+          this.isRequestOngoing = false
         }
       }
     },
@@ -353,7 +381,7 @@ export default {
             window.toastr['success'](this.$tc('users.deleted_message'))
             this.refreshTable()
             return true
-          } else if (request.data.error) {
+          } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }
         }

@@ -107,7 +107,7 @@ export const selectAllUsers = ({ commit, dispatch, state }) => {
 
 export const selectUser = ({ commit, dispatch, state }, data) => {
     commit(types.SET_SELECTED_USERS, data)
-    if (state.selectedUser.length === state.users.length) {
+    if (state.selectedUsers.length === state.users.length) {
         commit(types.SET_SELECT_ALL_STATE, true)
     } else {
         commit(types.SET_SELECT_ALL_STATE, false)
