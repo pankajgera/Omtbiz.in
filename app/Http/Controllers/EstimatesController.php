@@ -21,6 +21,7 @@ use App\Models\Inventory;
 use App\Notifications\EstimateSuccessful;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class EstimatesController extends Controller
@@ -126,39 +127,52 @@ class EstimatesController extends Controller
      */
     public function store(EstimatesRequest $request)
     {
-        $estimate_number = $request->estimate_number;
         $number_attributes['estimate_number'] = $request->estimate_number;
 
         Validator::make($number_attributes, [
             'estimate_number' => 'required'
         ])->validate();
 
-        //Check if same estimate number is already present
-        //if YES, then add 1 to this estimate number
-        $find_estimate = Estimate::where('estimate_number', '=', $estimate_number)->first();
-        if (! empty($find_estimate)) {
-            $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $request->header('company'));
-            $nextEstimateNumber = Estimate::getNextEstimateNumber($estimate_prefix, $request->header('company'));
-            $number_attributes['estimate_number'] = $estimate_prefix . '-' . $nextEstimateNumber;
-        }
-
-        $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date);
+        $companyId = (int) $request->header('company');
+        $estimate_prefix = CompanySetting::getSetting('estimate_prefix', $companyId);
+        $estimate_date = Carbon::createFromFormat('d/m/Y', $request->estimate_date)->format('Y-m-d');
         $status = Estimate::DRAFT;
 
-        $estimate = Estimate::create([
-            'estimate_date' => $estimate_date,
-            'expiry_date' => $estimate_date,
-            'estimate_number' => $number_attributes['estimate_number'],
-            'user_id' => $request->user_id,
-            'company_id' => $request->header('company'),
-            'estimate_template_id' => $request->estimate_template_id,
-            'status' => $status,
-            'sub_total' => $request->sub_total,
-            'total' => $request->total,
-            'notes' => $request->notes,
-            'unique_hash' => Str::random(60),
-            'account_master_id' => $request->debtors['id'],
-        ]);
+        $estimate = DB::transaction(function () use ($request, $number_attributes, $companyId, $estimate_prefix, $estimate_date, $status) {
+            Company::where('id', $companyId)->lockForUpdate()->first();
+
+            $finalEstimateNumber = $this->getNextAvailableEstimateNumber(
+                $number_attributes['estimate_number'],
+                $companyId,
+                $estimate_prefix
+            );
+            $reference_number = $this->getReferenceNumberForEstimate(
+                $companyId,
+                (int) $request->debtors['id'],
+                $estimate_date,
+                $finalEstimateNumber
+            );
+
+            if (! $reference_number || ! $finalEstimateNumber) {
+                abort(500);
+            }
+
+            return Estimate::create([
+                'estimate_date' => $estimate_date,
+                'expiry_date' => $estimate_date,
+                'estimate_number' => $finalEstimateNumber,
+                'user_id' => $request->user_id,
+                'company_id' => $companyId,
+                'estimate_template_id' => $request->estimate_template_id,
+                'status' => $status,
+                'sub_total' => $request->sub_total,
+                'total' => $request->total,
+                'notes' => $request->notes,
+                'unique_hash' => Str::random(60),
+                'account_master_id' => $request->debtors['id'],
+                'reference_number' => $reference_number,
+            ]);
+        }, 3);
 
         $estimateItems = $request->items;
 
@@ -208,6 +222,106 @@ class EstimatesController extends Controller
             'estimate' => $estimate,
             'url' => url('/estimates/pdf/' . $estimate->unique_hash),
         ]);
+    }
+
+    private function getReferenceNumberForEstimate($companyId, $accountMasterId, $estimateDate, $estimateNumber)
+    {
+        $firstEstimate = Estimate::where('company_id', $companyId)
+            ->where('account_master_id', $accountMasterId)
+            ->where('estimate_date', $estimateDate)
+            ->orderBy('id', 'asc')
+            ->lockForUpdate()
+            ->first();
+
+        if ($firstEstimate) {
+            return $firstEstimate->estimate_number;
+        }
+
+        return $estimateNumber;
+    }
+
+    private function getNextAvailableEstimateNumber($requestedEstimateNumber, $companyId, $estimatePrefix)
+    {
+        $estimateNumber = $requestedEstimateNumber;
+        $attempt = 0;
+        $maxAttempts = 20;
+
+        while ($attempt < $maxAttempts) {
+            $exists = Estimate::where('company_id', $companyId)
+                ->where('estimate_number', $estimateNumber)
+                ->exists();
+
+            if (! $exists) {
+                return $estimateNumber;
+            }
+
+            $estimateNumber = $this->buildEstimateNumberFromMaxSuffix($companyId, $estimatePrefix, $attempt + 1);
+            $attempt++;
+        }
+
+        return sprintf(
+            '%s-%06d',
+            $estimatePrefix,
+            (int) (microtime(true) * 1000000) % 1000000
+        );
+    }
+
+    private function buildEstimateNumberFromMaxSuffix($companyId, $estimatePrefix, $offset = 1)
+    {
+        $maxSuffix = Estimate::where('company_id', $companyId)
+            ->where('estimate_number', 'like', $estimatePrefix . '-%')
+            ->selectRaw("MAX(CAST(SUBSTRING_INDEX(estimate_number, '-', -1) AS UNSIGNED)) as max_suffix")
+            ->value('max_suffix');
+
+        $nextSuffix = ((int) $maxSuffix) + max(1, (int) $offset);
+
+        return $estimatePrefix . '-' . sprintf('%06d', $nextSuffix);
+    }
+
+    public function referenceNumber(Request $request)
+    {
+        $accountMasterId = is_array($request->id) ? ($request->id['id'] ?? null) : $request->id;
+        $companyId = (int) $request->header('company');
+        $estimateDate = $this->parseEstimateDateForReference($request->estimate_date);
+
+        if (! $accountMasterId) {
+            return response()->json([
+                'estimate' => null,
+            ]);
+        }
+
+        try {
+            $firstEstimate = Estimate::where('estimate_date', $estimateDate)
+                ->whereCompany($companyId)
+                ->where('account_master_id', $accountMasterId)
+                ->orderBy('id', 'asc')->firstOrFail();
+            $firstEstimate->reference_number = $firstEstimate->estimate_number;
+        } catch (\Exception $e) {
+            return response()->json([
+                'estimate' => null,
+            ]);
+        }
+
+        return response()->json([
+            'estimate' => $firstEstimate
+        ]);
+    }
+
+    private function parseEstimateDateForReference($estimateDate)
+    {
+        if (! $estimateDate) {
+            return Carbon::now('Asia/Kolkata')->toDateString();
+        }
+
+        foreach (['Y-m-d', 'd/m/Y'] as $format) {
+            try {
+                return Carbon::createFromFormat($format, $estimateDate, 'Asia/Kolkata')->format('Y-m-d');
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return Carbon::now('Asia/Kolkata')->toDateString();
     }
 
     /**

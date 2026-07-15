@@ -173,34 +173,29 @@ class InvoicesController extends Controller
 
             $companyId = (int) $request->header('company');
             $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $companyId);
-            $number_attributes['invoice_number'] = $this->getNextAvailableInvoiceNumber(
-                $number_attributes['invoice_number'],
-                $companyId,
-                $invoice_prefix
-            );
-
-            //Check reference_number
-            $reference_number = $request->reference_number;
-            // $find_reference_number = Invoice::where('reference_number', '=', $reference_number)
-            //     ->where('account_master_id', '!=', $request->debtors['id'])->first();
-            // if (! empty($find_reference_number)) {
-            //     $reference_number = intval($reference_number) + 1;
-            // }
-
-            if (! $reference_number || ! $number_attributes['invoice_number']) {
-                abort(500);
-            }
+            $reference_prefix = CompanySetting::getSetting('reference_prefix', $companyId);
 
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
-            $invoice = DB::transaction(function () use ($request, $number_attributes, $reference_number, $invoice_date, $companyId, $invoice_prefix) {
-                // Lock latest invoice row for this company to serialize auto-number generation across concurrent requests.
-                Invoice::where('company_id', $companyId)->orderBy('id', 'desc')->lockForUpdate()->first();
+            $invoice = DB::transaction(function () use ($request, $number_attributes, $invoice_date, $companyId, $invoice_prefix, $reference_prefix) {
+                // Serialize number assignment for this company, even when no invoice rows exist yet.
+                Company::where('id', $companyId)->lockForUpdate()->first();
 
                 $finalInvoiceNumber = $this->getNextAvailableInvoiceNumber(
                     $number_attributes['invoice_number'],
                     $companyId,
                     $invoice_prefix
                 );
+                $reference_number = $this->getReferenceNumberForInvoice(
+                    $companyId,
+                    (int) $request->debtors['id'],
+                    $invoice_date,
+                    $finalInvoiceNumber,
+                    $reference_prefix
+                );
+
+                if (! $reference_number || ! $finalInvoiceNumber) {
+                    abort(500);
+                }
 
                 return Invoice::create([
                     'invoice_date' => $invoice_date,
@@ -396,6 +391,34 @@ class InvoicesController extends Controller
                 'error' => 'Unable to create invoice. Please try again.',
             ], 500);
         }
+    }
+
+    private function getReferenceNumberForInvoice($companyId, $accountMasterId, $invoiceDate, $invoiceNumber, $referencePrefix)
+    {
+        $firstInvoice = Invoice::where('company_id', $companyId)
+            ->where('account_master_id', $accountMasterId)
+            ->where('invoice_date', $invoiceDate)
+            ->orderBy('id', 'asc')
+            ->lockForUpdate()
+            ->first();
+
+        if ($firstInvoice) {
+            return $this->buildReferenceNumberFromInvoiceNumber($firstInvoice->invoice_number, $referencePrefix);
+        }
+
+        return $this->buildReferenceNumberFromInvoiceNumber($invoiceNumber, $referencePrefix);
+    }
+
+    private function buildReferenceNumberFromInvoiceNumber($invoiceNumber, $referencePrefix)
+    {
+        $numberParts = explode('-', $invoiceNumber);
+        $numberSuffix = end($numberParts);
+
+        if (! $referencePrefix) {
+            return $invoiceNumber;
+        }
+
+        return $referencePrefix . '-' . $numberSuffix;
     }
 
     private function getNextAvailableInvoiceNumber($requestedInvoiceNumber, $companyId, $invoicePrefix)
@@ -878,11 +901,25 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
+        $accountMasterId = is_array($request->id) ? ($request->id['id'] ?? null) : $request->id;
+        $companyId = (int) $request->header('company');
+        $invoiceDate = $this->parseInvoiceDateForReference($request->invoice_date);
+
+        if (! $accountMasterId) {
+            return response()->json([
+                'invoice' => null,
+            ]);
+        }
+
         try {
-            $find_today_first_invoice = Invoice::where('invoice_date', Carbon::now('Asia/Kolkata')->toDateString())
-                ->whereCompany($request->header('company'))
-                ->where('account_master_id', $request->id)
+            $find_today_first_invoice = Invoice::where('invoice_date', $invoiceDate)
+                ->whereCompany($companyId)
+                ->where('account_master_id', $accountMasterId)
                 ->orderBy('id', 'asc')->firstOrFail();
+            $find_today_first_invoice->reference_number = $this->buildReferenceNumberFromInvoiceNumber(
+                $find_today_first_invoice->invoice_number,
+                CompanySetting::getSetting('reference_prefix', $companyId)
+            );
         } catch (Exception $e) {
             return response()->json([
                 'invoice' => null,
@@ -892,6 +929,23 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice' => $find_today_first_invoice
         ]);
+    }
+
+    private function parseInvoiceDateForReference($invoiceDate)
+    {
+        if (! $invoiceDate) {
+            return Carbon::now('Asia/Kolkata')->toDateString();
+        }
+
+        foreach (['Y-m-d', 'd/m/Y'] as $format) {
+            try {
+                return Carbon::createFromFormat($format, $invoiceDate, 'Asia/Kolkata')->format('Y-m-d');
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        return Carbon::now('Asia/Kolkata')->toDateString();
     }
 
     /**

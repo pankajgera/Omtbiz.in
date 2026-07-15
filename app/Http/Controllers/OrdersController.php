@@ -8,10 +8,12 @@ use App\Http\Requests\OrdersRequest;
 use App\Models\User;
 use Validator;
 use App\Models\CompanySetting;
+use App\Models\Company;
 use App\Models\AccountMaster;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class OrdersController extends Controller
@@ -118,36 +120,49 @@ class OrdersController extends Controller
      */
     public function store(OrdersRequest $request)
     {
-        $order_number = $request->order_number;
         $number_attributes['order_number'] = $request->order_number;
 
         Validator::make($number_attributes, [
             'order_number' => 'required'
         ])->validate();
 
-        //Check if same order number is already present
-        //if YES, then add 1 to this order number
-        $find_order = Orders::where('order_number', '=', $order_number)->first();
-        if (! empty($find_order)) {
-            $order_prefix = CompanySetting::getSetting('order_prefix', $request->header('company'));
-            $nextOrderNumber = Orders::getNextOrderNumber($order_prefix, $request->header('company'));
-            $number_attributes['order_number'] = $order_prefix . '-' . $nextOrderNumber;
-        }
-
-        $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date);
+        $companyId = (int) $request->header('company');
+        $order_prefix = CompanySetting::getSetting('order_prefix', $companyId);
+        $order_date = Carbon::createFromFormat('d/m/Y', $request->order_date)->format('Y-m-d');
         $status = Orders::DRAFT;
 
-        $order = Orders::create([
-            'order_date' => $order_date,
-            'expiry_date' => $order_date,
-            'order_number' => $number_attributes['order_number'],
-            'user_id' => $request->user_id,
-            'company_id' => $request->header('company'),
-            'status' => $status,
-            'notes' => $request->notes,
-            'unique_hash' => Str::random(60),
-            'account_master_id' => $request->debtors['id'],
-        ]);
+        $order = DB::transaction(function () use ($request, $number_attributes, $companyId, $order_prefix, $order_date, $status) {
+            Company::where('id', $companyId)->lockForUpdate()->first();
+
+            $finalOrderNumber = $this->getNextAvailableOrderNumber(
+                $number_attributes['order_number'],
+                $companyId,
+                $order_prefix
+            );
+            $reference_number = $this->getReferenceNumberForOrder(
+                $companyId,
+                (int) $request->debtors['id'],
+                $order_date,
+                $finalOrderNumber
+            );
+
+            if (! $reference_number || ! $finalOrderNumber) {
+                abort(500);
+            }
+
+            return Orders::create([
+                'order_date' => $order_date,
+                'expiry_date' => $order_date,
+                'order_number' => $finalOrderNumber,
+                'user_id' => $request->user_id,
+                'company_id' => $companyId,
+                'status' => $status,
+                'notes' => $request->notes,
+                'unique_hash' => Str::random(60),
+                'account_master_id' => $request->debtors['id'],
+                'reference_number' => $reference_number,
+            ]);
+        }, 3);
 
         foreach ($request->order_items as $orderItem) {
             $orderItem['company_id'] = $request->header('company');
@@ -164,6 +179,106 @@ class OrdersController extends Controller
             'order' => $order,
             'url' => url('/orders/pdf/' . $order->unique_hash),
         ]);
+    }
+
+    private function getReferenceNumberForOrder($companyId, $accountMasterId, $orderDate, $orderNumber)
+    {
+        $firstOrder = Orders::where('company_id', $companyId)
+            ->where('account_master_id', $accountMasterId)
+            ->where('order_date', $orderDate)
+            ->orderBy('id', 'asc')
+            ->lockForUpdate()
+            ->first();
+
+        if ($firstOrder) {
+            return $firstOrder->order_number;
+        }
+
+        return $orderNumber;
+    }
+
+    private function getNextAvailableOrderNumber($requestedOrderNumber, $companyId, $orderPrefix)
+    {
+        $orderNumber = $requestedOrderNumber;
+        $attempt = 0;
+        $maxAttempts = 20;
+
+        while ($attempt < $maxAttempts) {
+            $exists = Orders::where('company_id', $companyId)
+                ->where('order_number', $orderNumber)
+                ->exists();
+
+            if (! $exists) {
+                return $orderNumber;
+            }
+
+            $orderNumber = $this->buildOrderNumberFromMaxSuffix($companyId, $orderPrefix, $attempt + 1);
+            $attempt++;
+        }
+
+        return sprintf(
+            '%s-%06d',
+            $orderPrefix,
+            (int) (microtime(true) * 1000000) % 1000000
+        );
+    }
+
+    private function buildOrderNumberFromMaxSuffix($companyId, $orderPrefix, $offset = 1)
+    {
+        $maxSuffix = Orders::where('company_id', $companyId)
+            ->where('order_number', 'like', $orderPrefix . '-%')
+            ->selectRaw("MAX(CAST(SUBSTRING_INDEX(order_number, '-', -1) AS UNSIGNED)) as max_suffix")
+            ->value('max_suffix');
+
+        $nextSuffix = ((int) $maxSuffix) + max(1, (int) $offset);
+
+        return $orderPrefix . '-' . sprintf('%06d', $nextSuffix);
+    }
+
+    public function referenceNumber(Request $request)
+    {
+        $accountMasterId = is_array($request->id) ? ($request->id['id'] ?? null) : $request->id;
+        $companyId = (int) $request->header('company');
+        $orderDate = $this->parseOrderDateForReference($request->order_date);
+
+        if (! $accountMasterId) {
+            return response()->json([
+                'order' => null,
+            ]);
+        }
+
+        try {
+            $firstOrder = Orders::where('order_date', $orderDate)
+                ->whereCompany($companyId)
+                ->where('account_master_id', $accountMasterId)
+                ->orderBy('id', 'asc')->firstOrFail();
+            $firstOrder->reference_number = $firstOrder->order_number;
+        } catch (\Exception $e) {
+            return response()->json([
+                'order' => null,
+            ]);
+        }
+
+        return response()->json([
+            'order' => $firstOrder
+        ]);
+    }
+
+    private function parseOrderDateForReference($orderDate)
+    {
+        if (! $orderDate) {
+            return Carbon::now('Asia/Kolkata')->toDateString();
+        }
+
+        foreach (['Y-m-d', 'd/m/Y'] as $format) {
+            try {
+                return Carbon::createFromFormat($format, $orderDate, 'Asia/Kolkata')->format('Y-m-d');
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return Carbon::now('Asia/Kolkata')->toDateString();
     }
 
     /**

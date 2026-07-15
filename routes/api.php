@@ -67,12 +67,14 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/estimates/delete', [App\Http\Controllers\EstimatesController::class, 'delete'])->name('estimates.delete');
     Route::post('/estimates/send', [App\Http\Controllers\EstimatesController::class, 'sendEstimate'])->name('estimates.send');
     Route::post('/estimates/create-invoice', [App\Http\Controllers\EstimatesController::class, 'store'])->name('estimates.create-invoice');
+    Route::post('/estimates/reference', [App\Http\Controllers\EstimatesController::class, 'referenceNumber'])->name('estimates.reference');
     Route::resource('estimates', App\Http\Controllers\EstimatesController::class);
 
     // Orders
     //-------------------------------------------------
     Route::post('/orders/delete', [App\Http\Controllers\OrdersController::class, 'delete'])->name('orders.delete');
     Route::post('/orders/create-invoice', [App\Http\Controllers\OrdersController::class, 'store'])->name('orders.create-invoice');
+    Route::post('/orders/reference', [App\Http\Controllers\OrdersController::class, 'referenceNumber'])->name('orders.reference');
     Route::resource('orders', App\Http\Controllers\OrdersController::class);
 
     // Expenses

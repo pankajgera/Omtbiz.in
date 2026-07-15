@@ -507,7 +507,10 @@ export default {
         return this.newInvoice.debtors
       },
       set(value) {
-        this.searchDebtorRefNumber({'id': value})
+        this.searchDebtorRefNumber({
+          id: value && value.id ? value.id : value,
+          invoice_date: this.newInvoice.invoice_date
+        })
         this.newInvoice.debtors = value
       },
     },
@@ -545,6 +548,14 @@ export default {
     subtotal (newValue) {
       if (this.newInvoice.discount_type === 'percentage') {
         this.newInvoice.discount_val = (this.newInvoice.discount * newValue)
+      }
+    },
+    'newInvoice.invoice_date' () {
+      if (this.newInvoice.debtors && this.$route.name !== 'invoices.edit') {
+        this.searchDebtorRefNumber({
+          id: this.newInvoice.debtors.id ? this.newInvoice.debtors.id : this.newInvoice.debtors,
+          invoice_date: this.newInvoice.invoice_date
+        })
       }
     }
   },
@@ -904,13 +915,18 @@ export default {
       return isValid
     },
     async searchDebtorRefNumber(data) {
-       this.newInvoice.reference_number = null;
-       let response = await this.fetchReferenceNumber(data)
+      this.newInvoice.reference_number = this.invoiceNumAttribute
+      try {
+        let response = await this.fetchReferenceNumber({
+          ...data,
+          invoice_date: data.invoice_date ? data.invoice_date : this.newInvoice.invoice_date
+        })
         if (response.data && response.data.invoice) {
-          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[2]
-        } else {
-          this.newInvoice.reference_number = this.invoiceNumAttribute
+          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-').pop()
         }
+      } catch (err) {
+        this.newInvoice.reference_number = this.invoiceNumAttribute
+      }
     },
     showEndList(val) {
       this.showAddNewInventory = !val;
@@ -949,7 +965,10 @@ export default {
       };
 
       //set reference number
-      this.searchDebtorRefNumber({'id': invoice.account_master_id})
+      this.searchDebtorRefNumber({
+        id: invoice.account_master_id,
+        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD')
+      })
     },
     sendReports() {
       this.isLoading = true
