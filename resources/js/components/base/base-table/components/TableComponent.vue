@@ -1,5 +1,9 @@
 <template>
-  <div class="table-component">
+  <div
+    :class="{ 'is-loading': loading }"
+    :aria-busy="loading"
+    class="table-component"
+  >
     <div v-if="showFilter && filterableColumnExists" class="table-component__filter">
       <input
         :class="fullFilterInputClass"
@@ -117,6 +121,7 @@ export default {
       order: ''
     },
     pagination: null,
+    rowRequestId: 0,
 
     loading: false,
     localSettings: {}
@@ -279,18 +284,42 @@ export default {
     },
 
     async mapDataToRows () {
-      const data = this.usesLocalData
-        ? this.prepareLocalData()
-        : await this.fetchServerData()
+      const requestId = ++this.rowRequestId
+      let data
 
-      let rowId = 0
+      if (this.usesLocalData) {
+        data = this.prepareLocalData()
+      } else {
+        const response = await this.fetchServerData(requestId)
 
-      this.rows = data
-        .map(rowData => {
-          rowData.vueTableComponentInternalRowId = rowId++
-          return rowData
-        })
-        .map(rowData => new Row(rowData, this.columns))
+        if (requestId !== this.rowRequestId) {
+          return
+        }
+
+        this.pagination = response.pagination
+        data = response.data
+      }
+
+      const normalizedRows = this.normalizeRows(data)
+
+      this.rows = normalizedRows
+        .filter(rowData => rowData && typeof rowData === 'object')
+        .map((rowData, rowId) => new Row({
+          ...rowData,
+          vueTableComponentInternalRowId: rowId
+        }, this.columns))
+    },
+
+    normalizeRows (data) {
+      if (Array.isArray(data)) {
+        return data
+      }
+
+      if (data && Array.isArray(data.data)) {
+        return data.data
+      }
+
+      return []
     },
 
     prepareLocalData () {
@@ -299,19 +328,21 @@ export default {
       return this.data
     },
 
-    async fetchServerData () {
+    async fetchServerData (requestId) {
       const page = (this.pagination && this.pagination.currentPage) || 1
       this.loading = true
 
-      const response = await this.data({
-        filter: this.filter,
-        sort: this.sort,
-        page: page
-      })
-
-      this.pagination = response.pagination
-      this.loading = false
-      return response.data
+      try {
+        return await this.data({
+          filter: this.filter,
+          sort: this.sort,
+          page: page
+        })
+      } finally {
+        if (requestId === this.rowRequestId) {
+          this.loading = false
+        }
+      }
     },
 
     async refresh () {

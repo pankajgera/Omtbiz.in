@@ -331,10 +331,11 @@ export default {
       this.isRequestOngoing = false
 
       return {
-        data: response.data.notes.data,
+        data: this.notes.map(note => ({ ...note })),
         pagination: {
           totalPages: response.data.notes.last_page,
-          currentPage: page
+          currentPage: response.data.notes.current_page || page,
+          count: this.notes.length
         }
       }
     },
