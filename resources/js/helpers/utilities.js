@@ -1,8 +1,22 @@
 export default {
   toggleSidebar () {
-    let icon = document.getElementsByClassName('hamburger')[0]
-    document.body.classList.toggle('sidebar-open')
-    icon.classList.toggle('is-active')
+    const body = document.body
+    const icon = document.getElementsByClassName('hamburger')[0]
+    const isDesktop = window.matchMedia('(min-width: 992px)').matches
+    const stateClass = isDesktop ? 'sidebar-collapsed' : 'sidebar-open'
+
+    body.classList.remove(isDesktop ? 'sidebar-open' : 'sidebar-collapsed')
+    body.classList.toggle(stateClass)
+
+    const isToggled = body.classList.contains(stateClass)
+    icon?.classList.toggle('is-active', isToggled)
+
+    const isVisible = isDesktop ? !isToggled : isToggled
+    window.dispatchEvent(new CustomEvent('sidebar-visibility-change', {
+      detail: { visible: isVisible }
+    }))
+
+    return isVisible
   },
 
   addClass (el, className) {

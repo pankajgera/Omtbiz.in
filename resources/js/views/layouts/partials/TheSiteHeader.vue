@@ -13,6 +13,8 @@
       type="button"
       class="nav-toggle tw:grid tw:size-10 tw:place-items-center tw:rounded-md tw:border tw:border-line tw:bg-surface-muted tw:text-ink"
       aria-label="Toggle navigation"
+      aria-controls="app-sidebar"
+      :aria-expanded="sidebarVisible"
       @click="onNavToggle"
     >
       <div class="hamburger hamburger--arrowturn">
@@ -103,7 +105,8 @@ import { getActiveTheme, handleStoredThemeChange, toggleTheme } from '../../../h
 export default {
   data () {
     return {
-      theme: getActiveTheme()
+      theme: getActiveTheme(),
+      sidebarVisible: window.matchMedia('(min-width: 992px)').matches
     }
   },
   computed: {
@@ -137,9 +140,11 @@ export default {
   },
   mounted () {
     window.addEventListener('storage', this.onThemeStorage)
+    window.addEventListener('sidebar-visibility-change', this.onSidebarVisibilityChange)
   },
   beforeUnmount () {
     window.removeEventListener('storage', this.onThemeStorage)
+    window.removeEventListener('sidebar-visibility-change', this.onSidebarVisibilityChange)
   },
   methods: {
     getFormattedDate(date) {
@@ -156,13 +161,16 @@ export default {
       'logout'
     ]),
     onNavToggle () {
-      this.$utils.toggleSidebar()
+      this.sidebarVisible = this.$utils.toggleSidebar()
     },
     onThemeToggle () {
       this.theme = toggleTheme()
     },
     onThemeStorage (event) {
       this.theme = handleStoredThemeChange(event)
+    },
+    onSidebarVisibilityChange (event) {
+      this.sidebarVisible = event.detail.visible
     }
   }
 }

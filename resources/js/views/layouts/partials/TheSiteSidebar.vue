@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar-left tw:flex tw:flex-col tw:border-r tw:border-line tw:bg-sidebar tw:text-sidebar-ink">
+  <div id="app-sidebar" class="sidebar-left tw:flex tw:flex-col tw:border-r tw:border-line tw:bg-sidebar tw:text-sidebar-ink">
     <div class="sidebar-body scroll-pane tw:min-h-0 tw:flex-1 tw:overflow-y-auto">
       <nav class="side-nav" aria-label="Primary navigation">
         <div v-for="(menuItems, index) in menu" :key="index" class="menu-group tw:space-y-1">
@@ -198,7 +198,9 @@ export default {
   },
   methods: {
     Toggle() {
-      this.$utils.toggleSidebar();
+      if (window.matchMedia('(max-width: 991px)').matches) {
+        this.$utils.toggleSidebar();
+      }
     },
     closeModal() {
       this.calculatorOpen = false;

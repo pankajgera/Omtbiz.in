@@ -106,7 +106,7 @@
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
-      <div class="table-actions mt-5">
+      <div class="table-actions notes-table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ notes.length }}</b> {{ $t('general.of') }} <b>{{ totalNotes }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedNotes.length" :show-arrow="false">
@@ -123,96 +123,105 @@
         </transition>
       </div>
 
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all"
-          v-model="selectAllFieldStatus"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllNotes"
-        >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
+      <div id="to_print" class="table-component notes-table-component">
+        <div class="table-component__table-wrapper">
+          <base-loader v-if="isRequestOngoing" class="table-loader" />
+
+          <table class="table-component__table table notes-table">
+            <caption class="table-component__table__caption">
+              {{ $tc('notes.notes', 2) }}
+            </caption>
+            <thead class="table-component__table__head">
+              <tr>
+                <th class="notes-selection-column hide-print" scope="col">
+                  <label class="notes-select-all-label" for="select-all">
+                    <input
+                      id="select-all"
+                      v-model="selectAllFieldStatus"
+                      type="checkbox"
+                      class="notes-checkbox"
+                      @change="selectAllNotes"
+                    >
+                    <span>{{ $t('general.select_all') }}</span>
+                  </label>
+                </th>
+                <th v-for="column in noteColumns" :key="column.field" scope="col">
+                  <button
+                    :aria-label="sortLabel(column.label, column.field)"
+                    class="table-sort-button"
+                    type="button"
+                    @click="changeSorting(column.field)"
+                  >
+                    {{ column.label }}
+                    <span
+                      v-if="sort.fieldName === column.field"
+                      :class="sort.order === 'asc' ? 'is-ascending' : 'is-descending'"
+                      class="table-sort-indicator"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </th>
+                <th class="notes-action-column hide-print" scope="col">
+                  <span class="sr-only">{{ $t('notes.action') }}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="table-component__table__body">
+              <tr v-for="note in notes" :key="note.id">
+                <td class="notes-selection-column hide-print">
+                  <input
+                    :id="`note-${note.id}`"
+                    v-model="selectField"
+                    :value="note.id"
+                    :aria-label="`Select ${note.name}`"
+                    type="checkbox"
+                    class="notes-checkbox"
+                  >
+                </td>
+                <td :data-label="$t('notes.name')">
+                  <router-link :to="{ path: `notes/${note.id}/edit` }">
+                    {{ note.name }}
+                  </router-link>
+                </td>
+                <td :data-label="$t('notes.design_no')">{{ note.design_no }}</td>
+                <td :data-label="$t('notes.rate')">{{ note.rate }}</td>
+                <td :data-label="$t('notes.average')">{{ note.average }}</td>
+                <td class="action-dropdown notes-action-column hide-print">
+                  <v-dropdown :show-arrow="false">
+                    <template #activator>
+                      <button class="table-row-menu" type="button" :aria-label="$t('notes.action')">
+                        <dot-icon />
+                      </button>
+                    </template>
+                    <v-dropdown-item>
+                      <router-link :to="{ path: `notes/${note.id}/edit` }" class="dropdown-item">
+                        <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                        {{ $t('general.edit') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item>
+                      <button class="dropdown-item" type="button" @click="removeNotes(note.id)">
+                        <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                        {{ $t('general.delete') }}
+                      </button>
+                    </v-dropdown-item>
+                  </v-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-if="!notes.length && !isRequestOngoing" class="table-component__message">
+          There are no matching rows
+        </div>
+
+        <table-pagination
+          v-if="pagination.totalPages > 1 && !isRequestOngoing"
+          :pagination="pagination"
+          @pageChange="loadNotes"
+        />
       </div>
-
-      <table-component
-        ref="table"
-        id="to_print"
-        :data="fetchData"
-        :show-filter="false"
-        table-class="table"
-      >
-
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox" id="no-print-check">
-              <input
-                :id="row.id"
-                v-model="selectField"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label"/>
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('notes.name')"
-          show="name"
-        >
-          <template slot-scope="row">
-             <router-link :to="{path: `notes/${row.id}/edit`}" >
-                {{ row.name }}
-              </router-link>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('notes.design_no')"
-          show="design_no"
-        />
-        <table-column
-          :label="$t('notes.rate')"
-          show="rate"
-        />
-        <table-column
-          :label="$t('notes.average')"
-          show="average"
-        />
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-          <template slot-scope="row">
-            <span id="no-print-option"> {{ $t('notes.action') }} </span>
-            <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
-              <v-dropdown-item>
-
-                <router-link :to="{path: `notes/${row.id}/edit`}" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                  {{ $t('general.edit') }}
-                </router-link>
-
-              </v-dropdown-item>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="removeNotes(row.id)">
-                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                  {{ $t('general.delete') }}
-                </div>
-              </v-dropdown-item>
-            </v-dropdown>
-          </template>
-        </table-column>
-      </table-component>
     </div>
   </div>
 </template>
@@ -226,15 +235,20 @@ body > .expandable-image.expanded {
 </style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import printJS from 'print-js'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import BaseLoader from '../../components/base/BaseLoader'
+import TablePagination from '../../components/base/base-table/components/Pagination'
 
 export default {
   components: {
     DotIcon,
     SatelliteIcon,
     BaseButton,
+    BaseLoader,
+    TablePagination,
   },
   data () {
     return {
@@ -250,8 +264,17 @@ export default {
         }
       ],
       showFilters: false,
-      sortedBy: 'created_at',
       isRequestOngoing: true,
+      noteRequestId: 0,
+      pagination: {
+        totalPages: 0,
+        currentPage: 1,
+        count: 0
+      },
+      sort: {
+        fieldName: 'created_at',
+        order: 'desc'
+      },
       filtersApplied: false,
       filters: {
         name: '',
@@ -274,6 +297,14 @@ export default {
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
+    },
+    noteColumns () {
+      return [
+        { field: 'name', label: this.$t('notes.name') },
+        { field: 'design_no', label: this.$t('notes.design_no') },
+        { field: 'rate', label: this.$t('notes.rate') },
+        { field: 'average', label: this.$t('notes.average') }
+      ]
     },
     selectField: {
       get: function () {
@@ -298,6 +329,9 @@ export default {
       deep: true
     },
   },
+  mounted () {
+    this.loadNotes()
+  },
   unmounted() {
     if (this.selectAllField) {
       this.selectAllNotes()
@@ -313,31 +347,56 @@ export default {
       'setSelectAllState'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      return this.loadNotes(1)
     },
-    async fetchData ({ page, filter, sort }) {
+    async loadNotes (page = 1) {
+      const requestId = ++this.noteRequestId
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
         rate: this.filters.rate !== null ? this.filters.rate : '',
         average: this.filters.average !== null ? this.filters.average : '',
         design_no: this.filters.design_no !== null ? this.filters.design_no : '',
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        orderByField: this.sort.fieldName,
+        orderBy: this.sort.order,
         page
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchNotes(data)
-      this.isRequestOngoing = false
+      try {
+        const response = await this.fetchNotes(data)
 
-      return {
-        data: this.notes.map(note => ({ ...note })),
-        pagination: {
-          totalPages: response.data.notes.last_page,
-          currentPage: response.data.notes.current_page || page,
+        if (requestId !== this.noteRequestId) {
+          return
+        }
+
+        const notesPage = response.data.notes
+        this.pagination = {
+          totalPages: notesPage.last_page,
+          currentPage: notesPage.current_page || page,
           count: this.notes.length
         }
+      } finally {
+        if (requestId === this.noteRequestId) {
+          this.isRequestOngoing = false
+        }
       }
+    },
+    changeSorting (fieldName) {
+      if (this.sort.fieldName === fieldName) {
+        this.sort.order = this.sort.order === 'asc' ? 'desc' : 'asc'
+      } else {
+        this.sort.fieldName = fieldName
+        this.sort.order = 'asc'
+      }
+
+      this.loadNotes(1)
+    },
+    sortLabel (label, fieldName) {
+      if (this.sort.fieldName !== fieldName) {
+        return `Sort by ${label}`
+      }
+
+      return `Sort by ${label} ${this.sort.order === 'asc' ? 'descending' : 'ascending'}`
     },
     setFilters () {
       if (this.timer) {
@@ -382,7 +441,7 @@ export default {
           let res = await this.deleteNote(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('notes.deleted_message', 1))
-            this.$refs.table.refresh()
+            this.refreshTable()
             return true
           }
 
@@ -403,7 +462,7 @@ export default {
           let res = await this.deleteMultipleNotes()
           if (res.data.success) {
             window.toastr['success'](this.$tc('notes.deleted_message', 2))
-            this.$refs.table.refresh()
+            this.refreshTable()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }

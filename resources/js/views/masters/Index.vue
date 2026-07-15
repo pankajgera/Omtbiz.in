@@ -115,145 +115,137 @@
         </transition>
       </div>
 
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all"
-          v-model="selectAllFieldStatus"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllMasters"
-        >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
-      </div>
+      <div class="table-component masters-table-component">
+        <div class="table-component__table-wrapper">
+          <base-loader v-if="isRequestOngoing" class="table-loader" />
 
-      <table-component
-        ref="table"
-        :data="fetchData"
-        :show-filter="false"
-        table-class="table"
-      >
+          <table class="table-component__table table masters-table">
+            <caption class="table-component__table__caption">
+              {{ $tc('masters.account_master', 2) }}
+            </caption>
+            <thead class="table-component__table__head">
+              <tr>
+                <th class="masters-selection-column" scope="col">
+                  <label class="masters-select-all-label" for="select-all-masters">
+                    <input
+                      id="select-all-masters"
+                      v-model="selectAllFieldStatus"
+                      type="checkbox"
+                      class="masters-checkbox"
+                      @change="selectAllMasters"
+                    >
+                    <span>{{ $t('general.select_all') }}</span>
+                  </label>
+                </th>
+                <th v-for="column in masterColumns" :key="column.field" scope="col">
+                  <button
+                    :aria-label="sortLabel(column.label, column.field)"
+                    class="table-sort-button"
+                    type="button"
+                    @click="changeSorting(column.field)"
+                  >
+                    {{ column.label }}
+                    <span
+                      v-if="sort.fieldName === column.field"
+                      :class="sort.order === 'asc' ? 'is-ascending' : 'is-descending'"
+                      class="table-sort-indicator"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </th>
+                <th class="masters-action-column" scope="col">
+                  <span class="sr-only">{{ $t('masters.action') }}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="table-component__table__body">
+              <tr v-for="master in masters" :key="master.id">
+                <td class="masters-selection-column">
+                  <input
+                    :id="`master-${master.id}`"
+                    v-model="selectField"
+                    :value="master.id"
+                    :aria-label="`Select ${master.name}`"
+                    type="checkbox"
+                    class="masters-checkbox"
+                  >
+                </td>
+                <td :data-label="$t('masters.name')">
+                  <router-link :to="{ path: `masters/${master.id}/edit` }">
+                    {{ master.name }}
+                  </router-link>
+                </td>
+                <td :data-label="$t('masters.groups')">{{ master.groups }}</td>
+                <td class="action-dropdown masters-action-column">
+                  <v-dropdown :show-arrow="false">
+                    <template #activator>
+                      <button class="table-row-menu" type="button" :aria-label="$t('masters.action')">
+                        <dot-icon />
+                      </button>
+                    </template>
+                    <v-dropdown-item>
+                      <router-link :to="{ path: `masters/${master.id}/edit` }" class="dropdown-item">
+                        <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                        {{ $t('general.edit') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item>
+                      <button class="dropdown-item" type="button" @click="removeMasters(master.id)">
+                        <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                        {{ $t('general.delete') }}
+                      </button>
+                    </v-dropdown-item>
+                  </v-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
-              <input
-                :id="row.id"
-                v-model="selectField"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label"/>
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('masters.name')"
-          show="name"
-        >
-          <template slot-scope="row">
-            <router-link :to="{path: `masters/${row.id}/edit`}">
-              {{ row.name }}
-              </router-link>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('masters.groups')"
-          show="groups"
+        <div v-if="!masters.length && !isRequestOngoing" class="table-component__message">
+          There are no matching rows
+        </div>
+
+        <table-pagination
+          v-if="pagination.totalPages > 1 && !isRequestOngoing"
+          :pagination="pagination"
+          @pageChange="loadMasters"
         />
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-        <template slot-scope="row">
-          <span> {{ $t('masters.action') }} </span>
-          <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
-            <v-dropdown-item>
-
-              <router-link :to="{path: `masters/${row.id}/edit`}" class="dropdown-item">
-                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.edit') }}
-              </router-link>
-
-            </v-dropdown-item>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMasters(row.id)">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </template>
-      </table-column>
-      </table-component>
+      </div>
     </div>
   </div>
 </template>
-<style>
-body > .expandable-image.expanded {
-  width: 100% !important;
-}
-.expandable-image{
-  width: 100px;
-}
-.table .table-component__table__body td {
-    padding: 0px 15px !important;
-    height: 20px !important;
-}
-.table-component__table {
-  border-spacing: 0 5px !important;
-}
-@media (max-width: 768px) {
-  .table-component .dropdown-group {
-    top: 4px;
-  }
-  .table .table-component__table__body td.no-click {
-    height: 25px !important;
-  }
-  .table .table-component__table__body td.action-dropdown {
-    height: 5px !important;
-  }
-  .table .table-component__table__body td {
-    height: 80px !important;
-  }
-  .table .table-component__table__body td span.dot {
-    position: relative;
-  }
-  .table .table-component__table__body td span {
-    position: relative;
-    overflow: auto;
-    display: block;
-  }
-}
-</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import BaseLoader from '../../components/base/BaseLoader'
+import TablePagination from '../../components/base/base-table/components/Pagination'
 
 export default {
   components: {
     DotIcon,
     SatelliteIcon,
     BaseButton,
+    BaseLoader,
+    TablePagination,
   },
   data () {
     return {
       id: null,
       showFilters: false,
-      sortedBy: 'created_at',
       isRequestOngoing: true,
+      masterRequestId: 0,
+      pagination: {
+        totalPages: 0,
+        currentPage: 1,
+        count: 0
+      },
+      sort: {
+        fieldName: 'created_at',
+        order: 'desc'
+      },
       filtersApplied: false,
       filters: {
         name: '',
@@ -274,6 +266,12 @@ export default {
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
+    },
+    masterColumns () {
+      return [
+        { field: 'name', label: this.$t('masters.name') },
+        { field: 'groups', label: this.$t('masters.groups') }
+      ]
     },
     selectField: {
       get: function () {
@@ -298,7 +296,14 @@ export default {
       deep: true
     }
   },
+  mounted () {
+    this.loadMasters()
+  },
   unmounted() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+
     if (this.selectAllField) {
       this.selectAllMasters()
     }
@@ -313,28 +318,54 @@ export default {
       'setSelectAllState'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      return this.loadMasters(1)
     },
-    async fetchData ({ page, filter, sort }) {
+    async loadMasters (page = 1) {
+      const requestId = ++this.masterRequestId
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
         groups: this.filters.groups !== null ? this.filters.groups : '',
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        orderByField: this.sort.fieldName,
+        orderBy: this.sort.order,
         page
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchMasters(data)
-      this.isRequestOngoing = false
+      try {
+        const response = await this.fetchMasters(data)
 
-      return {
-        data: response.data.masters.data,
-        pagination: {
-          totalPages: response.data.masters.last_page,
-          currentPage: page
+        if (requestId !== this.masterRequestId) {
+          return
+        }
+
+        const mastersPage = response.data.masters
+        this.pagination = {
+          totalPages: mastersPage.last_page,
+          currentPage: mastersPage.current_page || page,
+          count: this.masters.length
+        }
+      } finally {
+        if (requestId === this.masterRequestId) {
+          this.isRequestOngoing = false
         }
       }
+    },
+    changeSorting (fieldName) {
+      if (this.sort.fieldName === fieldName) {
+        this.sort.order = this.sort.order === 'asc' ? 'desc' : 'asc'
+      } else {
+        this.sort.fieldName = fieldName
+        this.sort.order = 'asc'
+      }
+
+      this.loadMasters(1)
+    },
+    sortLabel (label, fieldName) {
+      if (this.sort.fieldName !== fieldName) {
+        return `Sort by ${label}`
+      }
+
+      return `Sort by ${label} ${this.sort.order === 'asc' ? 'descending' : 'ascending'}`
     },
     setFilters () {
       if (this.timer) {
@@ -377,7 +408,7 @@ export default {
           let res = await this.deleteMaster(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('masters.deleted_message', 1))
-            this.$refs.table.refresh()
+            this.refreshTable()
             return true
           }
 
@@ -403,7 +434,7 @@ export default {
           let res = await this.deleteMultipleMasters()
           if (res.data.success) {
             window.toastr['success'](this.$tc('masters.deleted_message', 2))
-            this.$refs.table.refresh()
+            this.refreshTable()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }

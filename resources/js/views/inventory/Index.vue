@@ -88,9 +88,9 @@
 
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventory.length }}</b> {{ $t('general.of') }} <b>{{ totalInventories }}</b></p>
+        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventories.length }}</b> {{ $t('general.of') }} <b>{{ totalInventories }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedInventory" :show-arrow="false">
+          <v-dropdown v-if="selectedInventory.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -110,137 +110,144 @@
         </transition>
       </div>
 
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all-inventory"
-          v-model="selectAllFieldStatus"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllInventory"
-        >
-        <label v-show="!isRequestOngoing" for="select-all-inventory" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
-      </div>
+      <div class="table-component inventory-table-component">
+        <div class="table-component__table-wrapper">
+          <base-loader v-if="isRequestOngoing" class="table-loader" />
 
-      <table-component
-        ref="table"
-        :data="fetchData"
-        :show-filter="false"
-        table-class="table"
-      >
+          <table class="table-component__table table inventory-table">
+            <caption class="table-component__table__caption">
+              {{ $tc('inventory.inventory', 2) }}
+            </caption>
+            <thead class="table-component__table__head">
+              <tr>
+                <th class="inventory-selection-column" scope="col">
+                  <label class="inventory-select-all-label" for="select-all-inventory">
+                    <input
+                      id="select-all-inventory"
+                      v-model="selectAllFieldStatus"
+                      type="checkbox"
+                      class="inventory-checkbox"
+                      @change="selectAllInventory"
+                    >
+                    <span>{{ $t('general.select_all') }}</span>
+                  </label>
+                </th>
+                <th v-for="column in inventoryColumns" :key="column.field" scope="col">
+                  <button
+                    v-if="column.sortable"
+                    :aria-label="sortLabel(column.label, column.field)"
+                    class="table-sort-button"
+                    type="button"
+                    @click="changeSorting(column.field)"
+                  >
+                    {{ column.label }}
+                    <span
+                      v-if="sort.fieldName === column.field"
+                      :class="sort.order === 'asc' ? 'is-ascending' : 'is-descending'"
+                      class="table-sort-indicator"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <span v-else>{{ column.label }}</span>
+                </th>
+                <th class="inventory-action-column" scope="col">
+                  <span class="sr-only">{{ $t('inventory.action') }}</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="table-component__table__body">
+              <tr v-for="item in inventories" :key="item.id">
+                <td class="inventory-selection-column">
+                  <input
+                    :id="`inventory-${item.id}`"
+                    v-model="selectField"
+                    :value="item.id"
+                    :aria-label="`Select ${item.name}`"
+                    type="checkbox"
+                    class="inventory-checkbox"
+                  >
+                </td>
+                <td :data-label="$t('inventory.name')">
+                  <router-link :to="{ path: `inventory/${item.id}/edit` }">
+                    {{ item.name }}
+                  </router-link>
+                </td>
+                <td :data-label="$t('inventory.unit')">{{ item.unit }}</td>
+                <td :data-label="$t('inventory.avg_price')">
+                  <span aria-hidden="true">&#8377;</span> {{ numberWithCommas(item.price) }}
+                </td>
+                <td :data-label="$t('inventory.quantity')">{{ item.quantity }}</td>
+                <td class="action-dropdown inventory-action-column">
+                  <v-dropdown :show-arrow="false">
+                    <template #activator>
+                      <button class="table-row-menu" type="button" :aria-label="$t('inventory.action')">
+                        <dot-icon />
+                      </button>
+                    </template>
+                    <v-dropdown-item>
+                      <router-link :to="{ path: `inventory/${item.id}/edit` }" class="dropdown-item">
+                        <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                        {{ $t('general.edit') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item>
+                      <button class="dropdown-item" type="button" @click="removeInventory(item.id)">
+                        <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                        {{ $t('general.delete') }}
+                      </button>
+                    </v-dropdown-item>
+                  </v-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
-              <input
-                :id="row.id"
-                v-model="selectField"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label"/>
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('inventory.name')"
-          show="name"
-        >
-          <template slot-scope="row">
-            <router-link :to="{path: `inventory/${row.id}/edit`}">
-               {{ row.name }}
-              </router-link>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('inventory.unit')"
-          show="unit"
-        >
-          <template slot-scope="row">
-            {{ row.unit }}
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('inventory.avg_price')"
-          show="price"
-        >
-          <template slot-scope="row">
-            ₹ {{ numberWithCommas(row.price) }}
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('inventory.quantity')"
-          show="quantity"
+        <div v-if="!inventories.length && !isRequestOngoing" class="table-component__message">
+          There are no matching rows
+        </div>
+
+        <table-pagination
+          v-if="pagination.totalPages > 1 && !isRequestOngoing"
+          :pagination="pagination"
+          @pageChange="loadInventory"
         />
-         <!-- <table-column
-          :label="$t('inventory.worker_name')"
-          show="worker_name"
-        /> -->
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-        <template slot-scope="row">
-          <span> {{ $t('inventory.action') }} </span>
-          <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
-            <v-dropdown-item>
-
-              <router-link :to="{path: `inventory/${row.id}/edit`}" class="dropdown-item">
-                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.edit') }}
-              </router-link>
-
-            </v-dropdown-item>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeInventory(row.id)">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </template>
-      </table-column>
-      </table-component>
+      </div>
     </div>
   </div>
 </template>
-<style>
-body > .expandable-image.expanded {
-  width: 100% !important;
-}
-.expandable-image{
-  width: 100px;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
-import GlobalMixin from '../../helpers/mixins.js';
+import BaseLoader from '../../components/base/BaseLoader'
+import TablePagination from '../../components/base/base-table/components/Pagination'
+import GlobalMixin from '../../helpers/mixins.js'
 export default {
   components: {
     DotIcon,
     SatelliteIcon,
     BaseButton,
+    BaseLoader,
+    TablePagination,
   },
   mixins:[GlobalMixin],
   data () {
     return {
       id: null,
       showFilters: false,
-      sortedBy: 'created_at',
       isRequestOngoing: true,
+      inventoryRequestId: 0,
+      pagination: {
+        totalPages: 0,
+        currentPage: 1,
+        count: 0
+      },
+      sort: {
+        fieldName: 'created_at',
+        order: 'desc'
+      },
       filtersApplied: false,
       filters: {
         name: '',
@@ -266,6 +273,14 @@ export default {
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
     },
+    inventoryColumns () {
+      return [
+        { field: 'name', label: this.$t('inventory.name'), sortable: true },
+        { field: 'unit', label: this.$t('inventory.unit'), sortable: false },
+        { field: 'price', label: this.$t('inventory.avg_price'), sortable: false },
+        { field: 'quantity', label: this.$t('inventory.quantity'), sortable: true }
+      ]
+    },
     selectField: {
       get: function () {
         return this.selectedInventory
@@ -289,7 +304,14 @@ export default {
       deep: true
     }
   },
+  mounted () {
+    this.loadInventory()
+  },
   unmounted() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+
     if (this.selectAllField) {
       this.selectAllInventory()
     }
@@ -307,30 +329,57 @@ export default {
       'setSelectAllState'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      return this.loadInventory(1)
     },
-    async fetchData ({ page, filter, sort }) {
+    async loadInventory (page = 1) {
+      const requestId = ++this.inventoryRequestId
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
         price: this.filters.price !== null ? this.filters.price : '',
         quantity: this.filters.quantity !== null ? this.filters.quantity : '',
         unit: this.filters.unit !== null ? this.filters.unit : '',
         worker_name: this.filters.worker_name !== null ? this.filters.worker_name : '',
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        orderByField: this.sort.fieldName,
+        orderBy: this.sort.order,
         page
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchAllInventory(data)
-      this.isRequestOngoing = false
-      return {
-        data: this.inventories, //from state, see mutation
-        pagination: {
-          totalPages: response.data.inventories.last_page,
-          currentPage: page
+      try {
+        const response = await this.fetchAllInventory(data)
+
+        if (requestId !== this.inventoryRequestId) {
+          return
+        }
+
+        const inventoryPage = response.data.inventories
+        this.pagination = {
+          totalPages: inventoryPage.last_page,
+          currentPage: inventoryPage.current_page || page,
+          count: this.inventories.length
+        }
+      } finally {
+        if (requestId === this.inventoryRequestId) {
+          this.isRequestOngoing = false
         }
       }
+    },
+    changeSorting (fieldName) {
+      if (this.sort.fieldName === fieldName) {
+        this.sort.order = this.sort.order === 'asc' ? 'desc' : 'asc'
+      } else {
+        this.sort.fieldName = fieldName
+        this.sort.order = 'asc'
+      }
+
+      this.loadInventory(1)
+    },
+    sortLabel (label, fieldName) {
+      if (this.sort.fieldName !== fieldName) {
+        return `Sort by ${label}`
+      }
+
+      return `Sort by ${label} ${this.sort.order === 'asc' ? 'descending' : 'ascending'}`
     },
     setFilters () {
       if (this.timer) {
@@ -376,7 +425,7 @@ export default {
           let resp = await this.deleteInventory(this.id)
           if (resp.data.success) {
             window.toastr['success'](this.$tc('inventory.deleted_message', 1))
-            this.$refs.table.refresh()
+            this.refreshTable()
           }
         }
       }).catch(err => {
@@ -403,7 +452,7 @@ export default {
           let resp = await this.deleteMultipleInventory()
           if (resp.data) {
             window.toastr['success'](this.$tc('inventory.deleted_message', 2))
-            this.$refs.table.refresh()
+            this.refreshTable()
           }
         }
       }).catch((err) => {
