@@ -193,9 +193,7 @@ import "../../components/grid-table/VueEditableGrid.css";
 import moment from "moment";
 
 export default {
-  mixins: {
-    validationMixin,
-  },
+  mixins: [validationMixin],
   components: {
     VueEditableGrid,
   },
