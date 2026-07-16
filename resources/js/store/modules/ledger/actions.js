@@ -66,7 +66,7 @@ export const updateLedger = ({ commit, dispatch, state }, data) => {
 export const deleteLedger = ({ commit, dispatch, state }, id) => {
   return new Promise((resolve, reject) => {
     window.axios.delete(`/api/ledgers/${id}`).then((response) => {
-      commit(types.DELETE_LEDGER, response.data)
+      commit(types.DELETE_LEDGER, id)
       resolve(response)
     }).catch((err) => {
       reject(err)

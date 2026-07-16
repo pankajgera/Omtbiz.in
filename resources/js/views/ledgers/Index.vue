@@ -82,32 +82,35 @@
     </div>
 
     <transition name="fade">
-      <div v-show="showFilters" class="filter-section">
-        <div class="row">
-          <div class="col-sm-3">
-            <div class="filter-date">
-              <div class="from pr-3">
-                <label>{{ $t('general.from') }}</label>
-                <base-date-picker
-                  v-model="filters.from_date"
-                  :calendar-button="true"
-                  calendar-button-icon="calendar"
-                />
-              </div>
-            </div>
+      <div v-show="showFilters" class="filter-section ledger-filter-section">
+        <div class="ledger-filter-actions">
+          <button class="ledger-clear-filter" type="button" @click="clearFilter">
+            <font-awesome-icon :icon="['fas', 'times']" aria-hidden="true" />
+            {{ $t('general.clear_all') }}
+          </button>
+        </div>
+
+        <div class="ledger-filter-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div class="ledger-filter-field min-w-0">
+            <label class="form-label">{{ $t('general.from') }}</label>
+            <base-date-picker
+              v-model="filters.from_date"
+              :calendar-button="true"
+              calendar-button-icon="calendar"
+            />
           </div>
-          <div class="col-sm-3">
-            <div class="to pl-3">
-              <label>{{ $t('general.to') }}</label>
-              <base-date-picker
-                v-model="filters.to_date"
-                :calendar-button="true"
-                calendar-button-icon="calendar"
-              />
-            </div>
+
+          <div class="ledger-filter-field min-w-0">
+            <label class="form-label">{{ $t('general.to') }}</label>
+            <base-date-picker
+              v-model="filters.to_date"
+              :calendar-button="true"
+              calendar-button-icon="calendar"
+            />
           </div>
-          <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('ledgers.account') }} </label>
+
+          <div class="ledger-filter-field min-w-0">
+            <label class="form-label">{{ $tc('ledgers.account') }}</label>
             <base-input
               v-model="filters.account"
               type="text"
@@ -115,26 +118,9 @@
               autocomplete="off"
             />
           </div>
-          <!-- <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.credit') }} </label>
-            <base-input
-              v-model="filters.credit"
-              type="text"
-              name="credit"
-              autocomplete="off"
-            />
-          </div>
-          <div class="col-sm-4">
-            <label class="form-label"> {{ $tc('ledgers.debit') }} </label>
-            <base-input
-              v-model="filters.debit"
-              type="text"
-              name="debit"
-              autocomplete="off"
-            />
-          </div> -->
-          <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('ledgers.balance') }} </label>
+
+          <div class="ledger-filter-field min-w-0">
+            <label class="form-label">{{ $tc('ledgers.balance') }}</label>
             <base-input
               v-model="filters.balance"
               type="text"
@@ -142,7 +128,6 @@
               autocomplete="off"
             />
           </div>
-          <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
     </transition>
@@ -185,106 +170,104 @@
           </v-dropdown>
         </transition>
       </div>
-      <div style="margin-left: 60%;padding-top: 40px;text-transform: uppercase;">{{$t('ledgers.closing_balance')}}</div>
-      <div class="custom-control custom-checkbox">
-        <input
-          id="select-all"
-          v-model="selectAllFieldStatus"
-          type="checkbox"
-          class="custom-control-input"
-          @change="selectAllLedgers"
-        >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
-          <span class="select-all-label">{{ $t('general.select_all') }} </span>
-        </label>
+      <div class="table-component ledgers-table-component">
+        <div class="table-component__table-wrapper">
+          <base-loader v-if="isRequestOngoing" class="table-loader" />
+
+          <table class="table-component__table table ledgers-table">
+            <caption class="table-component__table__caption">
+              {{ $tc('ledgers.ledger', 2) }}
+            </caption>
+            <thead class="table-component__table__head">
+              <tr>
+                <th class="ledgers-selection-column" rowspan="2" scope="col">
+                  <label class="ledgers-select-all-label" for="select-all-ledgers">
+                    <input
+                      id="select-all-ledgers"
+                      v-model="selectAllFieldStatus"
+                      type="checkbox"
+                      class="ledgers-checkbox"
+                      @change="selectAllLedgers"
+                    >
+                    <span>{{ $t('general.select_all') }}</span>
+                  </label>
+                </th>
+                <th rowspan="2" scope="col">{{ $t('ledgers.account') }}</th>
+                <th class="ledgers-balance-heading" colspan="2" scope="colgroup">
+                  {{ $t('ledgers.closing_balance') }}
+                </th>
+                <th class="ledgers-action-column" rowspan="2" scope="col">
+                  <span class="sr-only">{{ $t('ledgers.action') }}</span>
+                </th>
+              </tr>
+              <tr>
+                <th scope="col">{{ $t('ledgers.debit') }}</th>
+                <th scope="col">{{ $t('ledgers.credit') }}</th>
+              </tr>
+            </thead>
+            <tbody class="table-component__table__body">
+              <tr v-for="ledger in ledgers" :key="ledger.id">
+                <td class="ledgers-selection-column">
+                  <input
+                    :id="`ledger-${ledger.id}`"
+                    v-model="selectField"
+                    :value="ledger.id"
+                    :aria-label="`Select ${ledger.account}`"
+                    type="checkbox"
+                    class="ledgers-checkbox"
+                  >
+                </td>
+                <td :data-label="$t('ledgers.account')">
+                  <router-link :to="{ path: `ledgers/${ledger.id}/display` }">
+                    {{ ledger.account }}
+                  </router-link>
+                </td>
+                <td :data-label="$t('ledgers.debit')">
+                  <template v-if="ledger.type === 'Dr'">
+                    <span aria-hidden="true">&#8377;</span> {{ numberWithCommas(ledger.balance) }}
+                  </template>
+                </td>
+                <td :data-label="$t('ledgers.credit')">
+                  <template v-if="ledger.type === 'Cr'">
+                    <span aria-hidden="true">&#8377;</span> {{ numberWithCommas(ledger.balance) }}
+                  </template>
+                </td>
+                <td class="action-dropdown ledgers-action-column">
+                  <v-dropdown :show-arrow="false">
+                    <template #activator>
+                      <button class="table-row-menu" type="button" :aria-label="$t('ledgers.action')">
+                        <dot-icon />
+                      </button>
+                    </template>
+                    <v-dropdown-item>
+                      <router-link :to="{ path: `ledgers/${ledger.id}/display` }" class="dropdown-item">
+                        <font-awesome-icon :icon="['fas', 'eye']" class="dropdown-item-icon" />
+                        {{ $t('general.view') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item>
+                      <button class="dropdown-item" type="button" @click="removeLedgers(ledger.id)">
+                        <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                        {{ $t('general.delete') }}
+                      </button>
+                    </v-dropdown-item>
+                  </v-dropdown>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-if="!ledgers.length && !isRequestOngoing" class="table-component__message">
+          There are no matching rows
+        </div>
+
+        <table-pagination
+          v-if="pagination.totalPages > 1 && !isRequestOngoing"
+          :pagination="pagination"
+          @pageChange="loadLedgers"
+        />
       </div>
-      <table-component
-        ref="table"
-        :data="fetchData"
-        :show-filter="false"
-        table-class="table"
-      >
-
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="no-click"
-        >
-          <template slot-scope="row">
-            <div class="custom-control custom-checkbox">
-              <input
-                :id="row.id"
-                v-model="selectField"
-                :value="row.id"
-                type="checkbox"
-                class="custom-control-input"
-              >
-              <label :for="row.id" class="custom-control-label"/>
-            </div>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('ledgers.account')"
-          show="account"
-        >
-          <template slot-scope="row">
-            <router-link :to="{path: `ledgers/${row.id}/display`}">
-               {{ row.account }}
-              </router-link>
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('ledgers.debit')"
-          show="debit"
-        >
-          <template slot-scope="row" v-if="row.type === 'Dr'">
-            ₹ {{ numberWithCommas(row.balance) }}
-          </template>
-        </table-column>
-        <table-column
-          :label="$t('ledgers.credit')"
-          show="credit"
-        >
-          <template slot-scope="row" v-if="row.type === 'Cr'">
-            ₹ {{ numberWithCommas(row.balance) }}
-          </template>
-        </table-column>
-
-        <!-- <table-column
-          :label="$t('ledgers.closing_balance')"
-          show="balance"
-        >
-          <template slot-scope="row">
-            ₹ {{ row.balance }}
-          </template>
-        </table-column> -->
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-        <template slot-scope="row">
-          <span> {{ $t('ledgers.action') }} </span>
-          <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
-            <v-dropdown-item>
-              <router-link :to="{path: `ledgers/${row.id}/display`}" class="dropdown-item">
-                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.view') }}
-              </router-link>
-            </v-dropdown-item>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeLedgers(row.id)">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </template>
-      </table-column>
-      </table-component>
     </div>
   </div>
 </template>
@@ -301,6 +284,8 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import BaseLoader from '../../components/base/BaseLoader'
+import TablePagination from '../../components/base/base-table/components/Pagination'
 import moment from 'moment'
 import GlobalMixin from '../../helpers/mixins.js';
 export default {
@@ -308,6 +293,8 @@ export default {
     DotIcon,
     SatelliteIcon,
     BaseButton,
+    BaseLoader,
+    TablePagination,
   },
   mixins:[GlobalMixin],
   data () {
@@ -316,6 +303,12 @@ export default {
       showFilters: true,
       sortedBy: 'created_at',
       isRequestOngoing: true,
+      ledgerRequestId: 0,
+      pagination: {
+        totalPages: 0,
+        currentPage: 1,
+        count: 0
+      },
       filtersApplied: false,
       filters: {
         from_date: '',
@@ -364,7 +357,14 @@ export default {
       deep: true
     }
   },
+  mounted() {
+    this.loadLedgers()
+  },
   unmounted() {
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+
     if (this.selectAllField) {
       this.selectAllLedgers()
     }
@@ -379,9 +379,10 @@ export default {
       'setSelectAllState'
     ]),
     refreshTable () {
-      this.$refs.table.refresh()
+      return this.loadLedgers(1)
     },
-    async fetchData ({ page, filter, sort }) {
+    async loadLedgers (page = 1) {
+      const requestId = ++this.ledgerRequestId
       let data = {
         account: this.filters.account !== null ? this.filters.account : '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
@@ -389,20 +390,28 @@ export default {
         credit: this.filters.credit !== null ? this.filters.credit : '',
         debit: this.filters.debit !== null ? this.filters.debit : '',
         balance: this.filters.balance !== null ? this.filters.balance : '',
-        orderByField: sort.fieldName || 'created_at',
-        orderBy: sort.order || 'desc',
+        orderByField: 'created_at',
+        orderBy: 'desc',
         page
       }
 
       this.isRequestOngoing = true
-      let response = await this.fetchLedgers(data)
-      this.isRequestOngoing = false
+      try {
+        const response = await this.fetchLedgers(data)
 
-      return {
-        data: response.data.ledgers.data,
-        pagination: {
-          totalPages: response.data.ledgers.last_page,
-          currentPage: page
+        if (requestId !== this.ledgerRequestId) {
+          return
+        }
+
+        const ledgersPage = response.data.ledgers
+        this.pagination = {
+          totalPages: ledgersPage.last_page,
+          currentPage: ledgersPage.current_page || page,
+          count: this.ledgers.length
+        }
+      } finally {
+        if (requestId === this.ledgerRequestId) {
+          this.isRequestOngoing = false
         }
       }
     },
@@ -460,7 +469,7 @@ export default {
           let res = await this.deleteLedger(this.id)
           if (res.data.success) {
             window.toastr['success'](this.$tc('ledgers.deleted_message', 1))
-            this.$refs.table.refresh()
+            this.refreshTable()
             return true
           }
 
@@ -486,7 +495,7 @@ export default {
           let res = await this.deleteMultipleLedgers()
           if (res.data.success) {
             window.toastr['success'](this.$tc('ledgers.deleted_message', 2))
-            this.$refs.table.refresh()
+            this.refreshTable()
           } else if (res.data.error) {
             window.toastr['error'](res.data.message)
           }

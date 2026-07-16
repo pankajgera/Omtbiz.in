@@ -25,9 +25,11 @@ export default {
   },
 
   [types.DELETE_MULTIPLE_LEDGERS] (state, selectedLedgers) {
-    selectedLedgers.forEach((ledger) => {
-      let index = state.ledgers.findIndex(_ledger => _ledger.id === ledger.id)
-      state.ledgers.splice(index, 1)
+    selectedLedgers.forEach((ledgerId) => {
+      let index = state.ledgers.findIndex(ledger => ledger.id === ledgerId)
+      if (index !== -1) {
+        state.ledgers.splice(index, 1)
+      }
     })
 
     state.selectedLedgers = []
