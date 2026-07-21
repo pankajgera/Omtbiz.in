@@ -103,6 +103,10 @@ export default {
       type: Boolean,
       default: false
     },
+    modelValue: {
+      type: null,
+      default: undefined
+    },
     /**
      * Presets the selected options value.
      * @type {Object||Array||String||Integer}
@@ -340,8 +344,9 @@ export default {
   },
   computed: {
     internalValue () {
-      return this.value || this.value === 0
-        ? Array.isArray(this.value) ? this.value : [this.value]
+      const value = this.modelValue !== undefined ? this.modelValue : this.value
+      return value || value === 0
+        ? Array.isArray(value) ? value : [value]
         : []
     },
     filteredOptions () {
@@ -398,7 +403,7 @@ export default {
       /* istanbul ignore else */
       if (this.resetAfter && this.internalValue.length) {
         this.search = ''
-        this.$emit('input', this.multiple ? [] : null)
+        this.emitInput(this.multiple ? [] : null)
       }
     },
     search () {
@@ -406,6 +411,10 @@ export default {
     }
   },
   methods: {
+    emitInput (value) {
+      this.$emit('update:modelValue', value)
+      this.$emit('input', value, this.id)
+    },
     /**
      * Returns the internalValue in a way it can be emited to the parent
      * @returns {Object||Array||String||Integer}
@@ -536,9 +545,9 @@ export default {
         this.$emit('select', option, this.id)
 
         if (this.multiple) {
-          this.$emit('input', this.internalValue.concat([option]), this.id)
+          this.emitInput(this.internalValue.concat([option]))
         } else {
-          this.$emit('input', option, this.id)
+          this.emitInput(option)
         }
 
         /* istanbul ignore else */
@@ -567,18 +576,14 @@ export default {
           option => group[this.groupValues].indexOf(option) === -1
         )
 
-        this.$emit('input', newValue, this.id)
+        this.emitInput(newValue)
       } else {
         const optionsToAdd = group[this.groupValues].filter(
           option => !(this.isOptionDisabled(option) || this.isSelected(option))
         )
 
         this.$emit('select', optionsToAdd, this.id)
-        this.$emit(
-          'input',
-          this.internalValue.concat(optionsToAdd),
-          this.id
-        )
+        this.emitInput(this.internalValue.concat(optionsToAdd))
       }
     },
     /**
@@ -624,9 +629,9 @@ export default {
       this.$emit('remove', option, this.id)
       if (this.multiple) {
         const newValue = this.internalValue.slice(0, index).concat(this.internalValue.slice(index + 1))
-        this.$emit('input', newValue, this.id)
+        this.emitInput(newValue)
       } else {
-        this.$emit('input', null, this.id)
+        this.emitInput(null)
       }
 
       /* istanbul ignore else */

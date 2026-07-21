@@ -909,7 +909,10 @@
             "date_range": "Select Date Range",
             "ledgers": "Select Ledgers",
             "report_preview": "Customer report preview",
-            "select_ledger_preview": "Select a ledger to preview the report."
+            "select_ledger_preview": "Select a ledger to preview the report.",
+            "update_report_preview": "Click Update Report to generate the preview.",
+            "generating_report": "Generating report preview...",
+            "send_on_whatsapp": "Send on WhatsApp"
         },
         "banks": {
             "banks": "Banks",

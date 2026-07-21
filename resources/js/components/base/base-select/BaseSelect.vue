@@ -77,7 +77,7 @@
           @mousedown.prevent="toggle"
         >
           <slot :option="singleValue" name="singleLabel">
-            <template>{{ currentOptionLabel }}</template>
+            {{ currentOptionLabel }}
           </slot>
         </span>
         <span
@@ -85,8 +85,8 @@
           class="multiselect__single"
           @mousedown.prevent="toggle"
         >
-          <slot :option="value" name="singleLabel">
-            <template>{{ value }}</template>
+          <slot :option="singleValue" name="singleLabel">
+            {{ internalValue.length ? currentOptionLabel : placeholder }}
           </slot>
         </span>
       </span>

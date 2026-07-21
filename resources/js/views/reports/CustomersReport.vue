@@ -7,10 +7,12 @@
           <base-select
             ref="selectedLedger"
             v-model="selectedLedger"
-            :options="ledgersArr.map(i => {return i.account + ' (Group: ' + i.account_master.groups + ')'})"
+            :options="ledgersArr"
+            :custom-label="ledgerLabel"
             :allow-empty="false"
             :show-labels="false"
-            @input="getReports"
+            track-by="id"
+            @input="onLedgerSelected"
           />
           <span v-if="vRange.$error && !vRange.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
@@ -36,7 +38,7 @@
             :invalid="vFormData.from_date.$error"
             :calendar-button="true"
             calendar-button-icon="calendar"
-            @change="vFormData.from_date.$touch()"
+            @change="onDateChanged('from_date')"
           />
           <span v-if="vFormData.from_date.$error && !vFormData.from_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
@@ -47,35 +49,60 @@
             :invalid="vFormData.to_date.$error"
             :calendar-button="true"
             calendar-button-icon="calendar"
-            @change="vFormData.to_date.$touch()"
+            @change="onDateChanged('to_date')"
           />
           <span v-if="vFormData.to_date.$error && !vFormData.to_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
       </div>
       <div class="row report-submit-button-container">
-        <div class="col-md-6">
-          <base-button outline color="theme" class="report-button" @click="getReports()">
+        <div class="col-md-12 report-action-buttons">
+          <base-button
+            :loading="isReportLoading"
+            icon="sync-alt"
+            outline
+            color="theme"
+            class="report-button"
+            @click="getReports()"
+          >
             {{ $t('reports.update_report') }}
           </base-button>
-          <br/>
-          <base-button v-if="selectedLedger" outline color="theme" class="report-button" @click="sendReports()">
-            {{ $t('reports.send_report') }}
+          <base-button
+            v-if="getReportUrl && !isReportLoading"
+            icon="paper-plane"
+            outline
+            color="theme"
+            class="report-button"
+            @click="sendReports()"
+          >
+            {{ $t('reports.customers.send_on_whatsapp') }}
           </base-button>
         </div>
       </div>
     </div>
     <div class="col-sm-8 reports-tab-container report-preview-container">
+      <div v-if="isReportLoading" class="report-preview-empty" role="status" aria-live="polite">
+        <font-awesome-icon icon="spinner" class="report-preview-icon fa-spin"/>
+        <p>{{ $t('reports.customers.generating_report') }}</p>
+      </div>
       <iframe
         v-if="getReportUrl"
+        v-show="!isReportLoading"
+        :key="reportPreviewKey"
         :src="getReportUrl"
         :title="$t('reports.customers.report_preview')"
         class="reports-frame-style"
+        @load="onReportLoaded"
       />
-      <div v-else class="report-preview-empty" role="status">
+      <div v-else-if="!isReportLoading" class="report-preview-empty" role="status">
         <font-awesome-icon icon="file-pdf" class="report-preview-icon"/>
-        <p>{{ $t('reports.customers.select_ledger_preview') }}</p>
+        <p>
+          {{ selectedLedger
+            ? $t('reports.customers.update_report_preview')
+            : $t('reports.customers.select_ledger_preview')
+          }}
+        </p>
       </div>
-      <a v-if="getReportUrl" class="base-button btn btn-primary btn-lg report-view-button" @click="viewReportsPDF">
+      <a v-if="getReportUrl && !isReportLoading" class="base-button btn btn-primary btn-lg report-view-button" @click="viewReportsPDF">
         <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" /> <span>{{ $t('reports.view_pdf') }}</span>
       </a>
     </div>
@@ -113,7 +140,9 @@ export default {
       url: null,
       siteURL: null,
       ledgersArr: [],
-      ledger: '',
+      selectedLedger: null,
+      isReportLoading: false,
+      reportPreviewKey: 0,
       vouchersListArr: [],
     }
   },
@@ -148,18 +177,6 @@ export default {
     ]),
     getReportUrl () {
       return this.url
-    },
-    selectedLedger: {
-      get: function() {
-        return this.ledger
-      },
-      set: function(value) {
-        this.ledger = (value.substring(0, value.indexOf('(Group:'))).trim();
-        // let legder_id = this.ledgersArr.find(i => i.account === value).id
-        // if (legder_id) {
-        //   this.onChangeLedgers(legder_id)
-        // }
-      }
     }
   },
   created() {
@@ -180,6 +197,13 @@ export default {
       'fetchVouchersReport',
       'sendReportOnWhatsApp'
     ]),
+    ledgerLabel (ledger) {
+      return `${ledger.account} (Group: ${ledger.account_master.groups})`
+    },
+    onLedgerSelected (ledger) {
+      this.selectedLedger = ledger
+      this.invalidateReport()
+    },
     getThisDate (type, time) {
       return moment()[type](time).toString()
     },
@@ -241,19 +265,31 @@ export default {
         default:
           break
       }
+      this.invalidateReport()
+    },
+    onDateChanged (field) {
+      this.vFormData[field].$touch()
+      this.setRangeToCustom()
+      this.invalidateReport()
     },
     setRangeToCustom () {
       this.selectedRange = 'Custom'
     },
-    async viewReportsPDF () {
-      let data = await this.getReports()
-      if (!data) {
+    invalidateReport () {
+      this.url = null
+      this.isReportLoading = false
+    },
+    onReportLoaded () {
+      this.isReportLoading = false
+    },
+    viewReportsPDF () {
+      if (!this.getReportUrl) {
         return false
       }
       window.open(this.getReportUrl, '_blank')
-      return data
+      return true
     },
-    async getReports (isDownload = false) {
+    prepareReportUrl () {
       this.vRange.$touch()
       this.vFormData.$touch()
       if (this.selectedRange === 'Till Date') {
@@ -265,20 +301,31 @@ export default {
         return false
       }
 
-      const selectedLedger = this.ledgersArr.find(i => i.account === this.ledger)
-      if (!selectedLedger) {
+      if (!this.selectedLedger) {
         window.toastr['error'](this.$t('reports.customers.select_ledger_preview'))
         return false
       }
 
-      this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${selectedLedger.id}`
-      return true
+      return `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${this.selectedLedger.id}`
     },
-    async downloadReport () {
-      if (!await this.getReports()) {
+    getReports () {
+      const reportUrl = this.prepareReportUrl()
+      if (!reportUrl) {
+        this.isReportLoading = false
         return false
       }
-      window.open(this.getReportUrl + '&download=true')
+
+      this.isReportLoading = true
+      this.reportPreviewKey += 1
+      this.url = reportUrl
+      return true
+    },
+    downloadReport () {
+      const reportUrl = this.prepareReportUrl()
+      if (!reportUrl) {
+        return false
+      }
+      window.open(reportUrl + '&download=true')
       return true
     },
     async loadLedgers () {
@@ -286,7 +333,7 @@ export default {
       this.ledgersArr = response.data.ledgers
     },
     sendReports() {
-      let mobile = this.ledgersArr.find(i => i.account === this.selectedLedger).account_master.mobile_number
+      let mobile = this.selectedLedger.account_master.mobile_number
       if (!mobile) {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
