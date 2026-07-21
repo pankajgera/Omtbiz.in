@@ -2,8 +2,18 @@
 <html lang="en">
 <head>
     <title>Omtbiz</title>
+    <script>
+        (function () {
+            var storedTheme = window.localStorage.getItem('omtbiz-theme');
+            var theme = storedTheme === 'light' || storedTheme === 'dark'
+                ? storedTheme
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+        })();
+    </script>
     <script src="/assets/js/pace.js"></script>
-    <link href="{{mix("/assets/css/omtbiz.css")}}" rel="stylesheet" type="text/css">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
@@ -14,17 +24,19 @@
     <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#f4f6f8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @vite(['resources/js/app.js', 'resources/sass/omtbiz.scss', 'resources/css/tailwind.css'])
 </head>
 <body class="layout-default skin-omtbiz">
 <div id="app" class="template-container">
     <div class="mobile-menu-overlay" @click.prevent="onOverlayClick"></div>
-    <transition name="fade" mode="out-in">
-        <router-view></router-view>
-    </transition>
+    <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+            <component :is="Component"></component>
+        </transition>
+    </router-view>
 </div>
-<script type="text/javascript" src="{{mix('/assets/js/app.js')}}"></script>
 <script type="text/javascript" src="/assets/js/print.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/assets/css/print.min.css">
 <link rel="stylesheet" type="text/css" href="/assets/css/font-poppins.css">

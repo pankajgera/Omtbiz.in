@@ -1,0 +1,997 @@
+<template>
+  <div class="invoice-create-page main-content tw:min-h-screen tw:bg-canvas tw:text-ink">
+    <div class="page-header invoice-page-header tw:mb-6 tw:flex tw:flex-col tw:items-start tw:justify-between tw:gap-4 tw:md:flex-row">
+      <div class="page-heading-copy">
+        <h3 v-if="$route.name === 'invoices.edit'" class="page-title">{{ $t('invoices.edit_invoice') }}</h3>
+        <h3 v-else class="page-title">{{ $t('invoices.new_invoice') }}</h3>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $tc('invoices.invoice', 2) }}</router-link></li>
+          <li v-if="$route.name === 'invoices.edit'" class="breadcrumb-item">{{ $t('invoices.edit_invoice') }}</li>
+          <li v-else class="breadcrumb-item">{{ $t('invoices.new_invoice') }}</li>
+        </ol>
+      </div>
+      <div class="page-actions invoice-view-actions tw:flex tw:w-full tw:flex-wrap tw:gap-2 tw:md:w-auto tw:md:justify-end">
+        <router-link slot="item-title" to="/invoices">
+          <base-button icon="file-alt" color="theme" outline>
+            {{ $t('invoices.title') }}
+          </base-button>
+        </router-link>
+        <router-link slot="item-title" to="/invoices/bulk">
+          <base-button icon="copy" color="theme">
+            {{ $t('invoices.bulk_title') }}
+          </base-button>
+        </router-link>
+      </div>
+    </div>
+    <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width tw:w-full">
+      <section class="row invoice-input-group invoice-details-panel tw:grid tw:grid-cols-1 tw:gap-4 tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:md:grid-cols-2 tw:xl:grid-cols-12" aria-label="Invoice details">
+        <div class="col-md-6 invoice-customer-container mb-2 tw:w-full tw:max-w-none tw:xl:col-span-6">
+          <label class="form-label">{{ $t('invoices.estimate-list') }}</label>
+            <base-select
+              v-model="setEstimate"
+              :options="estimateList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :disabled="isDisabled || estimateDisabled"
+              :placeholder="$t('receipts.select_a_list')"
+              label="estimate_number"
+              track-by="id"
+            />
+        </div>
+        <div class="col-md-6 invoice-customer-container mb-2 tw:w-full tw:max-w-none tw:xl:col-span-6">
+          <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
+            <base-select
+              v-model="setInvoiceDebtor"
+              :invalid="vNewInvoice.debtors.$error"
+              :options="sundryDebtorsList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :name="'edit' === urlMode ? 'party' : 'party_name'"
+              :disabled="isDisabled || estimateSelected"
+              :placeholder="$t('receipts.select_a_list')"
+              label="name"
+              track-by="id"
+            />
+            <div v-if="vNewInvoice.debtors.$error">
+              <span v-if="!vNewInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
+          <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class="text-danger"> * </span></label>
+          <input
+            v-model="newInvoice.invoice_date"
+            type="date"
+            data-date=""
+            data-date-format="DD/MM/YYYY"
+            class="base-prefix-input"
+            @change="vNewInvoice.invoice_date.$touch()"
+            :disabled="isDisabled"
+          />
+          <span v-if="vNewInvoice.invoice_date.$error && !vNewInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+        </div>
+        <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
+          <label>{{ $t('invoices.invoice_number') }}<span class="text-danger"> * </span></label>
+          <base-prefix-input
+            v-model="invoiceNumAttribute"
+            icon="hashtag"
+            :invalid="vInvoiceNumAttribute.$error"
+            :prefix="invoicePrefix"
+            :prefix-width="55"
+            :disabled="true"
+            @input="vInvoiceNumAttribute.$touch()"
+          />
+          <span v-show="vInvoiceNumAttribute.$error && !vInvoiceNumAttribute.required" class="text-danger mt-1"> {{ $tc('validation.required') }}  </span>
+        </div>
+        <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
+          <label>{{ $t('invoices.ref_number') }}</label>
+          <base-prefix-input
+            v-model="referenceNumAttribute"
+            icon="hashtag"
+            :invalid="vReferenceNumAttribute.$error"
+            :prefix="referencePrefix"
+            :prefix-width="55"
+            :disabled="true"
+            @input="vReferenceNumAttribute.$touch()"
+          />
+          <div v-if="vReferenceNumAttribute.$error" class="text-danger">{{ $tc('validation.ref_number_required') }}</div>
+        </div>
+      </section>
+      <section class="invoice-items-panel tw:overflow-hidden tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:shadow-sm" aria-label="Invoice items">
+      <div class="table-responsive invoice-table-scroll tw:w-full tw:overflow-x-auto">
+        <table class="table item-table">
+          <colgroup>
+            <col style="width: 40%;">
+            <col style="width: 10%;">
+            <col style="width: 15%;">
+            <col style="width: 15%;">
+            <col v-if="discountPerInventory === 'YES'" style="width: 15%;">
+            <col style="width: 15%;">
+          </colgroup>
+          <thead class="item-table-header">
+            <tr>
+              <th class="text-left">
+                <span class="column-heading heading-1 item-heading">
+                  {{ $tc('invoices.inventory.title',2) }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.quantity') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.price') }}
+                </span>
+              </th>
+              <th class="text-left">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.sale_price') }}
+                </span>
+              </th>
+              <th v-if="discountPerInventory === 'YES'" class="text-right">
+                <span class="column-heading">
+                  {{ $t('invoices.inventory.discount') }}
+                </span>
+              </th>
+              <th class="text-right">
+                <span class="column-heading amount-heading">
+                  {{ $t('invoices.inventory.amount') }}
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <invoice-inventory
+              v-for="(each, index) in inventoryBind"
+              ref="invoiceInventory"
+              :key="inventoryKey(each, index)"
+              :index="index"
+              :inventory-data="each"
+              :currency="currency"
+              :discount-per-inventory="discountPerInventory"
+              :is-disable="$route.query.d === 'true'"
+              :inventory-type="'invoice'"
+              :inventory-list="inventoryListBind"
+              :inventory-negative="inventoryNegative"
+              :is-edit="$route.name === 'invoices.edit'"
+              @remove="removeInventory"
+              @update="updateInventoryBounce"
+              @inventoryValidate="checkInventoryData"
+              @endlist="showEndList"
+            />
+          </tbody>
+        </table>
+      </div>
+      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item tw:flex tw:min-h-12 tw:w-full tw:items-center tw:justify-center tw:border-0 tw:border-t tw:border-line tw:bg-surface-muted tw:text-accent tw:hover:bg-surface-hover" :disabled="isDisabled" @click="addInventory">
+        <font-awesome-icon icon="shopping-basket" class="mr-2"/>
+        {{ $t('invoices.add_item') }}
+      </button>
+      <button v-if="showEndOfList" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
+        End Of List
+      </button>
+      </section>
+
+      <div class="invoice-foot invoice-summary-grid tw:grid tw:grid-cols-1 tw:items-start tw:gap-4 tw:py-6 tw:xl:grid-cols-[minmax(0,1fr)_minmax(22rem,32rem)] tw:xl:gap-6">
+        <div class="invoice-notes-panel tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:sm:p-5">
+          <label>{{ $t('invoices.notes') }}</label>
+          <base-text-area
+            v-model="newInvoice.notes"
+            rows="3"
+            cols="50"
+            @input="vNewInvoice.notes.$touch()"
+          />
+          <div v-if="vNewInvoice.notes.$error">
+            <span v-if="!vNewInvoice.notes.maxLength" class="text-danger">{{ $t('validation.notes_maxlength') }}</span>
+          </div>
+        </div>
+
+        <div class="invoice-total tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:sm:p-5">
+          <div class="section">
+            <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
+            <label class="">
+              <div v-html="totalQuantity(inventoryBind)" />
+            </label>
+          </div>
+          <div class="section">
+            <label class="invoice-label">{{ $t('invoices.sub_total') }}</label>
+            <label class="invoice-amount">
+              ₹ {{ subtotal }}
+            </label>
+
+          </div>
+          <div class="section" v-if="incomeLedgerList.length">
+            <div class="row align-items-center">
+              <div class="pl-3">
+              <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
+              </div>
+              <div class="pl-3 mr-5">
+                <base-select
+                v-model="income_ledger"
+                :options="incomeLedgerList"
+                :required="'required'"
+                :searchable="true"
+                :show-labels="false"
+                :allow-empty="false"
+                :disabled="isDisabled"
+                :placeholder="$t('receipts.select_a_list')"
+                label="name"
+                track-by="id"
+              />
+              </div>
+
+            </div>
+            <div>
+              <base-input
+                style="width:100px"
+                :disabled="this.income_ledger===null"
+                v-model="income_ledger_value"
+                type="number"
+                min="0"
+                input-class="item-discount"
+              />
+            </div>
+          </div>
+          <div class="section" v-if="expenseLedgerList.length">
+           <div class="row align-items-center">
+            <div class="pl-3 mb-2">
+             <label class="form-label"><strong>{{ $t('invoices.less') }}</strong></label>
+           </div>
+             <div class="pl-3 mb-2 mr-5">
+            <base-select
+              v-model="expense_ledger"
+              :options="expenseLedgerList"
+              :required="'required'"
+              :searchable="true"
+              :show-labels="false"
+              :allow-empty="false"
+              :disabled="isDisabled"
+              :placeholder="$t('receipts.select_a_list')"
+              label="name"
+              track-by="id"
+            />
+        </div>
+           </div>
+           <base-input
+              style="width:100px"
+              :disabled="this.expense_ledger===null"
+              v-model="expense_ledger_value"
+              type="number"
+              min="0"
+              input-class="item-discount"
+              />
+        </div>
+
+          <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
+            <label class="invoice-label">{{ $t('invoices.discount') }}</label>
+            <div
+              class="btn-group discount-drop-down"
+              role="group"
+            >
+              <base-input
+                v-model="discount"
+                :invalid="vNewInvoice.discount_val.$error"
+                input-class="item-discount"
+                @input="vNewInvoice.discount_val.$touch()"
+              />
+              <v-dropdown :show-arrow="false">
+                <button
+                  slot="activator"
+                  type="button"
+                  class="btn item-dropdown dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {{ newInvoice.discount_type == 'fixed' ? currency.symbol : '%' }}
+                </button>
+                <v-dropdown-item>
+                  <a class="dropdown-item" href="#" @click.prevent="selectFixed">
+                    {{ $t('general.fixed') }}
+                  </a>
+                </v-dropdown-item>
+                <v-dropdown-item>
+                  <a class="dropdown-item" href="#" @click.prevent="selectPercentage">
+                    {{ $t('general.percentage') }}
+                  </a>
+                </v-dropdown-item>
+              </v-dropdown>
+            </div>
+          </div>
+
+          <div class="section border-top mt-3">
+            <label class="invoice-label">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>
+            <label class="invoice-amount total">
+              ₹ {{ total }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="invoice-form-actions tw:flex tw:flex-wrap tw:justify-end tw:gap-2 tw:pb-4">
+          <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+            {{ $t('general.view_pdf') }}
+          </a> -->
+          <base-button
+            :loading="isLoading"
+            :disabled="isLoading"
+            icon="save"
+            color="theme"
+            class="invoice-action-btn"
+            type="submit">
+            {{ $t('invoices.save_invoice') }}
+          </base-button>
+          <br/>
+          <base-button v-if="this.$route.name === 'invoices.edit'" outline color="theme" class="report-button ml-2" @click="sendReports()">
+            {{ $t('reports.send_report') }}
+          </base-button>
+        </div>
+    </form>
+    <base-loader v-else />
+  </div>
+</template>
+<script>
+import draggable from 'vuedraggable'
+import MultiSelect from 'vue-multiselect'
+import InvoiceInventory from './Inventory'
+import InvoiceStub from '../../stub/invoice'
+import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
+import { validationMixin } from 'vuelidate'
+import Guid from 'guid'
+import { required, between, maxLength, numeric } from '@vuelidate/validators';
+export default {
+  components: {
+    InvoiceInventory,
+    MultiSelect,
+    draggable
+  },
+  mixins: [validationMixin],
+  data () {
+    return {
+      newInvoice: {
+        invoice_date: null,
+        invoice_number: null,
+        reference_number: null,
+        user_id: null,
+        invoice_template_id: 1,
+        sub_total: null,
+        total: null,
+        notes: null,
+        discount_type: 'fixed',
+        discount_val: 0,
+        discount: 0,
+        inventories: [{
+          ...InvoiceStub,
+        }],
+        debtors: '',
+        estimate: '',
+      },
+      customers: [],
+      inventoryList: [],
+      inventoryNegative: false,
+      invoiceTemplates: [],
+      selectedCurrency: '',
+      discountPerInventory: null,
+      initLoading: false,
+      isLoading: false,
+      estimateDisabled: false,
+      maxDiscount: 0,
+      invoicePrefix: null,
+      referencePrefix: null,
+      invoiceNumAttribute: null,
+      role: this.$store.state.user.currentUser.role,
+      sundryDebtorsList: [], //List of Sundry Debitor name
+      estimateList: [], //List of estimates
+      incomeLedgerList: [], //List of income indirect group ledger
+      expenseLedgerList: [], //List of expense indirect group ledger
+      income_ledger: null,
+      expense_ledger: null,
+      expense_ledger_value: 0,
+      income_ledger_value: 0,
+      isDisabled: false,
+      url: null,
+      siteURL: null,
+      showAddNewInventory: true,
+      showEndOfList: false,
+      estimateSelected: false,
+      urlMode: null,
+    }
+  },
+  validations () {
+    return {
+      newInvoice: {
+        invoice_date: {
+          required
+        },
+        discount_val: {
+          between: between(0, this.subtotal)
+        },
+        notes: {
+          maxLength: maxLength(255)
+        },
+        reference_number: {
+          required,
+        },
+        debtors: {
+          required
+        }
+      },
+      invoiceNumAttribute: {
+        required
+      },
+      referenceNumAttribute: {
+        required
+      }
+    }
+  },
+  computed: {
+    vInvoiceNumAttribute () {
+      return this.$v?.invoiceNumAttribute || { $error: false, required: true, $touch: () => {} }
+    },
+    vReferenceNumAttribute () {
+      return this.$v?.referenceNumAttribute || { $error: false, required: true, $touch: () => {} }
+    },
+    vNewInvoice () {
+      return this.$v?.newInvoice || {
+        $error: false,
+        $invalid: false,
+        $touch: () => {},
+        debtors: { $error: false, required: true, $touch: () => {} },
+        invoice_date: { $error: false, required: true, $touch: () => {} },
+        notes: { $error: false, maxLength: true, $touch: () => {} },
+        discount_val: { $error: false, $touch: () => {} },
+        reference_number: { $error: false, required: true, $touch: () => {} }
+      }
+    },
+    ...mapGetters('currency', [
+      'defaultCurrency'
+    ]),
+    ...mapGetters('invoice', [
+      'getTemplateId',
+      //'selectedCustomer'
+    ]),
+    ...mapGetters('user', {
+      user: 'currentUser'
+    }),
+    currency () {
+      return this.selectedCurrency
+    },
+    subtotalWithDiscount () {
+      if (this.newInvoice.discount_val) {
+        return this.subtotal - this.newInvoice.discount_val
+      }
+      if (this.income_ledger_value && !this.expense_ledger_value) {
+        return  this.subtotal + parseInt(this.income_ledger_value)
+      }
+      if (!this.income_ledger_value && this.expense_ledger_value) {
+        return  this.subtotal - parseInt(this.expense_ledger_value)
+      }
+      if (this.income_ledger_value && this.expense_ledger_value) {
+        return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)
+      }
+      return this.subtotal
+    },
+    total () {
+      return this.subtotalWithDiscount
+    },
+    subtotal () {
+      let inventory = this.newInvoice.inventories;
+      if (inventory.length) {
+        return inventory.reduce(function (a, b) {
+                return a + b['total']
+              }, 0)
+      }
+
+      return 0
+    },
+    discount: {
+      get: function () {
+        return this.newInvoice.discount
+      },
+      set: function (newValue) {
+        if (this.newInvoice.discount_type === 'percentage') {
+          this.newInvoice.discount_val = (this.subtotal * newValue)
+        } else {
+          this.newInvoice.discount_val = newValue
+        }
+        this.newInvoice.discount = newValue
+      }
+    },
+    setInvoiceDebtor: {
+      cache: false,
+      get() {
+        return this.newInvoice.debtors
+      },
+      set(value) {
+        this.searchDebtorRefNumber({
+          id: value && value.id ? value.id : value,
+          invoice_date: this.newInvoice.invoice_date
+        })
+        this.newInvoice.debtors = value
+      },
+    },
+    setEstimate: {
+      cache: false,
+      get() {
+        return this.newInvoice.estimate
+      },
+      set(value) {
+        this.estimateSelected = true
+        this.newInvoice.estimate = value
+        this.getInvoiceFromEstimate()
+      }
+    },
+    inventoryBind() {
+      return this.newInvoice.inventories
+    },
+    inventoryListBind() {
+      return this.$store.state.inventory.inventories
+    },
+    referenceNumAttribute: {
+      cache: false,
+      get() {
+        if (this.newInvoice.reference_number && -1 !== this.newInvoice.reference_number.indexOf('-')) {
+          return this.newInvoice.reference_number.split('-')[2]
+        }
+        return this.newInvoice.reference_number
+      },
+      set(value) {
+        this.newInvoice.reference_number = value;
+      }
+    }
+  },
+  watch: {
+    subtotal (newValue) {
+      if (this.newInvoice.discount_type === 'percentage') {
+        this.newInvoice.discount_val = (this.newInvoice.discount * newValue)
+      }
+    },
+    'newInvoice.invoice_date' () {
+      if (this.newInvoice.debtors && this.$route.name !== 'invoices.edit') {
+        this.searchDebtorRefNumber({
+          id: this.newInvoice.debtors.id ? this.newInvoice.debtors.id : this.newInvoice.debtors,
+          invoice_date: this.newInvoice.invoice_date
+        })
+      }
+    }
+  },
+  mounted() {
+    this.urlMode = window.location.pathname.split('/')[3];
+  },
+  created () {
+    this.loadData()
+    this.fetchInitialInventory()
+    this.updateInventoryBounce = _.debounce((data) => {
+      this.updateInventory(data);
+    }, 500);
+  },
+  methods: {
+    ...mapActions('modal', [
+      'openModal'
+    ]),
+    ...mapActions('invoice', [
+      'addInvoice',
+      'fetchCreateInvoice',
+      'getInvoiceEstimate',
+      'fetchInvoice',
+      'updateInvoice',
+      'fetchReferenceNumber',
+    ]),
+    ...mapActions('customer', [
+      'sendReportOnWhatsApp'
+    ]),
+    ...mapActions('inventory', [
+      'fetchAllInventory'
+    ]),
+    totalQuantity(inventory){
+      if (inventory.length) {
+        let invent = 0
+        inventory.forEach((i) => {
+          if (i.quantity) {
+            invent += i.quantity
+          }
+        });
+        return invent;
+      }
+      return 0
+    },
+    getUrlParameters() {
+      return decodeURI(window.location.search)
+          .replace('?', '')
+          .split('&')
+          .map(param => param.split('='))
+          .reduce((values, [key, value]) => {
+              values[key] = value;
+              return values;
+          }, {});
+    },
+    selectFixed () {
+      if (this.newInvoice.discount_type === 'fixed') {
+        return
+      }
+      this.newInvoice.discount_val = this.newInvoice.discount
+      this.newInvoice.discount_type = 'fixed'
+    },
+    selectPercentage () {
+      if (this.newInvoice.discount_type === 'percentage') {
+        return
+      }
+      this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount)
+      this.newInvoice.discount_type = 'percentage'
+    },
+    async fetchInitialInventory () {
+      await this.fetchAllInventory({
+        limit: 50,
+        filter: {},
+        name: '',
+        orderByField: '',
+        orderBy: ''
+      }).then(resp => {
+        this.inventoryList = resp.data.inventories.data
+      })
+    },
+    async loadData () {
+      if (this.$route.name === 'invoices.edit') {
+        this.initLoading = true
+        this.estimateDisabled = true
+        let response = await this.fetchInvoice(this.$route.params.id)
+        if (this.$route.query && this.$route.query.nondis === 'false') {
+          this.isDisabled = true
+        } else {
+          this.isDisabled = false
+        }
+        if (response.data) {
+          this.newInvoice = response.data.invoice
+          this.inventoryNegative = response.data.inventory_negative
+          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')
+          this.discountPerInventory = response.data.discount_per_inventory
+          this.selectedCurrency = this.defaultCurrency
+          this.invoiceTemplates = response.data.invoiceTemplates
+          this.invoicePrefix = response.data.invoice_prefix
+          this.referencePrefix = response.data.reference_prefix
+          this.invoiceNumAttribute = response.data.invoiceNumber
+          this.newInvoice.debtors = response.data.sundryDebtorsList[0]
+          this.sundryDebtorsList = response.data.sundryDebtorsList
+          this.incomeLedgerList = response.data.incomeIndirectLedgers
+          this.expenseLedgerList = response.data.expenseIndirectLedgers
+          if(response.data.InvoiceEstimate.length) {
+            this.newInvoice.estimate = response.data.InvoiceEstimate[0]
+          }
+          this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null
+          this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null
+          this.income_ledger_value = response.data.invoice.indirect_income_value ? response.data.invoice.indirect_income_value : 0
+          this.expense_ledger_value = response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0
+          response.data.estimateList.map(i => {
+            let obj = {}
+            let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
+            obj['id'] = i.id;
+            obj['total'] = i.total;
+            obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');
+
+            this.estimateList.push(obj)
+          })
+        }
+        this.initLoading = false
+        return
+      }
+
+      this.initLoading = true
+      let response = await this.fetchCreateInvoice()
+      if (response.data) {
+        this.discountPerInventory = response.data.discount_per_inventory
+        this.selectedCurrency = this.defaultCurrency
+        this.invoiceTemplates = response.data.invoiceTemplates
+        this.newInvoice.invoice_date = response.data.invoice_today_date
+        this.inventoryNegative = response.data.inventory_negative
+        this.invoicePrefix = response.data.invoice_prefix
+        this.referencePrefix = response.data.reference_prefix
+        this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute
+        this.sundryDebtorsList = response.data.sundryDebtorsList
+        this.incomeLedgerList = response.data.incomeIndirectLedgers
+        this.expenseLedgerList = response.data.expenseIndirectLedgers
+
+        response.data.estimateList.map(i => {
+          let obj = {}
+          let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);
+          obj['id'] = i.id;
+          obj['total'] = i.total;
+          obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');
+
+          this.estimateList.push(obj)
+        })
+
+        // set estimate
+        let params = this.getUrlParameters();
+        if(params['id']) {
+          let estimate  = this.estimateList.find(node => node.id===Number(params['id']));
+          this.newInvoice.estimate = estimate;
+          this.estimateSelected = true;
+          this.getInvoiceFromEstimate(Number(params['id']))
+        }
+      }
+      this.initLoading = false
+    },
+    openTemplateModal () {
+      this.openModal({
+        'title': this.$t('general.choose_template'),
+        'componentName': 'InvoiceTemplate',
+        'data': this.invoiceTemplates
+      })
+    },
+    addInventory () {
+      this.inventoryBind.push({...InvoiceStub})
+      this.$nextTick(() => {
+        this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()
+        this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
+      })
+    },
+    removeInventory (index) {
+      this.inventoryBind.splice(index, 1)
+      this.inventoryBind.filter(i => i).map((each, key) => {
+        each['index'] = key
+        this.updateInventory(each)
+      })
+    },
+    updateInventory (data) {
+      if (data.inventory && !data.inventory.inventory_id) {
+        return false
+      }
+      Object.assign(this.inventoryBind[data.index], {...data.inventory})
+      this.$nextTick(() => {
+        this.$refs.invoiceInventory[data.index].$el.focus()
+        if (data.updatingInput === 'sale_price') {
+          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()
+        }
+        if (data.updatingInput === 'quantity') {
+          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
+        }
+      })
+    },
+    async validateInventoryQuantity() {
+      let valid = true;
+      this.newInvoice.inventories.map(selectedItem => {
+        let findItem = this.inventoryList.find(i =>
+            i.name === selectedItem.name &&
+            parseInt(i.price) === parseInt(selectedItem.price)
+          );
+        if (!findItem) {
+          return;
+        }
+        let maxQuantityAvailable = parseInt(findItem.quantity);
+        if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {
+          swal({
+            title: this.$t('invoices.out_of_stock'),
+            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantityAvailable}),
+            icon: '/assets/icon/check-circle-solid.svg',
+            buttons: true,
+            dangerMode: true
+          }).then(async (success) => {
+            if (success) {
+              window.open('/inventory/' + selectedItem.inventory_id + '/edit', '_blank').focus()
+            }
+          })
+          valid = false
+        }
+      })
+      return valid
+    },
+    async submitInvoiceData () {
+      let validQuantity = await this.validateInventoryQuantity();
+      if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {
+        return false
+      }
+      this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
+      this.newInvoice.reference_number = this.referencePrefix + '-' + this.newInvoice.reference_number
+
+        // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
+        // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
+      let data = {
+        ...this.newInvoice,
+        invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
+        sub_total: this.subtotal,
+        total: this.total,
+        user_id: this.user.id,
+        income_ledger: this.income_ledger,
+        income_ledger_value: this.income_ledger_value ? this.income_ledger_value : 0,
+        expense_ledger:  this.expense_ledger,
+        expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,
+        invoice_template_id: this.getTemplateId,
+      }
+
+      if (this.$route.name === 'invoices.edit') {
+        this.submitUpdate(data)
+        return
+      }
+
+      this.submitSave(data)
+    },
+    reset() {
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
+    },
+    printInvoice(invoice_id) {
+      //print invoice
+      this.siteURL = `/reports/invoice/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          this.reset();
+          // this.printSlip(invoice_id)
+        }
+      })
+    },
+    printSlip(invoice_id) {
+      //print slip
+      this.siteURL = `/reports/slip/${invoice_id}`
+      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      printJS({
+        printable: this.url,
+        type: 'pdf',
+        onPrintDialogClose: () => {
+          this.reset();
+        }
+      })
+    },
+    async showInvoicePopup (invoice_id) {
+      swal({
+        title: this.$t('invoices.invoice_report_title'),
+        text: this.$t('invoices.invoice_report_text'),
+        icon: '/assets/icon/check-circle-solid.svg',
+        buttons: true,
+        dangerMode: false
+      }).then(async (success) => {
+        if (success) {
+          this.printInvoice(invoice_id)
+        } else {
+          this.reset()
+        }
+      })
+    },
+    submitSave (data) {
+      if (this.isLoading) {
+        return false
+      }
+      this.isLoading = true
+      this.addInvoice(data).then((res) => {
+        if (res.data) {
+          window.toastr['success'](this.$t('invoices.created_message'))
+          //this.$router.push('/invoices/create')
+          this.showInvoicePopup(res.data.invoice.id)
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        if (err) {
+          window.toastr['error'](err)
+          return true
+        }
+      })
+    },
+    submitUpdate (data) {
+      if (this.isLoading) {
+        return false
+      }
+      this.isLoading = true
+      this.updateInvoice(data).then((res) => {
+        if (res.data.success) {
+          window.toastr['success'](this.$t('invoices.updated_message'))
+          this.isLoading = false
+          this.showInvoicePopup(res.data.invoice.id)
+        }
+
+        if (res.data.error === 'invalid_due_amount') {
+          this.isLoading = false
+          window.toastr['error'](this.$t('invoices.invalid_due_amount_message'))
+        }
+      }).catch((err) => {
+        this.isLoading = false
+        if (err) {
+          window.toastr['error'](err)
+          return true
+        }
+      })
+    },
+    checkInventoryData (index, isValid) {
+      this.newInvoice.inventories[index].valid = isValid
+    },
+    checkValid () {
+      this.vNewInvoice.$touch()
+      window.hub.$emit('checkInventory')
+      let isValid = true
+      this.newInvoice.inventories.forEach((each) => {
+        if (!each.valid) {
+          isValid = false
+        }
+      })
+      if (this.vNewInvoice.$invalid === false && isValid === true) {
+        isValid = true
+      }
+      return isValid
+    },
+    async searchDebtorRefNumber(data) {
+      this.newInvoice.reference_number = this.invoiceNumAttribute
+      try {
+        let response = await this.fetchReferenceNumber({
+          ...data,
+          invoice_date: data.invoice_date ? data.invoice_date : this.newInvoice.invoice_date
+        })
+        if (response.data && response.data.invoice) {
+          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-').pop()
+        }
+      } catch (err) {
+        this.newInvoice.reference_number = this.invoiceNumAttribute
+      }
+    },
+    showEndList(val) {
+      this.showAddNewInventory = !val;
+      this.showEndOfList = val;
+      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);
+    },
+    removeEndOfList() {
+      this.showEndOfList = false;
+      this.showAddNewInventory = true;
+    },
+    async getInvoiceFromEstimate(id) {
+      let resp = await this.getInvoiceEstimate(id ? id :this.newInvoice.estimate.id)
+      let invoice = resp.data.estimate
+      let inventory = invoice.items.map(i => {
+        i.sale_price = i.sale_price ? i.sale_price : i.price
+        i.sub_total = i.total
+        return i
+      })
+
+      //set invoice data
+      this.newInvoice = {
+        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),
+        invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
+        reference_number: this.referencePrefix + '-' + this.invoiceNumAttribute,
+        user_id: invoice.user_id,
+        invoice_template_id: 1,
+        sub_total: invoice.sub_total,
+        total: invoice.total,
+        notes: invoice.notes,
+        discount_type: 'fixed',
+        discount_val: 0,
+        discount: 0,
+        inventories: inventory,
+        debtors: this.sundryDebtorsList.find(i => i.id === invoice.account_master_id),
+        estimate: this.newInvoice.estimate
+      };
+
+      //set reference number
+      this.searchDebtorRefNumber({
+        id: invoice.account_master_id,
+        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD')
+      })
+    },
+    sendReports() {
+      this.isLoading = true
+      this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`
+      let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;
+      if (!mobile) {
+        window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
+        return
+      }
+
+      let fileName = 'Invoice-' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');
+      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
+      .then((val) => {
+        setTimeout(() => {
+          this.isLoading = false
+          window.location.reload()
+        }, 2000)
+      })
+    }
+    ,
+    inventoryKey (item, index) {
+      return item.id || item.inventory_id || item.name || index
+    }
+  }
+}
+</script>

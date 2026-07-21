@@ -13,8 +13,6 @@ class MakeNameUniqueToAccountMasters extends Migration
      */
     public function up()
     {
-        Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
         Schema::table('account_masters', function (Blueprint $table) {
             $table->string('name')->unique()->change();
         });
