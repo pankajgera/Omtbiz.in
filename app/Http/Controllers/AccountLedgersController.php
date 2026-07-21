@@ -20,49 +20,34 @@ class AccountLedgersController extends Controller
     {
         $limit = $request->has('limit') ? $request->limit : 20;
 
-        $ledgers = AccountLedger::applyFilters($request->only([
-            'from_date',
-            'to_date',
-            'account',
-            'debit',
-            'credit',
-            'balance',
-        ]))
+        $ledgers = AccountLedger::with('accountMaster')
+            ->applyFilters($request->only([
+                'from_date',
+                'to_date',
+                'account',
+                'debit',
+                'credit',
+                'balance',
+            ]))
             ->whereCompany($request->header('company'))
             ->orderBy('account', 'asc')
             ->latest()
             ->paginate($limit);
 
+        $ledgerIds = $ledgers->pluck('id');
+
+        //Update balance according to 'debit' or 'credit', summed per ledger in a single query
+        $voucherSums = Voucher::whereIn('account_ledger_id', $ledgerIds)
+            ->visibleOutsideApproval()
+            ->selectRaw('account_ledger_id, SUM(debit) as debit_sum, SUM(credit) as credit_sum')
+            ->groupBy('account_ledger_id')
+            ->get()
+            ->keyBy('account_ledger_id');
 
         foreach ($ledgers as $ledger) {
-            $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
-                ->whereCompany($request->header('company'))
-                ->visibleOutsideApproval()
-                ->whereNotNull('related_voucher')
-                ->get();
-            $each_ids = null;
-            foreach ($all_voucher_ids as $each) {
-                if ($each_ids) {
-                    $each_ids = $each_ids . ', ' . $each->related_voucher;
-                } else {
-                    $each_ids = $each->related_voucher;
-                }
-            }
-            $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-            $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
-                ->where('account_ledger_id', '!=', $ledger->id)
-                ->whereCompany($request->header('company'))
-                ->visibleOutsideApproval()
-                ->orderBy('date', 'desc')
-                ->get();
-            //Update balance according to 'debit' or 'credit'
-            $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)
-                ->visibleOutsideApproval()
-                ->get();
-
-            $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
-
-            $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+            $sum = $voucherSums->get($ledger->id);
+            $vouchers_debit_sum = $sum ? (float) $sum->debit_sum : 0;
+            $vouchers_credit_sum = $sum ? (float) $sum->credit_sum : 0;
             $opening_balance = $ledger->accountMaster->opening_balance;
             $calc_balance = $ledger->balance;
             $calc_type = $ledger->type;
@@ -107,12 +92,6 @@ class AccountLedgersController extends Controller
                 'debit' => $vouchers_debit_sum,
                 'balance' => $calc_balance,
             ]);
-
-            //Extra's for vouchers collection
-            foreach ($related_vouchers as $each) {
-                $each['voucher_type'] = 'Journal';
-                $each['particulars'] = $each->account;
-            }
         }
 
         return response()->json([
@@ -285,16 +264,26 @@ class AccountLedgersController extends Controller
             ->groupBy('account_ledger_id')
             ->get();
 
+        $ledgerIds = $all_voucher_ids->pluck('account_ledger_id');
+
+        $lotCounts = Voucher::whereIn('account_ledger_id', $ledgerIds)
+            ->where('date', Carbon::now()->format('Y-m-d'))
+            ->whereNotNull('invoice_id')
+            ->visibleOutsideApproval()
+            ->selectRaw('account_ledger_id, COUNT(*) as lot_count')
+            ->groupBy('account_ledger_id')
+            ->get()
+            ->keyBy('account_ledger_id');
+
+        $invoiceIds = $all_voucher_ids->pluck('invoice_id')->filter()->unique();
+        $invoices = Invoice::whereIn('id', $invoiceIds)->get()->keyBy('id');
+
         $ledgers = [];
         foreach ($all_voucher_ids as $each) {
-            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)
-                ->where('date', Carbon::now()->format('Y-m-d'))
-                ->whereNotNull('invoice_id')
-                ->visibleOutsideApproval()
-                ->count();
-            $each['lot'] = $lot;
+            $lot = $lotCounts->get($each->account_ledger_id);
+            $each['lot'] = $lot ? $lot->lot_count : 0;
             $each['party'] = $each->account;
-            $invoice = $each->invoice_id ? Invoice::find($each->invoice_id) : null;
+            $invoice = $each->invoice_id ? $invoices->get($each->invoice_id) : null;
             $each['reference_number'] = $invoice ? $invoice->reference_number : null;
             array_push($ledgers, $each);
         }
