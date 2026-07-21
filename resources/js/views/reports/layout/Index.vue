@@ -65,17 +65,18 @@ export default {
   },
   methods: {
     onDownload () {
-      if (this.$refs.report && this.$refs.report.$children[0] && this.$refs.report.$children[0].$el.children[1].innerText) {
-        this.$refs.report.downloadReport()
-      } else {
-        swal({
-          title: 'Missing ledger',
-          text: 'Please select a ledger first',
-          icon: '/assets/icon/times-circle-solid.svg',
-          buttons: true,
-          dangerMode: false
-        })
+      const activeReport = this.$refs.report
+      if (activeReport && typeof activeReport.downloadReport === 'function' && activeReport.downloadReport()) {
+        return
       }
+
+      swal({
+        title: 'Report not ready',
+        text: 'Click Update Report and wait for the preview before downloading.',
+        icon: '/assets/icon/times-circle-solid.svg',
+        buttons: true,
+        dangerMode: false
+      })
     }
   }
 

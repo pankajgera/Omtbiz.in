@@ -321,11 +321,16 @@ export default {
       return true
     },
     downloadReport () {
-      const reportUrl = this.prepareReportUrl()
-      if (!reportUrl) {
+      if (!this.getReportUrl || this.isReportLoading) {
         return false
       }
-      window.open(reportUrl + '&download=true')
+
+      const downloadLink = document.createElement('a')
+      downloadLink.href = this.getReportUrl + '&download=true'
+      downloadLink.download = ''
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      downloadLink.remove()
       return true
     },
     async loadLedgers () {
