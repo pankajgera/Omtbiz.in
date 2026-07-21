@@ -25,7 +25,7 @@
                   :allow-empty="true"
                   :disabled="isEdit"
                   :custom-label="invoiceWithAmount"
-                  track-by="invoice_number"
+                  track-by="id"
                   class="multi-select-item"
                   @select="addInvoice"
                   @remove="removeInvoice"
@@ -215,7 +215,7 @@ export default {
     },
     removeInvoice (value) {
       let index = this.formData.invoice_id.findIndex(each => each === value.id)
-      if (index) {
+      if (index !== -1) {
         this.formData.invoice_id.splice(index, 1)
       }
     },
