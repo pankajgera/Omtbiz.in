@@ -54,6 +54,10 @@
         </v-dropdown-item>
         </v-dropdown>
       </li>
+      <li v-if="currentUser" class="user-info">
+        <span class="user-name">{{ currentUser.name }}</span>
+        <span class="user-role">{{ currentUser.role }}</span>
+      </li>
       <li>
         <v-dropdown :show-arrow="false">
           <a
@@ -97,9 +101,12 @@ export default {
     profilePicture () {
       return '/images/default-avatar.jpg'
     },
+    currentUser() {
+      return this.$store.state.user.currentUser
+    },
     role() {
-      return this.$store.state.user.currentUser.role
-    }, 
+      return this.currentUser ? this.currentUser.role : ''
+    },
     listNotifications() {
       let array = this.$store.state.userProfile.notifications;
       if(array) {
@@ -133,6 +140,31 @@ export default {
 }
 </script>
 <style>
+.user-info {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: flex-end !important;
+  float: left !important;
+  height: 36px !important;
+  padding: 0 !important;
+  margin-left: 14px !important;
+  margin-right: 0 !important;
+  line-height: 1.3 !important;
+  background-color: transparent !important;
+}
+.user-info .user-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+.user-info .user-role {
+  display: block;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  text-transform: capitalize;
+}
 .notifications .dropdown-group .dropdown-container {
   min-width: 23rem !important;
 }
