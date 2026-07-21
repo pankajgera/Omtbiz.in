@@ -215,7 +215,7 @@ export default {
     },
     removeInvoice (value) {
       let index = this.formData.invoice_id.findIndex(each => each === value.id)
-      if (index) {
+      if (index !== -1) {
         this.formData.invoice_id.splice(index, 1)
       }
     },

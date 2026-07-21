@@ -20,7 +20,16 @@ class Dispatch extends Model
     public function scopeWhereName($query, $name)
     {
         $invoices = Invoice::where('account_master_id', $name)->pluck('id')->toArray();
-        return $query->whereIn('invoice_id', $invoices);
+        if (! count($invoices)) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        // invoice_id can be a comma-separated list for multi-parcel dispatches
+        return $query->where(function ($q) use ($invoices) {
+            foreach ($invoices as $invoiceId) {
+                $q->orWhereRaw('FIND_IN_SET(?, REPLACE(invoice_id, " ", ""))', [(string) $invoiceId]);
+            }
+        });
     }
 
     public function scopeWhereDesignNo($query, $date_time)
@@ -32,7 +41,7 @@ class Dispatch extends Model
     {
         return $query->whereBetween(
             'date_time',
-            [$start->format('Y-m-d'), $end->format('Y-m-d')]
+            [$start->copy()->startOfDay()->format('Y-m-d H:i:s'), $end->copy()->endOfDay()->format('Y-m-d H:i:s')]
         );
     }
     public function scopeWhereAverage($query, $transport)
@@ -48,8 +57,12 @@ class Dispatch extends Model
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
         $query->where('company_id', $company_id);
-        if ($filter==='false') {
-            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
+        // Default list (no filters) shows today's dispatches in Asia/Kolkata
+        if ($filter === 'false' || $filter === false || $filter === 0 || $filter === '0') {
+            $query->where(
+                DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"),
+                Carbon::now('Asia/Kolkata')->format('Y-m-d')
+            );
         }
     }
 
@@ -110,15 +123,19 @@ class Dispatch extends Model
         //Selected dispatch might have multiple invoices
         $same_invoice_dispatch = Dispatch::whereIn('invoice_id', [Dispatch::where('id', $id)->value('invoice_id')])->get();
         foreach ($same_invoice_dispatch as $dispatch) {
-            if (false === strpos($dispatch->invoice_id, ',')) {
-                $invoices = Invoice::whereIn('id', explode(',', $dispatch->invoice_id))->get();
-            } else {
-                $invoices = Invoice::where('id', $dispatch->invoice_id)->get();
-            }
+            $invoiceIds = array_filter(array_map('trim', explode(',', (string) $dispatch->invoice_id)));
+            $invoices = Invoice::whereIn('id', $invoiceIds)->get();
+
             if ('Sent' === $dispatch->status) {
                 $dispatch->update([
                     'status' => 'Draft',
                 ]);
+                foreach ($invoices as $invoice) {
+                    $invoice->update([
+                        'status' => 'TO_BE_DISPATCH',
+                        'paid_status' => 'TO_BE_DISPATCH',
+                    ]);
+                }
                 self::removeDispatchBillTy($dispatch);
                 continue;
             }
@@ -134,6 +151,11 @@ class Dispatch extends Model
                         ]);
                     }
                 }
+                $each->update([
+                    'dispatch_id' => $dispatch->id,
+                    'paid_status' => 'DISPATCHED',
+                    'status' => 'COMPLETED',
+                ]);
             }
 
             $dispatch->update([
@@ -146,7 +168,9 @@ class Dispatch extends Model
             }
         }
         //Add bill-ty for multiple dispatch (invoice)
-        if (false !== strpos($same_invoice_dispatch->first()->invoice_id, ',')) {
+        if ($same_invoice_dispatch->isNotEmpty() && false !== strpos($same_invoice_dispatch->first()->invoice_id, ',')) {
+            $invoiceIds = array_filter(array_map('trim', explode(',', (string) $same_invoice_dispatch->first()->invoice_id)));
+            $invoices = Invoice::whereIn('id', $invoiceIds)->get();
             self::addDispatchBillTy($same_invoice_dispatch->first(), $invoices->sum('total'), $company_id, $same_invoice_dispatch->pluck('id')->toArray());
         }
         return true;
