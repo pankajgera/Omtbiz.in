@@ -86,7 +86,7 @@
       </div>
     </div>
 
-    <div v-if="!showEmptyScreen">
+    <div v-show="showTableScreen">
       <h4>Pending Bill-Ty</h4>
       <div class="table-container">
         <div class="table-actions mt-5">
@@ -373,7 +373,11 @@ export default {
       ],
       showFilters: false,
       sortedBy: 'created_at',
-      isRequestOngoing: true,
+      activeRequestCount: 0,
+      initialLoadsCompleted: {
+        pending: false,
+        completed: false
+      },
       filtersApplied: false,
       filters: {
         name: '',
@@ -405,7 +409,16 @@ export default {
       'defaultCurrency'
     ]),
     showEmptyScreen () {
-      return !this.isRequestOngoing && !this.filtersApplied && (!(this.totalItems + this.totalItemsToBe))
+      return this.isInitialLoadComplete && !this.filtersApplied && (!(this.totalItems + this.totalItemsToBe))
+    },
+    showTableScreen () {
+      return this.isInitialLoadComplete && !this.showEmptyScreen
+    },
+    isInitialLoadComplete () {
+      return this.initialLoadsCompleted.pending && this.initialLoadsCompleted.completed
+    },
+    isRequestOngoing () {
+      return this.activeRequestCount > 0
     },
     filterIcon () {
       return (this.showFilters) ? 'times' : 'filter'
@@ -484,16 +497,20 @@ export default {
         page
       }
 
-      this.isRequestOngoing = true
-      let response = await this.fetchItems(data)
-      this.isRequestOngoing = false
-       this.sundryDebtorsList = response.data.sundryDebtorsList;
-      return {
-        data: response.data.items.data,
-        pagination: {
-          totalPages: response.data.items.last_page,
-          currentPage: page
+      this.activeRequestCount += 1
+      try {
+        let response = await this.fetchItems(data)
+        this.sundryDebtorsList = response.data.sundryDebtorsList
+        return {
+          data: response.data.items.data,
+          pagination: {
+            totalPages: response.data.items.last_page,
+            currentPage: page
+          }
         }
+      } finally {
+        this.activeRequestCount -= 1
+        this.initialLoadsCompleted.completed = true
       }
     },
     async fetchDataToBe ({ page, filter, sort }) {
@@ -507,16 +524,20 @@ export default {
         page
       }
 
-      this.isRequestOngoing = true
-      let response = await this.fetchItems(data)
-      this.isRequestOngoing = false
-      this.sundryDebtorsList = response.data.sundryDebtorsList;
-      return {
-        data: response.data.itemsToBe.data,
-        pagination: {
-          totalPages: response.data.itemsToBe.last_page,
-          currentPage: page
+      this.activeRequestCount += 1
+      try {
+        let response = await this.fetchItems(data)
+        this.sundryDebtorsList = response.data.sundryDebtorsList
+        return {
+          data: response.data.itemsToBe.data,
+          pagination: {
+            totalPages: response.data.itemsToBe.last_page,
+            currentPage: page
+          }
         }
+      } finally {
+        this.activeRequestCount -= 1
+        this.initialLoadsCompleted.pending = true
       }
     },
     setFilters () {
