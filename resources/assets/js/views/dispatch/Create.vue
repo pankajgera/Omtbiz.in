@@ -25,7 +25,7 @@
                   :allow-empty="true"
                   :disabled="isEdit"
                   :custom-label="invoiceWithAmount"
-                  track-by="invoice_number"
+                  track-by="id"
                   class="multi-select-item"
                   @select="addInvoice"
                   @remove="removeInvoice"
