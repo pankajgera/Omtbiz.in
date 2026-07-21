@@ -15,7 +15,7 @@ class DispatchController extends Controller
 {
     public function index(Request $request)
     {
-        $limit = $request->has('limit') ? $request->limit : 20;
+        $limit = $request->has('limit') ? $request->limit : 100;
 
         $dispatch_inprogress = Dispatch::where('status', 'Draft')->applyFilters($request->only([
             'name',
@@ -32,7 +32,8 @@ class DispatchController extends Controller
             ->paginate($limit);
 
         foreach ($dispatch_inprogress as $inprogress) {
-            $inprogress['invoices'] =  Invoice::whereIn('id', explode(',', $inprogress['invoice_id']))->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            $invoiceIds = array_filter(array_map('trim', explode(',', (string) $inprogress['invoice_id'])));
+            $inprogress['invoices'] = Invoice::whereIn('id', $invoiceIds)->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
             foreach ($inprogress['invoices'] as $each) {
                 $inprogress['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
             }
@@ -52,7 +53,8 @@ class DispatchController extends Controller
             ->paginate($limit);
 
         foreach ($dispatch_completed as $processed) {
-            $processed['invoices'] =  Invoice::whereIn('id', explode(',', $processed['invoice_id']))->with('master')->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            $invoiceIds = array_filter(array_map('trim', explode(',', (string) $processed['invoice_id'])));
+            $processed['invoices'] = Invoice::whereIn('id', $invoiceIds)->with('master')->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
             foreach ($processed['invoices'] as $each) {
                 $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
             }
@@ -117,30 +119,26 @@ class DispatchController extends Controller
             }
             $date = Carbon::createFromFormat($date_format, $request->date_time);
             $date->setTimeZone('Asia/Kolkata');
+            $invoiceIds = array_values(array_unique(array_map('intval', (array) $request->invoice_id)));
+            $invoices = Invoice::whereIn('id', $invoiceIds)->get();
+
             $dispatch = new Dispatch();
-            $dispatch->invoice_id = implode(', ', $request->invoice_id);
+            $dispatch->invoice_id = implode(', ', $invoiceIds);
+            $dispatch->name = $invoices->pluck('invoice_number')->unique()->implode(', ');
             $dispatch->date_time = $date;
             $dispatch->transport = $request->transport;
             $dispatch->person = $request->person;
             $dispatch->time = $request->time;
             $dispatch->status = $request->status['name'];
             $dispatch->company_id = $request->header('company');
-
-            $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
+            $dispatch->save();
 
             foreach ($invoices as $each) {
-                $deleteing_disptach = Dispatch::where('invoice_id', $each->id)->first();
+                $deleteing_disptach = Dispatch::where('invoice_id', $each->id)
+                    ->where('id', '!=', $dispatch->id)
+                    ->first();
                 if ($deleteing_disptach) {
                     $deleteing_disptach->delete();
-                }
-                if (!$dispatch->name) {
-                    $dispatch->name = $each->invoice_number;
-                } else {
-                    if (false === strpos($dispatch->name, $each->invoice_number)) {
-                        $dispatch->update([
-                            'name' => $dispatch->name . ', ' . $each->invoice_number,
-                        ]);
-                    }
                 }
 
                 $each->update([
@@ -152,8 +150,6 @@ class DispatchController extends Controller
             if ('Sent' === $dispatch->status) {
                 $dispatch->addDispatchBillTy($dispatch, $invoices->sum('total'), $request->header('company'), []);
             }
-
-            $dispatch->save();
             $invoices_master_id = AccountMaster::where('groups', 'Sundry Debtors')->get();
             return response()->json([
                 'dispatch' => $dispatch,
@@ -263,8 +259,21 @@ class DispatchController extends Controller
                 ]);
                 $invoices = Invoice::whereIn('id', $request->invoice_id)->get();
                 if ('Sent' === $each->status) {
+                    foreach ($invoices as $invoice) {
+                        $invoice->update([
+                            'dispatch_id' => $each->id,
+                            'paid_status' => 'DISPATCHED',
+                            'status' => 'COMPLETED',
+                        ]);
+                    }
                     $each->addDispatchBillTy($each, $invoices->sum('total'), $request->header('company'), []);
                 } else {
+                    foreach ($invoices as $invoice) {
+                        $invoice->update([
+                            'status' => 'TO_BE_DISPATCH',
+                            'paid_status' => 'TO_BE_DISPATCH',
+                        ]);
+                    }
                     $each->removeDispatchBillTy($each);
                 }
             }
@@ -335,10 +344,15 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
+        // Only return bills still pending dispatch. Limiting to newest 200 and
+        // filtering COMPLETED on the frontend was hiding older eligible bills.
         $invoices = Invoice::with('master')
             ->whereCompany($request->header('company'))
+            ->where(function ($query) {
+                $query->whereNull('status')
+                    ->orWhere('status', '!=', 'COMPLETED');
+            })
             ->orderBy('id', 'desc')
-            ->limit(200)
             ->get();
 
         return response()->json([
