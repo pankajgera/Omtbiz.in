@@ -14,6 +14,7 @@ use Laravel\Passport\HasApiTokens;
 use Exception;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Traits\Auditable;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable implements HasMedia
     use Notifiable;
     use InteractsWithMedia;
     use SoftDeletes;
+    use Auditable;
 
     /**
      * The attributes that are mass assignable.

@@ -12,6 +12,7 @@ use App\Models\Company;
 use App\Models\AccountMaster;
 use App\Models\OrderItems;
 use App\Models\Orders;
+use App\Services\AuditLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -163,11 +164,13 @@ class OrdersController extends Controller
             ]);
         }, 3);
 
-        foreach ($request->order_items as $orderItem) {
-            $orderItem['company_id'] = $request->header('company');
-            $orderItem['type'] = 'order';
-            $item = $order->orderItems()->create($orderItem);
-        }
+        AuditLogger::withoutAuditing(function () use ($request, $order) {
+            foreach ($request->order_items as $orderItem) {
+                $orderItem['company_id'] = $request->header('company');
+                $orderItem['type'] = 'order';
+                $order->orderItems()->create($orderItem);
+            }
+        });
 
         $order = Orders::with([
             'orderItems',

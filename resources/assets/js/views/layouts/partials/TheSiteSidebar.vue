@@ -196,6 +196,12 @@ export default {
             meta: ["admin", "accountant"],
           },
           {
+            title: "navigation.audit_logs",
+            icon: "history",
+            route: "/audit-logs",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.settings",
             icon: "cog",
             route: "/settings",

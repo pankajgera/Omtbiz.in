@@ -19,6 +19,7 @@ use App\Mail\EstimatePdf;
 use App\Models\AccountMaster;
 use App\Models\Inventory;
 use App\Notifications\EstimateSuccessful;
+use App\Services\AuditLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -173,14 +174,13 @@ class EstimatesController extends Controller
             ]);
         }, 3);
 
-        $estimateItems = $request->items;
-
-        foreach ($estimateItems as $estimateItem) {
-            $estimateItem['company_id'] = $request->header('company');
-            $estimateItem['type'] = 'estimate';
-
-            $item = $estimate->items()->create($estimateItem);
-        }
+        AuditLogger::withoutAuditing(function () use ($request, $estimate) {
+            foreach ($request->items as $estimateItem) {
+                $estimateItem['company_id'] = $request->header('company');
+                $estimateItem['type'] = 'estimate';
+                $estimate->items()->create($estimateItem);
+            }
+        });
 
         if ($request->has('estimateSend')) {
             $data['estimate'] = $estimate->toArray();

@@ -2,9 +2,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class OrderItems extends Model
 {
+    use Auditable;
+
     protected $table = 'order_items';
     protected $fillable = [
         'order_id',

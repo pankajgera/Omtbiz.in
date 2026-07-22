@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Log;
+use App\Traits\Auditable;
 
 class AccountMaster extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'groups',

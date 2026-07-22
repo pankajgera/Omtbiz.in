@@ -499,6 +499,19 @@ Route::group(['middleware' => 'api'], function () {
     Route::resource('dispatch', 'DispatchController');
 
 
+    // Audit Logs (admin only)
+    //----------------------------------
+    Route::get('/audit-logs', [
+        'as' => 'audit-logs.index',
+        'uses' => 'AuditLogsController@index'
+    ]);
+
+    Route::get('/audit-logs/{id}', [
+        'as' => 'audit-logs.show',
+        'uses' => 'AuditLogsController@show'
+    ]);
+
+
     Route::post('/whatsapp-send-pdf', [
         'as' => 'whatsapp',
         'uses' => 'WhatsappController@sendPdf'

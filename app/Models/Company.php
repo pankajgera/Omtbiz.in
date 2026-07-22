@@ -6,10 +6,12 @@ use App\Models\User;
 use App\Models\CompanySetting;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Traits\Auditable;
 
 class Company extends Model implements HasMedia
 {
     use InteractsWithMedia;
+    use Auditable;
 
     protected $fillable = ['name', 'logo', 'unique_hash'];
 
