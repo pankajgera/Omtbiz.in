@@ -344,16 +344,29 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
-        // Only return bills still pending dispatch. Limiting to newest 200 and
-        // filtering COMPLETED on the frontend was hiding older eligible bills.
-        $invoices = Invoice::with('master')
+        $invoices = Invoice::with(['master:id,name'])
             ->whereCompany($request->header('company'))
             ->where(function ($query) {
                 $query->whereNull('status')
                     ->orWhere('status', '!=', 'COMPLETED');
             })
+            ->select([
+                'id',
+                'invoice_number',
+                'status',
+                'paid_status',
+                'due_amount',
+                'total',
+                'account_master_id',
+                'company_id',
+                'invoice_date',
+                'created_at',
+                'due_date',
+            ])
             ->orderBy('id', 'desc')
             ->get();
+
+        $invoices->each->setAppends([]);
 
         return response()->json([
             'invoices' => $invoices
