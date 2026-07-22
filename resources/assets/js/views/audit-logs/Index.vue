@@ -140,70 +140,12 @@
           :label="$t('audit_logs.ip')"
           show="ip_address"
         />
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          cell-class="action-dropdown"
-        >
-          <template slot-scope="row">
-            <span>{{ $t('audit_logs.action') }}</span>
-            <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
-              <v-dropdown-item>
-                <div class="dropdown-item" @click="showDetails(row)">
-                  <font-awesome-icon :icon="['fas', 'eye']" class="dropdown-item-icon"/>
-                  {{ $t('audit_logs.view_details') }}
-                </div>
-              </v-dropdown-item>
-            </v-dropdown>
-          </template>
-        </table-column>
       </table-component>
-    </div>
-
-    <div v-if="selectedLog" class="modal" style="display:block;" @click.self="selectedLog = null">
-      <div class="modal-dialog modal-lg mt-5">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">{{ $t('audit_logs.details') }}</h5>
-            <button type="button" class="close" @click="selectedLog = null">
-              <span>&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p><strong>{{ $t('audit_logs.description') }}:</strong> {{ selectedLog.description }}</p>
-            <p><strong>{{ $t('audit_logs.user') }}:</strong> {{ selectedLog.user_name }} ({{ selectedLog.user_email }})</p>
-            <p><strong>{{ $t('audit_logs.action') }}:</strong> {{ selectedLog.action_label }}</p>
-            <p><strong>{{ $t('audit_logs.module') }}:</strong> {{ selectedLog.module }}</p>
-            <p><strong>{{ $t('audit_logs.ip') }}:</strong> {{ selectedLog.ip_address || '—' }}</p>
-            <p><strong>{{ $t('audit_logs.url') }}:</strong> {{ selectedLog.url || '—' }}</p>
-            <div v-if="selectedLog.old_values" class="mt-3">
-              <strong>{{ $t('audit_logs.old_values') }}</strong>
-              <pre class="audit-json">{{ formatJson(selectedLog.old_values) }}</pre>
-            </div>
-            <div v-if="selectedLog.new_values" class="mt-3">
-              <strong>{{ $t('audit_logs.new_values') }}</strong>
-              <pre class="audit-json">{{ formatJson(selectedLog.new_values) }}</pre>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.audit-json {
-  background: #f7f7f7;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
-  max-height: 240px;
-  overflow: auto;
-  font-size: 12px;
-}
 .badge-created { color: #1b7a3d; font-weight: 600; }
 .badge-updated { color: #b36b00; font-weight: 600; }
 .badge-deleted { color: #b00020; font-weight: 600; }
@@ -243,13 +185,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import DotIcon from '../../components/icon/DotIcon'
 import AstronautIcon from '../../components/icon/AstronautIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
 
 export default {
   components: {
-    DotIcon,
     AstronautIcon,
     BaseButton
   },
@@ -259,7 +199,6 @@ export default {
       showFilters: false,
       filtersApplied: false,
       isRequestOngoing: true,
-      selectedLog: null,
       currentPage: 1,
       perPage: 15,
       filters: {
@@ -423,16 +362,6 @@ export default {
             count: 0
           }
         }
-      }
-    },
-    showDetails (row) {
-      this.selectedLog = row
-    },
-    formatJson (value) {
-      try {
-        return JSON.stringify(value, null, 2)
-      } catch (e) {
-        return String(value)
       }
     },
     actionBadgeClass (action) {
