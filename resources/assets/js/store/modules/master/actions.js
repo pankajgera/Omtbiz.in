@@ -3,8 +3,10 @@ import * as types from './mutation-types'
 export const fetchMasters = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/masters`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_MASTERS, response.data.masters.data)
-      commit(types.SET_TOTAL_MASTERS, response.data.masters.total)
+      const masters = response.data.masters
+      const isPlainList = Array.isArray(masters)
+      commit(types.BOOTSTRAP_MASTERS, isPlainList ? masters : masters.data)
+      commit(types.SET_TOTAL_MASTERS, isPlainList ? masters.length : masters.total)
       resolve(response)
     }).catch((err) => {
       reject(err)
