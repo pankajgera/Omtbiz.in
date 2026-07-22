@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
+use App\Traits\Auditable;
 
 class Orders extends Model
 {
+    use Auditable;
+
     protected $table = 'orders';
     public const DRAFT = 'DRAFT';
 

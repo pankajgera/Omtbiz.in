@@ -5,9 +5,12 @@ namespace App\Models;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Traits\Auditable;
 
 class Inventory extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'company_id',

@@ -7,8 +7,12 @@ use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Auditable;
+
 class Payment extends Model
 {
+    use Auditable;
+
     public const PAYMENT_MODE_CHECK = 'CHECK';
     public const PAYMENT_MODE_OTHER = 'OTHER';
     public const PAYMENT_MODE_CASH = 'CASH';

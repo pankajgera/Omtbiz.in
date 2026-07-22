@@ -9,8 +9,12 @@ use Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
+use App\Traits\Auditable;
+
 class Item extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'unit',

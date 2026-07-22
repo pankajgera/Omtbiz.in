@@ -16,6 +16,7 @@
         "settings": "Settings",
         "logout": "Logout",
         "users": "Users",
+        "audit_logs": "Audit Logs",
         "notes": "Notes",
         "bank": "Bank",
         "inventory": "Inventory",
@@ -1453,5 +1454,24 @@
         "address_maxlength": "Address should not be greater than 255 characters.",
         "ref_number_required": "Reference number is required.",
         "prefix_maxlength": "Prefix should not be greater than 5 characters."
+    },
+    "audit_logs": {
+        "title": "Audit Logs",
+        "user": "User",
+        "user_placeholder": "Name or email",
+        "action": "Action",
+        "module": "Module",
+        "select_action": "Select action",
+        "select_module": "Select module",
+        "date_time": "Date & Time",
+        "description": "Description",
+        "ip": "IP Address",
+        "url": "URL",
+        "details": "Activity Details",
+        "view_details": "View Details",
+        "old_values": "Previous Values",
+        "new_values": "New Values",
+        "no_logs": "No activity logs yet!",
+        "list_of_logs": "User login, logout, and create/update/delete activity will appear here."
     }
 }

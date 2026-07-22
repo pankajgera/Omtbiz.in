@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+use App\Traits\Auditable;
+
 class Dispatch extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'invoice_id',
