@@ -21,15 +21,12 @@
                   :show-pointer="false"
                   :options="isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')"
                   :searchable="true"
-                  :internal-search="false"
-                  :loading="invoiceLoading"
                   :show-labels="false"
                   :allow-empty="true"
                   :disabled="isEdit"
                   :custom-label="invoiceWithAmount"
                   track-by="id"
                   class="multi-select-item"
-                  @search-change="onInvoiceSearch"
                   @select="addInvoice"
                   @remove="removeInvoice"
                 />
@@ -160,8 +157,6 @@ export default {
       },
       invoice: [],
       invoiceList: [],
-      invoiceLoading: false,
-      invoiceSearchTimer: null,
       assignToBeDispatch: false,
       isToBeDispatch: []
     }
@@ -283,37 +278,18 @@ export default {
       this.formData['all_selected_dispatch'] = [];
       response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))
     },
-    async fetchInvoices (search = '') {
-      this.invoiceLoading = true
-      try {
-        let params = {
-          search: search || undefined,
-          ids: this.formData.invoice_id && this.formData.invoice_id.length
-            ? this.formData.invoice_id
-            : undefined
+    async fetchInvoices () {
+      let response = await axios.get(`/api/dispatch/invoices`)
+      if (response.data) {
+        this.invoiceList = response.data.invoices
+        if (this.isEdit) {
+          this.loadEditData()
         }
-        let response = await axios.get(`/api/dispatch/invoices`, { params })
-        if (response.data) {
-          this.invoiceList = response.data.invoices
-          if (this.isEdit && !search) {
-            this.loadEditData()
-          }
-          this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch
-          if (this.isToBeDispatch.length && !search) {
-            this.loadIsToBeDispatch()
-          }
+        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch
+        if (this.isToBeDispatch.length) {
+          this.loadIsToBeDispatch()
         }
-      } finally {
-        this.invoiceLoading = false
       }
-    },
-    onInvoiceSearch (search) {
-      if (this.invoiceSearchTimer) {
-        clearTimeout(this.invoiceSearchTimer)
-      }
-      this.invoiceSearchTimer = setTimeout(() => {
-        this.fetchInvoices(search)
-      }, 350)
     },
     async showDispatchPopup (invoice_id, invoices_master_id) {
       this.change_invoice = true;
