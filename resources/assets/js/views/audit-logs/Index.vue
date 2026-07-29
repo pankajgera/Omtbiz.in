@@ -120,7 +120,6 @@
           show="action_label"
         >
           <template slot-scope="row">
-            <span>{{ $t('audit_logs.action') }}</span>
             <div :class="actionBadgeClass(row.action)">{{ row.action_label || row.action }}</div>
           </template>
         </table-column>
@@ -194,7 +193,6 @@ export default {
     BaseButton
   },
   data () {
-    const today = this.getTodayDate()
     return {
       showFilters: false,
       filtersApplied: false,
@@ -205,8 +203,8 @@ export default {
         user: '',
         action: '',
         module: '',
-        from_date: today,
-        to_date: today
+        from_date: '',
+        to_date: ''
       },
       actionOptions: [
         { label: 'Login', value: 'login' },
@@ -257,13 +255,12 @@ export default {
       return !this.totalAuditLogs && !this.isRequestOngoing && !this.hasCustomFilters
     },
     hasCustomFilters () {
-      const today = this.getTodayDate()
       return !!(
         this.filters.user ||
         this.filters.action ||
         this.filters.module ||
-        this.filters.from_date !== today ||
-        this.filters.to_date !== today
+        this.filters.from_date ||
+        this.filters.to_date
       )
     },
     filterIcon () {
@@ -291,23 +288,16 @@ export default {
     ...mapActions('auditLogs', [
       'fetchAuditLogs'
     ]),
-    getTodayDate () {
-      const d = new Date()
-      const month = `${d.getMonth() + 1}`.padStart(2, '0')
-      const day = `${d.getDate()}`.padStart(2, '0')
-      return `${d.getFullYear()}-${month}-${day}`
-    },
     toggleFilter () {
       this.showFilters = !this.showFilters
     },
     clearFilter () {
-      const today = this.getTodayDate()
       this.filters = {
         user: '',
         action: '',
         module: '',
-        from_date: today,
-        to_date: today
+        from_date: '',
+        to_date: ''
       }
       this.filtersApplied = false
       this.$refs.table && this.$refs.table.refresh()

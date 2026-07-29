@@ -22,6 +22,7 @@ class AuditLogsController extends Controller
 
         try {
             $limit = $request->has('limit') ? (int) $request->limit : 15;
+            $limit = max(1, min($limit, 100));
 
             $logs = AuditLog::query()
                 ->applyFilters($request->only([
@@ -47,17 +48,20 @@ class AuditLogsController extends Controller
     /**
      * Show a single audit log entry.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse|array
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         if ($response = $this->adminOnlyResponse()) {
             return $response;
         }
 
         try {
-            $log = AuditLog::findOrFail($id);
+            $log = AuditLog::query()
+                ->whereCompany($request->header('company'))
+                ->findOrFail($id);
 
             return response()->json([
                 'audit_log' => $log,
