@@ -2,9 +2,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Auditable;
 
 class EstimateItem extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'estimate_id',
         'name',

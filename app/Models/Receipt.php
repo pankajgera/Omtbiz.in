@@ -7,8 +7,12 @@ use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Auditable;
+
 class Receipt extends Model
 {
+    use Auditable;
+
     public const STATUS_DRAFT = 'Draft';
     public const STATUS_DONE = 'Done';
     public const STATUS_TO_BE_APPROVED = 'To Be Approved';
