@@ -92,69 +92,72 @@
         </span>
       </span>
     </div>
-    <transition name="multiselect">
-      <div
-        v-show="isOpen"
-        ref="list"
-        :style="{ maxHeight: optimizedHeight + 'px' }"
-        class="multiselect__content-wrapper"
-        tabindex="-1"
-        @focus="activate"
-        @mousedown.prevent
-      >
-        <ul :style="contentStyle" :id="'listbox-'+id" class="multiselect__content" role="listbox">
-          <slot name="beforeList"/>
-          <li v-if="multiple && max === internalValue.length">
-            <span class="multiselect__option">
-              <slot name="maxElements"> {{ $t('validation.maximum_options_error', { max: max }) }} </slot>
-            </span>
-          </li>
-          <template v-if="!max || internalValue.length < max">
-            <li
-              v-for="(option, index) of filteredOptions"
-              :key="index"
-              :id="option.id + '-' + index"
-              :role="!(option && (option.$isLabel || option.$isDisabled)) ? 'option' : null"
-              class="multiselect__element"
-            >
-              <span
-                v-if="!(option && (option.$isLabel || option.$isDisabled))"
-                :class="optionHighlight(index, option)"
-                :data-select="option && option.isTag ? tagPlaceholder : selectLabelText"
-                :data-selected="selectedLabelText"
-                :data-deselect="deselectLabelText"
-                class="multiselect__option"
-                @click.stop="select(option)"
-                @mouseenter.self="pointerSet(index)"
-              >
-                <slot :option="option" :search="search" name="option">
-                  <span>{{ getOptionLabel(option) }}</span>
-                </slot>
-              </span>
-              <span
-                v-if="option && (option.$isLabel || option.$isDisabled)"
-                :data-select="groupSelect && selectGroupLabelText"
-                :data-deselect="groupSelect && deselectGroupLabelText"
-                :class="groupHighlight(index, option)"
-                class="multiselect__option"
-                @mouseenter.self="groupSelect && pointerSet(index)"
-                @mousedown.prevent="selectGroup(option)"
-              >
-                <slot :option="option" :search="search" name="option">
-                  <span>{{ getOptionLabel(option) }}</span>
-                </slot>
+    <teleport to="body" :disabled="!appendToBody">
+      <transition name="multiselect">
+        <div
+          v-show="isOpen"
+          ref="list"
+          :style="dropdownStyle"
+          :class="{ 'multiselect__content-wrapper--fixed': appendToBody }"
+          class="multiselect__content-wrapper"
+          tabindex="-1"
+          @focus="activate"
+          @mousedown.prevent
+        >
+          <ul :style="contentStyle" :id="'listbox-'+id" class="multiselect__content" role="listbox">
+            <slot name="beforeList"/>
+            <li v-if="multiple && max === internalValue.length">
+              <span class="multiselect__option">
+                <slot name="maxElements"> {{ $t('validation.maximum_options_error', { max: max }) }} </slot>
               </span>
             </li>
-          </template>
-          <li v-if="showNoOptions && (options.length === 0 && !search && !loading)">
-            <span class="multiselect__option">
-              <slot name="noOptions">{{ $t('general.list_is_empty') }}</slot>
-            </span>
-          </li>
-        </ul>
-        <slot name="afterList"/>
-      </div>
-    </transition>
+            <template v-if="!max || internalValue.length < max">
+              <li
+                v-for="(option, index) of filteredOptions"
+                :key="index"
+                :id="option.id + '-' + index"
+                :role="!(option && (option.$isLabel || option.$isDisabled)) ? 'option' : null"
+                class="multiselect__element"
+              >
+                <span
+                  v-if="!(option && (option.$isLabel || option.$isDisabled))"
+                  :class="optionHighlight(index, option)"
+                  :data-select="option && option.isTag ? tagPlaceholder : selectLabelText"
+                  :data-selected="selectedLabelText"
+                  :data-deselect="deselectLabelText"
+                  class="multiselect__option"
+                  @click.stop="select(option)"
+                  @mouseenter.self="pointerSet(index)"
+                >
+                  <slot :option="option" :search="search" name="option">
+                    <span>{{ getOptionLabel(option) }}</span>
+                  </slot>
+                </span>
+                <span
+                  v-if="option && (option.$isLabel || option.$isDisabled)"
+                  :data-select="groupSelect && selectGroupLabelText"
+                  :data-deselect="groupSelect && deselectGroupLabelText"
+                  :class="groupHighlight(index, option)"
+                  class="multiselect__option"
+                  @mouseenter.self="groupSelect && pointerSet(index)"
+                  @mousedown.prevent="selectGroup(option)"
+                >
+                  <slot :option="option" :search="search" name="option">
+                    <span>{{ getOptionLabel(option) }}</span>
+                  </slot>
+                </span>
+              </li>
+            </template>
+            <li v-if="showNoOptions && (options.length === 0 && !search && !loading)">
+              <span class="multiselect__option">
+                <slot name="noOptions">{{ $t('general.list_is_empty') }}</slot>
+              </span>
+            </li>
+          </ul>
+          <slot name="afterList"/>
+        </div>
+      </transition>
+    </teleport>
   </div>
 </template>
 
@@ -312,15 +315,30 @@ export default {
     doNotSelectDefault: {
       type: Boolean,
       default: false
+    },
+    appendToBody: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       focus: this.name==='party_name' ? true : false,
+      dropdownPosition: null
     }
   },
   mounted() {
-    this.focusInput();
+    this.focusInput()
+    if (this.appendToBody) {
+      window.addEventListener('resize', this.updateDropdownPosition)
+      window.addEventListener('scroll', this.updateDropdownPosition, true)
+    }
+  },
+  beforeUnmount() {
+    if (this.appendToBody) {
+      window.removeEventListener('resize', this.updateDropdownPosition)
+      window.removeEventListener('scroll', this.updateDropdownPosition, true)
+    }
   },
   computed: {
     isSingleLabelVisible () {
@@ -353,6 +371,15 @@ export default {
     },
     selectedLabelText () {
       return this.showLabels ? this.selectedLabel : ''
+    },
+    dropdownStyle () {
+      const style = {
+        maxHeight: this.optimizedHeight + 'px'
+      }
+
+      return this.appendToBody && this.dropdownPosition
+        ? { ...style, ...this.dropdownPosition }
+        : style
     },
     inputStyle () {
       if ( this.searchable || (this.multiple && this.value && this.value.length)) {
@@ -390,6 +417,28 @@ export default {
     }
   },
   methods:{
+    updateDropdownPosition (event) {
+      if (!this.appendToBody || !this.isOpen || !this.$el) {
+        return
+      }
+
+      if (event?.target && this.$refs.list?.contains(event.target)) {
+        return
+      }
+
+      const rect = this.$el.getBoundingClientRect()
+      const opensAbove = this.isAbove
+
+      this.dropdownPosition = {
+        position: 'fixed',
+        top: opensAbove ? 'auto' : `${rect.bottom}px`,
+        right: 'auto',
+        bottom: opensAbove ? `${window.innerHeight - rect.top}px` : 'auto',
+        left: `${rect.left}px`,
+        width: `${rect.width}px`,
+        zIndex: 10000
+      }
+    },
     focusInput () {
       if (this.focus && this.$refs.search) {
         this.$refs.search.focus()

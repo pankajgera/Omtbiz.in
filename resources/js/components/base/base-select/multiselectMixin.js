@@ -673,6 +673,9 @@ export default {
       } else {
         this.$el.focus()
       }
+      if (this.appendToBody && this.updateDropdownPosition) {
+        this.$nextTick(() => this.updateDropdownPosition())
+      }
       this.$emit('open', this.id)
     },
     /**

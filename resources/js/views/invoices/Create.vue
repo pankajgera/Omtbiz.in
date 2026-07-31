@@ -742,12 +742,14 @@ export default {
       }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
       this.$nextTick(() => {
-        this.$refs.invoiceInventory[data.index].$el.focus()
+        const inventoryRow = this.$refs.invoiceInventory[data.index]
+        inventoryRow.$el.focus()
+
         if (data.updatingInput === 'sale_price') {
-          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()
+          inventoryRow.$refs.inventoryPrice.$refs.baseInput.focus()
         }
         if (data.updatingInput === 'quantity') {
-          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
+          inventoryRow.$refs.inventoryQuantity.$refs.baseInput.focus()
         }
       })
     },

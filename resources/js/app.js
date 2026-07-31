@@ -19,6 +19,19 @@ import { applyTheme, getPreferredTheme } from './helpers/theme'
 
 applyTheme(getPreferredTheme())
 
+document.addEventListener('click', (event) => {
+  const dateInput = event.target.closest('input[type="date"]')
+
+  if (!dateInput || dateInput.disabled || dateInput.readOnly || typeof dateInput.showPicker !== 'function') {
+    return
+  }
+
+  try {
+    dateInput.showPicker()
+    event.preventDefault()
+  } catch {}
+})
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

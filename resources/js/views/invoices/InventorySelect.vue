@@ -14,6 +14,7 @@
       :placeholder="$t('invoices.inventory.select_an_inventory')"
       :do-not-select-default="true"
       :disabled="isDisable"
+      append-to-body
       label="name"
       track-by="id"
       @value="onTextChange"
