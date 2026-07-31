@@ -18,19 +18,19 @@
     --ui-surface-hover: #edf3f5;
     --ui-border: #d8dee6;
     --ui-border-strong: #b8c2ce;
-    --ui-text: #1d2733;
-    --ui-text-muted: #5f6d7c;
-    --ui-placeholder: #8290a0;
+    --ui-text: #000000;
+    --ui-text-muted: #000000;
+    --ui-placeholder: #000000;
     --ui-input-bg: #ffffff;
     --ui-disabled-bg: #e9edf1;
-    --ui-disabled-text: #6b7683;
+    --ui-disabled-text: #000000;
     --ui-primary: #d94343;
     --ui-primary-dark: #b93232;
     --ui-accent: #087f8c;
     --ui-accent-hover: #066b75;
     --ui-sidebar: #ffffff;
-    --ui-sidebar-text: #26323e;
-    --ui-sidebar-muted: #647386;
+    --ui-sidebar-text: #000000;
+    --ui-sidebar-muted: #000000;
     --ui-sidebar-hover: #edf4f5;
     --ui-sidebar-border: #d8dee6;
     --ui-focus: rgba(8, 127, 140, 0.24);
@@ -51,19 +51,19 @@
     --ui-surface-hover: #28313b;
     --ui-border: #343e49;
     --ui-border-strong: #4a5765;
-    --ui-text: #edf2f7;
-    --ui-text-muted: #a7b2be;
-    --ui-placeholder: #7f8b98;
+    --ui-text: #ffffff;
+    --ui-text-muted: #ffffff;
+    --ui-placeholder: #ffffff;
     --ui-input-bg: #141a20;
     --ui-disabled-bg: #252d36;
-    --ui-disabled-text: #95a0ab;
+    --ui-disabled-text: #ffffff;
     --ui-primary: #f06464;
     --ui-primary-dark: #d84c4c;
     --ui-accent: #2bb3c0;
     --ui-accent-hover: #49c4cf;
     --ui-sidebar: #0d1116;
-    --ui-sidebar-text: #edf2f7;
-    --ui-sidebar-muted: #a3aeba;
+    --ui-sidebar-text: #ffffff;
+    --ui-sidebar-muted: #ffffff;
     --ui-sidebar-hover: #222a33;
     --ui-sidebar-border: #2c3540;
     --ui-focus: rgba(43, 179, 192, 0.34);
@@ -1077,6 +1077,29 @@ textarea,
     color: var(--ui-text) !important;
     background-color: var(--ui-input-bg) !important;
     border-color: var(--ui-border-strong) !important;
+}
+
+input.base-prefix-input[type="date"] {
+    position: relative;
+    direction: ltr;
+    padding-right: 1rem;
+    padding-left: 2.75rem;
+    text-align: right;
+}
+
+input.base-prefix-input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    left: 1rem;
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    cursor: pointer;
+}
+
+.invoice-label,
+.base-prefix-input .prefix-label,
+.base-prefix-input .prefix-label span {
+    color: var(--ui-text) !important;
 }
 
 input::placeholder,

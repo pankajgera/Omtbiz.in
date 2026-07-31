@@ -47,10 +47,11 @@
       </transition>
       <span  id="hide_tags">
       <input
+        v-if="searchable"
         ref="search"
         :name="name"
         :id="id"
-        :placeholder="placeholder"
+        :placeholder="isOpen ? placeholder : ''"
         :style="inputStyle"
         :value="search"
         :disabled="disabled"
@@ -81,12 +82,12 @@
           </slot>
         </span>
         <span
-          v-else
-          class="multiselect__single"
+          v-if="isPlaceholderVisible"
+          class="multiselect__placeholder"
           @mousedown.prevent="toggle"
         >
-          <slot :option="singleValue" name="singleLabel">
-            {{ internalValue.length ? currentOptionLabel : placeholder }}
+          <slot name="placeholder">
+            {{ placeholder }}
           </slot>
         </span>
       </span>
@@ -390,7 +391,7 @@ export default {
   },
   methods:{
     focusInput () {
-      if (this.focus) {
+      if (this.focus && this.$refs.search) {
         this.$refs.search.focus()
       }
     },
