@@ -950,6 +950,15 @@
         "primary_currency": "Primary Currency",
         "timezone": "Time Zone",
         "date_format": "Date Format",
+        "delete_data": {
+            "initial_warning": "This action permanently deletes all website data and cannot be undone.",
+            "confirmation_title": "Final confirmation",
+            "confirmation_instruction": "Type DELETE ALL DATA to continue.",
+            "delete_button": "Delete all data",
+            "incorrect_title": "Confirmation did not match",
+            "incorrect_message": "No data was deleted. Enter the confirmation text exactly as shown.",
+            "queued_message": "Website data deletion has been queued."
+        },
         "currencies": {
             "title": "Currencies",
             "currency": "Currency | Currencies",

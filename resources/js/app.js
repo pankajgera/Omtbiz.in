@@ -3,7 +3,7 @@
  * include Vue and Vue Resource. This gives a great starting point for
  * building robust, powerful web applications using Vue and Laravel.
  */
-import { createApp, configureCompat } from 'vue'
+import { createApp, configureCompat, reactive } from 'vue'
 import router from './router.js'
 import Plugin from './helpers/plugin'
 import store from './store/index'
@@ -18,6 +18,38 @@ import { validationMixin } from './compat/vuelidate'
 import { applyTheme, getPreferredTheme } from './helpers/theme'
 
 applyTheme(getPreferredTheme())
+
+const navigationLoader = reactive({ active: false })
+let navigationLoaderStartedAt = 0
+let navigationLoaderToken = 0
+let navigationLoaderTimer = null
+
+const stopNavigationLoader = () => {
+  const token = navigationLoaderToken
+  const elapsed = Date.now() - navigationLoaderStartedAt
+  const delay = Math.max(0, 320 - elapsed)
+
+  window.clearTimeout(navigationLoaderTimer)
+  navigationLoaderTimer = window.setTimeout(() => {
+    if (token === navigationLoaderToken) {
+      navigationLoader.active = false
+    }
+  }, delay)
+}
+
+router.beforeEach((to, from, next) => {
+  if (to.fullPath !== from.fullPath) {
+    navigationLoaderToken += 1
+    navigationLoaderStartedAt = Date.now()
+    navigationLoader.active = true
+    window.clearTimeout(navigationLoaderTimer)
+  }
+
+  next()
+})
+
+router.afterEach(stopNavigationLoader)
+router.onError(stopNavigationLoader)
 
 document.addEventListener('click', (event) => {
   const dateInput = event.target.closest('input[type="date"]')
@@ -49,7 +81,10 @@ const app = createApp({
   computed: {
     ...mapGetters([
       'isAdmin'
-    ])
+    ]),
+    routeIsLoading () {
+      return navigationLoader.active
+    }
   },
   methods: {
     onOverlayClick () {

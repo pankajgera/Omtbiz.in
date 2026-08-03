@@ -20,18 +20,21 @@ use App\Models\Currency;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
 use App\Jobs\EraseData;
+use Illuminate\Validation\Rule;
 use Auth;
 use Notification;
 
 class CompanyController extends Controller
 {
+    private const DATA_DELETE_CONFIRMATION = 'DELETE ALL DATA';
+
     /**
      * Retrive the Admin account.
      * @return \App\Models\User
      */
     public function getAdmin()
     {
-        return User::find(1);
+        return auth()->user();
     }
 
 
@@ -94,9 +97,10 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAdminCompany()
+    public function getAdminCompany(Request $request)
     {
-        $user = User::with(['addresses', 'addresses.country', 'company'])->find(1);
+        $user = $request->user('api');
+        $user->load(['addresses', 'addresses.country', 'company']);
 
         return response()->json([
             'user' => $user
@@ -128,7 +132,7 @@ class CompanyController extends Controller
 
         $fields = $request->only(['address_street_1', 'address_street_2', 'city', 'state', 'country_id', 'zip', 'phone']);
         $address = Address::updateOrCreate(['user_id' => $user->id], $fields);
-        $user = User::with(['addresses', 'addresses.country', 'company'])->find(1);
+        $user->load(['addresses', 'addresses.country', 'company']);
 
         return response()->json([
             'user' => $user,
@@ -420,8 +424,23 @@ class CompanyController extends Controller
      */
     public function delete(Request $request)
     {
-        $job = new EraseData();
-        dispatch($job);
+        $user = $request->user('api');
+
+        if (!$user || !$user->isAdmin()) {
+            return response()->json([
+                'error' => 'admin_only',
+            ], 403);
+        }
+
+        $request->validate([
+            'confirmation' => [
+                'required',
+                'string',
+                Rule::in([self::DATA_DELETE_CONFIRMATION]),
+            ],
+        ]);
+
+        EraseData::dispatch();
 
         return response()->json([
             'success' => true

@@ -190,9 +190,11 @@ export default {
       window.toastr['error']('Oops! Something went wrong...')
     },
     async setInitialData () {
-      let response = await this.loadData()
-      this.formData.name = response.data.name
-      this.formData.email = response.data.email
+      const response = await this.loadData()
+      const user = response.data.user || response.data
+
+      this.formData.name = user?.name || ''
+      this.formData.email = user?.email || ''
       // if (response.data.avatar) {
       //   this.previewAvatar = response.data.avatar
       // } else {

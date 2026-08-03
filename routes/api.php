@@ -110,7 +110,9 @@ Route::group(['middleware' => 'api'], function () {
 
         // Erase Data
         //----------------------------------
-        Route::delete('/data/delete', [App\Http\Controllers\CompanyController::class, 'delete'])->name('admin.data.delete');
+        Route::delete('/data/delete', [App\Http\Controllers\CompanyController::class, 'delete'])
+            ->middleware('admin:api')
+            ->name('admin.data.delete');
         Route::put('/profile', [App\Http\Controllers\CompanyController::class, 'updateAdminProfile'])->name('admin.put.profile');
         Route::post('/profile/upload-avatar', [App\Http\Controllers\CompanyController::class, 'uploadAdminAvatar'])->name('admin.profile.avatar');
         Route::post('/company/upload-logo', [App\Http\Controllers\CompanyController::class, 'uploadCompanyLogo'])->name('upload.admin.company.logo');

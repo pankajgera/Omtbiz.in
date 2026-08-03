@@ -30,6 +30,19 @@
 <body class="layout-default skin-omtbiz">
 <div id="app" class="template-container">
     <div class="mobile-menu-overlay" @click.prevent="onOverlayClick"></div>
+    <div
+        v-if="routeIsLoading"
+        class="route-loading-overlay"
+        role="status"
+        aria-live="polite"
+        aria-label="Loading page"
+    >
+        <div class="money-loader" aria-hidden="true">
+            <span class="money-loader__coin">&#8377;</span>
+            <span class="money-loader__shadow"></span>
+        </div>
+        <span class="route-loading-overlay__label">Loading</span>
+    </div>
     <router-view v-slot="{ Component }">
         <component :is="Component"></component>
     </router-view>

@@ -194,7 +194,7 @@ export default {
   },
   watch: {
     country (newCountry) {
-      this.formData.country_id = newCountry.id
+      this.formData.country_id = newCountry?.id || null
       if (this.isFetchingData) {
         return true
       }
@@ -243,9 +243,9 @@ export default {
       window.toastr['error']('Oops! Something went wrong...')
     },
     async setInitialData () {
-      let response = await this.loadData()
+      const response = await this.loadData()
       this.isFetchingData = true
-      const user = response?.data?.user
+      const user = response?.data?.user || response?.data
       if (!user) {
         window.toastr?.['error']?.('Oops! User data is unavailable.')
         this.isFetchingData = false
@@ -263,6 +263,7 @@ export default {
       this.formData.city = address.city || ''
       this.country = address.country || null
       this.previewLogo = company.logo || null
+      this.isFetchingData = false
     },
     async updateCompany () {
       this.$v.formData.$touch()
