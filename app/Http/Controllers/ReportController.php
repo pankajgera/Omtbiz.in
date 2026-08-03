@@ -327,7 +327,8 @@ class ReportController extends Controller
             'closing_balance_dr' => $response['closing_balance_dr'],
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.customers');
+        $pdf = PDF::loadView('app.pdf.reports.customers')
+            ->setPaper('a4', 'landscape');
         if ($request->has('download')) {
             return $pdf->download();
         }
