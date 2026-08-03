@@ -318,7 +318,7 @@ export default {
     },
     appendToBody: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data() {
@@ -428,15 +428,20 @@ export default {
 
       const rect = this.$el.getBoundingClientRect()
       const opensAbove = this.isAbove
+      const viewportPadding = 8
+      const availableWidth = Math.max(window.innerWidth - (viewportPadding * 2), 0)
+      const width = Math.min(rect.width, availableWidth)
+      const maxLeft = Math.max(window.innerWidth - width - viewportPadding, viewportPadding)
+      const left = Math.min(Math.max(rect.left, viewportPadding), maxLeft)
 
       this.dropdownPosition = {
         position: 'fixed',
         top: opensAbove ? 'auto' : `${rect.bottom}px`,
         right: 'auto',
         bottom: opensAbove ? `${window.innerHeight - rect.top}px` : 'auto',
-        left: `${rect.left}px`,
-        width: `${rect.width}px`,
-        zIndex: 10000
+        left: `${left}px`,
+        width: `${width}px`,
+        zIndex: 12000
       }
     },
     focusInput () {

@@ -11,17 +11,27 @@
     <div class="dropdown-activator" @click.stop.prevent="showDropdown">
       <slot name="activator"/>
     </div>
-    <transition name="bounce">
-      <div
-        v-show="toggle"
-        v-if="hasChild"
-        ref="dropdownItems"
-        :class="['dropdown-container', {'align-right': rightAlign}]"
-        @click="closeOnSelectDropdownItem"
-      >
-        <slot />
-      </div>
-    </transition>
+    <teleport to="body" :disabled="!appendToBody">
+      <transition name="bounce">
+        <div
+          v-show="toggle"
+          v-if="hasChild"
+          ref="dropdownItems"
+          :class="[
+            'dropdown-container',
+            {
+              'align-right': rightAlign,
+              'dropdown-container--fixed': appendToBody,
+              'dropdown-light': themeLight
+            }
+          ]"
+          :style="appendToBody ? dropdownPosition : null"
+          @click="closeOnSelectDropdownItem"
+        >
+          <slot />
+        </div>
+      </transition>
+    </teleport>
   </div>
 </template>
 <script>
@@ -46,42 +56,105 @@ export default {
       type: Boolean,
       require: true,
       default: true
+    },
+    appendToBody: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
     return {
       toggle: true,
       hasChild: true,
-      rightAlign: false
+      rightAlign: false,
+      dropdownPosition: null
     }
   },
   mounted () {
     this.$nextTick(() => {
       this.setDropdownPosition()
-      window.addEventListener('resize', e => {
-        if (this.toggle === true) {
-          this.setDropdownPosition()
-        }
-      })
+      if (this.appendToBody) {
+        window.addEventListener('resize', this.setDropdownPosition)
+        window.addEventListener('scroll', this.setDropdownPosition, true)
+      }
       if (!this.$slots.default) {
         this.hasChild = false
       }
       this.toggle = false
     })
   },
+  beforeUnmount () {
+    if (this.appendToBody) {
+      window.removeEventListener('resize', this.setDropdownPosition)
+      window.removeEventListener('scroll', this.setDropdownPosition, true)
+    }
+  },
   methods: {
-    setDropdownPosition () {
-      let rect = this.$refs.dropdownItems.getBoundingClientRect()
+    setDropdownPosition (event) {
+      const menu = this.$refs.dropdownItems
 
-      let offsetPos = rect.width - this.$el.offsetWidth
-      let itemPos = rect.right + rect.width + offsetPos
-
-      if (itemPos > window.innerWidth) {
-        this.rightAlign = true
+      if (!menu || !this.$el) {
+        return
       }
-      itemPos += offsetPos + rect.width + offsetPos
-      if (itemPos < window.innerWidth) {
+
+      if (event?.target && menu.contains(event.target)) {
+        return
+      }
+
+      if (!this.appendToBody) {
+        const rect = menu.getBoundingClientRect()
+        this.rightAlign = rect.right > window.innerWidth
+        return
+      }
+
+      if (!this.toggle) {
+        return
+      }
+
+      const triggerRect = this.$el.getBoundingClientRect()
+      const menuRect = menu.getBoundingClientRect()
+      const viewportPadding = 8
+      const menuGap = 4
+      const width = Math.min(
+        Math.max(menuRect.width, 160),
+        Math.max(window.innerWidth - (viewportPadding * 2), 0)
+      )
+      const spaceBelow = window.innerHeight - triggerRect.bottom - viewportPadding
+      const spaceAbove = triggerRect.top - viewportPadding
+      const openAbove = menuRect.height > spaceBelow && spaceAbove > spaceBelow
+      const availableHeight = Math.max(openAbove ? spaceAbove : spaceBelow, 96)
+      const renderedHeight = Math.min(menuRect.height, availableHeight)
+
+      let left = triggerRect.left
+      if (left + width > window.innerWidth - viewportPadding) {
+        left = triggerRect.right - width
+        this.rightAlign = true
+      } else {
         this.rightAlign = false
+      }
+      left = Math.min(
+        Math.max(left, viewportPadding),
+        Math.max(window.innerWidth - width - viewportPadding, viewportPadding)
+      )
+
+      const desiredTop = openAbove
+        ? triggerRect.top - renderedHeight - menuGap
+        : triggerRect.bottom + menuGap
+      const top = Math.min(
+        Math.max(desiredTop, viewportPadding),
+        Math.max(window.innerHeight - renderedHeight - viewportPadding, viewportPadding)
+      )
+
+      this.dropdownPosition = {
+        position: 'fixed',
+        top: `${top}px`,
+        right: 'auto',
+        bottom: 'auto',
+        left: `${left}px`,
+        width: `${width}px`,
+        maxHeight: `${availableHeight}px`,
+        overflowY: 'auto',
+        zIndex: 12000
       }
     },
     isActive () {
@@ -92,6 +165,9 @@ export default {
     },
     showDropdown () {
       this.toggle = !this.toggle
+      if (this.toggle && this.appendToBody) {
+        this.$nextTick(() => this.setDropdownPosition())
+      }
     },
     closeOnSelectDropdownItem () {
       if (this.closeOnSelect === false) {
@@ -100,7 +176,15 @@ export default {
         this.toggle = false
       }
     },
-    closeDropdown () {
+    closeDropdown (event) {
+      if (
+        this.appendToBody &&
+        this.closeOnSelect === false &&
+        event?.target &&
+        this.$refs.dropdownItems?.contains(event.target)
+      ) {
+        return
+      }
       this.toggle = false
     }
   }

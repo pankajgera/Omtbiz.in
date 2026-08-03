@@ -927,6 +927,7 @@ a:focus {
 .swal-modal,
 .dropdown-menu,
 .dropdown-group .dropdown-container,
+.dropdown-container--fixed,
 .invoice-details-panel,
 .invoice-items-panel,
 .invoice-notes-panel,
@@ -939,8 +940,48 @@ a:focus {
 .card,
 .modal-content,
 .dropdown-group .dropdown-container,
+.dropdown-container--fixed,
 .swal-modal {
     box-shadow: var(--ui-shadow-md) !important;
+}
+
+.dropdown-container--fixed {
+    min-width: 10rem;
+    padding: 0.5rem;
+    color: var(--ui-text);
+    background-color: var(--ui-surface) !important;
+    border: 1px solid var(--ui-border) !important;
+    border-radius: 0.375rem;
+    box-shadow: var(--ui-shadow-md) !important;
+    list-style: none;
+}
+
+.dropdown-container--fixed .dropdown-group-item .dropdown-item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    color: var(--ui-text) !important;
+    background-color: transparent !important;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    text-align: left;
+    text-decoration: none;
+}
+
+.dropdown-container--fixed .dropdown-group-item .dropdown-item:hover,
+.dropdown-container--fixed .dropdown-group-item .dropdown-item:focus-visible {
+    color: var(--ui-text) !important;
+    background-color: var(--ui-surface-hover) !important;
+    box-shadow: inset 3px 0 0 var(--ui-primary);
+    outline: none;
+}
+
+.dropdown-container--fixed .dropdown-item-divider {
+    height: 1px;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid var(--ui-border);
 }
 
 .skin-omtbiz .site-header {
@@ -1104,6 +1145,14 @@ textarea,
     color: var(--ui-text) !important;
     background-color: var(--ui-input-bg) !important;
     border-color: var(--ui-border-strong) !important;
+}
+
+.multiselect__content-wrapper--fixed {
+    position: fixed;
+    z-index: 12000;
+    border: 1px solid var(--ui-border-strong) !important;
+    border-radius: 0.375rem;
+    box-shadow: var(--ui-shadow-md);
 }
 
 input.base-prefix-input[type="date"] {
