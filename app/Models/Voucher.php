@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Log;
+use App\Traits\Auditable;
 
 class Voucher extends Model
 {
+    use Auditable;
+
     public const STATUS_DONE = 'Done';
     public const STATUS_TO_BE_APPROVED = 'To Be Approved';
     public const STATUS_DECLINED = 'Declined';

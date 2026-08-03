@@ -44,7 +44,7 @@
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setInvoiceDebtor"
-              :invalid="vNewInvoice.debtors.$error"
+              :invalid="vNewInvoice.debtors.$error || submissionErrors.debtors"
               :options="sundryDebtorsList"
               :required="'required'"
               :searchable="true"
@@ -56,8 +56,8 @@
               label="name"
               track-by="id"
             />
-            <div v-if="vNewInvoice.debtors.$error">
-              <span v-if="!vNewInvoice.debtors.required" class="text-danger">{{ $tc('validation.required') }}</span>
+            <div v-if="vNewInvoice.debtors.$error || submissionErrors.debtors">
+              <span v-if="!vNewInvoice.debtors.required || submissionErrors.debtors" class="text-danger">{{ $tc('validation.required') }}</span>
             </div>
         </div>
         <div class="col-md-4 col-sm-6 collapse-input tw:w-full tw:max-w-none tw:xl:col-span-4">
@@ -399,6 +399,9 @@ export default {
       showEndOfList: false,
       estimateSelected: false,
       urlMode: null,
+      submissionErrors: {
+        debtors: false,
+      },
     }
   },
   validations () {
@@ -507,6 +510,7 @@ export default {
         return this.newInvoice.debtors
       },
       set(value) {
+        this.submissionErrors.debtors = false
         this.searchDebtorRefNumber({
           id: value && value.id ? value.id : value,
           invoice_date: this.newInvoice.invoice_date
@@ -725,9 +729,22 @@ export default {
     addInventory () {
       this.inventoryBind.push({...InvoiceStub})
       this.$nextTick(() => {
-        this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()
-        this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
+        const inventoryRow = this.getInventoryRow(this.inventoryBind.length - 1)
+        if (!inventoryRow) {
+          return
+        }
+
+        inventoryRow.$el?.focus?.()
+        inventoryRow.$refs.inventorySelect?.$refs.baseSelect?.$el?.focus?.()
       })
+    },
+    getInventoryRow (index) {
+      const inventoryRows = this.$refs.invoiceInventory
+      if (Array.isArray(inventoryRows)) {
+        return inventoryRows[index]
+      }
+
+      return index === 0 ? inventoryRows : null
     },
     removeInventory (index) {
       this.inventoryBind.splice(index, 1)
@@ -742,14 +759,18 @@ export default {
       }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
       this.$nextTick(() => {
-        const inventoryRow = this.$refs.invoiceInventory[data.index]
-        inventoryRow.$el.focus()
+        const inventoryRow = this.getInventoryRow(data.index)
+        if (!inventoryRow) {
+          return
+        }
+
+        inventoryRow.$el?.focus?.()
 
         if (data.updatingInput === 'sale_price') {
-          inventoryRow.$refs.inventoryPrice.$refs.baseInput.focus()
+          inventoryRow.$refs.inventoryPrice?.$refs?.baseInput?.focus?.()
         }
         if (data.updatingInput === 'quantity') {
-          inventoryRow.$refs.inventoryQuantity.$refs.baseInput.focus()
+          inventoryRow.$refs.inventoryQuantity?.$refs?.baseInput?.focus?.()
         }
       })
     },
@@ -786,13 +807,13 @@ export default {
       if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {
         return false
       }
-      this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute
-      this.newInvoice.reference_number = this.referencePrefix + '-' + this.newInvoice.reference_number
 
         // this.income_ledger = this.income_ledger ? this.income_ledger.name : null
         // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null
       let data = {
         ...this.newInvoice,
+        invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
+        reference_number: this.referencePrefix + '-' + this.referenceNumAttribute,
         invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
         total: this.total,
@@ -812,22 +833,24 @@ export default {
       this.submitSave(data)
     },
     reset() {
+      this.isLoading = false
       setTimeout(() => {
         window.location.reload()
       }, 1000)
     },
     printInvoice(invoice_id) {
-      //print invoice
       this.siteURL = `/reports/invoice/${invoice_id}`
       this.url = `${this.siteURL}?company_id=${this.user.company_id}`
-      printJS({
-        printable: this.url,
-        type: 'pdf',
-        onPrintDialogClose: () => {
-          this.reset();
-          // this.printSlip(invoice_id)
-        }
-      })
+
+      const pdfWindow = window.open(this.url, '_blank')
+
+      if (!pdfWindow) {
+        window.location.assign(this.url)
+        return
+      }
+
+      pdfWindow.opener = null
+      this.reset()
     },
     printSlip(invoice_id) {
       //print slip
@@ -862,15 +885,16 @@ export default {
       }
       this.isLoading = true
       this.addInvoice(data).then((res) => {
-        if (res.data) {
+        this.isLoading = false
+
+        if (res.data && res.data.invoice) {
           window.toastr['success'](this.$t('invoices.created_message'))
-          //this.$router.push('/invoices/create')
           this.showInvoicePopup(res.data.invoice.id)
         }
       }).catch((err) => {
         this.isLoading = false
         if (err) {
-          window.toastr['error'](err)
+          window.toastr['error'](this.getRequestErrorMessage(err))
           return true
         }
       })
@@ -894,7 +918,7 @@ export default {
       }).catch((err) => {
         this.isLoading = false
         if (err) {
-          window.toastr['error'](err)
+          window.toastr['error'](this.getRequestErrorMessage(err))
           return true
         }
       })
@@ -905,16 +929,35 @@ export default {
     checkValid () {
       this.vNewInvoice.$touch()
       window.hub.$emit('checkInventory')
-      let isValid = true
+      const debtor = this.newInvoice.debtors
+      this.submissionErrors.debtors = !(debtor && debtor.id && debtor.name)
+
+      let inventoriesValid = true
       this.newInvoice.inventories.forEach((each) => {
         if (!each.valid) {
-          isValid = false
+          inventoriesValid = false
         }
       })
-      if (this.vNewInvoice.$invalid === false && isValid === true) {
-        isValid = true
+
+      if (this.submissionErrors.debtors) {
+        window.toastr['error'](`${this.$t('receipts.list')}: ${this.$tc('validation.required')}`)
       }
-      return isValid
+
+      return this.vNewInvoice.$invalid === false && !this.submissionErrors.debtors && inventoriesValid
+    },
+    getRequestErrorMessage (error) {
+      const response = error?.response?.data
+      if (response?.errors) {
+        const messages = Object.values(response.errors).reduce((all, fieldMessages) => {
+          return all.concat(fieldMessages)
+        }, [])
+
+        if (messages.length) {
+          return messages.join(' ')
+        }
+      }
+
+      return response?.message || error?.message || this.$t('general.action_failed')
     },
     async searchDebtorRefNumber(data) {
       this.newInvoice.reference_number = this.invoiceNumAttribute

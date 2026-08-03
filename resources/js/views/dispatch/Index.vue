@@ -664,7 +664,7 @@ export default {
       }
     },
     onSelectCustomer (customer) {
-      this.filters.name = customer.name
+      this.filters.name = customer
     },
     async clearCustomerSearch (removedOption, id) {
       this.filters.name = ''

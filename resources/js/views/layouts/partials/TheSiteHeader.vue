@@ -66,6 +66,10 @@
         </v-dropdown-item>
         </v-dropdown>
       </li>
+      <li v-if="currentUser" class="user-info">
+        <span class="user-name">{{ currentUser.name }}</span>
+        <span class="user-role">{{ currentUser.role }}</span>
+      </li>
       <li>
         <v-dropdown :show-arrow="false">
           <a
@@ -117,9 +121,12 @@ export default {
     profilePicture () {
       return '/images/default-avatar.jpg'
     },
+    currentUser() {
+      return this.$store.state.user.currentUser
+    },
     role() {
-      return this.$store.state.user.currentUser.role
-    }, 
+      return this.currentUser ? this.currentUser.role : ''
+    },
     listNotifications() {
       let array = this.$store.state.userProfile.notifications;
       if(array) {

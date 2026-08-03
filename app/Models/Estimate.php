@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
 
+use App\Traits\Auditable;
+
 class Estimate extends Model
 {
+    use Auditable;
+
     public const TO_BE_DISPATCH = 'TO_BE_DISPATCH';
     public const DRAFT = 'DRAFT';
     public const SENT = 'SENT';

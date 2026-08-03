@@ -5,9 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Log;
+use App\Traits\Auditable;
 
 class AccountLedger extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'date',
         'type',

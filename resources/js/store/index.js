@@ -36,6 +36,7 @@ import states from './modules/states'
 import banks from './modules/banks'
 import dispatch from './modules/disptach'
 import orders from './modules/orders'
+import auditLogs from './modules/audit-logs'
 
 const initialState = {
     isAppLoaded: false
@@ -82,5 +83,6 @@ export default createStore({
         dispatch,
         estimate,
         orders,
+        auditLogs,
     }
 })

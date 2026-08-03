@@ -9,8 +9,12 @@ use Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+use App\Traits\Auditable;
+
 class Note extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'design_no',

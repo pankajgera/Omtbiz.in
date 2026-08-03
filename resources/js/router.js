@@ -76,6 +76,7 @@ const BanksReport = () => import('./views/reports/BanksReport.vue')
 // Users
 const UserIndex = () => import('./views/users/Index.vue')
 const UserCreate = () => import('./views/users/Create.vue')
+const AuditLogsIndex = () => import('./views/audit-logs/Index.vue')
 
 // Settings
 const SettingsLayout = () => import('./views/settings/layout/Index.vue')
@@ -631,6 +632,14 @@ const routes = [
                 path: 'users/:id/edit',
                 name: 'users.edit',
                 component: UserCreate,
+                meta: ['admin']
+            },
+
+            // Audit Logs
+            {
+                path: 'audit-logs',
+                name: 'audit.logs',
+                component: AuditLogsIndex,
                 meta: ['admin']
             },
 

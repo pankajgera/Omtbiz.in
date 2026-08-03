@@ -382,11 +382,8 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
-    totalQuantity(inventory){
-      if (inventory.length) {
-        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
-      }
-      return 0
+    totalQuantity(inventory = []){
+      return inventory.reduce((total, item) => total + (parseInt(item.quantity, 10) || 0), 0)
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({

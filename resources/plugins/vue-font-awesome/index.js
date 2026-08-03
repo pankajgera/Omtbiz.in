@@ -21,6 +21,7 @@ import {
   faShoppingBasket,
   faTimes,
   faUserPlus,
+  faHistory,
   faCartPlus,
   faArrowLeft,
   faArrowRight,
@@ -58,8 +59,24 @@ import {
   faClock,
   faCircle,
   faCalculator,
+  faBalanceScale,
+  faBookOpen,
+  faBoxes,
+  faChartBar,
+  faClipboardList,
+  faFileContract,
+  faFileInvoiceDollar,
   faMoon,
-  faSun
+  faReceipt,
+  faShieldAlt,
+  faShoppingCart,
+  faSlidersH,
+  faStickyNote,
+  faSun,
+  faTicketAlt,
+  faTruck,
+  faUserCheck,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -90,6 +107,7 @@ library.add(
   faTimes,
   faTimesCircle,
   faUserPlus,
+  faHistory,
   faCartPlus,
   faArrowLeft,
   faArrowRight,
@@ -126,8 +144,24 @@ library.add(
   faClock,
   faCircle,
   faCalculator,
+  faBalanceScale,
+  faBookOpen,
+  faBoxes,
+  faChartBar,
+  faClipboardList,
+  faFileContract,
+  faFileInvoiceDollar,
   faMoon,
-  faSun
+  faReceipt,
+  faShieldAlt,
+  faShoppingCart,
+  faSlidersH,
+  faStickyNote,
+  faSun,
+  faTicketAlt,
+  faTruck,
+  faUserCheck,
+  faUsers
 )
 
 export function registerFontAwesome (app) {

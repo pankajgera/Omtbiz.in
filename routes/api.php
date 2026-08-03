@@ -200,5 +200,10 @@ Route::group(['middleware' => 'api'], function () {
     Route::get('/dispatch/invoices', [App\Http\Controllers\DispatchController::class, 'getInvoices'])->name('dispatch');
     Route::resource('dispatch', App\Http\Controllers\DispatchController::class);
 
+    // Audit Logs (admin only)
+    //----------------------------------
+    Route::get('/audit-logs', [App\Http\Controllers\AuditLogsController::class, 'index'])->name('audit-logs.index');
+    Route::get('/audit-logs/{id}', [App\Http\Controllers\AuditLogsController::class, 'show'])->name('audit-logs.show');
+
     Route::post('/whatsapp-send-pdf', [App\Http\Controllers\WhatsappController::class, 'sendPdf'])->name('whatsapp');
 });

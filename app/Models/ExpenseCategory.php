@@ -4,9 +4,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Expense;
 use Carbon\Carbon;
+use App\Traits\Auditable;
 
 class ExpenseCategory extends Model
 {
+    use Auditable;
+
     protected $fillable = ['name', 'company_id', 'description'];
 
     /**
