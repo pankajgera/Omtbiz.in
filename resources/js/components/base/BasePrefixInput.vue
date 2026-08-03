@@ -17,15 +17,31 @@
   </div>
 </template>
 <style scoped>
-.disabled{
-  background: rgb(235 241 250) !important;
+.disabled {
+  color: var(--ui-disabled-text) !important;
+  background: var(--ui-disabled-bg) !important;
+  border-color: var(--ui-border) !important;
 }
-.base-prefix-input p.prefix-label{
-  background: #e9e9e9;
+
+.base-prefix-input p.prefix-label {
   height: 100%;
+  color: var(--ui-text) !important;
+  background: var(--ui-surface-muted);
+  border-right: 1px solid var(--ui-border);
 }
+
+.base-prefix-input.disabled p.prefix-label {
+  color: var(--ui-disabled-text) !important;
+  background: var(--ui-disabled-bg);
+}
+
+.base-prefix-input.disabled .prefix-input-field {
+  color: var(--ui-disabled-text) !important;
+  background: var(--ui-disabled-bg) !important;
+}
+
 @media screen and (max-width: 1030px) {
-  .base-prefix-input p.prefix-label{
+  .base-prefix-input p.prefix-label {
     padding: 3px;
   }
 }

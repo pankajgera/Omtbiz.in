@@ -155,7 +155,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -172,7 +172,7 @@
           :label="$t('vouchers.name')"
           show="account"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link v-if="role === 'admin'" :to="{ name: 'vouchers.edit', params: { id: row.id } }">
               {{ row.account }}
             </router-link>
@@ -186,7 +186,7 @@
           :label="$t('ledgers.debit')"
           show="debit"
         >
-          <template slot-scope="row">
+          <template #default="row">
             ₹ {{ numberWithCommas(row.debit) }}
           </template>
         </table-column>
@@ -194,7 +194,7 @@
           :label="$t('ledgers.credit')"
           show="credit"
         >
-          <template slot-scope="row">
+          <template #default="row">
             ₹ {{ numberWithCommas(row.credit) }}
           </template>
         </table-column>
@@ -202,7 +202,7 @@
           :label="$t('vouchers.groups')"
           show="groups"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.account_master.groups }}
           </template>
         </table-column>
@@ -211,12 +211,14 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-        <template slot-scope="row">
+        <template #default="row">
           <span> {{ $t('vouchers.action') }} </span>
           <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
+            <template #activator>
+              <span href="#">
+                <dot-icon />
+              </span>
+            </template>
             <v-dropdown-item>
 
               <router-link v-if="role === 'admin'" :to="{ name: 'vouchers.edit', params: { id: row.id } }" class="dropdown-item">

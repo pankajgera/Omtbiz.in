@@ -113,64 +113,64 @@
                 />
               </div>
             </div>
-            <div class="col-sm-6">
-              <div class="col-sm-12 p-0">
-                <div class="form-group">
-                  <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
-                  <base-prefix-input
-                    v-model.trim="openingBalance"
-                    :prefix="openingBalanceType ? openingBalanceType + ' - ' + money.prefix : money.prefix"
-                    type="number"
-                    name="openingBalance"
-                    disabled
-                  />
+            <div class="col-sm-12 receipt-summary-column">
+              <div class="receipt-summary-row">
+                <div class="receipt-balance-field">
+                  <div class="form-group">
+                    <label class="form-label">{{ $t('receipts.opening_balance') }}</label>
+                    <base-prefix-input
+                      v-model.trim="openingBalance"
+                      :prefix="openingBalanceType ? openingBalanceType + ' - ' + money.prefix : money.prefix"
+                      type="number"
+                      name="openingBalance"
+                      disabled
+                    />
+                  </div>
                 </div>
-              </div>
-              <div class="col-sm-12 p-0">
-                <div class="form-group">
-                  <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
-                  <base-prefix-input
-                    v-model.trim="closingBalance"
-                    :prefix="closingBalanceType ? closingBalanceType + ' - ' + money.prefix : money.prefix"
-                    type="number"
-                    name="closingBalance"
-                    disabled
-                  />
+                <div class="receipt-balance-field">
+                  <div class="form-group">
+                    <label class="form-label">{{ $t('receipts.closing_balance') }}</label>
+                    <base-prefix-input
+                      v-model.trim="closingBalance"
+                      :prefix="closingBalanceType ? closingBalanceType + ' - ' + money.prefix : money.prefix"
+                      type="number"
+                      name="closingBalance"
+                      disabled
+                    />
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-sm-12">
-              <div class="form-group collapse-button-container">
-                <div class="receipt-action-row">
-                  <base-button
-                    :loading="isLoading"
-                    icon="save"
-                    color="theme"
-                    type="submit"
-                    class="collapse-button"
-                  >
-                    {{ $t('receipts.save_receipt') }}
-                  </base-button>
-                  <base-button
-                    v-if="isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'"
-                    color="theme"
-                    class="report-button"
-                    @click="approveCurrentReceipt"
-                  >
-                    {{ $t('receipts.approve_receipt') }}
-                  </base-button>
-                  <base-button
-                    v-if="isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'"
-                    outline
-                    color="danger"
-                    class="report-button"
-                    @click="declineCurrentReceipt"
-                  >
-                    {{ $t('receipts.decline_receipt') }}
-                  </base-button>
-                  <base-button v-if="isEdit" outline color="theme" class="report-button" @click="sendReports()">
-                    {{ $t('reports.send_report') }}
-                  </base-button>
+                <div class="receipt-summary-actions">
+                  <div class="receipt-action-row">
+                    <base-button
+                      :loading="isLoading"
+                      icon="save"
+                      color="theme"
+                      type="submit"
+                      class="collapse-button"
+                    >
+                      {{ $t('receipts.save_receipt') }}
+                    </base-button>
+                    <base-button
+                      v-if="isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'"
+                      color="theme"
+                      class="report-button"
+                      @click="approveCurrentReceipt"
+                    >
+                      {{ $t('receipts.approve_receipt') }}
+                    </base-button>
+                    <base-button
+                      v-if="isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'"
+                      outline
+                      color="danger"
+                      class="report-button"
+                      @click="declineCurrentReceipt"
+                    >
+                      {{ $t('receipts.decline_receipt') }}
+                    </base-button>
+                    <base-button v-if="isEdit" outline color="theme" class="report-button" @click="sendReports()">
+                      {{ $t('reports.send_report') }}
+                    </base-button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -523,10 +523,64 @@ export default {
 </script>
 
 <style scoped>
+.receipt-card .card-body > .row > .col-sm-6 {
+  padding-top: 12px;
+}
+
+.receipt-summary-column {
+  margin-top: 18px;
+}
+
+.receipt-summary-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: end;
+  padding-top: 18px;
+  border-top: 1px solid var(--ui-border);
+}
+
+.receipt-balance-field .form-group {
+  margin-bottom: 0;
+}
+
+.receipt-summary-actions {
+  padding-bottom: 1px;
+}
+
 .receipt-action-row {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
+}
+
+@media (max-width: 991px) {
+  .receipt-summary-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .receipt-summary-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 575px) {
+  .receipt-summary-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .receipt-summary-actions {
+    grid-column: auto;
+  }
+
+  .receipt-action-row {
+    justify-content: stretch;
+  }
+
+  .receipt-action-row > * {
+    flex: 1 1 100%;
+  }
 }
 </style>

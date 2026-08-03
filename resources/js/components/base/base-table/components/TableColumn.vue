@@ -1,9 +1,6 @@
 <template>
-  <!-- Never render the contents -->
-  <!-- The scoped slot won't have the required data -->
-  <div v-if="false">
-    <slot></slot>
-  </div>
+  <!-- Column definitions are registered in mounted; row slots are rendered by TableCell. -->
+  <div v-if="false" />
 </template>
 
 <script>
