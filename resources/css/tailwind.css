@@ -705,6 +705,14 @@ a:has(button):focus {
     font-size: 0.8125rem;
 }
 
+.table-actions:has(> .table-stats) {
+    margin-bottom: 1.25rem !important;
+}
+
+.table-container > .table-actions:has(> .table-stats) ~ .table-component {
+    margin-top: 0 !important;
+}
+
 .notes-table-actions {
     margin-bottom: 1rem !important;
 }
