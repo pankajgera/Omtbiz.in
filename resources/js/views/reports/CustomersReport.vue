@@ -68,12 +68,16 @@
           </base-button>
           <base-button
             v-if="getReportUrl && !isReportLoading"
-            icon="paper-plane"
-            outline
-            color="theme"
-            class="report-button"
+            color="success"
+            class="report-button whatsapp-report-button"
             @click="sendReports()"
           >
+            <img
+              :src="whatsappIconUrl"
+              alt=""
+              class="whatsapp-button-icon"
+              aria-hidden="true"
+            />
             {{ $t('reports.customers.send_on_whatsapp') }}
           </base-button>
         </div>
@@ -114,10 +118,12 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import { required } from '@vuelidate/validators';
+import whatsappIconUrl from '@fortawesome/fontawesome-free/svgs/brands/whatsapp.svg'
 export default {
   mixins: [validationMixin],
   data () {
     return {
+      whatsappIconUrl,
       range: new Date(),
       dateRange: [
         'Today',
