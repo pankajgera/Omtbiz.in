@@ -277,14 +277,6 @@
     </div>
   </div>
 </template>
-<style>
-body > .expandable-image.expanded {
-  width: 100% !important;
-}
-.expandable-image{
-  width: 100px;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'

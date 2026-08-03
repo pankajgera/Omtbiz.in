@@ -1,5 +1,4 @@
 import { VMoney } from 'v-money3'
-import VueExpandableImage from 'vue-expandable-image'
 import axios from 'axios'
 import $ from 'jquery'
 import _ from 'lodash'
@@ -69,12 +68,6 @@ export function setupBootstrap (app) {
   registerBaseComponents(app)
 
   app.directive('money', VMoney)
-
-  if (VueExpandableImage && typeof VueExpandableImage.install === 'function') {
-    app.use(VueExpandableImage)
-  } else {
-    app.component('expandable-image', VueExpandableImage)
-  }
 
   app.component('v-dropdown', VDropdown)
   app.component('v-dropdown-item', VDropdownItem)

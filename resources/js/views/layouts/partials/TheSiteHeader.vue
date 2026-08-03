@@ -81,7 +81,7 @@
             aria-label="Open user menu"
             class="avatar"
           >
-            <img :src="profilePicture" alt="Avatar">
+            <img :src="profilePicture" alt="Avatar" width="40" height="40">
           </a>
           <v-dropdown-item>
             <router-link class="dropdown-item" to="/settings">

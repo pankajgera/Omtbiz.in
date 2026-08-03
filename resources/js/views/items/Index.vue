@@ -173,11 +173,13 @@
             label="Image"
             show="images"
           >
-            <template v-if="row.images" slot-scope="row">
-              <expandable-image
+            <template #default="row">
+              <img
+                v-if="row.images"
                 class="image"
                 :src="row.images.original_image_path"
-              ></expandable-image>
+                alt=""
+              >
             </template>
           </table-column>
           <table-column
@@ -298,11 +300,13 @@
             label="Image"
             show="images"
           >
-            <template v-if="row.images" slot-scope="row">
-              <expandable-image
+            <template #default="row">
+              <img
+                v-if="row.images"
                 class="image"
                 :src="row.images.original_image_path"
-              ></expandable-image>
+                alt=""
+              >
             </template>
           </table-column>
           <table-column
@@ -337,14 +341,6 @@
 
   </div>
 </template>
-<style>
-body > .expandable-image.expanded {
-  width: 100% !important;
-}
-.expandable-image{
-  width: 100px;
-}
-</style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'

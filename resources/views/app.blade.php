@@ -13,7 +13,6 @@
             document.documentElement.style.colorScheme = theme;
         })();
     </script>
-    <script src="/assets/js/pace.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
@@ -32,9 +31,7 @@
 <div id="app" class="template-container">
     <div class="mobile-menu-overlay" @click.prevent="onOverlayClick"></div>
     <router-view v-slot="{ Component }">
-        <transition name="fade" mode="out-in">
-            <component :is="Component"></component>
-        </transition>
+        <component :is="Component"></component>
     </router-view>
 </div>
 <script type="text/javascript" src="/assets/js/print.min.js"></script>
