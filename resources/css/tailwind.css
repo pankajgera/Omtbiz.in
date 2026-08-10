@@ -965,7 +965,10 @@ a:focus {
 }
 
 .dropdown-container--fixed {
+    box-sizing: border-box;
+    width: max-content;
     min-width: 10rem;
+    max-width: calc(100vw - 1rem);
     padding: 0.5rem;
     color: var(--ui-text);
     background-color: var(--ui-surface) !important;
