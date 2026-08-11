@@ -16,6 +16,10 @@ class Voucher extends Model
     public const STATUS_TO_BE_APPROVED = 'To Be Approved';
     public const STATUS_DECLINED = 'Declined';
 
+    protected $appends = [
+        'formattedDate',
+    ];
+
     protected $fillable = [
         'type',
         'date',
@@ -53,6 +57,12 @@ class Voucher extends Model
     public function receipt()
     {
         return $this->belongsTo(\App\Models\Receipt::class);
+    }
+
+    public function getFormattedDateAttribute($value)
+    {
+        $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);
+        return Carbon::parse($this->date)->format($dateFormat);
     }
 
     public function scopeWhereType($query, $type)
