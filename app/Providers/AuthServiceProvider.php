@@ -22,6 +22,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (method_exists(Passport::class, 'enablePasswordGrant')) {
+            Passport::enablePasswordGrant();
+        }
+
         Passport::cookie('access_token_'.env('APP_ENV'));
         Passport::personalAccessTokensExpireIn(now()->addYears(10));
         Passport::withoutCookieSerialization();
