@@ -1,4 +1,4 @@
-<template lang="pug">
+<template>
   <div class="grid-paginate">
       <div class="grid-paginate-item grid-page-count">
           <span class="grid-paginate-item">Show</span>

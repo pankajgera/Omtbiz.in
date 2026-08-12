@@ -310,8 +310,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import AstronautIcon from '../../components/icon/AstronautIcon'
-import BaseButton from '../../../js/components/base/BaseButton'
+import AstronautIcon from '@/components/icon/AstronautIcon'
+import BaseButton from '@/components/base/BaseButton'
 
 export default {
   components: {

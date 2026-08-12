@@ -83,7 +83,7 @@ import BanksReport from './views/reports/BanksReport.vue'
 // Users
 import UserIndex from './views/users/Index.vue'
 import UserCreate from './views/users/Create.vue'
-import AuditLogsIndex from './views/audit-logs/Index.vue'
+import AuditLogsIndex from '../assets/js/views/audit-logs/Index.vue'
 
 
 // Settings
@@ -134,11 +134,11 @@ import DispatchCreate from './views/dispatch/Create.vue'
 
 
 // Credit History
-import CreditIndex from './views/credithistory/Index.vue'
+import CreditIndex from '../assets/js/views/credithistory/Index.vue'
 
 
 // Credits History
-import CreditsHistory from './views/credithistory/Index.vue'
+import CreditsHistory from '../assets/js/views/credithistory/Index.vue'
 
 Vue.use(VueRouter)
 
