@@ -62,9 +62,29 @@ class AuditLog extends Model
         'discount_val' => 'Discount Amount',
         'notes' => 'Notes',
         'invoice_date' => 'Date',
+        'estimate_date' => 'Date',
+        'order_date' => 'Date',
+        'date' => 'Date',
+        'receipt_date' => 'Date',
         'due_date' => 'Due Date',
+        'expiry_date' => 'Expiry Date',
         'sent' => 'Sent',
         'viewed' => 'Viewed',
+    ];
+
+    /**
+     * Date-only fields that are stored/serialized as full timestamps —
+     * formatted as plain dates in the change summary instead of raw
+     * ISO/SQL datetime strings.
+     */
+    const CHANGE_FIELD_DATES = [
+        'invoice_date',
+        'estimate_date',
+        'order_date',
+        'date',
+        'receipt_date',
+        'due_date',
+        'expiry_date',
     ];
 
     /**
@@ -210,6 +230,14 @@ class AuditLog extends Model
             return number_format((float) $value, 2);
         }
 
+        if (in_array($field, self::CHANGE_FIELD_DATES, true)) {
+            try {
+                return Carbon::parse($value)->format('d/m/Y');
+            } catch (\Throwable $e) {
+                return (string) $value;
+            }
+        }
+
         return (string) $value;
     }
 
@@ -218,36 +246,52 @@ class AuditLog extends Model
      * log entry belongs to, e.g. "invoices/12/view". Null for record types
      * that don't have a viewable page, or once the record no longer exists.
      */
+    /**
+     * Per-request memo of which (type, id) records still exist, so the
+     * activity list doesn't run a fresh existence check for every row when
+     * several entries reference the same record.
+     */
+    protected static $existenceCache = [];
+
     public function getDocumentPathAttribute()
     {
         if (!$this->auditable_id) {
             return null;
         }
 
-        // The record is gone — don't link to a page that will 404.
-        if ($this->action === 'deleted') {
-            return null;
-        }
-
-        // Prefix + the page each record type actually has — Invoice/Estimate/
-        // Order/Receipt have a read-only "view" page, Voucher/Inventory only
-        // have "edit".
-        $routes = [
-            Invoice::class => ['invoices', 'view'],
-            Estimate::class => ['estimates', 'view'],
-            Orders::class => ['orders', 'view'],
-            Receipt::class => ['receipts', 'view'],
-            Voucher::class => ['vouchers', 'edit'],
-            Inventory::class => ['inventory', 'edit'],
+        // Prefix each record type opens to — always its edit page.
+        $prefixes = [
+            Invoice::class => 'invoices',
+            Estimate::class => 'estimates',
+            Orders::class => 'orders',
+            Receipt::class => 'receipts',
+            Voucher::class => 'vouchers',
+            Inventory::class => 'inventory',
         ];
 
-        if (!isset($routes[$this->auditable_type])) {
+        if (!isset($prefixes[$this->auditable_type])) {
             return null;
         }
 
-        [$prefix, $page] = $routes[$this->auditable_type];
+        // The record may have been deleted since this log entry was
+        // written (even a Created/Updated row can outlive its record) —
+        // don't link to a page that will error out.
+        if (!$this->documentStillExists($this->auditable_type, $this->auditable_id)) {
+            return null;
+        }
 
-        return $prefix . '/' . $this->auditable_id . '/' . $page;
+        return $prefixes[$this->auditable_type] . '/' . $this->auditable_id . '/edit';
+    }
+
+    protected function documentStillExists($class, $id)
+    {
+        $key = $class . ':' . $id;
+
+        if (!array_key_exists($key, self::$existenceCache)) {
+            self::$existenceCache[$key] = $class::whereKey($id)->exists();
+        }
+
+        return self::$existenceCache[$key];
     }
 
     public function scopeWhereCompany($query, $companyId)
