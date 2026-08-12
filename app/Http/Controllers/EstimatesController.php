@@ -19,6 +19,7 @@ use App\Mail\EstimatePdf;
 use App\Models\AccountMaster;
 use App\Notifications\EstimateSuccessful;
 use App\Services\AuditLogger;
+use App\Services\NumberSequenceService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

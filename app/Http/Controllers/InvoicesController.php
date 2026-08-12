@@ -25,6 +25,7 @@ use App\Models\User;
 use Validator;
 use App\Models\Voucher;
 use App\Services\AuditLogger;
+use App\Services\NumberSequenceService;
 use Exception;
 use Illuminate\Database\QueryException;
 
@@ -981,7 +982,6 @@ class InvoicesController extends Controller
 
 
 }
-
 
 
 
