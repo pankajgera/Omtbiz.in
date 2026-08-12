@@ -20078,6 +20078,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     },
     disableInput: function disableInput() {
       var bool = false;
+      var isAccountantVoucherView = this.$route && this.$route.name === 'vouchers.edit' && window.Ls && window.Ls.get('role') === 'accountant';
+      if (isAccountantVoucherView && (this.column.field === 'debit' || this.column.field === 'credit')) {
+        return true;
+      }
+      if (isAccountantVoucherView && (this.column.field === 'type' || this.column.field === 'account')) {
+        return true;
+      }
       if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {
         this.rowValue = null;
         this.value = null;
@@ -20987,6 +20994,354 @@ __webpack_require__.r(__webpack_exports__);
       }, 300);
     }
   }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js ***!
+  \************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_icon_AstronautIcon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/icon/AstronautIcon */ "./resources/assets/js/components/icon/AstronautIcon.vue");
+/* harmony import */ var _js_components_base_BaseButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../js/components/base/BaseButton */ "./resources/assets/js/components/base/BaseButton.vue");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    AstronautIcon: _components_icon_AstronautIcon__WEBPACK_IMPORTED_MODULE_1__["default"],
+    BaseButton: _js_components_base_BaseButton__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    var typeOptions = [{
+      label: this.$t('audit_logs.all_types'),
+      value: ''
+    }, {
+      label: this.$t('navigation.invoices'),
+      value: 'invoice'
+    }, {
+      label: this.$t('navigation.estimates'),
+      value: 'estimate'
+    }, {
+      label: this.$t('navigation.orders'),
+      value: 'order'
+    }, {
+      label: this.$t('navigation.inventory'),
+      value: 'inventory'
+    }, {
+      label: this.$t('navigation.voucher'),
+      value: 'voucher'
+    }, {
+      label: this.$t('navigation.receipts'),
+      value: 'receipt'
+    }, {
+      label: this.$t('audit_logs.login_logout'),
+      value: 'auth'
+    }];
+    // Default to Invoice only — a full "All Types" load pulls in every
+    // module and is exactly the noisy view this page was built to avoid.
+    var defaultTypeValue = 'invoice';
+    var defaultType = typeOptions.find(function (o) {
+      return o.value === defaultTypeValue;
+    });
+    return {
+      showFilters: false,
+      filtersApplied: false,
+      isRequestOngoing: true,
+      currentPage: 1,
+      perPage: 15,
+      searchInput: '',
+      searchDebounce: null,
+      changeSummaryLimit: 3,
+      expandedChanges: {},
+      defaultTypeValue: defaultTypeValue,
+      filters: {
+        search: '',
+        type: defaultType,
+        user: '',
+        from_date: '',
+        to_date: ''
+      },
+      typeOptions: typeOptions,
+      dateRangeOption: {
+        label: this.$t('audit_logs.all_time'),
+        value: ''
+      },
+      dateRangeOptions: [{
+        label: this.$t('audit_logs.all_time'),
+        value: ''
+      }, {
+        label: this.$t('audit_logs.today'),
+        value: 'today'
+      }, {
+        label: this.$t('audit_logs.this_week'),
+        value: 'week'
+      }, {
+        label: this.$t('audit_logs.this_month'),
+        value: 'month'
+      }],
+      breadCrumbLinks: [{
+        url: 'dashboard',
+        title: this.$t('general.home')
+      }, {
+        url: '#',
+        title: this.$t('audit_logs.title')
+      }]
+    };
+  },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapGetters)('auditLogs', ['auditLogs', 'totalAuditLogs'])), {}, {
+    showEmptyScreen: function showEmptyScreen() {
+      return !this.totalAuditLogs && !this.isRequestOngoing && !this.hasCustomFilters;
+    },
+    hasCustomFilters: function hasCustomFilters() {
+      var typeValue = this.filters.type && this.filters.type.value;
+      return !!(this.filters.search || typeValue && typeValue !== this.defaultTypeValue || this.filters.user || this.filters.from_date || this.filters.to_date);
+    },
+    filterIcon: function filterIcon() {
+      return this.showFilters ? 'angle-up' : 'angle-down';
+    },
+    pageStart: function pageStart() {
+      if (!this.totalAuditLogs) {
+        return 0;
+      }
+      return (this.currentPage - 1) * this.perPage + 1;
+    },
+    pageEnd: function pageEnd() {
+      return Math.min(this.currentPage * this.perPage, this.totalAuditLogs);
+    },
+    activeFilterChips: function activeFilterChips() {
+      var chips = [];
+      if (this.filters.search) {
+        chips.push({
+          key: 'search',
+          label: "\"".concat(this.filters.search, "\"")
+        });
+      }
+      var typeValue = this.filters.type && this.filters.type.value;
+      if (typeValue && typeValue !== this.defaultTypeValue) {
+        var option = this.typeOptions.find(function (o) {
+          return o.value === typeValue;
+        });
+        chips.push({
+          key: 'type',
+          label: option ? option.label : typeValue
+        });
+      }
+      if (this.filters.user) {
+        chips.push({
+          key: 'user',
+          label: "".concat(this.$t('audit_logs.user'), ": ").concat(this.filters.user)
+        });
+      }
+      if (this.filters.from_date) {
+        chips.push({
+          key: 'from_date',
+          label: "".concat(this.$t('general.from_date'), ": ").concat(this.filters.from_date)
+        });
+      }
+      if (this.filters.to_date) {
+        chips.push({
+          key: 'to_date',
+          label: "".concat(this.$t('general.to_date'), ": ").concat(this.filters.to_date)
+        });
+      }
+      return chips;
+    }
+  }),
+  watch: {
+    filters: {
+      handler: function handler() {
+        this.$refs.table && this.$refs.table.refresh();
+      },
+      deep: true
+    },
+    dateRangeOption: function dateRangeOption(option) {
+      var value = option && option.value;
+      if (!value) {
+        this.filters.from_date = '';
+        this.filters.to_date = '';
+      } else {
+        this.setQuickRange(value);
+      }
+    }
+  },
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('auditLogs', ['fetchAuditLogs'])), {}, {
+    toggleFilter: function toggleFilter() {
+      this.showFilters = !this.showFilters;
+    },
+    handleSearchInput: function handleSearchInput(value) {
+      var _this = this;
+      clearTimeout(this.searchDebounce);
+      this.searchDebounce = setTimeout(function () {
+        _this.filters.search = value;
+      }, 300);
+    },
+    clearFilterKey: function clearFilterKey(key) {
+      if (key === 'search') {
+        this.searchInput = '';
+        this.filters.search = '';
+      } else if (key === 'type') {
+        this.filters.type = this.defaultTypeOption();
+      } else if (key === 'from_date' || key === 'to_date') {
+        this.filters.from_date = '';
+        this.filters.to_date = '';
+        this.dateRangeOption = {
+          label: this.$t('audit_logs.all_time'),
+          value: ''
+        };
+      } else {
+        this.filters[key] = '';
+      }
+    },
+    clearFilter: function clearFilter() {
+      this.searchInput = '';
+      this.dateRangeOption = {
+        label: this.$t('audit_logs.all_time'),
+        value: ''
+      };
+      this.filters = {
+        search: '',
+        type: this.defaultTypeOption(),
+        user: '',
+        from_date: '',
+        to_date: ''
+      };
+      this.filtersApplied = false;
+      this.$refs.table && this.$refs.table.refresh();
+    },
+    defaultTypeOption: function defaultTypeOption() {
+      var _this2 = this;
+      return this.typeOptions.find(function (o) {
+        return o.value === _this2.defaultTypeValue;
+      });
+    },
+    setQuickRange: function setQuickRange(range) {
+      var pad = function pad(n) {
+        return String(n).padStart(2, '0');
+      };
+      var toInputDate = function toInputDate(d) {
+        return "".concat(d.getFullYear(), "-").concat(pad(d.getMonth() + 1), "-").concat(pad(d.getDate()));
+      };
+      var now = new Date();
+      var from = now;
+      if (range === 'week') {
+        var day = now.getDay() === 0 ? 7 : now.getDay();
+        from = new Date(now);
+        from.setDate(now.getDate() - day + 1);
+      } else if (range === 'month') {
+        from = new Date(now.getFullYear(), now.getMonth(), 1);
+      }
+      this.filters.from_date = toInputDate(from);
+      this.filters.to_date = toInputDate(now);
+    },
+    getFilterParams: function getFilterParams() {
+      var type = this.filters.type && this.filters.type.value || '';
+      // Default view covers invoices/estimates/orders/inventory/vouchers/
+      // receipts (create/update/delete) plus login/logout activity. Other
+      // modules (users, banks, etc.) stay out to keep this readable; the
+      // Type filter narrows further.
+      var module = type || 'invoice,estimate,order,inventory,voucher,receipt,auth';
+      return {
+        search: this.filters.search,
+        module: module,
+        action: 'created,updated,deleted,login,logout,login_failed',
+        user: this.filters.user,
+        from_date: this.filters.from_date,
+        to_date: this.filters.to_date
+      };
+    },
+    fetchData: function fetchData(_ref) {
+      var _this3 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var page, filter, sort, params, response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              page = _ref.page, filter = _ref.filter, sort = _ref.sort;
+              params = _objectSpread(_objectSpread({}, _this3.getFilterParams()), {}, {
+                page: page,
+                limit: _this3.perPage,
+                orderByField: sort.fieldName || 'created_at',
+                orderBy: sort.order || 'desc'
+              });
+              _this3.filtersApplied = _this3.hasCustomFilters;
+              _this3.isRequestOngoing = true;
+              _this3.currentPage = page || 1;
+              _context.prev = 5;
+              _context.next = 8;
+              return _this3.fetchAuditLogs(params);
+            case 8:
+              response = _context.sent;
+              _this3.isRequestOngoing = false;
+              return _context.abrupt("return", {
+                data: response.data.audit_logs.data,
+                pagination: {
+                  totalPages: response.data.audit_logs.last_page,
+                  currentPage: response.data.audit_logs.current_page || page,
+                  count: response.data.audit_logs.total
+                }
+              });
+            case 13:
+              _context.prev = 13;
+              _context.t0 = _context["catch"](5);
+              _this3.isRequestOngoing = false;
+              return _context.abrupt("return", {
+                data: [],
+                pagination: {
+                  totalPages: 1,
+                  currentPage: 1,
+                  count: 0
+                }
+              });
+            case 17:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee, null, [[5, 13]]);
+      }))();
+    },
+    actionBadgeClass: function actionBadgeClass(action) {
+      if (action === 'created') return 'badge-created';
+      if (action === 'updated') return 'badge-updated';
+      if (action === 'deleted') return 'badge-deleted';
+      if (action === 'login') return 'badge-login';
+      if (action === 'logout') return 'badge-logout';
+      if (action === 'login_failed') return 'badge-failed';
+      return '';
+    },
+    relativeTime: function relativeTime(date) {
+      return date ? moment__WEBPACK_IMPORTED_MODULE_0___default()(date).fromNow() : '';
+    },
+    visibleChanges: function visibleChanges(row) {
+      if (this.expandedChanges[row.id] || row.change_summary.length <= this.changeSummaryLimit) {
+        return row.change_summary;
+      }
+      return row.change_summary.slice(0, this.changeSummaryLimit);
+    },
+    toggleChanges: function toggleChanges(id) {
+      this.$set(this.expandedChanges, id, !this.expandedChanges[id]);
+    }
+  })
 });
 
 /***/ }),
@@ -22685,7 +23040,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       var index = this.formData.invoice_id.findIndex(function (each) {
         return each === value.id;
       });
-      if (index) {
+      if (index !== -1) {
         this.formData.invoice_id.splice(index, 1);
       }
     },
@@ -23125,7 +23480,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }))();
     },
     onSelectCustomer: function onSelectCustomer(customer) {
-      this.filters.name = customer.name;
+      this.filters.name = customer;
     },
     clearCustomerSearch: function clearCustomerSearch(removedOption, id) {
       var _this2 = this;
@@ -23533,6 +23888,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       newEstimate: {
         estimate_date: null,
         estimate_number: null,
+        reference_number: null,
         user_id: null,
         estimate_template_id: 1,
         sub_total: null,
@@ -23633,7 +23989,10 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         return this.newEstimate.debtors;
       },
       set: function set(value) {
-        //this.searchDebtorRefNumber(value)
+        this.searchDebtorRefNumber({
+          id: value && value.id ? value.id : value,
+          estimate_date: this.newEstimate.estimate_date
+        });
         this.newEstimate.debtors = value;
       }
     },
@@ -23646,12 +24005,32 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     },
     inventoryListBind: function inventoryListBind() {
       return this.$store.state.inventory.inventories;
+    },
+    referenceNumAttribute: {
+      cache: false,
+      get: function get() {
+        if (this.newEstimate.reference_number && -1 !== this.newEstimate.reference_number.indexOf('-')) {
+          return this.newEstimate.reference_number.split('-').pop();
+        }
+        return this.newEstimate.reference_number;
+      },
+      set: function set(value) {
+        this.newEstimate.reference_number = value;
+      }
     }
   }),
   watch: {
     subtotal: function subtotal(newValue) {
       if (this.newEstimate.discount_type === 'percentage') {
         this.newEstimate.discount_val = this.newEstimate.discount * newValue;
+      }
+    },
+    'newEstimate.estimate_date': function newEstimateEstimate_date() {
+      if (this.newEstimate.debtors && this.$route.name !== 'estimates.edit') {
+        this.searchDebtorRefNumber({
+          id: this.newEstimate.debtors.id ? this.newEstimate.debtors.id : this.newEstimate.debtors,
+          estimate_date: this.newEstimate.estimate_date
+        });
       }
     }
   },
@@ -23728,6 +24107,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 _this3.estimateTemplates = _response.data.estimateTemplates;
                 _this3.estimatePrefix = _response.data.estimate_prefix;
                 _this3.estimateNumAttribute = _response.data.estimateNumber;
+                _this3.newEstimate.reference_number = _response.data.estimate.reference_number;
                 _this3.newEstimate.debtors = _response.data.sundryDebtorsList[0];
               }
               _this3.initLoading = false;
@@ -23746,6 +24126,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 _this3.inventoryNegative = response.data.inventory_negative;
                 _this3.estimatePrefix = response.data.estimate_prefix;
                 _this3.estimateNumAttribute = response.data.nextEstimateNumberAttribute;
+                _this3.newEstimate.reference_number = response.data.nextEstimateNumberAttribute;
                 _this3.sundryDebtorsList = response.data.sundryDebtorsList;
               }
               _this3.initLoading = false;
@@ -23800,7 +24181,8 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       if (!this.checkValid()) {
         return false;
       }
-      this.newEstimate.estimate_number = this.estimatePrefix + this.estimateNumAttribute;
+      this.newEstimate.estimate_number = this.estimatePrefix + '-' + this.estimateNumAttribute;
+      this.newEstimate.reference_number = this.estimatePrefix + '-' + this.referenceNumAttribute;
       var data = _objectSpread(_objectSpread({}, this.newEstimate), {}, {
         estimate_date: moment__WEBPACK_IMPORTED_MODULE_4___default()(this.newEstimate.estimate_date).format('DD/MM/YYYY'),
         sub_total: this.subtotal,
@@ -23930,6 +24312,37 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         isValid = true;
       }
       return isValid;
+    },
+    searchDebtorRefNumber: function searchDebtorRefNumber(data) {
+      var _this11 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              _this11.newEstimate.reference_number = _this11.estimateNumAttribute;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return _this11.fetchReferenceNumber(_objectSpread(_objectSpread({}, data), {}, {
+                estimate_date: data.estimate_date ? data.estimate_date : _this11.newEstimate.estimate_date
+              }));
+            case 4:
+              response = _context5.sent;
+              if (response.data && response.data.estimate) {
+                _this11.newEstimate.reference_number = response.data.estimate.reference_number.split('-').pop();
+              }
+              _context5.next = 11;
+              break;
+            case 8:
+              _context5.prev = 8;
+              _context5.t0 = _context5["catch"](1);
+              _this11.newEstimate.reference_number = _this11.estimateNumAttribute;
+            case 11:
+            case "end":
+              return _context5.stop();
+          }
+        }, _callee5, null, [[1, 8]]);
+      }))();
     },
     showEndList: function showEndList(val) {
       this.showAddNewInventory = !val;
@@ -25943,7 +26356,8 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       },
       set: function set(value) {
         this.searchDebtorRefNumber({
-          'id': value
+          id: value && value.id ? value.id : value,
+          invoice_date: this.newInvoice.invoice_date
         });
         this.newInvoice.debtors = value;
       }
@@ -25979,6 +26393,14 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     subtotal: function subtotal(newValue) {
       if (this.newInvoice.discount_type === 'percentage') {
         this.newInvoice.discount_val = this.newInvoice.discount * newValue;
+      }
+    },
+    'newInvoice.invoice_date': function newInvoiceInvoice_date() {
+      if (this.newInvoice.debtors && this.$route.name !== 'invoices.edit') {
+        this.searchDebtorRefNumber({
+          id: this.newInvoice.debtors.id ? this.newInvoice.debtors.id : this.newInvoice.debtors,
+          invoice_date: this.newInvoice.invoice_date
+        });
       }
     }
   },
@@ -26441,20 +26863,28 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         return _regenerator().w(function (_context8) {
           while (1) switch (_context8.n) {
             case 0:
-              _this12.newInvoice.reference_number = null;
-              _context8.n = 1;
-              return _this12.fetchReferenceNumber(data);
-            case 1:
-              response = _context8.v;
+              _this14.newInvoice.reference_number = _this14.invoiceNumAttribute;
+              _context8.prev = 1;
+              _context8.next = 4;
+              return _this14.fetchReferenceNumber(_objectSpread(_objectSpread({}, data), {}, {
+                invoice_date: data.invoice_date ? data.invoice_date : _this14.newInvoice.invoice_date
+              }));
+            case 4:
+              response = _context8.sent;
               if (response.data && response.data.invoice) {
-                _this12.newInvoice.reference_number = response.data.invoice.reference_number.split('-')[2];
-              } else {
-                _this12.newInvoice.reference_number = _this12.invoiceNumAttribute;
+                _this14.newInvoice.reference_number = response.data.invoice.reference_number.split('-').pop();
               }
-            case 2:
-              return _context8.a(2);
+              _context8.next = 11;
+              break;
+            case 8:
+              _context8.prev = 8;
+              _context8.t0 = _context8["catch"](1);
+              _this14.newInvoice.reference_number = _this14.invoiceNumAttribute;
+            case 11:
+            case "end":
+              return _context8.stop();
           }
-        }, _callee8);
+        }, _callee8, null, [[1, 8]]);
       }))();
     },
     showEndList: function showEndList(val) {
@@ -26503,8 +26933,9 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
               };
 
               //set reference number
-              _this13.searchDebtorRefNumber({
-                'id': invoice.account_master_id
+              _this15.searchDebtorRefNumber({
+                id: invoice.account_master_id,
+                invoice_date: moment__WEBPACK_IMPORTED_MODULE_4___default()(invoice.estimate_date).format('YYYY-MM-DD')
               });
             case 2:
               return _context9.a(2);
@@ -26557,8 +26988,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _helpers_mixins_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../helpers/mixins.js */ "./resources/assets/js/helpers/mixins.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _regenerator() { /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */ var e, t, r = "function" == typeof Symbol ? Symbol : {}, n = r.iterator || "@@iterator", o = r.toStringTag || "@@toStringTag"; function i(r, n, o, i) { var c = n && n.prototype instanceof Generator ? n : Generator, u = Object.create(c.prototype); return _regeneratorDefine2(u, "_invoke", function (r, n, o) { var i, c, u, f = 0, p = o || [], y = !1, G = { p: 0, n: 0, v: e, a: d, f: d.bind(e, 4), d: function d(t, r) { return i = t, c = 0, u = e, G.n = r, a; } }; function d(r, n) { for (c = r, u = n, t = 0; !y && f && !o && t < p.length; t++) { var o, i = p[t], d = G.p, l = i[2]; r > 3 ? (o = l === n) && (u = i[(c = i[4]) ? 5 : (c = 3, 3)], i[4] = i[5] = e) : i[0] <= d && ((o = r < 2 && d < i[1]) ? (c = 0, G.v = n, G.n = i[1]) : d < l && (o = r < 3 || i[0] > n || n > l) && (i[4] = r, i[5] = n, G.n = l, c = 0)); } if (o || r > 1) return a; throw y = !0, n; } return function (o, p, l) { if (f > 1) throw TypeError("Generator is already running"); for (y && 1 === p && d(p, l), c = p, u = l; (t = c < 2 ? e : u) || !y;) { i || (c ? c < 3 ? (c > 1 && (G.n = -1), d(c, u)) : G.n = u : G.v = u); try { if (f = 2, i) { if (c || (o = "next"), t = i[o]) { if (!(t = t.call(i, u))) throw TypeError("iterator result is not an object"); if (!t.done) return t; u = t.value, c < 2 && (c = 0); } else 1 === c && (t = i["return"]) && t.call(i), c < 2 && (u = TypeError("The iterator does not provide a '" + o + "' method"), c = 1); i = e; } else if ((t = (y = G.n < 0) ? u : r.call(n, G)) !== a) break; } catch (t) { i = e, c = 1, u = t; } finally { f = 1; } } return { value: t, done: y }; }; }(r, o, i), !0), u; } var a = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} t = Object.getPrototypeOf; var c = [][n] ? t(t([][n]())) : (_regeneratorDefine2(t = {}, n, function () { return this; }), t), u = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(c); function f(e) { return Object.setPrototypeOf ? Object.setPrototypeOf(e, GeneratorFunctionPrototype) : (e.__proto__ = GeneratorFunctionPrototype, _regeneratorDefine2(e, o, "GeneratorFunction")), e.prototype = Object.create(u), e; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, _regeneratorDefine2(u, "constructor", GeneratorFunctionPrototype), _regeneratorDefine2(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = "GeneratorFunction", _regeneratorDefine2(GeneratorFunctionPrototype, o, "GeneratorFunction"), _regeneratorDefine2(u), _regeneratorDefine2(u, o, "Generator"), _regeneratorDefine2(u, n, function () { return this; }), _regeneratorDefine2(u, "toString", function () { return "[object Generator]"; }), (_regenerator = function _regenerator() { return { w: i, m: f }; })(); }
-function _regeneratorDefine2(e, r, n, t) { var i = Object.defineProperty; try { i({}, "", {}); } catch (e) { i = 0; } _regeneratorDefine2 = function _regeneratorDefine(e, r, n, t) { if (r) i ? i(e, r, { value: n, enumerable: !t, configurable: !t, writable: !t }) : e[r] = n;else { var o = function o(r, n) { _regeneratorDefine2(e, r, function (e) { return this._invoke(r, n, e); }); }; o("next", 0), o("throw", 1), o("return", 2); } }, _regeneratorDefine2(e, r, n, t); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t["return"] || t["return"](); } finally { if (u) throw o; } } }; }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -26589,6 +27022,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       filtersApplied: false,
       isRequestOngoing: true,
       filtered_count: 0,
+      isLoading: false,
+      isBulkWhatsappSending: false,
       filters: {
         invoice_number: '',
         customer: '',
@@ -26648,7 +27083,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.selectAllInvoices();
     }
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('invoice', ['fetchInvoices', 'fetchInvoice', 'getRecord', 'selectInvoice', 'resetSelectedInvoices', 'selectAllInvoices', 'deleteInvoice', 'deleteMultipleInvoices', 'setSelectAllState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('customer', ['fetchCustomers', 'sendReportOnWhatsApp'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('invoice', ['fetchInvoices', 'getRecord', 'selectInvoice', 'resetSelectedInvoices', 'selectAllInvoices', 'deleteInvoice', 'deleteMultipleInvoices', 'setSelectAllState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('customer', ['fetchCustomers', 'sendReportOnWhatsApp'])), {}, {
     refreshTable: function refreshTable() {
       this.$refs.table.refresh();
     },
@@ -26872,59 +27307,149 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee6);
       }))();
     },
-    sendReports: function sendReports(invoice_id) {
+    sendReports: function sendReports(invoice) {
       var _this7 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee7() {
-        var response, invoice, mobile, fileName;
-        return _regenerator().w(function (_context7) {
-          while (1) switch (_context7.n) {
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var mobile, fileName;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
             case 0:
-              _context7.n = 1;
-              return _this7.fetchInvoice(invoice_id);
-            case 1:
-              response = _context7.v;
-              invoice = response.data.invoice;
               if (invoice) {
-                _context7.n = 2;
+                _context7.next = 3;
                 break;
               }
-              window.toastr['error']("Invoice not found for id - " + invoice_id);
-              return _context7.a(2);
-            case 2:
+              window.toastr['error']("Invoice not found.");
+              return _context7.abrupt("return");
+            case 3:
               _this7.isLoading = true;
               _this7.siteURL = "/invoices/pdf/".concat(invoice.unique_hash);
-              if (response.data.sundryDebtorsList.length) {
-                _context7.n = 3;
-                break;
-              }
-              window.toastr['error']("Sundry Debtors list is empty for invoice id - " + invoice_id);
-              return _context7.a(2);
-            case 3:
-              mobile = response.data.sundryDebtorsList.find(function (i) {
-                return i.id === invoice.account_master_id;
-              }).mobile_number;
+              mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null;
               if (mobile) {
-                _context7.n = 4;
+                _context7.next = 9;
                 break;
               }
               window.toastr['error']("Sorry, didn't find mobile number for selected ledger.");
-              return _context7.a(2);
-            case 4:
+              return _context7.abrupt("return");
+            case 9:
               fileName = 'Invoice - ' + moment__WEBPACK_IMPORTED_MODULE_1___default()(invoice.invoice_date).format('DD/MM/YYYY');
               _this7.sendReportOnWhatsApp({
                 fileName: fileName,
                 number: mobile,
                 filePath: window.location.origin + _this7.siteURL
-              }).then(function (val) {
+              }).then(function () {
                 setTimeout(function () {
                   _this7.isLoading = false;
-                  window.location.reload();
+                  _this7.refreshTable();
                 }, 2000);
               });
-            case 5:
-              return _context7.a(2);
+            case 11:
+            case "end":
+              return _context7.stop();
           }
         }, _callee7);
+      }))();
+    },
+    sendMultipleReports: function sendMultipleReports() {
+      var _this8 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+        var successCount, failedCount, selectedInvoiceRows, _iterator, _step, invoice, _whatsappResponse$dat, mobile, siteURL, fileName, whatsappResponse;
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) switch (_context8.prev = _context8.next) {
+            case 0:
+              if (!(_this8.selectedInvoices.length < 2 || _this8.isBulkWhatsappSending)) {
+                _context8.next = 2;
+                break;
+              }
+              return _context8.abrupt("return");
+            case 2:
+              _this8.isBulkWhatsappSending = true;
+              successCount = 0;
+              failedCount = 0;
+              selectedInvoiceRows = _this8.invoices.filter(function (i) {
+                return _this8.selectedInvoices.includes(i.id);
+              });
+              _context8.prev = 6;
+              _iterator = _createForOfIteratorHelper(selectedInvoiceRows);
+              _context8.prev = 8;
+              _iterator.s();
+            case 10:
+              if ((_step = _iterator.n()).done) {
+                _context8.next = 35;
+                break;
+              }
+              invoice = _step.value;
+              _context8.prev = 12;
+              if (invoice) {
+                _context8.next = 16;
+                break;
+              }
+              failedCount++;
+              return _context8.abrupt("continue", 33);
+            case 16:
+              mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null;
+              if (mobile) {
+                _context8.next = 20;
+                break;
+              }
+              failedCount++;
+              return _context8.abrupt("continue", 33);
+            case 20:
+              siteURL = "/invoices/pdf/".concat(invoice.unique_hash);
+              fileName = 'Invoice - ' + moment__WEBPACK_IMPORTED_MODULE_1___default()(invoice.invoice_date).format('DD/MM/YYYY');
+              _context8.next = 24;
+              return window.axios.post('/api/whatsapp-send-pdf', {
+                fileName: fileName,
+                number: mobile,
+                filePath: window.location.origin + siteURL
+              });
+            case 24:
+              whatsappResponse = _context8.sent;
+              if (whatsappResponse.status === 200 && !((_whatsappResponse$dat = whatsappResponse.data) !== null && _whatsappResponse$dat !== void 0 && _whatsappResponse$dat.error)) {
+                successCount++;
+              } else {
+                failedCount++;
+              }
+              _context8.next = 31;
+              break;
+            case 28:
+              _context8.prev = 28;
+              _context8.t0 = _context8["catch"](12);
+              failedCount++;
+            case 31:
+              _context8.next = 33;
+              return new Promise(function (resolve) {
+                return setTimeout(resolve, 10000);
+              });
+            case 33:
+              _context8.next = 10;
+              break;
+            case 35:
+              _context8.next = 40;
+              break;
+            case 37:
+              _context8.prev = 37;
+              _context8.t1 = _context8["catch"](8);
+              _iterator.e(_context8.t1);
+            case 40:
+              _context8.prev = 40;
+              _iterator.f();
+              return _context8.finish(40);
+            case 43:
+              if (successCount) {
+                window.toastr['success']("".concat(successCount, " invoice(s) sent on WhatsApp"));
+              }
+              if (failedCount) {
+                window.toastr['warning']("".concat(failedCount, " invoice(s) could not be sent on WhatsApp"));
+              }
+            case 45:
+              _context8.prev = 45;
+              _this8.isBulkWhatsappSending = false;
+              return _context8.finish(45);
+            case 48:
+            case "end":
+              return _context8.stop();
+          }
+        }, _callee8, null, [[6,, 45, 48], [8, 37, 40, 43], [12, 28]]);
       }))();
     }
   })
@@ -27819,6 +28344,9 @@ var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
     };
   },
   computed: {
+    isAdmin: function isAdmin() {
+      return this.$store.state.user.currentUser.role === 'admin';
+    },
     getOrderBy: function getOrderBy() {
       if (this.searchData.orderBy === 'asc' || this.searchData.orderBy == null) {
         return true;
@@ -28826,8 +29354,11 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     profilePicture: function profilePicture() {
       return '/images/default-avatar.jpg';
     },
+    currentUser: function currentUser() {
+      return this.$store.state.user.currentUser;
+    },
     role: function role() {
-      return this.$store.state.user.currentUser.role;
+      return this.currentUser ? this.currentUser.role : '';
     },
     listNotifications: function listNotifications() {
       var array = this.$store.state.userProfile.notifications;
@@ -28921,6 +29452,11 @@ __webpack_require__.r(__webpack_exports__);
         route: "/receipts/create",
         meta: ["admin", "accountant"]
       }, {
+        title: "navigation.receipt_approvals",
+        icon: "check-circle",
+        route: "/receipts/approvals",
+        meta: ["admin"]
+      }, {
         title: "navigation.payments",
         icon: "credit-card",
         route: "/payments",
@@ -28929,7 +29465,13 @@ __webpack_require__.r(__webpack_exports__);
         title: "navigation.voucher",
         icon: "file-alt",
         route: "/vouchers",
+        exact: true,
         meta: ["admin", "accountant"]
+      }, {
+        title: "navigation.voucher_approvals",
+        icon: "check-circle",
+        route: "/vouchers/approvals",
+        meta: ["admin"]
       }, {
         title: "navigation.notes",
         icon: "envelope",
@@ -28981,6 +29523,11 @@ __webpack_require__.r(__webpack_exports__);
         iconType: "fa",
         route: "/users",
         meta: ["admin", "accountant"]
+      }, {
+        title: "navigation.audit_logs",
+        icon: "history",
+        route: "/audit-logs",
+        meta: ["admin"]
       }, {
         title: "navigation.settings",
         icon: "cog",
@@ -30967,6 +31514,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       newOrder: {
         order_date: null,
         order_number: null,
+        reference_number: null,
         user_id: null,
         order_template_id: 1,
         sub_total: null,
@@ -30975,7 +31523,6 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         discount_type: 'fixed',
         discount_val: 0,
         discount: 0,
-        //reference_number: null,
         order_items: [_objectSpread({}, _stub_order__WEBPACK_IMPORTED_MODULE_3__["default"])],
         debtors: ''
       },
@@ -31037,7 +31584,10 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         return this.newOrder.debtors;
       },
       set: function set(value) {
-        //this.searchDebtorRefNumber(value)
+        this.searchDebtorRefNumber({
+          id: value && value.id ? value.id : value,
+          order_date: this.newOrder.order_date
+        });
         this.newOrder.debtors = value;
       }
     },
@@ -31056,12 +31606,32 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     },
     inventoryListBind: function inventoryListBind() {
       return this.$store.state.inventory.inventories;
+    },
+    referenceNumAttribute: {
+      cache: false,
+      get: function get() {
+        if (this.newOrder.reference_number && -1 !== this.newOrder.reference_number.indexOf('-')) {
+          return this.newOrder.reference_number.split('-').pop();
+        }
+        return this.newOrder.reference_number;
+      },
+      set: function set(value) {
+        this.newOrder.reference_number = value;
+      }
     }
   }),
   watch: {
     subtotal: function subtotal(newValue) {
       if (this.newOrder.discount_type === 'percentage') {
         this.newOrder.discount_val = this.newOrder.discount * newValue;
+      }
+    },
+    'newOrder.order_date': function newOrderOrder_date() {
+      if (this.newOrder.debtors && !this.isEdit) {
+        this.searchDebtorRefNumber({
+          id: this.newOrder.debtors.id ? this.newOrder.debtors.id : this.newOrder.debtors,
+          order_date: this.newOrder.order_date
+        });
       }
     }
   },
@@ -31074,15 +31644,11 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     }, 1500);
   },
   methods: _objectSpread(_objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('modal', ['openModal'])), (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('orders', ['addOrder', 'fetchCreateOrder', 'fetchOrder', 'updateOrder', 'fetchReferenceNumber'])), (0,vuex__WEBPACK_IMPORTED_MODULE_6__.mapActions)('inventory', ['fetchAllInventory'])), {}, {
-    totalQuantity: function totalQuantity(inventory) {
-      if (inventory.length) {
-        return inventory.map(function (i) {
-          return parseFloat(i.quantity);
-        }).reduce(function (a, b) {
-          return a + b;
-        });
-      }
-      return 0;
+    totalQuantity: function totalQuantity() {
+      var inventory = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      return inventory.reduce(function (total, item) {
+        return total + (parseInt(item.quantity, 10) || 0);
+      }, 0);
     },
     fetchInitialInventory: function fetchInitialInventory() {
       var _this2 = this;
@@ -31129,6 +31695,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 _this3.selectedCurrency = _this3.defaultCurrency;
                 _this3.orderPrefix = _response.data.order_prefix;
                 _this3.orderNumAttribute = _response.data.orderNumber;
+                _this3.newOrder.reference_number = _response.data.order.reference_number;
                 _this3.newOrder.debtors = _response.data.sundryDebtorsList[0];
               }
               _this3.initLoading = false;
@@ -31146,6 +31713,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 _this3.inventoryNegative = response.data.inventory_negative;
                 _this3.orderPrefix = response.data.order_prefix;
                 _this3.orderNumAttribute = response.data.nextOrderNumberAttribute;
+                _this3.newOrder.reference_number = response.data.nextOrderNumberAttribute;
                 _this3.sundryDebtorsList = response.data.sundryDebtorsList;
               }
               _this3.initLoading = false;
@@ -31194,6 +31762,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         return false;
       }
       this.newOrder.order_number = this.orderPrefix + '-' + this.orderNumAttribute;
+      this.newOrder.reference_number = this.orderPrefix + '-' + this.referenceNumAttribute;
       var data = _objectSpread(_objectSpread({}, this.newOrder), {}, {
         order_date: moment__WEBPACK_IMPORTED_MODULE_4___default()(this.newOrder.order_date).format('DD/MM/YYYY'),
         user_id: this.user.id,
@@ -31322,6 +31891,37 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         isValid = true;
       }
       return isValid;
+    },
+    searchDebtorRefNumber: function searchDebtorRefNumber(data) {
+      var _this11 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              _this11.newOrder.reference_number = _this11.orderNumAttribute;
+              _context5.prev = 1;
+              _context5.next = 4;
+              return _this11.fetchReferenceNumber(_objectSpread(_objectSpread({}, data), {}, {
+                order_date: data.order_date ? data.order_date : _this11.newOrder.order_date
+              }));
+            case 4:
+              response = _context5.sent;
+              if (response.data && response.data.order) {
+                _this11.newOrder.reference_number = response.data.order.reference_number.split('-').pop();
+              }
+              _context5.next = 11;
+              break;
+            case 8:
+              _context5.prev = 8;
+              _context5.t0 = _context5["catch"](1);
+              _this11.newOrder.reference_number = _this11.orderNumAttribute;
+            case 11:
+            case "end":
+              return _context5.stop();
+          }
+        }, _callee5, null, [[1, 8]]);
+      }))();
     },
     showEndList: function showEndList(val) {
       this.showAddNewInventory = !val;
@@ -33458,7 +34058,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       }, _callee);
     }))();
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('receipt', ['fetchCreateReceipt', 'addReceipt', 'updateReceipt', 'fetchReceipt'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('customer', ['sendReportOnWhatsApp'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('receipt', ['fetchCreateReceipt', 'addReceipt', 'updateReceipt', 'fetchReceipt', 'approveReceipt', 'declineReceipt'])), (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('customer', ['sendReportOnWhatsApp'])), {}, {
     loadData: function loadData() {
       var _this4 = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
@@ -33547,10 +34147,10 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     },
     submitReceiptData: function submitReceiptData() {
       var _this7 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee6() {
-        var data, response, _data, _response2, _t, _t2;
-        return _regenerator().w(function (_context6) {
-          while (1) switch (_context6.n) {
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        var data, response, _data, _response2, receiptStatus, isPendingApproval;
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
             case 0:
               _this7.$v.formData.$touch();
               if (!_this7.$v.formData.$invalid) {
@@ -33604,12 +34204,12 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 _context6.n = 7;
                 break;
               }
-              window.toastr['error'](_t.response.data.errors.receipt_number);
-              return _context6.a(2, true);
-            case 7:
-              window.toastr['error'](_t);
-            case 8:
-              _context6.n = 16;
+              window.toastr['error'](_context6.t0.response.data.errors.receipt_number);
+              return _context6.abrupt("return", true);
+            case 29:
+              window.toastr['error'](_context6.t0);
+            case 30:
+              _context6.next = 61;
               break;
             case 9:
               _data = _objectSpread(_objectSpread({}, _this7.formData), {}, {
@@ -33622,10 +34222,21 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
             case 11:
               _response2 = _context6.v;
               if (!_response2.data.success) {
-                _context6.n = 12;
+                _context6.next = 48;
                 break;
               }
-              window.toastr['success'](_this7.$t('receipts.created_message'));
+              receiptStatus = _response2.data.receipt && _response2.data.receipt.receipt_status;
+              isPendingApproval = receiptStatus === 'To Be Approved';
+              window.toastr['success'](isPendingApproval ? _this7.$t('receipts.submitted_for_approval_message') : _this7.$t('receipts.created_message'));
+              if (!isPendingApproval) {
+                _context6.next = 45;
+                break;
+              }
+              setTimeout(function () {
+                window.location.reload();
+              }, 1000);
+              return _context6.abrupt("return", true);
+            case 45:
               _this7.siteURL = "/receipts/pdf/".concat(_response2.data.receipt.id);
               window.swal({
                 title: 'Send Receipt',
@@ -33654,34 +34265,35 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                   return _ref.apply(this, arguments);
                 };
               }());
-              return _context6.a(2, true);
-            case 12:
+              return _context6.abrupt("return", true);
+            case 48:
               if (!(_response2.data.error === 'invalid_amount')) {
-                _context6.n = 13;
+                _context6.next = 51;
                 break;
               }
               window.toastr['error'](_this7.$t('invalid_amount_message'));
-              return _context6.a(2, false);
-            case 13:
+              return _context6.abrupt("return", false);
+            case 51:
               window.toastr['error'](_response2.data.error);
-              _context6.n = 16;
+              _context6.next = 61;
               break;
-            case 14:
-              _context6.p = 14;
-              _t2 = _context6.v;
+            case 54:
+              _context6.prev = 54;
+              _context6.t1 = _context6["catch"](34);
               _this7.isLoading = false;
-              if (!_t2.response.data.errors.receipt_number) {
-                _context6.n = 15;
+              if (!_context6.t1.response.data.errors.receipt_number) {
+                _context6.next = 60;
                 break;
               }
-              window.toastr['error'](_t2.response.data.errors.receipt_number);
-              return _context6.a(2, true);
-            case 15:
-              window.toastr['error'](_t2);
-            case 16:
-              return _context6.a(2);
+              window.toastr['error'](_context6.t1.response.data.errors.receipt_number);
+              return _context6.abrupt("return", true);
+            case 60:
+              window.toastr['error'](_context6.t1);
+            case 61:
+            case "end":
+              return _context6.stop();
           }
-        }, _callee6, null, [[10, 14], [2, 6]]);
+        }, _callee6, null, [[10, 23], [34, 54]]);
       }))();
     },
     sendReports: function sendReports() {
@@ -33709,6 +34321,53 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
           window.location.reload();
         }, 2000);
       });
+    },
+    approveCurrentReceipt: function approveCurrentReceipt() {
+      var _this9 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              _context7.next = 2;
+              return _this9.approveReceipt(_this9.$route.params.id);
+            case 2:
+              response = _context7.sent;
+              if (response.data.success) {
+                _this9.formData.receipt_status = response.data.receipt.receipt_status;
+                window.toastr['success'](_this9.$t('receipts.approved_message'));
+                if (response.data.whatsapp_sent === false) {
+                  window.toastr['warning']("Approved, but WhatsApp failed: ".concat(response.data.whatsapp_error || 'unknown_error'));
+                }
+              }
+            case 4:
+            case "end":
+              return _context7.stop();
+          }
+        }, _callee7);
+      }))();
+    },
+    declineCurrentReceipt: function declineCurrentReceipt() {
+      var _this10 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) switch (_context8.prev = _context8.next) {
+            case 0:
+              _context8.next = 2;
+              return _this10.declineReceipt(_this10.$route.params.id);
+            case 2:
+              response = _context8.sent;
+              if (response.data.success) {
+                _this10.formData.receipt_status = response.data.receipt.receipt_status;
+                window.toastr['success'](_this10.$t('receipts.declined_message'));
+              }
+            case 4:
+            case "end":
+              return _context8.stop();
+          }
+        }, _callee8);
+      }))();
     }
   })
 });
@@ -33746,6 +34405,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    approvalMode: {
+      type: Boolean,
+      "default": false
+    }
+  },
   components: {
     'moon-walker-icon': _js_components_icon_MoonwalkerIcon__WEBPACK_IMPORTED_MODULE_0__["default"],
     BaseButton: _components_base_BaseButton__WEBPACK_IMPORTED_MODULE_2__["default"]
@@ -33761,7 +34426,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         title: this.$t('general.home')
       }, {
         url: '#',
-        title: this.$tc('receipts.receipt', 2)
+        title: this.approvalMode ? this.$t('receipts.approvals_title') : this.$tc('receipts.receipt', 2)
       }],
       status: [{
         label: 'Status',
@@ -33803,6 +34468,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       filters: {
         receipt_number: '',
         customer: '',
+        receipt_status: '',
         status: {
           name: 'DUE',
           value: 'UNPAID'
@@ -33810,12 +34476,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         from_date: '',
         to_date: ''
       },
+      receiptStatusOptions: ['Draft', 'To Be Approved', 'Done', 'Declined'],
       role: this.$store.state.user.currentUser.role
     };
   },
   computed: _objectSpread(_objectSpread(_objectSpread({
     applyFilter: function applyFilter() {
-      if (this.filters.receipt_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+      if (this.filters.receipt_number || this.filters.customer || this.filters.receipt_status || this.filters.from_date || this.filters.to_date) {
         return true;
       }
       return false;
@@ -33858,7 +34525,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.selectAllReceipts();
     }
   },
-  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('receipt', ['fetchReceipts', 'getRecord', 'selectReceipt', 'resetSelectedReceipts', 'selectAllReceipts', 'deleteReceipt', 'deleteMultipleReceipts', 'sendEmail', 'setSelectAllState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('customer', ['fetchCustomers'])), {}, {
+  methods: _objectSpread(_objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('receipt', ['fetchReceipts', 'getRecord', 'selectReceipt', 'resetSelectedReceipts', 'selectAllReceipts', 'deleteReceipt', 'deleteMultipleReceipts', 'approveReceipt', 'declineReceipt', 'approveMultipleReceipts', 'declineMultipleReceipts', 'sendEmail', 'setSelectAllState'])), (0,vuex__WEBPACK_IMPORTED_MODULE_3__.mapActions)('customer', ['fetchCustomers'])), {}, {
     sendReceipt: function sendReceipt(id) {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
@@ -33933,6 +34600,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               data = {
                 receipt_number: _this2.filters.receipt_number,
                 customer_id: _this2.filters.customer === '' ? _this2.filters.customer : _this2.filters.customer.id,
+                receipt_status: _this2.approvalMode ? 'To Be Approved' : _this2.filters.receipt_status,
                 status: '',
                 from_date: _this2.filters.from_date === '' ? _this2.filters.from_date : moment__WEBPACK_IMPORTED_MODULE_1___default()(_this2.filters.from_date).format('DD/MM/YYYY'),
                 to_date: _this2.filters.to_date === '' ? _this2.filters.to_date : moment__WEBPACK_IMPORTED_MODULE_1___default()(_this2.filters.to_date).format('DD/MM/YYYY'),
@@ -33983,6 +34651,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.filters = {
         receipt_number: '',
         customer: '',
+        receipt_status: '',
         status: '',
         from_date: '',
         to_date: ''
@@ -34147,6 +34816,222 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }
         }, _callee9);
       }))();
+    },
+    approveReceiptAction: function approveReceiptAction(id) {
+      var _this9 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+          while (1) switch (_context11.prev = _context11.next) {
+            case 0:
+              swal({
+                title: _this9.$t('general.are_you_sure'),
+                text: _this9.$t('receipts.confirm_approve'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: false
+              }).then(/*#__PURE__*/function () {
+                var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(value) {
+                  var response;
+                  return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+                    while (1) switch (_context10.prev = _context10.next) {
+                      case 0:
+                        if (!value) {
+                          _context10.next = 5;
+                          break;
+                        }
+                        _context10.next = 3;
+                        return _this9.approveReceipt(id);
+                      case 3:
+                        response = _context10.sent;
+                        if (response.data.success) {
+                          window.toastr['success'](_this9.$t('receipts.approved_message'));
+                          if (response.data.whatsapp_sent === false) {
+                            window.toastr['warning']("Approved, but WhatsApp failed: ".concat(response.data.whatsapp_error || 'unknown_error'));
+                          }
+                          _this9.refreshTable();
+                        }
+                      case 5:
+                      case "end":
+                        return _context10.stop();
+                    }
+                  }, _callee10);
+                }));
+                return function (_x4) {
+                  return _ref5.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context11.stop();
+          }
+        }, _callee11);
+      }))();
+    },
+    declineReceiptAction: function declineReceiptAction(id) {
+      var _this10 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee13() {
+        return _regeneratorRuntime().wrap(function _callee13$(_context13) {
+          while (1) switch (_context13.prev = _context13.next) {
+            case 0:
+              swal({
+                title: _this10.$t('general.are_you_sure'),
+                text: _this10.$t('receipts.confirm_decline'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true
+              }).then(/*#__PURE__*/function () {
+                var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee12(value) {
+                  var response;
+                  return _regeneratorRuntime().wrap(function _callee12$(_context12) {
+                    while (1) switch (_context12.prev = _context12.next) {
+                      case 0:
+                        if (!value) {
+                          _context12.next = 5;
+                          break;
+                        }
+                        _context12.next = 3;
+                        return _this10.declineReceipt(id);
+                      case 3:
+                        response = _context12.sent;
+                        if (response.data.success) {
+                          window.toastr['success'](_this10.$t('receipts.declined_message'));
+                          _this10.refreshTable();
+                        }
+                      case 5:
+                      case "end":
+                        return _context12.stop();
+                    }
+                  }, _callee12);
+                }));
+                return function (_x5) {
+                  return _ref6.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context13.stop();
+          }
+        }, _callee13);
+      }))();
+    },
+    approveMultipleReceiptsAction: function approveMultipleReceiptsAction() {
+      var _this11 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee15() {
+        return _regeneratorRuntime().wrap(function _callee15$(_context15) {
+          while (1) switch (_context15.prev = _context15.next) {
+            case 0:
+              swal({
+                title: _this11.$t('general.are_you_sure'),
+                text: _this11.$t('receipts.confirm_approve'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: false
+              }).then(/*#__PURE__*/function () {
+                var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee14(value) {
+                  var response, processedCount, skippedCount;
+                  return _regeneratorRuntime().wrap(function _callee14$(_context14) {
+                    while (1) switch (_context14.prev = _context14.next) {
+                      case 0:
+                        if (!value) {
+                          _context14.next = 5;
+                          break;
+                        }
+                        _context14.next = 3;
+                        return _this11.approveMultipleReceipts();
+                      case 3:
+                        response = _context14.sent;
+                        if (response.data.success) {
+                          processedCount = response.data.processed ? response.data.processed.length : 0;
+                          skippedCount = response.data.skipped ? response.data.skipped.length : 0;
+                          if (processedCount > 0) {
+                            window.toastr['success']("".concat(processedCount, " receipt(s) approved successfully"));
+                          }
+                          if (skippedCount > 0) {
+                            window.toastr['warning']("".concat(skippedCount, " receipt(s) were skipped (not pending approval)"));
+                          }
+                          if (response.data.whatsapp_failed && response.data.whatsapp_failed.length > 0) {
+                            window.toastr['warning']("".concat(response.data.whatsapp_failed.length, " approved receipt(s) could not be sent on WhatsApp"));
+                          }
+                          _this11.resetSelectedReceipts();
+                          _this11.refreshTable();
+                        }
+                      case 5:
+                      case "end":
+                        return _context14.stop();
+                    }
+                  }, _callee14);
+                }));
+                return function (_x6) {
+                  return _ref7.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context15.stop();
+          }
+        }, _callee15);
+      }))();
+    },
+    declineMultipleReceiptsAction: function declineMultipleReceiptsAction() {
+      var _this12 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee17() {
+        return _regeneratorRuntime().wrap(function _callee17$(_context17) {
+          while (1) switch (_context17.prev = _context17.next) {
+            case 0:
+              swal({
+                title: _this12.$t('general.are_you_sure'),
+                text: _this12.$t('receipts.confirm_decline'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true
+              }).then(/*#__PURE__*/function () {
+                var _ref8 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee16(value) {
+                  var response, processedCount, skippedCount;
+                  return _regeneratorRuntime().wrap(function _callee16$(_context16) {
+                    while (1) switch (_context16.prev = _context16.next) {
+                      case 0:
+                        if (!value) {
+                          _context16.next = 5;
+                          break;
+                        }
+                        _context16.next = 3;
+                        return _this12.declineMultipleReceipts();
+                      case 3:
+                        response = _context16.sent;
+                        if (response.data.success) {
+                          processedCount = response.data.processed ? response.data.processed.length : 0;
+                          skippedCount = response.data.skipped ? response.data.skipped.length : 0;
+                          if (processedCount > 0) {
+                            window.toastr['success']("".concat(processedCount, " receipt(s) declined successfully"));
+                          }
+                          if (skippedCount > 0) {
+                            window.toastr['warning']("".concat(skippedCount, " receipt(s) were skipped (not pending approval)"));
+                          }
+                          _this12.resetSelectedReceipts();
+                          _this12.refreshTable();
+                        }
+                      case 5:
+                      case "end":
+                        return _context16.stop();
+                    }
+                  }, _callee16);
+                }));
+                return function (_x7) {
+                  return _ref8.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context17.stop();
+          }
+        }, _callee17);
+      }))();
+    },
+    getReceiptLink: function getReceiptLink(row) {
+      var path = this.role === 'admin' || this.role === 'accountant' ? "/receipts/".concat(row.id, "/edit?d=true") : "/receipts/".concat(row.id, "/view");
+      return this.$router.resolve({
+        path: path
+      }).href;
     }
   })
 });
@@ -34196,6 +35081,13 @@ var _ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
     };
   },
   computed: {
+    canEdit: function canEdit() {
+      var role = this.$store.state.user.currentUser.role;
+      return role === 'admin' || role === 'accountant';
+    },
+    isAdmin: function isAdmin() {
+      return this.$store.state.user.currentUser.role === 'admin';
+    },
     getReceiptBy: function getReceiptBy() {
       if (this.searchData.receiptBy === 'asc' || this.searchData.receiptBy == null) {
         return true;
@@ -38602,11 +39494,27 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     };
   },
   computed: {
+    userRole: function userRole() {
+      return this.$store.state.user.currentUser.role;
+    },
     isEdit: function isEdit() {
       if (this.$route.name === 'vouchers.edit') {
         return true;
       }
       return false;
+    },
+    isReadOnly: function isReadOnly() {
+      return this.isEdit && this.userRole === 'accountant';
+    },
+    gridColumnDefs: function gridColumnDefs() {
+      if (!this.isReadOnly) {
+        return this.columnDefs;
+      }
+      return this.columnDefs.map(function (column) {
+        return _objectSpread(_objectSpread({}, column), {}, {
+          editable: false
+        });
+      });
     },
     masterDataBind: function masterDataBind() {
       var _this = this;
@@ -38676,6 +39584,9 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     },
     validateSubmitVoucher: function validateSubmitVoucher() {
       var _this4 = this;
+      if (this.isReadOnly) {
+        return;
+      }
       if (this.alreadySubmitted) {
         swal({
           title: this.$t('general.are_you_sure'),
@@ -38706,11 +39617,17 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     },
     submitVoucher: function submitVoucher() {
       var _this5 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee4() {
-        var rows, credit_sum, debit_sum, calc_balance, response, _t;
-        return _regenerator().w(function (_context4) {
-          while (1) switch (_context4.n) {
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var rows, credit_sum, debit_sum, calc_balance, response, isPendingApproval;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
             case 0:
+              if (!_this5.isReadOnly) {
+                _context4.next = 2;
+                break;
+              }
+              return _context4.abrupt("return", false);
+            case 2:
               rows = _this5.rows;
               rows = rows.filter(function (each) {
                 return each['account'] !== '';
@@ -38727,7 +39644,7 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
               });
               calc_balance = 0;
               if (!(credit_sum !== debit_sum || !credit_sum || !debit_sum)) {
-                _context4.n = 1;
+                _context4.next = 10;
                 break;
               }
               swal({
@@ -38737,10 +39654,10 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 buttons: false,
                 dangerMode: true
               });
-              return _context4.a(2, false);
-            case 1:
+              return _context4.abrupt("return", false);
+            case 10:
               if (_this5.date) {
-                _context4.n = 2;
+                _context4.next = 13;
                 break;
               }
               swal({
@@ -38750,8 +39667,8 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 buttons: false,
                 dangerMode: true
               });
-              return _context4.a(2, false);
-            case 2:
+              return _context4.abrupt("return", false);
+            case 13:
               rows.map(function (each) {
                 each['total_debit'] = debit_sum;
                 each['total_credit'] = credit_sum;
@@ -38760,41 +39677,46 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 each['date'] = _this5.date;
                 each['is_edit'] = _this5.isEdit;
               });
-              _context4.p = 3;
+              _context4.prev = 14;
               _this5.isLoading = true;
-              _context4.n = 4;
+              _context4.next = 18;
               return _this5.addVoucher(rows);
-            case 4:
-              response = _context4.v;
+            case 18:
+              response = _context4.sent;
               if (!response.data) {
-                _context4.n = 5;
+                _context4.next = 26;
                 break;
               }
-              window.toastr['success'](_this5.$tc('vouchers.created_message'));
+              isPendingApproval = _this5.userRole !== 'admin';
+              window.toastr['success'](isPendingApproval ? _this5.$t('vouchers.submitted_for_approval_message') : _this5.$tc('vouchers.created_message'));
               _this5.isLoading = false;
               _this5.alreadySubmitted = true;
               setTimeout(function () {
                 window.location.reload();
               }, 2000);
-              return _context4.a(2, true);
-            case 5:
-              _context4.n = 7;
+              return _context4.abrupt("return", true);
+            case 26:
+              _context4.next = 31;
               break;
-            case 6:
-              _context4.p = 6;
-              _t = _context4.v;
-              if (_t) {
+            case 28:
+              _context4.prev = 28;
+              _context4.t0 = _context4["catch"](14);
+              if (_context4.t0) {
                 _this5.isLoading = false;
                 window.toastr['error'](_t);
               }
-            case 7:
-              return _context4.a(2);
+            case 31:
+            case "end":
+              return _context4.stop();
           }
-        }, _callee4, null, [[3, 6]]);
+        }, _callee4, null, [[14, 28]]);
       }))();
     },
     cellUpdated: function cellUpdated($event) {
       var _this6 = this;
+      if (this.isReadOnly) {
+        return;
+      }
       var rows = this.rows;
       if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter') {
         this.$nextTick(function () {
@@ -38834,6 +39756,9 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       }
     },
     rowSelected: function rowSelected($event) {
+      if (this.isReadOnly) {
+        return;
+      }
       if ($event.rowData && $event.rowData.type === 'Cr') {
         $event.rowData.debit = null;
       } else if ($event.rowData && $event.rowData.type === 'Dr') {
@@ -38847,6 +39772,9 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
     addNewRow: function addNewRow() {
       var typ = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       var sum = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      if (this.isReadOnly) {
+        return;
+      }
       var deb = typ == 'Dr' ? sum : null;
       var cred = typ == 'Cr' ? sum : null;
       this.rows.push({
@@ -39125,13 +40053,20 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
               response = _context.v;
               _this.isLoading = false;
               _this.ledgerData = response.data.ledger.sort(function (a, b) {
-                return String(a.reference_number).localeCompare(String(b.reference_number));
+                return _this.formatReferenceNumber(a.reference_number).localeCompare(_this.formatReferenceNumber(b.reference_number));
               });
             case 2:
               return _context.a(2);
           }
         }, _callee);
       }))();
+    },
+    formatReferenceNumber: function formatReferenceNumber(referenceNumber) {
+      if (!referenceNumber) {
+        return '-';
+      }
+      var parts = referenceNumber.split('-');
+      return parts.length >= 3 ? parts[2] : referenceNumber;
     },
     printData: function printData() {
       printJS({
@@ -39183,6 +40118,12 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: {
+    approvalMode: {
+      type: Boolean,
+      "default": false
+    }
+  },
   components: {
     DotIcon: _components_icon_DotIcon__WEBPACK_IMPORTED_MODULE_0__["default"],
     SatelliteIcon: _components_icon_SatelliteIcon__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -39201,7 +40142,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         title: this.$t('general.home')
       }, {
         url: '#',
-        title: this.$tc('vouchers.voucher')
+        title: this.$route.name === 'vouchers.approvals' ? this.$t('vouchers.approvals_title') : this.$tc('vouchers.voucher')
       }],
       filters: {
         name: '',
@@ -39209,10 +40150,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         from_date: '',
         to_date: ''
       },
-      index: null
+      index: null,
+      role: this.$store.state.user.currentUser.role
     };
   },
   computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapGetters)('voucher', ['vouchers', 'selectedVouchers', 'totalVouchers', 'selectAllField'])), {}, {
+    isApprovalMode: function isApprovalMode() {
+      return this.$route.name === 'vouchers.approvals';
+    },
     showEmptyScreen: function showEmptyScreen() {
       return !this.totalVouchers && !this.isRequestOngoing && !this.filtersApplied;
     },
@@ -39240,41 +40185,59 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     filters: {
       handler: 'setFilters',
       deep: true
+    },
+    '$route.name': function $routeName() {
+      var _this = this;
+      this.updateBreadCrumbTitle();
+      this.filtersApplied = false;
+      if (this.selectAllField) {
+        this.selectAllVouchers();
+      }
+      this.$nextTick(function () {
+        if (_this.$refs.table) {
+          _this.$refs.table.refresh();
+        }
+      });
     }
+  },
+  mounted: function mounted() {
+    this.updateBreadCrumbTitle();
   },
   destroyed: function destroyed() {
     if (this.selectAllField) {
       this.selectAllVouchers();
     }
   },
-  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('voucher', ['fetchVouchers', 'selectAllVouchers', 'selectVoucher', 'deleteVoucher', 'deleteMultipleVouchers', 'setSelectAllState'])), {}, {
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_5__.mapActions)('voucher', ['fetchVouchers', 'selectAllVouchers', 'selectVoucher', 'deleteVoucher', 'deleteMultipleVouchers', 'setSelectAllState', 'approveVoucher', 'approveMultipleVouchers', 'declineVoucher'])), {}, {
     refreshTable: function refreshTable() {
       this.$refs.table.refresh();
     },
     fetchData: function fetchData(_ref) {
-      var _this = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
+      var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var page, filter, sort, data, response;
         return _regenerator().w(function (_context) {
           while (1) switch (_context.n) {
             case 0:
               page = _ref.page, filter = _ref.filter, sort = _ref.sort;
               data = {
-                name: _this.filters.name !== null ? _this.filters.name : '',
-                groups: _this.filters.groups !== null ? _this.filters.groups : '',
-                from_date: _this.filters.from_date === '' ? _this.filters.from_date : moment__WEBPACK_IMPORTED_MODULE_4___default()(_this.filters.from_date).format('DD/MM/YYYY'),
-                to_date: _this.filters.to_date === '' ? _this.filters.to_date : moment__WEBPACK_IMPORTED_MODULE_4___default()(_this.filters.to_date).format('DD/MM/YYYY'),
+                name: _this2.filters.name !== null ? _this2.filters.name : '',
+                groups: _this2.filters.groups !== null ? _this2.filters.groups : '',
+                from_date: _this2.filters.from_date === '' ? _this2.filters.from_date : moment__WEBPACK_IMPORTED_MODULE_4___default()(_this2.filters.from_date).format('DD/MM/YYYY'),
+                to_date: _this2.filters.to_date === '' ? _this2.filters.to_date : moment__WEBPACK_IMPORTED_MODULE_4___default()(_this2.filters.to_date).format('DD/MM/YYYY'),
+                approval_mode: _this2.isApprovalMode,
+                voucher_status: _this2.isApprovalMode ? 'To Be Approved' : '',
                 orderByField: sort.fieldName || 'created_at',
                 orderBy: sort.order || 'desc',
                 page: page
               };
-              _this.isRequestOngoing = true;
-              _context.n = 1;
-              return _this.fetchVouchers(data);
-            case 1:
-              response = _context.v;
-              _this.isRequestOngoing = false;
-              return _context.a(2, {
+              _this2.isRequestOngoing = true;
+              _context.next = 5;
+              return _this2.fetchVouchers(data);
+            case 5:
+              response = _context.sent;
+              _this2.isRequestOngoing = false;
+              return _context.abrupt("return", {
                 data: response.data.vouchers.data,
                 pagination: {
                   totalPages: response.data.vouchers.last_page,
@@ -39286,18 +40249,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }))();
     },
     setFilters: function setFilters() {
-      var _this2 = this;
+      var _this3 = this;
       if (this.timer) {
         clearTimeout(this.timer);
         this.timer = null;
       }
       this.timer = setTimeout(function () {
-        _this2.filtersApplied = true;
-        _this2.refreshTable();
+        _this3.filtersApplied = true;
+        _this3.refreshTable();
       }, 1000);
     },
     clearFilter: function clearFilter() {
-      var _this3 = this;
+      var _this4 = this;
       this.filters = {
         name: '',
         groups: '',
@@ -39305,7 +40268,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         to_date: ''
       };
       this.$nextTick(function () {
-        _this3.filtersApplied = false;
+        _this4.filtersApplied = false;
       });
     },
     toggleFilter: function toggleFilter() {
@@ -39316,15 +40279,15 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       this.showFilters = !this.showFilters;
     },
     removeVouchers: function removeVouchers(id) {
-      var _this4 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee3() {
-        return _regenerator().w(function (_context3) {
-          while (1) switch (_context3.n) {
+      var _this5 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              _this4.id = id;
+              _this5.id = id;
               swal({
-                title: _this4.$t('general.are_you_sure'),
-                text: _this4.$tc('vouchers.confirm_delete'),
+                title: _this5.$t('general.are_you_sure'),
+                text: _this5.$tc('vouchers.confirm_delete'),
                 icon: '/assets/icon/trash-solid.svg',
                 buttons: true,
                 dangerMode: true
@@ -39338,25 +40301,25 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                           _context2.n = 4;
                           break;
                         }
-                        _context2.n = 1;
-                        return _this4.deleteVoucher(_this4.id);
-                      case 1:
-                        res = _context2.v;
+                        _context2.next = 3;
+                        return _this5.deleteVoucher(_this5.id);
+                      case 3:
+                        res = _context2.sent;
                         if (!res.data.success) {
                           _context2.n = 2;
                           break;
                         }
-                        window.toastr['success'](_this4.$tc('vouchers.deleted_message', 1));
-                        _this4.$refs.table.refresh();
-                        return _context2.a(2, true);
-                      case 2:
+                        window.toastr['success'](_this5.$tc('vouchers.deleted_message', 1));
+                        _this5.$refs.table.refresh();
+                        return _context2.abrupt("return", true);
+                      case 8:
                         if (!(res.data.error === 'voucher_attached')) {
                           _context2.n = 3;
                           break;
                         }
-                        window.toastr['error'](_this4.$tc('vouchers.voucher_attached_message'), _this4.$t('general.action_failed'));
-                        return _context2.a(2, true);
-                      case 3:
+                        window.toastr['error'](_this5.$tc('vouchers.voucher_attached_message'), _this5.$t('general.action_failed'));
+                        return _context2.abrupt("return", true);
+                      case 11:
                         window.toastr['error'](res.data.message);
                         return _context2.a(2, true);
                       case 4:
@@ -39375,14 +40338,14 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }))();
     },
     removeMultipleVouchers: function removeMultipleVouchers() {
-      var _this5 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee5() {
-        return _regenerator().w(function (_context5) {
-          while (1) switch (_context5.n) {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
             case 0:
               swal({
-                title: _this5.$t('general.are_you_sure'),
-                text: _this5.$tc('vouchers.confirm_delete', 2),
+                title: _this6.$t('general.are_you_sure'),
+                text: _this6.$tc('vouchers.confirm_delete', 2),
                 icon: '/assets/icon/trash-solid.svg',
                 buttons: true,
                 dangerMode: true
@@ -39396,13 +40359,13 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
                           _context4.n = 2;
                           break;
                         }
-                        _context4.n = 1;
-                        return _this5.deleteMultipleVouchers();
-                      case 1:
-                        res = _context4.v;
+                        _context4.next = 3;
+                        return _this6.deleteMultipleVouchers();
+                      case 3:
+                        res = _context4.sent;
                         if (res.data.success) {
-                          window.toastr['success'](_this5.$tc('vouchers.deleted_message', 2));
-                          _this5.$refs.table.refresh();
+                          window.toastr['success'](_this6.$tc('vouchers.deleted_message', 2));
+                          _this6.$refs.table.refresh();
                         } else if (res.data.error) {
                           window.toastr['error'](res.data.message);
                         }
@@ -39421,8 +40384,154 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         }, _callee5);
       }))();
     },
+    approveVoucherAction: function approveVoucherAction(id) {
+      var _this7 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              swal({
+                title: _this7.$t('general.are_you_sure'),
+                text: _this7.$t('vouchers.confirm_approve'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: false
+              }).then(/*#__PURE__*/function () {
+                var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(approved) {
+                  var response;
+                  return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+                    while (1) switch (_context6.prev = _context6.next) {
+                      case 0:
+                        if (!approved) {
+                          _context6.next = 5;
+                          break;
+                        }
+                        _context6.next = 3;
+                        return _this7.approveVoucher(id);
+                      case 3:
+                        response = _context6.sent;
+                        if (response.data && response.data.success) {
+                          window.toastr['success'](_this7.$t('vouchers.approved_message'));
+                          _this7.$refs.table.refresh();
+                        }
+                      case 5:
+                      case "end":
+                        return _context6.stop();
+                    }
+                  }, _callee6);
+                }));
+                return function (_x3) {
+                  return _ref4.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context7.stop();
+          }
+        }, _callee7);
+      }))();
+    },
+    approveMultipleVouchersAction: function approveMultipleVouchersAction() {
+      var _this8 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee9() {
+        return _regeneratorRuntime().wrap(function _callee9$(_context9) {
+          while (1) switch (_context9.prev = _context9.next) {
+            case 0:
+              swal({
+                title: _this8.$t('general.are_you_sure'),
+                text: _this8.$t('vouchers.confirm_approve'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: false
+              }).then(/*#__PURE__*/function () {
+                var _ref5 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8(approved) {
+                  var response;
+                  return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+                    while (1) switch (_context8.prev = _context8.next) {
+                      case 0:
+                        if (!approved) {
+                          _context8.next = 5;
+                          break;
+                        }
+                        _context8.next = 3;
+                        return _this8.approveMultipleVouchers();
+                      case 3:
+                        response = _context8.sent;
+                        if (response.data && response.data.success) {
+                          window.toastr['success'](_this8.$t('vouchers.approved_message'));
+                          _this8.$refs.table.refresh();
+                        }
+                      case 5:
+                      case "end":
+                        return _context8.stop();
+                    }
+                  }, _callee8);
+                }));
+                return function (_x4) {
+                  return _ref5.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context9.stop();
+          }
+        }, _callee9);
+      }))();
+    },
+    declineVoucherAction: function declineVoucherAction(id) {
+      var _this9 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee11() {
+        return _regeneratorRuntime().wrap(function _callee11$(_context11) {
+          while (1) switch (_context11.prev = _context11.next) {
+            case 0:
+              swal({
+                title: _this9.$t('general.are_you_sure'),
+                text: _this9.$t('vouchers.confirm_decline'),
+                icon: 'warning',
+                buttons: true,
+                dangerMode: false
+              }).then(/*#__PURE__*/function () {
+                var _ref6 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee10(declined) {
+                  var response;
+                  return _regeneratorRuntime().wrap(function _callee10$(_context10) {
+                    while (1) switch (_context10.prev = _context10.next) {
+                      case 0:
+                        if (!declined) {
+                          _context10.next = 5;
+                          break;
+                        }
+                        _context10.next = 3;
+                        return _this9.declineVoucher(id);
+                      case 3:
+                        response = _context10.sent;
+                        if (response.data && response.data.success) {
+                          window.toastr['success'](_this9.$t('vouchers.declined_message'));
+                          _this9.$refs.table.refresh();
+                        }
+                      case 5:
+                      case "end":
+                        return _context10.stop();
+                    }
+                  }, _callee10);
+                }));
+                return function (_x5) {
+                  return _ref6.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context11.stop();
+          }
+        }, _callee11);
+      }))();
+    },
     setIndex: function setIndex(index) {
       this.index = index;
+    },
+    updateBreadCrumbTitle: function updateBreadCrumbTitle() {
+      if (this.breadCrumbLinks && this.breadCrumbLinks[1]) {
+        this.breadCrumbLinks[1].title = this.isApprovalMode ? this.$t('vouchers.approvals_title') : this.$tc('vouchers.voucher');
+      }
     }
   })
 });
@@ -43032,6 +44141,7 @@ var render = function render() {
     },
     attrs: {
       options: _vm.setOptions,
+      disabled: _vm.disableInput,
       searchable: true,
       "show-labels": false,
       "allow-empty": false,
@@ -43055,6 +44165,7 @@ var render = function render() {
     },
     attrs: {
       options: _vm.setOptions,
+      disabled: _vm.disableInput,
       searchable: true,
       "show-labels": false,
       "allow-empty": false,
@@ -44299,6 +45410,356 @@ var render = function render() {
       fill: "#B9C1D1"
     }
   })]);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=template&id=19514592&scoped=true":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=template&id=19514592&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "audit-logs main-content"
+  }, [_c("div", {
+    staticClass: "page-header"
+  }, [_c("Header", {
+    attrs: {
+      title: _vm.$t("audit_logs.title"),
+      "bread-crumb-links": _vm.breadCrumbLinks
+    }
+  }, [_c("div", {
+    staticClass: "mr-4 mb-3 mb-sm-0"
+  }, [_c("base-button", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.totalAuditLogs || _vm.filtersApplied,
+      expression: "totalAuditLogs || filtersApplied"
+    }],
+    attrs: {
+      outline: true,
+      icon: _vm.filterIcon,
+      size: "large",
+      color: "theme",
+      "right-icon": ""
+    },
+    on: {
+      click: _vm.toggleFilter
+    }
+  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1)])], 1), _vm._v(" "), _c("div", {
+    staticClass: "search-bar row"
+  }, [_c("div", {
+    staticClass: "col-sm-4"
+  }, [_c("base-input", {
+    attrs: {
+      type: "text",
+      name: "search",
+      icon: "search",
+      autocomplete: "off",
+      placeholder: _vm.$t("audit_logs.search_placeholder")
+    },
+    on: {
+      input: _vm.handleSearchInput
+    },
+    model: {
+      value: _vm.searchInput,
+      callback: function callback($$v) {
+        _vm.searchInput = $$v;
+      },
+      expression: "searchInput"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-4"
+  }, [_c("base-select", {
+    attrs: {
+      options: _vm.typeOptions,
+      searchable: false,
+      "show-labels": false,
+      "allow-empty": false,
+      label: "label",
+      "track-by": "value"
+    },
+    model: {
+      value: _vm.filters.type,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "type", $$v);
+      },
+      expression: "filters.type"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-4"
+  }, [_c("base-select", {
+    attrs: {
+      options: _vm.dateRangeOptions,
+      searchable: false,
+      "show-labels": false,
+      "allow-empty": false,
+      label: "label",
+      "track-by": "value"
+    },
+    model: {
+      value: _vm.dateRangeOption,
+      callback: function callback($$v) {
+        _vm.dateRangeOption = $$v;
+      },
+      expression: "dateRangeOption"
+    }
+  })], 1)]), _vm._v(" "), _vm.activeFilterChips.length ? _c("div", {
+    staticClass: "filter-chips"
+  }, [_vm._l(_vm.activeFilterChips, function (chip) {
+    return _c("span", {
+      key: chip.key,
+      staticClass: "filter-chip"
+    }, [_vm._v("\n      " + _vm._s(chip.label) + "\n      "), _c("a", {
+      staticClass: "filter-chip-remove",
+      attrs: {
+        href: "#"
+      },
+      on: {
+        click: function click($event) {
+          $event.preventDefault();
+          return _vm.clearFilterKey(chip.key);
+        }
+      }
+    }, [_vm._v("×")])]);
+  }), _vm._v(" "), _c("a", {
+    staticClass: "clear-all-chip",
+    attrs: {
+      href: "#"
+    },
+    on: {
+      click: function click($event) {
+        $event.preventDefault();
+        return _vm.clearFilter.apply(null, arguments);
+      }
+    }
+  }, [_vm._v(_vm._s(_vm.$t("general.clear_all")))])], 2) : _vm._e(), _vm._v(" "), _c("transition", {
+    attrs: {
+      name: "fade"
+    }
+  }, [_c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showFilters,
+      expression: "showFilters"
+    }],
+    staticClass: "filter-section"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", {
+    staticClass: "form-label"
+  }, [_vm._v(_vm._s(_vm.$t("audit_logs.user")))]), _vm._v(" "), _c("base-input", {
+    attrs: {
+      type: "text",
+      name: "user",
+      autocomplete: "off",
+      placeholder: _vm.$t("audit_logs.user_placeholder")
+    },
+    model: {
+      value: _vm.filters.user,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "user", $$v);
+      },
+      expression: "filters.user"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", {
+    staticClass: "form-label"
+  }, [_vm._v(_vm._s(_vm.$t("general.from_date")))]), _vm._v(" "), _c("base-input", {
+    attrs: {
+      type: "date",
+      name: "from_date"
+    },
+    model: {
+      value: _vm.filters.from_date,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "from_date", $$v);
+      },
+      expression: "filters.from_date"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", {
+    staticClass: "form-label"
+  }, [_vm._v(_vm._s(_vm.$t("general.to_date")))]), _vm._v(" "), _c("base-input", {
+    attrs: {
+      type: "date",
+      name: "to_date"
+    },
+    model: {
+      value: _vm.filters.to_date,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "to_date", $$v);
+      },
+      expression: "filters.to_date"
+    }
+  })], 1), _vm._v(" "), _c("label", {
+    staticClass: "clear-filter",
+    on: {
+      click: _vm.clearFilter
+    }
+  }, [_vm._v(_vm._s(_vm.$t("general.clear_all")))])])])]), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showEmptyScreen,
+      expression: "showEmptyScreen"
+    }],
+    staticClass: "col-xs-1 no-data-info",
+    attrs: {
+      align: "center"
+    }
+  }, [_c("astronaut-icon", {
+    staticClass: "mt-5 mb-4"
+  }), _vm._v(" "), _c("div", {
+    staticClass: "row",
+    attrs: {
+      align: "center"
+    }
+  }, [_c("label", {
+    staticClass: "col title"
+  }, [_vm._v(_vm._s(_vm.$t("audit_logs.no_logs")))])]), _vm._v(" "), _c("div", {
+    staticClass: "row"
+  }, [_c("label", {
+    staticClass: "description col mt-1",
+    attrs: {
+      align: "center"
+    }
+  }, [_vm._v(_vm._s(_vm.$t("audit_logs.list_of_logs")))])])], 1), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.showEmptyScreen,
+      expression: "!showEmptyScreen"
+    }],
+    staticClass: "table-container"
+  }, [_c("div", {
+    staticClass: "table-actions mt-5"
+  }, [_c("p", {
+    staticClass: "table-stats"
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("general.showing")) + ": "), _c("b", [_vm._v(_vm._s(_vm.pageStart) + "–" + _vm._s(_vm.pageEnd))]), _vm._v("\n        " + _vm._s(_vm.$t("general.of")) + " "), _c("b", [_vm._v(_vm._s(_vm.totalAuditLogs))])])]), _vm._v(" "), _c("table-component", {
+    ref: "table",
+    attrs: {
+      "show-filter": false,
+      data: _vm.fetchData,
+      "table-class": "table"
+    }
+  }, [_c("table-column", {
+    attrs: {
+      label: _vm.$t("audit_logs.date_time"),
+      show: "formatted_created_at"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", [_vm._v(_vm._s(row.formatted_created_at))]), _vm._v(" "), _c("small", {
+          staticClass: "text-muted"
+        }, [_vm._v(_vm._s(_vm.relativeTime(row.created_at)))])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("audit_logs.document"),
+      show: "module"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [row.document_path ? _c("router-link", {
+          staticClass: "document-link",
+          attrs: {
+            to: {
+              path: row.document_path
+            }
+          }
+        }, [_c("span", {
+          staticClass: "document-type"
+        }, [_vm._v(_vm._s(row.module))]), _vm._v(" "), _c("span", {
+          staticClass: "document-number"
+        }, [_vm._v(_vm._s(row.document_number || "#" + row.auditable_id))])]) : _c("div", [_c("span", {
+          staticClass: "document-type"
+        }, [_vm._v(_vm._s(row.module))]), _vm._v(" "), row.document_number ? _c("span", {
+          staticClass: "document-number"
+        }, [_vm._v(_vm._s(row.document_number))]) : _vm._e()])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("audit_logs.action"),
+      show: "action_label"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", {
+          "class": _vm.actionBadgeClass(row.action)
+        }, [_vm._v(_vm._s(row.action_label || row.action))])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("audit_logs.user"),
+      show: "user_name"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", [_vm._v(_vm._s(row.user_name || "—"))]), _vm._v(" "), _c("small", {
+          staticClass: "text-muted"
+        }, [_vm._v(_vm._s(row.user_email))])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      label: _vm.$t("audit_logs.description"),
+      show: "description"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", [_vm._v(_vm._s(row.description))]), _vm._v(" "), row.change_summary && row.change_summary.length ? _c("ul", {
+          staticClass: "change-summary"
+        }, _vm._l(_vm.visibleChanges(row), function (change, idx) {
+          return _c("li", {
+            key: idx
+          }, [_c("b", [_vm._v(_vm._s(change.field) + ":")]), _vm._v(" " + _vm._s(change.old) + " → " + _vm._s(change["new"]) + "\n            ")]);
+        }), 0) : _vm._e(), _vm._v(" "), row.change_summary && row.change_summary.length > _vm.changeSummaryLimit ? _c("a", {
+          staticClass: "change-toggle",
+          attrs: {
+            href: "#"
+          },
+          on: {
+            click: function click($event) {
+              $event.preventDefault();
+              return _vm.toggleChanges(row.id);
+            }
+          }
+        }, [_vm._v("\n            " + _vm._s(_vm.expandedChanges[row.id] ? _vm.$t("audit_logs.show_less") : _vm.$t("audit_logs.show_more", {
+          count: row.change_summary.length - _vm.changeSummaryLimit
+        })) + "\n          ")]) : _vm._e()];
+      }
+    }])
+  })], 1)], 1)], 1);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -46545,7 +48006,7 @@ var render = function render() {
       "allow-empty": true,
       disabled: _vm.isEdit,
       "custom-label": _vm.invoiceWithAmount,
-      "track-by": "invoice_number"
+      "track-by": "id"
     },
     on: {
       select: _vm.addInvoice,
@@ -47804,7 +49265,23 @@ var render = function render() {
       expression: "$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required"
     }],
     staticClass: "text-danger mt-1"
-  }, [_vm._v(" " + _vm._s(_vm.$tc("validation.required")) + "  ")])], 1)])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(" " + _vm._s(_vm.$tc("validation.required")) + "  ")])], 1), _vm._v(" "), _c("div", {
+    staticClass: "col collapse-input"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("estimates.ref_number")))]), _vm._v(" "), _c("base-prefix-input", {
+    attrs: {
+      prefix: _vm.estimatePrefix,
+      icon: "hashtag",
+      "prefix-width": 55,
+      disabled: true
+    },
+    model: {
+      value: _vm.referenceNumAttribute,
+      callback: function callback($$v) {
+        _vm.referenceNumAttribute = $$v;
+      },
+      expression: "referenceNumAttribute"
+    }
+  })], 1)])])]), _vm._v(" "), _c("div", {
     staticClass: "table-responsive"
   }, [_c("table", {
     staticClass: "table item-table"
@@ -51357,7 +52834,20 @@ var render = function render() {
     attrs: {
       name: "fade"
     }
-  }, [_vm.selectedInvoices.length ? _c("v-dropdown", {
+  }, [_vm.selectedInvoices.length ? _c("div", {
+    staticClass: "d-flex align-items-center"
+  }, [_vm.role === "accountant" && _vm.selectedInvoices.length > 1 ? _c("base-button", {
+    staticClass: "mr-2",
+    attrs: {
+      color: "theme",
+      size: "small",
+      loading: _vm.isBulkWhatsappSending,
+      disabled: _vm.isBulkWhatsappSending
+    },
+    on: {
+      click: _vm.sendMultipleReports
+    }
+  }, [_vm._v("\n            " + _vm._s(_vm.isBulkWhatsappSending ? _vm.$t("invoices.sending_selected_whatsapp") : _vm.$t("invoices.send_selected_whatsapp")) + "\n          ")]) : _vm._e(), _vm._v(" "), _vm.role === "admin" ? _c("v-dropdown", {
     attrs: {
       "show-arrow": false
     }
@@ -51368,7 +52858,7 @@ var render = function render() {
       href: "#"
     },
     slot: "activator"
-  }, [_vm._v("\n            " + _vm._s(_vm.$t("general.actions")) + "\n          ")]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+  }, [_vm._v("\n              " + _vm._s(_vm.$t("general.actions")) + "\n            ")]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
     staticClass: "dropdown-item",
     on: {
       click: _vm.removeMultipleInvoices
@@ -51378,7 +52868,7 @@ var render = function render() {
     attrs: {
       icon: ["fas", "trash"]
     }
-  }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1)])], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c("div", {
+  }), _vm._v("\n                " + _vm._s(_vm.$t("general.delete")) + "\n              ")], 1)])], 1) : _vm._e()], 1) : _vm._e()])], 1), _vm._v(" "), _c("div", {
     staticClass: "custom-control custom-checkbox"
   }, [_c("input", {
     directives: [{
@@ -51498,7 +52988,7 @@ var render = function render() {
         return [_c("router-link", {
           attrs: {
             to: {
-              path: "invoices/".concat(row.id, "/edit?nondis=").concat(row.paid_status !== "DISPATCHED")
+              path: _vm.role === "admin" ? "invoices/".concat(row.id, "/edit?nondis=").concat(row.paid_status !== "DISPATCHED") : "invoices/".concat(row.id, "/view")
             }
           }
         }, [_vm._v("\n             " + _vm._s(row.invoice_number) + "\n            ")])];
@@ -51548,7 +53038,7 @@ var render = function render() {
             href: "#"
           },
           slot: "activator"
-        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("router-link", {
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("router-link", {
           staticClass: "dropdown-item",
           attrs: {
             to: {
@@ -51576,7 +53066,7 @@ var render = function render() {
           staticClass: "dropdown-item",
           on: {
             click: function click($event) {
-              return _vm.sendReports(row.id);
+              return _vm.sendReports(row);
             }
           }
         }, [_c("font-awesome-icon", {
@@ -51584,7 +53074,7 @@ var render = function render() {
           attrs: {
             icon: "file-pdf"
           }
-        }), _vm._v("\n                " + _vm._s(_vm.$t("invoices.whatsapp")) + "\n              ")], 1) : _vm._e()]), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("div", {
+        }), _vm._v("\n                " + _vm._s(_vm.$t("invoices.whatsapp")) + "\n              ")], 1) : _vm._e()]), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("div", {
           staticClass: "dropdown-item",
           on: {
             click: function click($event) {
@@ -52142,7 +53632,7 @@ var render = function render() {
     attrs: {
       name: "fade"
     }
-  }, [_vm.selectedInvoices.length ? _c("v-dropdown", {
+  }, [_vm.role === "admin" && _vm.selectedInvoices.length ? _c("v-dropdown", {
     attrs: {
       "show-arrow": false
     }
@@ -52283,7 +53773,7 @@ var render = function render() {
           staticClass: "dropdown-item",
           attrs: {
             to: {
-              path: "invoices/".concat(row.id, "/edit?nondis=").concat(row.paid_status !== "DISPATCHED")
+              path: _vm.role === "admin" ? "invoices/".concat(row.id, "/edit?nondis=").concat(row.paid_status !== "DISPATCHED") : "invoices/".concat(row.id, "/view")
             }
           }
         }, [_vm._v("\n             " + _vm._s(row.invoice_number) + "\n            ")])];
@@ -52333,7 +53823,7 @@ var render = function render() {
             href: "#"
           },
           slot: "activator"
-        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("router-link", {
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("router-link", {
           staticClass: "dropdown-item",
           attrs: {
             to: {
@@ -52357,7 +53847,7 @@ var render = function render() {
           attrs: {
             icon: "eye"
           }
-        }), _vm._v("\n                " + _vm._s(_vm.$t("invoices.view")) + "\n              ")], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("div", {
+        }), _vm._v("\n                " + _vm._s(_vm.$t("invoices.view")) + "\n              ")], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("div", {
           staticClass: "dropdown-item",
           on: {
             click: function click($event) {
@@ -52431,7 +53921,7 @@ var render = function render() {
     attrs: {
       icon: "ellipsis-h"
     }
-  })], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_c("router-link", {
+  })], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.isAdmin ? _c("router-link", {
     staticClass: "dropdown-item",
     attrs: {
       to: {
@@ -52443,7 +53933,7 @@ var render = function render() {
     attrs: {
       icon: ["fas", "pencil-alt"]
     }
-  }), _vm._v("\n            " + _vm._s(_vm.$t("general.edit")) + "\n          ")], 1), _vm._v(" "), _c("div", {
+  }), _vm._v("\n            " + _vm._s(_vm.$t("general.edit")) + "\n          ")], 1) : _vm._e(), _vm._v(" "), _vm.isAdmin ? _c("div", {
     staticClass: "dropdown-item",
     on: {
       click: function click($event) {
@@ -52455,7 +53945,7 @@ var render = function render() {
     attrs: {
       icon: ["fas", "trash"]
     }
-  }), _vm._v("\n            " + _vm._s(_vm.$t("general.delete")) + "\n          ")], 1)], 1)], 1)], 1)]), _vm._v(" "), _c("div", {
+  }), _vm._v("\n            " + _vm._s(_vm.$t("general.delete")) + "\n          ")], 1) : _vm._e()], 1)], 1)], 1)]), _vm._v(" "), _c("div", {
     staticClass: "invoice-sidebar"
   }, [_c("div", {
     staticClass: "side-header"
@@ -53696,7 +55186,13 @@ var render = function render() {
     }, [_vm._v("Estimate Number : "), _c("span", {
       staticClass: "badge badge-success"
     }, [_vm._v(_vm._s(item.data.estimate_number))])])])])]);
-  }), 0)], 1)], 1), _vm._v(" "), _c("li", [_c("v-dropdown", {
+  }), 0)], 1)], 1), _vm._v(" "), _vm.currentUser ? _c("li", {
+    staticClass: "user-info"
+  }, [_c("span", {
+    staticClass: "user-name"
+  }, [_vm._v(_vm._s(_vm.currentUser.name))]), _vm._v(" "), _c("span", {
+    staticClass: "user-role"
+  }, [_vm._v(_vm._s(_vm.currentUser.role))])]) : _vm._e(), _vm._v(" "), _c("li", [_c("v-dropdown", {
     attrs: {
       "show-arrow": false
     }
@@ -53814,7 +55310,8 @@ var render = function render() {
         key: index1,
         staticClass: "menu-item",
         attrs: {
-          to: item.route
+          to: item.route,
+          exact: !!item.exact
         },
         nativeOn: {
           click: function click($event) {
@@ -56378,7 +57875,23 @@ var render = function render() {
       expression: "$v.orderNumAttribute.$error && !$v.orderNumAttribute.required"
     }],
     staticClass: "text-danger mt-1"
-  }, [_vm._v(" " + _vm._s(_vm.$tc("validation.required")) + "  ")])], 1)])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(" " + _vm._s(_vm.$tc("validation.required")) + "  ")])], 1), _vm._v(" "), _c("div", {
+    staticClass: "col collapse-input"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("orders.ref_number")))]), _vm._v(" "), _c("base-prefix-input", {
+    attrs: {
+      prefix: _vm.orderPrefix,
+      icon: "hashtag",
+      "prefix-width": 55,
+      disabled: true
+    },
+    model: {
+      value: _vm.referenceNumAttribute,
+      callback: function callback($$v) {
+        _vm.referenceNumAttribute = $$v;
+      },
+      expression: "referenceNumAttribute"
+    }
+  })], 1)])])]), _vm._v(" "), _c("div", {
     staticClass: "table-responsive"
   }, [_c("table", {
     staticClass: "table item-table"
@@ -57899,7 +59412,7 @@ var render = function render() {
     attrs: {
       name: "fade"
     }
-  }, [_vm.selectedPayments && _vm.selectedPayments.length ? _c("v-dropdown", {
+  }, [_vm.role === "admin" && _vm.selectedPayments && _vm.selectedPayments.length ? _c("v-dropdown", {
     attrs: {
       "show-arrow": false
     }
@@ -58040,7 +59553,7 @@ var render = function render() {
           staticClass: "dropdown-item",
           attrs: {
             to: {
-              path: "payments/".concat(row.id, "/edit?d=true")
+              path: _vm.role === "admin" ? "payments/".concat(row.id, "/edit?d=true") : "/payments"
             }
           }
         }, [_vm._v("\n             " + _vm._s(row.master.name) + "\n            ")])];
@@ -58079,7 +59592,7 @@ var render = function render() {
             href: "#"
           },
           slot: "activator"
-        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("router-link", {
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("router-link", {
           staticClass: "dropdown-item",
           attrs: {
             to: {
@@ -58091,7 +59604,7 @@ var render = function render() {
           attrs: {
             icon: ["fas", "pencil-alt"]
           }
-        }), _vm._v("\n                " + _vm._s(_vm.$t("general.edit")) + "\n              ")], 1) : _vm._e()], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("div", {
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.edit")) + "\n              ")], 1) : _vm._e()], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("div", {
           staticClass: "dropdown-item",
           on: {
             click: function click($event) {
@@ -58695,10 +60208,10 @@ render._withStripped = true;
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d":
-/*!**********************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d ***!
-  \**********************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d&scoped=true":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d&scoped=true ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -58971,6 +60484,8 @@ var render = function render() {
     staticClass: "col-sm-12"
   }, [_c("div", {
     staticClass: "form-group collapse-button-container"
+  }, [_c("div", {
+    staticClass: "receipt-action-row"
   }, [_c("base-button", {
     staticClass: "collapse-button",
     attrs: {
@@ -58979,7 +60494,24 @@ var render = function render() {
       color: "theme",
       type: "submit"
     }
-  }, [_vm._v("\n                " + _vm._s(_vm.$t("receipts.save_receipt")) + "\n              ")]), _vm._v(" "), _c("br"), _vm._v(" "), _vm.isEdit ? _c("base-button", {
+  }, [_vm._v("\n                  " + _vm._s(_vm.$t("receipts.save_receipt")) + "\n                ")]), _vm._v(" "), _vm.isEdit && _vm.user.role === "admin" && _vm.formData.receipt_status === "To Be Approved" ? _c("base-button", {
+    staticClass: "report-button",
+    attrs: {
+      color: "theme"
+    },
+    on: {
+      click: _vm.approveCurrentReceipt
+    }
+  }, [_vm._v("\n                  " + _vm._s(_vm.$t("receipts.approve_receipt")) + "\n                ")]) : _vm._e(), _vm._v(" "), _vm.isEdit && _vm.user.role === "admin" && _vm.formData.receipt_status === "To Be Approved" ? _c("base-button", {
+    staticClass: "report-button",
+    attrs: {
+      outline: "",
+      color: "danger"
+    },
+    on: {
+      click: _vm.declineCurrentReceipt
+    }
+  }, [_vm._v("\n                  " + _vm._s(_vm.$t("receipts.decline_receipt")) + "\n                ")]) : _vm._e(), _vm._v(" "), _vm.isEdit ? _c("base-button", {
     staticClass: "report-button",
     attrs: {
       outline: "",
@@ -58990,7 +60522,7 @@ var render = function render() {
         return _vm.sendReports();
       }
     }
-  }, [_vm._v("\n                " + _vm._s(_vm.$t("reports.send_report")) + "\n              ")]) : _vm._e()], 1)])])])])])]);
+  }, [_vm._v("\n                  " + _vm._s(_vm.$t("reports.send_report")) + "\n                ")]) : _vm._e()], 1)])])])])])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -59019,16 +60551,10 @@ var render = function render() {
     staticClass: "page-header"
   }, [_c("Header", {
     attrs: {
-      title: _vm.$tc("receipts.receipt", 2),
+      title: _vm.approvalMode ? _vm.$t("receipts.approvals_title") : _vm.$tc("receipts.receipt", 2),
       "bread-crumb-links": _vm.breadCrumbLinks
     }
   }, [_c("div", {
-    directives: [{
-      name: "show",
-      rawName: "v-show",
-      value: _vm.totalReceipts || _vm.filtersApplied,
-      expression: "totalReceipts || filtersApplied"
-    }],
     staticClass: "mr-4 mb-3 mb-sm-0"
   }, [_c("base-button", {
     attrs: {
@@ -59041,7 +60567,7 @@ var render = function render() {
     on: {
       click: _vm.toggleFilter
     }
-  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1), _vm._v(" "), _c("div", [_c("router-link", {
+  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1), _vm._v(" "), !_vm.approvalMode ? _c("div", [_c("router-link", {
     attrs: {
       slot: "item-title",
       to: "/receipts/create"
@@ -59053,7 +60579,7 @@ var render = function render() {
       icon: "plus",
       color: "theme"
     }
-  }, [_vm._v("\n            " + _vm._s(_vm.$t("receipts.new_receipt")) + "\n          ")])], 1)], 1)])], 1), _vm._v(" "), _c("transition", {
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("receipts.new_receipt")) + "\n          ")])], 1)], 1) : _vm._e()])], 1), _vm._v(" "), _c("transition", {
     attrs: {
       name: "fade"
     }
@@ -59136,6 +60662,22 @@ var render = function render() {
       },
       expression: "filters.receipt_number"
     }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "filter-status"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("receipts.receipt_status")))]), _vm._v(" "), _c("base-select", {
+    attrs: {
+      options: _vm.receiptStatusOptions,
+      "show-labels": false,
+      searchable: false,
+      "allow-empty": true
+    },
+    model: {
+      value: _vm.filters.receipt_status,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "receipt_status", $$v);
+      },
+      expression: "filters.receipt_status"
+    }
   })], 1)]), _vm._v(" "), _c("label", {
     staticClass: "clear-filter",
     on: {
@@ -59161,14 +60703,14 @@ var render = function render() {
     }
   }, [_c("label", {
     staticClass: "col title"
-  }, [_vm._v(_vm._s(_vm.$t("receipts.no_receipts")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.approvalMode ? _vm.$t("receipts.no_receipts_pending_approval") : _vm.$t("receipts.no_receipts")))])]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, [_c("label", {
     staticClass: "description col mt-1",
     attrs: {
       align: "center"
     }
-  }, [_vm._v(_vm._s(_vm.$t("receipts.list_of_receipts")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.approvalMode ? _vm.$t("receipts.list_of_receipts_pending_approval") : _vm.$t("receipts.list_of_receipts")))])]), _vm._v(" "), !_vm.approvalMode ? _c("div", {
     staticClass: "btn-container"
   }, [_c("base-button", {
     staticClass: "mt-3",
@@ -59182,7 +60724,7 @@ var render = function render() {
         return _vm.$router.push("receipts/create");
       }
     }
-  }, [_vm._v("\n        " + _vm._s(_vm.$t("receipts.new_receipt")) + "\n      ")])], 1)], 1), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("receipts.new_receipt")) + "\n      ")])], 1) : _vm._e()], 1), _vm._v(" "), _c("div", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -59198,7 +60740,7 @@ var render = function render() {
     attrs: {
       name: "fade"
     }
-  }, [_vm.selectedReceipts && _vm.selectedReceipts.length ? _c("v-dropdown", {
+  }, [_vm.role === "admin" && _vm.selectedReceipts && _vm.selectedReceipts.length ? _c("v-dropdown", {
     attrs: {
       "show-arrow": false
     }
@@ -59210,6 +60752,26 @@ var render = function render() {
     },
     slot: "activator"
   }, [_vm._v("\n            " + _vm._s(_vm.$t("general.actions")) + "\n          ")]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+    staticClass: "dropdown-item",
+    on: {
+      click: _vm.approveMultipleReceiptsAction
+    }
+  }, [_c("font-awesome-icon", {
+    staticClass: "dropdown-item-icon",
+    attrs: {
+      icon: ["fas", "check"]
+    }
+  }), _vm._v("\n              " + _vm._s(_vm.$t("receipts.approve_receipt")) + "\n            ")], 1)]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+    staticClass: "dropdown-item",
+    on: {
+      click: _vm.declineMultipleReceiptsAction
+    }
+  }, [_c("font-awesome-icon", {
+    staticClass: "dropdown-item-icon",
+    attrs: {
+      icon: ["fas", "times"]
+    }
+  }), _vm._v("\n              " + _vm._s(_vm.$t("receipts.decline_receipt")) + "\n            ")], 1)]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
     staticClass: "dropdown-item",
     on: {
       click: _vm.removeMultipleReceipts
@@ -59335,13 +60897,14 @@ var render = function render() {
     scopedSlots: _vm._u([{
       key: "default",
       fn: function fn(row) {
-        return [_c("router-link", {
+        return [_c("a", {
+          staticClass: "receipt-number-link",
           attrs: {
-            to: {
-              path: _vm.role === "admin" ? "receipts/".concat(row.id, "/edit?d=true") : "receipts/".concat(row.id, "/view")
-            }
+            href: _vm.getReceiptLink(row),
+            target: "_blank",
+            rel: "noopener noreferrer"
           }
-        }, [_vm._v("\n             " + _vm._s(row.receipt_number) + "\n            ")])];
+        }, [_vm._v("\n            " + _vm._s(row.receipt_number) + "\n          ")])];
       }
     }])
   }), _vm._v(" "), _c("table-column", {
@@ -59370,6 +60933,12 @@ var render = function render() {
     }
   }), _vm._v(" "), _c("table-column", {
     attrs: {
+      label: _vm.$t("receipts.receipt_status"),
+      width: "20%",
+      show: "receipt_status"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
       sortable: false,
       filterable: false,
       "cell-class": "action-dropdown no-click"
@@ -59383,7 +60952,7 @@ var render = function render() {
             href: "#"
           },
           slot: "activator"
-        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("router-link", {
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" || _vm.role === "accountant" ? _c("router-link", {
           staticClass: "dropdown-item",
           attrs: {
             to: {
@@ -59419,7 +60988,31 @@ var render = function render() {
           attrs: {
             icon: ["fas", "trash"]
           }
-        }), _vm._v("\n                " + _vm._s(_vm.$t("general.delete")) + "\n              ")], 1) : _vm._e()])], 1)];
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.delete")) + "\n              ")], 1) : _vm._e()]), _vm._v(" "), _vm.role === "admin" && row.receipt_status === "To Be Approved" ? _c("v-dropdown-item", [_c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.approveReceiptAction(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "check"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("receipts.approve_receipt")) + "\n              ")], 1), _vm._v(" "), _c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.declineReceiptAction(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "times"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("receipts.decline_receipt")) + "\n              ")], 1)]) : _vm._e()], 1)];
       }
     }])
   })], 1)], 1)], 1);
@@ -59473,7 +61066,7 @@ var render = function render() {
     attrs: {
       icon: "ellipsis-h"
     }
-  })], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_c("router-link", {
+  })], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.canEdit ? _c("router-link", {
     staticClass: "dropdown-item",
     attrs: {
       to: {
@@ -59485,7 +61078,7 @@ var render = function render() {
     attrs: {
       icon: ["fas", "pencil-alt"]
     }
-  }), _vm._v("\n            " + _vm._s(_vm.$t("general.edit")) + "\n          ")], 1), _vm._v(" "), _c("div", {
+  }), _vm._v("\n            " + _vm._s(_vm.$t("general.edit")) + "\n          ")], 1) : _vm._e(), _vm._v(" "), _vm.isAdmin ? _c("div", {
     staticClass: "dropdown-item",
     on: {
       click: function click($event) {
@@ -59497,7 +61090,7 @@ var render = function render() {
     attrs: {
       icon: ["fas", "trash"]
     }
-  }), _vm._v("\n            " + _vm._s(_vm.$t("general.delete")) + "\n          ")], 1)], 1)], 1)], 1)]), _vm._v(" "), _c("div", {
+  }), _vm._v("\n            " + _vm._s(_vm.$t("general.delete")) + "\n          ")], 1) : _vm._e()], 1)], 1)], 1)]), _vm._v(" "), _c("div", {
     staticClass: "receipt-sidebar"
   }, [_vm.isSearching ? _c("base-loader") : _c("div", {
     staticClass: "side-header"
@@ -63950,7 +65543,7 @@ var render = function render() {
     staticClass: "my-grid-class",
     attrs: {
       id: "mygrid",
-      "column-defs": _vm.columnDefs,
+      "column-defs": _vm.gridColumnDefs,
       "row-data": _vm.rows,
       "row-data-key": "voucherId",
       "master-options": _vm.masterDataBind
@@ -63991,6 +65584,7 @@ var render = function render() {
       autofocus: "",
       rows: "2",
       width: "400",
+      disabled: _vm.isReadOnly,
       id: "narration-voucher",
       placeholder: "Type Short Narration (optional)"
     },
@@ -64009,6 +65603,7 @@ var render = function render() {
     staticClass: "text-danger"
   }, [_vm._v(" * ")]), _vm._v(" "), _c("base-date-picker", {
     attrs: {
+      disabled: _vm.isReadOnly,
       "calendar-button": true,
       "calendar-button-icon": "calendar"
     },
@@ -64019,21 +65614,21 @@ var render = function render() {
       },
       expression: "date"
     }
-  })], 1)])]), _vm._v(" "), _c("button", {
+  })], 1)])]), _vm._v(" "), !_vm.isReadOnly ? _c("button", {
     staticClass: "btn btn-theme-outline",
     on: {
       click: function click($event) {
         return _vm.addNewRow();
       }
     }
-  }, [_vm._v("Add new")]), _vm._v(" "), _c("button", {
+  }, [_vm._v("Add new")]) : _vm._e(), _vm._v(" "), !_vm.isReadOnly ? _c("button", {
     staticClass: "btn btn-primary",
     on: {
       click: function click($event) {
         return _vm.validateSubmitVoucher();
       }
     }
-  }, [_vm._v("Save Voucher")])], 1)])])])]);
+  }, [_vm._v("Save Voucher")]) : _vm._e()], 1)])])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -64489,7 +66084,7 @@ var render = function render() {
     scopedSlots: _vm._u([{
       key: "default",
       fn: function fn(row) {
-        return [_vm._v("\n                " + _vm._s(row.reference_number) + "\n              ")];
+        return [_vm._v("\n                " + _vm._s(_vm.formatReferenceNumber(row.reference_number)) + "\n              ")];
       }
     }])
   }), _vm._v(" "), _c("table-column", {
@@ -64534,7 +66129,7 @@ var render = function render() {
   }), _vm._v(" "), _c("table-column", {
     attrs: {
       label: _vm.$tc("daysheet.sign"),
-      show: "lot"
+      show: "sign"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -64550,13 +66145,13 @@ var render = function render() {
     scopedSlots: _vm._u([{
       key: "default",
       fn: function fn(row) {
-        return [_vm._v("\n                " + _vm._s(row.reference_number) + "\n              ")];
+        return [_vm._v("\n                " + _vm._s(_vm.formatReferenceNumber(row.reference_number)) + "\n              ")];
       }
     }])
   }), _vm._v(" "), _c("table-column", {
     attrs: {
       label: _vm.$tc("daysheet.name"),
-      show: "party"
+      show: "name"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -64567,7 +66162,7 @@ var render = function render() {
   }), _vm._v(" "), _c("table-column", {
     attrs: {
       label: _vm.$tc("daysheet.city"),
-      show: "party"
+      show: "city"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -64578,7 +66173,7 @@ var render = function render() {
   }), _vm._v(" "), _c("table-column", {
     attrs: {
       label: _vm.$tc("daysheet.transport"),
-      show: "party"
+      show: "transport"
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -64615,7 +66210,7 @@ var render = function render() {
     staticClass: "page-header"
   }, [_c("Header", {
     attrs: {
-      title: _vm.$tc("vouchers.voucher", 2),
+      title: _vm.isApprovalMode ? _vm.$t("vouchers.approvals_title") : _vm.$tc("vouchers.voucher", 2),
       "bread-crumb-links": _vm.breadCrumbLinks
     }
   }, [_c("div", {
@@ -64637,7 +66232,21 @@ var render = function render() {
     on: {
       click: _vm.toggleFilter
     }
-  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1), _vm._v(" "), _c("div", [_c("router-link", {
+  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1), _vm._v(" "), _vm.role === "admin" && !_vm.isApprovalMode ? _c("div", {
+    staticClass: "mr-4 mb-3 mb-sm-0"
+  }, [_c("router-link", {
+    attrs: {
+      to: {
+        name: "vouchers.approvals"
+      }
+    }
+  }, [_c("base-button", {
+    attrs: {
+      outline: true,
+      color: "theme",
+      size: "large"
+    }
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("vouchers.need_approval")) + "\n          ")])], 1)], 1) : _vm._e(), _vm._v(" "), !_vm.isApprovalMode ? _c("div", [_c("router-link", {
     attrs: {
       slot: "item-title",
       to: "vouchers/create"
@@ -64649,7 +66258,7 @@ var render = function render() {
       icon: "plus",
       size: "large"
     }
-  }, [_vm._v("\n          " + _vm._s(_vm.$t("vouchers.add_voucher")) + "\n        ")])], 1)], 1)])], 1), _vm._v(" "), _c("transition", {
+  }, [_vm._v("\n          " + _vm._s(_vm.$t("vouchers.add_voucher")) + "\n        ")])], 1)], 1) : _vm._e()])], 1), _vm._v(" "), _c("transition", {
     attrs: {
       name: "fade"
     }
@@ -64754,14 +66363,14 @@ var render = function render() {
     }
   }, [_c("label", {
     staticClass: "col title"
-  }, [_vm._v(_vm._s(_vm.$t("vouchers.no_vouchers")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.isApprovalMode ? _vm.$t("vouchers.no_vouchers_pending_approval") : _vm.$t("vouchers.no_vouchers")))])]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, [_c("label", {
     staticClass: "description col mt-1",
     attrs: {
       align: "center"
     }
-  }, [_vm._v(_vm._s(_vm.$t("vouchers.list_of_vouchers")))])]), _vm._v(" "), _c("div", {
+  }, [_vm._v(_vm._s(_vm.isApprovalMode ? _vm.$t("vouchers.list_of_vouchers_pending_approval") : _vm.$t("vouchers.list_of_vouchers")))])]), _vm._v(" "), !_vm.isApprovalMode ? _c("div", {
     staticClass: "btn-container"
   }, [_c("base-button", {
     staticClass: "mt-3",
@@ -64775,7 +66384,7 @@ var render = function render() {
         return _vm.$router.push("vouchers/create");
       }
     }
-  }, [_vm._v("\n        " + _vm._s(_vm.$t("vouchers.add_new_voucher")) + "\n      ")])], 1)], 1), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("vouchers.add_new_voucher")) + "\n      ")])], 1) : _vm._e()], 1), _vm._v(" "), _c("div", {
     directives: [{
       name: "show",
       rawName: "v-show",
@@ -64791,7 +66400,7 @@ var render = function render() {
     attrs: {
       name: "fade"
     }
-  }, [_vm.selectedVouchers.length ? _c("v-dropdown", {
+  }, [_vm.role === "admin" && _vm.selectedVouchers.length ? _c("v-dropdown", {
     attrs: {
       "show-arrow": false
     }
@@ -64812,7 +66421,17 @@ var render = function render() {
     attrs: {
       icon: ["fas", "trash"]
     }
-  }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1)])], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c("div", {
+  }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1)]), _vm._v(" "), _vm.isApprovalMode ? _c("v-dropdown-item", [_c("div", {
+    staticClass: "dropdown-item",
+    on: {
+      click: _vm.approveMultipleVouchersAction
+    }
+  }, [_c("font-awesome-icon", {
+    staticClass: "dropdown-item-icon",
+    attrs: {
+      icon: "check-circle"
+    }
+  }), _vm._v("\n              " + _vm._s(_vm.$t("vouchers.approve_voucher")) + "\n            ")], 1)]) : _vm._e()], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c("div", {
     staticClass: "custom-control custom-checkbox"
   }, [_c("input", {
     directives: [{
@@ -64928,13 +66547,25 @@ var render = function render() {
     scopedSlots: _vm._u([{
       key: "default",
       fn: function fn(row) {
-        return [_c("router-link", {
+        return [_vm.role === "admin" ? _c("router-link", {
           attrs: {
             to: {
-              path: "vouchers/".concat(row.id, "/edit")
+              name: "vouchers.edit",
+              params: {
+                id: row.id
+              }
             }
           }
-        }, [_vm._v("\n            " + _vm._s(row.account) + "\n          ")])];
+        }, [_vm._v("\n            " + _vm._s(row.account) + "\n          ")]) : _vm.role === "accountant" ? _c("router-link", {
+          attrs: {
+            to: {
+              name: "vouchers.edit",
+              params: {
+                id: row.id
+              }
+            }
+          }
+        }, [_vm._v("\n            " + _vm._s(row.account) + "\n          ")]) : _c("span", [_vm._v(_vm._s(row.account))])];
       }
     }])
   }), _vm._v(" "), _c("table-column", {
@@ -64971,6 +66602,12 @@ var render = function render() {
       }
     }])
   }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("vouchers.date"),
+      "sort-as": "date",
+      show: "formattedDate"
+    }
+  }), _vm._v(" "), _c("table-column", {
     key: Math.random(),
     attrs: {
       sortable: false,
@@ -64986,11 +66623,14 @@ var render = function render() {
             href: "#"
           },
           slot: "activator"
-        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_c("router-link", {
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("router-link", {
           staticClass: "dropdown-item",
           attrs: {
             to: {
-              path: "vouchers/".concat(row.id, "/edit")
+              name: "vouchers.edit",
+              params: {
+                id: row.id
+              }
             }
           }
         }, [_c("font-awesome-icon", {
@@ -64998,7 +66638,46 @@ var render = function render() {
           attrs: {
             icon: ["fas", "pencil-alt"]
           }
-        }), _vm._v("\n              " + _vm._s(_vm.$t("general.edit")) + "\n            ")], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+        }), _vm._v("\n              " + _vm._s(_vm.$t("general.edit")) + "\n            ")], 1) : _vm.role === "accountant" ? _c("router-link", {
+          staticClass: "dropdown-item",
+          attrs: {
+            to: {
+              name: "vouchers.edit",
+              params: {
+                id: row.id
+              }
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: "eye"
+          }
+        }), _vm._v("\n              " + _vm._s(_vm.$t("invoices.view")) + "\n            ")], 1) : _vm._e()], 1), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" && row.voucher_status === "To Be Approved" ? _c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.approveVoucherAction(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: "check-circle"
+          }
+        }), _vm._v("\n              " + _vm._s(_vm.$t("vouchers.approve_voucher")) + "\n            ")], 1) : _vm._e()]), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" && row.voucher_status === "To Be Approved" ? _c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.declineVoucherAction(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: "times-circle"
+          }
+        }), _vm._v("\n              " + _vm._s(_vm.$t("vouchers.decline_voucher")) + "\n            ")], 1) : _vm._e()]), _vm._v(" "), _c("v-dropdown-item", [_vm.role === "admin" ? _c("div", {
           staticClass: "dropdown-item",
           on: {
             click: function click($event) {
@@ -65010,7 +66689,7 @@ var render = function render() {
           attrs: {
             icon: ["fas", "trash"]
           }
-        }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1)])], 1)];
+        }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1) : _vm._e()])], 1)];
       }
     }])
   })], 1)], 1)], 1);
@@ -85736,7 +87415,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.style-chooser .vs__search[data-v-c0b2ab7a]::-moz-placeholder {\n  background: #3c4b81;\n  border: none;\n  color: #394066;\n  text-transform: lowercase;\n  font-variant: small-caps;\n  z-index: 10;\n}\n.style-chooser .vs__search[data-v-c0b2ab7a]::placeholder,\n.style-chooser .vs__dropdown-toggle[data-v-c0b2ab7a],\n.style-chooser .vs__dropdown-menu[data-v-c0b2ab7a] {\n  background: #3c4b81;\n  border: none;\n  color: #394066;\n  text-transform: lowercase;\n  font-variant: small-caps;\n  z-index: 10;\n}\n.style-chooser .vs__clear[data-v-c0b2ab7a],\n.style-chooser .vs__open-indicator[data-v-c0b2ab7a] {\n  fill: #394066;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/components/grid-table/Cell.vue"],"names":[],"mappings":";AAicA;EAGA,mBAAA;EACA,YAAA;EACA,cAAA;EACA,yBAAA;EACA,wBAAA;EACA,WAAA;AACA;AATA;;;EAGA,mBAAA;EACA,YAAA;EACA,cAAA;EACA,yBAAA;EACA,wBAAA;EACA,WAAA;AACA;AACA;;EAEA,aAAA;AACA","sourcesContent":["<template>\n  <td\n      class=\"cell noselect\"\n      :id=\"`cell${rowIndex}-${columnIndex}`\"\n      :class='{ selected: !onlyBorder && selected, editable, invalid, [column.type || \"text\"]: true }'\n      :title=\"invalid\"\n      :style=\"cellStyle\"\n      @click='$emit(\"click\", $event)'\n  >\n      <span class=\"editable-field\" v-if=\"inputType === 'select'\">\n        <span v-if=\"column.field === 'type'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectTypeBind\"\n            :options=\"setOptions\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectTypeBind, 'width-100 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n        <span v-if=\"column.field === 'account'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectAccountBind\"\n            :options=\"setOptions\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectAccountBind, 'width-500 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n      </span>\n      <span v-else>\n        <span class=\"editable-field\">\n          <input\n            :type=\"inputType\"\n            ref=\"input\"\n            :key=\"value\"\n            :min=\"0\"\n            :placeholder=\"placeholder\"\n            :disabled=\"disableInput\"\n            :value=\"value\"\n            @keyup.enter=\"setEditableValue\"\n            @focus=\"editPending = true\"\n            @blur=\"leaved\"\n          />\n          </span>\n      </span>\n  </td>\n</template>\n<style scoped>\n  .style-chooser .vs__search::placeholder,\n  .style-chooser .vs__dropdown-toggle,\n  .style-chooser .vs__dropdown-menu {\n    background: #3c4b81;\n    border: none;\n    color: #394066;\n    text-transform: lowercase;\n    font-variant: small-caps;\n    z-index: 10;\n  }\n  .style-chooser .vs__clear,\n  .style-chooser .vs__open-indicator {\n    fill: #394066;\n  }\n</style>\n<style>\n  .vs__actions {\n    display: none !important;\n  }\n  .input-group .form-control {\n    z-index: 0 !important;\n  }\n</style>\n<script>\nimport { format } from 'date-fns'\nimport { cellValueParser } from './helpers'\nimport { cellFormatter } from './vue-filters.js'\n\nexport default {\n  filters: {\n    cellFormatter\n  },\n  props: {\n    column: { type: Object },\n    row: { type: Object },\n    columnIndex: { type: Number },\n    rowIndex: { type: Number },\n    selStart: { type: Array },\n    selEnd: { type: Array },\n    cellEditing: { type: Array },\n    cellsWithErrors: { type: Object },\n    onlyBorder: { type: Boolean },\n    masterOptions: { type: Array, default: [] },\n    placeholder: { type: String, default: null }\n  },\n  data () {\n    return { value: null, rowValue: null, editPending: false, selectedValue: null}\n  },\n  mounted() {\n    if (this.column.field === 'type') {\n      this.value = this.row.type\n      this.rowValue = this.row.type\n      this.selectedValue = this.setOptions.find(each => each.name === this.value)\n    }\n    if (this.column.field === 'account') {\n      this.rowValue = this.row.account\n      this.value = this.row.account\n    }\n    if (this.column.field === 'credit' && this.row.credit) {\n      this.rowValue = this.row.credit\n      this.value = this.row.credit\n    }\n    if (this.column.field === 'debit' && this.row.debit) {\n      this.rowValue = this.row.debit\n      this.value = this.row.debit\n    }\n    // if (this.$refs.select && this.column.field === 'type') {\n    //   this.$refs.select.$refs.search.focus()\n    // }\n  },\n  computed: {\n    selectTypeBind: {\n      get: function () {\n        if (this.column.field === 'type') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'type') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selectAccountBind: {\n      get: function () {\n        if (this.column.field === 'account') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'account') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selected () {\n      return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedTop () {\n      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedRight () {\n      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    selectedBottom () {\n      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedLeft () {\n      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    editable () {\n      if (this.disableInput) {\n        return false\n      }\n      return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex\n    },\n    invalid () {\n      return this.cellsWithErrors[`cell${this.rowIndex}-${this.columnIndex}`]\n    },\n    inputType () {\n      switch (this.column.type) {\n        case 'text': return 'text'\n        case 'link': return 'text'\n        case 'numeric': return 'number'\n        case 'currency': return 'number'\n        case 'percent': return 'number'\n        case 'date': return 'date'\n        case 'datetime': return 'datetime-local'\n        case 'select': return 'select'\n      }\n      return 'text'\n    },\n    cellStyle () {\n      const cellStyle = this.row.$cellStyle && this.row.$cellStyle[this.column.field]\n      return { ...this.row.$rowStyle, ...cellStyle }\n    },\n    setOptions() {\n      if (this.column.field === 'type') {\n        return [{id: 1, name: 'Dr'}, {id: 2, name: 'Cr'}]\n      }\n      return this.masterOptions\n    },\n    disableInput() {\n      let bool = false\n      if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {\n        this.rowValue = null\n        this.value = null\n        bool = true\n      }\n      return bool\n    },\n    isEdit() {\n      if (this.$route.name === 'vouchers.edit') {\n          return true\n        }\n        return false\n    }\n  },\n  created () {\n    if (this.isEdit) {\n      this.loadEditData()\n    }\n  },\n  watch: {\n    cellEditing () {\n      if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex && !this.disableInput) {\n        this.rowValue = this.getEditableValue(this.row[this.column.field])\n        this.value = this.getEditableValue(this.row[this.column.field])\n\n        this.$nextTick(() => {\n          const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search\n          if (this.inputType === 'select') {\n            input.focus()\n            if (!this.selectedValue) return\n            input.value = this.selectedValue.name\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n          }\n          if (!this.value && this.value !== 0 && this.value !== false) {\n            input.value = null\n            input.focus()\n            return\n          }\n          if (this.column.type === 'datetime' || this.column.type === 'date') {\n            const formattedDate = this.column.type === 'datetime'\n              ? `${format(this.value, 'yyyy-MM-dd')}T${format(this.value, 'HH:mm')}`\n              : `${format(this.value, 'yyyy-MM-dd')}`\n            setTimeout(() => {\n              input.value = formattedDate\n              input.focus()\n            }, 50)\n          } else {\n            input.value = this.value\n            input.focus()\n          }\n        })\n      }\n      if (this.inputType === 'select') {\n        if (this.selectedValue) {\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n            if (this.column.field === 'type') {\n              this.row.type = this.selectedValue.name\n            }\n            if(this.column.field === 'account') {\n              this.row.account = this.selectedValue.name\n              this.row.account_id = this.selectedValue.id\n            }\n        }\n      }\n      if (this.row.type === 'Cr' && this.column.field === 'credit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.debit\n        this.value = this.row.debit\n      }\n      if (this.row.type === 'Dr' && this.column.field === 'debit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.credit\n        this.value = this.row.credit\n      }\n    },\n  },\n  methods: {\n    loadEditData() {\n      if (this.row.type !== '') {\n        if (this.column.field === 'type') {\n          this.selectedValue = {name: this.row.type, id: this.row.account_id}\n          this.rowValue = this.row.type\n          this.value = this.row.type\n        }\n        if (this.column.field === 'account') {\n          this.selectedValue = {name: this.row.account, id: this.row.account_id}\n          this.rowValue = this.row.account\n          this.value = this.row.account\n        }\n        if (this.column.field === 'debit') {\n          this.rowValue = this.row.debit\n          this.value = this.row.debit\n        }\n        if (this.column.field === 'credit') {\n          this.rowValue = this.row.credit\n          this.value = this.row.credit\n        }\n      }\n    },\n    getEditableValue (value) {\n      if (this.column.type === 'datetime' || this.column.type === 'date') {\n        if (typeof value === 'string') {\n          const parsedDate = new Date(value)\n          return isNaN(parsedDate) ? null : parsedDate\n        }\n      }\n      return value\n    },\n    setEditableValue ($event) {\n      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null\n      let value = cellValueParser(this.column, this.row, input, true)\n      if (!value) return\n      this.editPending = false\n      let valueChanged = true\n\n      if (!this.disableInput) {\n        this.rowValue = value\n        this.value = value\n        const { row, column, rowIndex, columnIndex } = this\n        this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })\n      }\n    },\n    leaved ($event) {\n      if (this.editPending) {\n        this.setEditableValue($event)\n      }\n    },\n    linkClicked () {\n      this.$emit('link-clicked')\n    },\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n@import './variables';\n\n.cell {\n  padding: 0 $cell-side-paddings;\n  position: relative;\n  display: flex;\n  align-items: center;\n  min-height: 40px;\n  border: solid 1px transparent;\n  border-bottom-color: $cell-border-color;\n  border-right-color: $cell-border-color;\n  cursor: default;\n\n  &.selected {\n    border-color: $cell-selected-border-color;\n  }\n\n  &.selected-top {\n    border-top-color: $cell-selected-border-color;\n  }\n\n  &.selected-right {\n    border-right-color: $cell-selected-border-color;\n  }\n\n  &.selected-bottom {\n    border-bottom-color: $cell-selected-border-color;\n  }\n\n  &.selected-left {\n    border-left-color: $cell-selected-border-color;\n  }\n\n  &.currency,\n  &.numeric,\n  &.percent\n  {\n    text-align: right;\n  }\n\n  &.editable {\n    padding: 0;\n    display: flex;\n    box-shadow: 1px 1px 4px #cbcbcb;\n  }\n\n  &.invalid {\n    &::after {\n      content: \"\\26A0\";\n      position: absolute;\n      right: 6px;\n      top: 0;\n      color: red;\n      font-weight: bold;\n      font-size: 20px;\n    }\n  }\n\n  .cell-content {\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    display: block;\n    overflow: hidden;\n  }\n\n  .editable-field {\n    height: 100%;\n    width: 100%;\n    display: flex;\n\n    input {\n      height: 100%;\n      border: none;\n      outline: none;\n      width: 100%;\n\n      &:disabled {\n        background: #eeeeee;\n        cursor: not-allowed;\n      }\n    }\n  }\n}\n\n.noselect {\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n  -khtml-user-select: none; /* Konqueror HTML */\n  -moz-user-select: none; /* Old versions of Firefox */\n  -ms-user-select: none; /* Internet Explorer/Edge */\n  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */\n}\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.style-chooser .vs__search[data-v-c0b2ab7a]::-moz-placeholder {\n  background: #3c4b81;\n  border: none;\n  color: #394066;\n  text-transform: lowercase;\n  font-variant: small-caps;\n  z-index: 10;\n}\n.style-chooser .vs__search[data-v-c0b2ab7a]::placeholder,\n.style-chooser .vs__dropdown-toggle[data-v-c0b2ab7a],\n.style-chooser .vs__dropdown-menu[data-v-c0b2ab7a] {\n  background: #3c4b81;\n  border: none;\n  color: #394066;\n  text-transform: lowercase;\n  font-variant: small-caps;\n  z-index: 10;\n}\n.style-chooser .vs__clear[data-v-c0b2ab7a],\n.style-chooser .vs__open-indicator[data-v-c0b2ab7a] {\n  fill: #394066;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/components/grid-table/Cell.vue"],"names":[],"mappings":";AAgdA;EAGA,mBAAA;EACA,YAAA;EACA,cAAA;EACA,yBAAA;EACA,wBAAA;EACA,WAAA;AACA;AATA;;;EAGA,mBAAA;EACA,YAAA;EACA,cAAA;EACA,yBAAA;EACA,wBAAA;EACA,WAAA;AACA;AACA;;EAEA,aAAA;AACA","sourcesContent":["<template>\n  <td\n      class=\"cell noselect\"\n      :id=\"`cell${rowIndex}-${columnIndex}`\"\n      :class='{ selected: !onlyBorder && selected, editable, invalid, [column.type || \"text\"]: true }'\n      :title=\"invalid\"\n      :style=\"cellStyle\"\n      @click='$emit(\"click\", $event)'\n  >\n      <span class=\"editable-field\" v-if=\"inputType === 'select'\">\n        <span v-if=\"column.field === 'type'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectTypeBind\"\n            :options=\"setOptions\"\n            :disabled=\"disableInput\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectTypeBind, 'width-100 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n        <span v-if=\"column.field === 'account'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectAccountBind\"\n            :options=\"setOptions\"\n            :disabled=\"disableInput\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectAccountBind, 'width-500 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n      </span>\n      <span v-else>\n        <span class=\"editable-field\">\n          <input\n            :type=\"inputType\"\n            ref=\"input\"\n            :key=\"value\"\n            :min=\"0\"\n            :placeholder=\"placeholder\"\n            :disabled=\"disableInput\"\n            :value=\"value\"\n            @keyup.enter=\"setEditableValue\"\n            @focus=\"editPending = true\"\n            @blur=\"leaved\"\n          />\n          </span>\n      </span>\n  </td>\n</template>\n<style scoped>\n  .style-chooser .vs__search::placeholder,\n  .style-chooser .vs__dropdown-toggle,\n  .style-chooser .vs__dropdown-menu {\n    background: #3c4b81;\n    border: none;\n    color: #394066;\n    text-transform: lowercase;\n    font-variant: small-caps;\n    z-index: 10;\n  }\n  .style-chooser .vs__clear,\n  .style-chooser .vs__open-indicator {\n    fill: #394066;\n  }\n</style>\n<style>\n  .vs__actions {\n    display: none !important;\n  }\n  .input-group .form-control {\n    z-index: 0 !important;\n  }\n</style>\n<script>\nimport { format } from 'date-fns'\nimport { cellValueParser } from './helpers'\nimport { cellFormatter } from './vue-filters.js'\n\nexport default {\n  filters: {\n    cellFormatter\n  },\n  props: {\n    column: { type: Object },\n    row: { type: Object },\n    columnIndex: { type: Number },\n    rowIndex: { type: Number },\n    selStart: { type: Array },\n    selEnd: { type: Array },\n    cellEditing: { type: Array },\n    cellsWithErrors: { type: Object },\n    onlyBorder: { type: Boolean },\n    masterOptions: { type: Array, default: [] },\n    placeholder: { type: String, default: null }\n  },\n  data () {\n    return { value: null, rowValue: null, editPending: false, selectedValue: null}\n  },\n  mounted() {\n    if (this.column.field === 'type') {\n      this.value = this.row.type\n      this.rowValue = this.row.type\n      this.selectedValue = this.setOptions.find(each => each.name === this.value)\n    }\n    if (this.column.field === 'account') {\n      this.rowValue = this.row.account\n      this.value = this.row.account\n    }\n    if (this.column.field === 'credit' && this.row.credit) {\n      this.rowValue = this.row.credit\n      this.value = this.row.credit\n    }\n    if (this.column.field === 'debit' && this.row.debit) {\n      this.rowValue = this.row.debit\n      this.value = this.row.debit\n    }\n    // if (this.$refs.select && this.column.field === 'type') {\n    //   this.$refs.select.$refs.search.focus()\n    // }\n  },\n  computed: {\n    selectTypeBind: {\n      get: function () {\n        if (this.column.field === 'type') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'type') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selectAccountBind: {\n      get: function () {\n        if (this.column.field === 'account') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'account') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selected () {\n      return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedTop () {\n      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedRight () {\n      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    selectedBottom () {\n      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedLeft () {\n      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    editable () {\n      if (this.disableInput) {\n        return false\n      }\n      return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex\n    },\n    invalid () {\n      return this.cellsWithErrors[`cell${this.rowIndex}-${this.columnIndex}`]\n    },\n    inputType () {\n      switch (this.column.type) {\n        case 'text': return 'text'\n        case 'link': return 'text'\n        case 'numeric': return 'number'\n        case 'currency': return 'number'\n        case 'percent': return 'number'\n        case 'date': return 'date'\n        case 'datetime': return 'datetime-local'\n        case 'select': return 'select'\n      }\n      return 'text'\n    },\n    cellStyle () {\n      const cellStyle = this.row.$cellStyle && this.row.$cellStyle[this.column.field]\n      return { ...this.row.$rowStyle, ...cellStyle }\n    },\n    setOptions() {\n      if (this.column.field === 'type') {\n        return [{id: 1, name: 'Dr'}, {id: 2, name: 'Cr'}]\n      }\n      return this.masterOptions\n    },\n    disableInput() {\n      let bool = false\n      const isAccountantVoucherView =\n        this.$route &&\n        this.$route.name === 'vouchers.edit' &&\n        window.Ls &&\n        window.Ls.get('role') === 'accountant'\n\n      if (isAccountantVoucherView && (this.column.field === 'debit' || this.column.field === 'credit')) {\n        return true\n      }\n      if (isAccountantVoucherView && (this.column.field === 'type' || this.column.field === 'account')) {\n        return true\n      }\n\n      if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {\n        this.rowValue = null\n        this.value = null\n        bool = true\n      }\n      return bool\n    },\n    isEdit() {\n      if (this.$route.name === 'vouchers.edit') {\n          return true\n        }\n        return false\n    }\n  },\n  created () {\n    if (this.isEdit) {\n      this.loadEditData()\n    }\n  },\n  watch: {\n    cellEditing () {\n      if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex && !this.disableInput) {\n        this.rowValue = this.getEditableValue(this.row[this.column.field])\n        this.value = this.getEditableValue(this.row[this.column.field])\n\n        this.$nextTick(() => {\n          const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search\n          if (this.inputType === 'select') {\n            input.focus()\n            if (!this.selectedValue) return\n            input.value = this.selectedValue.name\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n          }\n          if (!this.value && this.value !== 0 && this.value !== false) {\n            input.value = null\n            input.focus()\n            return\n          }\n          if (this.column.type === 'datetime' || this.column.type === 'date') {\n            const formattedDate = this.column.type === 'datetime'\n              ? `${format(this.value, 'yyyy-MM-dd')}T${format(this.value, 'HH:mm')}`\n              : `${format(this.value, 'yyyy-MM-dd')}`\n            setTimeout(() => {\n              input.value = formattedDate\n              input.focus()\n            }, 50)\n          } else {\n            input.value = this.value\n            input.focus()\n          }\n        })\n      }\n      if (this.inputType === 'select') {\n        if (this.selectedValue) {\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n            if (this.column.field === 'type') {\n              this.row.type = this.selectedValue.name\n            }\n            if(this.column.field === 'account') {\n              this.row.account = this.selectedValue.name\n              this.row.account_id = this.selectedValue.id\n            }\n        }\n      }\n      if (this.row.type === 'Cr' && this.column.field === 'credit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.debit\n        this.value = this.row.debit\n      }\n      if (this.row.type === 'Dr' && this.column.field === 'debit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.credit\n        this.value = this.row.credit\n      }\n    },\n  },\n  methods: {\n    loadEditData() {\n      if (this.row.type !== '') {\n        if (this.column.field === 'type') {\n          this.selectedValue = {name: this.row.type, id: this.row.account_id}\n          this.rowValue = this.row.type\n          this.value = this.row.type\n        }\n        if (this.column.field === 'account') {\n          this.selectedValue = {name: this.row.account, id: this.row.account_id}\n          this.rowValue = this.row.account\n          this.value = this.row.account\n        }\n        if (this.column.field === 'debit') {\n          this.rowValue = this.row.debit\n          this.value = this.row.debit\n        }\n        if (this.column.field === 'credit') {\n          this.rowValue = this.row.credit\n          this.value = this.row.credit\n        }\n      }\n    },\n    getEditableValue (value) {\n      if (this.column.type === 'datetime' || this.column.type === 'date') {\n        if (typeof value === 'string') {\n          const parsedDate = new Date(value)\n          return isNaN(parsedDate) ? null : parsedDate\n        }\n      }\n      return value\n    },\n    setEditableValue ($event) {\n      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null\n      let value = cellValueParser(this.column, this.row, input, true)\n      if (!value) return\n      this.editPending = false\n      let valueChanged = true\n\n      if (!this.disableInput) {\n        this.rowValue = value\n        this.value = value\n        const { row, column, rowIndex, columnIndex } = this\n        this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })\n      }\n    },\n    leaved ($event) {\n      if (this.editPending) {\n        this.setEditableValue($event)\n      }\n    },\n    linkClicked () {\n      this.$emit('link-clicked')\n    },\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n@import './variables';\n\n.cell {\n  padding: 0 $cell-side-paddings;\n  position: relative;\n  display: flex;\n  align-items: center;\n  min-height: 40px;\n  border: solid 1px transparent;\n  border-bottom-color: $cell-border-color;\n  border-right-color: $cell-border-color;\n  cursor: default;\n\n  &.selected {\n    border-color: $cell-selected-border-color;\n  }\n\n  &.selected-top {\n    border-top-color: $cell-selected-border-color;\n  }\n\n  &.selected-right {\n    border-right-color: $cell-selected-border-color;\n  }\n\n  &.selected-bottom {\n    border-bottom-color: $cell-selected-border-color;\n  }\n\n  &.selected-left {\n    border-left-color: $cell-selected-border-color;\n  }\n\n  &.currency,\n  &.numeric,\n  &.percent\n  {\n    text-align: right;\n  }\n\n  &.editable {\n    padding: 0;\n    display: flex;\n    box-shadow: 1px 1px 4px #cbcbcb;\n  }\n\n  &.invalid {\n    &::after {\n      content: \"\\26A0\";\n      position: absolute;\n      right: 6px;\n      top: 0;\n      color: red;\n      font-weight: bold;\n      font-size: 20px;\n    }\n  }\n\n  .cell-content {\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    display: block;\n    overflow: hidden;\n  }\n\n  .editable-field {\n    height: 100%;\n    width: 100%;\n    display: flex;\n\n    input {\n      height: 100%;\n      border: none;\n      outline: none;\n      width: 100%;\n\n      &:disabled {\n        background: #eeeeee;\n        cursor: not-allowed;\n      }\n    }\n  }\n}\n\n.noselect {\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n  -khtml-user-select: none; /* Konqueror HTML */\n  -moz-user-select: none; /* Old versions of Firefox */\n  -ms-user-select: none; /* Internet Explorer/Edge */\n  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -85763,7 +87442,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vs__actions {\n  display: none !important;\n}\n.input-group .form-control {\n  z-index: 0 !important;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/components/grid-table/Cell.vue"],"names":[],"mappings":";AAicA;EACA,wBAAA;AACA;AACA;EACA,qBAAA;AACA","sourcesContent":["<template>\n  <td\n      class=\"cell noselect\"\n      :id=\"`cell${rowIndex}-${columnIndex}`\"\n      :class='{ selected: !onlyBorder && selected, editable, invalid, [column.type || \"text\"]: true }'\n      :title=\"invalid\"\n      :style=\"cellStyle\"\n      @click='$emit(\"click\", $event)'\n  >\n      <span class=\"editable-field\" v-if=\"inputType === 'select'\">\n        <span v-if=\"column.field === 'type'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectTypeBind\"\n            :options=\"setOptions\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectTypeBind, 'width-100 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n        <span v-if=\"column.field === 'account'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectAccountBind\"\n            :options=\"setOptions\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectAccountBind, 'width-500 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n      </span>\n      <span v-else>\n        <span class=\"editable-field\">\n          <input\n            :type=\"inputType\"\n            ref=\"input\"\n            :key=\"value\"\n            :min=\"0\"\n            :placeholder=\"placeholder\"\n            :disabled=\"disableInput\"\n            :value=\"value\"\n            @keyup.enter=\"setEditableValue\"\n            @focus=\"editPending = true\"\n            @blur=\"leaved\"\n          />\n          </span>\n      </span>\n  </td>\n</template>\n<style scoped>\n  .style-chooser .vs__search::placeholder,\n  .style-chooser .vs__dropdown-toggle,\n  .style-chooser .vs__dropdown-menu {\n    background: #3c4b81;\n    border: none;\n    color: #394066;\n    text-transform: lowercase;\n    font-variant: small-caps;\n    z-index: 10;\n  }\n  .style-chooser .vs__clear,\n  .style-chooser .vs__open-indicator {\n    fill: #394066;\n  }\n</style>\n<style>\n  .vs__actions {\n    display: none !important;\n  }\n  .input-group .form-control {\n    z-index: 0 !important;\n  }\n</style>\n<script>\nimport { format } from 'date-fns'\nimport { cellValueParser } from './helpers'\nimport { cellFormatter } from './vue-filters.js'\n\nexport default {\n  filters: {\n    cellFormatter\n  },\n  props: {\n    column: { type: Object },\n    row: { type: Object },\n    columnIndex: { type: Number },\n    rowIndex: { type: Number },\n    selStart: { type: Array },\n    selEnd: { type: Array },\n    cellEditing: { type: Array },\n    cellsWithErrors: { type: Object },\n    onlyBorder: { type: Boolean },\n    masterOptions: { type: Array, default: [] },\n    placeholder: { type: String, default: null }\n  },\n  data () {\n    return { value: null, rowValue: null, editPending: false, selectedValue: null}\n  },\n  mounted() {\n    if (this.column.field === 'type') {\n      this.value = this.row.type\n      this.rowValue = this.row.type\n      this.selectedValue = this.setOptions.find(each => each.name === this.value)\n    }\n    if (this.column.field === 'account') {\n      this.rowValue = this.row.account\n      this.value = this.row.account\n    }\n    if (this.column.field === 'credit' && this.row.credit) {\n      this.rowValue = this.row.credit\n      this.value = this.row.credit\n    }\n    if (this.column.field === 'debit' && this.row.debit) {\n      this.rowValue = this.row.debit\n      this.value = this.row.debit\n    }\n    // if (this.$refs.select && this.column.field === 'type') {\n    //   this.$refs.select.$refs.search.focus()\n    // }\n  },\n  computed: {\n    selectTypeBind: {\n      get: function () {\n        if (this.column.field === 'type') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'type') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selectAccountBind: {\n      get: function () {\n        if (this.column.field === 'account') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'account') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selected () {\n      return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedTop () {\n      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedRight () {\n      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    selectedBottom () {\n      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedLeft () {\n      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    editable () {\n      if (this.disableInput) {\n        return false\n      }\n      return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex\n    },\n    invalid () {\n      return this.cellsWithErrors[`cell${this.rowIndex}-${this.columnIndex}`]\n    },\n    inputType () {\n      switch (this.column.type) {\n        case 'text': return 'text'\n        case 'link': return 'text'\n        case 'numeric': return 'number'\n        case 'currency': return 'number'\n        case 'percent': return 'number'\n        case 'date': return 'date'\n        case 'datetime': return 'datetime-local'\n        case 'select': return 'select'\n      }\n      return 'text'\n    },\n    cellStyle () {\n      const cellStyle = this.row.$cellStyle && this.row.$cellStyle[this.column.field]\n      return { ...this.row.$rowStyle, ...cellStyle }\n    },\n    setOptions() {\n      if (this.column.field === 'type') {\n        return [{id: 1, name: 'Dr'}, {id: 2, name: 'Cr'}]\n      }\n      return this.masterOptions\n    },\n    disableInput() {\n      let bool = false\n      if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {\n        this.rowValue = null\n        this.value = null\n        bool = true\n      }\n      return bool\n    },\n    isEdit() {\n      if (this.$route.name === 'vouchers.edit') {\n          return true\n        }\n        return false\n    }\n  },\n  created () {\n    if (this.isEdit) {\n      this.loadEditData()\n    }\n  },\n  watch: {\n    cellEditing () {\n      if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex && !this.disableInput) {\n        this.rowValue = this.getEditableValue(this.row[this.column.field])\n        this.value = this.getEditableValue(this.row[this.column.field])\n\n        this.$nextTick(() => {\n          const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search\n          if (this.inputType === 'select') {\n            input.focus()\n            if (!this.selectedValue) return\n            input.value = this.selectedValue.name\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n          }\n          if (!this.value && this.value !== 0 && this.value !== false) {\n            input.value = null\n            input.focus()\n            return\n          }\n          if (this.column.type === 'datetime' || this.column.type === 'date') {\n            const formattedDate = this.column.type === 'datetime'\n              ? `${format(this.value, 'yyyy-MM-dd')}T${format(this.value, 'HH:mm')}`\n              : `${format(this.value, 'yyyy-MM-dd')}`\n            setTimeout(() => {\n              input.value = formattedDate\n              input.focus()\n            }, 50)\n          } else {\n            input.value = this.value\n            input.focus()\n          }\n        })\n      }\n      if (this.inputType === 'select') {\n        if (this.selectedValue) {\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n            if (this.column.field === 'type') {\n              this.row.type = this.selectedValue.name\n            }\n            if(this.column.field === 'account') {\n              this.row.account = this.selectedValue.name\n              this.row.account_id = this.selectedValue.id\n            }\n        }\n      }\n      if (this.row.type === 'Cr' && this.column.field === 'credit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.debit\n        this.value = this.row.debit\n      }\n      if (this.row.type === 'Dr' && this.column.field === 'debit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.credit\n        this.value = this.row.credit\n      }\n    },\n  },\n  methods: {\n    loadEditData() {\n      if (this.row.type !== '') {\n        if (this.column.field === 'type') {\n          this.selectedValue = {name: this.row.type, id: this.row.account_id}\n          this.rowValue = this.row.type\n          this.value = this.row.type\n        }\n        if (this.column.field === 'account') {\n          this.selectedValue = {name: this.row.account, id: this.row.account_id}\n          this.rowValue = this.row.account\n          this.value = this.row.account\n        }\n        if (this.column.field === 'debit') {\n          this.rowValue = this.row.debit\n          this.value = this.row.debit\n        }\n        if (this.column.field === 'credit') {\n          this.rowValue = this.row.credit\n          this.value = this.row.credit\n        }\n      }\n    },\n    getEditableValue (value) {\n      if (this.column.type === 'datetime' || this.column.type === 'date') {\n        if (typeof value === 'string') {\n          const parsedDate = new Date(value)\n          return isNaN(parsedDate) ? null : parsedDate\n        }\n      }\n      return value\n    },\n    setEditableValue ($event) {\n      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null\n      let value = cellValueParser(this.column, this.row, input, true)\n      if (!value) return\n      this.editPending = false\n      let valueChanged = true\n\n      if (!this.disableInput) {\n        this.rowValue = value\n        this.value = value\n        const { row, column, rowIndex, columnIndex } = this\n        this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })\n      }\n    },\n    leaved ($event) {\n      if (this.editPending) {\n        this.setEditableValue($event)\n      }\n    },\n    linkClicked () {\n      this.$emit('link-clicked')\n    },\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n@import './variables';\n\n.cell {\n  padding: 0 $cell-side-paddings;\n  position: relative;\n  display: flex;\n  align-items: center;\n  min-height: 40px;\n  border: solid 1px transparent;\n  border-bottom-color: $cell-border-color;\n  border-right-color: $cell-border-color;\n  cursor: default;\n\n  &.selected {\n    border-color: $cell-selected-border-color;\n  }\n\n  &.selected-top {\n    border-top-color: $cell-selected-border-color;\n  }\n\n  &.selected-right {\n    border-right-color: $cell-selected-border-color;\n  }\n\n  &.selected-bottom {\n    border-bottom-color: $cell-selected-border-color;\n  }\n\n  &.selected-left {\n    border-left-color: $cell-selected-border-color;\n  }\n\n  &.currency,\n  &.numeric,\n  &.percent\n  {\n    text-align: right;\n  }\n\n  &.editable {\n    padding: 0;\n    display: flex;\n    box-shadow: 1px 1px 4px #cbcbcb;\n  }\n\n  &.invalid {\n    &::after {\n      content: \"\\26A0\";\n      position: absolute;\n      right: 6px;\n      top: 0;\n      color: red;\n      font-weight: bold;\n      font-size: 20px;\n    }\n  }\n\n  .cell-content {\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    display: block;\n    overflow: hidden;\n  }\n\n  .editable-field {\n    height: 100%;\n    width: 100%;\n    display: flex;\n\n    input {\n      height: 100%;\n      border: none;\n      outline: none;\n      width: 100%;\n\n      &:disabled {\n        background: #eeeeee;\n        cursor: not-allowed;\n      }\n    }\n  }\n}\n\n.noselect {\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n  -khtml-user-select: none; /* Konqueror HTML */\n  -moz-user-select: none; /* Old versions of Firefox */\n  -ms-user-select: none; /* Internet Explorer/Edge */\n  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */\n}\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vs__actions {\n  display: none !important;\n}\n.input-group .form-control {\n  z-index: 0 !important;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/components/grid-table/Cell.vue"],"names":[],"mappings":";AAgdA;EACA,wBAAA;AACA;AACA;EACA,qBAAA;AACA","sourcesContent":["<template>\n  <td\n      class=\"cell noselect\"\n      :id=\"`cell${rowIndex}-${columnIndex}`\"\n      :class='{ selected: !onlyBorder && selected, editable, invalid, [column.type || \"text\"]: true }'\n      :title=\"invalid\"\n      :style=\"cellStyle\"\n      @click='$emit(\"click\", $event)'\n  >\n      <span class=\"editable-field\" v-if=\"inputType === 'select'\">\n        <span v-if=\"column.field === 'type'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectTypeBind\"\n            :options=\"setOptions\"\n            :disabled=\"disableInput\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectTypeBind, 'width-100 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n        <span v-if=\"column.field === 'account'\">\n          <base-select\n            ref=\"select\"\n            v-model=\"selectAccountBind\"\n            :options=\"setOptions\"\n            :disabled=\"disableInput\"\n            :searchable=\"true\"\n            :show-labels=\"false\"\n            :allow-empty=\"false\"\n            :class=\"{'remove-extra': !selectAccountBind, 'width-500 style-chooser': true }\"\n            :placeholder=\"''\"\n            track-by=\"id\"\n            label=\"name\"\n            :open-direction=\"'bottom'\"\n          />\n        </span>\n      </span>\n      <span v-else>\n        <span class=\"editable-field\">\n          <input\n            :type=\"inputType\"\n            ref=\"input\"\n            :key=\"value\"\n            :min=\"0\"\n            :placeholder=\"placeholder\"\n            :disabled=\"disableInput\"\n            :value=\"value\"\n            @keyup.enter=\"setEditableValue\"\n            @focus=\"editPending = true\"\n            @blur=\"leaved\"\n          />\n          </span>\n      </span>\n  </td>\n</template>\n<style scoped>\n  .style-chooser .vs__search::placeholder,\n  .style-chooser .vs__dropdown-toggle,\n  .style-chooser .vs__dropdown-menu {\n    background: #3c4b81;\n    border: none;\n    color: #394066;\n    text-transform: lowercase;\n    font-variant: small-caps;\n    z-index: 10;\n  }\n  .style-chooser .vs__clear,\n  .style-chooser .vs__open-indicator {\n    fill: #394066;\n  }\n</style>\n<style>\n  .vs__actions {\n    display: none !important;\n  }\n  .input-group .form-control {\n    z-index: 0 !important;\n  }\n</style>\n<script>\nimport { format } from 'date-fns'\nimport { cellValueParser } from './helpers'\nimport { cellFormatter } from './vue-filters.js'\n\nexport default {\n  filters: {\n    cellFormatter\n  },\n  props: {\n    column: { type: Object },\n    row: { type: Object },\n    columnIndex: { type: Number },\n    rowIndex: { type: Number },\n    selStart: { type: Array },\n    selEnd: { type: Array },\n    cellEditing: { type: Array },\n    cellsWithErrors: { type: Object },\n    onlyBorder: { type: Boolean },\n    masterOptions: { type: Array, default: [] },\n    placeholder: { type: String, default: null }\n  },\n  data () {\n    return { value: null, rowValue: null, editPending: false, selectedValue: null}\n  },\n  mounted() {\n    if (this.column.field === 'type') {\n      this.value = this.row.type\n      this.rowValue = this.row.type\n      this.selectedValue = this.setOptions.find(each => each.name === this.value)\n    }\n    if (this.column.field === 'account') {\n      this.rowValue = this.row.account\n      this.value = this.row.account\n    }\n    if (this.column.field === 'credit' && this.row.credit) {\n      this.rowValue = this.row.credit\n      this.value = this.row.credit\n    }\n    if (this.column.field === 'debit' && this.row.debit) {\n      this.rowValue = this.row.debit\n      this.value = this.row.debit\n    }\n    // if (this.$refs.select && this.column.field === 'type') {\n    //   this.$refs.select.$refs.search.focus()\n    // }\n  },\n  computed: {\n    selectTypeBind: {\n      get: function () {\n        if (this.column.field === 'type') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'type') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selectAccountBind: {\n      get: function () {\n        if (this.column.field === 'account') {\n          return this.selectedValue\n        }\n        return this.value\n      },\n      set: function (val) {\n        if (this.column.field === 'account') {\n          this.selectedValue = val\n          this.value = this.selectedValue.name\n          this.rowValue = this.selectedValue.name\n          const { row, column, rowIndex, columnIndex } = this\n          let valueChanged = true\n          let event = this.$refs.select.$el\n          let value = this.selectedValue.name\n          this.$emit('edited', { row, column, rowIndex, columnIndex, event, value, valueChanged })\n        }\n      }\n    },\n    selected () {\n      return this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedTop () {\n      return this.rowIndex === this.selStart[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedRight () {\n      return this.columnIndex === this.selEnd[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    selectedBottom () {\n      return this.rowIndex === this.selEnd[0] && this.columnIndex >= this.selStart[1] && this.columnIndex <= this.selEnd[1]\n    },\n    selectedLeft () {\n      return this.columnIndex === this.selStart[1] && this.rowIndex >= this.selStart[0] && this.rowIndex <= this.selEnd[0]\n    },\n    editable () {\n      if (this.disableInput) {\n        return false\n      }\n      return this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex\n    },\n    invalid () {\n      return this.cellsWithErrors[`cell${this.rowIndex}-${this.columnIndex}`]\n    },\n    inputType () {\n      switch (this.column.type) {\n        case 'text': return 'text'\n        case 'link': return 'text'\n        case 'numeric': return 'number'\n        case 'currency': return 'number'\n        case 'percent': return 'number'\n        case 'date': return 'date'\n        case 'datetime': return 'datetime-local'\n        case 'select': return 'select'\n      }\n      return 'text'\n    },\n    cellStyle () {\n      const cellStyle = this.row.$cellStyle && this.row.$cellStyle[this.column.field]\n      return { ...this.row.$rowStyle, ...cellStyle }\n    },\n    setOptions() {\n      if (this.column.field === 'type') {\n        return [{id: 1, name: 'Dr'}, {id: 2, name: 'Cr'}]\n      }\n      return this.masterOptions\n    },\n    disableInput() {\n      let bool = false\n      const isAccountantVoucherView =\n        this.$route &&\n        this.$route.name === 'vouchers.edit' &&\n        window.Ls &&\n        window.Ls.get('role') === 'accountant'\n\n      if (isAccountantVoucherView && (this.column.field === 'debit' || this.column.field === 'credit')) {\n        return true\n      }\n      if (isAccountantVoucherView && (this.column.field === 'type' || this.column.field === 'account')) {\n        return true\n      }\n\n      if (this.row.type === 'Dr' && this.column.field === 'credit' || this.row.type === 'Cr' && this.column.field === 'debit') {\n        this.rowValue = null\n        this.value = null\n        bool = true\n      }\n      return bool\n    },\n    isEdit() {\n      if (this.$route.name === 'vouchers.edit') {\n          return true\n        }\n        return false\n    }\n  },\n  created () {\n    if (this.isEdit) {\n      this.loadEditData()\n    }\n  },\n  watch: {\n    cellEditing () {\n      if (this.cellEditing[0] === this.rowIndex && this.cellEditing[1] === this.columnIndex && !this.disableInput) {\n        this.rowValue = this.getEditableValue(this.row[this.column.field])\n        this.value = this.getEditableValue(this.row[this.column.field])\n\n        this.$nextTick(() => {\n          const input = this.inputType !== 'select' ? this.$refs.input : this.$refs.select.$refs.search\n          if (this.inputType === 'select') {\n            input.focus()\n            if (!this.selectedValue) return\n            input.value = this.selectedValue.name\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n          }\n          if (!this.value && this.value !== 0 && this.value !== false) {\n            input.value = null\n            input.focus()\n            return\n          }\n          if (this.column.type === 'datetime' || this.column.type === 'date') {\n            const formattedDate = this.column.type === 'datetime'\n              ? `${format(this.value, 'yyyy-MM-dd')}T${format(this.value, 'HH:mm')}`\n              : `${format(this.value, 'yyyy-MM-dd')}`\n            setTimeout(() => {\n              input.value = formattedDate\n              input.focus()\n            }, 50)\n          } else {\n            input.value = this.value\n            input.focus()\n          }\n        })\n      }\n      if (this.inputType === 'select') {\n        if (this.selectedValue) {\n            this.value = this.selectedValue.name\n            this.rowValue = this.selectedValue.name\n            if (this.column.field === 'type') {\n              this.row.type = this.selectedValue.name\n            }\n            if(this.column.field === 'account') {\n              this.row.account = this.selectedValue.name\n              this.row.account_id = this.selectedValue.id\n            }\n        }\n      }\n      if (this.row.type === 'Cr' && this.column.field === 'credit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.debit\n        this.value = this.row.debit\n      }\n      if (this.row.type === 'Dr' && this.column.field === 'debit' && !this.rowValue && !this.disableInput) {\n        this.rowValue = this.row.credit\n        this.value = this.row.credit\n      }\n    },\n  },\n  methods: {\n    loadEditData() {\n      if (this.row.type !== '') {\n        if (this.column.field === 'type') {\n          this.selectedValue = {name: this.row.type, id: this.row.account_id}\n          this.rowValue = this.row.type\n          this.value = this.row.type\n        }\n        if (this.column.field === 'account') {\n          this.selectedValue = {name: this.row.account, id: this.row.account_id}\n          this.rowValue = this.row.account\n          this.value = this.row.account\n        }\n        if (this.column.field === 'debit') {\n          this.rowValue = this.row.debit\n          this.value = this.row.debit\n        }\n        if (this.column.field === 'credit') {\n          this.rowValue = this.row.credit\n          this.value = this.row.credit\n        }\n      }\n    },\n    getEditableValue (value) {\n      if (this.column.type === 'datetime' || this.column.type === 'date') {\n        if (typeof value === 'string') {\n          const parsedDate = new Date(value)\n          return isNaN(parsedDate) ? null : parsedDate\n        }\n      }\n      return value\n    },\n    setEditableValue ($event) {\n      const input = this.inputType !== 'select' ? this.$refs.input.value : this.selectedValue ? this.selectedValue.name : null\n      let value = cellValueParser(this.column, this.row, input, true)\n      if (!value) return\n      this.editPending = false\n      let valueChanged = true\n\n      if (!this.disableInput) {\n        this.rowValue = value\n        this.value = value\n        const { row, column, rowIndex, columnIndex } = this\n        this.$emit('edited', { row, column, rowIndex, columnIndex, $event, value, valueChanged })\n      }\n    },\n    leaved ($event) {\n      if (this.editPending) {\n        this.setEditableValue($event)\n      }\n    },\n    linkClicked () {\n      this.$emit('link-clicked')\n    },\n  }\n}\n</script>\n\n<style lang=\"scss\" scoped>\n@import './variables';\n\n.cell {\n  padding: 0 $cell-side-paddings;\n  position: relative;\n  display: flex;\n  align-items: center;\n  min-height: 40px;\n  border: solid 1px transparent;\n  border-bottom-color: $cell-border-color;\n  border-right-color: $cell-border-color;\n  cursor: default;\n\n  &.selected {\n    border-color: $cell-selected-border-color;\n  }\n\n  &.selected-top {\n    border-top-color: $cell-selected-border-color;\n  }\n\n  &.selected-right {\n    border-right-color: $cell-selected-border-color;\n  }\n\n  &.selected-bottom {\n    border-bottom-color: $cell-selected-border-color;\n  }\n\n  &.selected-left {\n    border-left-color: $cell-selected-border-color;\n  }\n\n  &.currency,\n  &.numeric,\n  &.percent\n  {\n    text-align: right;\n  }\n\n  &.editable {\n    padding: 0;\n    display: flex;\n    box-shadow: 1px 1px 4px #cbcbcb;\n  }\n\n  &.invalid {\n    &::after {\n      content: \"\\26A0\";\n      position: absolute;\n      right: 6px;\n      top: 0;\n      color: red;\n      font-weight: bold;\n      font-size: 20px;\n    }\n  }\n\n  .cell-content {\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    display: block;\n    overflow: hidden;\n  }\n\n  .editable-field {\n    height: 100%;\n    width: 100%;\n    display: flex;\n\n    input {\n      height: 100%;\n      border: none;\n      outline: none;\n      width: 100%;\n\n      &:disabled {\n        background: #eeeeee;\n        cursor: not-allowed;\n      }\n    }\n  }\n}\n\n.noselect {\n  -webkit-touch-callout: none; /* iOS Safari */\n  -webkit-user-select: none; /* Safari */\n  -khtml-user-select: none; /* Konqueror HTML */\n  -moz-user-select: none; /* Old versions of Firefox */\n  -ms-user-select: none; /* Internet Explorer/Edge */\n  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -85791,6 +87470,60 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.dot-icon {\n  display: flex;\n  cursor: pointer;\n  padding: 5px 5px 5px 5px;\n  justify-content: flex-end;\n}\n.dot {\n  display: inline-block;\n  background: #A5ACC1;\n  display: block;\n  width: 6px;\n  height: 6px;\n  border-radius: 50%;\n  position: relative;\n}\n.dot1 {\n  margin-right: 3px;\n}\n.dot2 {\n  margin-right: 3px;\n}\n.move-right {\n  animation: moveright 0.2s;\n  animation-fill-mode: forwards;\n}\n.move-left {\n  animation: moveleft 0.2s;\n  animation-fill-mode: forwards;\n}\n@keyframes moveleft {\nfrom {left: 0px;}\nto {left: -18px;}\n}\n@keyframes moveright {\nfrom {left: 0px;}\nto {left: 18px;}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/components/icon/DotIcon.vue"],"names":[],"mappings":";AA8EA;EACA,aAAA;EACA,eAAA;EACA,wBAAA;EACA,yBAAA;AACA;AAEA;EACA,qBAAA;EACA,mBAAA;EACA,cAAA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;EACA,kBAAA;AACA;AAEA;EACA,iBAAA;AACA;AAEA;EACA,iBAAA;AACA;AAEA;EACA,yBAAA;EACA,6BAAA;AACA;AAEA;EACA,wBAAA;EACA,6BAAA;AACA;AAEA;AACA,MAAA,SAAA,CAAA;AACA,IAAA,WAAA,CAAA;AACA;AAEA;AACA,MAAA,SAAA,CAAA;AACA,IAAA,UAAA,CAAA;AACA","sourcesContent":["<template>\n  <div>\n    <div class=\"dot-icon\" @click=\"checktoggle\">\n      <span class=\"dot dot1\" :class=\"{'move-right': toggle}\" />\n\n      <span class=\"dot dot2\" />\n\n      <span class=\"dot dot3\" :class=\"{'move-left': toggle}\" />\n\n    </div>\n  </div>\n</template>\n<script>\nexport default {\n  data () {\n    return {\n      toggle: false\n    }\n  },\n  methods: {\n    checktoggle: function () {\n      var v = this\n      v.toggle = true\n      setTimeout(function () {\n        v.toggle = false\n      }, 300)\n    }\n  }\n}\n</script>\n\n<style>\n  .dot-icon {\n    display: flex;\n    cursor: pointer;\n    padding: 5px 5px 5px 5px;\n    justify-content: flex-end;\n  }\n\n  .dot {\n    display: inline-block;\n    background: #A5ACC1;\n    display: block;\n    width: 6px;\n    height: 6px;\n    border-radius: 50%;\n    position: relative;\n  }\n\n  .dot1 {\n    margin-right: 3px;\n  }\n\n  .dot2 {\n    margin-right: 3px;\n  }\n\n  .move-right {\n    animation: moveright 0.2s;\n    animation-fill-mode: forwards;\n  }\n\n  .move-left {\n    animation: moveleft 0.2s;\n    animation-fill-mode: forwards;\n  }\n\n  @keyframes moveleft {\n    from {left: 0px;}\n    to {left: -18px;}\n  }\n\n  @keyframes moveright {\n    from {left: 0px;}\n    to {left: 18px;}\n  }\n</style>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.badge-created[data-v-19514592] { color: #1b7a3d; font-weight: 600;\n}\n.badge-updated[data-v-19514592] { color: #b36b00; font-weight: 600;\n}\n.badge-deleted[data-v-19514592] { color: #b00020; font-weight: 600;\n}\n.badge-login[data-v-19514592] { color: #0b5ed7; font-weight: 600;\n}\n.badge-logout[data-v-19514592] { color: #6c757d; font-weight: 600;\n}\n.badge-failed[data-v-19514592] { color: #b00020; font-weight: 600;\n}\n.search-bar[data-v-19514592] {\n  margin-bottom: 12px;\n  align-items: flex-start;\n}\n.filter-chips[data-v-19514592] {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n  margin-bottom: 16px;\n}\n.filter-chip[data-v-19514592] {\n  display: inline-flex;\n  align-items: center;\n  background: #eef1f7;\n  border-radius: 14px;\n  padding: 4px 10px;\n  font-size: 12px;\n  color: #40495c;\n}\n.filter-chip-remove[data-v-19514592] {\n  margin-left: 6px;\n  color: #6c757d;\n  text-decoration: none;\n  font-weight: 700;\n}\n.clear-all-chip[data-v-19514592] {\n  font-size: 12px;\n  text-decoration: underline;\n}\n.document-link[data-v-19514592] {\n  display: flex;\n  flex-direction: column;\n  text-decoration: none;\n}\n.change-summary[data-v-19514592] {\n  list-style: none;\n  padding: 0;\n  margin: 4px 0 0;\n}\n.change-summary li[data-v-19514592] {\n  font-size: 12px;\n  color: #6c757d;\n}\n.change-toggle[data-v-19514592] {\n  display: inline-block;\n  margin-top: 2px;\n  font-size: 12px;\n}\n.document-type[data-v-19514592] {\n  font-size: 12px;\n  color: #6c757d;\n  text-transform: uppercase;\n  letter-spacing: 0.02em;\n}\n.document-number[data-v-19514592] {\n  font-weight: 600;\n}\n.document-link .document-number[data-v-19514592] {\n  color: #2a5bd7;\n}\n\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/audit-logs/Index.vue"],"names":[],"mappings":";AAkMA,kCAAA,cAAA,EAAA,gBAAA;AAAA;AACA,kCAAA,cAAA,EAAA,gBAAA;AAAA;AACA,kCAAA,cAAA,EAAA,gBAAA;AAAA;AACA,gCAAA,cAAA,EAAA,gBAAA;AAAA;AACA,iCAAA,cAAA,EAAA,gBAAA;AAAA;AACA,iCAAA,cAAA,EAAA,gBAAA;AAAA;AAEA;EACA,mBAAA;EACA,uBAAA;AACA;AAEA;EACA,aAAA;EACA,eAAA;EACA,mBAAA;EACA,QAAA;EACA,mBAAA;AACA;AAEA;EACA,oBAAA;EACA,mBAAA;EACA,mBAAA;EACA,mBAAA;EACA,iBAAA;EACA,eAAA;EACA,cAAA;AACA;AAEA;EACA,gBAAA;EACA,cAAA;EACA,qBAAA;EACA,gBAAA;AACA;AAEA;EACA,eAAA;EACA,0BAAA;AACA;AAEA;EACA,aAAA;EACA,sBAAA;EACA,qBAAA;AACA;AAEA;EACA,gBAAA;EACA,UAAA;EACA,eAAA;AACA;AAEA;EACA,eAAA;EACA,cAAA;AACA;AAEA;EACA,qBAAA;EACA,eAAA;EACA,eAAA;AACA;AAEA;EACA,eAAA;EACA,cAAA;EACA,yBAAA;EACA,sBAAA;AACA;AAEA;EACA,gBAAA;AACA;AAEA;EACA,cAAA;AACA","sourcesContent":["<template>\n  <div class=\"audit-logs main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('audit_logs.title')\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            v-show=\"totalAuditLogs || filtersApplied\"\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            size=\"large\"\n            color=\"theme\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n      </Header>\n    </div>\n\n    <div class=\"search-bar row\">\n      <div class=\"col-sm-4\">\n        <base-input\n          v-model=\"searchInput\"\n          type=\"text\"\n          name=\"search\"\n          icon=\"search\"\n          autocomplete=\"off\"\n          :placeholder=\"$t('audit_logs.search_placeholder')\"\n          @input=\"handleSearchInput\"\n        />\n      </div>\n      <div class=\"col-sm-4\">\n        <base-select\n          v-model=\"filters.type\"\n          :options=\"typeOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n      <div class=\"col-sm-4\">\n        <base-select\n          v-model=\"dateRangeOption\"\n          :options=\"dateRangeOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n    </div>\n\n    <div v-if=\"activeFilterChips.length\" class=\"filter-chips\">\n      <span v-for=\"chip in activeFilterChips\" :key=\"chip.key\" class=\"filter-chip\">\n        {{ chip.label }}\n        <a href=\"#\" class=\"filter-chip-remove\" @click.prevent=\"clearFilterKey(chip.key)\">×</a>\n      </span>\n      <a href=\"#\" class=\"clear-all-chip\" @click.prevent=\"clearFilter\">{{ $t('general.clear_all') }}</a>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\">{{ $t('audit_logs.user') }}</label>\n            <base-input\n              v-model=\"filters.user\"\n              type=\"text\"\n              name=\"user\"\n              autocomplete=\"off\"\n              :placeholder=\"$t('audit_logs.user_placeholder')\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\">{{ $t('general.from_date') }}</label>\n            <base-input\n              v-model=\"filters.from_date\"\n              type=\"date\"\n              name=\"from_date\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\">{{ $t('general.to_date') }}</label>\n            <base-input\n              v-model=\"filters.to_date\"\n              type=\"date\"\n              name=\"to_date\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\">{{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <astronaut-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('audit_logs.no_logs') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('audit_logs.list_of_logs') }}</label>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <p class=\"table-stats\">\n          {{ $t('general.showing') }}: <b>{{ pageStart }}–{{ pageEnd }}</b>\n          {{ $t('general.of') }} <b>{{ totalAuditLogs }}</b>\n        </p>\n      </div>\n\n      <table-component\n        ref=\"table\"\n        :show-filter=\"false\"\n        :data=\"fetchData\"\n        table-class=\"table\"\n      >\n        <table-column\n          :label=\"$t('audit_logs.date_time')\"\n          show=\"formatted_created_at\"\n        >\n          <template slot-scope=\"row\">\n            <div>{{ row.formatted_created_at }}</div>\n            <small class=\"text-muted\">{{ relativeTime(row.created_at) }}</small>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('audit_logs.document')\"\n          show=\"module\"\n        >\n          <template slot-scope=\"row\">\n            <router-link v-if=\"row.document_path\" :to=\"{ path: row.document_path }\" class=\"document-link\">\n              <span class=\"document-type\">{{ row.module }}</span>\n              <span class=\"document-number\">{{ row.document_number || ('#' + row.auditable_id) }}</span>\n            </router-link>\n            <div v-else>\n              <span class=\"document-type\">{{ row.module }}</span>\n              <span v-if=\"row.document_number\" class=\"document-number\">{{ row.document_number }}</span>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('audit_logs.action')\"\n          show=\"action_label\"\n        >\n          <template slot-scope=\"row\">\n            <div :class=\"actionBadgeClass(row.action)\">{{ row.action_label || row.action }}</div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('audit_logs.user')\"\n          show=\"user_name\"\n        >\n          <template slot-scope=\"row\">\n            <div>{{ row.user_name || '—' }}</div>\n            <small class=\"text-muted\">{{ row.user_email }}</small>\n          </template>\n        </table-column>\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          :label=\"$t('audit_logs.description')\"\n          show=\"description\"\n        >\n          <template slot-scope=\"row\">\n            <div>{{ row.description }}</div>\n            <ul v-if=\"row.change_summary && row.change_summary.length\" class=\"change-summary\">\n              <li v-for=\"(change, idx) in visibleChanges(row)\" :key=\"idx\">\n                <b>{{ change.field }}:</b> {{ change.old }} → {{ change.new }}\n              </li>\n            </ul>\n            <a\n              v-if=\"row.change_summary && row.change_summary.length > changeSummaryLimit\"\n              href=\"#\"\n              class=\"change-toggle\"\n              @click.prevent=\"toggleChanges(row.id)\"\n            >\n              {{ expandedChanges[row.id]\n                ? $t('audit_logs.show_less')\n                : $t('audit_logs.show_more', { count: row.change_summary.length - changeSummaryLimit }) }}\n            </a>\n          </template>\n        </table-column>\n      </table-component>\n    </div>\n  </div>\n</template>\n\n<style scoped>\n.badge-created { color: #1b7a3d; font-weight: 600; }\n.badge-updated { color: #b36b00; font-weight: 600; }\n.badge-deleted { color: #b00020; font-weight: 600; }\n.badge-login { color: #0b5ed7; font-weight: 600; }\n.badge-logout { color: #6c757d; font-weight: 600; }\n.badge-failed { color: #b00020; font-weight: 600; }\n\n.search-bar {\n  margin-bottom: 12px;\n  align-items: flex-start;\n}\n\n.filter-chips {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n  margin-bottom: 16px;\n}\n\n.filter-chip {\n  display: inline-flex;\n  align-items: center;\n  background: #eef1f7;\n  border-radius: 14px;\n  padding: 4px 10px;\n  font-size: 12px;\n  color: #40495c;\n}\n\n.filter-chip-remove {\n  margin-left: 6px;\n  color: #6c757d;\n  text-decoration: none;\n  font-weight: 700;\n}\n\n.clear-all-chip {\n  font-size: 12px;\n  text-decoration: underline;\n}\n\n.document-link {\n  display: flex;\n  flex-direction: column;\n  text-decoration: none;\n}\n\n.change-summary {\n  list-style: none;\n  padding: 0;\n  margin: 4px 0 0;\n}\n\n.change-summary li {\n  font-size: 12px;\n  color: #6c757d;\n}\n\n.change-toggle {\n  display: inline-block;\n  margin-top: 2px;\n  font-size: 12px;\n}\n\n.document-type {\n  font-size: 12px;\n  color: #6c757d;\n  text-transform: uppercase;\n  letter-spacing: 0.02em;\n}\n\n.document-number {\n  font-weight: 600;\n}\n\n.document-link .document-number {\n  color: #2a5bd7;\n}\n\n</style>\n\n<style>\n/* Unscoped so it wins over Bootstrap .table thead th border-bottom */\n.audit-logs .table-actions {\n  height: auto;\n  min-height: 40px;\n  margin-bottom: 16px;\n  padding-bottom: 12px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-wrap: wrap;\n}\n.audit-logs .table-container .table-component {\n  margin-top: 8px;\n}\n.audit-logs .table.table-component__table thead th,\n.audit-logs .table-component__table thead th,\n.audit-logs table.table thead th {\n  border: none !important;\n  border-bottom: none !important;\n  border-top: none !important;\n  vertical-align: middle !important;\n  padding-top: 8px !important;\n  padding-bottom: 20px !important;\n  background: transparent !important;\n  box-shadow: none !important;\n  line-height: 1.4 !important;\n}\n.audit-logs .table-component__table {\n  border-spacing: 0 12px !important;\n}\n</style>\n\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport AstronautIcon from '../../components/icon/AstronautIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    AstronautIcon,\n    BaseButton\n  },\n  data () {\n    const typeOptions = [\n      { label: this.$t('audit_logs.all_types'), value: '' },\n      { label: this.$t('navigation.invoices'), value: 'invoice' },\n      { label: this.$t('navigation.estimates'), value: 'estimate' },\n      { label: this.$t('navigation.orders'), value: 'order' },\n      { label: this.$t('navigation.inventory'), value: 'inventory' },\n      { label: this.$t('navigation.voucher'), value: 'voucher' },\n      { label: this.$t('navigation.receipts'), value: 'receipt' },\n      { label: this.$t('audit_logs.login_logout'), value: 'auth' }\n    ]\n    // Default to Invoice only — a full \"All Types\" load pulls in every\n    // module and is exactly the noisy view this page was built to avoid.\n    const defaultTypeValue = 'invoice'\n    const defaultType = typeOptions.find(o => o.value === defaultTypeValue)\n\n    return {\n      showFilters: false,\n      filtersApplied: false,\n      isRequestOngoing: true,\n      currentPage: 1,\n      perPage: 15,\n      searchInput: '',\n      searchDebounce: null,\n      changeSummaryLimit: 3,\n      expandedChanges: {},\n      defaultTypeValue,\n      filters: {\n        search: '',\n        type: defaultType,\n        user: '',\n        from_date: '',\n        to_date: ''\n      },\n      typeOptions,\n      dateRangeOption: { label: this.$t('audit_logs.all_time'), value: '' },\n      dateRangeOptions: [\n        { label: this.$t('audit_logs.all_time'), value: '' },\n        { label: this.$t('audit_logs.today'), value: 'today' },\n        { label: this.$t('audit_logs.this_week'), value: 'week' },\n        { label: this.$t('audit_logs.this_month'), value: 'month' }\n      ],\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home')\n        },\n        {\n          url: '#',\n          title: this.$t('audit_logs.title')\n        }\n      ]\n    }\n  },\n  computed: {\n    ...mapGetters('auditLogs', [\n      'auditLogs',\n      'totalAuditLogs'\n    ]),\n    showEmptyScreen () {\n      return !this.totalAuditLogs && !this.isRequestOngoing && !this.hasCustomFilters\n    },\n    hasCustomFilters () {\n      const typeValue = this.filters.type && this.filters.type.value\n      return !!(\n        this.filters.search ||\n        (typeValue && typeValue !== this.defaultTypeValue) ||\n        this.filters.user ||\n        this.filters.from_date ||\n        this.filters.to_date\n      )\n    },\n    filterIcon () {\n      return this.showFilters ? 'angle-up' : 'angle-down'\n    },\n    pageStart () {\n      if (!this.totalAuditLogs) {\n        return 0\n      }\n      return ((this.currentPage - 1) * this.perPage) + 1\n    },\n    pageEnd () {\n      return Math.min(this.currentPage * this.perPage, this.totalAuditLogs)\n    },\n    activeFilterChips () {\n      const chips = []\n\n      if (this.filters.search) {\n        chips.push({ key: 'search', label: `\"${this.filters.search}\"` })\n      }\n\n      const typeValue = this.filters.type && this.filters.type.value\n      if (typeValue && typeValue !== this.defaultTypeValue) {\n        const option = this.typeOptions.find(o => o.value === typeValue)\n        chips.push({ key: 'type', label: option ? option.label : typeValue })\n      }\n\n      if (this.filters.user) {\n        chips.push({ key: 'user', label: `${this.$t('audit_logs.user')}: ${this.filters.user}` })\n      }\n\n      if (this.filters.from_date) {\n        chips.push({ key: 'from_date', label: `${this.$t('general.from_date')}: ${this.filters.from_date}` })\n      }\n\n      if (this.filters.to_date) {\n        chips.push({ key: 'to_date', label: `${this.$t('general.to_date')}: ${this.filters.to_date}` })\n      }\n\n      return chips\n    }\n  },\n  watch: {\n    filters: {\n      handler () {\n        this.$refs.table && this.$refs.table.refresh()\n      },\n      deep: true\n    },\n    dateRangeOption (option) {\n      const value = option && option.value\n      if (!value) {\n        this.filters.from_date = ''\n        this.filters.to_date = ''\n      } else {\n        this.setQuickRange(value)\n      }\n    }\n  },\n  methods: {\n    ...mapActions('auditLogs', [\n      'fetchAuditLogs'\n    ]),\n    toggleFilter () {\n      this.showFilters = !this.showFilters\n    },\n    handleSearchInput (value) {\n      clearTimeout(this.searchDebounce)\n      this.searchDebounce = setTimeout(() => {\n        this.filters.search = value\n      }, 300)\n    },\n    clearFilterKey (key) {\n      if (key === 'search') {\n        this.searchInput = ''\n        this.filters.search = ''\n      } else if (key === 'type') {\n        this.filters.type = this.defaultTypeOption()\n      } else if (key === 'from_date' || key === 'to_date') {\n        this.filters.from_date = ''\n        this.filters.to_date = ''\n        this.dateRangeOption = { label: this.$t('audit_logs.all_time'), value: '' }\n      } else {\n        this.filters[key] = ''\n      }\n    },\n    clearFilter () {\n      this.searchInput = ''\n      this.dateRangeOption = { label: this.$t('audit_logs.all_time'), value: '' }\n      this.filters = {\n        search: '',\n        type: this.defaultTypeOption(),\n        user: '',\n        from_date: '',\n        to_date: ''\n      }\n      this.filtersApplied = false\n      this.$refs.table && this.$refs.table.refresh()\n    },\n    defaultTypeOption () {\n      return this.typeOptions.find(o => o.value === this.defaultTypeValue)\n    },\n    setQuickRange (range) {\n      const pad = (n) => String(n).padStart(2, '0')\n      const toInputDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`\n      const now = new Date()\n      let from = now\n\n      if (range === 'week') {\n        const day = now.getDay() === 0 ? 7 : now.getDay()\n        from = new Date(now)\n        from.setDate(now.getDate() - day + 1)\n      } else if (range === 'month') {\n        from = new Date(now.getFullYear(), now.getMonth(), 1)\n      }\n\n      this.filters.from_date = toInputDate(from)\n      this.filters.to_date = toInputDate(now)\n    },\n    getFilterParams () {\n      const type = (this.filters.type && this.filters.type.value) || ''\n      // Default view covers invoices/estimates/orders/inventory/vouchers/\n      // receipts (create/update/delete) plus login/logout activity. Other\n      // modules (users, banks, etc.) stay out to keep this readable; the\n      // Type filter narrows further.\n      const module = type || 'invoice,estimate,order,inventory,voucher,receipt,auth'\n\n      return {\n        search: this.filters.search,\n        module,\n        action: 'created,updated,deleted,login,logout,login_failed',\n        user: this.filters.user,\n        from_date: this.filters.from_date,\n        to_date: this.filters.to_date\n      }\n    },\n    async fetchData ({ page, filter, sort }) {\n      const params = {\n        ...this.getFilterParams(),\n        page,\n        limit: this.perPage,\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc'\n      }\n\n      this.filtersApplied = this.hasCustomFilters\n      this.isRequestOngoing = true\n      this.currentPage = page || 1\n\n      try {\n        const response = await this.fetchAuditLogs(params)\n        this.isRequestOngoing = false\n        return {\n          data: response.data.audit_logs.data,\n          pagination: {\n            totalPages: response.data.audit_logs.last_page,\n            currentPage: response.data.audit_logs.current_page || page,\n            count: response.data.audit_logs.total\n          }\n        }\n      } catch (e) {\n        this.isRequestOngoing = false\n        return {\n          data: [],\n          pagination: {\n            totalPages: 1,\n            currentPage: 1,\n            count: 0\n          }\n        }\n      }\n    },\n    actionBadgeClass (action) {\n      if (action === 'created') return 'badge-created'\n      if (action === 'updated') return 'badge-updated'\n      if (action === 'deleted') return 'badge-deleted'\n      if (action === 'login') return 'badge-login'\n      if (action === 'logout') return 'badge-logout'\n      if (action === 'login_failed') return 'badge-failed'\n      return ''\n    },\n    relativeTime (date) {\n      return date ? moment(date).fromNow() : ''\n    },\n    visibleChanges (row) {\n      if (this.expandedChanges[row.id] || row.change_summary.length <= this.changeSummaryLimit) {\n        return row.change_summary\n      }\n      return row.change_summary.slice(0, this.changeSummaryLimit)\n    },\n    toggleChanges (id) {\n      this.$set(this.expandedChanges, id, !this.expandedChanges[id])\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n/* Unscoped so it wins over Bootstrap .table thead th border-bottom */\n.audit-logs .table-actions {\n  height: auto;\n  min-height: 40px;\n  margin-bottom: 16px;\n  padding-bottom: 12px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-wrap: wrap;\n}\n.audit-logs .table-container .table-component {\n  margin-top: 8px;\n}\n.audit-logs .table.table-component__table thead th,\n.audit-logs .table-component__table thead th,\n.audit-logs table.table thead th {\n  border: none !important;\n  border-bottom: none !important;\n  border-top: none !important;\n  vertical-align: middle !important;\n  padding-top: 8px !important;\n  padding-bottom: 20px !important;\n  background: transparent !important;\n  box-shadow: none !important;\n  line-height: 1.4 !important;\n}\n.audit-logs .table-component__table {\n  border-spacing: 0 12px !important;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/audit-logs/Index.vue"],"names":[],"mappings":";AAqRA,qEAAA;AACA;EACA,YAAA;EACA,gBAAA;EACA,mBAAA;EACA,oBAAA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;EACA,eAAA;AACA;AACA;EACA,eAAA;AACA;AACA;;;EAGA,uBAAA;EACA,8BAAA;EACA,2BAAA;EACA,iCAAA;EACA,2BAAA;EACA,+BAAA;EACA,kCAAA;EACA,2BAAA;EACA,2BAAA;AACA;AACA;EACA,iCAAA;AACA","sourcesContent":["<template>\n  <div class=\"audit-logs main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('audit_logs.title')\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            v-show=\"totalAuditLogs || filtersApplied\"\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            size=\"large\"\n            color=\"theme\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n      </Header>\n    </div>\n\n    <div class=\"search-bar row\">\n      <div class=\"col-sm-4\">\n        <base-input\n          v-model=\"searchInput\"\n          type=\"text\"\n          name=\"search\"\n          icon=\"search\"\n          autocomplete=\"off\"\n          :placeholder=\"$t('audit_logs.search_placeholder')\"\n          @input=\"handleSearchInput\"\n        />\n      </div>\n      <div class=\"col-sm-4\">\n        <base-select\n          v-model=\"filters.type\"\n          :options=\"typeOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n      <div class=\"col-sm-4\">\n        <base-select\n          v-model=\"dateRangeOption\"\n          :options=\"dateRangeOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n    </div>\n\n    <div v-if=\"activeFilterChips.length\" class=\"filter-chips\">\n      <span v-for=\"chip in activeFilterChips\" :key=\"chip.key\" class=\"filter-chip\">\n        {{ chip.label }}\n        <a href=\"#\" class=\"filter-chip-remove\" @click.prevent=\"clearFilterKey(chip.key)\">×</a>\n      </span>\n      <a href=\"#\" class=\"clear-all-chip\" @click.prevent=\"clearFilter\">{{ $t('general.clear_all') }}</a>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\">{{ $t('audit_logs.user') }}</label>\n            <base-input\n              v-model=\"filters.user\"\n              type=\"text\"\n              name=\"user\"\n              autocomplete=\"off\"\n              :placeholder=\"$t('audit_logs.user_placeholder')\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\">{{ $t('general.from_date') }}</label>\n            <base-input\n              v-model=\"filters.from_date\"\n              type=\"date\"\n              name=\"from_date\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\">{{ $t('general.to_date') }}</label>\n            <base-input\n              v-model=\"filters.to_date\"\n              type=\"date\"\n              name=\"to_date\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\">{{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <astronaut-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('audit_logs.no_logs') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('audit_logs.list_of_logs') }}</label>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <p class=\"table-stats\">\n          {{ $t('general.showing') }}: <b>{{ pageStart }}–{{ pageEnd }}</b>\n          {{ $t('general.of') }} <b>{{ totalAuditLogs }}</b>\n        </p>\n      </div>\n\n      <table-component\n        ref=\"table\"\n        :show-filter=\"false\"\n        :data=\"fetchData\"\n        table-class=\"table\"\n      >\n        <table-column\n          :label=\"$t('audit_logs.date_time')\"\n          show=\"formatted_created_at\"\n        >\n          <template slot-scope=\"row\">\n            <div>{{ row.formatted_created_at }}</div>\n            <small class=\"text-muted\">{{ relativeTime(row.created_at) }}</small>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('audit_logs.document')\"\n          show=\"module\"\n        >\n          <template slot-scope=\"row\">\n            <router-link v-if=\"row.document_path\" :to=\"{ path: row.document_path }\" class=\"document-link\">\n              <span class=\"document-type\">{{ row.module }}</span>\n              <span class=\"document-number\">{{ row.document_number || ('#' + row.auditable_id) }}</span>\n            </router-link>\n            <div v-else>\n              <span class=\"document-type\">{{ row.module }}</span>\n              <span v-if=\"row.document_number\" class=\"document-number\">{{ row.document_number }}</span>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('audit_logs.action')\"\n          show=\"action_label\"\n        >\n          <template slot-scope=\"row\">\n            <div :class=\"actionBadgeClass(row.action)\">{{ row.action_label || row.action }}</div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('audit_logs.user')\"\n          show=\"user_name\"\n        >\n          <template slot-scope=\"row\">\n            <div>{{ row.user_name || '—' }}</div>\n            <small class=\"text-muted\">{{ row.user_email }}</small>\n          </template>\n        </table-column>\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          :label=\"$t('audit_logs.description')\"\n          show=\"description\"\n        >\n          <template slot-scope=\"row\">\n            <div>{{ row.description }}</div>\n            <ul v-if=\"row.change_summary && row.change_summary.length\" class=\"change-summary\">\n              <li v-for=\"(change, idx) in visibleChanges(row)\" :key=\"idx\">\n                <b>{{ change.field }}:</b> {{ change.old }} → {{ change.new }}\n              </li>\n            </ul>\n            <a\n              v-if=\"row.change_summary && row.change_summary.length > changeSummaryLimit\"\n              href=\"#\"\n              class=\"change-toggle\"\n              @click.prevent=\"toggleChanges(row.id)\"\n            >\n              {{ expandedChanges[row.id]\n                ? $t('audit_logs.show_less')\n                : $t('audit_logs.show_more', { count: row.change_summary.length - changeSummaryLimit }) }}\n            </a>\n          </template>\n        </table-column>\n      </table-component>\n    </div>\n  </div>\n</template>\n\n<style scoped>\n.badge-created { color: #1b7a3d; font-weight: 600; }\n.badge-updated { color: #b36b00; font-weight: 600; }\n.badge-deleted { color: #b00020; font-weight: 600; }\n.badge-login { color: #0b5ed7; font-weight: 600; }\n.badge-logout { color: #6c757d; font-weight: 600; }\n.badge-failed { color: #b00020; font-weight: 600; }\n\n.search-bar {\n  margin-bottom: 12px;\n  align-items: flex-start;\n}\n\n.filter-chips {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: 8px;\n  margin-bottom: 16px;\n}\n\n.filter-chip {\n  display: inline-flex;\n  align-items: center;\n  background: #eef1f7;\n  border-radius: 14px;\n  padding: 4px 10px;\n  font-size: 12px;\n  color: #40495c;\n}\n\n.filter-chip-remove {\n  margin-left: 6px;\n  color: #6c757d;\n  text-decoration: none;\n  font-weight: 700;\n}\n\n.clear-all-chip {\n  font-size: 12px;\n  text-decoration: underline;\n}\n\n.document-link {\n  display: flex;\n  flex-direction: column;\n  text-decoration: none;\n}\n\n.change-summary {\n  list-style: none;\n  padding: 0;\n  margin: 4px 0 0;\n}\n\n.change-summary li {\n  font-size: 12px;\n  color: #6c757d;\n}\n\n.change-toggle {\n  display: inline-block;\n  margin-top: 2px;\n  font-size: 12px;\n}\n\n.document-type {\n  font-size: 12px;\n  color: #6c757d;\n  text-transform: uppercase;\n  letter-spacing: 0.02em;\n}\n\n.document-number {\n  font-weight: 600;\n}\n\n.document-link .document-number {\n  color: #2a5bd7;\n}\n\n</style>\n\n<style>\n/* Unscoped so it wins over Bootstrap .table thead th border-bottom */\n.audit-logs .table-actions {\n  height: auto;\n  min-height: 40px;\n  margin-bottom: 16px;\n  padding-bottom: 12px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  flex-wrap: wrap;\n}\n.audit-logs .table-container .table-component {\n  margin-top: 8px;\n}\n.audit-logs .table.table-component__table thead th,\n.audit-logs .table-component__table thead th,\n.audit-logs table.table thead th {\n  border: none !important;\n  border-bottom: none !important;\n  border-top: none !important;\n  vertical-align: middle !important;\n  padding-top: 8px !important;\n  padding-bottom: 20px !important;\n  background: transparent !important;\n  box-shadow: none !important;\n  line-height: 1.4 !important;\n}\n.audit-logs .table-component__table {\n  border-spacing: 0 12px !important;\n}\n</style>\n\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport AstronautIcon from '../../components/icon/AstronautIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    AstronautIcon,\n    BaseButton\n  },\n  data () {\n    const typeOptions = [\n      { label: this.$t('audit_logs.all_types'), value: '' },\n      { label: this.$t('navigation.invoices'), value: 'invoice' },\n      { label: this.$t('navigation.estimates'), value: 'estimate' },\n      { label: this.$t('navigation.orders'), value: 'order' },\n      { label: this.$t('navigation.inventory'), value: 'inventory' },\n      { label: this.$t('navigation.voucher'), value: 'voucher' },\n      { label: this.$t('navigation.receipts'), value: 'receipt' },\n      { label: this.$t('audit_logs.login_logout'), value: 'auth' }\n    ]\n    // Default to Invoice only — a full \"All Types\" load pulls in every\n    // module and is exactly the noisy view this page was built to avoid.\n    const defaultTypeValue = 'invoice'\n    const defaultType = typeOptions.find(o => o.value === defaultTypeValue)\n\n    return {\n      showFilters: false,\n      filtersApplied: false,\n      isRequestOngoing: true,\n      currentPage: 1,\n      perPage: 15,\n      searchInput: '',\n      searchDebounce: null,\n      changeSummaryLimit: 3,\n      expandedChanges: {},\n      defaultTypeValue,\n      filters: {\n        search: '',\n        type: defaultType,\n        user: '',\n        from_date: '',\n        to_date: ''\n      },\n      typeOptions,\n      dateRangeOption: { label: this.$t('audit_logs.all_time'), value: '' },\n      dateRangeOptions: [\n        { label: this.$t('audit_logs.all_time'), value: '' },\n        { label: this.$t('audit_logs.today'), value: 'today' },\n        { label: this.$t('audit_logs.this_week'), value: 'week' },\n        { label: this.$t('audit_logs.this_month'), value: 'month' }\n      ],\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home')\n        },\n        {\n          url: '#',\n          title: this.$t('audit_logs.title')\n        }\n      ]\n    }\n  },\n  computed: {\n    ...mapGetters('auditLogs', [\n      'auditLogs',\n      'totalAuditLogs'\n    ]),\n    showEmptyScreen () {\n      return !this.totalAuditLogs && !this.isRequestOngoing && !this.hasCustomFilters\n    },\n    hasCustomFilters () {\n      const typeValue = this.filters.type && this.filters.type.value\n      return !!(\n        this.filters.search ||\n        (typeValue && typeValue !== this.defaultTypeValue) ||\n        this.filters.user ||\n        this.filters.from_date ||\n        this.filters.to_date\n      )\n    },\n    filterIcon () {\n      return this.showFilters ? 'angle-up' : 'angle-down'\n    },\n    pageStart () {\n      if (!this.totalAuditLogs) {\n        return 0\n      }\n      return ((this.currentPage - 1) * this.perPage) + 1\n    },\n    pageEnd () {\n      return Math.min(this.currentPage * this.perPage, this.totalAuditLogs)\n    },\n    activeFilterChips () {\n      const chips = []\n\n      if (this.filters.search) {\n        chips.push({ key: 'search', label: `\"${this.filters.search}\"` })\n      }\n\n      const typeValue = this.filters.type && this.filters.type.value\n      if (typeValue && typeValue !== this.defaultTypeValue) {\n        const option = this.typeOptions.find(o => o.value === typeValue)\n        chips.push({ key: 'type', label: option ? option.label : typeValue })\n      }\n\n      if (this.filters.user) {\n        chips.push({ key: 'user', label: `${this.$t('audit_logs.user')}: ${this.filters.user}` })\n      }\n\n      if (this.filters.from_date) {\n        chips.push({ key: 'from_date', label: `${this.$t('general.from_date')}: ${this.filters.from_date}` })\n      }\n\n      if (this.filters.to_date) {\n        chips.push({ key: 'to_date', label: `${this.$t('general.to_date')}: ${this.filters.to_date}` })\n      }\n\n      return chips\n    }\n  },\n  watch: {\n    filters: {\n      handler () {\n        this.$refs.table && this.$refs.table.refresh()\n      },\n      deep: true\n    },\n    dateRangeOption (option) {\n      const value = option && option.value\n      if (!value) {\n        this.filters.from_date = ''\n        this.filters.to_date = ''\n      } else {\n        this.setQuickRange(value)\n      }\n    }\n  },\n  methods: {\n    ...mapActions('auditLogs', [\n      'fetchAuditLogs'\n    ]),\n    toggleFilter () {\n      this.showFilters = !this.showFilters\n    },\n    handleSearchInput (value) {\n      clearTimeout(this.searchDebounce)\n      this.searchDebounce = setTimeout(() => {\n        this.filters.search = value\n      }, 300)\n    },\n    clearFilterKey (key) {\n      if (key === 'search') {\n        this.searchInput = ''\n        this.filters.search = ''\n      } else if (key === 'type') {\n        this.filters.type = this.defaultTypeOption()\n      } else if (key === 'from_date' || key === 'to_date') {\n        this.filters.from_date = ''\n        this.filters.to_date = ''\n        this.dateRangeOption = { label: this.$t('audit_logs.all_time'), value: '' }\n      } else {\n        this.filters[key] = ''\n      }\n    },\n    clearFilter () {\n      this.searchInput = ''\n      this.dateRangeOption = { label: this.$t('audit_logs.all_time'), value: '' }\n      this.filters = {\n        search: '',\n        type: this.defaultTypeOption(),\n        user: '',\n        from_date: '',\n        to_date: ''\n      }\n      this.filtersApplied = false\n      this.$refs.table && this.$refs.table.refresh()\n    },\n    defaultTypeOption () {\n      return this.typeOptions.find(o => o.value === this.defaultTypeValue)\n    },\n    setQuickRange (range) {\n      const pad = (n) => String(n).padStart(2, '0')\n      const toInputDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`\n      const now = new Date()\n      let from = now\n\n      if (range === 'week') {\n        const day = now.getDay() === 0 ? 7 : now.getDay()\n        from = new Date(now)\n        from.setDate(now.getDate() - day + 1)\n      } else if (range === 'month') {\n        from = new Date(now.getFullYear(), now.getMonth(), 1)\n      }\n\n      this.filters.from_date = toInputDate(from)\n      this.filters.to_date = toInputDate(now)\n    },\n    getFilterParams () {\n      const type = (this.filters.type && this.filters.type.value) || ''\n      // Default view covers invoices/estimates/orders/inventory/vouchers/\n      // receipts (create/update/delete) plus login/logout activity. Other\n      // modules (users, banks, etc.) stay out to keep this readable; the\n      // Type filter narrows further.\n      const module = type || 'invoice,estimate,order,inventory,voucher,receipt,auth'\n\n      return {\n        search: this.filters.search,\n        module,\n        action: 'created,updated,deleted,login,logout,login_failed',\n        user: this.filters.user,\n        from_date: this.filters.from_date,\n        to_date: this.filters.to_date\n      }\n    },\n    async fetchData ({ page, filter, sort }) {\n      const params = {\n        ...this.getFilterParams(),\n        page,\n        limit: this.perPage,\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc'\n      }\n\n      this.filtersApplied = this.hasCustomFilters\n      this.isRequestOngoing = true\n      this.currentPage = page || 1\n\n      try {\n        const response = await this.fetchAuditLogs(params)\n        this.isRequestOngoing = false\n        return {\n          data: response.data.audit_logs.data,\n          pagination: {\n            totalPages: response.data.audit_logs.last_page,\n            currentPage: response.data.audit_logs.current_page || page,\n            count: response.data.audit_logs.total\n          }\n        }\n      } catch (e) {\n        this.isRequestOngoing = false\n        return {\n          data: [],\n          pagination: {\n            totalPages: 1,\n            currentPage: 1,\n            count: 0\n          }\n        }\n      }\n    },\n    actionBadgeClass (action) {\n      if (action === 'created') return 'badge-created'\n      if (action === 'updated') return 'badge-updated'\n      if (action === 'deleted') return 'badge-deleted'\n      if (action === 'login') return 'badge-login'\n      if (action === 'logout') return 'badge-logout'\n      if (action === 'login_failed') return 'badge-failed'\n      return ''\n    },\n    relativeTime (date) {\n      return date ? moment(date).fromNow() : ''\n    },\n    visibleChanges (row) {\n      if (this.expandedChanges[row.id] || row.change_summary.length <= this.changeSummaryLimit) {\n        return row.change_summary\n      }\n      return row.change_summary.slice(0, this.changeSummaryLimit)\n    },\n    toggleChanges (id) {\n      this.$set(this.expandedChanges, id, !this.expandedChanges[id])\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -85871,7 +87604,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Create.vue"],"names":[],"mappings":";AA0GA;EACA,WAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,mBAAA;EACA,yBAAA;EACA,sBAAA;EACA,mBAAA;EACA,qBAAA;EACA,0BAAA;EACA,eAAA;EACA,gBAAA;EACA,eAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/dispatch\">{{ $tc('dispatch.dispatch',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col col-12 col-md-12 col-lg-6\">\n        <div class=\"card\">\n          <form action=\"\" @submit.prevent=\"submitDispatch\">\n            <div class=\"card-body\" id=\"to_print\">\n              <div class=\"form-group\" v-if=\"invoiceList && invoiceList.length && !change_invoice\">\n                <label class=\"form-label\">{{ $t('receipts.invoice') }}</label>\n                <base-select\n                  v-model=\"invoice\"\n                  :multiple=\"true\"\n                  :show-pointer=\"false\"\n                  :options=\"isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :allow-empty=\"true\"\n                  :disabled=\"isEdit\"\n                  :custom-label=\"invoiceWithAmount\"\n                  track-by=\"invoice_number\"\n                  class=\"multi-select-item\"\n                  @select=\"addInvoice\"\n                  @remove=\"removeInvoice\"\n                />\n              </div>\n              <div class=\"form-group\" v-if=\"change_invoice\">\n                <span class=\"ml-2\" v-for=\"(value, index) in filterInvoice \" :key=\"index\" >\n                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}\n                </span>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.date_time') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.date_time\"\n                  format=\"Y-m-d\"\n                  :invalid=\"$v.formData.date_time.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.date_time.$touch()\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.time') }}</label><span class=\"text-danger\"> *</span>\n                <div class=\"base-date-input\">\n                  <vue-timepicker\n                    v-model=\"formData.time\"\n                    format=\"hh:mm A\"\n                    :hide-clear-button=\"true\"\n                    @change=\"$v.formData.time.$touch()\">\n                    <template v-slot:icon>\n                      <span class=\"vdp-datepicker__calendar-button input-group-prepend\">\n                        <span>\n                          <font-awesome-icon id=\"time-icon\" :icon=\"['fas', 'clock']\"/>\n                        </span>\n                      </span>\n                    </template>\n                  </vue-timepicker>\n                </div>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.person') }}</label>\n                <base-input\n                  v-model.trim=\"formData.person\"\n                  focus\n                  type=\"text\"\n                  name=\"person\"\n                />\n              </div>\n               <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.transport') }}</label>\n                <base-input\n                  v-model.trim=\"formData.transport\"\n                  focus\n                  type=\"text\"\n                  name=\"transport\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <base-button\n                  id=\"submit-dispatch\"\n                  :loading=\"isLoading\"\n                  :disabled=\"isLoading\"\n                  icon=\"save\"\n                  color=\"theme\"\n                  type=\"submit\"\n                  class=\"collapse-button\"\n                >\n                  {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}\n                </base-button>\n              </div>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\nimport VueTimepicker from 'vue2-timepicker'\nimport 'vue2-timepicker/dist/VueTimepicker.css'\nimport getTime from 'date-fns/fp/getTime/index'\n\nexport default {\n  components: { VueTimepicker },\n  mixins: {\n    validationMixin\n  },\n  data () {\n    return {\n      isLoading: false,\n      filterInvoice: [],\n      change_invoice: false,\n      invoice_count: '',\n      title: 'Add Dispatch',\n      formData: {\n        name: '',\n        invoice_id: [],\n        date_time: new Date(),\n        transport: '',\n        person: '',\n        time: '',\n        status: {\n          id: 2,\n          name: 'Sent',\n        },\n        all_selected_dispatch: []\n      },\n      invoice: [],\n      invoiceList: [],\n      assignToBeDispatch: false,\n      isToBeDispatch: []\n    }\n  },\n  computed: {\n    isEdit () {\n      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {\n        return true\n      }\n      return false\n    },\n    formatDate() {\n      if (this.formData.date_time) {\n        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')\n      }\n      return moment().format('DD-MM-YYYY HH:mm:ss');\n    }\n  },\n  created () {\n    this.fetchInvoices()\n    let current = new Date();\n    this.formData.time = current.toLocaleTimeString(\"en-US\", {\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n    });\n  },\n  destroyed() {\n    this.resetSelectedDispatch()\n    this.resetSelectedToBeDispatch()\n  },\n  validations: {\n    formData: {\n      date_time: {\n        required,\n      },\n      time: {\n        required,\n      },\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'addDispatch',\n      'editDispatch',\n      'editToBeDispatch',\n      'dipatchedData',\n      'updateDispatch',\n      'updateToBeDispatch',\n      'resetSelectedDispatch',\n      'resetSelectedToBeDispatch'\n    ]),\n    addInvoice (value) {\n      if (value) {\n        this.formData.invoice_id.push(value.id)\n      }\n    },\n    removeInvoice (value) {\n      let index = this.formData.invoice_id.findIndex(each => each === value.id)\n      if (index) {\n        this.formData.invoice_id.splice(index, 1)\n      }\n    },\n    invoiceWithAmount ({ invoice_number, due_amount, master}) {\n      let invoiceArr = this.invoice;\n      if (! invoiceArr.length) {\n        invoiceArr = this.invoiceList\n      }\n      if (invoiceArr) {\n        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;\n        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`\n      }\n    },\n    loadInvoice() {\n      this.invoice = []\n      this.formData.invoice_id.map(i => {\n        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));\n        this.invoice.push(findFromList);\n      })\n      let current = new Date();\n      this.formData.time = current.toLocaleTimeString(\"en-US\", {\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n      });\n    },\n    printDispatch() {\n      return printJS({\n            onPrintDialogClose: () => {\n              this.$router.push('/dispatch')\n            },\n            printable: 'to_print',\n            type: 'html',\n            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],\n            scanStyles: true,\n            targetStyles: ['*'],\n            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'\n          })\n    },\n    async loadEditData () {\n      let response = await this.editDispatch(this.$route.params.id)\n      this.formData = response.data.dispatch\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      this.loadInvoice()\n    },\n    async loadIsToBeDispatch() {\n      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())\n      this.formData = response.data.dispatch[0]\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      let invoiceId = []\n      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))\n      this.formData.invoice_id = invoiceId\n      this.loadInvoice()\n      this.assignToBeDispatch = true\n      this.formData['all_selected_dispatch'] = [];\n      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))\n    },\n    async fetchInvoices () {\n      let response = await axios.get(`/api/dispatch/invoices`)\n      if (response.data) {\n        this.invoiceList = response.data.invoices\n        if (this.isEdit) {\n          this.loadEditData()\n        }\n        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch\n        if (this.isToBeDispatch.length) {\n          this.loadIsToBeDispatch()\n        }\n      }\n    },\n    async showDispatchPopup (invoice_id, invoices_master_id) {\n      this.change_invoice = true;\n      this.filterInvoice =  this.invoice.map(node=>{\n           let new_node = {};\n            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;\n            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {\n              return new Date(a.created_at) - new Date(b.created_at);\n            });\n           new_node.account_master_id = node.account_master_id;\n           new_node.name = node.master.name;\n           new_node.id = node.id;\n          return new_node;\n      });\n      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);\n      swal({\n        title: this.$t('dispatch.invoice_report_title'),\n        text: this.$t('dispatch.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printDispatch();\n        } else {\n          this.resetSelectedDispatch()\n          this.resetSelectedToBeDispatch()\n          this.$router.push('/dispatch')\n        }\n        this.change_invoice = false;\n      })\n    },\n    async submitDispatch () {\n      this.$v.formData.$touch()\n      if (this.$v.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return false\n      }\n      try {\n        this.isLoading = true\n        let response = null;\n        if (this.isEdit) {\n          if (this.assignToBeDispatch) {\n            response = await this.updateToBeDispatch(this.formData)\n          } else {\n            response = await this.updateDispatch(this.formData)\n          }\n        } else {\n          response = await this.addDispatch(this.formData)\n        }\n        if (response.data) {\n          this.isLoading = false\n          if (this.isEdit) {\n            window.toastr['success'](this.$tc('dispatch.updated_message'))\n          } else {\n            window.toastr['success'](this.$tc('dispatch.created_message'))\n          }\n          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Create.vue"],"names":[],"mappings":";AA0GA;EACA,WAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,mBAAA;EACA,yBAAA;EACA,sBAAA;EACA,mBAAA;EACA,qBAAA;EACA,0BAAA;EACA,eAAA;EACA,gBAAA;EACA,eAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/dispatch\">{{ $tc('dispatch.dispatch',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col col-12 col-md-12 col-lg-6\">\n        <div class=\"card\">\n          <form action=\"\" @submit.prevent=\"submitDispatch\">\n            <div class=\"card-body\" id=\"to_print\">\n              <div class=\"form-group\" v-if=\"invoiceList && invoiceList.length && !change_invoice\">\n                <label class=\"form-label\">{{ $t('receipts.invoice') }}</label>\n                <base-select\n                  v-model=\"invoice\"\n                  :multiple=\"true\"\n                  :show-pointer=\"false\"\n                  :options=\"isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :allow-empty=\"true\"\n                  :disabled=\"isEdit\"\n                  :custom-label=\"invoiceWithAmount\"\n                  track-by=\"id\"\n                  class=\"multi-select-item\"\n                  @select=\"addInvoice\"\n                  @remove=\"removeInvoice\"\n                />\n              </div>\n              <div class=\"form-group\" v-if=\"change_invoice\">\n                <span class=\"ml-2\" v-for=\"(value, index) in filterInvoice \" :key=\"index\" >\n                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}\n                </span>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.date_time') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.date_time\"\n                  format=\"Y-m-d\"\n                  :invalid=\"$v.formData.date_time.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.date_time.$touch()\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.time') }}</label><span class=\"text-danger\"> *</span>\n                <div class=\"base-date-input\">\n                  <vue-timepicker\n                    v-model=\"formData.time\"\n                    format=\"hh:mm A\"\n                    :hide-clear-button=\"true\"\n                    @change=\"$v.formData.time.$touch()\">\n                    <template v-slot:icon>\n                      <span class=\"vdp-datepicker__calendar-button input-group-prepend\">\n                        <span>\n                          <font-awesome-icon id=\"time-icon\" :icon=\"['fas', 'clock']\"/>\n                        </span>\n                      </span>\n                    </template>\n                  </vue-timepicker>\n                </div>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.person') }}</label>\n                <base-input\n                  v-model.trim=\"formData.person\"\n                  focus\n                  type=\"text\"\n                  name=\"person\"\n                />\n              </div>\n               <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.transport') }}</label>\n                <base-input\n                  v-model.trim=\"formData.transport\"\n                  focus\n                  type=\"text\"\n                  name=\"transport\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <base-button\n                  id=\"submit-dispatch\"\n                  :loading=\"isLoading\"\n                  :disabled=\"isLoading\"\n                  icon=\"save\"\n                  color=\"theme\"\n                  type=\"submit\"\n                  class=\"collapse-button\"\n                >\n                  {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}\n                </base-button>\n              </div>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\nimport VueTimepicker from 'vue2-timepicker'\nimport 'vue2-timepicker/dist/VueTimepicker.css'\nimport getTime from 'date-fns/fp/getTime/index'\n\nexport default {\n  components: { VueTimepicker },\n  mixins: {\n    validationMixin\n  },\n  data () {\n    return {\n      isLoading: false,\n      filterInvoice: [],\n      change_invoice: false,\n      invoice_count: '',\n      title: 'Add Dispatch',\n      formData: {\n        name: '',\n        invoice_id: [],\n        date_time: new Date(),\n        transport: '',\n        person: '',\n        time: '',\n        status: {\n          id: 2,\n          name: 'Sent',\n        },\n        all_selected_dispatch: []\n      },\n      invoice: [],\n      invoiceList: [],\n      assignToBeDispatch: false,\n      isToBeDispatch: []\n    }\n  },\n  computed: {\n    isEdit () {\n      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {\n        return true\n      }\n      return false\n    },\n    formatDate() {\n      if (this.formData.date_time) {\n        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')\n      }\n      return moment().format('DD-MM-YYYY HH:mm:ss');\n    }\n  },\n  created () {\n    this.fetchInvoices()\n    let current = new Date();\n    this.formData.time = current.toLocaleTimeString(\"en-US\", {\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n    });\n  },\n  destroyed() {\n    this.resetSelectedDispatch()\n    this.resetSelectedToBeDispatch()\n  },\n  validations: {\n    formData: {\n      date_time: {\n        required,\n      },\n      time: {\n        required,\n      },\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'addDispatch',\n      'editDispatch',\n      'editToBeDispatch',\n      'dipatchedData',\n      'updateDispatch',\n      'updateToBeDispatch',\n      'resetSelectedDispatch',\n      'resetSelectedToBeDispatch'\n    ]),\n    addInvoice (value) {\n      if (value) {\n        this.formData.invoice_id.push(value.id)\n      }\n    },\n    removeInvoice (value) {\n      let index = this.formData.invoice_id.findIndex(each => each === value.id)\n      if (index !== -1) {\n        this.formData.invoice_id.splice(index, 1)\n      }\n    },\n    invoiceWithAmount ({ invoice_number, due_amount, master}) {\n      let invoiceArr = this.invoice;\n      if (! invoiceArr.length) {\n        invoiceArr = this.invoiceList\n      }\n      if (invoiceArr) {\n        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;\n        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`\n      }\n    },\n    loadInvoice() {\n      this.invoice = []\n      this.formData.invoice_id.map(i => {\n        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));\n        this.invoice.push(findFromList);\n      })\n      let current = new Date();\n      this.formData.time = current.toLocaleTimeString(\"en-US\", {\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n      });\n    },\n    printDispatch() {\n      return printJS({\n            onPrintDialogClose: () => {\n              this.$router.push('/dispatch')\n            },\n            printable: 'to_print',\n            type: 'html',\n            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],\n            scanStyles: true,\n            targetStyles: ['*'],\n            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'\n          })\n    },\n    async loadEditData () {\n      let response = await this.editDispatch(this.$route.params.id)\n      this.formData = response.data.dispatch\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      this.loadInvoice()\n    },\n    async loadIsToBeDispatch() {\n      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())\n      this.formData = response.data.dispatch[0]\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      let invoiceId = []\n      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))\n      this.formData.invoice_id = invoiceId\n      this.loadInvoice()\n      this.assignToBeDispatch = true\n      this.formData['all_selected_dispatch'] = [];\n      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))\n    },\n    async fetchInvoices () {\n      let response = await axios.get(`/api/dispatch/invoices`)\n      if (response.data) {\n        this.invoiceList = response.data.invoices\n        if (this.isEdit) {\n          this.loadEditData()\n        }\n        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch\n        if (this.isToBeDispatch.length) {\n          this.loadIsToBeDispatch()\n        }\n      }\n    },\n    async showDispatchPopup (invoice_id, invoices_master_id) {\n      this.change_invoice = true;\n      this.filterInvoice =  this.invoice.map(node=>{\n           let new_node = {};\n            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;\n            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {\n              return new Date(a.created_at) - new Date(b.created_at);\n            });\n           new_node.account_master_id = node.account_master_id;\n           new_node.name = node.master.name;\n           new_node.id = node.id;\n          return new_node;\n      });\n      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);\n      swal({\n        title: this.$t('dispatch.invoice_report_title'),\n        text: this.$t('dispatch.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printDispatch();\n        } else {\n          this.resetSelectedDispatch()\n          this.resetSelectedToBeDispatch()\n          this.$router.push('/dispatch')\n        }\n        this.change_invoice = false;\n      })\n    },\n    async submitDispatch () {\n      this.$v.formData.$touch()\n      if (this.$v.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return false\n      }\n      try {\n        this.isLoading = true\n        let response = null;\n        if (this.isEdit) {\n          if (this.assignToBeDispatch) {\n            response = await this.updateToBeDispatch(this.formData)\n          } else {\n            response = await this.updateDispatch(this.formData)\n          }\n        } else {\n          response = await this.addDispatch(this.formData)\n        }\n        if (response.data) {\n          this.isLoading = false\n          if (this.isEdit) {\n            window.toastr['success'](this.$tc('dispatch.updated_message'))\n          } else {\n            window.toastr['success'](this.$tc('dispatch.created_message'))\n          }\n          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -85898,7 +87631,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Index.vue"],"names":[],"mappings":";AAgfA;EACA,sBAAA;AACA;AACA;EACA,YAAA;AACA;AACA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$tc('dispatch.dispatch', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalDispatch || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n\n        <router-link slot=\"item-title\" to=\"dispatch/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('dispatch.new_dispatch') }}\n          </base-button>\n        </router-link>\n        </div>\n       </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n           <label>{{ $t('general.from') }}</label>\n              <base-date-picker\n                v-model=\"filters.from_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-3\">\n           <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.transport') }} </label>\n            <base-input\n              v-model=\"filters.transport\"\n              type=\"text\"\n              name=\"transport\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>To Be Dispatch</h4>\n        <base-button\n            v-show=\"toBeDispatchedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            :style=\"['position: absolute',' margin-right: 5%']\"\n            right-icon\n            @click=\"printToBeDispatch\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <!-- <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"multipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item> -->\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n          <!-- <span class=\"select-to-be-all-label\">{{ $t('general.select_all') }} </span> -->\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n             <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>Dispatched</h4>\n          <base-button\n            v-show=\"dipatchedCompletedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printDispatched\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('sent')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      id: null,\n      sundryDebtorsList: [],\n      change_invoice: false,\n      breadCrumbLinks:[\n        {\n          url:'dashboard',\n          title:this.$t('general.home'),\n        },\n        {\n          url:'#',\n          title:this.$tc('dispatch.dispatch', 2)\n        }\n      ],\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        date_time: '',\n        status: '',\n        transport: '',\n        from_date: '',\n        to_date: ''\n      },\n      index: null,\n    }\n  },\n  computed: {\n      applyFilter() {\n        if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {\n          return true;\n        }\n        return false;\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'toBeDispatch',\n      'selectedDispatch',\n      'selectedToBeDispatch',\n      'totalDispatch',\n      'selectAllField',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalDispatch && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'dipatchedData',\n      'updateDispatch',\n      'selectAllDispatch',\n      'selectAllToBeDispatch',\n      'selectDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n      'setSelectAllToBeState',\n      'moveMultipleDispatch',\n      'moveMultipleToBeDispatch',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList;\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer.name\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable();\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n       this.filtersApplied = false;\n      this.showFilters=false;\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        status: '',\n        transport: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch (type) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          const ids = 'draft' === type ? this.selectedToBeDispatch : this.selectedDispatch;\n          let res = await this.deleteMultipleDispatch(ids)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    // async multipleDispatch (type) {\n    //   let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));\n    //   let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));\n    //   let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);\n    //   if (type === 'draft') {\n    //     modal_text = this.$tc('dispatch.confirm_dispatch', 2);\n    //   }\n    //   swal({\n    //     title: this.$t('general.are_you_sure'),\n    //     text: modal_text,\n    //     icon: '/assets/icon/paper-plane-solid.svg',\n    //     buttons: true,\n    //     dangerMode: false\n    //   }).then(async (willSend) => {\n    //     if (willSend) {\n    //       if ('sent' === type) {\n    //         let name = '';\n    //         dispatchArray.map(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              return\n    //           }\n    //         });\n    //         let res = await this.moveMultipleDispatch(this.selectedDispatch)\n    //         if (res) {\n    //           window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //           window.location.reload()\n    //         } else {\n    //           window.toastr['error'](res.data.message)\n    //         }\n    //       } else {\n    //         let name = '';\n    //         let allowMoving = true;\n    //         let showEdit = [];\n    //         tobeDispatchArray.some(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              allowMoving = false\n    //              return true\n    //           }\n    //           name = i.master.name\n    //           if (!i.person || !i.transport || i.invoices && !i.invoices.length) {\n    //             showEdit.push(i)\n    //             allowMoving = false\n    //           }\n    //         })\n    //         if (showEdit.length) {\n    //           showEdit.map(i => {\n    //             window.open('/dispatch/' + i.id + '/edit', '_blank').focus()\n    //           })\n    //         }\n    //         if (allowMoving) {\n    //           let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)\n    //           if (res) {\n    //             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //             window.location.reload()\n    //           } else {\n    //             window.toastr['error'](res.data.message)\n    //           }\n    //         }\n    //       }\n    //     }\n    //   })\n    // },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id);\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n          id: 2,\n          name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus();\n        } else {\n          let res = await this.updateDispatch(data);\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    setIndex(index) {\n      this.index = index\n    },\n    printToBeDispatch() {\n        printJS({\n          printable: 'to_print_to_be_dispatch',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    },\n    printDispatched() {\n\n        printJS({\n          printable: 'to_print_dispatched',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Index.vue"],"names":[],"mappings":";AAgfA;EACA,sBAAA;AACA;AACA;EACA,YAAA;AACA;AACA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$tc('dispatch.dispatch', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalDispatch || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n\n        <router-link slot=\"item-title\" to=\"dispatch/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('dispatch.new_dispatch') }}\n          </base-button>\n        </router-link>\n        </div>\n       </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n           <label>{{ $t('general.from') }}</label>\n              <base-date-picker\n                v-model=\"filters.from_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-3\">\n           <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.transport') }} </label>\n            <base-input\n              v-model=\"filters.transport\"\n              type=\"text\"\n              name=\"transport\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>To Be Dispatch</h4>\n        <base-button\n            v-show=\"toBeDispatchedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            :style=\"['position: absolute',' margin-right: 5%']\"\n            right-icon\n            @click=\"printToBeDispatch\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <!-- <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"multipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item> -->\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n          <!-- <span class=\"select-to-be-all-label\">{{ $t('general.select_all') }} </span> -->\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n             <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>Dispatched</h4>\n          <base-button\n            v-show=\"dipatchedCompletedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printDispatched\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('sent')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      id: null,\n      sundryDebtorsList: [],\n      change_invoice: false,\n      breadCrumbLinks:[\n        {\n          url:'dashboard',\n          title:this.$t('general.home'),\n        },\n        {\n          url:'#',\n          title:this.$tc('dispatch.dispatch', 2)\n        }\n      ],\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        date_time: '',\n        status: '',\n        transport: '',\n        from_date: '',\n        to_date: ''\n      },\n      index: null,\n    }\n  },\n  computed: {\n      applyFilter() {\n        if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {\n          return true;\n        }\n        return false;\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'toBeDispatch',\n      'selectedDispatch',\n      'selectedToBeDispatch',\n      'totalDispatch',\n      'selectAllField',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalDispatch && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'dipatchedData',\n      'updateDispatch',\n      'selectAllDispatch',\n      'selectAllToBeDispatch',\n      'selectDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n      'setSelectAllToBeState',\n      'moveMultipleDispatch',\n      'moveMultipleToBeDispatch',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList;\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable();\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n       this.filtersApplied = false;\n      this.showFilters=false;\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        status: '',\n        transport: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch (type) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          const ids = 'draft' === type ? this.selectedToBeDispatch : this.selectedDispatch;\n          let res = await this.deleteMultipleDispatch(ids)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    // async multipleDispatch (type) {\n    //   let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));\n    //   let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));\n    //   let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);\n    //   if (type === 'draft') {\n    //     modal_text = this.$tc('dispatch.confirm_dispatch', 2);\n    //   }\n    //   swal({\n    //     title: this.$t('general.are_you_sure'),\n    //     text: modal_text,\n    //     icon: '/assets/icon/paper-plane-solid.svg',\n    //     buttons: true,\n    //     dangerMode: false\n    //   }).then(async (willSend) => {\n    //     if (willSend) {\n    //       if ('sent' === type) {\n    //         let name = '';\n    //         dispatchArray.map(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              return\n    //           }\n    //         });\n    //         let res = await this.moveMultipleDispatch(this.selectedDispatch)\n    //         if (res) {\n    //           window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //           window.location.reload()\n    //         } else {\n    //           window.toastr['error'](res.data.message)\n    //         }\n    //       } else {\n    //         let name = '';\n    //         let allowMoving = true;\n    //         let showEdit = [];\n    //         tobeDispatchArray.some(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              allowMoving = false\n    //              return true\n    //           }\n    //           name = i.master.name\n    //           if (!i.person || !i.transport || i.invoices && !i.invoices.length) {\n    //             showEdit.push(i)\n    //             allowMoving = false\n    //           }\n    //         })\n    //         if (showEdit.length) {\n    //           showEdit.map(i => {\n    //             window.open('/dispatch/' + i.id + '/edit', '_blank').focus()\n    //           })\n    //         }\n    //         if (allowMoving) {\n    //           let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)\n    //           if (res) {\n    //             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //             window.location.reload()\n    //           } else {\n    //             window.toastr['error'](res.data.message)\n    //           }\n    //         }\n    //       }\n    //     }\n    //   })\n    // },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id);\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n          id: 2,\n          name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus();\n        } else {\n          let res = await this.updateDispatch(data);\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    setIndex(index) {\n      this.index = index\n    },\n    printToBeDispatch() {\n        printJS({\n          printable: 'to_print_to_be_dispatch',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    },\n    printDispatched() {\n\n        printJS({\n          printable: 'to_print_dispatched',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -85925,7 +87658,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.table-actions[data-v-91dcb660] {\n  height: 55px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Index.vue"],"names":[],"mappings":";AAm3BA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$tc('dispatch.dispatch', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalDispatch || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n\n        <router-link slot=\"item-title\" to=\"dispatch/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('dispatch.new_dispatch') }}\n          </base-button>\n        </router-link>\n        </div>\n       </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n           <label>{{ $t('general.from') }}</label>\n              <base-date-picker\n                v-model=\"filters.from_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-3\">\n           <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.transport') }} </label>\n            <base-input\n              v-model=\"filters.transport\"\n              type=\"text\"\n              name=\"transport\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>To Be Dispatch</h4>\n        <base-button\n            v-show=\"toBeDispatchedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            :style=\"['position: absolute',' margin-right: 5%']\"\n            right-icon\n            @click=\"printToBeDispatch\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <!-- <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"multipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item> -->\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n          <!-- <span class=\"select-to-be-all-label\">{{ $t('general.select_all') }} </span> -->\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n             <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>Dispatched</h4>\n          <base-button\n            v-show=\"dipatchedCompletedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printDispatched\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('sent')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      id: null,\n      sundryDebtorsList: [],\n      change_invoice: false,\n      breadCrumbLinks:[\n        {\n          url:'dashboard',\n          title:this.$t('general.home'),\n        },\n        {\n          url:'#',\n          title:this.$tc('dispatch.dispatch', 2)\n        }\n      ],\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        date_time: '',\n        status: '',\n        transport: '',\n        from_date: '',\n        to_date: ''\n      },\n      index: null,\n    }\n  },\n  computed: {\n      applyFilter() {\n        if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {\n          return true;\n        }\n        return false;\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'toBeDispatch',\n      'selectedDispatch',\n      'selectedToBeDispatch',\n      'totalDispatch',\n      'selectAllField',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalDispatch && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'dipatchedData',\n      'updateDispatch',\n      'selectAllDispatch',\n      'selectAllToBeDispatch',\n      'selectDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n      'setSelectAllToBeState',\n      'moveMultipleDispatch',\n      'moveMultipleToBeDispatch',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList;\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer.name\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable();\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n       this.filtersApplied = false;\n      this.showFilters=false;\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        status: '',\n        transport: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch (type) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          const ids = 'draft' === type ? this.selectedToBeDispatch : this.selectedDispatch;\n          let res = await this.deleteMultipleDispatch(ids)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    // async multipleDispatch (type) {\n    //   let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));\n    //   let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));\n    //   let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);\n    //   if (type === 'draft') {\n    //     modal_text = this.$tc('dispatch.confirm_dispatch', 2);\n    //   }\n    //   swal({\n    //     title: this.$t('general.are_you_sure'),\n    //     text: modal_text,\n    //     icon: '/assets/icon/paper-plane-solid.svg',\n    //     buttons: true,\n    //     dangerMode: false\n    //   }).then(async (willSend) => {\n    //     if (willSend) {\n    //       if ('sent' === type) {\n    //         let name = '';\n    //         dispatchArray.map(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              return\n    //           }\n    //         });\n    //         let res = await this.moveMultipleDispatch(this.selectedDispatch)\n    //         if (res) {\n    //           window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //           window.location.reload()\n    //         } else {\n    //           window.toastr['error'](res.data.message)\n    //         }\n    //       } else {\n    //         let name = '';\n    //         let allowMoving = true;\n    //         let showEdit = [];\n    //         tobeDispatchArray.some(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              allowMoving = false\n    //              return true\n    //           }\n    //           name = i.master.name\n    //           if (!i.person || !i.transport || i.invoices && !i.invoices.length) {\n    //             showEdit.push(i)\n    //             allowMoving = false\n    //           }\n    //         })\n    //         if (showEdit.length) {\n    //           showEdit.map(i => {\n    //             window.open('/dispatch/' + i.id + '/edit', '_blank').focus()\n    //           })\n    //         }\n    //         if (allowMoving) {\n    //           let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)\n    //           if (res) {\n    //             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //             window.location.reload()\n    //           } else {\n    //             window.toastr['error'](res.data.message)\n    //           }\n    //         }\n    //       }\n    //     }\n    //   })\n    // },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id);\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n          id: 2,\n          name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus();\n        } else {\n          let res = await this.updateDispatch(data);\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    setIndex(index) {\n      this.index = index\n    },\n    printToBeDispatch() {\n        printJS({\n          printable: 'to_print_to_be_dispatch',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    },\n    printDispatched() {\n\n        printJS({\n          printable: 'to_print_dispatched',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.table-actions[data-v-91dcb660] {\n  height: 55px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Index.vue"],"names":[],"mappings":";AAm3BA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$tc('dispatch.dispatch', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalDispatch || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n\n        <router-link slot=\"item-title\" to=\"dispatch/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('dispatch.new_dispatch') }}\n          </base-button>\n        </router-link>\n        </div>\n       </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n           <label>{{ $t('general.from') }}</label>\n              <base-date-picker\n                v-model=\"filters.from_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-3\">\n           <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.transport') }} </label>\n            <base-input\n              v-model=\"filters.transport\"\n              type=\"text\"\n              name=\"transport\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>To Be Dispatch</h4>\n        <base-button\n            v-show=\"toBeDispatchedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            :style=\"['position: absolute',' margin-right: 5%']\"\n            right-icon\n            @click=\"printToBeDispatch\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <!-- <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"multipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item> -->\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n          <!-- <span class=\"select-to-be-all-label\">{{ $t('general.select_all') }} </span> -->\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n             <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>Dispatched</h4>\n          <base-button\n            v-show=\"dipatchedCompletedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printDispatched\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('sent')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      id: null,\n      sundryDebtorsList: [],\n      change_invoice: false,\n      breadCrumbLinks:[\n        {\n          url:'dashboard',\n          title:this.$t('general.home'),\n        },\n        {\n          url:'#',\n          title:this.$tc('dispatch.dispatch', 2)\n        }\n      ],\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        date_time: '',\n        status: '',\n        transport: '',\n        from_date: '',\n        to_date: ''\n      },\n      index: null,\n    }\n  },\n  computed: {\n      applyFilter() {\n        if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {\n          return true;\n        }\n        return false;\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'toBeDispatch',\n      'selectedDispatch',\n      'selectedToBeDispatch',\n      'totalDispatch',\n      'selectAllField',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalDispatch && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'dipatchedData',\n      'updateDispatch',\n      'selectAllDispatch',\n      'selectAllToBeDispatch',\n      'selectDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n      'setSelectAllToBeState',\n      'moveMultipleDispatch',\n      'moveMultipleToBeDispatch',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList;\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable();\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n       this.filtersApplied = false;\n      this.showFilters=false;\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        status: '',\n        transport: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch (type) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          const ids = 'draft' === type ? this.selectedToBeDispatch : this.selectedDispatch;\n          let res = await this.deleteMultipleDispatch(ids)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    // async multipleDispatch (type) {\n    //   let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));\n    //   let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));\n    //   let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);\n    //   if (type === 'draft') {\n    //     modal_text = this.$tc('dispatch.confirm_dispatch', 2);\n    //   }\n    //   swal({\n    //     title: this.$t('general.are_you_sure'),\n    //     text: modal_text,\n    //     icon: '/assets/icon/paper-plane-solid.svg',\n    //     buttons: true,\n    //     dangerMode: false\n    //   }).then(async (willSend) => {\n    //     if (willSend) {\n    //       if ('sent' === type) {\n    //         let name = '';\n    //         dispatchArray.map(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              return\n    //           }\n    //         });\n    //         let res = await this.moveMultipleDispatch(this.selectedDispatch)\n    //         if (res) {\n    //           window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //           window.location.reload()\n    //         } else {\n    //           window.toastr['error'](res.data.message)\n    //         }\n    //       } else {\n    //         let name = '';\n    //         let allowMoving = true;\n    //         let showEdit = [];\n    //         tobeDispatchArray.some(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              allowMoving = false\n    //              return true\n    //           }\n    //           name = i.master.name\n    //           if (!i.person || !i.transport || i.invoices && !i.invoices.length) {\n    //             showEdit.push(i)\n    //             allowMoving = false\n    //           }\n    //         })\n    //         if (showEdit.length) {\n    //           showEdit.map(i => {\n    //             window.open('/dispatch/' + i.id + '/edit', '_blank').focus()\n    //           })\n    //         }\n    //         if (allowMoving) {\n    //           let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)\n    //           if (res) {\n    //             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //             window.location.reload()\n    //           } else {\n    //             window.toastr['error'](res.data.message)\n    //           }\n    //         }\n    //       }\n    //     }\n    //   })\n    // },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id);\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n          id: 2,\n          name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus();\n        } else {\n          let res = await this.updateDispatch(data);\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    setIndex(index) {\n      this.index = index\n    },\n    printToBeDispatch() {\n        printJS({\n          printable: 'to_print_to_be_dispatch',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    },\n    printDispatched() {\n\n        printJS({\n          printable: 'to_print_dispatched',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -85952,7 +87685,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ninput.base-prefix-input[data-v-eb7995da]:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-estimate-item[data-v-eb7995da]{\n  border: 0px\n}\n.add-estimate-item[data-v-eb7995da]:focus {\n  border: 1px solid salmon\n}\n.table-responsive[data-v-eb7995da] {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n.heading-1[data-v-eb7995da] {\n    padding: 5px 180px;\n}\n.table-responsive[data-v-eb7995da] {\n    overflow-x: auto !important;\n}\n.multiselect__content-wrapper[data-v-eb7995da] {\n    overflow-x: visible !important;\n}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/estimates/Create.vue"],"names":[],"mappings":";AAuMA;IACA,4CAAA;IACA,iDAAA;AACA;AACA;EACA;AACA;AACA;EACA;AACA;AACA;EACA,oBAAA;AACA;AACA;AACA;IACA,kBAAA;AACA;AACA;IACA,2BAAA;AACA;AACA;IACA,8BAAA;AACA;AACA","sourcesContent":["<template>\n  <div class=\"estimate-create-page main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/estimates\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('estimates.title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form v-if=\"!initLoading\" action=\"\" @submit.prevent=\"submitEstimateData\">\n      <div class=\"page-header\">\n        <h3 v-if=\"$route.name === 'estimates.edit'\" class=\"page-title\">{{ $t('estimates.edit_estimate') }}</h3>\n        <h3 v-else class=\"page-title\">{{ $t('estimates.new_estimate') }} </h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/estimates\">{{ $tc('estimates.estimate', 2) }}</router-link></li>\n          <li v-if=\"$route.name === 'estimates.edit'\" class=\"breadcrumb-item\">{{ $t('estimates.edit_estimate') }}</li>\n          <li v-else class=\"breadcrumb-item\">{{ $t('estimates.new_estimate') }}</li>\n        </ol>\n      </div>\n      <div class=\"row estimate-input-group\">\n        <div class=\"col-md-5 estimate-customer-container\">\n          <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n            <base-select\n              v-model=\"setEstimateDebtor\"\n              :invalid=\"$v.newEstimate.debtors.$error\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"$route.name === 'estimates.edit'\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"name\"\n              track-by=\"id\"\n            />\n            <div v-if=\"$v.newEstimate.debtors.$error\">\n              <span v-if=\"!$v.newEstimate.debtors.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n            </div>\n        </div>\n        <div class=\"col estimate-input\">\n          <div class=\"row\">\n            <div class=\"col collapse-input\">\n              <label>{{ $tc('estimates.estimate',1) }} {{ $t('estimates.date') }}<span class=\"text-danger\"> * </span></label>\n              <input\n                v-model=\"newEstimate.estimate_date\"\n                type=\"date\"\n                data-date=\"\"\n                data-date-format=\"DD/MM/YYYY\"\n                class=\"base-prefix-input\"\n                @change=\"$v.newEstimate.estimate_date.$touch()\"\n                :disabled=\"isEdit\"\n              />\n              <span v-if=\"$v.newEstimate.estimate_date.$error && !$v.newEstimate.estimate_date.required\" class=\"text-danger\"> {{ $t('validation.required') }} </span>\n            </div>\n            <div class=\"col collapse-input\">\n              <label>{{ $t('estimates.estimate_number') }}<span class=\"text-danger\"> * </span></label>\n              <base-prefix-input\n                v-model=\"estimateNumAttribute\"\n                :invalid=\"$v.estimateNumAttribute.$error\"\n                :prefix=\"estimatePrefix\"\n                icon=\"hashtag\"\n                @input=\"$v.estimateNumAttribute.$touch()\"\n                :prefix-width=\"55\"\n                :disabled=\"true\"\n              />\n              <span v-show=\"$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required\" class=\"text-danger mt-1\"> {{ $tc('validation.required') }}  </span>\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"table-responsive\">\n        <table class=\"table item-table\">\n          <colgroup>\n            <col style=\"width: 40%;\">\n            <col style=\"width: 10%;\">\n            <col style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n            <col v-if=\"discountPerInventory === 'YES'\" style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n          </colgroup>\n          <thead class=\"item-table-header\">\n            <tr>\n              <th class=\"text-left\">\n                <span class=\"column-heading heading-1 item-heading\">\n                  {{ $tc('estimates.inventory.title',2) }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.quantity') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.price') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.sale_price') }}\n                </span>\n              </th>\n              <th v-if=\"discountPerInventory === 'YES'\" class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.discount') }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading amount-heading\">\n                  {{ $t('estimates.inventory.amount') }}\n                </span>\n              </th>\n            </tr>\n          </thead>\n          <draggable v-model=\"inventoryBind\" class=\"item-body\" tag=\"tbody\" handle=\".handle\">\n            <invoice-inventory\n              v-for=\"(each, index) in inventoryBind\"\n              ref=\"estimateInventory\"\n              :key=\"each.name+index\"\n              :index=\"index\"\n              :inventory-data=\"each\"\n              :currency=\"currency\"\n              :discount-per-inventory=\"discountPerInventory\"\n              :inventory-type=\"'estimate'\"\n              :inventory-list=\"inventoryListBind\"\n              :inventory-negative=\"inventoryNegative\"\n              @remove=\"removeInventory\"\n              @update=\"updateInventoryBounce\"\n              @inventoryValidate=\"checkInventoryData\"\n              @endlist=\"showEndList\"\n            />\n          </draggable>\n        </table>\n      </div>\n      <button v-if=\"showAddNewInventory\" class=\"add-item-action add-estimate-item\" @click=\"addInventory\">\n        <font-awesome-icon icon=\"shopping-basket\" class=\"mr-2\"/>\n        {{ $t('estimates.add_item') }}\n      </button>\n      <button v-if=\"showEndOfList\" @click=\"removeEndOfList\" class=\"btn btn-primary\" style=\"margin: 10px\">\n        End Of List\n      </button>\n\n      <div class=\"estimate-foot\">\n        <div>\n          <label>{{ $t('estimates.notes') }}</label>\n          <base-text-area\n            v-model=\"newEstimate.notes\"\n            rows=\"3\"\n            cols=\"50\"\n            @input=\"$v.newEstimate.notes.$touch()\"\n          />\n          <div v-if=\"$v.newEstimate.notes.$error\">\n            <span v-if=\"!$v.newEstimate.notes.maxLength\" class=\"text-danger\">{{ $t('validation.notes_maxlength') }}</span>\n          </div>\n        </div>\n\n        <div class=\"estimate-total\">\n          <div class=\"section\">\n            <label class=\"estimate-label\">{{ $t('estimates.quantity') }}</label>\n            <label class=\"\">\n              <div v-html=\"totalQuantity(inventoryBind)\" />\n            </label>\n          </div>\n          <div class=\"section\">\n            <label class=\"estimate-label\">{{ $t('estimates.sub_total') }}</label>\n            <label class=\"estimate-amount\">\n              <span v-html=\"$utils.formatMoney(subtotal, currency)\" />\n            </label>\n          </div>\n\n          <div class=\"section border-top mt-3\">\n            <label class=\"estimate-label\">{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label>\n            <label class=\"estimate-amount total\">\n              <span v-html=\"$utils.formatMoney(total, currency)\" />\n            </label>\n          </div>\n        </div>\n      </div>\n      <div class=\"page-actions row\">\n          <!-- <a v-if=\"$route.name === 'estimates.edit'\" :href=\"`/estimates/pdf/${newEstimate.unique_hash}`\" target=\"_blank\" class=\"mr-3 estimate-action-btn base-button btn btn-outline-primary default-size\" outline color=\"theme\">\n            {{ $t('general.view_pdf') }}\n          </a> -->\n          <base-button\n            :loading=\"isLoading\"\n            :disabled=\"isLoading\"\n            icon=\"save\"\n            color=\"theme\"\n            class=\"estimate-action-btn\"\n            type=\"submit\">\n            {{ $t('estimates.save_estimate') }}\n          </base-button>\n        </div>\n    </form>\n    <base-loader v-else />\n  </div>\n</template>\n<style scoped>\ninput.base-prefix-input:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-estimate-item{\n  border: 0px\n}\n.add-estimate-item:focus {\n  border: 1px solid salmon\n}\n.table-responsive {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n  .heading-1 {\n    padding: 5px 180px;\n  }\n  .table-responsive {\n    overflow-x: auto !important;\n  }\n  .multiselect__content-wrapper {\n    overflow-x: visible !important;\n  }\n}\n</style>\n<script>\nimport draggable from 'vuedraggable'\nimport MultiSelect from 'vue-multiselect'\nimport InvoiceInventory from '../invoices/Inventory'\nimport EstimateStub from '../../stub/estimate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport { validationMixin } from 'vuelidate'\nimport Guid from 'guid'\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: {\n    MultiSelect,\n    draggable,\n    InvoiceInventory\n  },\n  mixins: [validationMixin],\n  data () {\n    return {\n      newEstimate: {\n        estimate_date: null,\n        estimate_number: null,\n        user_id: null,\n        estimate_template_id: 1,\n        sub_total: null,\n        total: null,\n        notes: null,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        items: [{\n          ...EstimateStub,\n        }],\n        debtors: '',\n      },\n      customers: [],\n      inventoryList: [],\n      estimateTemplates: [],\n      selectedCurrency: '',\n      discountPerInventory: null,\n      initLoading: false,\n      isLoading: false,\n      maxDiscount: 0,\n      estimatePrefix: null,\n      estimateNumAttribute: null,\n      role: this.$store.state.user.currentUser.role,\n      sundryDebtorsList: [], //List of Sundry Debitor name\n      isEdit: false,\n      url: null,\n      siteURL: null,\n      showAddNewInventory: true,\n      showEndOfList: false,\n      inventoryNegative: false,\n    }\n  },\n  validations () {\n    return {\n      newEstimate: {\n        estimate_date: {\n          required\n        },\n        notes: {\n          maxLength: maxLength(255)\n        },\n        debtors: {\n          required\n        }\n      },\n      estimateNumAttribute: {\n        required\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrency'\n    ]),\n    ...mapGetters('estimate', [\n      'getTemplateId',\n      //'selectedCustomer'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    currency () {\n      return this.selectedCurrency\n    },\n    subtotalWithDiscount () {\n      let total = this.subtotal\n      if (this.newEstimate.discount_val) {\n        total = this.subtotal - this.newEstimate.discount_val\n      }\n      return this.roundMoney(total)\n    },\n    total () {\n      return this.roundMoney(this.subtotalWithDiscount)\n    },\n    subtotal () {\n      let inventory = this.newEstimate.items\n      if (this.$route.name === 'estimates.edit') {\n        inventory = this.newEstimate.items\n      }\n      if (inventory && inventory.length) {\n        const sum = inventory.reduce(function (a, b) {\n          return a + b['total']\n        }, 0)\n        return this.roundMoney(sum)\n      }\n      return 0\n    },\n    discount: {\n      get: function () {\n        return this.newEstimate.discount\n      },\n      set: function (newValue) {\n        if (this.newEstimate.discount_type === 'percentage') {\n          this.newEstimate.discount_val = (this.subtotal * newValue)\n        } else {\n          this.newEstimate.discount_val = newValue\n        }\n        this.newEstimate.discount = newValue\n      }\n    },\n    setEstimateDebtor: {\n      cache: false,\n      get() {\n        return this.newEstimate.debtors\n      },\n      set(value) {\n        //this.searchDebtorRefNumber(value)\n        this.newEstimate.debtors = value\n      },\n    },\n    inventoryBind() {\n      let invent = this.newEstimate.items\n      if (this.$route.name === 'estimates.edit') {\n        invent = this.newEstimate.items\n      }\n      return invent\n    },\n    inventoryListBind() {\n      return this.$store.state.inventory.inventories\n    }\n  },\n  watch: {\n    subtotal (newValue) {\n      if (this.newEstimate.discount_type === 'percentage') {\n        this.newEstimate.discount_val = (this.newEstimate.discount * newValue)\n      }\n    }\n  },\n  created () {\n    this.loadData()\n    this.fetchInitialInventory()\n    this.updateInventoryBounce = _.debounce((data) => {\n      this.updateInventory(data);\n    }, 1500);\n  },\n  methods: {\n    ...mapActions('modal', [\n      'openModal'\n    ]),\n    ...mapActions('estimate', [\n      'addEstimate',\n      'fetchCreateEstimate',\n      'fetchEstimate',\n      'updateEstimate',\n      'fetchReferenceNumber',\n    ]),\n    ...mapActions('inventory', [\n      'fetchAllInventory'\n    ]),\n    roundMoney (value) {\n      const amount = Number(value)\n      if (Number.isNaN(amount)) {\n        return 0\n      }\n      return Math.round((amount + Number.EPSILON) * 100) / 100\n    },\n    totalQuantity(inventory){\n      if (inventory.length) {\n        return inventory.map(i => parseFloat(i.quantity)).reduce((a,b) => a + b)\n      }\n      return 0\n    },\n    async fetchInitialInventory () {\n      await this.fetchAllInventory({\n        limit: 50,\n        filter: {},\n        orderByField: '',\n        orderBy: ''\n      }).then((resp) => {\n        this.inventoryList = resp.data.inventories.data\n      })\n    },\n    async loadData () {\n      if (this.$route.name === 'estimates.edit') {\n        this.initLoading = true\n        let response = await this.fetchEstimate(this.$route.params.id)\n        this.isEdit = true\n        if (response.data) {\n          this.newEstimate = response.data.estimate\n          this.inventoryNegative = response.data.inventory_negative\n          this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')\n          this.discountPerInventory = response.data.discount_per_inventory\n          this.selectedCurrency = this.defaultCurrency\n          this.estimateTemplates = response.data.estimateTemplates\n          this.estimatePrefix = response.data.estimate_prefix\n          this.estimateNumAttribute = response.data.estimateNumber\n          this.newEstimate.debtors = response.data.sundryDebtorsList[0]\n        }\n        this.initLoading = false\n        return\n      }\n\n      this.initLoading = true\n      let response = await this.fetchCreateEstimate()\n      if (response.data) {\n        this.discountPerInventory = response.data.discount_per_inventory\n        this.selectedCurrency = this.defaultCurrency\n        this.estimateTemplates = response.data.estimateTemplates\n        this.newEstimate.estimate_date = response.data.estimate_today_date\n        this.inventoryNegative = response.data.inventory_negative\n        this.estimatePrefix = response.data.estimate_prefix\n        this.estimateNumAttribute = response.data.nextEstimateNumberAttribute\n        this.sundryDebtorsList = response.data.sundryDebtorsList\n      }\n      this.initLoading = false\n    },\n    openTemplateModal () {\n      this.openModal({\n        'title': this.$t('general.choose_template'),\n        'componentName': 'EstimateTemplate',\n        'data': this.estimateTemplates\n      })\n    },\n    addInventory () {\n      this.inventoryBind.push({...EstimateStub})\n      this.$nextTick(() => {\n        this.$refs.estimateInventory[this.inventoryBind.length-1].$el.focus()\n        this.$refs.estimateInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()\n      })\n    },\n    removeInventory (index) {\n      this.inventoryBind.splice(index, 1)\n      this.inventoryBind.filter(i => i).map((each, key) => {\n        each['index'] = key\n        this.updateInventory(each)\n      })\n    },\n    updateInventory (data) {\n      if (data.inventory && !data.inventory.inventory_id) {\n        return false\n      }\n      Object.assign(this.inventoryBind[data.index], {...data.inventory})\n      this.$nextTick(() => {\n        this.$refs.estimateInventory[data.index].$el.focus()\n        if (data.updatingInput === 'sale_price') {\n          this.$refs.estimateInventory[data.index].$children[3].$refs.baseInput.focus()\n        }\n        if (data.updatingInput === 'quantity') {\n          this.$refs.estimateInventory[data.index].$children[1].$refs.baseInput.focus()\n        }\n      })\n\n    },\n    submitEstimateData () {\n      if (!this.checkValid()) {\n        return false\n      }\n      this.newEstimate.estimate_number = this.estimatePrefix + this.estimateNumAttribute\n\n      let data = {\n        ...this.newEstimate,\n        estimate_date: moment(this.newEstimate.estimate_date).format('DD/MM/YYYY'),\n        sub_total: this.subtotal,\n        total: this.total,\n        user_id: this.user.id,\n        estimate_template_id: this.getTemplateId,\n      }\n      if (this.$route.name === 'estimates.edit') {\n        this.submitUpdate(data)\n        return\n      }\n\n      this.submitSave(data)\n    },\n    reset() {\n      setTimeout(() => {\n        window.location.reload()\n        this.isLoading = false\n      }, 2000)\n    },\n    async showEstimatePopup (estimate_id) {\n      swal({\n        title: this.$t('estimates.estimate_report_title'),\n        text: this.$t('estimates.estimate_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.siteURL = `/reports/estimate/${estimate_id}`\n          this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n\n          printJS({\n            printable: this.url,\n            type: 'pdf',\n            onPrintDialogClose: () => {\n              this.reset();\n            }\n          })\n        } else {\n          this.reset()\n        }\n      })\n    },\n    submitSave (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.addEstimate(data).then((res) => {\n        if (res.data) {\n          window.toastr['success'](this.$t('estimates.created_message'))\n          let notificationSound = new Audio(\"/assets/ring.mp3\");\n          notificationSound.play();\n          this.reset()\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n        this.reset()\n      })\n    },\n    submitUpdate (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.updateEstimate(data).then((res) => {\n        if (res.data && res.data.estimate && res.data.estimate.id) {\n          window.toastr['success'](this.$t('estimates.updated_message'))\n          this.isLoading = false\n          //this.showEstimatePopup(res.data.estimate.id)\n          this.reset()\n        }\n        if (res.data.error === 'invalid_due_amount') {\n          this.isLoading = false\n           window.toastr['error'](this.$t('estimates.invalid_due_amount_message'))\n           this.reset()\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          this.reset()\n          return true\n        }\n      })\n    },\n    checkInventoryData (index, isValid) {\n      this.newEstimate.items[index].valid = isValid\n    },\n    checkValid () {\n      this.$v.newEstimate.$touch()\n      window.hub.$emit('checkInventory')\n      let isValid = true\n      this.newEstimate.items.forEach((each) => {\n        if (!each.valid) {\n          isValid = false\n        }\n      })\n\n      if (this.$v.newEstimate.$invalid === false && isValid === true) {\n        isValid = true\n      }\n      return isValid\n    },\n    showEndList(val) {\n      this.showAddNewInventory = !val;\n      this.showEndOfList = val;\n      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);\n    },\n    removeEndOfList() {\n      this.showEndOfList = false;\n      this.showAddNewInventory = true;\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ninput.base-prefix-input[data-v-eb7995da]:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-estimate-item[data-v-eb7995da]{\n  border: 0px\n}\n.add-estimate-item[data-v-eb7995da]:focus {\n  border: 1px solid salmon\n}\n.table-responsive[data-v-eb7995da] {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n.heading-1[data-v-eb7995da] {\n    padding: 5px 180px;\n}\n.table-responsive[data-v-eb7995da] {\n    overflow-x: auto !important;\n}\n.multiselect__content-wrapper[data-v-eb7995da] {\n    overflow-x: visible !important;\n}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/estimates/Create.vue"],"names":[],"mappings":";AAiNA;IACA,4CAAA;IACA,iDAAA;AACA;AACA;EACA;AACA;AACA;EACA;AACA;AACA;EACA,oBAAA;AACA;AACA;AACA;IACA,kBAAA;AACA;AACA;IACA,2BAAA;AACA;AACA;IACA,8BAAA;AACA;AACA","sourcesContent":["<template>\n  <div class=\"estimate-create-page main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/estimates\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('estimates.title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form v-if=\"!initLoading\" action=\"\" @submit.prevent=\"submitEstimateData\">\n      <div class=\"page-header\">\n        <h3 v-if=\"$route.name === 'estimates.edit'\" class=\"page-title\">{{ $t('estimates.edit_estimate') }}</h3>\n        <h3 v-else class=\"page-title\">{{ $t('estimates.new_estimate') }} </h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/estimates\">{{ $tc('estimates.estimate', 2) }}</router-link></li>\n          <li v-if=\"$route.name === 'estimates.edit'\" class=\"breadcrumb-item\">{{ $t('estimates.edit_estimate') }}</li>\n          <li v-else class=\"breadcrumb-item\">{{ $t('estimates.new_estimate') }}</li>\n        </ol>\n      </div>\n      <div class=\"row estimate-input-group\">\n        <div class=\"col-md-5 estimate-customer-container\">\n          <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n            <base-select\n              v-model=\"setEstimateDebtor\"\n              :invalid=\"$v.newEstimate.debtors.$error\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"$route.name === 'estimates.edit'\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"name\"\n              track-by=\"id\"\n            />\n            <div v-if=\"$v.newEstimate.debtors.$error\">\n              <span v-if=\"!$v.newEstimate.debtors.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n            </div>\n        </div>\n        <div class=\"col estimate-input\">\n          <div class=\"row\">\n            <div class=\"col collapse-input\">\n              <label>{{ $tc('estimates.estimate',1) }} {{ $t('estimates.date') }}<span class=\"text-danger\"> * </span></label>\n              <input\n                v-model=\"newEstimate.estimate_date\"\n                type=\"date\"\n                data-date=\"\"\n                data-date-format=\"DD/MM/YYYY\"\n                class=\"base-prefix-input\"\n                @change=\"$v.newEstimate.estimate_date.$touch()\"\n                :disabled=\"isEdit\"\n              />\n              <span v-if=\"$v.newEstimate.estimate_date.$error && !$v.newEstimate.estimate_date.required\" class=\"text-danger\"> {{ $t('validation.required') }} </span>\n            </div>\n            <div class=\"col collapse-input\">\n              <label>{{ $t('estimates.estimate_number') }}<span class=\"text-danger\"> * </span></label>\n              <base-prefix-input\n                v-model=\"estimateNumAttribute\"\n                :invalid=\"$v.estimateNumAttribute.$error\"\n                :prefix=\"estimatePrefix\"\n                icon=\"hashtag\"\n                @input=\"$v.estimateNumAttribute.$touch()\"\n                :prefix-width=\"55\"\n                :disabled=\"true\"\n              />\n              <span v-show=\"$v.estimateNumAttribute.$error && !$v.estimateNumAttribute.required\" class=\"text-danger mt-1\"> {{ $tc('validation.required') }}  </span>\n            </div>\n            <div class=\"col collapse-input\">\n              <label>{{ $t('estimates.ref_number') }}</label>\n              <base-prefix-input\n                v-model=\"referenceNumAttribute\"\n                :prefix=\"estimatePrefix\"\n                icon=\"hashtag\"\n                :prefix-width=\"55\"\n                :disabled=\"true\"\n              />\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"table-responsive\">\n        <table class=\"table item-table\">\n          <colgroup>\n            <col style=\"width: 40%;\">\n            <col style=\"width: 10%;\">\n            <col style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n            <col v-if=\"discountPerInventory === 'YES'\" style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n          </colgroup>\n          <thead class=\"item-table-header\">\n            <tr>\n              <th class=\"text-left\">\n                <span class=\"column-heading heading-1 item-heading\">\n                  {{ $tc('estimates.inventory.title',2) }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.quantity') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.price') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.sale_price') }}\n                </span>\n              </th>\n              <th v-if=\"discountPerInventory === 'YES'\" class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('estimates.inventory.discount') }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading amount-heading\">\n                  {{ $t('estimates.inventory.amount') }}\n                </span>\n              </th>\n            </tr>\n          </thead>\n          <draggable v-model=\"inventoryBind\" class=\"item-body\" tag=\"tbody\" handle=\".handle\">\n            <invoice-inventory\n              v-for=\"(each, index) in inventoryBind\"\n              ref=\"estimateInventory\"\n              :key=\"each.name+index\"\n              :index=\"index\"\n              :inventory-data=\"each\"\n              :currency=\"currency\"\n              :discount-per-inventory=\"discountPerInventory\"\n              :inventory-type=\"'estimate'\"\n              :inventory-list=\"inventoryListBind\"\n              :inventory-negative=\"inventoryNegative\"\n              @remove=\"removeInventory\"\n              @update=\"updateInventoryBounce\"\n              @inventoryValidate=\"checkInventoryData\"\n              @endlist=\"showEndList\"\n            />\n          </draggable>\n        </table>\n      </div>\n      <button v-if=\"showAddNewInventory\" class=\"add-item-action add-estimate-item\" @click=\"addInventory\">\n        <font-awesome-icon icon=\"shopping-basket\" class=\"mr-2\"/>\n        {{ $t('estimates.add_item') }}\n      </button>\n      <button v-if=\"showEndOfList\" @click=\"removeEndOfList\" class=\"btn btn-primary\" style=\"margin: 10px\">\n        End Of List\n      </button>\n\n      <div class=\"estimate-foot\">\n        <div>\n          <label>{{ $t('estimates.notes') }}</label>\n          <base-text-area\n            v-model=\"newEstimate.notes\"\n            rows=\"3\"\n            cols=\"50\"\n            @input=\"$v.newEstimate.notes.$touch()\"\n          />\n          <div v-if=\"$v.newEstimate.notes.$error\">\n            <span v-if=\"!$v.newEstimate.notes.maxLength\" class=\"text-danger\">{{ $t('validation.notes_maxlength') }}</span>\n          </div>\n        </div>\n\n        <div class=\"estimate-total\">\n          <div class=\"section\">\n            <label class=\"estimate-label\">{{ $t('estimates.quantity') }}</label>\n            <label class=\"\">\n              <div v-html=\"totalQuantity(inventoryBind)\" />\n            </label>\n          </div>\n          <div class=\"section\">\n            <label class=\"estimate-label\">{{ $t('estimates.sub_total') }}</label>\n            <label class=\"estimate-amount\">\n              ₹ {{ subtotal }}\n            </label>\n          </div>\n\n          <div class=\"section border-top mt-3\">\n            <label class=\"estimate-label\">{{ $t('estimates.total') }} {{ $t('estimates.amount') }}:</label>\n            <label class=\"estimate-amount total\">\n              ₹ {{ total }}\n            </label>\n          </div>\n        </div>\n      </div>\n      <div class=\"page-actions row\">\n          <!-- <a v-if=\"$route.name === 'estimates.edit'\" :href=\"`/estimates/pdf/${newEstimate.unique_hash}`\" target=\"_blank\" class=\"mr-3 estimate-action-btn base-button btn btn-outline-primary default-size\" outline color=\"theme\">\n            {{ $t('general.view_pdf') }}\n          </a> -->\n          <base-button\n            :loading=\"isLoading\"\n            :disabled=\"isLoading\"\n            icon=\"save\"\n            color=\"theme\"\n            class=\"estimate-action-btn\"\n            type=\"submit\">\n            {{ $t('estimates.save_estimate') }}\n          </base-button>\n        </div>\n    </form>\n    <base-loader v-else />\n  </div>\n</template>\n<style scoped>\ninput.base-prefix-input:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-estimate-item{\n  border: 0px\n}\n.add-estimate-item:focus {\n  border: 1px solid salmon\n}\n.table-responsive {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n  .heading-1 {\n    padding: 5px 180px;\n  }\n  .table-responsive {\n    overflow-x: auto !important;\n  }\n  .multiselect__content-wrapper {\n    overflow-x: visible !important;\n  }\n}\n</style>\n<script>\nimport draggable from 'vuedraggable'\nimport MultiSelect from 'vue-multiselect'\nimport InvoiceInventory from '../invoices/Inventory'\nimport EstimateStub from '../../stub/estimate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport { validationMixin } from 'vuelidate'\nimport Guid from 'guid'\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: {\n    MultiSelect,\n    draggable,\n    InvoiceInventory\n  },\n  mixins: [validationMixin],\n  data () {\n    return {\n      newEstimate: {\n        estimate_date: null,\n        estimate_number: null,\n        reference_number: null,\n        user_id: null,\n        estimate_template_id: 1,\n        sub_total: null,\n        total: null,\n        notes: null,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        items: [{\n          ...EstimateStub,\n        }],\n        debtors: '',\n      },\n      customers: [],\n      inventoryList: [],\n      estimateTemplates: [],\n      selectedCurrency: '',\n      discountPerInventory: null,\n      initLoading: false,\n      isLoading: false,\n      maxDiscount: 0,\n      estimatePrefix: null,\n      estimateNumAttribute: null,\n      role: this.$store.state.user.currentUser.role,\n      sundryDebtorsList: [], //List of Sundry Debitor name\n      isEdit: false,\n      url: null,\n      siteURL: null,\n      showAddNewInventory: true,\n      showEndOfList: false,\n      inventoryNegative: false,\n    }\n  },\n  validations () {\n    return {\n      newEstimate: {\n        estimate_date: {\n          required\n        },\n        notes: {\n          maxLength: maxLength(255)\n        },\n        debtors: {\n          required\n        }\n      },\n      estimateNumAttribute: {\n        required\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrency'\n    ]),\n    ...mapGetters('estimate', [\n      'getTemplateId',\n      //'selectedCustomer'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    currency () {\n      return this.selectedCurrency\n    },\n    subtotalWithDiscount () {\n      if (this.newEstimate.discount_val) {\n        return this.subtotal - this.newEstimate.discount_val\n      }\n      return this.subtotal\n    },\n    total () {\n      return this.subtotalWithDiscount\n    },\n    subtotal () {\n      let inventory = this.newEstimate.items\n      if (this.$route.name === 'estimates.edit') {\n        inventory = this.newEstimate.items\n      }\n      if (inventory && inventory.length) {\n        return inventory.reduce(function (a, b) {\n                return a + b['total']\n              }, 0)\n      }\n      return 0\n    },\n    discount: {\n      get: function () {\n        return this.newEstimate.discount\n      },\n      set: function (newValue) {\n        if (this.newEstimate.discount_type === 'percentage') {\n          this.newEstimate.discount_val = (this.subtotal * newValue)\n        } else {\n          this.newEstimate.discount_val = newValue\n        }\n        this.newEstimate.discount = newValue\n      }\n    },\n    setEstimateDebtor: {\n      cache: false,\n      get() {\n        return this.newEstimate.debtors\n      },\n      set(value) {\n        this.searchDebtorRefNumber({\n          id: value && value.id ? value.id : value,\n          estimate_date: this.newEstimate.estimate_date\n        })\n        this.newEstimate.debtors = value\n      },\n    },\n    inventoryBind() {\n      let invent = this.newEstimate.items\n      if (this.$route.name === 'estimates.edit') {\n        invent = this.newEstimate.items\n      }\n      return invent\n    },\n    inventoryListBind() {\n      return this.$store.state.inventory.inventories\n    },\n    referenceNumAttribute: {\n      cache: false,\n      get() {\n        if (this.newEstimate.reference_number && -1 !== this.newEstimate.reference_number.indexOf('-')) {\n          return this.newEstimate.reference_number.split('-').pop()\n        }\n        return this.newEstimate.reference_number\n      },\n      set(value) {\n        this.newEstimate.reference_number = value\n      }\n    }\n  },\n  watch: {\n    subtotal (newValue) {\n      if (this.newEstimate.discount_type === 'percentage') {\n        this.newEstimate.discount_val = (this.newEstimate.discount * newValue)\n      }\n    },\n    'newEstimate.estimate_date' () {\n      if (this.newEstimate.debtors && this.$route.name !== 'estimates.edit') {\n        this.searchDebtorRefNumber({\n          id: this.newEstimate.debtors.id ? this.newEstimate.debtors.id : this.newEstimate.debtors,\n          estimate_date: this.newEstimate.estimate_date\n        })\n      }\n    }\n  },\n  created () {\n    this.loadData()\n    this.fetchInitialInventory()\n    this.updateInventoryBounce = _.debounce((data) => {\n      this.updateInventory(data);\n    }, 1500);\n  },\n  methods: {\n    ...mapActions('modal', [\n      'openModal'\n    ]),\n    ...mapActions('estimate', [\n      'addEstimate',\n      'fetchCreateEstimate',\n      'fetchEstimate',\n      'updateEstimate',\n      'fetchReferenceNumber',\n    ]),\n    ...mapActions('inventory', [\n      'fetchAllInventory'\n    ]),\n    totalQuantity(inventory){\n      if (inventory.length) {\n        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)\n      }\n      return 0\n    },\n    async fetchInitialInventory () {\n      await this.fetchAllInventory({\n        limit: 50,\n        filter: {},\n        orderByField: '',\n        orderBy: ''\n      }).then((resp) => {\n        this.inventoryList = resp.data.inventories.data\n      })\n    },\n    async loadData () {\n      if (this.$route.name === 'estimates.edit') {\n        this.initLoading = true\n        let response = await this.fetchEstimate(this.$route.params.id)\n        this.isEdit = true\n        if (response.data) {\n          this.newEstimate = response.data.estimate\n          this.inventoryNegative = response.data.inventory_negative\n          this.newEstimate.estimate_date = moment(response.data.estimate.estimate_date).format('YYYY-MM-DD')\n          this.discountPerInventory = response.data.discount_per_inventory\n          this.selectedCurrency = this.defaultCurrency\n          this.estimateTemplates = response.data.estimateTemplates\n          this.estimatePrefix = response.data.estimate_prefix\n          this.estimateNumAttribute = response.data.estimateNumber\n          this.newEstimate.reference_number = response.data.estimate.reference_number\n          this.newEstimate.debtors = response.data.sundryDebtorsList[0]\n        }\n        this.initLoading = false\n        return\n      }\n\n      this.initLoading = true\n      let response = await this.fetchCreateEstimate()\n      if (response.data) {\n        this.discountPerInventory = response.data.discount_per_inventory\n        this.selectedCurrency = this.defaultCurrency\n        this.estimateTemplates = response.data.estimateTemplates\n        this.newEstimate.estimate_date = response.data.estimate_today_date\n        this.inventoryNegative = response.data.inventory_negative\n        this.estimatePrefix = response.data.estimate_prefix\n        this.estimateNumAttribute = response.data.nextEstimateNumberAttribute\n        this.newEstimate.reference_number = response.data.nextEstimateNumberAttribute\n        this.sundryDebtorsList = response.data.sundryDebtorsList\n      }\n      this.initLoading = false\n    },\n    openTemplateModal () {\n      this.openModal({\n        'title': this.$t('general.choose_template'),\n        'componentName': 'EstimateTemplate',\n        'data': this.estimateTemplates\n      })\n    },\n    addInventory () {\n      this.inventoryBind.push({...EstimateStub})\n      this.$nextTick(() => {\n        this.$refs.estimateInventory[this.inventoryBind.length-1].$el.focus()\n        this.$refs.estimateInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()\n      })\n    },\n    removeInventory (index) {\n      this.inventoryBind.splice(index, 1)\n      this.inventoryBind.filter(i => i).map((each, key) => {\n        each['index'] = key\n        this.updateInventory(each)\n      })\n    },\n    updateInventory (data) {\n      if (data.inventory && !data.inventory.inventory_id) {\n        return false\n      }\n      Object.assign(this.inventoryBind[data.index], {...data.inventory})\n      this.$nextTick(() => {\n        this.$refs.estimateInventory[data.index].$el.focus()\n        if (data.updatingInput === 'sale_price') {\n          this.$refs.estimateInventory[data.index].$children[3].$refs.baseInput.focus()\n        }\n        if (data.updatingInput === 'quantity') {\n          this.$refs.estimateInventory[data.index].$children[1].$refs.baseInput.focus()\n        }\n      })\n\n    },\n    submitEstimateData () {\n      if (!this.checkValid()) {\n        return false\n      }\n      this.newEstimate.estimate_number = this.estimatePrefix + '-' + this.estimateNumAttribute\n      this.newEstimate.reference_number = this.estimatePrefix + '-' + this.referenceNumAttribute\n\n      let data = {\n        ...this.newEstimate,\n        estimate_date: moment(this.newEstimate.estimate_date).format('DD/MM/YYYY'),\n        sub_total: this.subtotal,\n        total: this.total,\n        user_id: this.user.id,\n        estimate_template_id: this.getTemplateId,\n      }\n      if (this.$route.name === 'estimates.edit') {\n        this.submitUpdate(data)\n        return\n      }\n\n      this.submitSave(data)\n    },\n    reset() {\n      setTimeout(() => {\n        window.location.reload()\n        this.isLoading = false\n      }, 2000)\n    },\n    async showEstimatePopup (estimate_id) {\n      swal({\n        title: this.$t('estimates.estimate_report_title'),\n        text: this.$t('estimates.estimate_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.siteURL = `/reports/estimate/${estimate_id}`\n          this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n\n          printJS({\n            printable: this.url,\n            type: 'pdf',\n            onPrintDialogClose: () => {\n              this.reset();\n            }\n          })\n        } else {\n          this.reset()\n        }\n      })\n    },\n    submitSave (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.addEstimate(data).then((res) => {\n        if (res.data) {\n          window.toastr['success'](this.$t('estimates.created_message'))\n          let notificationSound = new Audio(\"/assets/ring.mp3\");\n          notificationSound.play();\n          this.reset()\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n        this.reset()\n      })\n    },\n    submitUpdate (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.updateEstimate(data).then((res) => {\n        if (res.data && res.data.estimate && res.data.estimate.id) {\n          window.toastr['success'](this.$t('estimates.updated_message'))\n          this.isLoading = false\n          //this.showEstimatePopup(res.data.estimate.id)\n          this.reset()\n        }\n        if (res.data.error === 'invalid_due_amount') {\n          this.isLoading = false\n           window.toastr['error'](this.$t('estimates.invalid_due_amount_message'))\n           this.reset()\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          this.reset()\n          return true\n        }\n      })\n    },\n    checkInventoryData (index, isValid) {\n      this.newEstimate.items[index].valid = isValid\n    },\n    checkValid () {\n      this.$v.newEstimate.$touch()\n      window.hub.$emit('checkInventory')\n      let isValid = true\n      this.newEstimate.items.forEach((each) => {\n        if (!each.valid) {\n          isValid = false\n        }\n      })\n\n      if (this.$v.newEstimate.$invalid === false && isValid === true) {\n        isValid = true\n      }\n      return isValid\n    },\n    async searchDebtorRefNumber(data) {\n      this.newEstimate.reference_number = this.estimateNumAttribute\n      try {\n        let response = await this.fetchReferenceNumber({\n          ...data,\n          estimate_date: data.estimate_date ? data.estimate_date : this.newEstimate.estimate_date\n        })\n        if (response.data && response.data.estimate) {\n          this.newEstimate.reference_number = response.data.estimate.reference_number.split('-').pop()\n        }\n      } catch (err) {\n        this.newEstimate.reference_number = this.estimateNumAttribute\n      }\n    },\n    showEndList(val) {\n      this.showAddNewInventory = !val;\n      this.showEndOfList = val;\n      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);\n    },\n    removeEndOfList() {\n      this.showEndOfList = false;\n      this.showAddNewInventory = true;\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86060,7 +87793,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.invoice-create-page .invoice-foot .invoice-total[data-v-3f396602] {\n  display: flex;\n  flex-direction: column;\n  background: #ffffff;\n  min-width: 590px;\n  padding: 15px 20px;\n  border: 1px solid #969696;\n  border-radius: 5px;\n}\ninput.base-prefix-input[data-v-3f396602]:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-invoice-item[data-v-3f396602]{\n  border: 0px\n}\n.add-invoice-item[data-v-3f396602]:focus {\n  border: 1px solid salmon\n}\n.table-responsive[data-v-3f396602] {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n.heading-1[data-v-3f396602] {\n    padding: 5px 180px;\n}\n.table-responsive[data-v-3f396602] {\n    overflow-x: auto !important;\n}\n.multiselect__content-wrapper[data-v-3f396602] {\n    overflow-x: visible !important;\n}\n}\n@media screen and (min-width: 768px) and (max-width: 1030px) {\n.ipad-width[data-v-3f396602] {\n    width: 133%;\n}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/invoices/Create.vue"],"names":[],"mappings":";AA4UA;EACA,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,gBAAA;EACA,kBAAA;EACA,yBAAA;EACA,kBAAA;AACA;AAEA;IACA,4CAAA;IACA,iDAAA;AACA;AACA;EACA;AACA;AACA;EACA;AACA;AACA;EACA,oBAAA;AACA;AACA;AACA;IACA,kBAAA;AACA;AACA;IACA,2BAAA;AACA;AACA;IACA,8BAAA;AACA;AACA;AACA;AACA;IACA,WAAA;AACA;AACA","sourcesContent":["<template>\n  <div class=\"invoice-create-page main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/invoices\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('invoices.title') }}\n          </base-button>\n        </router-link>\n        <router-link slot=\"item-title\" class=\"ml-2 col-xs-2\" to=\"/invoices/bulk\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('invoices.bulk_title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form v-if=\"!initLoading\" action=\"\" @submit.prevent=\"submitInvoiceData\" class=\"ipad-width\">\n      <div class=\"page-header\">\n        <h3 v-if=\"$route.name === 'invoices.edit'\" class=\"page-title\">{{ $t('invoices.edit_invoice') }}</h3>\n        <h3 v-else class=\"page-title\">{{ $t('invoices.new_invoice') }} </h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $tc('invoices.invoice', 2) }}</router-link></li>\n          <li v-if=\"$route.name === 'invoices.edit'\" class=\"breadcrumb-item\">{{ $t('invoices.edit_invoice') }}</li>\n          <li v-else class=\"breadcrumb-item\">{{ $t('invoices.new_invoice') }}</li>\n        </ol>\n      </div>\n      <div class=\"row invoice-input-group\">\n        <div class=\"col-md-6 invoice-customer-container mb-2\">\n          <label class=\"form-label\">{{ $t('invoices.estimate-list') }}</label>\n            <base-select\n              v-model=\"setEstimate\"\n              :options=\"estimateList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"isDisabled || estimateDisabled\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"estimate_number\"\n              track-by=\"id\"\n            />\n        </div>\n        <div class=\"col-md-6 invoice-customer-container mb-2\">\n          <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n            <base-select\n              v-model=\"setInvoiceDebtor\"\n              :invalid=\"$v.newInvoice.debtors.$error\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :name=\"'edit' === urlMode ? 'party' : 'party_name'\"\n              :disabled=\"isDisabled || estimateSelected\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"name\"\n              track-by=\"id\"\n            />\n            <div v-if=\"$v.newInvoice.debtors.$error\">\n              <span v-if=\"!$v.newInvoice.debtors.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n            </div>\n        </div>\n        <div class=\"col-md-4 col-sm-6 collapse-input\">\n          <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class=\"text-danger\"> * </span></label>\n          <input\n            v-model=\"newInvoice.invoice_date\"\n            type=\"date\"\n            data-date=\"\"\n            data-date-format=\"DD/MM/YYYY\"\n            class=\"base-prefix-input\"\n            @change=\"$v.newInvoice.invoice_date.$touch()\"\n            :disabled=\"isDisabled\"\n          />\n          <span v-if=\"$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required\" class=\"text-danger\"> {{ $t('validation.required') }} </span>\n        </div>\n        <div class=\"col-md-4 col-sm-6 collapse-input\">\n          <label>{{ $t('invoices.invoice_number') }}<span class=\"text-danger\"> * </span></label>\n          <base-prefix-input\n            v-model=\"invoiceNumAttribute\"\n            icon=\"hashtag\"\n            :invalid=\"$v.invoiceNumAttribute.$error\"\n            :prefix=\"invoicePrefix\"\n            :prefix-width=\"55\"\n            :disabled=\"true\"\n            @input=\"$v.invoiceNumAttribute.$touch()\"\n          />\n          <span v-show=\"$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required\" class=\"text-danger mt-1\"> {{ $tc('validation.required') }}  </span>\n        </div>\n        <div class=\"col-md-4 col-sm-6 collapse-input\">\n          <label>{{ $t('invoices.ref_number') }}</label>\n          <base-prefix-input\n            v-model=\"referenceNumAttribute\"\n            icon=\"hashtag\"\n            :invalid=\"$v.referenceNumAttribute.$error\"\n            :prefix=\"referencePrefix\"\n            :prefix-width=\"0\"\n            :disabled=\"true\"\n            @input=\"$v.referenceNumAttribute.$touch()\"\n          />\n          <div v-if=\"$v.referenceNumAttribute.$error\" class=\"text-danger\">{{ $tc('validation.ref_number_required') }}</div>\n        </div>\n      </div>\n      <div class=\"table-responsive\">\n        <table class=\"table item-table\">\n          <colgroup>\n            <col style=\"width: 40%;\">\n            <col style=\"width: 10%;\">\n            <col style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n            <col v-if=\"discountPerInventory === 'YES'\" style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n          </colgroup>\n          <thead class=\"item-table-header\">\n            <tr>\n              <th class=\"text-left\">\n                <span class=\"column-heading heading-1 item-heading\">\n                  {{ $tc('invoices.inventory.title',2) }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.quantity') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.price') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.sale_price') }}\n                </span>\n              </th>\n              <th v-if=\"discountPerInventory === 'YES'\" class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.discount') }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading amount-heading\">\n                  {{ $t('invoices.inventory.amount') }}\n                </span>\n              </th>\n            </tr>\n          </thead>\n          <draggable v-model=\"inventoryBind\" class=\"item-body\" tag=\"tbody\" handle=\".handle\">\n            <invoice-inventory\n              v-for=\"(each, index) in inventoryBind\"\n              ref=\"invoiceInventory\"\n              :key=\"each.name+index+each.quantity\"\n              :index=\"index\"\n              :inventory-data=\"each\"\n              :currency=\"currency\"\n              :discount-per-inventory=\"discountPerInventory\"\n              :is-disable=\"$route.query.d === 'true'\"\n              :inventory-type=\"'invoice'\"\n              :inventory-list=\"inventoryListBind\"\n              :inventory-negative=\"inventoryNegative\"\n              :is-edit=\"$route.name === 'invoices.edit'\"\n              @remove=\"removeInventory\"\n              @update=\"updateInventoryBounce\"\n              @inventoryValidate=\"checkInventoryData\"\n              @endlist=\"showEndList\"\n            />\n          </draggable>\n        </table>\n      </div>\n      <button v-if=\"showAddNewInventory\" class=\"add-item-action add-invoice-item\" :disabled=\"isDisabled\" @click=\"addInventory\">\n        <font-awesome-icon icon=\"shopping-basket\" class=\"mr-2\"/>\n        {{ $t('invoices.add_item') }}\n      </button>\n      <button v-if=\"showEndOfList\" @click=\"removeEndOfList\" class=\"btn btn-primary\" style=\"margin: 10px\">\n        End Of List\n      </button>\n\n      <div class=\"invoice-foot\">\n        <div>\n          <label>{{ $t('invoices.notes') }}</label>\n          <base-text-area\n            v-model=\"newInvoice.notes\"\n            rows=\"3\"\n            cols=\"50\"\n            @input=\"$v.newInvoice.notes.$touch()\"\n          />\n          <div v-if=\"$v.newInvoice.notes.$error\">\n            <span v-if=\"!$v.newInvoice.notes.maxLength\" class=\"text-danger\">{{ $t('validation.notes_maxlength') }}</span>\n          </div>\n        </div>\n\n        <div class=\"invoice-total\">\n          <div class=\"section\">\n            <label class=\"invoice-label\">{{ $t('invoices.quantity') }}</label>\n            <label class=\"\">\n              <div v-html=\"totalQuantity(inventoryBind)\" />\n            </label>\n          </div>\n          <div class=\"section\">\n            <label class=\"invoice-label\">{{ $t('invoices.sub_total') }}</label>\n            <label class=\"invoice-amount\">\n              <span v-html=\"$utils.formatMoney(subtotal, currency)\" />\n            </label>\n\n          </div>\n          <div class=\"section\">\n            <div class=\"row align-items-center\">\n              <div class=\"pl-3\">\n              <label class=\"form-label\"><strong>{{ $t('invoices.add') }}</strong></label>\n              </div>\n              <div class=\"pl-3 mr-5\">\n                <base-select\n                v-model=\"income_ledger\"\n                :options=\"incomeLedgerList\"\n                :required=\"'required'\"\n                :searchable=\"true\"\n                :show-labels=\"false\"\n                :allow-empty=\"false\"\n                :placeholder=\"$t('receipts.select_a_list')\"\n                label=\"name\"\n                track-by=\"id\"\n              />\n              </div>\n\n            </div>\n            <div>\n              <base-input\n                style=\"width:100px\"\n                v-model=\"income_ledger_value\"\n                type=\"number\"\n                min=\"0\"\n                step=\"0.01\"\n                input-class=\"item-discount\"\n              />\n            </div>\n          </div>\n          <div class=\"section\">\n           <div class=\"row align-items-center\">\n            <div class=\"pl-3 mb-2\">\n             <label class=\"form-label\"><strong>{{ $t('invoices.less') }}</strong></label>\n           </div>\n             <div class=\"pl-3 mb-2 mr-5\">\n            <base-select\n              v-model=\"expense_ledger\"\n              :options=\"expenseLedgerList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"name\"\n              track-by=\"id\"\n            />\n        </div>\n           </div>\n           <base-input\n              style=\"width:100px\"\n              v-model=\"expense_ledger_value\"\n              type=\"number\"\n              min=\"0\"\n              step=\"0.01\"\n              input-class=\"item-discount\"\n              />\n        </div>\n\n          <div v-if=\"discountPerInventory === 'NO' || discountPerInventory === null\" class=\"section mt-2\">\n            <label class=\"invoice-label\">{{ $t('invoices.discount') }}</label>\n            <div\n              class=\"btn-group discount-drop-down\"\n              role=\"group\"\n            >\n              <base-input\n                v-model=\"discount\"\n                :invalid=\"$v.newInvoice.discount_val.$error\"\n                input-class=\"item-discount\"\n                @input=\"$v.newInvoice.discount_val.$touch()\"\n              />\n              <v-dropdown :show-arrow=\"false\">\n                <button\n                  slot=\"activator\"\n                  type=\"button\"\n                  class=\"btn item-dropdown dropdown-toggle\"\n                  data-toggle=\"dropdown\"\n                  aria-haspopup=\"true\"\n                  aria-expanded=\"false\"\n                >\n                  {{ newInvoice.discount_type == 'fixed' ? currency.symbol : '%' }}\n                </button>\n                <v-dropdown-item>\n                  <a class=\"dropdown-item\" href=\"#\" @click.prevent=\"selectFixed\">\n                    {{ $t('general.fixed') }}\n                  </a>\n                </v-dropdown-item>\n                <v-dropdown-item>\n                  <a class=\"dropdown-item\" href=\"#\" @click.prevent=\"selectPercentage\">\n                    {{ $t('general.percentage') }}\n                  </a>\n                </v-dropdown-item>\n              </v-dropdown>\n            </div>\n          </div>\n\n          <div class=\"section border-top mt-3\">\n            <label class=\"invoice-label\">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>\n            <label class=\"invoice-amount total\">\n              <span v-html=\"$utils.formatMoney(total, currency)\" />\n            </label>\n          </div>\n        </div>\n      </div>\n      <div class=\"page-actions row\" style=\"margin-left: 3px\">\n          <!-- <a v-if=\"$route.name === 'invoices.edit'\" :href=\"`/invoices/pdf/${newInvoice.unique_hash}`\" target=\"_blank\" class=\"mr-3 invoice-action-btn base-button btn btn-outline-primary default-size\" outline color=\"theme\">\n            {{ $t('general.view_pdf') }}\n          </a> -->\n          <base-button\n            :loading=\"isLoading\"\n            :disabled=\"isLoading\"\n            icon=\"save\"\n            color=\"theme\"\n            class=\"invoice-action-btn\"\n            type=\"submit\">\n            {{ $t('invoices.save_invoice') }}\n          </base-button>\n          <br/>\n          <base-button v-if=\"this.$route.name === 'invoices.edit'\" outline color=\"theme\" class=\"report-button ml-2\" @click=\"sendReports()\">\n            {{ $t('reports.send_report') }}\n          </base-button>\n        </div>\n    </form>\n    <base-loader v-else />\n  </div>\n</template>\n<style scoped>\n.invoice-create-page .invoice-foot .invoice-total {\n  display: flex;\n  flex-direction: column;\n  background: #ffffff;\n  min-width: 590px;\n  padding: 15px 20px;\n  border: 1px solid #969696;\n  border-radius: 5px;\n}\n\ninput.base-prefix-input:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-invoice-item{\n  border: 0px\n}\n.add-invoice-item:focus {\n  border: 1px solid salmon\n}\n.table-responsive {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n  .heading-1 {\n    padding: 5px 180px;\n  }\n  .table-responsive {\n    overflow-x: auto !important;\n  }\n  .multiselect__content-wrapper {\n    overflow-x: visible !important;\n  }\n}\n@media screen and (min-width: 768px) and (max-width: 1030px) {\n  .ipad-width {\n    width: 133%;\n  }\n}\n</style>\n<script>\nimport draggable from 'vuedraggable'\nimport MultiSelect from 'vue-multiselect'\nimport InvoiceInventory from './Inventory'\nimport InvoiceStub from '../../stub/invoice'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport { validationMixin } from 'vuelidate'\nimport Guid from 'guid'\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: {\n    InvoiceInventory,\n    MultiSelect,\n    draggable\n  },\n  mixins: [validationMixin],\n  data () {\n    return {\n      newInvoice: {\n        invoice_date: null,\n        invoice_number: null,\n        reference_number: null,\n        user_id: null,\n        invoice_template_id: 1,\n        sub_total: null,\n        total: null,\n        notes: null,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        inventories: [{\n          ...InvoiceStub,\n        }],\n        debtors: '',\n        estimate: '',\n      },\n      customers: [],\n      inventoryList: [],\n      inventoryNegative: false,\n      invoiceTemplates: [],\n      selectedCurrency: '',\n      discountPerInventory: null,\n      initLoading: false,\n      isLoading: false,\n      estimateDisabled: false,\n      maxDiscount: 0,\n      invoicePrefix: null,\n      referencePrefix: null,\n      invoiceNumAttribute: null,\n      role: this.$store.state.user.currentUser.role,\n      sundryDebtorsList: [], //List of Sundry Debitor name\n      estimateList: [], //List of estimates\n      incomeLedgerList: [], //List of income indirect group ledger\n      expenseLedgerList: [], //List of expense indirect group ledger\n      income_ledger: null,\n      expense_ledger: null,\n      expense_ledger_value: 0,\n      income_ledger_value: 0,\n      isDisabled: false,\n      url: null,\n      siteURL: null,\n      showAddNewInventory: true,\n      showEndOfList: false,\n      estimateSelected: false,\n      urlMode: null,\n    }\n  },\n  validations () {\n    return {\n      newInvoice: {\n        invoice_date: {\n          required\n        },\n        discount_val: {\n          between: between(0, this.subtotal)\n        },\n        notes: {\n          maxLength: maxLength(255)\n        },\n        reference_number: {\n          required,\n        },\n        debtors: {\n          required\n        }\n      },\n      invoiceNumAttribute: {\n        required\n      },\n      referenceNumAttribute: {\n        required\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrency'\n    ]),\n    ...mapGetters('invoice', [\n      'getTemplateId',\n      //'selectedCustomer'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    currency () {\n      return this.selectedCurrency\n    },\n    subtotalWithDiscount () {\n      let total = this.subtotal\n      if (this.newInvoice.discount_val) {\n        total = this.subtotal - this.newInvoice.discount_val\n      }\n      if (this.income_ledger_value && !this.expense_ledger_value) {\n        total = this.subtotal + parseFloat(this.income_ledger_value)\n      }\n      if (!this.income_ledger_value && this.expense_ledger_value) {\n        total = this.subtotal - parseFloat(this.expense_ledger_value)\n      }\n      if (this.income_ledger_value && this.expense_ledger_value) {\n        total = this.subtotal + parseFloat(this.income_ledger_value) - parseFloat(this.expense_ledger_value)\n      }\n      return this.roundMoney(total)\n    },\n    total () {\n      return this.roundMoney(this.subtotalWithDiscount)\n    },\n    subtotal () {\n      let inventory = this.newInvoice.inventories;\n      if (inventory.length) {\n        const sum = inventory.reduce(function (a, b) {\n          return a + b['total']\n        }, 0)\n        return this.roundMoney(sum)\n      }\n\n      return 0\n    },\n    discount: {\n      get: function () {\n        return this.newInvoice.discount\n      },\n      set: function (newValue) {\n        if (this.newInvoice.discount_type === 'percentage') {\n          this.newInvoice.discount_val = (this.subtotal * newValue)\n        } else {\n          this.newInvoice.discount_val = newValue\n        }\n        this.newInvoice.discount = newValue\n      }\n    },\n    setInvoiceDebtor: {\n      cache: false,\n      get() {\n        return this.newInvoice.debtors\n      },\n      set(value) {\n        this.searchDebtorRefNumber({'id': value})\n        this.newInvoice.debtors = value\n      },\n    },\n    setEstimate: {\n      cache: false,\n      get() {\n        return this.newInvoice.estimate\n      },\n      set(value) {\n        this.estimateSelected = true\n        this.newInvoice.estimate = value\n        this.getInvoiceFromEstimate()\n      }\n    },\n    inventoryBind() {\n      return this.newInvoice.inventories\n    },\n    inventoryListBind() {\n      return this.$store.state.inventory.inventories\n    },\n    referenceNumAttribute: {\n      cache: false,\n      get() {\n        return this.newInvoice.reference_number\n      },\n      set(value) {\n        this.newInvoice.reference_number = value;\n      }\n    }\n  },\n  watch: {\n    subtotal (newValue) {\n      if (this.newInvoice.discount_type === 'percentage') {\n        this.newInvoice.discount_val = (this.newInvoice.discount * newValue)\n      }\n    }\n  },\n  mounted() {\n    this.urlMode = window.location.pathname.split('/')[3];\n  },\n  created () {\n    this.loadData()\n    this.fetchInitialInventory()\n    this.updateInventoryBounce = _.debounce((data) => {\n      this.updateInventory(data);\n    }, 500);\n  },\n  methods: {\n    ...mapActions('modal', [\n      'openModal'\n    ]),\n    ...mapActions('invoice', [\n      'addInvoice',\n      'fetchCreateInvoice',\n      'getInvoiceEstimate',\n      'fetchInvoice',\n      'updateInvoice',\n      'fetchReferenceNumber',\n    ]),\n    ...mapActions('customer', [\n      'sendReportOnWhatsApp'\n    ]),\n    ...mapActions('inventory', [\n      'fetchAllInventory'\n    ]),\n    roundMoney (value) {\n      const amount = Number(value)\n      if (Number.isNaN(amount)) {\n        return 0\n      }\n      return Math.round((amount + Number.EPSILON) * 100) / 100\n    },\n    totalQuantity(inventory){\n      if (inventory.length) {\n        let invent = 0\n        inventory.forEach((i) => {\n          if (i.quantity) {\n            invent += i.quantity\n          }\n        });\n        return invent;\n      }\n      return 0\n    },\n    getUrlParameters() {\n      return decodeURI(window.location.search)\n          .replace('?', '')\n          .split('&')\n          .map(param => param.split('='))\n          .reduce((values, [key, value]) => {\n              values[key] = value;\n              return values;\n          }, {});\n    },\n    selectFixed () {\n      if (this.newInvoice.discount_type === 'fixed') {\n        return\n      }\n      this.newInvoice.discount_val = this.newInvoice.discount\n      this.newInvoice.discount_type = 'fixed'\n    },\n    selectPercentage () {\n      if (this.newInvoice.discount_type === 'percentage') {\n        return\n      }\n      this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount)\n      this.newInvoice.discount_type = 'percentage'\n    },\n    async fetchInitialInventory () {\n      await this.fetchAllInventory({\n        limit: 50,\n        filter: {},\n        name: '',\n        orderByField: '',\n        orderBy: ''\n      }).then(resp => {\n        this.inventoryList = resp.data.inventories.data\n      })\n    },\n    async loadData () {\n      if (this.$route.name === 'invoices.edit') {\n        this.initLoading = true\n        this.estimateDisabled = true\n        let response = await this.fetchInvoice(this.$route.params.id)\n        if (this.$route.query && this.$route.query.nondis === 'false') {\n          this.isDisabled = true\n        } else {\n          this.isDisabled = false\n        }\n        if (response.data) {\n          this.newInvoice = response.data.invoice\n          this.inventoryNegative = response.data.inventory_negative\n          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')\n          this.discountPerInventory = response.data.discount_per_inventory\n          this.selectedCurrency = this.defaultCurrency\n          this.invoiceTemplates = response.data.invoiceTemplates\n          this.invoicePrefix = response.data.invoice_prefix\n          this.referencePrefix = response.data.reference_prefix\n          this.invoiceNumAttribute = response.data.invoiceNumber\n          this.newInvoice.debtors = response.data.sundryDebtorsList[0]\n          this.sundryDebtorsList = response.data.sundryDebtorsList\n          this.incomeLedgerList = response.data.incomeIndirectLedgers\n          this.expenseLedgerList = response.data.expenseIndirectLedgers\n          if(response.data.InvoiceEstimate.length) {\n            this.newInvoice.estimate = response.data.InvoiceEstimate[0]\n          }\n          this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null\n          this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null\n          this.income_ledger_value = response.data.invoice.indirect_income_value ? response.data.invoice.indirect_income_value : 0\n          this.expense_ledger_value = response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0\n          response.data.estimateList.map(i => {\n            let obj = {}\n            let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);\n            obj['id'] = i.id;\n            obj['total'] = i.total;\n            obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');\n\n            this.estimateList.push(obj)\n          })\n        }\n        this.initLoading = false\n        return\n      }\n\n      this.initLoading = true\n      let response = await this.fetchCreateInvoice()\n      if (response.data) {\n        this.discountPerInventory = response.data.discount_per_inventory\n        this.selectedCurrency = this.defaultCurrency\n        this.invoiceTemplates = response.data.invoiceTemplates\n        this.newInvoice.invoice_date = response.data.invoice_today_date\n        this.inventoryNegative = response.data.inventory_negative\n        this.invoicePrefix = response.data.invoice_prefix\n        this.referencePrefix = response.data.reference_prefix\n        this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute\n        this.sundryDebtorsList = response.data.sundryDebtorsList\n        this.incomeLedgerList = response.data.incomeIndirectLedgers\n        this.expenseLedgerList = response.data.expenseIndirectLedgers\n\n        response.data.estimateList.map(i => {\n          let obj = {}\n          let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);\n          obj['id'] = i.id;\n          obj['total'] = i.total;\n          obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');\n\n          this.estimateList.push(obj)\n        })\n\n        // set estimate\n        let params = this.getUrlParameters();\n        if(params['id']) {\n          let estimate  = this.estimateList.find(node => node.id===Number(params['id']));\n          this.newInvoice.estimate = estimate;\n          this.estimateSelected = true;\n          this.getInvoiceFromEstimate(Number(params['id']))\n        }\n      }\n      this.initLoading = false\n    },\n    openTemplateModal () {\n      this.openModal({\n        'title': this.$t('general.choose_template'),\n        'componentName': 'InvoiceTemplate',\n        'data': this.invoiceTemplates\n      })\n    },\n    addInventory () {\n      this.inventoryBind.push({...InvoiceStub})\n      this.$nextTick(() => {\n        this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()\n        this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()\n      })\n    },\n    removeInventory (index) {\n      this.inventoryBind.splice(index, 1)\n      this.inventoryBind.filter(i => i).map((each, key) => {\n        each['index'] = key\n        this.updateInventory(each)\n      })\n    },\n    updateInventory (data) {\n      if (data.inventory && !data.inventory.inventory_id) {\n        return false\n      }\n      Object.assign(this.inventoryBind[data.index], {...data.inventory})\n      this.$nextTick(() => {\n        this.$refs.invoiceInventory[data.index].$el.focus()\n        if (data.updatingInput === 'sale_price') {\n          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()\n        }\n        if (data.updatingInput === 'quantity') {\n          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()\n        }\n      })\n    },\n    async validateInventoryQuantity() {\n      let valid = true;\n      this.newInvoice.inventories.map(selectedItem => {\n        let findItem = this.inventoryList.find(i =>\n            i.name === selectedItem.name &&\n            parseFloat(i.price) === parseFloat(selectedItem.price)\n          );\n        if (!findItem) {\n          return;\n        }\n        let maxQuantityAvailable = parseFloat(findItem.quantity);\n        if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {\n          swal({\n            title: this.$t('invoices.out_of_stock'),\n            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantityAvailable}),\n            icon: '/assets/icon/check-circle-solid.svg',\n            buttons: true,\n            dangerMode: true\n          }).then(async (success) => {\n            if (success) {\n              window.open('/inventory/' + selectedItem.inventory_id + '/edit', '_blank').focus()\n            }\n          })\n          valid = false\n        }\n      })\n      return valid\n    },\n    async submitInvoiceData () {\n      let validQuantity = await this.validateInventoryQuantity();\n      if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {\n        return false\n      }\n      this.newInvoice.invoice_number = this.invoicePrefix + this.invoiceNumAttribute\n        // this.income_ledger = this.income_ledger ? this.income_ledger.name : null\n        // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null\n      let data = {\n        ...this.newInvoice,\n        invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),\n        sub_total: this.subtotal,\n        total: this.total,\n        user_id: this.user.id,\n        income_ledger: this.income_ledger,\n        income_ledger_value: this.income_ledger_value ? parseFloat(this.income_ledger_value) : 0,\n        expense_ledger:  this.expense_ledger,\n        expense_ledger_value: this.expense_ledger_value ? parseFloat(this.expense_ledger_value) : 0,\n        invoice_template_id: this.getTemplateId,\n      }\n\n      if (this.$route.name === 'invoices.edit') {\n        this.submitUpdate(data)\n        return\n      }\n\n      this.submitSave(data)\n    },\n    reset() {\n      setTimeout(() => {\n        window.location.reload()\n      }, 1000)\n    },\n    printInvoice(invoice_id) {\n      //print invoice\n      this.siteURL = `/reports/invoice/${invoice_id}`\n      this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n      printJS({\n        printable: this.url,\n        type: 'pdf',\n        onPrintDialogClose: () => {\n          this.reset();\n          // this.printSlip(invoice_id)\n        }\n      })\n    },\n    printSlip(invoice_id) {\n      //print slip\n      this.siteURL = `/reports/slip/${invoice_id}`\n      this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n      printJS({\n        printable: this.url,\n        type: 'pdf',\n        onPrintDialogClose: () => {\n          this.reset();\n        }\n      })\n    },\n    async showInvoicePopup (invoice_id) {\n      swal({\n        title: this.$t('invoices.invoice_report_title'),\n        text: this.$t('invoices.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printInvoice(invoice_id)\n        } else {\n          this.reset()\n        }\n      })\n    },\n    submitSave (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.addInvoice(data).then((res) => {\n        if (res.data) {\n          window.toastr['success'](this.$t('invoices.created_message'))\n          //this.$router.push('/invoices/create')\n          this.showInvoicePopup(res.data.invoice.id)\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n      })\n    },\n    submitUpdate (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.updateInvoice(data).then((res) => {\n        if (res.data.success) {\n          window.toastr['success'](this.$t('invoices.updated_message'))\n          this.isLoading = false\n          this.showInvoicePopup(res.data.invoice.id)\n        }\n\n        if (res.data.error === 'invalid_due_amount') {\n          this.isLoading = false\n          window.toastr['error'](this.$t('invoices.invalid_due_amount_message'))\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n      })\n    },\n    checkInventoryData (index, isValid) {\n      this.newInvoice.inventories[index].valid = isValid\n    },\n    checkValid () {\n      this.$v.newInvoice.$touch()\n      window.hub.$emit('checkInventory')\n      let isValid = true\n      this.newInvoice.inventories.forEach((each) => {\n        if (!each.valid) {\n          isValid = false\n        }\n      })\n      if (this.$v.newInvoice.$invalid === false && isValid === true) {\n        isValid = true\n      }\n      return isValid\n    },\n    async searchDebtorRefNumber(data) {\n       this.newInvoice.reference_number = null;\n       let response = await this.fetchReferenceNumber(data)\n        if (response.data && response.data.reference_number) {\n          this.newInvoice.reference_number = response.data.reference_number\n        } else {\n          this.newInvoice.reference_number = this.invoiceNumAttribute\n        }\n    },\n    showEndList(val) {\n      this.showAddNewInventory = !val;\n      this.showEndOfList = val;\n      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);\n    },\n    removeEndOfList() {\n      this.showEndOfList = false;\n      this.showAddNewInventory = true;\n    },\n    async getInvoiceFromEstimate(id) {\n      let resp = await this.getInvoiceEstimate(id ? id :this.newInvoice.estimate.id)\n      let invoice = resp.data.estimate\n      let inventory = invoice.items.map(i => {\n        i.sale_price = i.sale_price ? i.sale_price : i.price\n        i.sub_total = i.total\n        return i\n      })\n\n      //set invoice data\n      this.newInvoice = {\n        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),\n        invoice_number: this.invoicePrefix + this.invoiceNumAttribute,\n        reference_number: this.invoiceNumAttribute,\n        user_id: invoice.user_id,\n        invoice_template_id: 1,\n        sub_total: invoice.sub_total,\n        total: invoice.total,\n        notes: invoice.notes,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        inventories: inventory,\n        debtors: this.sundryDebtorsList.find(i => i.id === invoice.account_master_id),\n        estimate: this.newInvoice.estimate\n      };\n\n      //set reference number\n      this.searchDebtorRefNumber({'id': invoice.account_master_id})\n    },\n    sendReports() {\n      this.isLoading = true\n      this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`\n      let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;\n      if (!mobile) {\n        window.toastr['error'](\"Sorry, didn't find mobile number for selected ledger.\")\n        return\n      }\n\n      let fileName = 'Invoice-' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');\n      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})\n      .then((val) => {\n        setTimeout(() => {\n          this.isLoading = false\n          window.location.reload()\n        }, 2000)\n      })\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.invoice-create-page .invoice-foot .invoice-total[data-v-3f396602] {\n  display: flex;\n  flex-direction: column;\n  background: #ffffff;\n  min-width: 590px;\n  padding: 15px 20px;\n  border: 1px solid #969696;\n  border-radius: 5px;\n}\ninput.base-prefix-input[data-v-3f396602]:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-invoice-item[data-v-3f396602]{\n  border: 0px\n}\n.add-invoice-item[data-v-3f396602]:focus {\n  border: 1px solid salmon\n}\n.table-responsive[data-v-3f396602] {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n.heading-1[data-v-3f396602] {\n    padding: 5px 180px;\n}\n.table-responsive[data-v-3f396602] {\n    overflow-x: auto !important;\n}\n.multiselect__content-wrapper[data-v-3f396602] {\n    overflow-x: visible !important;\n}\n}\n@media screen and (min-width: 768px) and (max-width: 1030px) {\n.ipad-width[data-v-3f396602] {\n    width: 133%;\n}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/invoices/Create.vue"],"names":[],"mappings":";AA8UA;EACA,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,gBAAA;EACA,kBAAA;EACA,yBAAA;EACA,kBAAA;AACA;AAEA;IACA,4CAAA;IACA,iDAAA;AACA;AACA;EACA;AACA;AACA;EACA;AACA;AACA;EACA,oBAAA;AACA;AACA;AACA;IACA,kBAAA;AACA;AACA;IACA,2BAAA;AACA;AACA;IACA,8BAAA;AACA;AACA;AACA;AACA;IACA,WAAA;AACA;AACA","sourcesContent":["<template>\n  <div class=\"invoice-create-page main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/invoices\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('invoices.title') }}\n          </base-button>\n        </router-link>\n        <router-link slot=\"item-title\" class=\"ml-2 col-xs-2\" to=\"/invoices/bulk\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('invoices.bulk_title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form v-if=\"!initLoading\" action=\"\" @submit.prevent=\"submitInvoiceData\" class=\"ipad-width\">\n      <div class=\"page-header\">\n        <h3 v-if=\"$route.name === 'invoices.edit'\" class=\"page-title\">{{ $t('invoices.edit_invoice') }}</h3>\n        <h3 v-else class=\"page-title\">{{ $t('invoices.new_invoice') }} </h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $tc('invoices.invoice', 2) }}</router-link></li>\n          <li v-if=\"$route.name === 'invoices.edit'\" class=\"breadcrumb-item\">{{ $t('invoices.edit_invoice') }}</li>\n          <li v-else class=\"breadcrumb-item\">{{ $t('invoices.new_invoice') }}</li>\n        </ol>\n      </div>\n      <div class=\"row invoice-input-group\">\n        <div class=\"col-md-6 invoice-customer-container mb-2\">\n          <label class=\"form-label\">{{ $t('invoices.estimate-list') }}</label>\n            <base-select\n              v-model=\"setEstimate\"\n              :options=\"estimateList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"isDisabled || estimateDisabled\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"estimate_number\"\n              track-by=\"id\"\n            />\n        </div>\n        <div class=\"col-md-6 invoice-customer-container mb-2\">\n          <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n            <base-select\n              v-model=\"setInvoiceDebtor\"\n              :invalid=\"$v.newInvoice.debtors.$error\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :name=\"'edit' === urlMode ? 'party' : 'party_name'\"\n              :disabled=\"isDisabled || estimateSelected\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"name\"\n              track-by=\"id\"\n            />\n            <div v-if=\"$v.newInvoice.debtors.$error\">\n              <span v-if=\"!$v.newInvoice.debtors.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n            </div>\n        </div>\n        <div class=\"col-md-4 col-sm-6 collapse-input\">\n          <label>{{ $tc('invoices.invoice',1) }} {{ $t('invoices.date') }}<span class=\"text-danger\"> * </span></label>\n          <input\n            v-model=\"newInvoice.invoice_date\"\n            type=\"date\"\n            data-date=\"\"\n            data-date-format=\"DD/MM/YYYY\"\n            class=\"base-prefix-input\"\n            @change=\"$v.newInvoice.invoice_date.$touch()\"\n            :disabled=\"isDisabled\"\n          />\n          <span v-if=\"$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required\" class=\"text-danger\"> {{ $t('validation.required') }} </span>\n        </div>\n        <div class=\"col-md-4 col-sm-6 collapse-input\">\n          <label>{{ $t('invoices.invoice_number') }}<span class=\"text-danger\"> * </span></label>\n          <base-prefix-input\n            v-model=\"invoiceNumAttribute\"\n            icon=\"hashtag\"\n            :invalid=\"$v.invoiceNumAttribute.$error\"\n            :prefix=\"invoicePrefix\"\n            :prefix-width=\"55\"\n            :disabled=\"true\"\n            @input=\"$v.invoiceNumAttribute.$touch()\"\n          />\n          <span v-show=\"$v.invoiceNumAttribute.$error && !$v.invoiceNumAttribute.required\" class=\"text-danger mt-1\"> {{ $tc('validation.required') }}  </span>\n        </div>\n        <div class=\"col-md-4 col-sm-6 collapse-input\">\n          <label>{{ $t('invoices.ref_number') }}</label>\n          <base-prefix-input\n            v-model=\"referenceNumAttribute\"\n            icon=\"hashtag\"\n            :invalid=\"$v.referenceNumAttribute.$error\"\n            :prefix=\"referencePrefix\"\n            :prefix-width=\"55\"\n            :disabled=\"true\"\n            @input=\"$v.referenceNumAttribute.$touch()\"\n          />\n          <div v-if=\"$v.referenceNumAttribute.$error\" class=\"text-danger\">{{ $tc('validation.ref_number_required') }}</div>\n        </div>\n      </div>\n      <div class=\"table-responsive\">\n        <table class=\"table item-table\">\n          <colgroup>\n            <col style=\"width: 40%;\">\n            <col style=\"width: 10%;\">\n            <col style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n            <col v-if=\"discountPerInventory === 'YES'\" style=\"width: 15%;\">\n            <col style=\"width: 15%;\">\n          </colgroup>\n          <thead class=\"item-table-header\">\n            <tr>\n              <th class=\"text-left\">\n                <span class=\"column-heading heading-1 item-heading\">\n                  {{ $tc('invoices.inventory.title',2) }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.quantity') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.price') }}\n                </span>\n              </th>\n              <th class=\"text-left\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.sale_price') }}\n                </span>\n              </th>\n              <th v-if=\"discountPerInventory === 'YES'\" class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('invoices.inventory.discount') }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading amount-heading\">\n                  {{ $t('invoices.inventory.amount') }}\n                </span>\n              </th>\n            </tr>\n          </thead>\n          <draggable v-model=\"inventoryBind\" class=\"item-body\" tag=\"tbody\" handle=\".handle\">\n            <invoice-inventory\n              v-for=\"(each, index) in inventoryBind\"\n              ref=\"invoiceInventory\"\n              :key=\"each.name+index+each.quantity\"\n              :index=\"index\"\n              :inventory-data=\"each\"\n              :currency=\"currency\"\n              :discount-per-inventory=\"discountPerInventory\"\n              :is-disable=\"$route.query.d === 'true'\"\n              :inventory-type=\"'invoice'\"\n              :inventory-list=\"inventoryListBind\"\n              :inventory-negative=\"inventoryNegative\"\n              :is-edit=\"$route.name === 'invoices.edit'\"\n              @remove=\"removeInventory\"\n              @update=\"updateInventoryBounce\"\n              @inventoryValidate=\"checkInventoryData\"\n              @endlist=\"showEndList\"\n            />\n          </draggable>\n        </table>\n      </div>\n      <button v-if=\"showAddNewInventory\" class=\"add-item-action add-invoice-item\" :disabled=\"isDisabled\" @click=\"addInventory\">\n        <font-awesome-icon icon=\"shopping-basket\" class=\"mr-2\"/>\n        {{ $t('invoices.add_item') }}\n      </button>\n      <button v-if=\"showEndOfList\" @click=\"removeEndOfList\" class=\"btn btn-primary\" style=\"margin: 10px\">\n        End Of List\n      </button>\n\n      <div class=\"invoice-foot\">\n        <div>\n          <label>{{ $t('invoices.notes') }}</label>\n          <base-text-area\n            v-model=\"newInvoice.notes\"\n            rows=\"3\"\n            cols=\"50\"\n            @input=\"$v.newInvoice.notes.$touch()\"\n          />\n          <div v-if=\"$v.newInvoice.notes.$error\">\n            <span v-if=\"!$v.newInvoice.notes.maxLength\" class=\"text-danger\">{{ $t('validation.notes_maxlength') }}</span>\n          </div>\n        </div>\n\n        <div class=\"invoice-total\">\n          <div class=\"section\">\n            <label class=\"invoice-label\">{{ $t('invoices.quantity') }}</label>\n            <label class=\"\">\n              <div v-html=\"totalQuantity(inventoryBind)\" />\n            </label>\n          </div>\n          <div class=\"section\">\n            <label class=\"invoice-label\">{{ $t('invoices.sub_total') }}</label>\n            <label class=\"invoice-amount\">\n              ₹ {{ subtotal }}\n            </label>\n\n          </div>\n          <div class=\"section\" v-if=\"incomeLedgerList.length\">\n            <div class=\"row align-items-center\">\n              <div class=\"pl-3\">\n              <label class=\"form-label\"><strong>{{ $t('invoices.add') }}</strong></label>\n              </div>\n              <div class=\"pl-3 mr-5\">\n                <base-select\n                v-model=\"income_ledger\"\n                :options=\"incomeLedgerList\"\n                :required=\"'required'\"\n                :searchable=\"true\"\n                :show-labels=\"false\"\n                :allow-empty=\"false\"\n                :disabled=\"isDisabled\"\n                :placeholder=\"$t('receipts.select_a_list')\"\n                label=\"name\"\n                track-by=\"id\"\n              />\n              </div>\n\n            </div>\n            <div>\n              <base-input\n                style=\"width:100px\"\n                :disabled=\"this.income_ledger===null\"\n                v-model=\"income_ledger_value\"\n                type=\"number\"\n                min=\"0\"\n                input-class=\"item-discount\"\n              />\n            </div>\n          </div>\n          <div class=\"section\" v-if=\"expenseLedgerList.length\">\n           <div class=\"row align-items-center\">\n            <div class=\"pl-3 mb-2\">\n             <label class=\"form-label\"><strong>{{ $t('invoices.less') }}</strong></label>\n           </div>\n             <div class=\"pl-3 mb-2 mr-5\">\n            <base-select\n              v-model=\"expense_ledger\"\n              :options=\"expenseLedgerList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"isDisabled\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n              label=\"name\"\n              track-by=\"id\"\n            />\n        </div>\n           </div>\n           <base-input\n              style=\"width:100px\"\n              :disabled=\"this.expense_ledger===null\"\n              v-model=\"expense_ledger_value\"\n              type=\"number\"\n              min=\"0\"\n              input-class=\"item-discount\"\n              />\n        </div>\n\n          <div v-if=\"discountPerInventory === 'NO' || discountPerInventory === null\" class=\"section mt-2\">\n            <label class=\"invoice-label\">{{ $t('invoices.discount') }}</label>\n            <div\n              class=\"btn-group discount-drop-down\"\n              role=\"group\"\n            >\n              <base-input\n                v-model=\"discount\"\n                :invalid=\"$v.newInvoice.discount_val.$error\"\n                input-class=\"item-discount\"\n                @input=\"$v.newInvoice.discount_val.$touch()\"\n              />\n              <v-dropdown :show-arrow=\"false\">\n                <button\n                  slot=\"activator\"\n                  type=\"button\"\n                  class=\"btn item-dropdown dropdown-toggle\"\n                  data-toggle=\"dropdown\"\n                  aria-haspopup=\"true\"\n                  aria-expanded=\"false\"\n                >\n                  {{ newInvoice.discount_type == 'fixed' ? currency.symbol : '%' }}\n                </button>\n                <v-dropdown-item>\n                  <a class=\"dropdown-item\" href=\"#\" @click.prevent=\"selectFixed\">\n                    {{ $t('general.fixed') }}\n                  </a>\n                </v-dropdown-item>\n                <v-dropdown-item>\n                  <a class=\"dropdown-item\" href=\"#\" @click.prevent=\"selectPercentage\">\n                    {{ $t('general.percentage') }}\n                  </a>\n                </v-dropdown-item>\n              </v-dropdown>\n            </div>\n          </div>\n\n          <div class=\"section border-top mt-3\">\n            <label class=\"invoice-label\">{{ $t('invoices.total') }} {{ $t('invoices.amount') }}:</label>\n            <label class=\"invoice-amount total\">\n              ₹ {{ total }}\n            </label>\n          </div>\n        </div>\n      </div>\n      <div class=\"page-actions row\" style=\"margin-left: 3px\">\n          <!-- <a v-if=\"$route.name === 'invoices.edit'\" :href=\"`/invoices/pdf/${newInvoice.unique_hash}`\" target=\"_blank\" class=\"mr-3 invoice-action-btn base-button btn btn-outline-primary default-size\" outline color=\"theme\">\n            {{ $t('general.view_pdf') }}\n          </a> -->\n          <base-button\n            :loading=\"isLoading\"\n            :disabled=\"isLoading\"\n            icon=\"save\"\n            color=\"theme\"\n            class=\"invoice-action-btn\"\n            type=\"submit\">\n            {{ $t('invoices.save_invoice') }}\n          </base-button>\n          <br/>\n          <base-button v-if=\"this.$route.name === 'invoices.edit'\" outline color=\"theme\" class=\"report-button ml-2\" @click=\"sendReports()\">\n            {{ $t('reports.send_report') }}\n          </base-button>\n        </div>\n    </form>\n    <base-loader v-else />\n  </div>\n</template>\n<style scoped>\n.invoice-create-page .invoice-foot .invoice-total {\n  display: flex;\n  flex-direction: column;\n  background: #ffffff;\n  min-width: 590px;\n  padding: 15px 20px;\n  border: 1px solid #969696;\n  border-radius: 5px;\n}\n\ninput.base-prefix-input:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-invoice-item{\n  border: 0px\n}\n.add-invoice-item:focus {\n  border: 1px solid salmon\n}\n.table-responsive {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n  .heading-1 {\n    padding: 5px 180px;\n  }\n  .table-responsive {\n    overflow-x: auto !important;\n  }\n  .multiselect__content-wrapper {\n    overflow-x: visible !important;\n  }\n}\n@media screen and (min-width: 768px) and (max-width: 1030px) {\n  .ipad-width {\n    width: 133%;\n  }\n}\n</style>\n<script>\nimport draggable from 'vuedraggable'\nimport MultiSelect from 'vue-multiselect'\nimport InvoiceInventory from './Inventory'\nimport InvoiceStub from '../../stub/invoice'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport { validationMixin } from 'vuelidate'\nimport Guid from 'guid'\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: {\n    InvoiceInventory,\n    MultiSelect,\n    draggable\n  },\n  mixins: [validationMixin],\n  data () {\n    return {\n      newInvoice: {\n        invoice_date: null,\n        invoice_number: null,\n        reference_number: null,\n        user_id: null,\n        invoice_template_id: 1,\n        sub_total: null,\n        total: null,\n        notes: null,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        inventories: [{\n          ...InvoiceStub,\n        }],\n        debtors: '',\n        estimate: '',\n      },\n      customers: [],\n      inventoryList: [],\n      inventoryNegative: false,\n      invoiceTemplates: [],\n      selectedCurrency: '',\n      discountPerInventory: null,\n      initLoading: false,\n      isLoading: false,\n      estimateDisabled: false,\n      maxDiscount: 0,\n      invoicePrefix: null,\n      referencePrefix: null,\n      invoiceNumAttribute: null,\n      role: this.$store.state.user.currentUser.role,\n      sundryDebtorsList: [], //List of Sundry Debitor name\n      estimateList: [], //List of estimates\n      incomeLedgerList: [], //List of income indirect group ledger\n      expenseLedgerList: [], //List of expense indirect group ledger\n      income_ledger: null,\n      expense_ledger: null,\n      expense_ledger_value: 0,\n      income_ledger_value: 0,\n      isDisabled: false,\n      url: null,\n      siteURL: null,\n      showAddNewInventory: true,\n      showEndOfList: false,\n      estimateSelected: false,\n      urlMode: null,\n    }\n  },\n  validations () {\n    return {\n      newInvoice: {\n        invoice_date: {\n          required\n        },\n        discount_val: {\n          between: between(0, this.subtotal)\n        },\n        notes: {\n          maxLength: maxLength(255)\n        },\n        reference_number: {\n          required,\n        },\n        debtors: {\n          required\n        }\n      },\n      invoiceNumAttribute: {\n        required\n      },\n      referenceNumAttribute: {\n        required\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrency'\n    ]),\n    ...mapGetters('invoice', [\n      'getTemplateId',\n      //'selectedCustomer'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    currency () {\n      return this.selectedCurrency\n    },\n    subtotalWithDiscount () {\n      if (this.newInvoice.discount_val) {\n        return this.subtotal - this.newInvoice.discount_val\n      }\n      if (this.income_ledger_value && !this.expense_ledger_value) {\n        return  this.subtotal + parseInt(this.income_ledger_value)\n      }\n      if (!this.income_ledger_value && this.expense_ledger_value) {\n        return  this.subtotal - parseInt(this.expense_ledger_value)\n      }\n      if (this.income_ledger_value && this.expense_ledger_value) {\n        return this.subtotal + parseInt(this.income_ledger_value) - parseInt(this.expense_ledger_value)\n      }\n      return this.subtotal\n    },\n    total () {\n      return this.subtotalWithDiscount\n    },\n    subtotal () {\n      let inventory = this.newInvoice.inventories;\n      if (inventory.length) {\n        return inventory.reduce(function (a, b) {\n                return a + b['total']\n              }, 0)\n      }\n\n      return 0\n    },\n    discount: {\n      get: function () {\n        return this.newInvoice.discount\n      },\n      set: function (newValue) {\n        if (this.newInvoice.discount_type === 'percentage') {\n          this.newInvoice.discount_val = (this.subtotal * newValue)\n        } else {\n          this.newInvoice.discount_val = newValue\n        }\n        this.newInvoice.discount = newValue\n      }\n    },\n    setInvoiceDebtor: {\n      cache: false,\n      get() {\n        return this.newInvoice.debtors\n      },\n      set(value) {\n        this.searchDebtorRefNumber({\n          id: value && value.id ? value.id : value,\n          invoice_date: this.newInvoice.invoice_date\n        })\n        this.newInvoice.debtors = value\n      },\n    },\n    setEstimate: {\n      cache: false,\n      get() {\n        return this.newInvoice.estimate\n      },\n      set(value) {\n        this.estimateSelected = true\n        this.newInvoice.estimate = value\n        this.getInvoiceFromEstimate()\n      }\n    },\n    inventoryBind() {\n      return this.newInvoice.inventories\n    },\n    inventoryListBind() {\n      return this.$store.state.inventory.inventories\n    },\n    referenceNumAttribute: {\n      cache: false,\n      get() {\n        if (this.newInvoice.reference_number && -1 !== this.newInvoice.reference_number.indexOf('-')) {\n          return this.newInvoice.reference_number.split('-')[2]\n        }\n        return this.newInvoice.reference_number\n      },\n      set(value) {\n        this.newInvoice.reference_number = value;\n      }\n    }\n  },\n  watch: {\n    subtotal (newValue) {\n      if (this.newInvoice.discount_type === 'percentage') {\n        this.newInvoice.discount_val = (this.newInvoice.discount * newValue)\n      }\n    },\n    'newInvoice.invoice_date' () {\n      if (this.newInvoice.debtors && this.$route.name !== 'invoices.edit') {\n        this.searchDebtorRefNumber({\n          id: this.newInvoice.debtors.id ? this.newInvoice.debtors.id : this.newInvoice.debtors,\n          invoice_date: this.newInvoice.invoice_date\n        })\n      }\n    }\n  },\n  mounted() {\n    this.urlMode = window.location.pathname.split('/')[3];\n  },\n  created () {\n    this.loadData()\n    this.fetchInitialInventory()\n    this.updateInventoryBounce = _.debounce((data) => {\n      this.updateInventory(data);\n    }, 500);\n  },\n  methods: {\n    ...mapActions('modal', [\n      'openModal'\n    ]),\n    ...mapActions('invoice', [\n      'addInvoice',\n      'fetchCreateInvoice',\n      'getInvoiceEstimate',\n      'fetchInvoice',\n      'updateInvoice',\n      'fetchReferenceNumber',\n    ]),\n    ...mapActions('customer', [\n      'sendReportOnWhatsApp'\n    ]),\n    ...mapActions('inventory', [\n      'fetchAllInventory'\n    ]),\n    totalQuantity(inventory){\n      if (inventory.length) {\n        let invent = 0\n        inventory.forEach((i) => {\n          if (i.quantity) {\n            invent += i.quantity\n          }\n        });\n        return invent;\n      }\n      return 0\n    },\n    getUrlParameters() {\n      return decodeURI(window.location.search)\n          .replace('?', '')\n          .split('&')\n          .map(param => param.split('='))\n          .reduce((values, [key, value]) => {\n              values[key] = value;\n              return values;\n          }, {});\n    },\n    selectFixed () {\n      if (this.newInvoice.discount_type === 'fixed') {\n        return\n      }\n      this.newInvoice.discount_val = this.newInvoice.discount\n      this.newInvoice.discount_type = 'fixed'\n    },\n    selectPercentage () {\n      if (this.newInvoice.discount_type === 'percentage') {\n        return\n      }\n      this.newInvoice.discount_val = (this.subtotal * this.newInvoice.discount)\n      this.newInvoice.discount_type = 'percentage'\n    },\n    async fetchInitialInventory () {\n      await this.fetchAllInventory({\n        limit: 50,\n        filter: {},\n        name: '',\n        orderByField: '',\n        orderBy: ''\n      }).then(resp => {\n        this.inventoryList = resp.data.inventories.data\n      })\n    },\n    async loadData () {\n      if (this.$route.name === 'invoices.edit') {\n        this.initLoading = true\n        this.estimateDisabled = true\n        let response = await this.fetchInvoice(this.$route.params.id)\n        if (this.$route.query && this.$route.query.nondis === 'false') {\n          this.isDisabled = true\n        } else {\n          this.isDisabled = false\n        }\n        if (response.data) {\n          this.newInvoice = response.data.invoice\n          this.inventoryNegative = response.data.inventory_negative\n          this.newInvoice.invoice_date = moment(response.data.invoice.invoice_date).format('YYYY-MM-DD')\n          this.discountPerInventory = response.data.discount_per_inventory\n          this.selectedCurrency = this.defaultCurrency\n          this.invoiceTemplates = response.data.invoiceTemplates\n          this.invoicePrefix = response.data.invoice_prefix\n          this.referencePrefix = response.data.reference_prefix\n          this.invoiceNumAttribute = response.data.invoiceNumber\n          this.newInvoice.debtors = response.data.sundryDebtorsList[0]\n          this.sundryDebtorsList = response.data.sundryDebtorsList\n          this.incomeLedgerList = response.data.incomeIndirectLedgers\n          this.expenseLedgerList = response.data.expenseIndirectLedgers\n          if(response.data.InvoiceEstimate.length) {\n            this.newInvoice.estimate = response.data.InvoiceEstimate[0]\n          }\n          this.expense_ledger= response.data.invoice.indirect_expense ? this.expenseLedgerList.find(node=> node.name === response.data.invoice.indirect_expense) : null\n          this.income_ledger= response.data.invoice.indirect_income ? this.incomeLedgerList.find(node=> node.name === response.data.invoice.indirect_income) : null\n          this.income_ledger_value = response.data.invoice.indirect_income_value ? response.data.invoice.indirect_income_value : 0\n          this.expense_ledger_value = response.data.invoice.indirect_expense_value ? response.data.invoice.indirect_expense_value : 0\n          response.data.estimateList.map(i => {\n            let obj = {}\n            let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);\n            obj['id'] = i.id;\n            obj['total'] = i.total;\n            obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');\n\n            this.estimateList.push(obj)\n          })\n        }\n        this.initLoading = false\n        return\n      }\n\n      this.initLoading = true\n      let response = await this.fetchCreateInvoice()\n      if (response.data) {\n        this.discountPerInventory = response.data.discount_per_inventory\n        this.selectedCurrency = this.defaultCurrency\n        this.invoiceTemplates = response.data.invoiceTemplates\n        this.newInvoice.invoice_date = response.data.invoice_today_date\n        this.inventoryNegative = response.data.inventory_negative\n        this.invoicePrefix = response.data.invoice_prefix\n        this.referencePrefix = response.data.reference_prefix\n        this.invoiceNumAttribute = response.data.nextInvoiceNumberAttribute\n        this.sundryDebtorsList = response.data.sundryDebtorsList\n        this.incomeLedgerList = response.data.incomeIndirectLedgers\n        this.expenseLedgerList = response.data.expenseIndirectLedgers\n\n        response.data.estimateList.map(i => {\n          let obj = {}\n          let debtor = this.sundryDebtorsList.find(a => i.account_master_id === a.id);\n          obj['id'] = i.id;\n          obj['total'] = i.total;\n          obj['estimate_number'] = i.estimate_number + (debtor ? (' - ' + debtor.name) : '');\n\n          this.estimateList.push(obj)\n        })\n\n        // set estimate\n        let params = this.getUrlParameters();\n        if(params['id']) {\n          let estimate  = this.estimateList.find(node => node.id===Number(params['id']));\n          this.newInvoice.estimate = estimate;\n          this.estimateSelected = true;\n          this.getInvoiceFromEstimate(Number(params['id']))\n        }\n      }\n      this.initLoading = false\n    },\n    openTemplateModal () {\n      this.openModal({\n        'title': this.$t('general.choose_template'),\n        'componentName': 'InvoiceTemplate',\n        'data': this.invoiceTemplates\n      })\n    },\n    addInventory () {\n      this.inventoryBind.push({...InvoiceStub})\n      this.$nextTick(() => {\n        this.$refs.invoiceInventory[this.inventoryBind.length-1].$el.focus()\n        this.$refs.invoiceInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()\n      })\n    },\n    removeInventory (index) {\n      this.inventoryBind.splice(index, 1)\n      this.inventoryBind.filter(i => i).map((each, key) => {\n        each['index'] = key\n        this.updateInventory(each)\n      })\n    },\n    updateInventory (data) {\n      if (data.inventory && !data.inventory.inventory_id) {\n        return false\n      }\n      Object.assign(this.inventoryBind[data.index], {...data.inventory})\n      this.$nextTick(() => {\n        this.$refs.invoiceInventory[data.index].$el.focus()\n        if (data.updatingInput === 'sale_price') {\n          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()\n        }\n        if (data.updatingInput === 'quantity') {\n          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()\n        }\n      })\n    },\n    async validateInventoryQuantity() {\n      let valid = true;\n      this.newInvoice.inventories.map(selectedItem => {\n        let findItem = this.inventoryList.find(i =>\n            i.name === selectedItem.name &&\n            parseInt(i.price) === parseInt(selectedItem.price)\n          );\n        if (!findItem) {\n          return;\n        }\n        let maxQuantityAvailable = parseInt(findItem.quantity);\n        if (maxQuantityAvailable < selectedItem.quantity && !this.inventoryNegative) {\n          swal({\n            title: this.$t('invoices.out_of_stock'),\n            text: this.$t('invoices.update_inventory_quantity', {'max': maxQuantityAvailable}),\n            icon: '/assets/icon/check-circle-solid.svg',\n            buttons: true,\n            dangerMode: true\n          }).then(async (success) => {\n            if (success) {\n              window.open('/inventory/' + selectedItem.inventory_id + '/edit', '_blank').focus()\n            }\n          })\n          valid = false\n        }\n      })\n      return valid\n    },\n    async submitInvoiceData () {\n      let validQuantity = await this.validateInventoryQuantity();\n      if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {\n        return false\n      }\n      this.newInvoice.invoice_number = this.invoicePrefix + '-' + this.invoiceNumAttribute\n      this.newInvoice.reference_number = this.referencePrefix + '-' + this.newInvoice.reference_number\n\n        // this.income_ledger = this.income_ledger ? this.income_ledger.name : null\n        // this.expense_ledger = this.expense_ledger ? this.expense_ledger.name : null\n      let data = {\n        ...this.newInvoice,\n        invoice_date: moment(this.newInvoice.invoice_date).format('DD/MM/YYYY'),\n        sub_total: this.subtotal,\n        total: this.total,\n        user_id: this.user.id,\n        income_ledger: this.income_ledger,\n        income_ledger_value: this.income_ledger_value ? this.income_ledger_value : 0,\n        expense_ledger:  this.expense_ledger,\n        expense_ledger_value: this.expense_ledger_value ? this.expense_ledger_value : 0,\n        invoice_template_id: this.getTemplateId,\n      }\n\n      if (this.$route.name === 'invoices.edit') {\n        this.submitUpdate(data)\n        return\n      }\n\n      this.submitSave(data)\n    },\n    reset() {\n      setTimeout(() => {\n        window.location.reload()\n      }, 1000)\n    },\n    printInvoice(invoice_id) {\n      //print invoice\n      this.siteURL = `/reports/invoice/${invoice_id}`\n      this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n      printJS({\n        printable: this.url,\n        type: 'pdf',\n        onPrintDialogClose: () => {\n          this.reset();\n          // this.printSlip(invoice_id)\n        }\n      })\n    },\n    printSlip(invoice_id) {\n      //print slip\n      this.siteURL = `/reports/slip/${invoice_id}`\n      this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n      printJS({\n        printable: this.url,\n        type: 'pdf',\n        onPrintDialogClose: () => {\n          this.reset();\n        }\n      })\n    },\n    async showInvoicePopup (invoice_id) {\n      swal({\n        title: this.$t('invoices.invoice_report_title'),\n        text: this.$t('invoices.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printInvoice(invoice_id)\n        } else {\n          this.reset()\n        }\n      })\n    },\n    submitSave (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.addInvoice(data).then((res) => {\n        if (res.data) {\n          window.toastr['success'](this.$t('invoices.created_message'))\n          //this.$router.push('/invoices/create')\n          this.showInvoicePopup(res.data.invoice.id)\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n      })\n    },\n    submitUpdate (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.updateInvoice(data).then((res) => {\n        if (res.data.success) {\n          window.toastr['success'](this.$t('invoices.updated_message'))\n          this.isLoading = false\n          this.showInvoicePopup(res.data.invoice.id)\n        }\n\n        if (res.data.error === 'invalid_due_amount') {\n          this.isLoading = false\n          window.toastr['error'](this.$t('invoices.invalid_due_amount_message'))\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n      })\n    },\n    checkInventoryData (index, isValid) {\n      this.newInvoice.inventories[index].valid = isValid\n    },\n    checkValid () {\n      this.$v.newInvoice.$touch()\n      window.hub.$emit('checkInventory')\n      let isValid = true\n      this.newInvoice.inventories.forEach((each) => {\n        if (!each.valid) {\n          isValid = false\n        }\n      })\n      if (this.$v.newInvoice.$invalid === false && isValid === true) {\n        isValid = true\n      }\n      return isValid\n    },\n    async searchDebtorRefNumber(data) {\n      this.newInvoice.reference_number = this.invoiceNumAttribute\n      try {\n        let response = await this.fetchReferenceNumber({\n          ...data,\n          invoice_date: data.invoice_date ? data.invoice_date : this.newInvoice.invoice_date\n        })\n        if (response.data && response.data.invoice) {\n          this.newInvoice.reference_number = response.data.invoice.reference_number.split('-').pop()\n        }\n      } catch (err) {\n        this.newInvoice.reference_number = this.invoiceNumAttribute\n      }\n    },\n    showEndList(val) {\n      this.showAddNewInventory = !val;\n      this.showEndOfList = val;\n      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);\n    },\n    removeEndOfList() {\n      this.showEndOfList = false;\n      this.showAddNewInventory = true;\n    },\n    async getInvoiceFromEstimate(id) {\n      let resp = await this.getInvoiceEstimate(id ? id :this.newInvoice.estimate.id)\n      let invoice = resp.data.estimate\n      let inventory = invoice.items.map(i => {\n        i.sale_price = i.sale_price ? i.sale_price : i.price\n        i.sub_total = i.total\n        return i\n      })\n\n      //set invoice data\n      this.newInvoice = {\n        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),\n        invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,\n        reference_number: this.referencePrefix + '-' + this.invoiceNumAttribute,\n        user_id: invoice.user_id,\n        invoice_template_id: 1,\n        sub_total: invoice.sub_total,\n        total: invoice.total,\n        notes: invoice.notes,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        inventories: inventory,\n        debtors: this.sundryDebtorsList.find(i => i.id === invoice.account_master_id),\n        estimate: this.newInvoice.estimate\n      };\n\n      //set reference number\n      this.searchDebtorRefNumber({\n        id: invoice.account_master_id,\n        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD')\n      })\n    },\n    sendReports() {\n      this.isLoading = true\n      this.siteURL = `/invoices/pdf/${this.newInvoice.unique_hash}`\n      let mobile = this.sundryDebtorsList.find(i => i.id === this.newInvoice.account_master_id).mobile_number;\n      if (!mobile) {\n        window.toastr['error'](\"Sorry, didn't find mobile number for selected ledger.\")\n        return\n      }\n\n      let fileName = 'Invoice-' + moment(this.newInvoice.invoice_date).format('DD/MM/YYYY');\n      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})\n      .then((val) => {\n        setTimeout(() => {\n          this.isLoading = false\n          window.location.reload()\n        }, 2000)\n      })\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86168,7 +87901,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.notifications .dropdown-group .dropdown-container {\n  min-width: 23rem !important;\n}\n.alert {\n  position: relative;\n  padding: 0.145rem 1.25rem;\n  margin-bottom: 0.3rem;\n  border: 1px solid transparent;\n  border-radius: 0.25rem;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/layouts/partials/TheSiteHeader.vue"],"names":[],"mappings":";AAuIA;EACA,2BAAA;AACA;AACA;EACA,kBAAA;EACA,yBAAA;EACA,qBAAA;EACA,6BAAA;EACA,sBAAA;AACA","sourcesContent":["<template>\n  <header class=\"site-header\">\n    <a href=\"/\" class=\"brand-main\">\n      <img\n        id=\"logo-white\"\n        src=\"/assets/img/bill.png\"\n        alt=\"Omtbiz Logo\"\n        class=\"d-none d-md-inline\"\n      >\n      <img\n        id=\"logo-mobile\"\n        src=\"/assets/img/bill.png\"\n        alt=\"Laraspace Logo\"\n        class=\"d-md-none\">\n    </a>\n\n    <a\n      href=\"#\"\n      class=\"nav-toggle\"\n      @click=\"onNavToggle\"\n    >\n      <div class=\"hamburger hamburger--arrowturn\">\n        <div class=\"hamburger-box\">\n          <div class=\"hamburger-inner\"/>\n        </div>\n      </div>\n    </a>\n    <ul class=\"action-list\">\n      <li class=\"notifications\">\n        <v-dropdown :show-arrow=\"false\">\n          <button\n            slot=\"activator\"\n            href=\"#\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\"\n            class=\"btn btn-success\"\n          >\n          <font-awesome-icon icon=\"bell\" class=\"dropdown-item-icon\"/> <span class=\"badge bg-secondary\">{{ listNotifications ? listNotifications.length : 0  }}</span>\n          </button>\n          <v-dropdown-item>\n            \n            <div v-for=\"(item,index) in listNotifications\"\n            :key=\"index\">\n            <div class=\"alert alert-success\" role=\"alert\">\n             \n              <p class=\"mb-1\"> <a :href=\"'/invoices/create?id='+item.data.id\" class=\"bg-transparent\">Estimate Number : <span class=\"badge badge-success\">{{ item.data.estimate_number }}</span> </a>\n                <!-- <br/>\n                Status : <span class=\"badge badge-secondary\">{{ item.data.status }}</span> -->\n              </p>\n            </div>\n        </div>\n        <!-- <button type=\"button\" class=\"btn btn-link\" @click=\"markAsRead\">Mark as read</button> -->\n        </v-dropdown-item>\n        </v-dropdown>\n      </li>\n      <li>\n        <v-dropdown :show-arrow=\"false\">\n          <a\n            slot=\"activator\"\n            href=\"#\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\"\n            class=\"avatar\"\n          >\n            <img :src=\"profilePicture\" alt=\"Avatar\">\n          </a>\n          <v-dropdown-item>\n            <router-link class=\"dropdown-item\" to=\"/settings\">\n              <font-awesome-icon icon=\"cogs\" class=\"dropdown-item-icon\"/> <span> {{ $t('navigation.settings') }} </span>\n            </router-link>\n          </v-dropdown-item>\n          <v-dropdown-item>\n            <a\n              href=\"#\"\n              class=\"dropdown-item\"\n              @click.prevent=\"logout\"\n            >\n              <font-awesome-icon icon=\"sign-out-alt\" class=\"dropdown-item-icon\"/> <span> {{ $t('navigation.logout') }} </span>\n            </a>\n          </v-dropdown-item>\n        </v-dropdown>\n      </li>\n    </ul>\n  </header>\n</template>\n<script type=\"text/babel\">\nimport { mapGetters, mapActions } from 'vuex'\nimport moment from \"moment\";\nexport default {\n  computed: {\n    ...mapGetters('userProfile', [\n      'user',\n      'notifications'\n    ]),\n    profilePicture () {\n      return '/images/default-avatar.jpg'\n    },\n    role() {\n      return this.$store.state.user.currentUser.role\n    }, \n    listNotifications() {\n      let array = this.$store.state.userProfile.notifications;\n      if(array) {\n        array = array.slice(0,10)\n      }\n      return array\n    },\n  },\n  created () {\n    this.loadData()\n    this.loadNotifications()\n  },\n  methods: {\n    getFormattedDate(date) {\n      return moment(date).format(\"DD-MM-YYYY\");\n    },\n    ...mapActions('userProfile', [\n      'loadData',\n      'loadNotifications',\n    ]),\n    ...mapActions({\n      companySelect: 'changeCompany'\n    }),\n    ...mapActions('auth', [\n      'logout'\n    ]),\n    onNavToggle () {\n      this.$utils.toggleSidebar()\n    }\n  }\n}\n</script>\n<style>\n.notifications .dropdown-group .dropdown-container {\n  min-width: 23rem !important;\n}\n.alert {\n  position: relative;\n  padding: 0.145rem 1.25rem;\n  margin-bottom: 0.3rem;\n  border: 1px solid transparent;\n  border-radius: 0.25rem;\n}\n</style>"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.user-info {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: center !important;\n  align-items: flex-end !important;\n  float: left !important;\n  height: 36px !important;\n  padding: 0 !important;\n  margin-left: 14px !important;\n  margin-right: 0 !important;\n  line-height: 1.3 !important;\n  background-color: transparent !important;\n}\n.user-info .user-name {\n  display: block;\n  font-size: 13px;\n  font-weight: 600;\n  color: #fff;\n}\n.user-info .user-role {\n  display: block;\n  font-size: 11px;\n  color: rgba(255, 255, 255, 0.75);\n  text-transform: capitalize;\n}\n.notifications .dropdown-group .dropdown-container {\n  min-width: 23rem !important;\n}\n.alert {\n  position: relative;\n  padding: 0.145rem 1.25rem;\n  margin-bottom: 0.3rem;\n  border: 1px solid transparent;\n  border-radius: 0.25rem;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/layouts/partials/TheSiteHeader.vue"],"names":[],"mappings":";AA8IA;EACA,wBAAA;EACA,iCAAA;EACA,kCAAA;EACA,gCAAA;EACA,sBAAA;EACA,uBAAA;EACA,qBAAA;EACA,4BAAA;EACA,0BAAA;EACA,2BAAA;EACA,wCAAA;AACA;AACA;EACA,cAAA;EACA,eAAA;EACA,gBAAA;EACA,WAAA;AACA;AACA;EACA,cAAA;EACA,eAAA;EACA,gCAAA;EACA,0BAAA;AACA;AACA;EACA,2BAAA;AACA;AACA;EACA,kBAAA;EACA,yBAAA;EACA,qBAAA;EACA,6BAAA;EACA,sBAAA;AACA","sourcesContent":["<template>\n  <header class=\"site-header\">\n    <a href=\"/\" class=\"brand-main\">\n      <img\n        id=\"logo-white\"\n        src=\"/assets/img/bill.png\"\n        alt=\"Omtbiz Logo\"\n        class=\"d-none d-md-inline\"\n      >\n      <img\n        id=\"logo-mobile\"\n        src=\"/assets/img/bill.png\"\n        alt=\"Laraspace Logo\"\n        class=\"d-md-none\">\n    </a>\n\n    <a\n      href=\"#\"\n      class=\"nav-toggle\"\n      @click=\"onNavToggle\"\n    >\n      <div class=\"hamburger hamburger--arrowturn\">\n        <div class=\"hamburger-box\">\n          <div class=\"hamburger-inner\"/>\n        </div>\n      </div>\n    </a>\n    <ul class=\"action-list\">\n      <li class=\"notifications\">\n        <v-dropdown :show-arrow=\"false\">\n          <button\n            slot=\"activator\"\n            href=\"#\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\"\n            class=\"btn btn-success\"\n          >\n          <font-awesome-icon icon=\"bell\" class=\"dropdown-item-icon\"/> <span class=\"badge bg-secondary\">{{ listNotifications ? listNotifications.length : 0  }}</span>\n          </button>\n          <v-dropdown-item>\n            \n            <div v-for=\"(item,index) in listNotifications\"\n            :key=\"index\">\n            <div class=\"alert alert-success\" role=\"alert\">\n             \n              <p class=\"mb-1\"> <a :href=\"'/invoices/create?id='+item.data.id\" class=\"bg-transparent\">Estimate Number : <span class=\"badge badge-success\">{{ item.data.estimate_number }}</span> </a>\n                <!-- <br/>\n                Status : <span class=\"badge badge-secondary\">{{ item.data.status }}</span> -->\n              </p>\n            </div>\n        </div>\n        <!-- <button type=\"button\" class=\"btn btn-link\" @click=\"markAsRead\">Mark as read</button> -->\n        </v-dropdown-item>\n        </v-dropdown>\n      </li>\n      <li v-if=\"currentUser\" class=\"user-info\">\n        <span class=\"user-name\">{{ currentUser.name }}</span>\n        <span class=\"user-role\">{{ currentUser.role }}</span>\n      </li>\n      <li>\n        <v-dropdown :show-arrow=\"false\">\n          <a\n            slot=\"activator\"\n            href=\"#\"\n            data-toggle=\"dropdown\"\n            aria-haspopup=\"true\"\n            aria-expanded=\"false\"\n            class=\"avatar\"\n          >\n            <img :src=\"profilePicture\" alt=\"Avatar\">\n          </a>\n          <v-dropdown-item>\n            <router-link class=\"dropdown-item\" to=\"/settings\">\n              <font-awesome-icon icon=\"cogs\" class=\"dropdown-item-icon\"/> <span> {{ $t('navigation.settings') }} </span>\n            </router-link>\n          </v-dropdown-item>\n          <v-dropdown-item>\n            <a\n              href=\"#\"\n              class=\"dropdown-item\"\n              @click.prevent=\"logout\"\n            >\n              <font-awesome-icon icon=\"sign-out-alt\" class=\"dropdown-item-icon\"/> <span> {{ $t('navigation.logout') }} </span>\n            </a>\n          </v-dropdown-item>\n        </v-dropdown>\n      </li>\n    </ul>\n  </header>\n</template>\n<script type=\"text/babel\">\nimport { mapGetters, mapActions } from 'vuex'\nimport moment from \"moment\";\nexport default {\n  computed: {\n    ...mapGetters('userProfile', [\n      'user',\n      'notifications'\n    ]),\n    profilePicture () {\n      return '/images/default-avatar.jpg'\n    },\n    currentUser() {\n      return this.$store.state.user.currentUser\n    },\n    role() {\n      return this.currentUser ? this.currentUser.role : ''\n    },\n    listNotifications() {\n      let array = this.$store.state.userProfile.notifications;\n      if(array) {\n        array = array.slice(0,10)\n      }\n      return array\n    },\n  },\n  created () {\n    this.loadData()\n    this.loadNotifications()\n  },\n  methods: {\n    getFormattedDate(date) {\n      return moment(date).format(\"DD-MM-YYYY\");\n    },\n    ...mapActions('userProfile', [\n      'loadData',\n      'loadNotifications',\n    ]),\n    ...mapActions({\n      companySelect: 'changeCompany'\n    }),\n    ...mapActions('auth', [\n      'logout'\n    ]),\n    onNavToggle () {\n      this.$utils.toggleSidebar()\n    }\n  }\n}\n</script>\n<style>\n.user-info {\n  display: flex !important;\n  flex-direction: column !important;\n  justify-content: center !important;\n  align-items: flex-end !important;\n  float: left !important;\n  height: 36px !important;\n  padding: 0 !important;\n  margin-left: 14px !important;\n  margin-right: 0 !important;\n  line-height: 1.3 !important;\n  background-color: transparent !important;\n}\n.user-info .user-name {\n  display: block;\n  font-size: 13px;\n  font-weight: 600;\n  color: #fff;\n}\n.user-info .user-role {\n  display: block;\n  font-size: 11px;\n  color: rgba(255, 255, 255, 0.75);\n  text-transform: capitalize;\n}\n.notifications .dropdown-group .dropdown-container {\n  min-width: 23rem !important;\n}\n.alert {\n  position: relative;\n  padding: 0.145rem 1.25rem;\n  margin-bottom: 0.3rem;\n  border: 1px solid transparent;\n  border-radius: 0.25rem;\n}\n</style>"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86195,7 +87928,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/layouts/partials/TheSiteSidebar.vue"],"names":[],"mappings":";AA4CA;EACA;AACA;AACA;EACA,UAAA;EACA,WAAA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;AACA","sourcesContent":["<template>\n  <div class=\"sidebar-left\">\n    <div class=\"sidebar-body scroll-pane\">\n      <div class=\"side-nav\">\n        <div v-for=\"(menuItems, index) in menu\" :key=\"index\" class=\"menu-group\">\n          <router-link\n            v-for=\"(item, index1) in menuItems.filter((i) =>\n              i.meta.includes(role)\n            )\"\n            :key=\"index1\"\n            :to=\"item.route\"\n            class=\"menu-item\"\n            @click.native=\"Toggle\"\n          >\n            <font-awesome-icon :icon=\"item.icon\" class=\"icon menu-icon\" />\n            <span class=\"ml-3 menu-text\">{{ $t(item.title) }}</span>\n          </router-link>\n        </div>\n      </div>\n      <button type=\"button\"  @click=\"showModal\" class=\"btn ml-5 mb-3 btn-default\">\n\n<svg xmlns=\"http://www.w3.org/2000/svg\"  viewBox=\"0 0 50 50\" width=\"30px\" height=\"30px\">\n<path d=\"M 14 4 C 8.4886661 4 4 8.4886661 4 14 L 4 36 C 4 41.511334 8.4886661 46 14 46 L 36 46 C 41.511334 46 46 41.511334 46 36 L 46 14 C 46 8.4886661 41.511334 4 36 4 L 14 4 z M 14 6 L 36 6 C 40.430666 6 44 9.5693339 44 14 L 44 36 C 44 40.430666 40.430666 44 36 44 L 14 44 C 9.5693339 44 6 40.430666 6 36 L 6 14 C 6 9.5693339 9.5693339 6 14 6 z M 18 9 C 15.250484 9 13 11.250484 13 14 L 13 36 C 13 38.749516 15.250484 41 18 41 L 32 41 C 34.749516 41 37 38.749516 37 36 L 37 14 C 37 11.250484 34.749516 9 32 9 L 18 9 z M 18 11 L 32 11 C 33.668484 11 35 12.331516 35 14 L 35 36 C 35 37.668484 33.668484 39 32 39 L 18 39 C 16.331516 39 15 37.668484 15 36 L 15 14 C 15 12.331516 16.331516 11 18 11 z M 18 13 C 17.448 13 17 13.448 17 14 L 17 18 C 17 18.552 17.448 19 18 19 L 32 19 C 32.552 19 33 18.552 33 18 L 33 14 C 33 13.448 32.552 13 32 13 L 18 13 z M 19 21 A 2 2 0 0 0 19 25 A 2 2 0 0 0 19 21 z M 25 21 A 2 2 0 0 0 25 25 A 2 2 0 0 0 25 21 z M 31 21 A 2 2 0 0 0 31 25 A 2 2 0 0 0 31 21 z M 19 27 A 2 2 0 0 0 19 31 A 2 2 0 0 0 19 27 z M 25 27 A 2 2 0 0 0 25 31 A 2 2 0 0 0 25 27 z M 31 27 A 2 2 0 0 0 31 31 A 2 2 0 0 0 31 27 z M 19 33 C 17.895 33 17 33.895 17 35 C 17 36.105 17.895 37 19 37 L 25 37 C 26.105 37 27 36.105 27 35 C 27 33.895 26.105 33 25 33 L 19 33 z M 31 33 A 2 2 0 0 0 31 37 A 2 2 0 0 0 31 33 z\"/>\n</svg>\n</button>\n       <div class=\"modal\" id=\"showModal\">\n  <div class=\"modal-dialog mt-5 pt-5\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\"> Calculator</h5>\n        <button type=\"button\" @click=\"closeModal\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div class=\"modal-body\">\n      <vue-advanced-calculator description=\"Advance Cacluclator\" title=\"Cacluclator\"/>\n      </div>\n    </div>\n  </div>\n</div>\n    </div>\n  </div>\n</template>\n<style>\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n</style>\n<script type=\"text/babel\">\nimport {VueAdvancedCalculator} from 'vue-advanced-calculator'\nimport 'vue-advanced-calculator/dist/vue-advanced-calculator.min.css'\nexport default {\n  components: {\n  VueAdvancedCalculator\n},\n  props: [\"type\", \"role\"],\n  data() {\n    return {\n      sidebar: \"sidebar\",\n      menu: [\n        [\n          {\n            title: \"navigation.master\",\n            icon: \"file\",\n            route: \"/masters\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.inventory\",\n            icon: \"envelope\",\n            route: \"/inventory\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.orders\",\n            icon: \"plus\",\n            route: \"/orders\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.estimates\",\n            icon: \"file\",\n            route: \"/estimates\",\n            meta: [\"admin\", \"estimate\", \"accountant\"],\n          },\n          {\n            title: \"navigation.invoices\",\n            icon: \"file-alt\",\n            route: \"/invoices/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.dispatch\",\n            icon: \"file\",\n            route: \"/dispatch\",\n            meta: [\"admin\", \"accountant\", \"dispatch\"],\n          },\n          {\n            title: \"navigation.items\",\n            icon: \"file\",\n            route: \"/bill-ty\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipts\",\n            icon: \"credit-card\",\n            route: \"/receipts/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.payments\",\n            icon: \"credit-card\",\n            route: \"/payments\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher\",\n            icon: \"file-alt\",\n            route: \"/vouchers\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.notes\",\n            icon: \"envelope\",\n            route: \"/notes\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.ledger\",\n            icon: \"file\",\n            route: \"/ledgers\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.reports\",\n            icon: \"signal\",\n            route: \"/reports\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.customers',\n          //   icon: 'user',\n          //   route: '/customers',\n          //   meta: ['admin', 'accountant']\n          // },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.bank',\n          //   icon: 'file',\n          //   route: '/bank',\n          //   meta: ['admin']\n          // },\n        ],\n        [\n          // {\n          //   title: \"navigation.expenses\",\n          //   icon: \"space-shuttle\",\n          //   route: \"/expenses\",\n          //   meta: [\"admin\"],\n          // },\n          {\n            title: \"navigation.users\",\n            icon: \"user-plus\",\n            iconType: \"fa\",\n            route: \"/users\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.settings\",\n            icon: \"cog\",\n            route: \"/settings\",\n            meta: [\"admin\", \"accountant\"],\n          },\n        ],\n      ],\n    };\n  },\n  updated() {\n    this.update();\n  },\n  methods: {\n    Toggle() {\n      this.$utils.toggleSidebar();\n    },\n    update() {\n      this.$mount();\n    },\n     closeModal() {\n    document.getElementById('showModal').style.display=\"none\";\n   },\n     showModal() {\n    document.getElementById('showModal').style.display=\"block\";\n   }\n  },\n};\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/layouts/partials/TheSiteSidebar.vue"],"names":[],"mappings":";AA6CA;EACA;AACA;AACA;EACA,UAAA;EACA,WAAA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;AACA","sourcesContent":["<template>\n  <div class=\"sidebar-left\">\n    <div class=\"sidebar-body scroll-pane\">\n      <div class=\"side-nav\">\n        <div v-for=\"(menuItems, index) in menu\" :key=\"index\" class=\"menu-group\">\n          <router-link\n            v-for=\"(item, index1) in menuItems.filter((i) =>\n              i.meta.includes(role)\n            )\"\n            :key=\"index1\"\n            :to=\"item.route\"\n            :exact=\"!!item.exact\"\n            class=\"menu-item\"\n            @click.native=\"Toggle\"\n          >\n            <font-awesome-icon :icon=\"item.icon\" class=\"icon menu-icon\" />\n            <span class=\"ml-3 menu-text\">{{ $t(item.title) }}</span>\n          </router-link>\n        </div>\n      </div>\n      <button type=\"button\"  @click=\"showModal\" class=\"btn ml-5 mb-3 btn-default\">\n\n<svg xmlns=\"http://www.w3.org/2000/svg\"  viewBox=\"0 0 50 50\" width=\"30px\" height=\"30px\">\n<path d=\"M 14 4 C 8.4886661 4 4 8.4886661 4 14 L 4 36 C 4 41.511334 8.4886661 46 14 46 L 36 46 C 41.511334 46 46 41.511334 46 36 L 46 14 C 46 8.4886661 41.511334 4 36 4 L 14 4 z M 14 6 L 36 6 C 40.430666 6 44 9.5693339 44 14 L 44 36 C 44 40.430666 40.430666 44 36 44 L 14 44 C 9.5693339 44 6 40.430666 6 36 L 6 14 C 6 9.5693339 9.5693339 6 14 6 z M 18 9 C 15.250484 9 13 11.250484 13 14 L 13 36 C 13 38.749516 15.250484 41 18 41 L 32 41 C 34.749516 41 37 38.749516 37 36 L 37 14 C 37 11.250484 34.749516 9 32 9 L 18 9 z M 18 11 L 32 11 C 33.668484 11 35 12.331516 35 14 L 35 36 C 35 37.668484 33.668484 39 32 39 L 18 39 C 16.331516 39 15 37.668484 15 36 L 15 14 C 15 12.331516 16.331516 11 18 11 z M 18 13 C 17.448 13 17 13.448 17 14 L 17 18 C 17 18.552 17.448 19 18 19 L 32 19 C 32.552 19 33 18.552 33 18 L 33 14 C 33 13.448 32.552 13 32 13 L 18 13 z M 19 21 A 2 2 0 0 0 19 25 A 2 2 0 0 0 19 21 z M 25 21 A 2 2 0 0 0 25 25 A 2 2 0 0 0 25 21 z M 31 21 A 2 2 0 0 0 31 25 A 2 2 0 0 0 31 21 z M 19 27 A 2 2 0 0 0 19 31 A 2 2 0 0 0 19 27 z M 25 27 A 2 2 0 0 0 25 31 A 2 2 0 0 0 25 27 z M 31 27 A 2 2 0 0 0 31 31 A 2 2 0 0 0 31 27 z M 19 33 C 17.895 33 17 33.895 17 35 C 17 36.105 17.895 37 19 37 L 25 37 C 26.105 37 27 36.105 27 35 C 27 33.895 26.105 33 25 33 L 19 33 z M 31 33 A 2 2 0 0 0 31 37 A 2 2 0 0 0 31 33 z\"/>\n</svg>\n</button>\n       <div class=\"modal\" id=\"showModal\">\n  <div class=\"modal-dialog mt-5 pt-5\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\"> Calculator</h5>\n        <button type=\"button\" @click=\"closeModal\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div class=\"modal-body\">\n      <vue-advanced-calculator description=\"Advance Cacluclator\" title=\"Cacluclator\"/>\n      </div>\n    </div>\n  </div>\n</div>\n    </div>\n  </div>\n</template>\n<style>\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n</style>\n<script type=\"text/babel\">\nimport {VueAdvancedCalculator} from 'vue-advanced-calculator'\nimport 'vue-advanced-calculator/dist/vue-advanced-calculator.min.css'\nexport default {\n  components: {\n  VueAdvancedCalculator\n},\n  props: [\"type\", \"role\"],\n  data() {\n    return {\n      sidebar: \"sidebar\",\n      menu: [\n        [\n          {\n            title: \"navigation.master\",\n            icon: \"file\",\n            route: \"/masters\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.inventory\",\n            icon: \"envelope\",\n            route: \"/inventory\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.orders\",\n            icon: \"plus\",\n            route: \"/orders\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.estimates\",\n            icon: \"file\",\n            route: \"/estimates\",\n            meta: [\"admin\", \"estimate\", \"accountant\"],\n          },\n          {\n            title: \"navigation.invoices\",\n            icon: \"file-alt\",\n            route: \"/invoices/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.dispatch\",\n            icon: \"file\",\n            route: \"/dispatch\",\n            meta: [\"admin\", \"accountant\", \"dispatch\"],\n          },\n          {\n            title: \"navigation.items\",\n            icon: \"file\",\n            route: \"/bill-ty\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipts\",\n            icon: \"credit-card\",\n            route: \"/receipts/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipt_approvals\",\n            icon: \"check-circle\",\n            route: \"/receipts/approvals\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.payments\",\n            icon: \"credit-card\",\n            route: \"/payments\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher\",\n            icon: \"file-alt\",\n            route: \"/vouchers\",\n            exact: true,\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher_approvals\",\n            icon: \"check-circle\",\n            route: \"/vouchers/approvals\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.notes\",\n            icon: \"envelope\",\n            route: \"/notes\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.ledger\",\n            icon: \"file\",\n            route: \"/ledgers\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.reports\",\n            icon: \"signal\",\n            route: \"/reports\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.customers',\n          //   icon: 'user',\n          //   route: '/customers',\n          //   meta: ['admin', 'accountant']\n          // },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.bank',\n          //   icon: 'file',\n          //   route: '/bank',\n          //   meta: ['admin']\n          // },\n        ],\n        [\n          // {\n          //   title: \"navigation.expenses\",\n          //   icon: \"space-shuttle\",\n          //   route: \"/expenses\",\n          //   meta: [\"admin\"],\n          // },\n          {\n            title: \"navigation.users\",\n            icon: \"user-plus\",\n            iconType: \"fa\",\n            route: \"/users\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.audit_logs\",\n            icon: \"history\",\n            route: \"/audit-logs\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.settings\",\n            icon: \"cog\",\n            route: \"/settings\",\n            meta: [\"admin\", \"accountant\"],\n          },\n        ],\n      ],\n    };\n  },\n  updated() {\n    this.update();\n  },\n  methods: {\n    Toggle() {\n      this.$utils.toggleSidebar();\n    },\n    update() {\n      this.$mount();\n    },\n     closeModal() {\n    document.getElementById('showModal').style.display=\"none\";\n   },\n     showModal() {\n    document.getElementById('showModal').style.display=\"block\";\n   }\n  },\n};\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86465,7 +88198,34 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ninput.base-prefix-input[data-v-9379c43a]:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-order-item[data-v-9379c43a]{\n  border: 0px\n}\n.add-order-item[data-v-9379c43a]:focus {\n  border: 1px solid salmon\n}\n.table-responsive[data-v-9379c43a] {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n.heading-1[data-v-9379c43a] {\n    padding: 5px 180px;\n}\n.table-responsive[data-v-9379c43a] {\n    overflow-x: auto !important;\n}\n.multiselect__content-wrapper[data-v-9379c43a] {\n    overflow-x: visible !important;\n}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/orders/Create.vue"],"names":[],"mappings":";AAmLA;IACA,4CAAA;IACA,iDAAA;AACA;AACA;EACA;AACA;AACA;EACA;AACA;AACA;EACA,oBAAA;AACA;AACA;AACA;IACA,kBAAA;AACA;AACA;IACA,2BAAA;AACA;AACA;IACA,8BAAA;AACA;AACA","sourcesContent":["<template>\n  <div class=\"order-create-page main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/orders\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('orders.title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form v-if=\"!initLoading\" action=\"\" @submit.prevent=\"submitOrderData\">\n      <div class=\"page-header\">\n        <h3 v-if=\"isEdit\" class=\"page-title\">{{ $t('orders.edit_order') }}</h3>\n        <h3 v-else class=\"page-title\">{{ $t('orders.new_order') }} </h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/orders\">{{ $tc('orders.order', 2) }}</router-link></li>\n          <li v-if=\"isEdit\" class=\"breadcrumb-item\">{{ $t('orders.edit_order') }}</li>\n          <li v-else class=\"breadcrumb-item\">{{ $t('orders.new_order') }}</li>\n        </ol>\n      </div>\n      <div class=\"row order-input-group\">\n        <div class=\"col-md-5 order-customer-container\">\n          <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n            <base-select\n              v-model=\"setOrderDebtor\"\n              label=\"name\"\n              track-by=\"id\"\n              :invalid=\"$v.newOrder.debtors.$error\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"isEdit\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n            />\n            <div v-if=\"$v.newOrder.debtors.$error\">\n              <span v-if=\"!$v.newOrder.debtors.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n            </div>\n        </div>\n        <div class=\"col order-input\">\n          <div class=\"row\">\n            <div class=\"col collapse-input\">\n              <label>{{ $tc('orders.order',1) }} {{ $t('orders.date') }}<span class=\"text-danger\"> * </span></label>\n              <input\n                v-model=\"newOrder.order_date\"\n                type=\"date\"\n                data-date=\"\"\n                data-date-format=\"DD/MM/YYYY\"\n                class=\"base-prefix-input\"\n                @change=\"$v.newOrder.order_date.$touch()\"\n                :disabled=\"isEdit\"\n              />\n              <span v-if=\"$v.newOrder.order_date.$error && !$v.newOrder.order_date.required\" class=\"text-danger\"> {{ $t('validation.required') }} </span>\n            </div>\n            <div class=\"col collapse-input\">\n              <label>{{ $t('orders.order_number') }}<span class=\"text-danger\"> * </span></label>\n              <base-prefix-input\n                v-model=\"orderNumAttribute\"\n                :invalid=\"$v.orderNumAttribute.$error\"\n                :prefix=\"orderPrefix\"\n                icon=\"hashtag\"\n                @input=\"$v.orderNumAttribute.$touch()\"\n                :prefix-width=\"55\"\n                :disabled=\"true\"\n              />\n              <span v-show=\"$v.orderNumAttribute.$error && !$v.orderNumAttribute.required\" class=\"text-danger mt-1\"> {{ $tc('validation.required') }}  </span>\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"table-responsive\">\n        <table class=\"table item-table\">\n          <colgroup>\n            <col style=\"width: 60%;\">\n            <col style=\"width: 17%;\">\n            <col style=\"width: 25%;\">\n            <col style=\"width: 0%;\">\n          </colgroup>\n          <thead class=\"item-table-header\">\n            <tr>\n              <th class=\"text-left\">\n                <span class=\"column-heading heading-1 item-heading\">\n                  {{ $tc('orders.inventory.title',2) }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('orders.inventory.quantity') }}\n                </span>\n              </th>\n              <th class=\"text-left\"></th>\n              <th class=\"text-left\"></th>\n            </tr>\n          </thead>\n          <draggable v-model=\"inventoryBind\" class=\"item-body\" tag=\"tbody\" handle=\".handle\">\n            <invoice-inventory\n              v-for=\"(each, index) in inventoryBind\"\n              ref=\"orderInventory\"\n              :key=\"each.name+index\"\n              :index=\"index\"\n              :inventory-data=\"each\"\n              :currency=\"currency\"\n              :discount-per-inventory=\"discountPerInventory\"\n              :inventory-type=\"'orders'\"\n              :inventory-list=\"inventoryListBind\"\n              :inventory-negative=\"inventoryNegative\"\n              @remove=\"removeInventory\"\n              @update=\"updateInventoryBounce\"\n              @inventoryValidate=\"checkInventoryData\"\n              @endlist=\"showEndList\"\n            />\n          </draggable>\n        </table>\n      </div>\n      <button v-if=\"showAddNewInventory\" class=\"add-item-action add-order-item\" @click=\"addInventory\">\n        <font-awesome-icon icon=\"shopping-basket\" class=\"mr-2\"/>\n        {{ $t('orders.add_item') }}\n      </button>\n      <button v-if=\"showEndOfList\" @click=\"removeEndOfList\" class=\"btn btn-primary\" style=\"margin: 10px\">\n        End Of List\n      </button>\n\n      <div class=\"order-foot\">\n        <div>\n          <label>{{ $t('orders.notes') }}</label>\n          <base-text-area\n            v-model=\"newOrder.notes\"\n            rows=\"3\"\n            cols=\"50\"\n            @input=\"$v.newOrder.notes.$touch()\"\n          />\n          <div v-if=\"$v.newOrder.notes.$error\">\n            <span v-if=\"!$v.newOrder.notes.maxLength\" class=\"text-danger\">{{ $t('validation.notes_maxlength') }}</span>\n          </div>\n        </div>\n\n        <div class=\"order-total\">\n          <div class=\"section\">\n            <label class=\"order-label\">{{ $t('orders.quantity') }}</label>\n            <label class=\"\">\n              <div v-html=\"totalQuantity(inventoryBind)\" />\n            </label>\n          </div>\n          <!-- <div class=\"section\">\n            <label class=\"order-label\">{{ $t('orders.sub_total') }}</label>\n            <label class=\"order-amount\">\n              ₹ {{ subtotal }}\n            </label>\n          </div>\n\n          <div class=\"section border-top mt-3\">\n            <label class=\"order-label\">{{ $t('orders.total') }} {{ $t('orders.amount') }}:</label>\n            <label class=\"order-amount total\">\n              ₹ {{ total }}\n            </label>\n          </div> -->\n        </div>\n      </div>\n      <div class=\"page-actions row\">\n          <!-- <a v-if=\"isEdit\" :href=\"`/orders/pdf/${newOrder.unique_hash}`\" target=\"_blank\" class=\"mr-3 order-action-btn base-button btn btn-outline-primary default-size\" outline color=\"theme\">\n            {{ $t('general.view_pdf') }}\n          </a> -->\n          <base-button\n            :loading=\"isLoading\"\n            :disabled=\"isLoading\"\n            icon=\"save\"\n            color=\"theme\"\n            class=\"order-action-btn\"\n            type=\"submit\">\n            {{ $t('orders.save_order') }}\n          </base-button>\n        </div>\n    </form>\n    <base-loader v-else />\n  </div>\n</template>\n<style scoped>\ninput.base-prefix-input:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-order-item{\n  border: 0px\n}\n.add-order-item:focus {\n  border: 1px solid salmon\n}\n.table-responsive {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n  .heading-1 {\n    padding: 5px 180px;\n  }\n  .table-responsive {\n    overflow-x: auto !important;\n  }\n  .multiselect__content-wrapper {\n    overflow-x: visible !important;\n  }\n}\n</style>\n<script>\nimport draggable from 'vuedraggable'\nimport MultiSelect from 'vue-multiselect'\nimport InvoiceInventory from '../invoices/Inventory'\nimport OrderStub from '../../stub/order'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport { validationMixin } from 'vuelidate'\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: {\n    MultiSelect,\n    draggable,\n    InvoiceInventory\n  },\n  mixins: [validationMixin],\n  data () {\n    return {\n      newOrder: {\n        order_date: null,\n        order_number: null,\n        user_id: null,\n        order_template_id: 1,\n        sub_total: null,\n        total: null,\n        notes: null,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        //reference_number: null,\n        order_items: [{\n          ...OrderStub,\n        }],\n        debtors: '',\n      },\n      customers: [],\n      inventoryList: [],\n      orderTemplates: [],\n      selectedCurrency: '',\n      discountPerInventory: null,\n      initLoading: false,\n      isLoading: false,\n      maxDiscount: 0,\n      orderPrefix: null,\n      orderNumAttribute: null,\n      role: this.$store.state.user.currentUser.role,\n      sundryDebtorsList: [], //List of Sundry Debitor name\n      url: null,\n      siteURL: null,\n      showAddNewInventory: true,\n      showEndOfList: false,\n      inventoryNegative: false,\n    }\n  },\n  validations () {\n    return {\n      newOrder: {\n        order_date: {\n          required\n        },\n        // discount_val: {\n        //   between: between(0, this.subtotal)\n        // },\n        notes: {\n          maxLength: maxLength(255)\n        },\n        // reference_number: {\n        //   maxLength: maxLength(255)\n        // },\n        debtors: {\n          required\n        }\n      },\n      orderNumAttribute: {\n        required\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrency'\n    ]),\n    ...mapGetters('orders', [\n      'getTemplateId',\n      //'selectedCustomer'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    currency () {\n      return this.selectedCurrency\n    },\n    setOrderDebtor: {\n      cache: false,\n      get() {\n        return this.newOrder.debtors\n      },\n      set(value) {\n        //this.searchDebtorRefNumber(value)\n        this.newOrder.debtors = value\n      },\n    },\n    inventoryBind() {\n      let invent = this.newOrder.order_items\n      if (this.isEdit) {\n        invent = this.newOrder.order_items\n      }\n      return invent\n    },\n    isEdit() {\n      if (this.$route.name === 'orders.edit') {\n        return true\n      }\n      return false\n    },\n    inventoryListBind() {\n      return this.$store.state.inventory.inventories\n    }\n  },\n  watch: {\n    subtotal (newValue) {\n      if (this.newOrder.discount_type === 'percentage') {\n        this.newOrder.discount_val = (this.newOrder.discount * newValue)\n      }\n    }\n  },\n  created () {\n    this.loadData()\n    this.fetchInitialInventory()\n    this.updateInventoryBounce = _.debounce((data) => {\n      this.updateInventory(data);\n    }, 1500);\n  },\n  methods: {\n    ...mapActions('modal', [\n      'openModal'\n    ]),\n    ...mapActions('orders', [\n      'addOrder',\n      'fetchCreateOrder',\n      'fetchOrder',\n      'updateOrder',\n      'fetchReferenceNumber',\n    ]),\n    ...mapActions('inventory', [\n      'fetchAllInventory'\n    ]),\n    totalQuantity(inventory){\n      if (inventory.length) {\n        return inventory.map(i => parseFloat(i.quantity)).reduce((a,b) => a + b)\n      }\n      return 0\n    },\n    async fetchInitialInventory () {\n      await this.fetchAllInventory({\n        limit: 50,\n        filter: {},\n        orderByField: '',\n        orderBy: ''\n      }).then((resp) => {\n        this.inventoryList = resp.data.inventories.data\n      })\n    },\n    async loadData () {\n      if (this.isEdit) {\n        this.initLoading = true\n        let response = await this.fetchOrder(this.$route.params.id)\n        if (response.data) {\n          this.newOrder = response.data.order\n          this.inventoryNegative = response.data.inventory_negative\n          this.newOrder.order_date = moment(response.data.order.order_date).format('YYYY-MM-DD')\n          this.discountPerInventory = response.data.discount_per_inventory\n          this.selectedCurrency = this.defaultCurrency\n          this.orderPrefix = response.data.order_prefix\n          this.orderNumAttribute = response.data.orderNumber\n          this.newOrder.debtors = response.data.sundryDebtorsList[0]\n        }\n        this.initLoading = false\n        return\n      }\n\n      this.initLoading = true\n      let response = await this.fetchCreateOrder()\n      if (response.data) {\n        this.discountPerInventory = response.data.discount_per_inventory\n        this.selectedCurrency = this.defaultCurrency\n        this.newOrder.order_date = response.data.order_today_date\n        this.inventoryNegative = response.data.inventory_negative\n        this.orderPrefix = response.data.order_prefix\n        this.orderNumAttribute = response.data.nextOrderNumberAttribute\n        this.sundryDebtorsList = response.data.sundryDebtorsList\n      }\n      this.initLoading = false\n    },\n    addInventory () {\n      this.inventoryBind.push({...OrderStub})\n      this.$nextTick(() => {\n        this.$refs.orderInventory[this.inventoryBind.length-1].$el.focus()\n        this.$refs.orderInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()\n      })\n    },\n    removeInventory (index) {\n      this.inventoryBind.splice(index, 1)\n      this.inventoryBind.filter(i => i).map((each, key) => {\n        each['index'] = key\n        this.updateInventory(each)\n      })\n    },\n    updateInventory (data) {\n      if (data.inventory && !data.inventory.inventory_id) {\n        return false\n      }\n      Object.assign(this.inventoryBind[data.index], {...data.inventory})\n      this.$nextTick(() => {\n        this.$refs.orderInventory[data.index].$el.focus()\n        if (data.updatingInput === 'sale_price') {\n          this.$refs.orderInventory[data.index].$children[3].$refs.baseInput.focus()\n        }\n        if (data.updatingInput === 'quantity') {\n          this.$refs.orderInventory[data.index].$children[1].$refs.baseInput.focus()\n        }\n      })\n    },\n    submitOrderData () {\n      if (!this.checkValid()) {\n        return false\n      }\n      this.newOrder.order_number = this.orderPrefix + '-' + this.orderNumAttribute\n\n      let data = {\n        ...this.newOrder,\n        order_date: moment(this.newOrder.order_date).format('DD/MM/YYYY'),\n        user_id: this.user.id,\n        order_template_id: this.getTemplateId,\n      }\n      if (this.isEdit) {\n        this.submitUpdate(data)\n        return\n      }\n\n      this.submitSave(data)\n    },\n    reset() {\n      setTimeout(() => {\n        window.location.reload()\n        this.isLoading = false\n      }, 2000)\n    },\n    async showOrderPopup (order_id) {\n      swal({\n        title: this.$t('orders.order_report_title'),\n        text: this.$t('orders.order_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.siteURL = `/reports/order/${order_id}`\n          this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n\n          printJS({\n            printable: this.url,\n            type: 'pdf',\n            onPrintDialogClose: () => {\n              this.reset();\n            }\n          })\n        } else {\n          this.reset()\n        }\n      })\n    },\n    submitSave (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.addOrder(data).then((res) => {\n        if (res.data) {\n          window.toastr['success'](this.$t('orders.created_message'))\n          //this.$router.push('/orders/create')\n          //this.showOrderPopup(res.data.order.id)\n          this.reset()\n        }\n      }).catch((err) => {s\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n        this.reset()\n      })\n    },\n    submitUpdate (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.updateOrder(data).then((res) => {\n        if (res.data && res.data.order && res.data.order.id) {\n          window.toastr['success'](this.$t('orders.updated_message'))\n          this.isLoading = false\n          //this.showOrderPopup(res.data.order.id)\n          this.reset()\n        }\n        if (res.data.error === 'invalid_due_amount') {\n          this.isLoading = false\n           window.toastr['error'](this.$t('orders.invalid_due_amount_message'))\n           this.reset()\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          this.reset()\n          return true\n        }\n      })\n    },\n    checkInventoryData (index, isValid) {\n      this.newOrder.order_items[index].valid = isValid\n    },\n    checkValid () {\n      this.$v.newOrder.$touch()\n      window.hub.$emit('checkInventory')\n      let isValid = true\n      this.newOrder.order_items.forEach((each) => {\n        if (!each.valid) {\n          isValid = false\n        }\n      })\n\n      if (this.$v.newOrder.$invalid === false && isValid === true) {\n        isValid = true\n      }\n      return isValid\n    },\n    showEndList(val) {\n      this.showAddNewInventory = !val;\n      this.showEndOfList = val;\n      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);\n    },\n    removeEndOfList() {\n      this.showEndOfList = false;\n      this.showAddNewInventory = true;\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ninput.base-prefix-input[data-v-9379c43a]:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-order-item[data-v-9379c43a]{\n  border: 0px\n}\n.add-order-item[data-v-9379c43a]:focus {\n  border: 1px solid salmon\n}\n.table-responsive[data-v-9379c43a] {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n.heading-1[data-v-9379c43a] {\n    padding: 5px 180px;\n}\n.table-responsive[data-v-9379c43a] {\n    overflow-x: auto !important;\n}\n.multiselect__content-wrapper[data-v-9379c43a] {\n    overflow-x: visible !important;\n}\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/orders/Create.vue"],"names":[],"mappings":";AA6LA;IACA,4CAAA;IACA,iDAAA;AACA;AACA;EACA;AACA;AACA;EACA;AACA;AACA;EACA,oBAAA;AACA;AACA;AACA;IACA,kBAAA;AACA;AACA;IACA,2BAAA;AACA;AACA;IACA,8BAAA;AACA;AACA","sourcesContent":["<template>\n  <div class=\"order-create-page main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/orders\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('orders.title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form v-if=\"!initLoading\" action=\"\" @submit.prevent=\"submitOrderData\">\n      <div class=\"page-header\">\n        <h3 v-if=\"isEdit\" class=\"page-title\">{{ $t('orders.edit_order') }}</h3>\n        <h3 v-else class=\"page-title\">{{ $t('orders.new_order') }} </h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/orders\">{{ $tc('orders.order', 2) }}</router-link></li>\n          <li v-if=\"isEdit\" class=\"breadcrumb-item\">{{ $t('orders.edit_order') }}</li>\n          <li v-else class=\"breadcrumb-item\">{{ $t('orders.new_order') }}</li>\n        </ol>\n      </div>\n      <div class=\"row order-input-group\">\n        <div class=\"col-md-5 order-customer-container\">\n          <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n            <base-select\n              v-model=\"setOrderDebtor\"\n              label=\"name\"\n              track-by=\"id\"\n              :invalid=\"$v.newOrder.debtors.$error\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              :disabled=\"isEdit\"\n              :placeholder=\"$t('receipts.select_a_list')\"\n            />\n            <div v-if=\"$v.newOrder.debtors.$error\">\n              <span v-if=\"!$v.newOrder.debtors.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n            </div>\n        </div>\n        <div class=\"col order-input\">\n          <div class=\"row\">\n            <div class=\"col collapse-input\">\n              <label>{{ $tc('orders.order',1) }} {{ $t('orders.date') }}<span class=\"text-danger\"> * </span></label>\n              <input\n                v-model=\"newOrder.order_date\"\n                type=\"date\"\n                data-date=\"\"\n                data-date-format=\"DD/MM/YYYY\"\n                class=\"base-prefix-input\"\n                @change=\"$v.newOrder.order_date.$touch()\"\n                :disabled=\"isEdit\"\n              />\n              <span v-if=\"$v.newOrder.order_date.$error && !$v.newOrder.order_date.required\" class=\"text-danger\"> {{ $t('validation.required') }} </span>\n            </div>\n            <div class=\"col collapse-input\">\n              <label>{{ $t('orders.order_number') }}<span class=\"text-danger\"> * </span></label>\n              <base-prefix-input\n                v-model=\"orderNumAttribute\"\n                :invalid=\"$v.orderNumAttribute.$error\"\n                :prefix=\"orderPrefix\"\n                icon=\"hashtag\"\n                @input=\"$v.orderNumAttribute.$touch()\"\n                :prefix-width=\"55\"\n                :disabled=\"true\"\n              />\n              <span v-show=\"$v.orderNumAttribute.$error && !$v.orderNumAttribute.required\" class=\"text-danger mt-1\"> {{ $tc('validation.required') }}  </span>\n            </div>\n            <div class=\"col collapse-input\">\n              <label>{{ $t('orders.ref_number') }}</label>\n              <base-prefix-input\n                v-model=\"referenceNumAttribute\"\n                :prefix=\"orderPrefix\"\n                icon=\"hashtag\"\n                :prefix-width=\"55\"\n                :disabled=\"true\"\n              />\n            </div>\n          </div>\n        </div>\n      </div>\n      <div class=\"table-responsive\">\n        <table class=\"table item-table\">\n          <colgroup>\n            <col style=\"width: 60%;\">\n            <col style=\"width: 17%;\">\n            <col style=\"width: 25%;\">\n            <col style=\"width: 0%;\">\n          </colgroup>\n          <thead class=\"item-table-header\">\n            <tr>\n              <th class=\"text-left\">\n                <span class=\"column-heading heading-1 item-heading\">\n                  {{ $tc('orders.inventory.title',2) }}\n                </span>\n              </th>\n              <th class=\"text-right\">\n                <span class=\"column-heading\">\n                  {{ $t('orders.inventory.quantity') }}\n                </span>\n              </th>\n              <th class=\"text-left\"></th>\n              <th class=\"text-left\"></th>\n            </tr>\n          </thead>\n          <draggable v-model=\"inventoryBind\" class=\"item-body\" tag=\"tbody\" handle=\".handle\">\n            <invoice-inventory\n              v-for=\"(each, index) in inventoryBind\"\n              ref=\"orderInventory\"\n              :key=\"each.name+index\"\n              :index=\"index\"\n              :inventory-data=\"each\"\n              :currency=\"currency\"\n              :discount-per-inventory=\"discountPerInventory\"\n              :inventory-type=\"'orders'\"\n              :inventory-list=\"inventoryListBind\"\n              :inventory-negative=\"inventoryNegative\"\n              @remove=\"removeInventory\"\n              @update=\"updateInventoryBounce\"\n              @inventoryValidate=\"checkInventoryData\"\n              @endlist=\"showEndList\"\n            />\n          </draggable>\n        </table>\n      </div>\n      <button v-if=\"showAddNewInventory\" class=\"add-item-action add-order-item\" @click=\"addInventory\">\n        <font-awesome-icon icon=\"shopping-basket\" class=\"mr-2\"/>\n        {{ $t('orders.add_item') }}\n      </button>\n      <button v-if=\"showEndOfList\" @click=\"removeEndOfList\" class=\"btn btn-primary\" style=\"margin: 10px\">\n        End Of List\n      </button>\n\n      <div class=\"order-foot\">\n        <div>\n          <label>{{ $t('orders.notes') }}</label>\n          <base-text-area\n            v-model=\"newOrder.notes\"\n            rows=\"3\"\n            cols=\"50\"\n            @input=\"$v.newOrder.notes.$touch()\"\n          />\n          <div v-if=\"$v.newOrder.notes.$error\">\n            <span v-if=\"!$v.newOrder.notes.maxLength\" class=\"text-danger\">{{ $t('validation.notes_maxlength') }}</span>\n          </div>\n        </div>\n\n        <div class=\"order-total\">\n          <div class=\"section\">\n            <label class=\"order-label\">{{ $t('orders.quantity') }}</label>\n            <label class=\"\">\n              <div v-html=\"totalQuantity(inventoryBind)\" />\n            </label>\n          </div>\n          <!-- <div class=\"section\">\n            <label class=\"order-label\">{{ $t('orders.sub_total') }}</label>\n            <label class=\"order-amount\">\n              ₹ {{ subtotal }}\n            </label>\n          </div>\n\n          <div class=\"section border-top mt-3\">\n            <label class=\"order-label\">{{ $t('orders.total') }} {{ $t('orders.amount') }}:</label>\n            <label class=\"order-amount total\">\n              ₹ {{ total }}\n            </label>\n          </div> -->\n        </div>\n      </div>\n      <div class=\"page-actions row\">\n          <!-- <a v-if=\"isEdit\" :href=\"`/orders/pdf/${newOrder.unique_hash}`\" target=\"_blank\" class=\"mr-3 order-action-btn base-button btn btn-outline-primary default-size\" outline color=\"theme\">\n            {{ $t('general.view_pdf') }}\n          </a> -->\n          <base-button\n            :loading=\"isLoading\"\n            :disabled=\"isLoading\"\n            icon=\"save\"\n            color=\"theme\"\n            class=\"order-action-btn\"\n            type=\"submit\">\n            {{ $t('orders.save_order') }}\n          </base-button>\n        </div>\n    </form>\n    <base-loader v-else />\n  </div>\n</template>\n<style scoped>\ninput.base-prefix-input:disabled {\n    background: rgba(59, 59, 59, 0.3) !important;\n    border-color: rgba(118, 118, 118, 0.3) !important;\n}\n.add-order-item{\n  border: 0px\n}\n.add-order-item:focus {\n  border: 1px solid salmon\n}\n.table-responsive {\n  overflow-x: inherit ;\n}\n@media screen and (max-width:400px) {\n  .heading-1 {\n    padding: 5px 180px;\n  }\n  .table-responsive {\n    overflow-x: auto !important;\n  }\n  .multiselect__content-wrapper {\n    overflow-x: visible !important;\n  }\n}\n</style>\n<script>\nimport draggable from 'vuedraggable'\nimport MultiSelect from 'vue-multiselect'\nimport InvoiceInventory from '../invoices/Inventory'\nimport OrderStub from '../../stub/order'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nimport { validationMixin } from 'vuelidate'\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: {\n    MultiSelect,\n    draggable,\n    InvoiceInventory\n  },\n  mixins: [validationMixin],\n  data () {\n    return {\n      newOrder: {\n        order_date: null,\n        order_number: null,\n        reference_number: null,\n        user_id: null,\n        order_template_id: 1,\n        sub_total: null,\n        total: null,\n        notes: null,\n        discount_type: 'fixed',\n        discount_val: 0,\n        discount: 0,\n        order_items: [{\n          ...OrderStub,\n        }],\n        debtors: '',\n      },\n      customers: [],\n      inventoryList: [],\n      orderTemplates: [],\n      selectedCurrency: '',\n      discountPerInventory: null,\n      initLoading: false,\n      isLoading: false,\n      maxDiscount: 0,\n      orderPrefix: null,\n      orderNumAttribute: null,\n      role: this.$store.state.user.currentUser.role,\n      sundryDebtorsList: [], //List of Sundry Debitor name\n      url: null,\n      siteURL: null,\n      showAddNewInventory: true,\n      showEndOfList: false,\n      inventoryNegative: false,\n    }\n  },\n  validations () {\n    return {\n      newOrder: {\n        order_date: {\n          required\n        },\n        // discount_val: {\n        //   between: between(0, this.subtotal)\n        // },\n        notes: {\n          maxLength: maxLength(255)\n        },\n        // reference_number: {\n        //   maxLength: maxLength(255)\n        // },\n        debtors: {\n          required\n        }\n      },\n      orderNumAttribute: {\n        required\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrency'\n    ]),\n    ...mapGetters('orders', [\n      'getTemplateId',\n      //'selectedCustomer'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    currency () {\n      return this.selectedCurrency\n    },\n    setOrderDebtor: {\n      cache: false,\n      get() {\n        return this.newOrder.debtors\n      },\n      set(value) {\n        this.searchDebtorRefNumber({\n          id: value && value.id ? value.id : value,\n          order_date: this.newOrder.order_date\n        })\n        this.newOrder.debtors = value\n      },\n    },\n    inventoryBind() {\n      let invent = this.newOrder.order_items\n      if (this.isEdit) {\n        invent = this.newOrder.order_items\n      }\n      return invent\n    },\n    isEdit() {\n      if (this.$route.name === 'orders.edit') {\n        return true\n      }\n      return false\n    },\n    inventoryListBind() {\n      return this.$store.state.inventory.inventories\n    },\n    referenceNumAttribute: {\n      cache: false,\n      get() {\n        if (this.newOrder.reference_number && -1 !== this.newOrder.reference_number.indexOf('-')) {\n          return this.newOrder.reference_number.split('-').pop()\n        }\n        return this.newOrder.reference_number\n      },\n      set(value) {\n        this.newOrder.reference_number = value\n      }\n    }\n  },\n  watch: {\n    subtotal (newValue) {\n      if (this.newOrder.discount_type === 'percentage') {\n        this.newOrder.discount_val = (this.newOrder.discount * newValue)\n      }\n    },\n    'newOrder.order_date' () {\n      if (this.newOrder.debtors && !this.isEdit) {\n        this.searchDebtorRefNumber({\n          id: this.newOrder.debtors.id ? this.newOrder.debtors.id : this.newOrder.debtors,\n          order_date: this.newOrder.order_date\n        })\n      }\n    }\n  },\n  created () {\n    this.loadData()\n    this.fetchInitialInventory()\n    this.updateInventoryBounce = _.debounce((data) => {\n      this.updateInventory(data);\n    }, 1500);\n  },\n  methods: {\n    ...mapActions('modal', [\n      'openModal'\n    ]),\n    ...mapActions('orders', [\n      'addOrder',\n      'fetchCreateOrder',\n      'fetchOrder',\n      'updateOrder',\n      'fetchReferenceNumber',\n    ]),\n    ...mapActions('inventory', [\n      'fetchAllInventory'\n    ]),\n    totalQuantity(inventory = []){\n      return inventory.reduce((total, item) => total + (parseInt(item.quantity, 10) || 0), 0)\n    },\n    async fetchInitialInventory () {\n      await this.fetchAllInventory({\n        limit: 50,\n        filter: {},\n        orderByField: '',\n        orderBy: ''\n      }).then((resp) => {\n        this.inventoryList = resp.data.inventories.data\n      })\n    },\n    async loadData () {\n      if (this.isEdit) {\n        this.initLoading = true\n        let response = await this.fetchOrder(this.$route.params.id)\n        if (response.data) {\n          this.newOrder = response.data.order\n          this.inventoryNegative = response.data.inventory_negative\n          this.newOrder.order_date = moment(response.data.order.order_date).format('YYYY-MM-DD')\n          this.discountPerInventory = response.data.discount_per_inventory\n          this.selectedCurrency = this.defaultCurrency\n          this.orderPrefix = response.data.order_prefix\n          this.orderNumAttribute = response.data.orderNumber\n          this.newOrder.reference_number = response.data.order.reference_number\n          this.newOrder.debtors = response.data.sundryDebtorsList[0]\n        }\n        this.initLoading = false\n        return\n      }\n\n      this.initLoading = true\n      let response = await this.fetchCreateOrder()\n      if (response.data) {\n        this.discountPerInventory = response.data.discount_per_inventory\n        this.selectedCurrency = this.defaultCurrency\n        this.newOrder.order_date = response.data.order_today_date\n        this.inventoryNegative = response.data.inventory_negative\n        this.orderPrefix = response.data.order_prefix\n        this.orderNumAttribute = response.data.nextOrderNumberAttribute\n        this.newOrder.reference_number = response.data.nextOrderNumberAttribute\n        this.sundryDebtorsList = response.data.sundryDebtorsList\n      }\n      this.initLoading = false\n    },\n    addInventory () {\n      this.inventoryBind.push({...OrderStub})\n      this.$nextTick(() => {\n        this.$refs.orderInventory[this.inventoryBind.length-1].$el.focus()\n        this.$refs.orderInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()\n      })\n    },\n    removeInventory (index) {\n      this.inventoryBind.splice(index, 1)\n      this.inventoryBind.filter(i => i).map((each, key) => {\n        each['index'] = key\n        this.updateInventory(each)\n      })\n    },\n    updateInventory (data) {\n      if (data.inventory && !data.inventory.inventory_id) {\n        return false\n      }\n      Object.assign(this.inventoryBind[data.index], {...data.inventory})\n      this.$nextTick(() => {\n        this.$refs.orderInventory[data.index].$el.focus()\n        if (data.updatingInput === 'sale_price') {\n          this.$refs.orderInventory[data.index].$children[3].$refs.baseInput.focus()\n        }\n        if (data.updatingInput === 'quantity') {\n          this.$refs.orderInventory[data.index].$children[1].$refs.baseInput.focus()\n        }\n      })\n    },\n    submitOrderData () {\n      if (!this.checkValid()) {\n        return false\n      }\n      this.newOrder.order_number = this.orderPrefix + '-' + this.orderNumAttribute\n      this.newOrder.reference_number = this.orderPrefix + '-' + this.referenceNumAttribute\n\n      let data = {\n        ...this.newOrder,\n        order_date: moment(this.newOrder.order_date).format('DD/MM/YYYY'),\n        user_id: this.user.id,\n        order_template_id: this.getTemplateId,\n      }\n      if (this.isEdit) {\n        this.submitUpdate(data)\n        return\n      }\n\n      this.submitSave(data)\n    },\n    reset() {\n      setTimeout(() => {\n        window.location.reload()\n        this.isLoading = false\n      }, 2000)\n    },\n    async showOrderPopup (order_id) {\n      swal({\n        title: this.$t('orders.order_report_title'),\n        text: this.$t('orders.order_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.siteURL = `/reports/order/${order_id}`\n          this.url = `${this.siteURL}?company_id=${this.user.company_id}`\n\n          printJS({\n            printable: this.url,\n            type: 'pdf',\n            onPrintDialogClose: () => {\n              this.reset();\n            }\n          })\n        } else {\n          this.reset()\n        }\n      })\n    },\n    submitSave (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.isLoading = true\n      this.addOrder(data).then((res) => {\n        if (res.data) {\n          window.toastr['success'](this.$t('orders.created_message'))\n          //this.$router.push('/orders/create')\n          //this.showOrderPopup(res.data.order.id)\n          this.reset()\n        }\n      }).catch((err) => {s\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          return true\n        }\n        this.reset()\n      })\n    },\n    submitUpdate (data) {\n      if (this.isLoading) {\n        return false\n      }\n      this.updateOrder(data).then((res) => {\n        if (res.data && res.data.order && res.data.order.id) {\n          window.toastr['success'](this.$t('orders.updated_message'))\n          this.isLoading = false\n          //this.showOrderPopup(res.data.order.id)\n          this.reset()\n        }\n        if (res.data.error === 'invalid_due_amount') {\n          this.isLoading = false\n           window.toastr['error'](this.$t('orders.invalid_due_amount_message'))\n           this.reset()\n        }\n      }).catch((err) => {\n        this.isLoading = false\n        if (err) {\n          window.toastr['error'](err)\n          this.reset()\n          return true\n        }\n      })\n    },\n    checkInventoryData (index, isValid) {\n      this.newOrder.order_items[index].valid = isValid\n    },\n    checkValid () {\n      this.$v.newOrder.$touch()\n      window.hub.$emit('checkInventory')\n      let isValid = true\n      this.newOrder.order_items.forEach((each) => {\n        if (!each.valid) {\n          isValid = false\n        }\n      })\n\n      if (this.$v.newOrder.$invalid === false && isValid === true) {\n        isValid = true\n      }\n      return isValid\n    },\n    async searchDebtorRefNumber(data) {\n      this.newOrder.reference_number = this.orderNumAttribute\n      try {\n        let response = await this.fetchReferenceNumber({\n          ...data,\n          order_date: data.order_date ? data.order_date : this.newOrder.order_date\n        })\n        if (response.data && response.data.order) {\n          this.newOrder.reference_number = response.data.order.reference_number.split('-').pop()\n        }\n      } catch (err) {\n        this.newOrder.reference_number = this.orderNumAttribute\n      }\n    },\n    showEndList(val) {\n      this.showAddNewInventory = !val;\n      this.showEndOfList = val;\n      this.inventoryBind.splice(this.inventoryBind.length - 1, 1);\n    },\n    removeEndOfList() {\n      this.showEndOfList = false;\n      this.showAddNewInventory = true;\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css":
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.receipt-action-row[data-v-36b85c8d] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/receipts/Create.vue"],"names":[],"mappings":";AAggBA;EACA,aAAA;EACA,mBAAA;EACA,eAAA;EACA,SAAA;AACA","sourcesContent":["<template>\n  <div class=\"receipt-create main-content\">\n    <div class=\"page-header\">\n      <div class=\"page-actions row\">\n        <router-link slot=\"item-title\" class=\"col-xs-2\" to=\"/receipts\">\n          <base-button size=\"large\" icon=\"envelope\" color=\"theme\">\n            {{ $t('receipts.title') }}\n          </base-button>\n        </router-link>\n      </div>\n    </div>\n    <form action=\"\" @submit.prevent=\"submitReceiptData\">\n      <div class=\"page-header\">\n        <h3 class=\"page-title\">{{ isEdit ? $t('receipts.edit_receipt') : $t('receipts.new_receipt') }}</h3>\n        <ol class=\"breadcrumb\">\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n          <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/receipts\">{{ $tc('receipts.receipt', 2) }}</router-link></li>\n          <li class=\"breadcrumb-item\">{{ isEdit ? $t('receipts.edit_receipt') : $t('receipts.new_receipt') }}</li>\n        </ol>\n      </div>\n      <div class=\"receipt-card card\">\n        <div class=\"card-body\">\n          <div class=\"row\">\n            <div class=\"col-sm-6\">\n              <div class=\"form-group\">\n                <label class=\"form-label\">{{ $t('receipts.date') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.receipt_date\"\n                  :invalid=\"$v.formData.receipt_date.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.receipt_date.$touch()\"\n                />\n                <div v-if=\"$v.formData.receipt_date.$error\">\n                  <span v-if=\"!$v.formData.receipt_date.required\" class=\"text-danger\">{{ $t('validation.required') }}</span>\n                </div>\n              </div>\n            </div>\n            <div class=\"col-sm-6\">\n              <div class=\"form-group\">\n                <label class=\"form-label\">{{ $t('receipts.receipt_number') }}</label><span class=\"text-danger\"> *</span>\n                <base-prefix-input\n                  :invalid=\"$v.receiptNumAttribute.$error\"\n                  v-model.trim=\"receiptNumAttribute\"\n                  :prefix=\"receiptPrefix\"\n                  :disabled=\"isEdit\"\n                  @input=\"$v.receiptNumAttribute.$touch()\"\n                />\n                <div v-if=\"$v.receiptNumAttribute.$error\">\n                  <span v-if=\"!$v.receiptNumAttribute.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n                  <span v-if=\"!$v.receiptNumAttribute.numeric\" class=\"text-danger\">{{ $tc('validation.numbers_only') }}</span>\n                </div>\n              </div>\n            </div>\n            <div class=\"col-sm-6\">\n              <label class=\"form-label\">{{ $t('receipts.list') }}</label><span class=\"text-danger\"> *</span>\n              <base-select\n                v-model=\"formData.list\"\n                :invalid=\"$v.formData.list.$error\"\n                :options=\"sundryDebtorList\"\n                :searchable=\"true\"\n                :show-labels=\"false\"\n                :placeholder=\"$t('receipts.select_a_list')\"\n                label=\"name\"\n                track-by=\"id\"\n                :disabled=\"isEdit\"\n              />\n              <div v-if=\"$v.formData.list.$error\">\n                <span v-if=\"!$v.formData.list.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n              </div>\n            </div>\n            <div class=\"col-sm-6\">\n              <div class=\"form-group\">\n                <label class=\"form-label\">{{ $t('receipts.amount') }}</label><span class=\"text-danger\"> *</span>\n                 <base-input\n                    v-model.trim=\"formData.amount\"\n                    :class=\"{'invalid' : $v.formData.amount.$error, 'input-field': true}\"\n                    type=\"number\"\n                    :max=\"15\"\n                    name=\"amount\"\n                  />\n                <div v-if=\"formData.amount\">\n                  ₹ {{ numberWithCommas(formData.amount) }}\n                </div>\n                <div v-if=\"$v.formData.amount.$error\">\n                  <span v-if=\"!$v.formData.amount.required\" class=\"text-danger\">{{ $t('validation.required') }}</span>\n                </div>\n              </div>\n            </div>\n            <div class=\"col-sm-6\">\n              <div class=\"form-group\">\n                <label class=\"form-label\">{{ $t('receipts.receipt_mode') }}</label><span class=\"text-danger\"> *</span>\n                <base-select\n                  v-model=\"formData.receipt_mode\"\n                  :options=\"getReceiptMode\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :class=\"{'invalid' : $v.formData.receipt_mode.$error}\"\n                  :placeholder=\"$t('receipts.select_receipt_mode')\"\n                  :disabled=\"isEdit\"\n                />\n                <div v-if=\"$v.formData.receipt_mode.$error\">\n                  <span v-if=\"!$v.formData.receipt_mode.required\" class=\"text-danger\">{{ $tc('validation.required') }}</span>\n                </div>\n              </div>\n            </div>\n            <div class=\"col-sm-6 \">\n              <div class=\"form-group\">\n                <label class=\"form-label\">{{ $t('receipts.note') }}</label>\n                <base-text-area\n                  v-model=\"formData.notes\"\n                  :rows=\"'5'\"\n                />\n              </div>\n            </div>\n            <div class=\"col-sm-6\">\n              <div class=\"col-sm-12 p-0\">\n                <div class=\"form-group\">\n                  <label class=\"form-label\">{{ $t('receipts.opening_balance') }}</label>\n                  <base-prefix-input\n                    v-model.trim=\"openingBalance\"\n                    :prefix=\"openingBalanceType ? openingBalanceType + ' - ' + money.prefix : money.prefix\"\n                    type=\"number\"\n                    name=\"openingBalance\"\n                    disabled\n                  />\n                </div>\n              </div>\n              <div class=\"col-sm-12 p-0\">\n                <div class=\"form-group\">\n                  <label class=\"form-label\">{{ $t('receipts.closing_balance') }}</label>\n                  <base-prefix-input\n                    v-model.trim=\"closingBalance\"\n                    :prefix=\"closingBalanceType ? closingBalanceType + ' - ' + money.prefix : money.prefix\"\n                    type=\"number\"\n                    name=\"closingBalance\"\n                    disabled\n                  />\n                </div>\n              </div>\n            </div>\n            <div class=\"col-sm-12\">\n              <div class=\"form-group collapse-button-container\">\n                <div class=\"receipt-action-row\">\n                  <base-button\n                    :loading=\"isLoading\"\n                    icon=\"save\"\n                    color=\"theme\"\n                    type=\"submit\"\n                    class=\"collapse-button\"\n                  >\n                    {{ $t('receipts.save_receipt') }}\n                  </base-button>\n                  <base-button\n                    v-if=\"isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'\"\n                    color=\"theme\"\n                    class=\"report-button\"\n                    @click=\"approveCurrentReceipt\"\n                  >\n                    {{ $t('receipts.approve_receipt') }}\n                  </base-button>\n                  <base-button\n                    v-if=\"isEdit && user.role === 'admin' && formData.receipt_status === 'To Be Approved'\"\n                    outline\n                    color=\"danger\"\n                    class=\"report-button\"\n                    @click=\"declineCurrentReceipt\"\n                  >\n                    {{ $t('receipts.decline_receipt') }}\n                  </base-button>\n                  <base-button v-if=\"isEdit\" outline color=\"theme\" class=\"report-button\" @click=\"sendReports()\">\n                    {{ $t('reports.send_report') }}\n                  </base-button>\n                </div>\n              </div>\n            </div>\n          </div>\n        </div>\n      </div>\n    </form>\n  </div>\n</template>\n\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport MultiSelect from 'vue-multiselect'\nimport { validationMixin } from 'vuelidate'\nimport moment from 'moment'\nimport GlobalMixin from '../../helpers/mixins.js';\nconst { required, between, maxLength, numeric } = require('vuelidate/lib/validators')\n\nexport default {\n  components: { MultiSelect },\n  mixins: [validationMixin, GlobalMixin],\n  data () {\n    return {\n      formData: {\n        receipt_number: null,\n        receipt_date: null,\n        amount: null,\n        receipt_mode: null,\n        notes: null,\n        list: null,\n      },\n      money: {\n        decimal: '.',\n        thousands: ',',\n        prefix: '₹ ',\n        precision: 2,\n        masked: false\n      },\n      customer: null,\n      isLoading: false,\n      maxPayableAmount: Number.MAX_SAFE_INTEGER,\n      isSettingInitialData: true,\n      receiptNumAttribute: null,\n      receiptPrefix: '',\n      sundryDebtorList: [],\n      closingBalanceType: '',\n      accountLedger: [],\n      receiptMode: [],\n      siteURL: '',\n    }\n  },\n  validations () {\n    return {\n      formData: {\n        list: {\n          required\n        },\n        receipt_date: {\n          required\n        },\n        receipt_mode: {\n          required\n        },\n        amount: {\n          required,\n        },\n      },\n      receiptNumAttribute: {\n        required,\n        numeric\n      }\n    }\n  },\n  computed: {\n    ...mapGetters('currency', [\n      'defaultCurrencyForInput'\n    ]),\n    ...mapGetters('user', {\n      user: 'currentUser'\n    }),\n    getReceiptMode () {\n      return this.receiptMode.map(i => i.name)\n    },\n    amount: {\n      get: function () {\n        return this.formData.amount\n      },\n      set: function (newValue) {\n        if (0 > parseInt(newValue)) {\n          this.formData.amount = 0\n        } else {\n          this.formData.amount = newValue\n        }\n      }\n    },\n    isEdit () {\n      if (this.$route.name === 'receipts.edit') {\n        return true\n      }\n      return false\n    },\n    openingBalance() {\n      if (this.formData.list && this.formData.list.id) {\n        let ledger = this.accountLedger.find(each => each.id === this.formData.list.id);\n        return parseFloat(ledger.balance).toFixed(2);\n      }\n      return 0\n    },\n    openingBalanceType() {\n      if (this.formData.list && this.formData.list.id) {\n        let typeObj = this.accountLedger.find(each => each.id === this.formData.list.id);\n        return typeObj.type;\n      }\n      return 'Cr';\n    },\n    closingBalance() {\n      if (this.formData.amount) {\n        let open = parseFloat(this.openingBalance);\n        let amount = parseFloat(this.formData.amount);\n        if (open >= amount) {\n          let oa = open - amount;\n          let openAmount = parseFloat(oa).toFixed(2);\n          if (open > amount) {\n            this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'\n          } else {\n            this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'\n          }\n          return openAmount\n        } else {\n          let ao = Math.abs(amount - open);\n          let closeAmount = parseFloat(ao).toFixed(2);\n          if (open > amount) {\n            this.closingBalanceType = this.openingBalanceType === 'Dr' ? 'Dr' : 'Cr'\n          } else {\n            this.closingBalanceType = this.openingBalanceType === 'Cr' ? 'Dr' : 'Cr'\n          }\n          return closeAmount\n        }\n      }\n      return 0\n    },\n    listBind: {\n      cache:false,\n      get() {\n        return this.formData.list\n      },\n      set(val) {\n        this.formData.list = val\n      }\n    }\n  },\n  async mounted () {\n    this.$nextTick(() => {\n      this.loadData()\n      if (this.$route.params.id && !this.isEdit) {\n        this.setInvoiceReceiptData()\n      }\n    })\n  },\n  methods: {\n    ...mapActions('receipt', [\n      'fetchCreateReceipt',\n      'addReceipt',\n      'updateReceipt',\n      'fetchReceipt',\n      'approveReceipt',\n      'declineReceipt'\n    ]),\n    ...mapActions('customer', [\n      'sendReportOnWhatsApp'\n    ]),\n    async loadData () {\n      if (this.isEdit) {\n        let response = await this.fetchReceipt(this.$route.params.id)\n        this.formData = { ...response.data.receipt }\n        this.formData.receipt_date = response.data.receipt.receipt_date\n        this.formData.amount = parseFloat(response.data.receipt.amount)\n        this.receiptPrefix = response.data.receipt_prefix\n        this.receiptNumAttribute = response.data.nextReceiptNumberAttribute\n        this.sundryDebtorList = response.data.usersOfSundryDebitors\n        this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)[0]\n        this.accountLedger = response.data.account_ledger\n        this.receiptMode = response.data.receipt_mode\n\n        this.siteURL = `/receipts/pdf/${this.formData.id}`\n        if (response.data.receipt.invoice !== null) {\n          this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)\n        }\n      } else {\n        let response = await this.fetchCreateReceipt()\n        this.sundryDebtorList = response.data.usersOfSundryDebitors\n        this.accountLedger = response.data.account_ledger\n        this.receiptNumAttribute = response.data.nextReceiptNumberAttribute\n        this.receiptPrefix = response.data.receipt_prefix\n        this.formData.receipt_date = moment(new Date()).toString()\n        this.receiptMode = response.data.receipt_mode\n      }\n      return true\n    },\n    async setInvoiceReceiptData () {\n      let data = await this.fetchInvoice(this.$route.params.id)\n      this.customer = data.data.invoice.user\n    },\n    async setReceiptAmountByInvoiceData (id) {\n      let data = await this.fetchInvoice(id)\n      this.formData.amount = parseFloat(data.data.invoice.due_amount).toFixed(2)\n      this.maxPayableAmount = parseFloat(data.data.invoice.due_amount).toFixed(2)\n    },\n    async submitReceiptData () {\n      this.$v.formData.$touch()\n      if (this.$v.formData.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return true\n      }\n\n      this.formData.receipt_number = this.receiptPrefix + '-' + this.receiptNumAttribute\n      this.formData.user_id = this.user.id\n      this.formData.closing_balance_type = this.closingBalanceType\n      this.formData.closing_balance = this.closingBalance\n      if (this.isEdit) {\n        let data = {\n          editData: {\n            ...this.formData,\n            receipt_date: moment(this.formData.receipt_date).format('DD/MM/YYYY')\n          },\n          id: this.$route.params.id\n        }\n        try {\n          let response = await this.updateReceipt(data)\n          if (response.data.success) {\n            window.toastr['success'](this.$t('receipts.updated_message'))\n            return true\n          }\n          if (response.data.error === 'invalid_amount') {\n            window.toastr['error'](this.$t('invalid_amount_message'))\n            return false\n          }\n          window.toastr['error'](response.data.error)\n        } catch (err) {\n          this.isLoading = false\n          if (err.response.data.errors.receipt_number) {\n            window.toastr['error'](err.response.data.errors.receipt_number)\n            return true\n          }\n          window.toastr['error'](err)\n        }\n      } else {\n        let data = {\n          ...this.formData,\n          receipt_date: moment(this.formData.receipt_date).format('DD/MM/YYYY')\n        }\n        this.isLoading = true\n        try {\n          let response = await this.addReceipt(data)\n          if (response.data.success) {\n            const receiptStatus = response.data.receipt && response.data.receipt.receipt_status\n            const isPendingApproval = receiptStatus === 'To Be Approved'\n            window.toastr['success'](isPendingApproval ? this.$t('receipts.submitted_for_approval_message') : this.$t('receipts.created_message'))\n            if (isPendingApproval) {\n              setTimeout(() => {\n                window.location.reload()\n              }, 1000)\n              return true\n            }\n            this.siteURL = `/receipts/pdf/${response.data.receipt.id}`\n            window.swal({\n              title: 'Send Receipt',\n              text: 'Do you want to send receipt on whatsapp?',\n              icon: '/assets/icon/envelope-solid.svg',\n              buttons: true,\n              dangerMode: false\n            }).then(async (value) => {\n              if (value) {\n                this.sendReports()\n              } else {\n                setTimeout(() => {\n                  window.location.reload()\n                }, 1000)\n              }\n            });\n            return true\n          }\n          if (response.data.error === 'invalid_amount') {\n            window.toastr['error'](this.$t('invalid_amount_message'))\n            return false\n          }\n          window.toastr['error'](response.data.error)\n        } catch (err) {\n          this.isLoading = false\n          if (err.response.data.errors.receipt_number) {\n            window.toastr['error'](err.response.data.errors.receipt_number)\n            return true\n          }\n          window.toastr['error'](err)\n        }\n      }\n    },\n    sendReports() {\n      this.isLoading = true\n      if (!this.siteURL) {\n        window.toastr['error']('Receipt report url not found');\n        return;\n      }\n      let mobile = this.accountLedger.find(i => i.id === this.formData.list.id).mobile_number;\n      if (!mobile) {\n        window.toastr['error'](\"Sorry, didn't find mobile number for selected ledger.\")\n        return\n      }\n      let fileName = 'Receipt - ' + moment(this.formData.receipt_date).format('DD/MM/YYYY');\n      this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})\n      .then((val) => {\n        setTimeout(() => {\n          this.isLoading = false\n          window.location.reload()\n        }, 2000)\n      })\n    },\n    async approveCurrentReceipt () {\n      let response = await this.approveReceipt(this.$route.params.id)\n      if (response.data.success) {\n        this.formData.receipt_status = response.data.receipt.receipt_status\n        window.toastr['success'](this.$t('receipts.approved_message'))\n        if (response.data.whatsapp_sent === false) {\n          window.toastr['warning'](`Approved, but WhatsApp failed: ${response.data.whatsapp_error || 'unknown_error'}`)\n        }\n      }\n    },\n    async declineCurrentReceipt () {\n      let response = await this.declineReceipt(this.$route.params.id)\n      if (response.data.success) {\n        this.formData.receipt_status = response.data.receipt.receipt_status\n        window.toastr['success'](this.$t('receipts.declined_message'))\n      }\n    }\n  }\n}\n</script>\n\n<style scoped>\n.receipt-action-row {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n  gap: 12px;\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86600,7 +88360,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.my-grid-class[data-v-18797803] {\n  height: 400px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/vouchers/Create.vue"],"names":[],"mappings":";AAmEA;EACA,aAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('vouchers.edit_voucher') : $t('vouchers.new_voucher') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/vouchers\">{{ $tc('vouchers.vouchers_list',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('vouchers.edit_voucher') : $t('vouchers.new_voucher') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-md-12\">\n        <div class=\"card\">\n          <div class=\"card-body\">\n              <!---- Grid table start -->\n              <vue-editable-grid\n                class=\"my-grid-class\"\n                ref=\"grid\"\n                id=\"mygrid\"\n                :column-defs=\"columnDefs\"\n                :row-data=\"rows\"\n                row-data-key='voucherId'\n                :master-options=\"masterDataBind\"\n                @cell-updated=\"cellUpdated\"\n                @row-selected=\"rowSelected\"\n              >\n                <template v-slot:header>\n                  Add / Edit Account Vouchers\n                </template>\n                <template v-slot:header-r>\n                  Total rows: {{ rows.length }}\n                </template>\n              </vue-editable-grid>\n              <!--- Grid table end -->\n              <div class=\"col-md-12 p-0 mb-4 mt-4\">\n                <div class=\"row\">\n                  <div class=\"col-md-6\">\n                    <label>{{ $t('vouchers.description') }}</label>\n                    <textarea\n                      type=\"text\"\n                      autofocus\n                      rows=\"2\"\n                      width=\"400\"\n                      class=\"form-control description-input mb-3\"\n                      v-model=\"short_narration\"\n                      id=\"narration-voucher\"\n                      placeholder=\"Type Short Narration (optional)\" />\n                  </div>\n                  <div class=\"col-md-6\">\n                    <label>{{ $t('vouchers.date') }}</label><span class=\"text-danger\"> * </span>\n                    <base-date-picker\n                      v-model=\"date\"\n                      :calendar-button=\"true\"\n                      calendar-button-icon=\"calendar\"\n                    />\n                  </div>\n              </div>\n              </div>\n              <button @click=\"addNewRow()\" class=\"btn btn-theme-outline\">Add new</button>\n              <button @click=\"validateSubmitVoucher()\" class=\"btn btn-primary\">Save Voucher</button>\n            </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style scoped>\n.my-grid-class {\n  height: 400px;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\n\n// Vue editable grid component and styles\nimport VueEditableGrid from '../../components/grid-table/VueEditableGrid'\nimport '../../components/grid-table/VueEditableGrid.css'\n\nexport default {\n  mixins: {\n    validationMixin\n  },\n  components: {\n    VueEditableGrid\n  },\n  data () {\n    return {\n      isLoading: false,\n      title: 'Add Account Voucher',\n      rows: [\n        {\n          type: '',\n          account: '',\n          account_id: 0,\n          credit: null,\n          debit: null,\n          total_debit: 0,\n          total_credit: 0,\n          balance: 0,\n        }\n      ],\n      columnDefs: [\n        { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'select', placeholder: 'C / D', size: '100px', editable: true },\n        { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },\n        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '200px', editable: true },\n        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '200px', editable: true },\n      ],\n      masterData: [],\n      short_narration: '',\n      date: new Date(),\n      alreadySubmitted: false,\n    }\n  },\n  computed: {\n    isEdit() {\n      if (this.$route.name === 'vouchers.edit') {\n          return true\n        }\n        return false\n    },\n    masterDataBind() {\n      var row = this.rows\n      return this.masterData.filter((i, k) => {\n        return row.map(j => {\n          if (i.name === j.account) {\n            this.masterData.splice(k, 1)\n          }\n        })\n      })\n    },\n  },\n  created () {\n    if (this.isEdit) {\n      this.loadEditData()\n    }\n    this.loadMasters();\n  },\n  methods: {\n    ...mapActions('voucher', [\n      'addVoucher',\n      'fetchVoucher',\n    ]),\n    ...mapActions('master', [\n      'fetchMasters'\n    ]),\n    async loadEditData () {\n      let response = await this.fetchVoucher(this.$route.params.id)\n      this.rows = []\n      response.data.voucher.map(each => {\n        let obj = {}\n        obj['id'] = each.id\n        obj['account_ledger_id'] = each.account_ledger_id\n        obj['type'] = each.type\n        obj['account'] = each.account,\n        obj['account_id'] = each.account_master_id,\n        obj['credit'] = parseFloat(each.credit),\n        obj['debit'] = parseFloat(each.debit),\n        obj['total_debit'] = 0,\n        obj['total_credit'] = 0,\n        obj['balance'] = 0,\n        this.rows.push(obj)\n        this.short_narration = each.short_narration\n        this.date = each.date\n      })\n    },\n    async loadMasters () {\n      let response = await this.fetchMasters({limit: false})\n      this.masterData = response.data.masters\n    },\n    validateSubmitVoucher() {\n      if (this.alreadySubmitted) {\n        swal({\n          title: this.$t('general.are_you_sure'),\n          text: this.$tc('vouchers.duplicate_vouchers', 2),\n          icon: '/assets/icon/trash-solid.svg',\n          buttons: true,\n          dangerMode: false\n        }).then(async (duplicate) => {\n          if (duplicate) {\n            this.submitVoucher()\n          }\n        })\n      } else {\n        this.submitVoucher()\n      }\n    },\n    async submitVoucher () {\n      let rows = this.rows\n      rows = rows.filter(each => each['account'] !== '');\n      let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c);\n      let debit_sum = rows.map(o => o.debit).reduce((a,c) => a + c);\n\n      let calc_balance = 0;\n      if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {\n          swal({\n            title: this.$t('vouchers.balace_not_equal_title'),\n            text: this.$t('vouchers.balace_not_equal_desc'),\n            icon: 'error',\n            buttons: false,\n            dangerMode: true\n          })\n          return false\n      }\n      if (!this.date) {\n        swal({\n            title: 'Field required',\n            text: 'Voucher date required',\n            icon: 'error',\n            buttons: false,\n            dangerMode: true\n          })\n          return false\n      }\n\n      rows.map(each => {\n        each['total_debit'] = debit_sum\n        each['total_credit'] = credit_sum\n        each['balance'] = calc_balance\n        each['short_narration'] = this.short_narration\n        each['date'] = this.date\n        each['is_edit'] = this.isEdit\n      });\n\n      try {\n        this.isLoading = true\n        let response = await this.addVoucher(rows)\n        if (response.data) {\n          window.toastr['success'](this.$tc('vouchers.created_message'))\n          this.isLoading = false\n          this.alreadySubmitted = true;\n          setTimeout(() => {\n            window.location.reload()\n          }, 2000)\n          return true\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n    cellUpdated($event) {\n      let rows = this.rows\n      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')\n      {\n        this.$nextTick(() => {\n          let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c)\n          let debit_sum = rows.map(o => o.debit).reduce((a,c) => a + c)\n          let calc_total = credit_sum > debit_sum ? credit_sum - debit_sum : debit_sum - credit_sum\n          let calc_type = credit_sum > debit_sum ? 'Dr' : 'Cr'\n          if (calc_total !== 0 && calc_type === 'Dr' && $event.value > 0) {\n            this.addNewRow('Dr', calc_total)\n            $event.rowIndex = $event.rowIndex + 1\n            $event.columnIndex = 0\n            $event.$event.target.blur()\n          } else if (calc_total !== 0 && calc_type === 'Cr' && $event.value > 0) {\n            this.addNewRow('Cr', calc_total)\n            $event.rowIndex = $event.rowIndex + 1\n            $event.columnIndex = 0\n            $event.$event.target.blur()\n          } else if (calc_total === 0) {\n            $event.$event.target.blur()\n            $event.$event.path[10].childNodes[2].lastChild.focus()\n          }\n        });\n      }\n\n      if ((rows.length - 1) === $event.rowIndex) {\n        if ($event.columnIndex === 2 && $event.$event.key === 'Tab' || $event.columnIndex === 3 && $event.$event.key === 'Tab')\n        {\n          $event.$event.target.blur()\n          $event.$event.path[10].childNodes[2].lastChild.focus()\n        }\n      }\n    },\n    rowSelected($event) {\n      if($event.rowData && $event.rowData.type === 'Cr') {\n        $event.rowData.debit = null;\n      } else if ($event.rowData && $event.rowData.type === 'Dr') {\n        $event.rowData.credit = null;\n      }\n      //Type of Voucher Column\n      if ($event.colIndex === 0) {\n\n      }\n      //Account Column\n      if ($event.colIndex === 1) {\n\n      }\n    },\n    addNewRow(typ = null, sum = null) {\n      let deb = typ == 'Dr' ? sum : null\n      let cred = typ == 'Cr' ? sum : null\n      this.rows.push({\n          type: typ,\n          account: '',\n          account_id: 0,\n          credit: cred,\n          debit: deb,\n          total_debit: 0,\n          total_credit: 0,\n          balance: 0,\n        });\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.my-grid-class[data-v-18797803] {\n  height: 400px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/vouchers/Create.vue"],"names":[],"mappings":";AAqEA;EACA,aAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('vouchers.edit_voucher') : $t('vouchers.new_voucher') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/vouchers\">{{ $tc('vouchers.vouchers_list',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('vouchers.edit_voucher') : $t('vouchers.new_voucher') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col-md-12\">\n        <div class=\"card\">\n          <div class=\"card-body\">\n              <!---- Grid table start -->\n              <vue-editable-grid\n                class=\"my-grid-class\"\n                ref=\"grid\"\n                id=\"mygrid\"\n                :column-defs=\"gridColumnDefs\"\n                :row-data=\"rows\"\n                row-data-key='voucherId'\n                :master-options=\"masterDataBind\"\n                @cell-updated=\"cellUpdated\"\n                @row-selected=\"rowSelected\"\n              >\n                <template v-slot:header>\n                  Add / Edit Account Vouchers\n                </template>\n                <template v-slot:header-r>\n                  Total rows: {{ rows.length }}\n                </template>\n              </vue-editable-grid>\n              <!--- Grid table end -->\n              <div class=\"col-md-12 p-0 mb-4 mt-4\">\n                <div class=\"row\">\n                  <div class=\"col-md-6\">\n                    <label>{{ $t('vouchers.description') }}</label>\n                    <textarea\n                      type=\"text\"\n                      autofocus\n                      rows=\"2\"\n                      width=\"400\"\n                      class=\"form-control description-input mb-3\"\n                      v-model=\"short_narration\"\n                      :disabled=\"isReadOnly\"\n                      id=\"narration-voucher\"\n                      placeholder=\"Type Short Narration (optional)\" />\n                  </div>\n                  <div class=\"col-md-6\">\n                    <label>{{ $t('vouchers.date') }}</label><span class=\"text-danger\"> * </span>\n                    <base-date-picker\n                      v-model=\"date\"\n                      :disabled=\"isReadOnly\"\n                      :calendar-button=\"true\"\n                      calendar-button-icon=\"calendar\"\n                    />\n                  </div>\n              </div>\n              </div>\n              <button v-if=\"!isReadOnly\" @click=\"addNewRow()\" class=\"btn btn-theme-outline\">Add new</button>\n              <button v-if=\"!isReadOnly\" @click=\"validateSubmitVoucher()\" class=\"btn btn-primary\">Save Voucher</button>\n            </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style scoped>\n.my-grid-class {\n  height: 400px;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\n\n// Vue editable grid component and styles\nimport VueEditableGrid from '../../components/grid-table/VueEditableGrid'\nimport '../../components/grid-table/VueEditableGrid.css'\n\nexport default {\n  mixins: {\n    validationMixin\n  },\n  components: {\n    VueEditableGrid\n  },\n  data () {\n    return {\n      isLoading: false,\n      title: 'Add Account Voucher',\n      rows: [\n        {\n          type: '',\n          account: '',\n          account_id: 0,\n          credit: null,\n          debit: null,\n          total_debit: 0,\n          total_credit: 0,\n          balance: 0,\n        }\n      ],\n      columnDefs: [\n        { sortable: true, filter: false, field: 'type', headerName: 'Type', type: 'select', placeholder: 'C / D', size: '100px', editable: true },\n        { sortable: true, filter: false, field: 'account', headerName: 'Account', type: 'select', size: '500px', editable: true },\n        { sortable: true, filter: false, field: 'debit', headerName: 'Debit', type: 'numeric', size: '200px', editable: true },\n        { sortable: true, filter: false, field: 'credit', headerName: 'Credit', type: 'numeric', size: '200px', editable: true },\n      ],\n      masterData: [],\n      short_narration: '',\n      date: new Date(),\n      alreadySubmitted: false,\n    }\n  },\n  computed: {\n    userRole () {\n      return this.$store.state.user.currentUser.role\n    },\n    isEdit() {\n      if (this.$route.name === 'vouchers.edit') {\n          return true\n        }\n        return false\n    },\n    isReadOnly () {\n      return this.isEdit && this.userRole === 'accountant'\n    },\n    gridColumnDefs () {\n      if (!this.isReadOnly) {\n        return this.columnDefs\n      }\n\n      return this.columnDefs.map((column) => ({\n        ...column,\n        editable: false\n      }))\n    },\n    masterDataBind() {\n      var row = this.rows\n      return this.masterData.filter((i, k) => {\n        return row.map(j => {\n          if (i.name === j.account) {\n            this.masterData.splice(k, 1)\n          }\n        })\n      })\n    },\n  },\n  created () {\n    if (this.isEdit) {\n      this.loadEditData()\n    }\n    this.loadMasters();\n  },\n  methods: {\n    ...mapActions('voucher', [\n      'addVoucher',\n      'fetchVoucher',\n    ]),\n    ...mapActions('master', [\n      'fetchMasters'\n    ]),\n    async loadEditData () {\n      let response = await this.fetchVoucher(this.$route.params.id)\n      this.rows = []\n      response.data.voucher.map(each => {\n        let obj = {}\n        obj['id'] = each.id\n        obj['account_ledger_id'] = each.account_ledger_id\n        obj['type'] = each.type\n        obj['account'] = each.account,\n        obj['account_id'] = each.account_master_id,\n        obj['credit'] = parseInt(each.credit),\n        obj['debit'] = parseInt(each.debit),\n        obj['total_debit'] = 0,\n        obj['total_credit'] = 0,\n        obj['balance'] = 0,\n        this.rows.push(obj)\n        this.short_narration = each.short_narration\n        this.date = each.date\n      })\n    },\n    async loadMasters () {\n      let response = await this.fetchMasters({limit: false})\n      this.masterData = response.data.masters\n    },\n    validateSubmitVoucher() {\n      if (this.isReadOnly) {\n        return\n      }\n\n      if (this.alreadySubmitted) {\n        swal({\n          title: this.$t('general.are_you_sure'),\n          text: this.$tc('vouchers.duplicate_vouchers', 2),\n          icon: '/assets/icon/trash-solid.svg',\n          buttons: true,\n          dangerMode: false\n        }).then(async (duplicate) => {\n          if (duplicate) {\n            this.submitVoucher()\n          }\n        })\n      } else {\n        this.submitVoucher()\n      }\n    },\n    async submitVoucher () {\n      if (this.isReadOnly) {\n        return false\n      }\n\n      let rows = this.rows\n      rows = rows.filter(each => each['account'] !== '');\n      let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c);\n      let debit_sum = rows.map(o => o.debit).reduce((a,c) => a + c);\n\n      let calc_balance = 0;\n      if (credit_sum !== debit_sum || !credit_sum || !debit_sum) {\n          swal({\n            title: this.$t('vouchers.balace_not_equal_title'),\n            text: this.$t('vouchers.balace_not_equal_desc'),\n            icon: 'error',\n            buttons: false,\n            dangerMode: true\n          })\n          return false\n      }\n      if (!this.date) {\n        swal({\n            title: 'Field required',\n            text: 'Voucher date required',\n            icon: 'error',\n            buttons: false,\n            dangerMode: true\n          })\n          return false\n      }\n\n      rows.map(each => {\n        each['total_debit'] = debit_sum\n        each['total_credit'] = credit_sum\n        each['balance'] = calc_balance\n        each['short_narration'] = this.short_narration\n        each['date'] = this.date\n        each['is_edit'] = this.isEdit\n      });\n\n      try {\n        this.isLoading = true\n        let response = await this.addVoucher(rows)\n        if (response.data) {\n          const isPendingApproval = this.userRole !== 'admin'\n          window.toastr['success'](isPendingApproval ? this.$t('vouchers.submitted_for_approval_message') : this.$tc('vouchers.created_message'))\n          this.isLoading = false\n          this.alreadySubmitted = true;\n          setTimeout(() => {\n            window.location.reload()\n          }, 2000)\n          return true\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n    cellUpdated($event) {\n      if (this.isReadOnly) {\n        return\n      }\n\n      let rows = this.rows\n      if ($event.columnIndex === 2 && $event.$event.key === 'Enter' || $event.columnIndex === 3 && $event.$event.key === 'Enter')\n      {\n        this.$nextTick(() => {\n          let credit_sum = rows.map(o => o.credit).reduce((a,c) => a + c)\n          let debit_sum = rows.map(o => o.debit).reduce((a,c) => a + c)\n          let calc_total = credit_sum > debit_sum ? credit_sum - debit_sum : debit_sum - credit_sum\n          let calc_type = credit_sum > debit_sum ? 'Dr' : 'Cr'\n          if (calc_total !== 0 && calc_type === 'Dr' && $event.value > 0) {\n            this.addNewRow('Dr', calc_total)\n            $event.rowIndex = $event.rowIndex + 1\n            $event.columnIndex = 0\n            $event.$event.target.blur()\n          } else if (calc_total !== 0 && calc_type === 'Cr' && $event.value > 0) {\n            this.addNewRow('Cr', calc_total)\n            $event.rowIndex = $event.rowIndex + 1\n            $event.columnIndex = 0\n            $event.$event.target.blur()\n          } else if (calc_total === 0) {\n            $event.$event.target.blur()\n            $event.$event.path[10].childNodes[2].lastChild.focus()\n          }\n        });\n      }\n\n      if ((rows.length - 1) === $event.rowIndex) {\n        if ($event.columnIndex === 2 && $event.$event.key === 'Tab' || $event.columnIndex === 3 && $event.$event.key === 'Tab')\n        {\n          $event.$event.target.blur()\n          $event.$event.path[10].childNodes[2].lastChild.focus()\n        }\n      }\n    },\n    rowSelected($event) {\n      if (this.isReadOnly) {\n        return\n      }\n\n      if($event.rowData && $event.rowData.type === 'Cr') {\n        $event.rowData.debit = null;\n      } else if ($event.rowData && $event.rowData.type === 'Dr') {\n        $event.rowData.credit = null;\n      }\n      //Type of Voucher Column\n      if ($event.colIndex === 0) {\n\n      }\n      //Account Column\n      if ($event.colIndex === 1) {\n\n      }\n    },\n    addNewRow(typ = null, sum = null) {\n      if (this.isReadOnly) {\n        return\n      }\n\n      let deb = typ == 'Dr' ? sum : null\n      let cred = typ == 'Cr' ? sum : null\n      this.rows.push({\n          type: typ,\n          account: '',\n          account_id: 0,\n          credit: cred,\n          debit: deb,\n          total_debit: 0,\n          total_credit: 0,\n          balance: 0,\n        });\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86681,7 +88441,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#to_print_table {\n  display:none;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/vouchers/Daysheet.vue"],"names":[],"mappings":";AA6HA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">\n        {{  $t(\"daybook.title-2\") }}\n      </h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\">\n          <router-link slot=\"item-title\" to=\"/ledgers\">{{\n            $t(\"general.home\")\n          }}</router-link>\n        </li>\n      </ol>\n    </div>\n    <div class=\"row\" >\n      <div class=\"col-sm-12 mb-5\">\n      <base-button\n            v-show=\"ledgerData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printData\"\n          >\n            Print\n          </base-button>\n      </div>\n      <div class=\"col-sm-12 daysheet\">\n        <table-component\n              ref=\"table\"\n              :data=\"ledgerData\"\n              :show-filter=\"false\"\n            table-class=\"table\"\n            >\n              <table-column\n                :label=\"$tc('daysheet.lot')\"\n                show=\"lot\"\n              >\n                <template slot-scope=\"row\">\n                  {{ row.lot }}\n                </template>\n              </table-column>\n              <table-column :label=\"$tc('daysheet.reference-number')\" show=\"reference_number\">\n                <template slot-scope=\"row\">\n                  {{ row.reference_number }}\n                </template>\n              </table-column>\n              <table-column\n                :label=\"$tc('daysheet.party-name')\"\n                show=\"party\"\n              >\n                <template slot-scope=\"row\">\n                   {{ row.party }}\n                </template>\n              </table-column>\n            </table-component>\n\n            <!-- print table here -->\n              <div class=\"row\" id=\"to_print_table\">\n              <div class=\"col-md-12 mb-2\">\n              {{ $tc('daysheet.date') }} {{  new Date().toJSON().slice(0, 10) }}\n              </div>\n              <div class=\"col-sm-12\">\n                <table-component\n              id=\"to_print_table\"\n              ref=\"table\"\n              :data=\"ledgerData\"\n              :show-filter=\"false\"\n            table-class=\"table\"\n            >\n              <table-column\n                :label=\"$tc('daysheet.lot')\"\n                show=\"lot\"\n              >\n                <template slot-scope=\"row\">\n                  {{ row.lot }}\n                </template>\n              </table-column>\n              <table-column\n                :label=\"$tc('daysheet.sign')\"\n                show=\"lot\"\n              >\n                <template slot-scope=\"row\">\n\n                </template>\n              </table-column>\n              <table-column :label=\"$tc('daysheet.pm')\" show=\"reference_number\">\n                <template slot-scope=\"row\">\n                  {{ row.reference_number }}\n                </template>\n              </table-column>\n              <table-column\n                :label=\"$tc('daysheet.name')\"\n                show=\"party\"\n              >\n                <template slot-scope=\"row\">\n                   {{ row.party }}\n                </template>\n              </table-column>\n               <table-column\n                :label=\"$tc('daysheet.city')\"\n                show=\"party\"\n              >\n                <template slot-scope=\"row\">\n\n                </template>\n              </table-column>\n                <table-column\n                :label=\"$tc('daysheet.transport')\"\n                show=\"party\"\n              >\n                <template slot-scope=\"row\">\n\n                </template>\n              </table-column>\n            </table-component>\n              </div>\n              </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n#to_print_table {\n  display:none;\n}\n</style>\n<script>\nimport { validationMixin } from \"vuelidate\";\nimport { mapActions, mapGetters } from \"vuex\";\nconst {\n  required,\n  minLength,\n  numeric,\n  minValue,\n  maxLength,\n} = require(\"vuelidate/lib/validators\");\n// Vue editable grid component and styles\nimport VueEditableGrid from \"../../components/grid-table/VueEditableGrid\";\nimport \"../../components/grid-table/VueEditableGrid.css\";\nimport moment from \"moment\";\n\nexport default {\n  mixins: {\n    validationMixin,\n  },\n  components: {\n    VueEditableGrid,\n  },\n  data() {\n    return {\n      isLoading: false,\n      ledgerData: [],\n    };\n  },\n  created() {\n    this.loadEditData();\n  },\n  methods: {\n    ...mapActions(\"ledger\", [\"fetchLedgerDaysheet\"]),\n    async loadEditData() {\n      let response = await this.fetchLedgerDaysheet(this.$route.params.id);\n        this.isLoading = false\n        this.ledgerData = response.data.ledger.sort((a, b) => {\n          return String(a.reference_number).localeCompare(String(b.reference_number));\n        });\n    },\n    printData() {\n      printJS({\n        printable: 'to_print_table',\n        type: 'html',\n        ignoreElements: ['no-print-check', 'no-print-option'],\n        scanStyles: true,\n        targetStyles: ['*'],\n        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {border:1px solid #000;padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table-component__table { min-width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table  .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n      })\n    }\n  },\n};\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#to_print_table {\n  display:none;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/vouchers/Daysheet.vue"],"names":[],"mappings":";AA6HA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">\n        {{  $t(\"daybook.title-2\") }}\n      </h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\">\n          <router-link slot=\"item-title\" to=\"/ledgers\">{{\n            $t(\"general.home\")\n          }}</router-link>\n        </li>\n      </ol>\n    </div>\n    <div class=\"row\" >\n      <div class=\"col-sm-12 mb-5\">\n      <base-button\n            v-show=\"ledgerData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printData\"\n          >\n            Print\n          </base-button>\n      </div>\n      <div class=\"col-sm-12 daysheet\">\n        <table-component\n              ref=\"table\"\n              :data=\"ledgerData\"\n              :show-filter=\"false\"\n            table-class=\"table\"\n            >\n              <table-column\n                :label=\"$tc('daysheet.lot')\"\n                show=\"lot\"\n              >\n                <template slot-scope=\"row\">\n                  {{ row.lot }}\n                </template>\n              </table-column>\n              <table-column :label=\"$tc('daysheet.reference-number')\" show=\"reference_number\">\n                <template slot-scope=\"row\">\n                  {{ formatReferenceNumber(row.reference_number) }}\n                </template>\n              </table-column>\n              <table-column\n                :label=\"$tc('daysheet.party-name')\"\n                show=\"party\"\n              >\n                <template slot-scope=\"row\">\n                   {{ row.party }}\n                </template>\n              </table-column>\n            </table-component>\n\n            <!-- print table here -->\n              <div class=\"row\" id=\"to_print_table\">\n              <div class=\"col-md-12 mb-2\">\n              {{ $tc('daysheet.date') }} {{  new Date().toJSON().slice(0, 10) }}\n              </div>\n              <div class=\"col-sm-12\">\n                <table-component\n              id=\"to_print_table\"\n              ref=\"table\"\n              :data=\"ledgerData\"\n              :show-filter=\"false\"\n            table-class=\"table\"\n            >\n              <table-column\n                :label=\"$tc('daysheet.lot')\"\n                show=\"lot\"\n              >\n                <template slot-scope=\"row\">\n                  {{ row.lot }}\n                </template>\n              </table-column>\n              <table-column\n                :label=\"$tc('daysheet.sign')\"\n                show=\"sign\"\n              >\n                <template slot-scope=\"row\">\n\n                </template>\n              </table-column>\n              <table-column :label=\"$tc('daysheet.pm')\" show=\"reference_number\">\n                <template slot-scope=\"row\">\n                  {{ formatReferenceNumber(row.reference_number) }}\n                </template>\n              </table-column>\n              <table-column\n                :label=\"$tc('daysheet.name')\"\n                show=\"name\"\n              >\n                <template slot-scope=\"row\">\n                   {{ row.party }}\n                </template>\n              </table-column>\n               <table-column\n                :label=\"$tc('daysheet.city')\"\n                show=\"city\"\n              >\n                <template slot-scope=\"row\">\n\n                </template>\n              </table-column>\n                <table-column\n                :label=\"$tc('daysheet.transport')\"\n                show=\"transport\"\n              >\n                <template slot-scope=\"row\">\n\n                </template>\n              </table-column>\n            </table-component>\n              </div>\n              </div>\n\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n#to_print_table {\n  display:none;\n}\n</style>\n<script>\nimport { validationMixin } from \"vuelidate\";\nimport { mapActions, mapGetters } from \"vuex\";\nconst {\n  required,\n  minLength,\n  numeric,\n  minValue,\n  maxLength,\n} = require(\"vuelidate/lib/validators\");\n// Vue editable grid component and styles\nimport VueEditableGrid from \"../../components/grid-table/VueEditableGrid\";\nimport \"../../components/grid-table/VueEditableGrid.css\";\nimport moment from \"moment\";\n\nexport default {\n  mixins: {\n    validationMixin,\n  },\n  components: {\n    VueEditableGrid,\n  },\n  data() {\n    return {\n      isLoading: false,\n      ledgerData: [],\n    };\n  },\n  created() {\n    this.loadEditData();\n  },\n  methods: {\n    ...mapActions(\"ledger\", [\"fetchLedgerDaysheet\"]),\n    async loadEditData() {\n      let response = await this.fetchLedgerDaysheet(this.$route.params.id);\n        this.isLoading = false\n        this.ledgerData = response.data.ledger.sort((a, b) => {\n          return this.formatReferenceNumber(a.reference_number).localeCompare(this.formatReferenceNumber(b.reference_number))\n        });\n    },\n    formatReferenceNumber (referenceNumber) {\n      if (!referenceNumber) {\n        return '-'\n      }\n      const parts = referenceNumber.split('-')\n      return parts.length >= 3 ? parts[2] : referenceNumber\n    },\n    printData() {\n      printJS({\n        printable: 'to_print_table',\n        type: 'html',\n        ignoreElements: ['no-print-check', 'no-print-option'],\n        scanStyles: true,\n        targetStyles: ['*'],\n        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {border:1px solid #000;padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table-component__table { min-width: 100%; border-collapse: collapse; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table  .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n      })\n    }\n  },\n};\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86708,7 +88468,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n.expandable-image{\n  width: 100px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/vouchers/Index.vue"],"names":[],"mappings":";AA6NA;EACA,sBAAA;AACA;AACA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$tc('vouchers.voucher', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalVouchers || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n        <router-link slot=\"item-title\" to=\"vouchers/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('vouchers.add_voucher') }}\n          </base-button>\n        </router-link>\n          </div>\n      </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('vouchers.name') }} </label>\n            <base-input\n              v-model.trim=\"filters.name\"\n              type=\"text\"\n              name=\"name\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('vouchers.groups') }} </label>\n            <base-input\n              v-model=\"filters.groups\"\n              type=\"text\"\n              name=\"groups\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n              <div class=\"from\">\n                <label>{{ $t('general.from') }}</label>\n                <base-date-picker\n                  v-model=\"filters.from_date\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                />\n            </div>\n          </div>\n          <div class=\"col-sm-3\">\n            <div class=\"to\">\n              <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n            </div>\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('vouchers.no_vouchers') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('vouchers.list_of_vouchers') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('vouchers/create')\"\n        >\n          {{ $t('vouchers.add_new_voucher') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ vouchers.length }}</b> {{ $t('general.of') }} <b>{{ totalVouchers }}</b></p>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedVouchers.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleVouchers\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllVouchers\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"table\"\n        :data=\"fetchData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('vouchers.name')\"\n          show=\"account\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `vouchers/${row.id}/edit`}\">\n              {{ row.account }}\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('ledgers.debit')\"\n          show=\"debit\"\n        >\n          <template slot-scope=\"row\">\n            ₹ {{ numberWithCommas(row.debit) }}\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('ledgers.credit')\"\n          show=\"credit\"\n        >\n          <template slot-scope=\"row\">\n            ₹ {{ numberWithCommas(row.credit) }}\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('vouchers.groups')\"\n          show=\"groups\"\n        >\n          <template slot-scope=\"row\">\n            {{ row.account_master.groups }}\n          </template>\n        </table-column>\n        <table-column\n          :key=\"Math.random()\"\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('vouchers.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n\n              <router-link :to=\"{path: `vouchers/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeVouchers(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\nimport GlobalMixin from '../../helpers/mixins.js';\nimport moment from 'moment'\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  mixins:[GlobalMixin],\n  data () {\n    return {\n      id: null,\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      breadCrumbLinks:[\n      {\n        url:'dashboard',\n        title:this.$t('general.home'),\n      },\n      {\n        url:'#',\n        title:this.$tc('vouchers.voucher')\n      }\n    ],\n      filters: {\n        name: '',\n        groups: '',\n        from_date: '',\n        to_date: '',\n      },\n      index: null\n    }\n  },\n  computed: {\n    ...mapGetters('voucher', [\n      'vouchers',\n      'selectedVouchers',\n      'totalVouchers',\n      'selectAllField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalVouchers && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedVouchers\n      },\n      set: function (val) {\n        this.selectVoucher(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllVouchers()\n    }\n  },\n  methods: {\n    ...mapActions('voucher', [\n      'fetchVouchers',\n      'selectAllVouchers',\n      'selectVoucher',\n      'deleteVoucher',\n      'deleteMultipleVouchers',\n      'setSelectAllState'\n    ]),\n    refreshTable () {\n      this.$refs.table.refresh()\n    },\n    async fetchData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name !== null ? this.filters.name : '',\n        groups: this.filters.groups !== null ? this.filters.groups : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.fetchVouchers(data)\n      this.isRequestOngoing = false\n\n      return {\n        data: response.data.vouchers.data,\n        pagination: {\n          totalPages: response.data.vouchers.last_page,\n          currentPage: page\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable()\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n      this.filters = {\n        name: '',\n        groups: '',\n        from_date: '',\n        to_date: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeVouchers (id) {\n      this.id = id\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('vouchers.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteVoucher(this.id)\n          if (res.data.success) {\n            window.toastr['success'](this.$tc('vouchers.deleted_message', 1))\n            this.$refs.table.refresh()\n            return true\n          }\n\n          if (res.data.error === 'voucher_attached') {\n            window.toastr['error'](this.$tc('vouchers.voucher_attached_message'), this.$t('general.action_failed'))\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleVouchers () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('vouchers.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteMultipleVouchers()\n          if (res.data.success) {\n            window.toastr['success'](this.$tc('vouchers.deleted_message', 2))\n            this.$refs.table.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    setIndex(index) {\n      this.index = index\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n.expandable-image{\n  width: 100px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/vouchers/Index.vue"],"names":[],"mappings":";AAuQA;EACA,sBAAA;AACA;AACA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"isApprovalMode ? $t('vouchers.approvals_title') : $tc('vouchers.voucher', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalVouchers || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div v-if=\"role === 'admin' && !isApprovalMode\" class=\"mr-4 mb-3 mb-sm-0\">\n          <router-link :to=\"{ name: 'vouchers.approvals' }\">\n            <base-button\n              :outline=\"true\"\n              color=\"theme\"\n              size=\"large\"\n            >\n              {{ $t('vouchers.need_approval') }}\n            </base-button>\n          </router-link>\n        </div>\n        <div v-if=\"!isApprovalMode\">\n        <router-link slot=\"item-title\" to=\"vouchers/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('vouchers.add_voucher') }}\n          </base-button>\n        </router-link>\n          </div>\n      </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('vouchers.name') }} </label>\n            <base-input\n              v-model.trim=\"filters.name\"\n              type=\"text\"\n              name=\"name\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('vouchers.groups') }} </label>\n            <base-input\n              v-model=\"filters.groups\"\n              type=\"text\"\n              name=\"groups\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n              <div class=\"from\">\n                <label>{{ $t('general.from') }}</label>\n                <base-date-picker\n                  v-model=\"filters.from_date\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                />\n            </div>\n          </div>\n          <div class=\"col-sm-3\">\n            <div class=\"to\">\n              <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n            </div>\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ isApprovalMode ? $t('vouchers.no_vouchers_pending_approval') : $t('vouchers.no_vouchers') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ isApprovalMode ? $t('vouchers.list_of_vouchers_pending_approval') : $t('vouchers.list_of_vouchers') }}</label>\n      </div>\n      <div v-if=\"!isApprovalMode\" class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('vouchers/create')\"\n        >\n          {{ $t('vouchers.add_new_voucher') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ vouchers.length }}</b> {{ $t('general.of') }} <b>{{ totalVouchers }}</b></p>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"role === 'admin' && selectedVouchers.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleVouchers\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item v-if=\"isApprovalMode\">\n              <div class=\"dropdown-item\" @click=\"approveMultipleVouchersAction\">\n                <font-awesome-icon icon=\"check-circle\" class=\"dropdown-item-icon\" />\n                {{ $t('vouchers.approve_voucher') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllVouchers\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"table\"\n        :data=\"fetchData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('vouchers.name')\"\n          show=\"account\"\n        >\n          <template slot-scope=\"row\">\n            <router-link v-if=\"role === 'admin'\" :to=\"{ name: 'vouchers.edit', params: { id: row.id } }\">\n              {{ row.account }}\n            </router-link>\n            <router-link v-else-if=\"role === 'accountant'\" :to=\"{ name: 'vouchers.edit', params: { id: row.id } }\">\n              {{ row.account }}\n            </router-link>\n            <span v-else>{{ row.account }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('ledgers.debit')\"\n          show=\"debit\"\n        >\n          <template slot-scope=\"row\">\n            ₹ {{ numberWithCommas(row.debit) }}\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('ledgers.credit')\"\n          show=\"credit\"\n        >\n          <template slot-scope=\"row\">\n            ₹ {{ numberWithCommas(row.credit) }}\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('vouchers.groups')\"\n          show=\"groups\"\n        >\n          <template slot-scope=\"row\">\n            {{ row.account_master.groups }}\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('vouchers.date')\"\n          sort-as=\"date\"\n          show=\"formattedDate\"\n        />\n        <table-column\n          :key=\"Math.random()\"\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('vouchers.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n\n              <router-link v-if=\"role === 'admin'\" :to=\"{ name: 'vouchers.edit', params: { id: row.id } }\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n              <router-link v-else-if=\"role === 'accountant'\" :to=\"{ name: 'vouchers.edit', params: { id: row.id } }\" class=\"dropdown-item\">\n                <font-awesome-icon icon=\"eye\" class=\"dropdown-item-icon\" />\n                {{ $t('invoices.view') }}\n              </router-link>\n\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div v-if=\"role === 'admin' && row.voucher_status === 'To Be Approved'\" class=\"dropdown-item\" @click=\"approveVoucherAction(row.id)\">\n                <font-awesome-icon icon=\"check-circle\" class=\"dropdown-item-icon\" />\n                {{ $t('vouchers.approve_voucher') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div v-if=\"role === 'admin' && row.voucher_status === 'To Be Approved'\" class=\"dropdown-item\" @click=\"declineVoucherAction(row.id)\">\n                <font-awesome-icon icon=\"times-circle\" class=\"dropdown-item-icon\" />\n                {{ $t('vouchers.decline_voucher') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div v-if=\"role === 'admin'\" class=\"dropdown-item\" @click=\"removeVouchers(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\nimport GlobalMixin from '../../helpers/mixins.js';\nimport moment from 'moment'\nexport default {\n  props: {\n    approvalMode: {\n      type: Boolean,\n      default: false\n    }\n  },\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  mixins:[GlobalMixin],\n  data () {\n    return {\n      id: null,\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      breadCrumbLinks:[\n      {\n        url:'dashboard',\n        title:this.$t('general.home'),\n      },\n      {\n        url:'#',\n        title:this.$route.name === 'vouchers.approvals' ? this.$t('vouchers.approvals_title') : this.$tc('vouchers.voucher')\n      }\n    ],\n      filters: {\n        name: '',\n        groups: '',\n        from_date: '',\n        to_date: '',\n      },\n      index: null,\n      role: this.$store.state.user.currentUser.role\n    }\n  },\n  computed: {\n    ...mapGetters('voucher', [\n      'vouchers',\n      'selectedVouchers',\n      'totalVouchers',\n      'selectAllField'\n    ]),\n    isApprovalMode () {\n      return this.$route.name === 'vouchers.approvals'\n    },\n    showEmptyScreen () {\n      return !this.totalVouchers && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedVouchers\n      },\n      set: function (val) {\n        this.selectVoucher(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    },\n    '$route.name' () {\n      this.updateBreadCrumbTitle()\n      this.filtersApplied = false\n      if (this.selectAllField) {\n        this.selectAllVouchers()\n      }\n      this.$nextTick(() => {\n        if (this.$refs.table) {\n          this.$refs.table.refresh()\n        }\n      })\n    }\n  },\n  mounted () {\n    this.updateBreadCrumbTitle()\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllVouchers()\n    }\n  },\n  methods: {\n    ...mapActions('voucher', [\n      'fetchVouchers',\n      'selectAllVouchers',\n      'selectVoucher',\n      'deleteVoucher',\n      'deleteMultipleVouchers',\n      'setSelectAllState',\n      'approveVoucher',\n      'approveMultipleVouchers',\n      'declineVoucher'\n    ]),\n    refreshTable () {\n      this.$refs.table.refresh()\n    },\n    async fetchData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name !== null ? this.filters.name : '',\n        groups: this.filters.groups !== null ? this.filters.groups : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        approval_mode: this.isApprovalMode,\n        voucher_status: this.isApprovalMode ? 'To Be Approved' : '',\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.fetchVouchers(data)\n      this.isRequestOngoing = false\n\n      return {\n        data: response.data.vouchers.data,\n        pagination: {\n          totalPages: response.data.vouchers.last_page,\n          currentPage: page\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable()\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n      this.filters = {\n        name: '',\n        groups: '',\n        from_date: '',\n        to_date: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeVouchers (id) {\n      this.id = id\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('vouchers.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteVoucher(this.id)\n          if (res.data.success) {\n            window.toastr['success'](this.$tc('vouchers.deleted_message', 1))\n            this.$refs.table.refresh()\n            return true\n          }\n\n          if (res.data.error === 'voucher_attached') {\n            window.toastr['error'](this.$tc('vouchers.voucher_attached_message'), this.$t('general.action_failed'))\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleVouchers () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('vouchers.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteMultipleVouchers()\n          if (res.data.success) {\n            window.toastr['success'](this.$tc('vouchers.deleted_message', 2))\n            this.$refs.table.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    async approveVoucherAction (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$t('vouchers.confirm_approve'),\n        icon: 'warning',\n        buttons: true,\n        dangerMode: false\n      }).then(async (approved) => {\n        if (approved) {\n          let response = await this.approveVoucher(id)\n          if (response.data && response.data.success) {\n            window.toastr['success'](this.$t('vouchers.approved_message'))\n            this.$refs.table.refresh()\n          }\n        }\n      })\n    },\n    async approveMultipleVouchersAction () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$t('vouchers.confirm_approve'),\n        icon: 'warning',\n        buttons: true,\n        dangerMode: false\n      }).then(async (approved) => {\n        if (approved) {\n          let response = await this.approveMultipleVouchers()\n          if (response.data && response.data.success) {\n            window.toastr['success'](this.$t('vouchers.approved_message'))\n            this.$refs.table.refresh()\n          }\n        }\n      })\n    },\n    async declineVoucherAction (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$t('vouchers.confirm_decline'),\n        icon: 'warning',\n        buttons: true,\n        dangerMode: false\n      }).then(async (declined) => {\n        if (declined) {\n          let response = await this.declineVoucher(id)\n          if (response.data && response.data.success) {\n            window.toastr['success'](this.$t('vouchers.declined_message'))\n            this.$refs.table.refresh()\n          }\n        }\n      })\n    },\n    setIndex(index) {\n      this.index = index\n    },\n    updateBreadCrumbTitle () {\n      if (this.breadCrumbLinks && this.breadCrumbLinks[1]) {\n        this.breadCrumbLinks[1].title = this.isApprovalMode\n          ? this.$t('vouchers.approvals_title')\n          : this.$tc('vouchers.voucher')\n      }\n    }\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -130553,6 +132313,66 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_19514592_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_19514592_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_19514592_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_19514592_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=1&id=19514592&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_19514592_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_19514592_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/bank/Index.vue?vue&type=style&index=0&id=5815c192&lang=css":
 /*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/bank/Index.vue?vue&type=style&index=0&id=5815c192&lang=css ***!
@@ -131300,6 +133120,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_9379c43a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_36b85c8d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_36b85c8d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_36b85c8d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -172582,7 +174432,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"navigation":{"dashboard":"Dashboard","customers":"Customers","calculator":"Calculator","items":"Bill-ty","bills":"Raw Bill","invoices":"Invoices","expenses":"Expenses","estimates":"Estimates","payments":"Payments","receipts":"Receipts","reports":"Reports","settings":"Settings","logout":"Logout","users":"Users","notes":"Notes","bank":"Bank","inventory":"Inventory","master":"Ledger","ledger":"Display","voucher":"Voucher","dispatch":"Dispatch","orders":"Orders"},"general":{"yes":"Yes","no":"No","view_pdf":"View PDF","download_pdf":"Download PDF","save":"Save","daybook":"Day Book","daysheet":"Day Sheet","dispatch":"Dispatch","undispatch":"Undispatch","cancel":"Cancel","update":"Update","download":"Download","from_date":"From Date","to_date":"To Date","from":"From","to":"To","go_back":"Go Back","back_to_login":"Back to Login?","home":"Home","filter":"Filter","delete":"Delete","edit":"Edit","view":"View","add_new_item":"Add New Item","clear_all":"Clear All","showing":"Showing","of":"of","actions":"Actions","subtotal":"SUBTOTAL","fixed":"Fixed","percentage":"Percentage","total_amount":"TOTAL AMOUNT","bill_to":"Bill to","ship_to":"Ship to","due":"Due","draft":"Draft","sent":"Sent","all":"All","select_all":"Select All","choose_file":"Click here to choose a file","choose_template":"Choose a template","choose":"Choose","remove":"Remove","powered_by":"Powered by","bytefury":"Bytefury","select_a_status":"Select a status","search":"Search","are_you_sure":"Are you sure?","list_is_empty":"List is empty.","four_zero_four":"404","you_got_lost":"Whoops! You got Lost!","go_home":"Go Home","setting_updated":"Setting updated successfully","select_state":"Select state","select_country":"Select Country","select_city":"Select City","street_1":"Street 1","street_2":"Street 2","action_failed":"Action Failed","to_display":"To Display","increase-price":"Increase Price","end_of_list":"End of list","summary_stock":"Summary Stock","inventory_stock":"Inventory Stock","invoice_stock":"Invoice Stock"},"dashboard":{"select_year":"Select year","cards":{"due_amount":"Amount Due","customers":"Customers","invoices":"Invoices","estimates":"Estimates"},"chart_info":{"total_sales":"Sales","total_receipts":"Receipts","total_expense":"Expenses","net_income":"Net Income","year":"Select year"},"weekly_invoices":{"title":"Weekly Invoices"},"monthly_chart":{"title":"Sales & Expenses"},"recent_invoices_card":{"title":"Due Invoices","due_on":"Due On","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"},"recent_estimate_card":{"title":"Recent Estimates","date":"Date","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"}},"customers":{"title":"Customers","add_customer":"Add Customer","contacts_list":"Customer List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_customer":"Add New Customer","save_customer":"Save Customer","update_customer":"Update Customer","customer":"Customer | Customers","new_customer":"New Customer","edit_customer":"Edit Customer","basic_info":"Basic Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_customers":"No customers yet!","no_customers_found":"No customers found!","list_of_customers":"This section will contain the list of customers.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_customer":"Select a customer","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this Customer | You will not be able to recover these Customers","created_message":"Customer created successfully","updated_message":"Customer updated successfully","deleted_message":"Customer deleted successfully | Customers deleted successfully"},"items":{"add_bill":"Add Bill-Ty","edit_bill":"Edit Bill-Ty","new_bill":"New Bill-Ty","title":"Items","date":"Date","sale_price":"Sale Price","dispatch":"Dispatch","party_name":"Party name","worker_name":"Worker Name","item_name":"Item Name","invoice_number":"Invoice Number","need_to_be_dispatch":"Need to be dispatch","items_list":"Items List","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_item":"Add Item","save_item":"Save Item","update_item":"Update Item","item":"Item | Items","add_new_item":"Add New Item","new_item":"New Item","edit_item":"Edit Item","no_items":"No items yet!","list_of_items":"This section will contain the list of items.","select_a_unit":"select unit","bill_ty":"Bill Ty","item_attached_message":"Cannot delete an item which is already in use","confirm_delete":"You will not be able to recover this Item | You will not be able to recover these Items","created_message":"Item created successfully","updated_message":"Item updated successfully","deleted_message":"Item deleted successfully | Items deleted successfully","price_increase_message":"Item price increased successfully | Items price increased successfully"},"masters":{"add_account_master":"Add Ledger","edit_account_master":"Edit Ledger","new_account_master":"New Ledger","title":"Ledger","date":"Date","masters_list":"Ledger List","name":"Name","unit":"Unit","mobile_number":"Mobile no.","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_master":"Add Ledger","save_master":"Save Ledger","update_master":"Update Ledger","master":"Ledger","add_new_master":"Add New Ledger","new_master":"New Ledger","edit_master":"Edit Ledger","no_masters":"No account masters yet!","list_of_masters":"This section will contain the list of masters.","select_a_unit":"select unit","account_master":"Ledger","groups":"Group","address":"Address","country":"Country","state":"State","select-state":"Select a State","opening_balance":"Opening Balance","save_masters":"Save Ledger","master_attached_message":"Cannot delete an master which is already in use","confirm_delete":"You will not be able to recover this Ledger | You will not be able to recover these Ledger","created_message":"Master created successfully","updated_message":"Master updated successfully","deleted_message":"Master deleted successfully | Ledger deleted successfully","credits":"Credits","button_label":"View Credits","credits_date":"Credits Date"},"groups":{"name":"Name","add_new_group":"Add new Group","select_an_group":"Select an Group","created_message":"Group created successfully","updated_message":"Group updated successfully","deleted_message":"Group deleted successfully | Groups deleted successfully"},"ledgers":{"title":"Display","date":"Date","ledgers_list":"Displays List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_ledger":"Add Display","save_ledger":"Save Display","update_ledger":"Update Display","ledger":"Display | Displays","add_new_ledger":"Add New Display","new_ledger":"New Display","edit_ledger":"Edit Display","no_ledgers":"No ledgers yet!","list_of_ledgers":"This section will contain the list of ledgers.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","closing_balance":"Closing Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Voucher Type","voucher_id":"Voucher Id","ledger_attached_message":"Cannot delete an ledger which is already in use","confirm_delete":"You will not be able to recover this Display | You will not be able to recover these Displays","created_message":"Display created successfully","updated_message":"Display updated successfully","deleted_message":"Display deleted successfully | Displays deleted successfully","inventory_item_quantity":"Quantity"},"daybook":{"title":"Day Book","title-2":"Day Sheet","date":"Date","daybooks_list":"Day Books List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","quantity":"Quantity","add_daybook":"Add Day Book","save_daybook":"Save Day Book","update_daybook":"Update Day Book","daybook":"Day Book | Day Books","add_new_daybook":"Add New Day Book","new_daybook":"New Day Book","edit_daybook":"Edit Day Book","no_daybook":"No daybooks yet!","list_of_daybook":"This section will contain the list of daybooks.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Type","voucher_count":"Count","voucher_debit":"Debit","voucher_credit":"Credit","voucher_balance":"Balance","voucher_id":"Voucher Id","daybook_attached_message":"Cannot delete an daybook which is already in use","confirm_delete":"You will not be able to recover this Day Book | You will not be able to recover these Day Books","created_message":"Day Book created successfully","updated_message":"Day Book updated successfully","deleted_message":"Day Book deleted successfully | Day Books deleted successfully","inventory_item_quantity":"Item Quantity"},"daysheet":{"city":"City","date":"Date:","transport":"Transport","lot":"Lot","reference-number":"Reference Number","name":"Name","party-name":"Party Name","pm":"PM","sign":"Sign"},"vouchers":{"title":"Vouchers","date":"Date","vouchers_list":"Account Vouchers List","name":"Name","unit":"Unit","groups":"Group","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_voucher":"Add Account Voucher","save_voucher":"Save Account Voucher","voucher":"Account Voucher | Account Vouchers","add_new_voucher":"Add New Account Voucher","new_voucher":"New Account Voucher","edit_voucher":"Edit Account Voucher","no_vouchers":"No vouchers yet!","list_of_vouchers":"This section will contain the list of vouchers.","select_a_unit":"select unit","voucher_attached_message":"Cannot delete an voucher which is already in use","confirm_delete":"You will not be able to recover this Account Voucher | You will not be able to recover these Account Vouchers","created_message":"Account Voucher created successfully","updated_message":"Account Voucher updated successfully","deleted_message":"Account Voucher deleted successfully | Account Vouchers deleted successfully","balace_not_equal_title":"Balance!","balace_not_equal_desc":"Voucher debit/credit balance should be equal","duplicate_vouchers":"This will duplicate/update existing vouchers"},"estimates":{"title":"Estimates","count":"Item count","name":"Name","estimate":"Estimate | Estimates","estimates_list":"Estimates List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","estimate_number":"Estimate Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","estimate_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_estimate":"Send Estimate","record_payment":"Record Payment","add_estimate":"Add Estimate","save_estimate":"Save Estimate","confirm_conversion":"You want to convert this Estimate into Invoice?","conversion_message":"Invoice created successful","confirm_send_estimate":"This estimate will be sent via email to the customer","confirm_mark_as_sent":"This estimate will be marked as sent","confirm_mark_as_accepted":"This estimate will be marked as Accepted","confirm_mark_as_rejected":"This estimate will be marked as Rejected","no_matching_estimates":"There are no matching estimates!","mark_as_sent_successfully":"Estimate marked as sent successfully","send_estimate_successfully":"Estimate sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_estimate":"New Estimate","add_new_estimate":"Add New Estimate","update_Estimate":"Update Estimate","edit_estimate":"Edit Estimate","items":"items","Estimate":"Estimate | Estimates","no_estimates":"No estimates yet!","list_of_estimates":"This section will contain the list of estimates.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Estimate marked as accepted","marked_as_rejected_message":"Estimate marked as rejected","confirm_delete":"You will not be able to recover this Estimate | You will not be able to recover these Estimates","created_message":"Estimate created successfully","updated_message":"Estimate updated successfully","deleted_message":"Estimate deleted successfully | Estimates deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"orders":{"title":"Orders","count":"Item count","name":"Name","order":"Order | Orders","orders_list":"Orders List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","remaining_quantity":"Remaining Quantity","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","order_number":"Order Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","order_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_order":"Send Order","record_payment":"Record Payment","add_order":"Add Order","save_order":"Save Order","confirm_conversion":"You want to convert this Order into Invoice?","conversion_message":"Invoice created successful","confirm_send_order":"This order will be sent via email to the customer","confirm_mark_as_sent":"This order will be marked as sent","confirm_mark_as_accepted":"This order will be marked as Accepted","confirm_mark_as_rejected":"This order will be marked as Rejected","no_matching_orders":"There are no matching orders!","mark_as_sent_successfully":"Order marked as sent successfully","send_order_successfully":"Order sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_order":"New Order","add_new_order":"Add New Order","update_Order":"Update Order","edit_order":"Edit Order","items":"items","Order":"Order | Orders","no_orders":"No orders yet!","list_of_orders":"This section will contain the list of orders.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Order marked as accepted","marked_as_rejected_message":"Order marked as rejected","confirm_delete":"You will not be able to recover this Order | You will not be able to recover these Orders","created_message":"Order created successfully","updated_message":"Order updated successfully","deleted_message":"Order deleted successfully | Orders deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"invoices":{"add":"Add :","title":"Invoices","bulk_title":"Bulk Invoices","invoices_list":"Invoices List","days":"{days} Days","months":"{months} Month","years":"{years} Year","out_of_stock":"Out of stock","update_inventory_quantity":"Max quantity available is {max}, do you want to update the quantity.","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","paid_status":"PAID STATUS","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","invoice":"Invoice | Invoices","invoice_number":"Invoice Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","view":"View","quantity":"Quantity","send_invoice":"Send Invoice","invoice_template":"Invoice Template","template":"Template","mark_as_sent":"Mark as sent","confirm_send_invoice":"This invoice will be sent via email to the customer","invoice_mark_as_sent":"This invoice will be marked as sent","confirm_send":"This invoice will be sent via email to the customer","invoice_date":"Invoice Date","record_payment":"Record Payment","add_new_invoice":"Add New Invoice","update_expense":"Update Expense","edit_invoice":"Edit Invoice","new_invoice":"New Invoice","save_invoice":"Save Invoice","update_invoice":"Update Invoice","no_invoices":"No Invoices yet!","list_of_invoices":"This section will contain the list of invoices.","less":"Less : ","select_invoice":"Select Invoice","no_matching_invoices":"There are no matching invoices!","mark_as_sent_successfully":"Invoice marked as sent successfully","send_invoice_successfully":"Invoice sent successfully","updated_inventory_price":"Inventory item price updated","invoice_report_title":"Invoice","invoice_report_text":"Do you want to print this invoice?","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"payment_attached_message":"One of the selected invoices already have a payment attached to it. Make sure to delete the attached payments first in order to go ahead with the removal","confirm_delete":"You will not be able to recover this Invoice | You want to delete invoices.","confirm_delete_2":"You want to delete {count} invoice. | You want to delete {count} invoices.","created_message":"Invoice created successfully","updated_message":"Invoice updated successfully","deleted_message":"Invoice deleted successfully | Invoices deleted successfully","marked_as_sent_message":"Invoice marked as sent successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","invalid_due_amount_message":"Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.","estimate-list":"Select Estimate","whatsapp":"Sent on whatsapp"},"credit_notes":{"title":"Credit Notes","credit_notes_list":"Credit Notes List","credit_notes":"Credit Notes","contact":"Contact","date":"Date","amount":"Amount","action":"Action","credit_number":"Credit Number","notes":"Notes","confirm_delete":"Do you want to delete this credit note?","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total"}},"payments":{"title":"Payments","list":"Party name","payments_list":"Payments List","record_payment":"Record Payment","customer":"Customer","date":"Date","amount":"Amount","action":"Action","payment_number":"Payment Number","payment_mode":"Payment Mode","invoice":"Invoice","note":"Note","party_name":"Party name","select_a_list":"Select from list","add_payment":"Add Payment","new_payment":"New Payment","edit_payment":"Edit Payment","view_payment":"View Payment","add_new_payment":"Add New Payment","save_payment":"Save Payment","update_payment":"Update Payment","payment":"Payment | Payments","no_payments":"No payments yet!","list_of_payments":"This section will contain the list of payments.","select_payment_mode":"Select payment mode","payment_status":"Status","confirm_delete":"You will not be able to recover this Payment | You will not be able to recover these Payments","created_message":"Payment created successfully","updated_message":"Payment updated successfully","deleted_message":"Payment deleted successfully | Payments deleted successfully","invalid_amount_message":"Payment amount is invalid"},"receipts":{"title":"Receipts","list":"Party name","receipts_list":"Receipts List","record_receipt":"Record Receipt","customer":"Customer","date":"Date","amount":"Amount","action":"Action","receipt_number":"Receipt Number","receipt_mode":"Receipt Mode","invoice":"Invoice","note":"Note","number":"Number","name":"Name","count":"Count","view":"View","mode":"Mode","closing_balance":"Closing Balance","opening_balance":"Opening Balance","select_a_list":"Select from list","add_receipt":"Add Receipt","new_receipt":"New Receipt","edit_receipt":"Edit Receipt","view_receipt":"View Receipt","add_new_receipt":"Add New Receipt","save_receipt":"Save Receipt","update_receipt":"Update Receipt","receipt":"Receipt | Receipts","no_receipts":"No receipts yet!","list_of_receipts":"This section will contain the list of receipts.","select_receipt_mode":"Select receipt mode","receipt_status":"Status","confirm_delete":"You will not be able to recover this Receipt | You will not be able to recover these Receipts","created_message":"Receipt created successfully","updated_message":"Receipt updated successfully","deleted_message":"Receipt deleted successfully | Receipts deleted successfully","invalid_amount_message":"Receipt amount is invalid","receipt_greater_than_due_amount":"Receipt amount is greater than Due amount","receipt_greater_than_zero":"Receipt amount should be greater than 0"},"expenses":{"title":"Expenses","expenses_list":"Expenses List","expense_title":"Title","contact":"Contact","category":"Category","from_date":"From Date","to_date":"To Date","expense_date":"Date","description":"Description","receipt":"Receipt","amount":"Amount","action":"Action","note":"Note","category_id":"Category Id","date":"Expense Date","add_expense":"Add Expense","add_new_expense":"Add New Expense","save_expense":"Save Expense","update_expense":"Update Expense","download_receipt":"Download Receipt","edit_expense":"Edit Expense","new_expense":"New Expense","expense":"Expense | Expenses","no_expenses":"No expenses yet!","list_of_expenses":"This section will contain the list of expenses.","confirm_delete":"You will not be able to recover this Expense | You will not be able to recover these Expenses","created_message":"Expense created successfully","updated_message":"Expense updated successfully","deleted_message":"Expense deleted successfully | Expenses deleted successfully","categories":{"categories_list":"Categories List","title":"Title","name":"Name","description":"Description","amount":"Amount","actions":"Actions","add_category":"Add Category","new_category":"New Category","category":"Category | Categories","select_a_category":"Select a category"}},"login":{"email":"Email","password":"Password","forgot_password":"Forgot Password?","or_signIn_with":"or Sign in with","login":"Login","register":"Register","reset_password":"Reset Password","password_reset_successfully":"Password Reset Successfully","enter_email":"Enter email","enter_password":"Enter Password","retype_password":"Retype Password","login_placeholder":"mail@example.com"},"reports":{"title":"Report","from_date":"From Date","to_date":"To Date","status":"Status","paid":"Paid","unpaid":"Unpaid","download_pdf":"Download PDF","view_pdf":"View PDF","update_report":"Update Report","send_report":"Send Report on Whatsapp","report":"Report | Reports","profit_loss":{"profit_loss":"Profit & Loss","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"sales":{"sales":"Sales","date_range":"Select Date Range","to_date":"To Date","from_date":"From Date","report_type":"Report Type"},"errors":{"required":"Field is required."},"invoices":{"invoice":"Invoice","invoice_date":"Invoice Date","due_date":"Due Date","amount":"Amount","contact_name":"Contact Name","status":"Status"},"estimates":{"estimate":"Estimate","estimate_date":"Estimate Date","due_date":"Due Date","estimate_number":"Estimate Number","ref_number":"Ref Number","amount":"Amount","contact_name":"Contact Name","status":"Status"},"expenses":{"expenses":"Expenses","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"customers":{"customers":"Customers","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","till_date":"Till Date","from_date":"From Date","date_range":"Select Date Range","ledgers":"Select Ledgers"},"banks":{"banks":"Banks","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"}},"settings":{"menu_title":{"account_settings":"Account Settings","company_information":"Company Information","customization":"Customization","preferences":"Preferences","notifications":"Notifications","expense_category":"Expense Categories","update_app":"Update App","all-data":"All Data"},"title":"Settings","setting":"Settings | Settings","general":"General","view":"View","language":"Language","primary_currency":"Primary Currency","timezone":"Time Zone","date_format":"Date Format","currencies":{"title":"Currencies","currency":"Currency | Currencies","currencies_list":"Currencies List","select_currency":"Select Currency","name":"Name","code":"Code","symbol":"Symbol","precision":"Precision","thousand_separator":"Thousand Separator","decimal_separator":"Decimal Separator","position":"Position","position_of_symbol":"Position Of Symbol","right":"Right","left":"Left","action":"Action","add_currency":"Add Currency"},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"pdf":{"title":"PDF Setting","footer_text":"Footer Text","pdf_layout":"PDF Layout"},"company_info":{"company_info":"Company info","company_name":"Company Name","company_logo":"Company Logo","section_description":"Information about your company that will be displayed on invoices, estimates and other documents created by omtbiz.","phone":"Phone","country":"Country","state":"State","city":"City","address_1":"Address 1","address_2":"Address 2","zip":"Zip","save":"Save","updated_message":"Company information updated successfully"},"customization":{"customization":"customization","save":"Save","addresses":{"title":"Addresses","section_description":"You can set Customer Billing Address and Customer Shipping Address Format (Displayed in PDF only). ","customer_billing_address":"Customer Billing Address","customer_shipping_address":"Customer Shipping Address","company_address":"Company Address","insert_fields":"Insert Fields","contact":"Contact","address":"Address","display_name":"Display Name","primary_contact_name":"Primary Contact Name","email":"Email","website":"Website","name":"Name","country":"Country","state":"State","city":"City","company_name":"Company Name","address_street_1":"Address Street 1","address_street_2":"Address Street 2","phone":"Phone","zip_code":"Zip Code","address_setting_updated":"Address Setting updated successfully"},"updated_message":"Company information updated successfully","invoices":{"title":"Invoices","invoice_prefix":"Invoice Prefix","invoice_settings":"Invoice Settings","autogenerate_invoice_number":"Auto-generate Invoice Number","invoice_setting_description":"Disable this, If you don\'t wish to auto-generate invoice numbers each time you create a new invoice.","enter_invoice_prefix":"Enter invoice prefix","invoice_setting_updated":"Invoice Setting updated successfully"},"references":{"title":"References","reference_prefix":"Reference Prefix","reference_settings":"Reference Settings","autogenerate_reference_number":"Auto-generate Reference Number","reference_setting_description":"Disable this, If you don\'t wish to auto-generate reference numbers each time you create a new reference.","enter_reference_prefix":"Enter reference prefix","reference_setting_updated":"Reference Setting updated successfully"},"estimates":{"title":"Estimates","estimate_prefix":"Estimate Prefix","estimate_settings":"Estimate Settings","autogenerate_estimate_number":"Auto-generate Estimate Number","estimate_setting_description":"Disable this, If you don\'t wish to auto-generate estimate numbers each time you create a new estimate.","enter_estimate_prefix":"Enter estmiate prefix","estimate_setting_updated":"Estimate Setting updated successfully"},"payments":{"title":"Payments","payment_prefix":"Payment Prefix","payment_settings":"Payment Settings","autogenerate_payment_number":"Auto-generate Payment Number","payment_setting_description":"Disable this, If you don\'t wish to auto-generate payment numbers each time you create a new payment.","enter_payment_prefix":"Enter Payment Prefix","payment_setting_updated":"Payment Setting updated successfully"}},"account_settings":{"profile_picture":"Profile Picture","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","account_settings":"Account Settings","save":"Save","section_description":"You can update your name, email & password using the form below.","updated_message":"Account Settings updated successfully"},"user_profile":{"name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password"},"notification":{"title":"Notification","email":"Send Notifications to","description":"Which email notifications would you like to receive when something changes?","invoice_viewed":"Invoice viewed","invoice_viewed_desc":"When your customer views the invoice sent via omtbiz dashboard.","estimate_viewed":"Estimate viewed","estimate_viewed_desc":"When your customer views the estimate sent via omtbiz dashboard.","save":"Save","email_save_message":"Email saved successfully","please_enter_email":"Please Enter Email"},"expense_category":{"title":"Expense Categories","action":"Action","description":"Categories are required for adding expense entries. You can Add or Remove these categories according to your preference.","add_new_category":"Add New Category","category_name":"Category Name","category_description":"Description","created_message":"Expense Category created successfully","deleted_message":"Expense category deleted successfully","updated_message":"Expense category updated successfully","confirm_delete":"You will not be able to recover this Expense Category","already_in_use":"Category is already in use"},"preferences":{"currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","save":"Save","discount_per_item":"Discount Per Item","discount_setting_description":"Add Discount for each product.","preference":"Preference | Preferences","general_settings":"Default preferences for the system.","updated_message":"Preferences updated successfully","select_language":"select language","select_time_zone":"select Time Zone","select_date_formate":"select Date Formate","select_financial_year":"select financial year","allow_negative_inventory":"Allow Negative Inventory","allow_negative_description1":"If \'Yes\' is selected then app will allow Negative Inventory in Order, Estimate and in Invoice.","allow_negative_description2":"If \'No\' is selected then app will not allow Negative Inventory in Order, Estimate and in Invoice. An error message will be shown - \'Stock is negative\'"},"update_app":{"title":"Update App","description":"You can easily update Omtbiz by checking for a new update by clicking the button below","check_update":"Check for updates","avail_update":"New Update available","next_version":"Next version","update":"Update Now","update_progress":"Update in progress...","progress_text":"It will just take a few minutes. Please do not refresh the screen or close the window before the update finishes","update_success":"App has been updated! Please wait while your browser window gets reloaded automatically.","latest_message":"No update available! You are on the latest version.","current_version":"Current Version"}},"users":{"title":"Users","add_user":"Add User","contacts_list":"User List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","change_password":"New Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_user":"Add New User","save_user":"Save User","update_user":"Update User","user":"user | Users","new_user":"New User","edit_user":"Edit User","user_info":"User Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_Users":"No Users yet!","no_Users_found":"No Users found!","list_of_Users":"This section will contain the list of Users.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_user":"Select a User","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this User | You will not be able to recover these Users","created_message":"User created successfully","updated_message":"User updated successfully","deleted_message":"User deleted successfully | Users deleted successfully","confirm_password":"Confirm Password","change_confirm_password":"Confirm New Password","company_name":"Company Name","companies":"Companies","role":"Role","roles":"Roles"},"notes":{"add_note":"Add Note","edit_note":"Edit Note","new_note":"New Note","title":"Notes","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_note":"Save Note","update_note":"Update Note","note":"Note | Notes","add_new_note":"Add New Note","no_notes":"No notes yet!","list_of_notes":"This section will contain the list of notes.","select_a_unit":"select unit","notes":"Notes","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","note_attached_message":"Cannot delete an note which is already in use","confirm_delete":"You will not be able to recover this Note | You will not be able to recover these Notes","created_message":"Note created successfully","updated_message":"Note updated successfully","deleted_message":"Note deleted successfully | Notes deleted successfully"},"dispatch":{"add_dispatch":"Add dispatch","edit_dispatch":"Edit dispatch","new_dispatch":"New dispatch","title":"Dispatch","date":"Date","name":"Party Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","transport":"Transport","person":"Person name","status":"Status","time":"Time","date_of_creation":"Date Of Creation","action":"Action","save_dispatch":"Save dispatch","date_time":"Date","update_dispatch":"Update dispatch","dispatch":"Dispatch","confirm_dispatch":"Dispatch all selected items","confirm_to_be_dispatch":"Undispatch all selected items","add_new_dispatch":"Add New dispatch","no_dispatch":"No dispatch yet!","list_of_dispatch":"This section will contain the list of dispatch.","select_a_unit":"select unit","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","invoice_id":"Invoice Number","invoice_name":"Invoice Name","invoice_report_title":"Dispatch","invoice_report_text":"Do you want to print this dispatch?","dispatch_attached_message":"Cannot delete an dispatch which is already in use","confirm_delete":"You will not be able to recover this dispatch | You will not be able to recover these dispatch","created_message":"Dispatch created successfully","updated_message":"Dispatch updated successfully","deleted_message":"Dispatch deleted successfully","multiple_dispatch_message":"Selected dispatch moved","print_dispatch":"Print"},"inventory":{"avg_price":"Average Price","add_inventory":"Add Inventory","edit_inventory":"Edit Inventory","new_inventory":"New Inventory","title":"Inventory","date":"Date","name":"Name","worker_name":"Worker Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Cost Price","sale_price":"Sale Price","date_of_creation":"Date Of Creation","action":"Action","save_inventory":"Save Inventory","update_inventory":"Update Inventory","add_new_inventory":"Add New Inventory","no_inventory":"No inventory yet!","list_of_inventory":"This section will contain the list of inventory.","select_a_unit":"select unit","inventory":"Inventory","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","quantity":"Quantity","inventory_attached_message":"Cannot delete an inventory which is already in use","confirm_delete":"You will not be able to recover this Inventory | You will not be able to recover these Inventory","created_message":"Inventory created successfully","updated_message":"Inventory updated successfully","deleted_message":"Inventory deleted successfully | Inventory deleted successfully"},"bank":{"add_bank":"Add Bank","edit_bank":"Edit Bank","new_bank":"New Bank","title":"Banks","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_bank":"Save Bank","update_bank":"Update Bank","bank":"Bank | Banks","add_new_bank":"Add New Bank","no_banks":"No banks yet!","list_of_banks":"This section will contain the list of banks.","select_a_unit":"select unit","banks":"Banks","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","bank_attached_message":"Cannot delete an bank which is already in use","confirm_delete":"You will not be able to recover this Bank | You will not be able to recover these Banks","created_message":"Bank created successfully","updated_message":"Bank updated successfully","deleted_message":"Bank deleted successfully | Banks deleted successfully"},"wizard":{"account_info":"Account Information","account_info_desc":"Below details will be used to create the main Administrator account. Also you can change the details anytime after logging in.","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","save_cont":"Save & Continue","company_info":"Company Information","company_info_desc":"This information will be displayed on invoices. Note that you can edit this later on settings page.","company_name":"Company Name","company_logo":"Company Logo","logo_preview":"Logo Preview","preferences":"Preferences","preferences_desc":"Default preferences for the system.","country":"Country","state":"State","city":"City","address":"Address","street":"Street1 | Street2","phone":"Phone","zip_code":"Zip Code","go_back":"Go Back","currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","from_address":"From Address","username":"Username","next":"Next","continue":"Continue","skip":"Skip","database":{"database":"Site URL & Database","connection":"Database Connection","host":"Database Host","port":"Database Port","password":"Database Password","app_url":"App URL","username":"Database Username","db_name":"Database Name","desc":"Create a database on your server and set the credentials using the form below."},"permissions":{"permissions":"Permissions","permission_confirm_title":"Are you sure you want to continue?","permission_confirm_desc":"Folder permission check failed","permission_desc":"Below is the list of folder permissions which are required in order for the app to work. If the permission check fails, make sure to update your folder permissions."},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"req":{"system_req":"System Requirements","php_req_version":"Php (version {version} required)","check_req":"Check Requirements","system_req_desc":"Omtbiz has a few server requirements. Make sure that your server has the required php version and all the extensions mentioned below."},"errors":{"migrate_failed":"Migrate Failed","database_variables_save_error":"Cannot write configuration to .env file. Please check its file permissions","mail_variables_save_error":"Email configuration failed.","connection_failed":"Database connection failed","database_should_be_empty":"Database should be empty"},"success":{"mail_variables_save_successfully":"Email configured successfully","database_variables_save_successfully":"Database configured successfully."}},"layout_login":{"copyright_omtbiz":"Copyright @ Omtbiz - 2024","super_simple_invoicing":"Super Simple Invoicing","for_freelancer":"for Freelancers &","small_businesses":"Small Businesses ","omtbiz_help":""},"validation":{"invalid_url":"Invalid url (ex: http://www.omtbiz.com)","required":"Field is required.","email_incorrect":"Incorrect Email.","email_already_taken":"The email has already been taken.","email_does_not_exist":"User with given email doesn\'t exist","send_reset_link":"Send Reset Link","not_yet":"Not yet? Send it again","password_min_length":"Password must contain {count} characters","name_min_length":"Name must have at least {count} letters.","numbers_only":"Numbers Only.","number_min":"Minimum length should be {min}","number_max":"Maximum length should be {max}","characters_only":"Characters Only.","password_incorrect":"Passwords must be identical","password_length":"Password must be {count} character long.","qty_must_greater_than_zero":"Quantity must be greater than zero.","price_greater_than_zero":"Price must be greater than zero.","payment_greater_than_zero":"Payment must be greater than   zero.","payment_greater_than_due_amount":"Entered Payment is more than due amount of this invoice.","quantity_maxlength":"Quantity should not be greater than 20 digits.","price_maxlength":"Price should not be greater than 20 digits.","price_minvalue":"Price should be greater than 0.","amount_maxlength":"Amount should not be greater than 20 digits.","amount_minvalue":"Amount should be greater than 0.","description_maxlength":"Description should not be greater than 255 characters.","maximum_options_error":"Maximum  of {max} options selected. First remove a selected option to select another.","notes_maxlength":"Notes should not be greater than 255 characters.","address_maxlength":"Address should not be greater than 255 characters.","ref_number_required":"Reference number is required.","prefix_maxlength":"Prefix should not be greater than 5 characters."},"credits":{"credits":"Credits","title":"Credits"}}');
+module.exports = /*#__PURE__*/JSON.parse('{"navigation":{"dashboard":"Dashboard","customers":"Customers","calculator":"Calculator","items":"Bill-ty","bills":"Raw Bill","invoices":"Invoices","expenses":"Expenses","estimates":"Estimates","payments":"Payments","receipts":"Receipts","receipt_approvals":"Receipt Approvals","voucher_approvals":"Voucher Approvals","reports":"Reports","settings":"Settings","logout":"Logout","users":"Users","audit_logs":"Audit Logs","notes":"Notes","bank":"Bank","inventory":"Inventory","master":"Ledger","ledger":"Display","voucher":"Voucher","dispatch":"Dispatch","orders":"Orders"},"general":{"yes":"Yes","no":"No","view_pdf":"View PDF","download_pdf":"Download PDF","save":"Save","daybook":"Day Book","daysheet":"Day Sheet","dispatch":"Dispatch","undispatch":"Undispatch","cancel":"Cancel","update":"Update","download":"Download","from_date":"From Date","to_date":"To Date","from":"From","to":"To","go_back":"Go Back","back_to_login":"Back to Login?","home":"Home","filter":"Filter","delete":"Delete","edit":"Edit","view":"View","add_new_item":"Add New Item","clear_all":"Clear All","showing":"Showing","of":"of","actions":"Actions","subtotal":"SUBTOTAL","fixed":"Fixed","percentage":"Percentage","total_amount":"TOTAL AMOUNT","bill_to":"Bill to","ship_to":"Ship to","due":"Due","draft":"Draft","sent":"Sent","all":"All","select_all":"Select All","choose_file":"Click here to choose a file","choose_template":"Choose a template","choose":"Choose","remove":"Remove","powered_by":"Powered by","bytefury":"Bytefury","select_a_status":"Select a status","search":"Search","are_you_sure":"Are you sure?","list_is_empty":"List is empty.","four_zero_four":"404","you_got_lost":"Whoops! You got Lost!","go_home":"Go Home","setting_updated":"Setting updated successfully","select_state":"Select state","select_country":"Select Country","select_city":"Select City","street_1":"Street 1","street_2":"Street 2","action_failed":"Action Failed","to_display":"To Display","increase-price":"Increase Price","end_of_list":"End of list","summary_stock":"Summary Stock","inventory_stock":"Inventory Stock","invoice_stock":"Invoice Stock"},"dashboard":{"select_year":"Select year","cards":{"due_amount":"Amount Due","customers":"Customers","invoices":"Invoices","estimates":"Estimates"},"chart_info":{"total_sales":"Sales","total_receipts":"Receipts","total_expense":"Expenses","net_income":"Net Income","year":"Select year"},"weekly_invoices":{"title":"Weekly Invoices"},"monthly_chart":{"title":"Sales & Expenses"},"recent_invoices_card":{"title":"Due Invoices","due_on":"Due On","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"},"recent_estimate_card":{"title":"Recent Estimates","date":"Date","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"}},"customers":{"title":"Customers","add_customer":"Add Customer","contacts_list":"Customer List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_customer":"Add New Customer","save_customer":"Save Customer","update_customer":"Update Customer","customer":"Customer | Customers","new_customer":"New Customer","edit_customer":"Edit Customer","basic_info":"Basic Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_customers":"No customers yet!","no_customers_found":"No customers found!","list_of_customers":"This section will contain the list of customers.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_customer":"Select a customer","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this Customer | You will not be able to recover these Customers","created_message":"Customer created successfully","updated_message":"Customer updated successfully","deleted_message":"Customer deleted successfully | Customers deleted successfully"},"items":{"add_bill":"Add Bill-Ty","edit_bill":"Edit Bill-Ty","new_bill":"New Bill-Ty","title":"Items","date":"Date","sale_price":"Sale Price","dispatch":"Dispatch","party_name":"Party name","worker_name":"Worker Name","item_name":"Item Name","invoice_number":"Invoice Number","need_to_be_dispatch":"Need to be dispatch","items_list":"Items List","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_item":"Add Item","save_item":"Save Item","update_item":"Update Item","item":"Item | Items","add_new_item":"Add New Item","new_item":"New Item","edit_item":"Edit Item","no_items":"No items yet!","list_of_items":"This section will contain the list of items.","select_a_unit":"select unit","bill_ty":"Bill Ty","item_attached_message":"Cannot delete an item which is already in use","confirm_delete":"You will not be able to recover this Item | You will not be able to recover these Items","created_message":"Item created successfully","updated_message":"Item updated successfully","deleted_message":"Item deleted successfully | Items deleted successfully","price_increase_message":"Item price increased successfully | Items price increased successfully"},"masters":{"add_account_master":"Add Ledger","edit_account_master":"Edit Ledger","new_account_master":"New Ledger","title":"Ledger","date":"Date","masters_list":"Ledger List","name":"Name","unit":"Unit","mobile_number":"Mobile no.","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_master":"Add Ledger","save_master":"Save Ledger","update_master":"Update Ledger","master":"Ledger","add_new_master":"Add New Ledger","new_master":"New Ledger","edit_master":"Edit Ledger","no_masters":"No account masters yet!","list_of_masters":"This section will contain the list of masters.","select_a_unit":"select unit","account_master":"Ledger","groups":"Group","address":"Address","country":"Country","state":"State","select-state":"Select a State","opening_balance":"Opening Balance","save_masters":"Save Ledger","master_attached_message":"Cannot delete an master which is already in use","confirm_delete":"You will not be able to recover this Ledger | You will not be able to recover these Ledger","created_message":"Master created successfully","updated_message":"Master updated successfully","deleted_message":"Master deleted successfully | Ledger deleted successfully"},"groups":{"name":"Name","add_new_group":"Add new Group","select_an_group":"Select an Group","created_message":"Group created successfully","updated_message":"Group updated successfully","deleted_message":"Group deleted successfully | Groups deleted successfully"},"ledgers":{"title":"Display","date":"Date","ledgers_list":"Displays List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_ledger":"Add Display","save_ledger":"Save Display","update_ledger":"Update Display","ledger":"Display | Displays","add_new_ledger":"Add New Display","new_ledger":"New Display","edit_ledger":"Edit Display","no_ledgers":"No ledgers yet!","list_of_ledgers":"This section will contain the list of ledgers.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","closing_balance":"Closing Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Voucher Type","voucher_id":"Voucher Id","ledger_attached_message":"Cannot delete an ledger which is already in use","confirm_delete":"You will not be able to recover this Display | You will not be able to recover these Displays","created_message":"Display created successfully","updated_message":"Display updated successfully","deleted_message":"Display deleted successfully | Displays deleted successfully","inventory_item_quantity":"Quantity"},"daybook":{"title":"Day Book","title-2":"Day Sheet","date":"Date","daybooks_list":"Day Books List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","quantity":"Quantity","add_daybook":"Add Day Book","save_daybook":"Save Day Book","update_daybook":"Update Day Book","daybook":"Day Book | Day Books","add_new_daybook":"Add New Day Book","new_daybook":"New Day Book","edit_daybook":"Edit Day Book","no_daybook":"No daybooks yet!","list_of_daybook":"This section will contain the list of daybooks.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Type","voucher_count":"Count","voucher_debit":"Debit","voucher_credit":"Credit","voucher_balance":"Balance","voucher_id":"Voucher Id","daybook_attached_message":"Cannot delete an daybook which is already in use","confirm_delete":"You will not be able to recover this Day Book | You will not be able to recover these Day Books","created_message":"Day Book created successfully","updated_message":"Day Book updated successfully","deleted_message":"Day Book deleted successfully | Day Books deleted successfully","inventory_item_quantity":"Item Quantity"},"daysheet":{"city":"City","date":"Date:","transport":"Transport","lot":"Lot","reference-number":"Reference Number","name":"Name","party-name":"Party Name","pm":"PM","sign":"Sign"},"vouchers":{"title":"Vouchers","date":"Date","vouchers_list":"Account Vouchers List","name":"Name","unit":"Unit","groups":"Group","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_voucher":"Add Account Voucher","save_voucher":"Save Account Voucher","voucher":"Account Voucher | Account Vouchers","add_new_voucher":"Add New Account Voucher","new_voucher":"New Account Voucher","edit_voucher":"Edit Account Voucher","no_vouchers":"No vouchers yet!","no_vouchers_pending_approval":"No vouchers pending approval.","list_of_vouchers":"This section will contain the list of vouchers.","list_of_vouchers_pending_approval":"This section contains vouchers waiting for admin approval.","select_a_unit":"select unit","voucher_attached_message":"Cannot delete an voucher which is already in use","confirm_delete":"You will not be able to recover this Account Voucher | You will not be able to recover these Account Vouchers","created_message":"Account Voucher created successfully","updated_message":"Account Voucher updated successfully","deleted_message":"Account Voucher deleted successfully | Account Vouchers deleted successfully","approve_voucher":"Approve Voucher","decline_voucher":"Decline Voucher","need_approval":"Need Approval","confirm_approve":"Do you want to approve this voucher?","confirm_decline":"Do you want to decline this voucher?","approved_message":"Voucher approved successfully","declined_message":"Voucher declined successfully","submitted_for_approval_message":"Voucher submitted for admin approval","approvals_title":"Vouchers To Be Approved","balace_not_equal_title":"Balance!","balace_not_equal_desc":"Voucher debit/credit balance should be equal","duplicate_vouchers":"This will duplicate/update existing vouchers"},"estimates":{"title":"Estimates","count":"Item count","name":"Name","estimate":"Estimate | Estimates","estimates_list":"Estimates List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","estimate_number":"Estimate Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","estimate_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_estimate":"Send Estimate","record_payment":"Record Payment","add_estimate":"Add Estimate","save_estimate":"Save Estimate","confirm_conversion":"You want to convert this Estimate into Invoice?","conversion_message":"Invoice created successful","confirm_send_estimate":"This estimate will be sent via email to the customer","confirm_mark_as_sent":"This estimate will be marked as sent","confirm_mark_as_accepted":"This estimate will be marked as Accepted","confirm_mark_as_rejected":"This estimate will be marked as Rejected","no_matching_estimates":"There are no matching estimates!","mark_as_sent_successfully":"Estimate marked as sent successfully","send_estimate_successfully":"Estimate sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_estimate":"New Estimate","add_new_estimate":"Add New Estimate","update_Estimate":"Update Estimate","edit_estimate":"Edit Estimate","items":"items","Estimate":"Estimate | Estimates","no_estimates":"No estimates yet!","list_of_estimates":"This section will contain the list of estimates.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Estimate marked as accepted","marked_as_rejected_message":"Estimate marked as rejected","confirm_delete":"You will not be able to recover this Estimate | You will not be able to recover these Estimates","created_message":"Estimate created successfully","updated_message":"Estimate updated successfully","deleted_message":"Estimate deleted successfully | Estimates deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"orders":{"title":"Orders","count":"Item count","name":"Name","order":"Order | Orders","orders_list":"Orders List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","remaining_quantity":"Remaining Quantity","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","order_number":"Order Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","order_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_order":"Send Order","record_payment":"Record Payment","add_order":"Add Order","save_order":"Save Order","confirm_conversion":"You want to convert this Order into Invoice?","conversion_message":"Invoice created successful","confirm_send_order":"This order will be sent via email to the customer","confirm_mark_as_sent":"This order will be marked as sent","confirm_mark_as_accepted":"This order will be marked as Accepted","confirm_mark_as_rejected":"This order will be marked as Rejected","no_matching_orders":"There are no matching orders!","mark_as_sent_successfully":"Order marked as sent successfully","send_order_successfully":"Order sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_order":"New Order","add_new_order":"Add New Order","update_Order":"Update Order","edit_order":"Edit Order","items":"items","Order":"Order | Orders","no_orders":"No orders yet!","list_of_orders":"This section will contain the list of orders.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Order marked as accepted","marked_as_rejected_message":"Order marked as rejected","confirm_delete":"You will not be able to recover this Order | You will not be able to recover these Orders","created_message":"Order created successfully","updated_message":"Order updated successfully","deleted_message":"Order deleted successfully | Orders deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"invoices":{"add":"Add :","title":"Invoices","bulk_title":"Bulk Invoices","invoices_list":"Invoices List","days":"{days} Days","months":"{months} Month","years":"{years} Year","out_of_stock":"Out of stock","update_inventory_quantity":"Max quantity available is {max}, do you want to update the quantity.","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","paid_status":"PAID STATUS","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","invoice":"Invoice | Invoices","invoice_number":"Invoice Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","view":"View","quantity":"Quantity","send_invoice":"Send Invoice","invoice_template":"Invoice Template","template":"Template","mark_as_sent":"Mark as sent","confirm_send_invoice":"This invoice will be sent via email to the customer","invoice_mark_as_sent":"This invoice will be marked as sent","confirm_send":"This invoice will be sent via email to the customer","invoice_date":"Invoice Date","record_payment":"Record Payment","add_new_invoice":"Add New Invoice","update_expense":"Update Expense","edit_invoice":"Edit Invoice","new_invoice":"New Invoice","save_invoice":"Save Invoice","update_invoice":"Update Invoice","no_invoices":"No Invoices yet!","list_of_invoices":"This section will contain the list of invoices.","less":"Less : ","select_invoice":"Select Invoice","no_matching_invoices":"There are no matching invoices!","mark_as_sent_successfully":"Invoice marked as sent successfully","send_invoice_successfully":"Invoice sent successfully","updated_inventory_price":"Inventory item price updated","invoice_report_title":"Invoice","invoice_report_text":"Do you want to print this invoice?","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"payment_attached_message":"One of the selected invoices already have a payment attached to it. Make sure to delete the attached payments first in order to go ahead with the removal","confirm_delete":"You will not be able to recover this Invoice | You want to delete invoices.","confirm_delete_2":"You want to delete {count} invoice. | You want to delete {count} invoices.","created_message":"Invoice created successfully","updated_message":"Invoice updated successfully","deleted_message":"Invoice deleted successfully | Invoices deleted successfully","marked_as_sent_message":"Invoice marked as sent successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","invalid_due_amount_message":"Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.","estimate-list":"Select Estimate","whatsapp":"Sent on whatsapp","send_selected_whatsapp":"Send Selected on WhatsApp","sending_selected_whatsapp":"Sending on WhatsApp..."},"credit_notes":{"title":"Credit Notes","credit_notes_list":"Credit Notes List","credit_notes":"Credit Notes","contact":"Contact","date":"Date","amount":"Amount","action":"Action","credit_number":"Credit Number","notes":"Notes","confirm_delete":"Do you want to delete this credit note?","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total"}},"payments":{"title":"Payments","list":"Party name","payments_list":"Payments List","record_payment":"Record Payment","customer":"Customer","date":"Date","amount":"Amount","action":"Action","payment_number":"Payment Number","payment_mode":"Payment Mode","invoice":"Invoice","note":"Note","party_name":"Party name","select_a_list":"Select from list","add_payment":"Add Payment","new_payment":"New Payment","edit_payment":"Edit Payment","view_payment":"View Payment","add_new_payment":"Add New Payment","save_payment":"Save Payment","update_payment":"Update Payment","payment":"Payment | Payments","no_payments":"No payments yet!","list_of_payments":"This section will contain the list of payments.","select_payment_mode":"Select payment mode","payment_status":"Status","confirm_delete":"You will not be able to recover this Payment | You will not be able to recover these Payments","created_message":"Payment created successfully","updated_message":"Payment updated successfully","deleted_message":"Payment deleted successfully | Payments deleted successfully","invalid_amount_message":"Payment amount is invalid"},"receipts":{"title":"Receipts","list":"Party name","receipts_list":"Receipts List","record_receipt":"Record Receipt","customer":"Customer","date":"Date","amount":"Amount","action":"Action","receipt_number":"Receipt Number","receipt_mode":"Receipt Mode","invoice":"Invoice","note":"Note","number":"Number","name":"Name","count":"Count","view":"View","mode":"Mode","closing_balance":"Closing Balance","opening_balance":"Opening Balance","select_a_list":"Select from list","add_receipt":"Add Receipt","new_receipt":"New Receipt","edit_receipt":"Edit Receipt","view_receipt":"View Receipt","add_new_receipt":"Add New Receipt","save_receipt":"Save Receipt","update_receipt":"Update Receipt","receipt":"Receipt | Receipts","approvals_title":"Receipts To Be Approved","no_receipts":"No receipts yet!","list_of_receipts":"This section will contain the list of receipts.","no_receipts_pending_approval":"No receipts pending approval.","list_of_receipts_pending_approval":"This section contains receipts waiting for admin approval.","select_receipt_mode":"Select receipt mode","receipt_status":"Status","approve_receipt":"Approve Receipt","decline_receipt":"Decline Receipt","confirm_approve":"Do you want to approve this receipt?","confirm_decline":"Do you want to decline this receipt?","approved_message":"Receipt approved successfully","declined_message":"Receipt declined successfully","submitted_for_approval_message":"Receipt submitted for admin approval","confirm_delete":"You will not be able to recover this Receipt | You will not be able to recover these Receipts","created_message":"Receipt created successfully","updated_message":"Receipt updated successfully","deleted_message":"Receipt deleted successfully | Receipts deleted successfully","invalid_amount_message":"Receipt amount is invalid","receipt_greater_than_due_amount":"Receipt amount is greater than Due amount","receipt_greater_than_zero":"Receipt amount should be greater than 0"},"expenses":{"title":"Expenses","expenses_list":"Expenses List","expense_title":"Title","contact":"Contact","category":"Category","from_date":"From Date","to_date":"To Date","expense_date":"Date","description":"Description","receipt":"Receipt","amount":"Amount","action":"Action","note":"Note","category_id":"Category Id","date":"Expense Date","add_expense":"Add Expense","add_new_expense":"Add New Expense","save_expense":"Save Expense","update_expense":"Update Expense","download_receipt":"Download Receipt","edit_expense":"Edit Expense","new_expense":"New Expense","expense":"Expense | Expenses","no_expenses":"No expenses yet!","list_of_expenses":"This section will contain the list of expenses.","confirm_delete":"You will not be able to recover this Expense | You will not be able to recover these Expenses","created_message":"Expense created successfully","updated_message":"Expense updated successfully","deleted_message":"Expense deleted successfully | Expenses deleted successfully","categories":{"categories_list":"Categories List","title":"Title","name":"Name","description":"Description","amount":"Amount","actions":"Actions","add_category":"Add Category","new_category":"New Category","category":"Category | Categories","select_a_category":"Select a category"}},"login":{"email":"Email","password":"Password","forgot_password":"Forgot Password?","or_signIn_with":"or Sign in with","login":"Login","register":"Register","reset_password":"Reset Password","password_reset_successfully":"Password Reset Successfully","enter_email":"Enter email","enter_password":"Enter Password","retype_password":"Retype Password","login_placeholder":"mail@example.com"},"reports":{"title":"Report","from_date":"From Date","to_date":"To Date","status":"Status","paid":"Paid","unpaid":"Unpaid","download_pdf":"Download PDF","view_pdf":"View PDF","update_report":"Update Report","send_report":"Send Report on Whatsapp","report":"Report | Reports","profit_loss":{"profit_loss":"Profit & Loss","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"sales":{"sales":"Sales","date_range":"Select Date Range","to_date":"To Date","from_date":"From Date","report_type":"Report Type"},"errors":{"required":"Field is required."},"invoices":{"invoice":"Invoice","invoice_date":"Invoice Date","due_date":"Due Date","amount":"Amount","contact_name":"Contact Name","status":"Status"},"estimates":{"estimate":"Estimate","estimate_date":"Estimate Date","due_date":"Due Date","estimate_number":"Estimate Number","ref_number":"Ref Number","amount":"Amount","contact_name":"Contact Name","status":"Status"},"expenses":{"expenses":"Expenses","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"customers":{"customers":"Customers","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","till_date":"Till Date","from_date":"From Date","date_range":"Select Date Range","ledgers":"Select Ledgers"},"banks":{"banks":"Banks","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"}},"settings":{"menu_title":{"account_settings":"Account Settings","company_information":"Company Information","customization":"Customization","preferences":"Preferences","notifications":"Notifications","expense_category":"Expense Categories","update_app":"Update App","all-data":"All Data"},"title":"Settings","setting":"Settings | Settings","general":"General","view":"View","language":"Language","primary_currency":"Primary Currency","timezone":"Time Zone","date_format":"Date Format","currencies":{"title":"Currencies","currency":"Currency | Currencies","currencies_list":"Currencies List","select_currency":"Select Currency","name":"Name","code":"Code","symbol":"Symbol","precision":"Precision","thousand_separator":"Thousand Separator","decimal_separator":"Decimal Separator","position":"Position","position_of_symbol":"Position Of Symbol","right":"Right","left":"Left","action":"Action","add_currency":"Add Currency"},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"pdf":{"title":"PDF Setting","footer_text":"Footer Text","pdf_layout":"PDF Layout"},"company_info":{"company_info":"Company info","company_name":"Company Name","company_logo":"Company Logo","section_description":"Information about your company that will be displayed on invoices, estimates and other documents created by omtbiz.","phone":"Phone","country":"Country","state":"State","city":"City","address_1":"Address 1","address_2":"Address 2","zip":"Zip","save":"Save","updated_message":"Company information updated successfully"},"customization":{"customization":"customization","save":"Save","addresses":{"title":"Addresses","section_description":"You can set Customer Billing Address and Customer Shipping Address Format (Displayed in PDF only). ","customer_billing_address":"Customer Billing Address","customer_shipping_address":"Customer Shipping Address","company_address":"Company Address","insert_fields":"Insert Fields","contact":"Contact","address":"Address","display_name":"Display Name","primary_contact_name":"Primary Contact Name","email":"Email","website":"Website","name":"Name","country":"Country","state":"State","city":"City","company_name":"Company Name","address_street_1":"Address Street 1","address_street_2":"Address Street 2","phone":"Phone","zip_code":"Zip Code","address_setting_updated":"Address Setting updated successfully"},"updated_message":"Company information updated successfully","invoices":{"title":"Invoices","invoice_prefix":"Invoice Prefix","invoice_settings":"Invoice Settings","autogenerate_invoice_number":"Auto-generate Invoice Number","invoice_setting_description":"Disable this, If you don\'t wish to auto-generate invoice numbers each time you create a new invoice.","enter_invoice_prefix":"Enter invoice prefix","invoice_setting_updated":"Invoice Setting updated successfully"},"references":{"title":"References","reference_prefix":"Reference Prefix","reference_settings":"Reference Settings","autogenerate_reference_number":"Auto-generate Reference Number","reference_setting_description":"Disable this, If you don\'t wish to auto-generate reference numbers each time you create a new reference.","enter_reference_prefix":"Enter reference prefix","reference_setting_updated":"Reference Setting updated successfully"},"estimates":{"title":"Estimates","estimate_prefix":"Estimate Prefix","estimate_settings":"Estimate Settings","autogenerate_estimate_number":"Auto-generate Estimate Number","estimate_setting_description":"Disable this, If you don\'t wish to auto-generate estimate numbers each time you create a new estimate.","enter_estimate_prefix":"Enter estmiate prefix","estimate_setting_updated":"Estimate Setting updated successfully"},"payments":{"title":"Payments","payment_prefix":"Payment Prefix","payment_settings":"Payment Settings","autogenerate_payment_number":"Auto-generate Payment Number","payment_setting_description":"Disable this, If you don\'t wish to auto-generate payment numbers each time you create a new payment.","enter_payment_prefix":"Enter Payment Prefix","payment_setting_updated":"Payment Setting updated successfully"}},"account_settings":{"profile_picture":"Profile Picture","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","account_settings":"Account Settings","save":"Save","section_description":"You can update your name, email & password using the form below.","updated_message":"Account Settings updated successfully"},"user_profile":{"name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password"},"notification":{"title":"Notification","email":"Send Notifications to","description":"Which email notifications would you like to receive when something changes?","invoice_viewed":"Invoice viewed","invoice_viewed_desc":"When your customer views the invoice sent via omtbiz dashboard.","estimate_viewed":"Estimate viewed","estimate_viewed_desc":"When your customer views the estimate sent via omtbiz dashboard.","save":"Save","email_save_message":"Email saved successfully","please_enter_email":"Please Enter Email"},"expense_category":{"title":"Expense Categories","action":"Action","description":"Categories are required for adding expense entries. You can Add or Remove these categories according to your preference.","add_new_category":"Add New Category","category_name":"Category Name","category_description":"Description","created_message":"Expense Category created successfully","deleted_message":"Expense category deleted successfully","updated_message":"Expense category updated successfully","confirm_delete":"You will not be able to recover this Expense Category","already_in_use":"Category is already in use"},"preferences":{"currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","save":"Save","discount_per_item":"Discount Per Item","discount_setting_description":"Add Discount for each product.","preference":"Preference | Preferences","general_settings":"Default preferences for the system.","updated_message":"Preferences updated successfully","select_language":"select language","select_time_zone":"select Time Zone","select_date_formate":"select Date Formate","select_financial_year":"select financial year","allow_negative_inventory":"Allow Negative Inventory","allow_negative_description1":"If \'Yes\' is selected then app will allow Negative Inventory in Order, Estimate and in Invoice.","allow_negative_description2":"If \'No\' is selected then app will not allow Negative Inventory in Order, Estimate and in Invoice. An error message will be shown - \'Stock is negative\'"},"update_app":{"title":"Update App","description":"You can easily update Omtbiz by checking for a new update by clicking the button below","check_update":"Check for updates","avail_update":"New Update available","next_version":"Next version","update":"Update Now","update_progress":"Update in progress...","progress_text":"It will just take a few minutes. Please do not refresh the screen or close the window before the update finishes","update_success":"App has been updated! Please wait while your browser window gets reloaded automatically.","latest_message":"No update available! You are on the latest version.","current_version":"Current Version"}},"users":{"title":"Users","add_user":"Add User","contacts_list":"User List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","change_password":"New Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_user":"Add New User","save_user":"Save User","update_user":"Update User","user":"user | Users","new_user":"New User","edit_user":"Edit User","user_info":"User Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_Users":"No Users yet!","no_Users_found":"No Users found!","list_of_Users":"This section will contain the list of Users.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_user":"Select a User","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this User | You will not be able to recover these Users","created_message":"User created successfully","updated_message":"User updated successfully","deleted_message":"User deleted successfully | Users deleted successfully","confirm_password":"Confirm Password","change_confirm_password":"Confirm New Password","company_name":"Company Name","companies":"Companies","role":"Role","roles":"Roles"},"notes":{"add_note":"Add Note","edit_note":"Edit Note","new_note":"New Note","title":"Notes","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_note":"Save Note","update_note":"Update Note","note":"Note | Notes","add_new_note":"Add New Note","no_notes":"No notes yet!","list_of_notes":"This section will contain the list of notes.","select_a_unit":"select unit","notes":"Notes","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","note_attached_message":"Cannot delete an note which is already in use","confirm_delete":"You will not be able to recover this Note | You will not be able to recover these Notes","created_message":"Note created successfully","updated_message":"Note updated successfully","deleted_message":"Note deleted successfully | Notes deleted successfully"},"dispatch":{"add_dispatch":"Add dispatch","edit_dispatch":"Edit dispatch","new_dispatch":"New dispatch","title":"Dispatch","date":"Date","name":"Party Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","transport":"Transport","person":"Person name","status":"Status","time":"Time","date_of_creation":"Date Of Creation","action":"Action","save_dispatch":"Save dispatch","date_time":"Date","update_dispatch":"Update dispatch","dispatch":"Dispatch","confirm_dispatch":"Dispatch all selected items","confirm_to_be_dispatch":"Undispatch all selected items","add_new_dispatch":"Add New dispatch","no_dispatch":"No dispatch yet!","list_of_dispatch":"This section will contain the list of dispatch.","select_a_unit":"select unit","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","invoice_id":"Invoice Number","invoice_name":"Invoice Name","invoice_report_title":"Dispatch","invoice_report_text":"Do you want to print this dispatch?","dispatch_attached_message":"Cannot delete an dispatch which is already in use","confirm_delete":"You will not be able to recover this dispatch | You will not be able to recover these dispatch","created_message":"Dispatch created successfully","updated_message":"Dispatch updated successfully","deleted_message":"Dispatch deleted successfully","multiple_dispatch_message":"Selected dispatch moved","print_dispatch":"Print"},"inventory":{"avg_price":"Average Price","add_inventory":"Add Inventory","edit_inventory":"Edit Inventory","new_inventory":"New Inventory","title":"Inventory","date":"Date","name":"Name","worker_name":"Worker Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Cost Price","sale_price":"Sale Price","date_of_creation":"Date Of Creation","action":"Action","save_inventory":"Save Inventory","update_inventory":"Update Inventory","add_new_inventory":"Add New Inventory","no_inventory":"No inventory yet!","list_of_inventory":"This section will contain the list of inventory.","select_a_unit":"select unit","inventory":"Inventory","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","quantity":"Quantity","inventory_attached_message":"Cannot delete an inventory which is already in use","confirm_delete":"You will not be able to recover this Inventory | You will not be able to recover these Inventory","created_message":"Inventory created successfully","updated_message":"Inventory updated successfully","deleted_message":"Inventory deleted successfully | Inventory deleted successfully"},"bank":{"add_bank":"Add Bank","edit_bank":"Edit Bank","new_bank":"New Bank","title":"Banks","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_bank":"Save Bank","update_bank":"Update Bank","bank":"Bank | Banks","add_new_bank":"Add New Bank","no_banks":"No banks yet!","list_of_banks":"This section will contain the list of banks.","select_a_unit":"select unit","banks":"Banks","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","bank_attached_message":"Cannot delete an bank which is already in use","confirm_delete":"You will not be able to recover this Bank | You will not be able to recover these Banks","created_message":"Bank created successfully","updated_message":"Bank updated successfully","deleted_message":"Bank deleted successfully | Banks deleted successfully"},"wizard":{"account_info":"Account Information","account_info_desc":"Below details will be used to create the main Administrator account. Also you can change the details anytime after logging in.","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","save_cont":"Save & Continue","company_info":"Company Information","company_info_desc":"This information will be displayed on invoices. Note that you can edit this later on settings page.","company_name":"Company Name","company_logo":"Company Logo","logo_preview":"Logo Preview","preferences":"Preferences","preferences_desc":"Default preferences for the system.","country":"Country","state":"State","city":"City","address":"Address","street":"Street1 | Street2","phone":"Phone","zip_code":"Zip Code","go_back":"Go Back","currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","from_address":"From Address","username":"Username","next":"Next","continue":"Continue","skip":"Skip","database":{"database":"Site URL & Database","connection":"Database Connection","host":"Database Host","port":"Database Port","password":"Database Password","app_url":"App URL","username":"Database Username","db_name":"Database Name","desc":"Create a database on your server and set the credentials using the form below."},"permissions":{"permissions":"Permissions","permission_confirm_title":"Are you sure you want to continue?","permission_confirm_desc":"Folder permission check failed","permission_desc":"Below is the list of folder permissions which are required in order for the app to work. If the permission check fails, make sure to update your folder permissions."},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"req":{"system_req":"System Requirements","php_req_version":"Php (version {version} required)","check_req":"Check Requirements","system_req_desc":"Omtbiz has a few server requirements. Make sure that your server has the required php version and all the extensions mentioned below."},"errors":{"migrate_failed":"Migrate Failed","database_variables_save_error":"Cannot write configuration to .env file. Please check its file permissions","mail_variables_save_error":"Email configuration failed.","connection_failed":"Database connection failed","database_should_be_empty":"Database should be empty"},"success":{"mail_variables_save_successfully":"Email configured successfully","database_variables_save_successfully":"Database configured successfully."}},"layout_login":{"copyright_omtbiz":"Copyright @ Omtbiz - 2024","super_simple_invoicing":"Super Simple Invoicing","for_freelancer":"for Freelancers &","small_businesses":"Small Businesses ","omtbiz_help":""},"validation":{"invalid_url":"Invalid url (ex: http://www.omtbiz.com)","required":"Field is required.","email_incorrect":"Incorrect Email.","email_already_taken":"The email has already been taken.","email_does_not_exist":"User with given email doesn\'t exist","send_reset_link":"Send Reset Link","not_yet":"Not yet? Send it again","password_min_length":"Password must contain {count} characters","name_min_length":"Name must have at least {count} letters.","numbers_only":"Numbers Only.","number_min":"Minimum length should be {min}","number_max":"Maximum length should be {max}","characters_only":"Characters Only.","password_incorrect":"Passwords must be identical","password_length":"Password must be {count} character long.","qty_must_greater_than_zero":"Quantity must be greater than zero.","price_greater_than_zero":"Price must be greater than zero.","payment_greater_than_zero":"Payment must be greater than   zero.","payment_greater_than_due_amount":"Entered Payment is more than due amount of this invoice.","quantity_maxlength":"Quantity should not be greater than 20 digits.","price_maxlength":"Price should not be greater than 20 digits.","price_minvalue":"Price should be greater than 0.","amount_maxlength":"Amount should not be greater than 20 digits.","amount_minvalue":"Amount should be greater than 0.","description_maxlength":"Description should not be greater than 255 characters.","maximum_options_error":"Maximum  of {max} options selected. First remove a selected option to select another.","notes_maxlength":"Notes should not be greater than 255 characters.","address_maxlength":"Address should not be greater than 255 characters.","ref_number_required":"Reference number is required.","prefix_maxlength":"Prefix should not be greater than 5 characters."},"audit_logs":{"title":"Audit Logs","search_placeholder":"Search by number or customer name","type":"Type","select_type":"Select type","all_types":"All Types","login_logout":"Login & Logout","document":"Document","user":"User","user_placeholder":"Name or email","action":"Action","module":"Module","select_action":"Select action","select_module":"Select module","date_time":"Date & Time","description":"Description","ip":"IP Address","url":"URL","details":"Activity Details","view_details":"View Details","old_values":"Previous Values","new_values":"New Values","no_logs":"No activity found","list_of_logs":"Invoice/estimate/order creation & updates, plus logins and logouts, will appear here — search by number or click a row to open the record.","all_time":"All Time","today":"Today","this_week":"This Week","this_month":"This Month","show_more":"+{count} more","show_less":"Show less"}}');
 
 /***/ }),
 
@@ -172625,7 +174475,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _store_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/index.js */ "./resources/assets/js/store/index.js");
 /* harmony import */ var _views_layouts_LayoutBasic_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/layouts/LayoutBasic.vue */ "./resources/assets/js/views/layouts/LayoutBasic.vue");
@@ -172666,35 +174516,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_reports_BanksReport_vue__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./views/reports/BanksReport.vue */ "./resources/assets/js/views/reports/BanksReport.vue");
 /* harmony import */ var _views_users_Index_vue__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./views/users/Index.vue */ "./resources/assets/js/views/users/Index.vue");
 /* harmony import */ var _views_users_Create_vue__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./views/users/Create.vue */ "./resources/assets/js/views/users/Create.vue");
-/* harmony import */ var _views_settings_layout_Index_vue__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./views/settings/layout/Index.vue */ "./resources/assets/js/views/settings/layout/Index.vue");
-/* harmony import */ var _views_settings_CompanyInfo_vue__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./views/settings/CompanyInfo.vue */ "./resources/assets/js/views/settings/CompanyInfo.vue");
-/* harmony import */ var _views_settings_Customization_vue__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./views/settings/Customization.vue */ "./resources/assets/js/views/settings/Customization.vue");
-/* harmony import */ var _views_settings_Notifications_vue__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./views/settings/Notifications.vue */ "./resources/assets/js/views/settings/Notifications.vue");
-/* harmony import */ var _views_settings_Calculator_vue__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./views/settings/Calculator.vue */ "./resources/assets/js/views/settings/Calculator.vue");
-/* harmony import */ var _views_settings_Preferences_vue__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./views/settings/Preferences.vue */ "./resources/assets/js/views/settings/Preferences.vue");
-/* harmony import */ var _views_settings_UserProfile_vue__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./views/settings/UserProfile.vue */ "./resources/assets/js/views/settings/UserProfile.vue");
-/* harmony import */ var _views_settings_ExpenseCategory_vue__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./views/settings/ExpenseCategory.vue */ "./resources/assets/js/views/settings/ExpenseCategory.vue");
-/* harmony import */ var _views_settings_MailConfig_vue__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./views/settings/MailConfig.vue */ "./resources/assets/js/views/settings/MailConfig.vue");
-/* harmony import */ var _views_notes_Index_vue__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./views/notes/Index.vue */ "./resources/assets/js/views/notes/Index.vue");
-/* harmony import */ var _views_notes_Create_vue__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./views/notes/Create.vue */ "./resources/assets/js/views/notes/Create.vue");
-/* harmony import */ var _views_inventory_Index_vue__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./views/inventory/Index.vue */ "./resources/assets/js/views/inventory/Index.vue");
-/* harmony import */ var _views_inventory_Create_vue__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./views/inventory/Create.vue */ "./resources/assets/js/views/inventory/Create.vue");
-/* harmony import */ var _views_inventory_InventoryStock_vue__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./views/inventory/InventoryStock.vue */ "./resources/assets/js/views/inventory/InventoryStock.vue");
-/* harmony import */ var _views_inventory_InvoiceStock_vue__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./views/inventory/InvoiceStock.vue */ "./resources/assets/js/views/inventory/InvoiceStock.vue");
-/* harmony import */ var _views_masters_Index_vue__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./views/masters/Index.vue */ "./resources/assets/js/views/masters/Index.vue");
-/* harmony import */ var _views_masters_Create_vue__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./views/masters/Create.vue */ "./resources/assets/js/views/masters/Create.vue");
-/* harmony import */ var _views_ledgers_Index_vue__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./views/ledgers/Index.vue */ "./resources/assets/js/views/ledgers/Index.vue");
-/* harmony import */ var _views_ledgers_Create_vue__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./views/ledgers/Create.vue */ "./resources/assets/js/views/ledgers/Create.vue");
-/* harmony import */ var _views_ledgers_Display_vue__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./views/ledgers/Display.vue */ "./resources/assets/js/views/ledgers/Display.vue");
-/* harmony import */ var _views_vouchers_Index_vue__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./views/vouchers/Index.vue */ "./resources/assets/js/views/vouchers/Index.vue");
-/* harmony import */ var _views_vouchers_Create_vue__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./views/vouchers/Create.vue */ "./resources/assets/js/views/vouchers/Create.vue");
-/* harmony import */ var _views_vouchers_Book_vue__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./views/vouchers/Book.vue */ "./resources/assets/js/views/vouchers/Book.vue");
-/* harmony import */ var _views_vouchers_Daysheet_vue__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./views/vouchers/Daysheet.vue */ "./resources/assets/js/views/vouchers/Daysheet.vue");
-/* harmony import */ var _views_vouchers_Daybook_vue__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./views/vouchers/Daybook.vue */ "./resources/assets/js/views/vouchers/Daybook.vue");
-/* harmony import */ var _views_bank_Index_vue__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./views/bank/Index.vue */ "./resources/assets/js/views/bank/Index.vue");
-/* harmony import */ var _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./views/bank/Create.vue */ "./resources/assets/js/views/bank/Create.vue");
-/* harmony import */ var _views_dispatch_Index_vue__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./views/dispatch/Index.vue */ "./resources/assets/js/views/dispatch/Index.vue");
-/* harmony import */ var _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./views/dispatch/Create.vue */ "./resources/assets/js/views/dispatch/Create.vue");
+/* harmony import */ var _views_audit_logs_Index_vue__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./views/audit-logs/Index.vue */ "./resources/assets/js/views/audit-logs/Index.vue");
+/* harmony import */ var _views_settings_layout_Index_vue__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./views/settings/layout/Index.vue */ "./resources/assets/js/views/settings/layout/Index.vue");
+/* harmony import */ var _views_settings_CompanyInfo_vue__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./views/settings/CompanyInfo.vue */ "./resources/assets/js/views/settings/CompanyInfo.vue");
+/* harmony import */ var _views_settings_Customization_vue__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./views/settings/Customization.vue */ "./resources/assets/js/views/settings/Customization.vue");
+/* harmony import */ var _views_settings_Notifications_vue__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./views/settings/Notifications.vue */ "./resources/assets/js/views/settings/Notifications.vue");
+/* harmony import */ var _views_settings_Calculator_vue__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./views/settings/Calculator.vue */ "./resources/assets/js/views/settings/Calculator.vue");
+/* harmony import */ var _views_settings_Preferences_vue__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./views/settings/Preferences.vue */ "./resources/assets/js/views/settings/Preferences.vue");
+/* harmony import */ var _views_settings_UserProfile_vue__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./views/settings/UserProfile.vue */ "./resources/assets/js/views/settings/UserProfile.vue");
+/* harmony import */ var _views_settings_ExpenseCategory_vue__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./views/settings/ExpenseCategory.vue */ "./resources/assets/js/views/settings/ExpenseCategory.vue");
+/* harmony import */ var _views_settings_MailConfig_vue__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./views/settings/MailConfig.vue */ "./resources/assets/js/views/settings/MailConfig.vue");
+/* harmony import */ var _views_notes_Index_vue__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./views/notes/Index.vue */ "./resources/assets/js/views/notes/Index.vue");
+/* harmony import */ var _views_notes_Create_vue__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./views/notes/Create.vue */ "./resources/assets/js/views/notes/Create.vue");
+/* harmony import */ var _views_inventory_Index_vue__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./views/inventory/Index.vue */ "./resources/assets/js/views/inventory/Index.vue");
+/* harmony import */ var _views_inventory_Create_vue__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./views/inventory/Create.vue */ "./resources/assets/js/views/inventory/Create.vue");
+/* harmony import */ var _views_inventory_InventoryStock_vue__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./views/inventory/InventoryStock.vue */ "./resources/assets/js/views/inventory/InventoryStock.vue");
+/* harmony import */ var _views_inventory_InvoiceStock_vue__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./views/inventory/InvoiceStock.vue */ "./resources/assets/js/views/inventory/InvoiceStock.vue");
+/* harmony import */ var _views_masters_Index_vue__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./views/masters/Index.vue */ "./resources/assets/js/views/masters/Index.vue");
+/* harmony import */ var _views_masters_Create_vue__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./views/masters/Create.vue */ "./resources/assets/js/views/masters/Create.vue");
+/* harmony import */ var _views_ledgers_Index_vue__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./views/ledgers/Index.vue */ "./resources/assets/js/views/ledgers/Index.vue");
+/* harmony import */ var _views_ledgers_Create_vue__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./views/ledgers/Create.vue */ "./resources/assets/js/views/ledgers/Create.vue");
+/* harmony import */ var _views_ledgers_Display_vue__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./views/ledgers/Display.vue */ "./resources/assets/js/views/ledgers/Display.vue");
+/* harmony import */ var _views_vouchers_Index_vue__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./views/vouchers/Index.vue */ "./resources/assets/js/views/vouchers/Index.vue");
+/* harmony import */ var _views_vouchers_Create_vue__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./views/vouchers/Create.vue */ "./resources/assets/js/views/vouchers/Create.vue");
+/* harmony import */ var _views_vouchers_Book_vue__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./views/vouchers/Book.vue */ "./resources/assets/js/views/vouchers/Book.vue");
+/* harmony import */ var _views_vouchers_Daysheet_vue__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./views/vouchers/Daysheet.vue */ "./resources/assets/js/views/vouchers/Daysheet.vue");
+/* harmony import */ var _views_vouchers_Daybook_vue__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./views/vouchers/Daybook.vue */ "./resources/assets/js/views/vouchers/Daybook.vue");
+/* harmony import */ var _views_bank_Index_vue__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./views/bank/Index.vue */ "./resources/assets/js/views/bank/Index.vue");
+/* harmony import */ var _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./views/bank/Create.vue */ "./resources/assets/js/views/bank/Create.vue");
+/* harmony import */ var _views_dispatch_Index_vue__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./views/dispatch/Index.vue */ "./resources/assets/js/views/dispatch/Index.vue");
+/* harmony import */ var _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./views/dispatch/Create.vue */ "./resources/assets/js/views/dispatch/Create.vue");
 
 
 
@@ -172778,6 +174629,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 // Settings
 
 
@@ -172823,7 +174675,7 @@ __webpack_require__.r(__webpack_exports__);
 // Dispatch
 
 
-vue__WEBPACK_IMPORTED_MODULE_69__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_70__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var routes = [
 /*
  |--------------------------------------------------------------------------
@@ -172912,69 +174764,78 @@ var routes = [
   // Account Masters
   {
     path: 'masters',
-    component: _views_masters_Index_vue__WEBPACK_IMPORTED_MODULE_55__["default"],
+    component: _views_masters_Index_vue__WEBPACK_IMPORTED_MODULE_56__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'masters/create',
     name: 'masters.create',
-    component: _views_masters_Create_vue__WEBPACK_IMPORTED_MODULE_56__["default"],
+    component: _views_masters_Create_vue__WEBPACK_IMPORTED_MODULE_57__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'masters/:id/edit',
     name: 'masters.edit',
-    component: _views_masters_Create_vue__WEBPACK_IMPORTED_MODULE_56__["default"],
+    component: _views_masters_Create_vue__WEBPACK_IMPORTED_MODULE_57__["default"],
     meta: ['admin', 'accountant']
   },
   // Account Ledger
   {
     path: 'ledgers',
-    component: _views_ledgers_Index_vue__WEBPACK_IMPORTED_MODULE_57__["default"],
+    component: _views_ledgers_Index_vue__WEBPACK_IMPORTED_MODULE_58__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'ledgers/create',
     name: 'ledgers.create',
-    component: _views_ledgers_Create_vue__WEBPACK_IMPORTED_MODULE_58__["default"],
+    component: _views_ledgers_Create_vue__WEBPACK_IMPORTED_MODULE_59__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'ledgers/:id/edit',
     name: 'ledgers.edit',
-    component: _views_ledgers_Create_vue__WEBPACK_IMPORTED_MODULE_58__["default"],
+    component: _views_ledgers_Create_vue__WEBPACK_IMPORTED_MODULE_59__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'ledgers/:id/display',
     name: 'ledgers.display',
-    component: _views_ledgers_Display_vue__WEBPACK_IMPORTED_MODULE_59__["default"],
+    component: _views_ledgers_Display_vue__WEBPACK_IMPORTED_MODULE_60__["default"],
     meta: ['admin', 'accountant']
   },
   // Voucher
   {
     path: 'vouchers',
-    component: _views_vouchers_Index_vue__WEBPACK_IMPORTED_MODULE_60__["default"],
+    name: 'vouchers.index',
+    component: _views_vouchers_Index_vue__WEBPACK_IMPORTED_MODULE_61__["default"],
     meta: ['admin', 'accountant']
+  }, {
+    path: 'vouchers/approvals',
+    name: 'vouchers.approvals',
+    component: _views_vouchers_Index_vue__WEBPACK_IMPORTED_MODULE_61__["default"],
+    meta: ['admin'],
+    props: {
+      approvalMode: true
+    }
   }, {
     path: 'vouchers/create',
     name: 'vouchers.create',
-    component: _views_vouchers_Create_vue__WEBPACK_IMPORTED_MODULE_61__["default"],
+    component: _views_vouchers_Create_vue__WEBPACK_IMPORTED_MODULE_62__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'vouchers/:id/edit',
     name: 'vouchers.edit',
-    component: _views_vouchers_Create_vue__WEBPACK_IMPORTED_MODULE_61__["default"],
+    component: _views_vouchers_Create_vue__WEBPACK_IMPORTED_MODULE_62__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'vouchers/:id/book',
     name: 'vouchers.book',
-    component: _views_vouchers_Book_vue__WEBPACK_IMPORTED_MODULE_62__["default"],
+    component: _views_vouchers_Book_vue__WEBPACK_IMPORTED_MODULE_63__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'vouchers/daybook',
     name: 'vouchers.daybook',
-    component: _views_vouchers_Daybook_vue__WEBPACK_IMPORTED_MODULE_64__["default"],
+    component: _views_vouchers_Daybook_vue__WEBPACK_IMPORTED_MODULE_65__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'vouchers/daysheet',
     name: 'vouchers.daysheet',
-    component: _views_vouchers_Daysheet_vue__WEBPACK_IMPORTED_MODULE_63__["default"],
+    component: _views_vouchers_Daysheet_vue__WEBPACK_IMPORTED_MODULE_64__["default"],
     meta: ['admin', 'accountant']
   },
   //Raw bill
@@ -173057,7 +174918,7 @@ var routes = [
     path: 'invoices/:id/edit',
     name: 'invoices.edit',
     component: _views_invoices_Create_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
-    meta: ['admin', 'accountant']
+    meta: ['admin']
   },
   // Payments
   {
@@ -173079,7 +174940,7 @@ var routes = [
     path: 'payments/:id/edit',
     name: 'payments.edit',
     component: _views_payments_Create_vue__WEBPACK_IMPORTED_MODULE_20__["default"],
-    meta: ['admin', 'accountant']
+    meta: ['admin']
   },
   //Receipt
   {
@@ -173087,6 +174948,14 @@ var routes = [
     name: 'receipts.create',
     component: _views_receipts_Create_vue__WEBPACK_IMPORTED_MODULE_21__["default"],
     meta: ['admin', 'accountant']
+  }, {
+    path: 'receipts/approvals',
+    name: 'receipts.approvals',
+    component: _views_receipts_Index_vue__WEBPACK_IMPORTED_MODULE_22__["default"],
+    meta: ['admin'],
+    props: {
+      approvalMode: true
+    }
   }, {
     path: 'receipts/:id/create',
     name: 'invoice.receipts.create',
@@ -173096,7 +174965,7 @@ var routes = [
     path: 'receipts/:id/edit',
     name: 'receipts.edit',
     component: _views_receipts_Create_vue__WEBPACK_IMPORTED_MODULE_21__["default"],
-    meta: ['admin']
+    meta: ['admin', 'accountant']
   }, {
     path: 'receipts',
     name: 'receipts.index',
@@ -173153,85 +175022,85 @@ var routes = [
   // Notes
   {
     path: 'notes',
-    component: _views_notes_Index_vue__WEBPACK_IMPORTED_MODULE_49__["default"],
+    component: _views_notes_Index_vue__WEBPACK_IMPORTED_MODULE_50__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'notes/create',
     name: 'notes.create',
-    component: _views_notes_Create_vue__WEBPACK_IMPORTED_MODULE_50__["default"],
+    component: _views_notes_Create_vue__WEBPACK_IMPORTED_MODULE_51__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'notes/:id/edit',
     name: 'notes.edit',
-    component: _views_notes_Create_vue__WEBPACK_IMPORTED_MODULE_50__["default"],
+    component: _views_notes_Create_vue__WEBPACK_IMPORTED_MODULE_51__["default"],
     meta: ['admin', 'accountant']
   },
   // Bank
   {
     path: 'bank',
-    component: _views_bank_Index_vue__WEBPACK_IMPORTED_MODULE_65__["default"],
+    component: _views_bank_Index_vue__WEBPACK_IMPORTED_MODULE_66__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'bank/create',
     name: 'bank.create',
-    component: _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_66__["default"],
+    component: _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_67__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'bank/:id/edit',
     name: 'bank.edit',
-    component: _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_66__["default"],
+    component: _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_67__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'calculator',
     name: 'calculator',
-    component: _views_settings_Calculator_vue__WEBPACK_IMPORTED_MODULE_44__["default"],
+    component: _views_settings_Calculator_vue__WEBPACK_IMPORTED_MODULE_45__["default"],
     meta: ['admin', 'accountant']
   },
   // Dispatch
   {
     path: 'dispatch',
-    component: _views_dispatch_Index_vue__WEBPACK_IMPORTED_MODULE_67__["default"],
+    component: _views_dispatch_Index_vue__WEBPACK_IMPORTED_MODULE_68__["default"],
     meta: ['admin', 'accountant', 'dispatch']
   }, {
     path: 'dispatch/create',
     name: 'dispatch.create',
-    component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_68__["default"],
+    component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_69__["default"],
     meta: ['admin', 'accountant', 'dispatch']
   }, {
     path: 'dispatch/:id/edit',
     name: 'dispatch.edit',
-    component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_68__["default"],
+    component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_69__["default"],
     meta: ['admin', 'accountant', 'dispatch']
   }, {
     path: 'dispatch/:id/to-be-edit',
     name: 'dispatch.tobeedit',
-    component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_68__["default"],
+    component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_69__["default"],
     meta: ['admin', 'accountant', 'dispatch']
   },
   // Inventroy
   {
     path: 'inventory',
-    component: _views_inventory_Index_vue__WEBPACK_IMPORTED_MODULE_51__["default"],
+    component: _views_inventory_Index_vue__WEBPACK_IMPORTED_MODULE_52__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'inventory/create',
     name: 'inventory.create',
-    component: _views_inventory_Create_vue__WEBPACK_IMPORTED_MODULE_52__["default"],
+    component: _views_inventory_Create_vue__WEBPACK_IMPORTED_MODULE_53__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'inventory/:id/edit',
     name: 'inventory.edit',
-    component: _views_inventory_Create_vue__WEBPACK_IMPORTED_MODULE_52__["default"],
+    component: _views_inventory_Create_vue__WEBPACK_IMPORTED_MODULE_53__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'inventory/stock',
     name: 'inventory.stock',
-    component: _views_inventory_InventoryStock_vue__WEBPACK_IMPORTED_MODULE_53__["default"],
+    component: _views_inventory_InventoryStock_vue__WEBPACK_IMPORTED_MODULE_54__["default"],
     meta: ['admin', 'accountant']
   }, {
     path: 'inventory/:id/stock',
     name: 'invoice.stock',
-    component: _views_inventory_InvoiceStock_vue__WEBPACK_IMPORTED_MODULE_54__["default"],
+    component: _views_inventory_InvoiceStock_vue__WEBPACK_IMPORTED_MODULE_55__["default"],
     meta: ['admin', 'accountant']
   },
   // User
@@ -173250,44 +175119,51 @@ var routes = [
     component: _views_users_Create_vue__WEBPACK_IMPORTED_MODULE_39__["default"],
     meta: ['admin']
   },
+  // Audit Logs
+  {
+    path: 'audit-logs',
+    name: 'audit.logs',
+    component: _views_audit_logs_Index_vue__WEBPACK_IMPORTED_MODULE_40__["default"],
+    meta: ['admin']
+  },
   // Settings
   {
     path: 'settings',
-    component: _views_settings_layout_Index_vue__WEBPACK_IMPORTED_MODULE_40__["default"],
+    component: _views_settings_layout_Index_vue__WEBPACK_IMPORTED_MODULE_41__["default"],
     children: [{
       path: 'company-info',
       name: 'company.info',
-      component: _views_settings_CompanyInfo_vue__WEBPACK_IMPORTED_MODULE_41__["default"],
+      component: _views_settings_CompanyInfo_vue__WEBPACK_IMPORTED_MODULE_42__["default"],
       meta: ['admin']
     }, {
       path: 'customization',
       name: 'customization',
-      component: _views_settings_Customization_vue__WEBPACK_IMPORTED_MODULE_42__["default"],
+      component: _views_settings_Customization_vue__WEBPACK_IMPORTED_MODULE_43__["default"],
       meta: ['admin']
     }, {
       path: 'user-profile',
       name: 'user.profile',
-      component: _views_settings_UserProfile_vue__WEBPACK_IMPORTED_MODULE_46__["default"],
+      component: _views_settings_UserProfile_vue__WEBPACK_IMPORTED_MODULE_47__["default"],
       meta: ['admin']
     }, {
       path: 'preferences',
       name: 'preferences',
-      component: _views_settings_Preferences_vue__WEBPACK_IMPORTED_MODULE_45__["default"],
+      component: _views_settings_Preferences_vue__WEBPACK_IMPORTED_MODULE_46__["default"],
       meta: ['admin']
     }, {
       path: 'expense-category',
       name: 'expense.category',
-      component: _views_settings_ExpenseCategory_vue__WEBPACK_IMPORTED_MODULE_47__["default"],
+      component: _views_settings_ExpenseCategory_vue__WEBPACK_IMPORTED_MODULE_48__["default"],
       meta: ['admin']
     }, {
       path: 'mail-configuration',
       name: 'mailconfig',
-      component: _views_settings_MailConfig_vue__WEBPACK_IMPORTED_MODULE_48__["default"],
+      component: _views_settings_MailConfig_vue__WEBPACK_IMPORTED_MODULE_49__["default"],
       meta: ['admin']
     }, {
       path: 'notifications',
       name: 'notifications',
-      component: _views_settings_Notifications_vue__WEBPACK_IMPORTED_MODULE_43__["default"],
+      component: _views_settings_Notifications_vue__WEBPACK_IMPORTED_MODULE_44__["default"],
       meta: ['admin']
     }]
   }]
@@ -173459,8 +175335,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./getters */ "./resources/assets/js/store/getters.js");
 /* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mutations */ "./resources/assets/js/store/mutations.js");
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./actions */ "./resources/assets/js/store/actions.js");
@@ -173496,6 +175372,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_banks__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./modules/banks */ "./resources/assets/js/store/modules/banks/index.js");
 /* harmony import */ var _modules_disptach__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./modules/disptach */ "./resources/assets/js/store/modules/disptach/index.js");
 /* harmony import */ var _modules_orders__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./modules/orders */ "./resources/assets/js/store/modules/orders/index.js");
+/* harmony import */ var _modules_audit_logs__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./modules/audit-logs */ "./resources/assets/js/store/modules/audit-logs/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
@@ -173537,17 +175414,18 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_35__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_36__["default"]);
+
+vue__WEBPACK_IMPORTED_MODULE_36__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_37__["default"]);
 var initialState = {
   isAppLoaded: false
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_36__["default"].Store({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_37__["default"].Store({
   strict: false,
   state: initialState,
   getters: _getters__WEBPACK_IMPORTED_MODULE_0__,
   mutations: _mutations__WEBPACK_IMPORTED_MODULE_1__["default"],
   actions: _actions__WEBPACK_IMPORTED_MODULE_2__["default"],
-  modules: _defineProperty(_defineProperty({
+  modules: _defineProperty(_defineProperty(_defineProperty({
     auth: _modules_auth__WEBPACK_IMPORTED_MODULE_3__["default"],
     user: _modules_user__WEBPACK_IMPORTED_MODULE_4__["default"],
     category: _modules_category__WEBPACK_IMPORTED_MODULE_5__["default"],
@@ -173579,7 +175457,142 @@ var initialState = {
     states: _modules_states__WEBPACK_IMPORTED_MODULE_31__["default"],
     banks: _modules_banks__WEBPACK_IMPORTED_MODULE_32__["default"],
     dispatch: _modules_disptach__WEBPACK_IMPORTED_MODULE_33__["default"]
-  }, "estimate", _modules_estimate__WEBPACK_IMPORTED_MODULE_9__["default"]), "orders", _modules_orders__WEBPACK_IMPORTED_MODULE_34__["default"])
+  }, "estimate", _modules_estimate__WEBPACK_IMPORTED_MODULE_9__["default"]), "orders", _modules_orders__WEBPACK_IMPORTED_MODULE_34__["default"]), "auditLogs", _modules_audit_logs__WEBPACK_IMPORTED_MODULE_35__["default"])
+}));
+
+/***/ }),
+
+/***/ "./resources/assets/js/store/modules/audit-logs/actions.js":
+/*!*****************************************************************!*\
+  !*** ./resources/assets/js/store/modules/audit-logs/actions.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   fetchAuditLog: () => (/* binding */ fetchAuditLog),
+/* harmony export */   fetchAuditLogs: () => (/* binding */ fetchAuditLogs)
+/* harmony export */ });
+/* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mutation-types */ "./resources/assets/js/store/modules/audit-logs/mutation-types.js");
+
+var fetchAuditLogs = function fetchAuditLogs(_ref, params) {
+  var commit = _ref.commit;
+  return new Promise(function (resolve, reject) {
+    window.axios.get('/api/audit-logs', {
+      params: params
+    }).then(function (response) {
+      commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.BOOTSTRAP_AUDIT_LOGS, response.data.audit_logs.data);
+      commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TOTAL_AUDIT_LOGS, response.data.audit_logs.total);
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var fetchAuditLog = function fetchAuditLog(_ref2, id) {
+  var commit = _ref2.commit;
+  return new Promise(function (resolve, reject) {
+    window.axios.get("/api/audit-logs/".concat(id)).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/store/modules/audit-logs/getters.js":
+/*!*****************************************************************!*\
+  !*** ./resources/assets/js/store/modules/audit-logs/getters.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   auditLogs: () => (/* binding */ auditLogs),
+/* harmony export */   totalAuditLogs: () => (/* binding */ totalAuditLogs)
+/* harmony export */ });
+var auditLogs = function auditLogs(state) {
+  return state.auditLogs;
+};
+var totalAuditLogs = function totalAuditLogs(state) {
+  return state.totalAuditLogs;
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/store/modules/audit-logs/index.js":
+/*!***************************************************************!*\
+  !*** ./resources/assets/js/store/modules/audit-logs/index.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mutations */ "./resources/assets/js/store/modules/audit-logs/mutations.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./actions */ "./resources/assets/js/store/modules/audit-logs/actions.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./getters */ "./resources/assets/js/store/modules/audit-logs/getters.js");
+
+
+
+var initialState = {
+  auditLogs: [],
+  totalAuditLogs: 0
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  namespaced: true,
+  state: initialState,
+  getters: _getters__WEBPACK_IMPORTED_MODULE_2__,
+  actions: _actions__WEBPACK_IMPORTED_MODULE_1__,
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_0__["default"]
+});
+
+/***/ }),
+
+/***/ "./resources/assets/js/store/modules/audit-logs/mutation-types.js":
+/*!************************************************************************!*\
+  !*** ./resources/assets/js/store/modules/audit-logs/mutation-types.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   BOOTSTRAP_AUDIT_LOGS: () => (/* binding */ BOOTSTRAP_AUDIT_LOGS),
+/* harmony export */   SET_TOTAL_AUDIT_LOGS: () => (/* binding */ SET_TOTAL_AUDIT_LOGS)
+/* harmony export */ });
+var BOOTSTRAP_AUDIT_LOGS = 'BOOTSTRAP_AUDIT_LOGS';
+var SET_TOTAL_AUDIT_LOGS = 'SET_TOTAL_AUDIT_LOGS';
+
+/***/ }),
+
+/***/ "./resources/assets/js/store/modules/audit-logs/mutations.js":
+/*!*******************************************************************!*\
+  !*** ./resources/assets/js/store/modules/audit-logs/mutations.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _mutation_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mutation-types */ "./resources/assets/js/store/modules/audit-logs/mutation-types.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_defineProperty(_defineProperty({}, _mutation_types__WEBPACK_IMPORTED_MODULE_0__.BOOTSTRAP_AUDIT_LOGS, function (state, logs) {
+  state.auditLogs = logs;
+}), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TOTAL_AUDIT_LOGS, function (state, total) {
+  state.totalAuditLogs = total;
 }));
 
 /***/ }),
@@ -175858,7 +177871,7 @@ var fetchReferenceNumber = function fetchReferenceNumber(_ref4, data) {
     dispatch = _ref4.dispatch,
     state = _ref4.state;
   return new Promise(function (resolve, reject) {
-    window.axios.post("/api/invoices/reference", data).then(function (response) {
+    window.axios.post("/api/estimates/reference", data).then(function (response) {
       resolve(response);
     })["catch"](function (err) {
       reject(err);
@@ -179363,7 +181376,7 @@ var fetchReferenceNumber = function fetchReferenceNumber(_ref4, data) {
     dispatch = _ref4.dispatch,
     state = _ref4.state;
   return new Promise(function (resolve, reject) {
-    window.axios.post("/api/invoices/reference", data).then(function (response) {
+    window.axios.post("/api/orders/reference", data).then(function (response) {
       resolve(response);
     })["catch"](function (err) {
       reject(err);
@@ -180163,12 +182176,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addReceipt: () => (/* binding */ addReceipt),
+/* harmony export */   approveMultipleReceipts: () => (/* binding */ approveMultipleReceipts),
+/* harmony export */   approveReceipt: () => (/* binding */ approveReceipt),
+/* harmony export */   declineMultipleReceipts: () => (/* binding */ declineMultipleReceipts),
+/* harmony export */   declineReceipt: () => (/* binding */ declineReceipt),
 /* harmony export */   deleteMultipleReceipts: () => (/* binding */ deleteMultipleReceipts),
 /* harmony export */   deleteReceipt: () => (/* binding */ deleteReceipt),
 /* harmony export */   fetchCreateReceipt: () => (/* binding */ fetchCreateReceipt),
 /* harmony export */   fetchReceipt: () => (/* binding */ fetchReceipt),
 /* harmony export */   fetchReceipts: () => (/* binding */ fetchReceipts),
 /* harmony export */   fetchViewReceipt: () => (/* binding */ fetchViewReceipt),
+/* harmony export */   resetSelectedReceipts: () => (/* binding */ resetSelectedReceipts),
 /* harmony export */   selectAllReceipts: () => (/* binding */ selectAllReceipts),
 /* harmony export */   selectReceipt: () => (/* binding */ selectReceipt),
 /* harmony export */   setSelectAllState: () => (/* binding */ setSelectAllState),
@@ -180244,10 +182262,15 @@ var setSelectAllState = function setSelectAllState(_ref6, data) {
     state = _ref6.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, data);
 };
-var selectReceipt = function selectReceipt(_ref7, data) {
-  var commit = _ref7.commit,
-    receipt = _ref7.receipt,
-    state = _ref7.state;
+var resetSelectedReceipts = function resetSelectedReceipts(_ref7) {
+  var commit = _ref7.commit;
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.RESET_SELECTED_RECEIPT);
+  commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
+};
+var selectReceipt = function selectReceipt(_ref8, data) {
+  var commit = _ref8.commit,
+    receipt = _ref8.receipt,
+    state = _ref8.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_RECEIPTS, data);
   if (state.selectedReceipts.length === state.receipts.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, true);
@@ -180255,10 +182278,10 @@ var selectReceipt = function selectReceipt(_ref7, data) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
   }
 };
-var updateReceipt = function updateReceipt(_ref8, data) {
-  var commit = _ref8.commit,
-    receipt = _ref8.receipt,
-    state = _ref8.state;
+var updateReceipt = function updateReceipt(_ref9, data) {
+  var commit = _ref9.commit,
+    receipt = _ref9.receipt,
+    state = _ref9.state;
   return new Promise(function (resolve, reject) {
     window.axios.put("/api/receipts/".concat(data.id), data.editData).then(function (response) {
       resolve(response);
@@ -180267,10 +182290,62 @@ var updateReceipt = function updateReceipt(_ref8, data) {
     });
   });
 };
-var deleteReceipt = function deleteReceipt(_ref9, id) {
-  var commit = _ref9.commit,
-    receipt = _ref9.receipt,
-    state = _ref9.state;
+var approveReceipt = function approveReceipt(_ref10, id) {
+  var commit = _ref10.commit,
+    receipt = _ref10.receipt,
+    state = _ref10.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/receipts/".concat(id, "/approve")).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var declineReceipt = function declineReceipt(_ref11, id) {
+  var commit = _ref11.commit,
+    receipt = _ref11.receipt,
+    state = _ref11.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/receipts/".concat(id, "/decline")).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var approveMultipleReceipts = function approveMultipleReceipts(_ref12) {
+  var commit = _ref12.commit,
+    receipt = _ref12.receipt,
+    state = _ref12.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/receipts/approve-multiple", {
+      'id': state.selectedReceipts
+    }).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var declineMultipleReceipts = function declineMultipleReceipts(_ref13) {
+  var commit = _ref13.commit,
+    receipt = _ref13.receipt,
+    state = _ref13.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/receipts/decline-multiple", {
+      'id': state.selectedReceipts
+    }).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var deleteReceipt = function deleteReceipt(_ref14, id) {
+  var commit = _ref14.commit,
+    receipt = _ref14.receipt,
+    state = _ref14.state;
   return new Promise(function (resolve, reject) {
     window.axios["delete"]("/api/receipts/".concat(id)).then(function (response) {
       commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.DELETE_RECEIPT, id);
@@ -180280,10 +182355,10 @@ var deleteReceipt = function deleteReceipt(_ref9, id) {
     });
   });
 };
-var deleteMultipleReceipts = function deleteMultipleReceipts(_ref0, id) {
-  var commit = _ref0.commit,
-    receipt = _ref0.receipt,
-    state = _ref0.state;
+var deleteMultipleReceipts = function deleteMultipleReceipts(_ref15, id) {
+  var commit = _ref15.commit,
+    receipt = _ref15.receipt,
+    state = _ref15.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/receipts/delete", {
       'id': state.selectedReceipts
@@ -180295,10 +182370,10 @@ var deleteMultipleReceipts = function deleteMultipleReceipts(_ref0, id) {
     });
   });
 };
-var selectAllReceipts = function selectAllReceipts(_ref1) {
-  var commit = _ref1.commit,
-    receipt = _ref1.receipt,
-    state = _ref1.state;
+var selectAllReceipts = function selectAllReceipts(_ref16) {
+  var commit = _ref16.commit,
+    receipt = _ref16.receipt,
+    state = _ref16.state;
   if (state.selectedReceipts.length === state.receipts.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_RECEIPTS, []);
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
@@ -180437,17 +182512,21 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.DELETE_MULTIPLE_RECEIPTS, function (state, selectedReceipts) {
   selectedReceipts.forEach(function (receipt) {
     var index = state.receipts.findIndex(function (_inv) {
-      return _inv.id === receipt.id;
+      return _inv.id === receipt;
     });
-    state.receipts.splice(index, 1);
+    if (index > -1) {
+      state.receipts.splice(index, 1);
+    }
   });
   state.selectedReceipts = [];
+  state.selectAllField = false;
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_RECEIPTS, function (state, data) {
   state.selectedReceipts = data;
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, function (state, data) {
   state.selectAllField = data;
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.RESET_SELECTED_RECEIPT, function (state, data) {
   state.selectedReceipts = [];
+  state.selectAllField = false;
 }));
 
 /***/ }),
@@ -181904,6 +183983,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addVoucher: () => (/* binding */ addVoucher),
+/* harmony export */   approveMultipleVouchers: () => (/* binding */ approveMultipleVouchers),
+/* harmony export */   approveVoucher: () => (/* binding */ approveVoucher),
+/* harmony export */   declineMultipleVouchers: () => (/* binding */ declineMultipleVouchers),
+/* harmony export */   declineVoucher: () => (/* binding */ declineVoucher),
 /* harmony export */   deleteMultipleVouchers: () => (/* binding */ deleteMultipleVouchers),
 /* harmony export */   deleteVoucher: () => (/* binding */ deleteVoucher),
 /* harmony export */   fetchDaybook: () => (/* binding */ fetchDaybook),
@@ -181956,10 +184039,62 @@ var addVoucher = function addVoucher(_ref3, data) {
     });
   });
 };
-var deleteVoucher = function deleteVoucher(_ref4, id) {
+var approveVoucher = function approveVoucher(_ref4, id) {
   var commit = _ref4.commit,
     dispatch = _ref4.dispatch,
     state = _ref4.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/vouchers/".concat(id, "/approve")).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var declineVoucher = function declineVoucher(_ref5, id) {
+  var commit = _ref5.commit,
+    dispatch = _ref5.dispatch,
+    state = _ref5.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/vouchers/".concat(id, "/decline")).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var approveMultipleVouchers = function approveMultipleVouchers(_ref6) {
+  var commit = _ref6.commit,
+    dispatch = _ref6.dispatch,
+    state = _ref6.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/vouchers/approve-multiple", {
+      'id': state.selectedVouchers
+    }).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var declineMultipleVouchers = function declineMultipleVouchers(_ref7) {
+  var commit = _ref7.commit,
+    dispatch = _ref7.dispatch,
+    state = _ref7.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.post("/api/vouchers/decline-multiple", {
+      'id': state.selectedVouchers
+    }).then(function (response) {
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var deleteVoucher = function deleteVoucher(_ref8, id) {
+  var commit = _ref8.commit,
+    dispatch = _ref8.dispatch,
+    state = _ref8.state;
   return new Promise(function (resolve, reject) {
     window.axios["delete"]("/api/vouchers/".concat(id)).then(function (response) {
       commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.DELETE_VOUCHER, response.data);
@@ -181969,10 +184104,10 @@ var deleteVoucher = function deleteVoucher(_ref4, id) {
     });
   });
 };
-var deleteMultipleVouchers = function deleteMultipleVouchers(_ref5, id) {
-  var commit = _ref5.commit,
-    dispatch = _ref5.dispatch,
-    state = _ref5.state;
+var deleteMultipleVouchers = function deleteMultipleVouchers(_ref9, id) {
+  var commit = _ref9.commit,
+    dispatch = _ref9.dispatch,
+    state = _ref9.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/vouchers/delete", {
       'id': state.selectedVouchers
@@ -181984,16 +184119,16 @@ var deleteMultipleVouchers = function deleteMultipleVouchers(_ref5, id) {
     });
   });
 };
-var setSelectAllState = function setSelectAllState(_ref6, data) {
-  var commit = _ref6.commit,
-    dispatch = _ref6.dispatch,
-    state = _ref6.state;
+var setSelectAllState = function setSelectAllState(_ref10, data) {
+  var commit = _ref10.commit,
+    dispatch = _ref10.dispatch,
+    state = _ref10.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, data);
 };
-var selectAllVouchers = function selectAllVouchers(_ref7) {
-  var commit = _ref7.commit,
-    dispatch = _ref7.dispatch,
-    state = _ref7.state;
+var selectAllVouchers = function selectAllVouchers(_ref11) {
+  var commit = _ref11.commit,
+    dispatch = _ref11.dispatch,
+    state = _ref11.state;
   if (state.selectedVouchers.length === state.vouchers.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_VOUCHERS, []);
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
@@ -182005,10 +184140,10 @@ var selectAllVouchers = function selectAllVouchers(_ref7) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, true);
   }
 };
-var selectVoucher = function selectVoucher(_ref8, data) {
-  var commit = _ref8.commit,
-    dispatch = _ref8.dispatch,
-    state = _ref8.state;
+var selectVoucher = function selectVoucher(_ref12, data) {
+  var commit = _ref12.commit,
+    dispatch = _ref12.dispatch,
+    state = _ref12.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_VOUCHERS, data);
   if (state.selectedVouchers.length === state.vouchers.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, true);
@@ -182016,9 +184151,9 @@ var selectVoucher = function selectVoucher(_ref8, data) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
   }
 };
-var fetchVoucherBook = function fetchVoucherBook(_ref9, id) {
-  var commit = _ref9.commit,
-    dispatch = _ref9.dispatch;
+var fetchVoucherBook = function fetchVoucherBook(_ref13, id) {
+  var commit = _ref13.commit,
+    dispatch = _ref13.dispatch;
   return new Promise(function (resolve, reject) {
     window.axios.get("/api/vouchers/".concat(id, "/book")).then(function (response) {
       resolve(response);
@@ -182027,10 +184162,10 @@ var fetchVoucherBook = function fetchVoucherBook(_ref9, id) {
     });
   });
 };
-var fetchDaybook = function fetchDaybook(_ref0, params) {
-  var commit = _ref0.commit,
-    dispatch = _ref0.dispatch,
-    state = _ref0.state;
+var fetchDaybook = function fetchDaybook(_ref14, params) {
+  var commit = _ref14.commit,
+    dispatch = _ref14.dispatch,
+    state = _ref14.state;
   return new Promise(function (resolve, reject) {
     window.axios.get("/api/vouchers/daybook", {
       params: params
@@ -182329,6 +184464,108 @@ __webpack_require__.r(__webpack_exports__);
   description: null,
   quantity: null
 });
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/audit-logs/Index.vue":
+/*!********************************************************!*\
+  !*** ./resources/assets/js/views/audit-logs/Index.vue ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Index_vue_vue_type_template_id_19514592_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Index.vue?vue&type=template&id=19514592&scoped=true */ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=template&id=19514592&scoped=true");
+/* harmony import */ var _Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Index.vue?vue&type=script&lang=js */ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js");
+/* harmony import */ var _Index_vue_vue_type_style_index_0_id_19514592_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css */ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css");
+/* harmony import */ var _Index_vue_vue_type_style_index_1_id_19514592_lang_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Index.vue?vue&type=style&index=1&id=19514592&lang=css */ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__["default"])(
+  _Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Index_vue_vue_type_template_id_19514592_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _Index_vue_vue_type_template_id_19514592_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "19514592",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/views/audit-logs/Index.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js":
+/*!********************************************************************************!*\
+  !*** ./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css":
+/*!****************************************************************************************************************!*\
+  !*** ./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css ***!
+  \****************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_19514592_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css":
+/*!****************************************************************************************************!*\
+  !*** ./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_19514592_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=1&id=19514592&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/audit-logs/Index.vue?vue&type=template&id=19514592&scoped=true":
+/*!**************************************************************************************************!*\
+  !*** ./resources/assets/js/views/audit-logs/Index.vue?vue&type=template&id=19514592&scoped=true ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_19514592_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_19514592_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_19514592_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=template&id=19514592&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=template&id=19514592&scoped=true");
+
 
 /***/ }),
 
@@ -186295,23 +188532,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _Create_vue_vue_type_template_id_36b85c8d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=36b85c8d */ "./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d");
+/* harmony import */ var _Create_vue_vue_type_template_id_36b85c8d_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Create.vue?vue&type=template&id=36b85c8d&scoped=true */ "./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d&scoped=true");
 /* harmony import */ var _Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Create.vue?vue&type=script&lang=js */ "./resources/assets/js/views/receipts/Create.vue?vue&type=script&lang=js");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Create_vue_vue_type_style_index_0_id_36b85c8d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css */ "./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
+;
 
 
 /* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
   _Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Create_vue_vue_type_template_id_36b85c8d__WEBPACK_IMPORTED_MODULE_0__.render,
-  _Create_vue_vue_type_template_id_36b85c8d__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  _Create_vue_vue_type_template_id_36b85c8d_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _Create_vue_vue_type_template_id_36b85c8d_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
   false,
   null,
-  null,
+  "36b85c8d",
   null
 
 )
@@ -186340,19 +188579,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d":
-/*!*************************************************************************************!*\
-  !*** ./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d ***!
-  \*************************************************************************************/
+/***/ "./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css ***!
+  \***************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_36b85c8d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d&scoped=true":
+/*!*************************************************************************************************!*\
+  !*** ./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d&scoped=true ***!
+  \*************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_36b85c8d__WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_36b85c8d__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_36b85c8d_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_36b85c8d_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_36b85c8d__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=template&id=36b85c8d */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_36b85c8d_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=template&id=36b85c8d&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=template&id=36b85c8d&scoped=true");
 
 
 /***/ }),
@@ -188554,7 +190806,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_0__.library.add(_fortawesome_free_regular_svg_icons__WEBPACK_IMPORTED_MODULE_2__.far, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faUser, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTrashAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTachometerAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFileAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFile, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faStar, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCreditCard, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSpaceShuttle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSignal, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCog, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faMoneyBill, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faComment, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faBell, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faHashtag, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSave, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFilter, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEdit, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTrash, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faBackward, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faShoppingBasket, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTimes, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTimesCircle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faUserPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCartPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faArrowLeft, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faArrowRight, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCartPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSpinner, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSignOutAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCogs, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPencilAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPrint, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCheck, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSync, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSortAmountDown, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSortAmountUp, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSearch, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faAsterisk, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faInfoCircle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCheckCircle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPencilAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCloudUploadAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faDownload, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faGripVertical, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCalendar, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFilePdf, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEnvelope, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEye, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEyeSlash, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faShare, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEllipsisH, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCopy, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPaperPlane, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSyncAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faRocket, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCamera, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faClock, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCircle);
+_fortawesome_fontawesome_svg_core__WEBPACK_IMPORTED_MODULE_0__.library.add(_fortawesome_free_regular_svg_icons__WEBPACK_IMPORTED_MODULE_2__.far, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faUser, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTrashAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTachometerAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFileAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFile, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faStar, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCreditCard, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSpaceShuttle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSignal, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCog, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faMoneyBill, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faComment, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faBell, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faHashtag, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSave, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFilter, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEdit, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTrash, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faBackward, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faShoppingBasket, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTimes, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faTimesCircle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faUserPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faHistory, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCartPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faArrowLeft, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faArrowRight, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCartPlus, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSpinner, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSignOutAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCogs, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPencilAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPrint, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCheck, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSync, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSortAmountDown, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSortAmountUp, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSearch, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faAsterisk, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faInfoCircle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCheckCircle, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPencilAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCloudUploadAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faDownload, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faGripVertical, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCalendar, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faFilePdf, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEnvelope, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEye, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEyeSlash, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faShare, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faEllipsisH, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCopy, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faPaperPlane, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faSyncAlt, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faRocket, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCamera, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faClock, _fortawesome_free_solid_svg_icons__WEBPACK_IMPORTED_MODULE_3__.faCircle);
 vue__WEBPACK_IMPORTED_MODULE_4__["default"].component('font-awesome-icon', _fortawesome_vue_fontawesome__WEBPACK_IMPORTED_MODULE_1__.FontAwesomeIcon);
 
 /***/ }),

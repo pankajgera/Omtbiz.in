@@ -7,10 +7,12 @@ use App\Models\ExpenseCategory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Traits\Auditable;
 
 class Expense extends Model implements HasMedia
 {
     use InteractsWithMedia;
+    use Auditable;
 
     protected $fillable = [
         'expense_category_id',

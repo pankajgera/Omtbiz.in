@@ -37,7 +37,7 @@ import states from './modules/states'
 import banks from './modules/banks'
 import dispatch from './modules/disptach'
 import orders from './modules/orders'
-import credits from './modules/credits'
+import auditLogs from './modules/audit-logs'
 
 Vue.use(Vuex)
 
@@ -86,6 +86,6 @@ export default new Vuex.Store({
         dispatch,
         estimate,
         orders,
-        credits,
+        auditLogs,
     }
 })

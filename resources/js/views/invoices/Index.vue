@@ -98,17 +98,30 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedInvoices.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleInvoices">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
+          <div v-if="selectedInvoices.length" class="d-flex align-items-center">
+            <base-button
+              v-if="role === 'accountant' && selectedInvoices.length > 1"
+              color="theme"
+              size="small"
+              class="mr-2"
+              :loading="isBulkWhatsappSending"
+              :disabled="isBulkWhatsappSending"
+              @click="sendMultipleReports"
+            >
+              {{ isBulkWhatsappSending ? $t('invoices.sending_selected_whatsapp') : $t('invoices.send_selected_whatsapp') }}
+            </base-button>
+            <v-dropdown v-if="role === 'admin'" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleInvoices">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </div>
         </transition>
       </div>
       <div class="custom-control custom-checkbox">
@@ -154,7 +167,7 @@
           show="invoice_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}`}">
+            <router-link :to="{path: role === 'admin' ? `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}` : `invoices/${row.id}/view`}">
                {{ row.invoice_number }}
               </router-link>
           </template>
@@ -194,7 +207,7 @@
                 <dot-icon />
               </span>
               <v-dropdown-item>
-                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
+                <router-link :to="{path: `invoices/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -204,13 +217,13 @@
                 </router-link>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="sendReports(row.id)" v-if="role === 'admin' || role === 'accountant'">
+                <div class="dropdown-item" @click="sendReports(row)" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" />
                   {{ $t('invoices.whatsapp') }}
                 </div>
               </v-dropdown-item>
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin' || role === 'accountant'">
+                <div class="dropdown-item" @click="removeInvoice(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>
@@ -249,6 +262,8 @@ export default {
       filtersApplied: false,
       isRequestOngoing: true,
       filtered_count: 0,
+      isLoading: false,
+      isBulkWhatsappSending: false,
       filters: {
         invoice_number: '',
         customer: '',
@@ -318,7 +333,6 @@ export default {
   methods: {
     ...mapActions('invoice', [
       'fetchInvoices',
-      'fetchInvoice',
       'getRecord',
       'selectInvoice',
       'resetSelectedInvoices',
@@ -472,32 +486,82 @@ export default {
       this.filters.customer = ''
       this.refreshTable()
     },
-    async sendReports(invoice_id) {
-      let response = await this.fetchInvoice(invoice_id);
-      let invoice = response.data.invoice
+    async sendReports(invoice) {
       if (!invoice) {
-        window.toastr['error']("Invoice not found for id - " + invoice_id)
+        window.toastr['error']("Invoice not found.")
         return
       }
       this.isLoading = true
       this.siteURL = `/invoices/pdf/${invoice.unique_hash}`
-      if (!response.data.sundryDebtorsList.length) {
-        window.toastr['error']("Sundry Debtors list is empty for invoice id - " + invoice_id)
-        return
-      }
-      let mobile = response.data.sundryDebtorsList.find(i => i.id === invoice.account_master_id).mobile_number;
+      let mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null
       if (!mobile) {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")
         return
       }
       let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY');
       this.sendReportOnWhatsApp({ fileName: fileName, number: mobile, filePath: window.location.origin + this.siteURL})
-      .then((val) => {
+      .then(() => {
         setTimeout(() => {
           this.isLoading = false
-          window.location.reload()
+          this.refreshTable()
         }, 2000)
       })
+    },
+    async sendMultipleReports () {
+      if (this.selectedInvoices.length < 2 || this.isBulkWhatsappSending) {
+        return
+      }
+
+      this.isBulkWhatsappSending = true
+      let successCount = 0
+      let failedCount = 0
+      const selectedInvoiceRows = this.invoices.filter(i => this.selectedInvoices.includes(i.id))
+
+      try {
+        for (const invoice of selectedInvoiceRows) {
+          try {
+            if (!invoice) {
+              failedCount++
+              continue
+            }
+
+            let mobile = invoice.master && invoice.master.mobile_number ? invoice.master.mobile_number : null
+            if (!mobile) {
+              failedCount++
+              continue
+            }
+
+            let siteURL = `/invoices/pdf/${invoice.unique_hash}`
+            let fileName = 'Invoice - ' + moment(invoice.invoice_date).format('DD/MM/YYYY')
+            let whatsappResponse = await window.axios.post('/api/whatsapp-send-pdf', {
+              fileName,
+              number: mobile,
+              filePath: window.location.origin + siteURL
+            })
+
+            if (whatsappResponse.status === 200 && !whatsappResponse.data?.error) {
+              successCount++
+            } else {
+              failedCount++
+            }
+          } catch (e) {
+            failedCount++
+          }
+
+          // Keep a fixed delay between every bulk whatsapp notification.
+          await new Promise(resolve => setTimeout(resolve, 10000))
+        }
+
+        if (successCount) {
+          window.toastr['success'](`${successCount} invoice(s) sent on WhatsApp`)
+        }
+
+        if (failedCount) {
+          window.toastr['warning'](`${failedCount} invoice(s) could not be sent on WhatsApp`)
+        }
+      } finally {
+        this.isBulkWhatsappSending = false
+      }
     }
   }
 }

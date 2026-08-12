@@ -33,11 +33,16 @@ class CompanySetting extends Model
     {
         $setting = static::whereOption($key)->whereCompany($company_id)->first();
 
-        if ($setting) {
+        if ($setting && $setting->value !== null && $setting->value !== '') {
             return $setting->value;
-        } else {
-            return null;
         }
+
+        $defaults = [
+            'carbon_date_format' => 'd M Y',
+            'moment_date_format' => 'DD MMM YYYY',
+        ];
+
+        return $defaults[$key] ?? null;
     }
 
     public function scopeWhereCompany($query, $company_id)

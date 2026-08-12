@@ -20,11 +20,13 @@ use App\Models\Dispatch;
 use App\Models\Estimate;
 use App\Models\InventoryItem;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Validator;
 use App\Models\Voucher;
-use App\Services\NumberSequenceService;
+use App\Services\AuditLogger;
 use Exception;
+use Illuminate\Database\QueryException;
 
 class InvoicesController extends Controller
 {
@@ -175,244 +177,181 @@ class InvoicesController extends Controller
                 'invoice_number' => 'required'
             ])->validate();
 
+            $companyId = (int) $request->header('company');
+            $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $companyId);
+            $reference_prefix = CompanySetting::getSetting('reference_prefix', $companyId);
+
             $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
-            $company_id = (int) $request->header('company');
-            $sequence = NumberSequenceService::getNextSequence(
-                $company_id,
-                Carbon::createFromFormat('Y-m-d', $invoice_date, 'Asia/Kolkata')
-            );
-            while (
-                Invoice::where('invoice_number', $sequence['invoice_number'])->exists()
-                || Estimate::where('estimate_number', $sequence['invoice_number'])->exists()
-            ) {
-                [$series, $left, $right] = NumberSequenceService::incrementSequence(
-                    $sequence['series'],
-                    $sequence['left'],
-                    $sequence['right']
+            $invoice = DB::transaction(function () use ($request, $number_attributes, $invoice_date, $companyId, $invoice_prefix, $reference_prefix) {
+                // Serialize number assignment for this company, even when no invoice rows exist yet.
+                Company::where('id', $companyId)->lockForUpdate()->first();
+
+                $finalInvoiceNumber = $this->getNextAvailableInvoiceNumber(
+                    $number_attributes['invoice_number'],
+                    $companyId,
+                    $invoice_prefix
                 );
-                $sequence = NumberSequenceService::buildSequence($sequence['year'], $series, $left, $right);
-            }
-            $reference_number = NumberSequenceService::getReferenceNumberForAccount(
-                $company_id,
-                $request->debtors['id'],
-                Carbon::createFromFormat('Y-m-d', $invoice_date, 'Asia/Kolkata')
-            );
-            if (! $reference_number) {
-                $reference_number = $sequence['reference_number'];
-            }
+                $reference_number = $this->getReferenceNumberForInvoice(
+                    $companyId,
+                    (int) $request->debtors['id'],
+                    $invoice_date,
+                    $finalInvoiceNumber,
+                    $reference_prefix
+                );
 
+                if (! $reference_number || ! $finalInvoiceNumber) {
+                    abort(500);
+                }
 
-
-
-
-
-
-            //check if credits are sufficient
-            $company_id = (int) $request->header('company');
-            $account_master_id = (int) $request->debtors['id'];
-            $total_amount = (int) ($request->total);
-
-
-            $dr_account_ledger = AccountLedger::where('account_master_id', $account_master_id)
-            ->where('company_id', $company_id)
-            ->first();
-
-            $total_credits = $dr_account_ledger->credits;
-            $credit_date = Carbon::createFromFormat('Y-m-d', $dr_account_ledger->credits_date);
-            $credit_date_format = Carbon::parse($credit_date)->startOfDay();
-            $invoice_date_format = Carbon::parse($invoice_date)->startOfDay();
-            $latestCreditEntry = Credits::where('account_ledger_id', $dr_account_ledger->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
-            \Log::info($latestCreditEntry);
-
-            $due_amount = $latestCreditEntry ? $latestCreditEntry->due_amount : 0;
-            $due = $due_amount;
-
-            if($total_credits < $total_amount) {
-                $dummy = $total_credits;
-                $dr_account_ledger->credits = 0;
-                $due = $due_amount + ($total_amount - $dummy);
-                $creditsStore = Credits::create([
-                    'account_ledger_id' => $dr_account_ledger->id,
-                    'credits' => -($total_credits),
-                    'credits_date' => $dr_account_ledger->credits_date,
-                    'due_amount' => $due,
+                return Invoice::create([
+                    'invoice_date' => $invoice_date,
+                    //'due_date' => $due_date,
+                    'invoice_number' => $finalInvoiceNumber,
+                    'reference_number' => $reference_number,
+                    'user_id' => $request->user_id,
+                    'company_id' => $companyId,
+                    'invoice_template_id' => $request->invoice_template_id,
+                    'status' => Invoice::TO_BE_DISPATCH,
+                    'paid_status' => Invoice::STATUS_PAID,
+                    'sub_total' => $request->sub_total,
+                    'total' => $request->total,
+                    'due_amount' => $request->total,
+                    'notes' => $request->notes,
+                    'indirect_income' =>  $request->income_ledger ? $request->income_ledger['name'] : null,
+                    'indirect_income_value' => $request->income_ledger_value,
+                    'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
+                    'indirect_expense_value' => $request->expense_ledger_value,
+                    'unique_hash' => str_random(60),
+                    'account_master_id' => $request->debtors['id'],
                 ]);
-            }
-            else if($invoice_date_format > $credit_date_format) {
-                $dummy = $total_credits;
-                $due = $due_amount - $total_amount;
-                $creditsStore = Credits::create([
-                    'account_ledger_id' => $dr_account_ledger->id,
-                    'credits' => $total_credits,
-                    'credits_date' => $dr_account_ledger->credits_date,
-                    'due_amount' => $due,
+            }, 3);
+
+            // Cascade (dispatch, items, stock, ledgers, vouchers) is one user action — log invoice only.
+            AuditLogger::withoutAuditing(function () use ($request, $invoice, $invoice_date, $companyId) {
+                //Added dispatch bill
+                $dispatch = new Dispatch();
+                $dispatch->name = $invoice->invoice_number;
+                $dispatch->invoice_id = $invoice->id;
+                $dispatch->date_time = Carbon::now('Asia/Kolkata');
+                $dispatch->transport = null;
+                $dispatch->status = 'Draft';
+                $dispatch->company_id = $request->header('company');
+                $dispatch->save();
+
+                $invoice->update([
+                    'dispatch_id' => $dispatch->id,
+                    'paid_status' => 'TO_BE_DISPATCH',
                 ]);
-            }else {
-                $dr_account_ledger->credits = $dr_account_ledger->credits - $total_amount;
-                $creditsStore = Credits::create([
-                    'account_ledger_id' => $dr_account_ledger->id,
-                    'credits' => -($total_amount),
-                    'credits_date' => $dr_account_ledger->credits_date,
-                    'due_amount' => $due,
-                ]);
-            }
 
+                //Now for each inventory item create journal entry
+                $invoiceInventories = $request->inventories;
+                $inventory_id = null;
+                foreach ($invoiceInventories as $invoiceInventory) {
+                    $invoiceInventory['company_id'] = $request->header('company');
+                    $invoiceInventory['type'] = 'invoice';
+                    $inventory = $invoice->inventories()->create($invoiceInventory);
 
-
-            $invoice = Invoice::create([
-                'invoice_date' => $invoice_date,
-                //'due_date' => $due_date,
-                'invoice_number' => $sequence['invoice_number'],
-                'reference_number' => $reference_number,
-                'user_id' => $request->user_id,
-                'company_id' => $company_id,
-                'invoice_template_id' => $request->invoice_template_id,
-                'status' => Invoice::TO_BE_DISPATCH,
-                'paid_status' => Invoice::STATUS_PAID,
-                'sub_total' => $request->sub_total,
-                'total' => $request->total,
-                'due_amount' => $request->total,
-                'notes' => $request->notes,
-                'indirect_income' =>  $request->income_ledger ? $request->income_ledger['name'] : null,
-                'indirect_income_value' => (float) $request->income_ledger_value,
-                'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
-                'indirect_expense_value' => (float) $request->expense_ledger_value,
-                'unique_hash' => str_random(60),
-                'account_master_id' => $request->debtors['id'],
-            ]);
-
-            //Added dispatch bill
-            $dispatch = new Dispatch();
-            $dispatch->name = $invoice->invoice_number;
-            $dispatch->invoice_id = $invoice->id;
-            $dispatch->date_time = Carbon::now('Asia/Kolkata');
-            $dispatch->transport = null;
-            $dispatch->status = 'Draft';
-            $dispatch->company_id = $request->header('company');
-            $dispatch->save();
-
-            $invoice->update([
-                'dispatch_id' => $dispatch->id,
-                'paid_status' => 'TO_BE_DISPATCH',
-            ]);
-
-            //Now for each inventory item create journal entry
-            $invoiceInventories = $request->inventories;
-            $inventory_id = null;
-            foreach ($invoiceInventories as $invoiceInventory) {
-                $invoiceInventory['company_id'] = $request->header('company');
-                $invoiceInventory['type'] = 'invoice';
-                $invoiceInventory['quantity'] = normalize_two_decimal($invoiceInventory['quantity']);
-                $invoiceInventory['price'] = normalize_two_decimal($invoiceInventory['price']);
-                $invoiceInventory['sale_price'] = normalize_two_decimal($invoiceInventory['sale_price'] ?? $invoiceInventory['price']);
-                $inventory = $invoice->inventories()->create($invoiceInventory);
-
-                $inventory_id = $inventory->id;
-                //Reset inventory quantity
-                $quantity_used = (float) ($inventory->quantity);
-                $invent = Inventory::where('id', $inventory->inventory_id)->first();
-                $invent->update([
-                    'quantity' => $invent->quantity - $quantity_used,
-                ]);
-            }
-
-            //Add journal entry
-            //It will be "Sales" type
-            $sale_account = AccountMaster::where('name', 'Sales')->first();
-            if (!$sale_account) {
-                $sale_account = AccountMaster::create([
-                    'name' => 'Sales',
-                    'groups' => 'Sales Accounts',
-                    'address' => '-',
-                    'country' => '-',
-                    'state' => '-',
-                    'opening_balance' => '0',
-                    'type' => 'Cr',
-                ]);
-            }
-            $company_id = (int) $request->header('company');
-            $account_master_id = (int) $request->debtors['id'];
-            $total_amount = (float) $request->total;
-
-            $account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $sale_account->id,
-                'account' => 'Sales',
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'type' => 'Cr',
-                'debit' => 0,
-                'credit' => $total_amount,
-                'balance' => $total_amount,
-            ]);
-            $dr_account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $account_master_id,
-                'account' => $request->debtors['name'],
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'debit' => $total_amount,
-                'type' => 'Dr',
-                'credit' => 0,
-                'balance' => $total_amount,
-            ]);
-
-            //Handle vouchers
-            //Add journal entry
-            //It will add voucher for sales from invoice
-            $voucher_1 = Voucher::create([
-                'account_master_id' => $account_master_id,
-                'account' => $request->debtors['name'],
-                'debit' => $total_amount,
-                'credit' => 0,
-                'account_ledger_id' => $dr_account_ledger->id,
-                'date' => $invoice_date,
-                'related_voucher' => null,
-                'type' => 'Dr',
-                'company_id' => $company_id,
-                'invoice_id' => $invoice->id,
-                'invoice_item_id' => $inventory_id,
-                'voucher_type' => 'Sales',
-            ]);
-            $voucher_2 = Voucher::create([
-                'account_master_id' => $sale_account->id,
-                'account' => 'Sales',
-                'debit' => 0,
-                'credit' => $total_amount,
-                'account_ledger_id' => $account_ledger->id,
-                'date' => $invoice_date,
-                'related_voucher' => null,
-                'type' => 'Cr',
-                'company_id' => $company_id,
-                'invoice_id' => $invoice->id,
-                'invoice_item_id' => $inventory_id,
-                'voucher_type' => 'Sales',
-            ]);
-
-            //Now update vouchers id to ledger-bill-no and related_voucher
-            $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-            $account_ledger->update([
-                'credit' => $account_ledger->credit + $total_amount,
-                'balance' => $account_ledger->balance + $total_amount,
-            ]);
-            $dr_account_ledger->update([
-                'debit' => $dr_account_ledger->debit + $total_amount,
-                'balance' => $dr_account_ledger->balance + $total_amount,
-            ]);
-            foreach ($voucher as $key => $each) {
-                if ($key < substr_count($voucher_ids, ',') + 1) {
-                    $each->update([
-                        'related_voucher' => $voucher_ids,
+                    $inventory_id = $inventory->id;
+                    //Reset inventory quantity
+                    $quantity_used = (int) ($inventory->quantity);
+                    $invent = Inventory::where('id', $inventory->inventory_id)->first();
+                    $invent->update([
+                        'quantity' => $invent->quantity - $quantity_used,
                     ]);
                 }
-            }
 
-            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
+                //Add journal entry
+                //It will be "Sales" type
+                $sale_account = AccountMaster::where('name', 'Sales')->first();
+                if (!$sale_account) {
+                    $sale_account = AccountMaster::create([
+                        'name' => 'Sales',
+                        'groups' => 'Sales Accounts',
+                        'address' => '-',
+                        'country' => '-',
+                        'state' => '-',
+                        'opening_balance' => '0',
+                        'type' => 'Cr',
+                    ]);
+                }
+                $company_id = $companyId;
+                $account_master_id = (int) $request->debtors['id'];
+                $total_amount = (int) ($request->total);
 
-            if ($invoice) {
+                $account_ledger = AccountLedger::firstOrCreate([
+                    'account_master_id' => $sale_account->id,
+                    'account' => 'Sales',
+                    'company_id' => $company_id,
+                ], [
+                    'date' => Carbon::now()->toDateTimeString(),
+                    'type' => 'Cr',
+                    'debit' => 0,
+                    'credit' => $total_amount,
+                    'balance' => $total_amount,
+                ]);
+                $dr_account_ledger = AccountLedger::firstOrCreate([
+                    'account_master_id' => $account_master_id,
+                    'account' => $request->debtors['name'],
+                    'company_id' => $company_id,
+                ], [
+                    'date' => Carbon::now()->toDateTimeString(),
+                    'debit' => $total_amount,
+                    'type' => 'Dr',
+                    'credit' => 0,
+                    'balance' => $total_amount,
+                ]);
+
+                //Handle vouchers
+                //Add journal entry
+                //It will add voucher for sales from invoice
+                $voucher_1 = Voucher::create([
+                    'account_master_id' => $account_master_id,
+                    'account' => $request->debtors['name'],
+                    'debit' => $total_amount,
+                    'credit' => 0,
+                    'account_ledger_id' => $dr_account_ledger->id,
+                    'date' => $invoice_date,
+                    'related_voucher' => null,
+                    'type' => 'Dr',
+                    'company_id' => $company_id,
+                    'invoice_id' => $invoice->id,
+                    'invoice_item_id' => $inventory_id,
+                    'voucher_type' => 'Sales',
+                ]);
+                $voucher_2 = Voucher::create([
+                    'account_master_id' => $sale_account->id,
+                    'account' => 'Sales',
+                    'debit' => 0,
+                    'credit' => $total_amount,
+                    'account_ledger_id' => $account_ledger->id,
+                    'date' => $invoice_date,
+                    'related_voucher' => null,
+                    'type' => 'Cr',
+                    'company_id' => $company_id,
+                    'invoice_id' => $invoice->id,
+                    'invoice_item_id' => $inventory_id,
+                    'voucher_type' => 'Sales',
+                ]);
+
+                //Now update vouchers id to ledger-bill-no and related_voucher
+                $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+                $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+                $account_ledger->update([
+                    'credit' => $account_ledger->credit + $total_amount,
+                    'balance' => $account_ledger->balance + $total_amount,
+                ]);
+                $dr_account_ledger->update([
+                    'debit' => $dr_account_ledger->debit + $total_amount,
+                    'balance' => $dr_account_ledger->balance + $total_amount,
+                ]);
+                foreach ($voucher as $key => $each) {
+                    if ($key < substr_count($voucher_ids, ',') + 1) {
+                        $each->update([
+                            'related_voucher' => $voucher_ids,
+                        ]);
+                    }
+                }
+
                 //Update estimate
                 if ($request->estimate) {
                     Estimate::where('id', $request->estimate['id'])->update([
@@ -437,7 +376,11 @@ class InvoicesController extends Controller
                         }
                     }
                 }
+            });
 
+            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
+
+            if ($invoice) {
                 return response()->json([
                     'url' => url('/invoices/pdf/' . $invoice->unique_hash),
                     'invoice' => $invoice
@@ -445,12 +388,84 @@ class InvoicesController extends Controller
             }
 
             return response()->json(204);
+        } catch (QueryException $e) {
+            Log::error('Database error while storing invoice ', [$e]);
+            return response()->json([
+                'error' => 'Unable to create invoice. Please try again.',
+            ], 500);
         } catch (Exception $e) {
             Log::error('Error while storing invoice ', [$e]);
             return response()->json([
-                'error' => $e->getMessage(),
-            ], $e->getCode() ?: 400);
+                'error' => 'Unable to create invoice. Please try again.',
+            ], 500);
         }
+    }
+
+    private function getReferenceNumberForInvoice($companyId, $accountMasterId, $invoiceDate, $invoiceNumber, $referencePrefix)
+    {
+        $firstInvoice = Invoice::where('company_id', $companyId)
+            ->where('account_master_id', $accountMasterId)
+            ->where('invoice_date', $invoiceDate)
+            ->orderBy('id', 'asc')
+            ->lockForUpdate()
+            ->first();
+
+        if ($firstInvoice) {
+            return $this->buildReferenceNumberFromInvoiceNumber($firstInvoice->invoice_number, $referencePrefix);
+        }
+
+        return $this->buildReferenceNumberFromInvoiceNumber($invoiceNumber, $referencePrefix);
+    }
+
+    private function buildReferenceNumberFromInvoiceNumber($invoiceNumber, $referencePrefix)
+    {
+        $numberParts = explode('-', $invoiceNumber);
+        $numberSuffix = end($numberParts);
+
+        if (! $referencePrefix) {
+            return $invoiceNumber;
+        }
+
+        return $referencePrefix . '-' . $numberSuffix;
+    }
+
+    private function getNextAvailableInvoiceNumber($requestedInvoiceNumber, $companyId, $invoicePrefix)
+    {
+        $invoiceNumber = $requestedInvoiceNumber;
+        $attempt = 0;
+        $maxAttempts = 20;
+
+        while ($attempt < $maxAttempts) {
+            $exists = Invoice::where('company_id', $companyId)
+                ->where('invoice_number', $invoiceNumber)
+                ->exists();
+
+            if (! $exists) {
+                return $invoiceNumber;
+            }
+
+            $invoiceNumber = $this->buildInvoiceNumberFromMaxSuffix($companyId, $invoicePrefix, $attempt + 1);
+            $attempt++;
+        }
+
+        // Last-resort fallback: keep invoice creation non-blocking even in pathological collision cases.
+        return sprintf(
+            '%s-%06d',
+            $invoicePrefix,
+            (int) (microtime(true) * 1000000) % 1000000
+        );
+    }
+
+    private function buildInvoiceNumberFromMaxSuffix($companyId, $invoicePrefix, $offset = 1)
+    {
+        $maxSuffix = Invoice::where('company_id', $companyId)
+            ->where('invoice_number', 'like', $invoicePrefix . '-%')
+            ->selectRaw("MAX(CAST(SUBSTRING_INDEX(invoice_number, '-', -1) AS UNSIGNED)) as max_suffix")
+            ->value('max_suffix');
+
+        $nextSuffix = ((int) $maxSuffix) + max(1, (int) $offset);
+
+        return $invoicePrefix . '-' . sprintf('%06d', $nextSuffix);
     }
 
     /**
@@ -483,6 +498,10 @@ class InvoicesController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $invoice = Invoice::with([
             'inventories',
             'user',
@@ -526,6 +545,10 @@ class InvoicesController extends Controller
      */
     public function update(Requests\InvoicesRequest $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $invoice = Invoice::findOrFail($id);
         $oldAmount = $invoice->total;
 
@@ -558,174 +581,174 @@ class InvoicesController extends Controller
 
         $invoice->save();
 
-        $requestInvoiceItems = $request->inventories;
+        // Related items/stock/vouchers/ledgers are side-effects of this invoice update.
+        AuditLogger::withoutAuditing(function () use ($request, $invoice) {
+            $requestInvoiceItems = $request->inventories;
 
-        //Add journal entry
-        //It will be "Sales" type
-        $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
-        $company_id = (int) $request->header('company');
-        $account_master_id = (int) $request->debtors['id'];
-        $total_amount = (float) $request->total;
-        $account_ledger = AccountLedger::firstOrCreate([
-            'account_master_id' => $sale_account_id,
-            'account' => 'Sales',
-            'company_id' => $company_id,
-        ], [
-            'date' => Carbon::now()->toDateTimeString(),
-            'type' => 'Cr',
-            'debit' => 0,
-            'credit' => $total_amount,
-            'balance' => $total_amount,
-        ]);
-        $dr_account_ledger = AccountLedger::firstOrCreate([
-            'account_master_id' => $account_master_id,
-            'account' => $request->debtors['name'],
-            'company_id' => $company_id,
-        ], [
-            'date' => Carbon::now()->toDateTimeString(),
-            'debit' => $total_amount,
-            'type' => 'Dr',
-            'credit' => 0,
-            'balance' => $total_amount,
-        ]);
+            //Add journal entry
+            //It will be "Sales" type
+            $sale_account_id = AccountMaster::where('name', 'Sales')->first()->id;
+            $company_id = (int) $request->header('company');
+            $account_master_id = (int) $request->debtors['id'];
+            $total_amount = (int) ($request->total);
+            $account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $sale_account_id,
+                'account' => 'Sales',
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'type' => 'Cr',
+                'debit' => 0,
+                'credit' => $total_amount,
+                'balance' => $total_amount,
+            ]);
+            $dr_account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => $total_amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $total_amount,
+            ]);
 
-        $total_invoice_items_amount = 0;
-        $changed_invoice_items = [];
-        foreach ($requestInvoiceItems as $req) {
-            $req['company_id'] = $request->header('company');
-            $req['type'] = 'invoice';
-            $req['quantity'] = normalize_two_decimal($req['quantity']);
-            $req['price'] = normalize_two_decimal($req['price']);
-            $req['sale_price'] = normalize_two_decimal($req['sale_price'] ?? $req['price']);
-            $total_invoice_items_amount = $total_invoice_items_amount + $req['total'];
-            $new_invoice_item = null;
+            $total_invoice_items_amount = 0;
+            $changed_invoice_items = [];
+            foreach ($requestInvoiceItems as $req) {
+                $req['company_id'] = $request->header('company');
+                $req['type'] = 'invoice';
+                $total_invoice_items_amount = $total_invoice_items_amount + $req['total'];
+                $new_invoice_item = null;
 
-            //Reset inventory quantity
-            //Add, if quantity is reduce in the existing invoice item
-            //Subtract, if quantity is add in the existing invoice item
-            $request_item_quantity = (float) ($req['quantity']);
-            if ($req['invoice_id']) {
-                $invent = Inventory::where('id', $req['inventory_id'])->first();
-                $existing_invoice_item = InvoiceItem::find($req['id']);
+                //Reset inventory quantity
+                //Add, if quantity is reduce in the existing invoice item
+                //Subtract, if quantity is add in the existing invoice item
+                $request_item_quantity = (int) ($req['quantity']);
+                if ($req['invoice_id']) {
+                    $invent = Inventory::where('id', $req['inventory_id'])->first();
+                    $existing_invoice_item = InvoiceItem::find($req['id']);
 
-                //If user didn't changed quantity but changed something else
-                //In that case we don't update inventory
-                if ($request_item_quantity !== $invent->quantity) {
-                    $calc_quantity = $request_item_quantity > $existing_invoice_item->quantity ?
-                        $request_item_quantity - $existing_invoice_item->quantity :
-                        $existing_invoice_item->quantity - $request_item_quantity;
-                    $calc_quantity = $calc_quantity > $invent->quantity ?
-                        $calc_quantity - $invent->quantity :
-                        $invent->quantity - $calc_quantity;
+                    //If user didn't changed quantity but changed something else
+                    //In that case we don't update inventory
+                    if ($request_item_quantity !== $invent->quantity) {
+                        $calc_quantity = $request_item_quantity > $existing_invoice_item->quantity ?
+                            $request_item_quantity - $existing_invoice_item->quantity :
+                            $existing_invoice_item->quantity - $request_item_quantity;
+                        $calc_quantity = $calc_quantity > $invent->quantity ?
+                            $calc_quantity - $invent->quantity :
+                            $invent->quantity - $calc_quantity;
+                        $invent->update([
+                            'quantity' => $calc_quantity,
+                        ]);
+                    }
+
+                    //Existing invoice items, other items in database should be deleted
+                    array_push($changed_invoice_items, $existing_invoice_item['id']);
+
+                    //Update existing invoice item, just in case user had changed anything
+                    $existing_invoice_item->update([
+                        'name' => $req['name'],
+                        'price' => $req['price'],
+                        'sale_price' => $req['sale_price'],
+                        'total' => $req['total'],
+                        'inventory_id' => $req['inventory_id'],
+                        'quantity' => $request_item_quantity,
+                    ]);
+                } else {
+                    //Create/add new invoice items
+                    $existing_invoice_item = InvoiceItem::create([
+                        'invoice_id' => $invoice->id,
+                        'inventory_id' => $req['inventory_id'],
+                        'name' => $req['name'],
+                        'price' => $req['price'],
+                        'sale_price' => $req['sale_price'],
+                        'total' => $req['total'],
+                        'company_id' => $req['company_id'],
+                        'quantity' => $request_item_quantity,
+                        'type' => 'invoice',
+                    ]);
+
+                    //Existing invoice items, other items in database should be deleted
+                    array_push($changed_invoice_items, $existing_invoice_item['id']);
+
+                    //update inventory quantity
+                    $invent = Inventory::where('id', $req['inventory_id'])->first();
                     $invent->update([
-                        'quantity' => $calc_quantity,
+                        'quantity' => $invent->quantity - $request_item_quantity,
                     ]);
                 }
-
-                //Existing invoice items, other items in database should be deleted
-                array_push($changed_invoice_items, $existing_invoice_item['id']);
-
-                //Update existing invoice item, just in case user had changed anything
-                $existing_invoice_item->update([
-                    'name' => $req['name'],
-                    'price' => $req['price'],
-                    'sale_price' => $req['sale_price'],
-                    'total' => $req['total'],
-                    'inventory_id' => $req['inventory_id'],
-                    'quantity' => $request_item_quantity,
-                ]);
-            } else {
-                //Create/add new invoice items
-                $existing_invoice_item = InvoiceItem::create([
-                    'invoice_id' => $invoice->id,
-                    'inventory_id' => $req['inventory_id'],
-                    'name' => $req['name'],
-                    'price' => $req['price'],
-                    'sale_price' => $req['sale_price'],
-                    'total' => $req['total'],
-                    'company_id' => $req['company_id'],
-                    'quantity' => $request_item_quantity,
-                    'type' => 'invoice',
-                ]);
-
-                //Existing invoice items, other items in database should be deleted
-                array_push($changed_invoice_items, $existing_invoice_item['id']);
-
-                //update inventory quantity
-                $invent = Inventory::where('id', $req['inventory_id'])->first();
-                $invent->update([
-                    'quantity' => $invent->quantity - $request_item_quantity,
-                ]);
             }
-        }
 
-        //Delete removed invoice items from database
-        $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $changed_invoice_items)->get();
-        foreach ($delete_invoice_items as $del) {
-            //'Add' deleting item quantity back to inventory
-            $find_invent = Inventory::where('id', $del->inventory_id)->first();
-            $find_invent->update([
-                'quantity' => $find_invent->quantity + $del->quantity,
+            //Delete removed invoice items from database
+            $delete_invoice_items = InvoiceItem::where('invoice_id', $invoice->id)->whereNotIn('id', $changed_invoice_items)->get();
+            foreach ($delete_invoice_items as $del) {
+                //'Add' deleting item quantity back to inventory
+                $find_invent = Inventory::where('id', $del->inventory_id)->first();
+                $find_invent->update([
+                    'quantity' => $find_invent->quantity + $del->quantity,
+                ]);
+                $del->delete();
+            }
+
+            $amount = $total_amount;
+            //It will add voucher for sales from invoice
+            $voucher_1 = Voucher::where([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'company_id' => $company_id,
+                'account_ledger_id' => $dr_account_ledger->id,
+                'type' => 'Dr',
+                'invoice_id' => $invoice->id,
+                'voucher_type' => 'Sales',
+            ])->first();
+            $voucher_1->update([
+                'debit' => $amount,
+                'credit' => 0,
+                'date' => $invoice->invoice_date,
+                'related_voucher' => null,
             ]);
-            $del->delete();
-        }
 
-        $amount = $total_amount;
-        //It will add voucher for sales from invoice
-        $voucher_1 = Voucher::where([
-            'account_master_id' => $account_master_id,
-            'account' => $request->debtors['name'],
-            'company_id' => $company_id,
-            'account_ledger_id' => $dr_account_ledger->id,
-            'type' => 'Dr',
-            'invoice_id' => $invoice->id,
-            'voucher_type' => 'Sales',
-        ])->first();
-        $voucher_1->update([
-            'debit' => $amount,
-            'credit' => 0,
-            'date' => $invoice->invoice_date,
-            'related_voucher' => null,
-        ]);
-
-        $voucher_2 = Voucher::where([
-            'account_master_id' => $sale_account_id,
-            'account' => 'Sales',
-            'company_id' => $company_id,
-            'account_ledger_id' => $account_ledger->id,
-            'invoice_id' => $invoice->id,
-            'voucher_type' => 'Sales',
-        ])->first();
-        $voucher_2->update([
-            'debit' => 0,
-            'credit' => $amount,
-            'date' => $invoice->invoice_date,
-            'related_voucher' => null,
-            'type' => 'Cr',
-        ]);
-
-        //Now update vouchers id to ledger-bill-no and related_voucher
-        $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-        $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-        $account_ledger->update([
-            'credit' => $account_ledger->credit + $amount,
-            'balance' => $account_ledger->balance + $amount,
-        ]);
-        $dr_account_ledger->update([
-            'debit' => $dr_account_ledger->debit + $amount,
-            'balance' => $dr_account_ledger->balance + $amount,
-        ]);
-        foreach ($voucher as $key => $each) {
-            $each->update([
-                'debit' => $each->type === 'Dr' ? $amount : 0,
-                'credit' => $each->type === 'Cr' ? $amount : 0,
+            $voucher_2 = Voucher::where([
+                'account_master_id' => $sale_account_id,
+                'account' => 'Sales',
+                'company_id' => $company_id,
+                'account_ledger_id' => $account_ledger->id,
+                'invoice_id' => $invoice->id,
+                'voucher_type' => 'Sales',
+            ])->first();
+            $voucher_2->update([
+                'debit' => 0,
+                'credit' => $amount,
+                'date' => $invoice->invoice_date,
+                'related_voucher' => null,
+                'type' => 'Cr',
             ]);
-            if ($key < substr_count($voucher_ids, ',') + 1) {
+
+            //Now update vouchers id to ledger-bill-no and related_voucher
+            $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            $account_ledger->update([
+                'credit' => $account_ledger->credit + $amount,
+                'balance' => $account_ledger->balance + $amount,
+            ]);
+            $dr_account_ledger->update([
+                'debit' => $dr_account_ledger->debit + $amount,
+                'balance' => $dr_account_ledger->balance + $amount,
+            ]);
+            foreach ($voucher as $key => $each) {
                 $each->update([
-                    'related_voucher' => $voucher_ids,
+                    'debit' => $each->type === 'Dr' ? $amount : 0,
+                    'credit' => $each->type === 'Cr' ? $amount : 0,
                 ]);
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
+                }
             }
-        }
+        });
 
         $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
@@ -744,6 +767,10 @@ class InvoicesController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $invoice = Invoice::find($id);
 
         if ($invoice->payments()->exists() && $invoice->payments()->count() > 0) {
@@ -752,19 +779,21 @@ class InvoicesController extends Controller
             ]);
         }
 
-        $vouchers = Voucher::where('invoice_id', $invoice->id)->get();
-        foreach ($vouchers as $each) {
-            $each->delete();
-        }
+        AuditLogger::withoutAuditing(function () use ($invoice, $id) {
+            $vouchers = Voucher::where('invoice_id', $invoice->id)->get();
+            foreach ($vouchers as $each) {
+                $each->delete();
+            }
 
-        $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
-        foreach ($invoice_item as $each) {
-            //'Add' deleting item quantity back to inventory
-            $find_invent = Inventory::where('id', $each->inventory_id)->first();
-            $find_invent->update([
-                'quantity' => $find_invent->quantity + $each->quantity,
-            ]);
-        }
+            $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
+            foreach ($invoice_item as $each) {
+                //'Add' deleting item quantity back to inventory
+                $find_invent = Inventory::where('id', $each->inventory_id)->first();
+                $find_invent->update([
+                    'quantity' => $find_invent->quantity + $each->quantity,
+                ]);
+            }
+        });
 
         $invoice = Invoice::destroy($id);
 
@@ -781,6 +810,10 @@ class InvoicesController extends Controller
      */
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         foreach ($request->id as $id) {
             $invoice = Invoice::find($id);
 
@@ -790,19 +823,21 @@ class InvoicesController extends Controller
                 ]);
             }
 
-            $vouchers = Voucher::where('invoice_id', $id)->get();
-            foreach ($vouchers as $each) {
-                $each->delete();
-            }
+            AuditLogger::withoutAuditing(function () use ($id) {
+                $vouchers = Voucher::where('invoice_id', $id)->get();
+                foreach ($vouchers as $each) {
+                    $each->delete();
+                }
 
-            $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
-            foreach ($invoice_item as $each) {
-                //'Add' deleting item quantity back to inventory
-                $find_invent = Inventory::where('id', $each->inventory_id)->first();
-                $find_invent->update([
-                    'quantity' => $find_invent->quantity + $each->quantity,
-                ]);
-            }
+                $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
+                foreach ($invoice_item as $each) {
+                    //'Add' deleting item quantity back to inventory
+                    $find_invent = Inventory::where('id', $each->inventory_id)->first();
+                    $find_invent->update([
+                        'quantity' => $find_invent->quantity + $each->quantity,
+                    ]);
+                }
+            });
 
             $invoice = Invoice::destroy($id);
 
@@ -880,13 +915,26 @@ class InvoicesController extends Controller
      */
     public function referenceNumber(Request $request)
     {
-        $referenceNumber = NumberSequenceService::getReferenceNumberForAccount(
-            (int) $request->header('company'),
-            (int) $request->id,
-            Carbon::now('Asia/Kolkata')
-        );
+        $accountMasterId = is_array($request->id) ? ($request->id['id'] ?? null) : $request->id;
+        $companyId = (int) $request->header('company');
+        $invoiceDate = $this->parseInvoiceDateForReference($request->invoice_date);
 
-        if (! $referenceNumber) {
+        if (! $accountMasterId) {
+            return response()->json([
+                'invoice' => null,
+            ]);
+        }
+
+        try {
+            $find_today_first_invoice = Invoice::where('invoice_date', $invoiceDate)
+                ->whereCompany($companyId)
+                ->where('account_master_id', $accountMasterId)
+                ->orderBy('id', 'asc')->firstOrFail();
+            $find_today_first_invoice->reference_number = $this->buildReferenceNumberFromInvoiceNumber(
+                $find_today_first_invoice->invoice_number,
+                CompanySetting::getSetting('reference_prefix', $companyId)
+            );
+        } catch (Exception $e) {
             return response()->json([
                 'reference_number' => null,
             ]);
@@ -895,6 +943,23 @@ class InvoicesController extends Controller
         return response()->json([
             'reference_number' => $referenceNumber,
         ]);
+    }
+
+    private function parseInvoiceDateForReference($invoiceDate)
+    {
+        if (! $invoiceDate) {
+            return Carbon::now('Asia/Kolkata')->toDateString();
+        }
+
+        foreach (['Y-m-d', 'd/m/Y'] as $format) {
+            try {
+                return Carbon::createFromFormat($format, $invoiceDate, 'Asia/Kolkata')->format('Y-m-d');
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        return Carbon::now('Asia/Kolkata')->toDateString();
     }
 
     /**

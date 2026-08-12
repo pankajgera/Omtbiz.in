@@ -245,6 +245,10 @@ class PaymentController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $payment = Payment::with('user', 'invoice', 'master')->find($id);
 
         $invoices = Invoice::where('paid_status', '<>', Invoice::STATUS_PAID)
@@ -287,6 +291,10 @@ class PaymentController extends Controller
      */
     public function update(PaymentRequest $request, $id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $payment_date = Carbon::createFromFormat('d/m/Y', $request->payment_date);
 
         $payment = Payment::find($id);
@@ -352,6 +360,10 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $payment = Payment::find($id);
 
         if ($payment->invoice_id != null) {
@@ -376,6 +388,10 @@ class PaymentController extends Controller
 
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         foreach ($request->id as $id) {
             $payment = Payment::find($id);
 

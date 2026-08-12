@@ -10,11 +10,11 @@
             </base-button>
           </span>
           <v-dropdown-item>
-            <router-link :to="{path: `/receipts/${$route.params.id}/edit`}" class="dropdown-item">
+            <router-link v-if="canEdit" :to="{path: `/receipts/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
               {{ $t('general.edit') }}
             </router-link>
-            <div class="dropdown-item" @click="removeReceipt($route.params.id)">
+            <div v-if="isAdmin" class="dropdown-item" @click="removeReceipt($route.params.id)">
               <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
               {{ $t('general.delete') }}
             </div>
@@ -138,6 +138,13 @@ export default {
     }
   },
   computed: {
+    canEdit () {
+      const role = this.$store.state.user.currentUser.role
+      return role === 'admin' || role === 'accountant'
+    },
+    isAdmin () {
+      return this.$store.state.user.currentUser.role === 'admin'
+    },
     getReceiptBy () {
       if (this.searchData.receiptBy === 'asc' || this.searchData.receiptBy == null) {
         return true

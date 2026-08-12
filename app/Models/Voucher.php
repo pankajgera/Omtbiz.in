@@ -6,9 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Log;
+use App\Traits\Auditable;
 
 class Voucher extends Model
 {
+    use Auditable;
+
+    public const STATUS_DONE = 'Done';
+    public const STATUS_TO_BE_APPROVED = 'To Be Approved';
+    public const STATUS_DECLINED = 'Declined';
+
+    protected $appends = [
+        'formattedDate',
+    ];
+
     protected $fillable = [
         'type',
         'date',
@@ -23,6 +34,7 @@ class Voucher extends Model
         'invoice_id',
         'invoice_item_id',
         'voucher_type',
+        'voucher_status',
         'receipt_id',
         'payment_id',
     ];
@@ -47,6 +59,12 @@ class Voucher extends Model
         return $this->belongsTo(\App\Models\Receipt::class);
     }
 
+    public function getFormattedDateAttribute($value)
+    {
+        $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);
+        return Carbon::parse($this->date)->format($dateFormat);
+    }
+
     public function scopeWhereType($query, $type)
     {
         return $query->where('type', 'LIKE', '%' . $type . '%');
@@ -65,6 +83,22 @@ class Voucher extends Model
     public function scopeWhereCreditAmount($query, $credit)
     {
         return $query->where('credit', 'LIKE', '%' . $credit . '%');
+    }
+
+    public function scopeVoucherStatus($query, $voucherStatus)
+    {
+        return $query->where('voucher_status', $voucherStatus);
+    }
+
+    public function scopeVisibleOutsideApproval($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('voucher_type', '!=', 'Voucher')
+                ->orWhere(function ($inner) {
+                    $inner->where('voucher_type', 'Voucher')
+                        ->where('voucher_status', self::STATUS_DONE);
+                });
+        });
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -112,6 +146,10 @@ class Voucher extends Model
         if ($filters->get('groups')) {
             $master_ids = AccountMaster::where('groups', 'LIKE', '%' . $filters->get('groups') . '%')->pluck('id')->toArray();
             $query->whereIn('account_master_id', $master_ids);
+        }
+
+        if ($filters->get('voucher_status')) {
+            $query->voucherStatus($filters->get('voucher_status'));
         }
 
         if ($filters->get('debit')) {

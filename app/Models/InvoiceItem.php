@@ -7,9 +7,12 @@ use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Inventory;
+use App\Traits\Auditable;
 
 class InvoiceItem extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'invoice_id',
         'name',

@@ -20,11 +20,14 @@ export default {
 
   [types.DELETE_MULTIPLE_RECEIPTS] (state, selectedReceipts) {
     selectedReceipts.forEach((receipt) => {
-      let index = state.receipts.findIndex(_inv => _inv.id === receipt.id)
-      state.receipts.splice(index, 1)
+      let index = state.receipts.findIndex(_inv => _inv.id === receipt)
+      if (index > -1) {
+        state.receipts.splice(index, 1)
+      }
     })
 
     state.selectedReceipts = []
+    state.selectAllField = false
   },
 
   [types.SET_SELECTED_RECEIPTS] (state, data) {
@@ -37,5 +40,6 @@ export default {
 
   [types.RESET_SELECTED_RECEIPT] (state, data) {
     state.selectedReceipts = []
+    state.selectAllField = false
   },
 }

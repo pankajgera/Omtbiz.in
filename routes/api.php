@@ -64,16 +64,49 @@ Route::group(['middleware' => 'api'], function () {
 
     // Estimates
     //-------------------------------------------------
-    Route::post('/estimates/delete', [App\Http\Controllers\EstimatesController::class, 'delete'])->name('estimates.delete');
-    Route::post('/estimates/send', [App\Http\Controllers\EstimatesController::class, 'sendEstimate'])->name('estimates.send');
-    Route::post('/estimates/create-invoice', [App\Http\Controllers\EstimatesController::class, 'store'])->name('estimates.create-invoice');
-    Route::resource('estimates', App\Http\Controllers\EstimatesController::class);
+
+    Route::post('/estimates/delete', [
+        'as' => 'estimates.delete',
+        'uses' => 'EstimatesController@delete'
+    ]);
+
+    Route::post('/estimates/send', [
+        'as' => 'estimates.send',
+        'uses' => 'EstimatesController@sendEstimate'
+    ]);
+
+    Route::post('/estimates/create-invoice', [
+        'as' => 'estimates.create-invoice',
+        'uses' => 'EstimatesController@store'
+    ]);
+
+    Route::post('/estimates/reference', [
+        'as' => 'estimates.reference',
+        'uses' => 'EstimatesController@referenceNumber'
+    ]);
+
+    Route::resource('estimates', 'EstimatesController');
+
 
     // Orders
     //-------------------------------------------------
-    Route::post('/orders/delete', [App\Http\Controllers\OrdersController::class, 'delete'])->name('orders.delete');
-    Route::post('/orders/create-invoice', [App\Http\Controllers\OrdersController::class, 'store'])->name('orders.create-invoice');
-    Route::resource('orders', App\Http\Controllers\OrdersController::class);
+
+    Route::post('/orders/delete', [
+        'as' => 'orders.delete',
+        'uses' => 'OrdersController@delete'
+    ]);
+
+    Route::post('/orders/create-invoice', [
+        'as' => 'orders.create-invoice',
+        'uses' => 'OrdersController@store'
+    ]);
+
+    Route::post('/orders/reference', [
+        'as' => 'orders.reference',
+        'uses' => 'OrdersController@referenceNumber'
+    ]);
+
+    Route::resource('orders', 'OrdersController');
 
     // Expenses
     //----------------------------------
@@ -93,8 +126,30 @@ Route::group(['middleware' => 'api'], function () {
 
     // Receipts
     //----------------------------------
-    Route::post('/receipts/delete', [App\Http\Controllers\ReceiptController::class, 'delete'])->name('receipts.delete');
-    Route::resource('receipts', App\Http\Controllers\ReceiptController::class);
+
+    Route::post('/receipts/delete', [
+        'as' => 'receipts.delete',
+        'uses' => 'ReceiptController@delete'
+    ]);
+    Route::post('/receipts/{id}/approve', [
+        'as' => 'receipts.approve',
+        'uses' => 'ReceiptController@approve'
+    ]);
+    Route::post('/receipts/{id}/decline', [
+        'as' => 'receipts.decline',
+        'uses' => 'ReceiptController@decline'
+    ]);
+    Route::post('/receipts/approve-multiple', [
+        'as' => 'receipts.approve-multiple',
+        'uses' => 'ReceiptController@approveMultiple'
+    ]);
+    Route::post('/receipts/decline-multiple', [
+        'as' => 'receipts.decline-multiple',
+        'uses' => 'ReceiptController@declineMultiple'
+    ]);
+
+    Route::resource('receipts', 'ReceiptController');
+
 
     // Settings
     //----------------------------------
@@ -165,11 +220,26 @@ Route::group(['middleware' => 'api'], function () {
 
     // Vouchers
     //----------------------------------
-    Route::post('/vouchers/delete', [App\Http\Controllers\VouchersController::class, 'delete'])->name('vouchers.delete');
-    Route::post('/vouchers/update', [App\Http\Controllers\VouchersController::class, 'update']);
-    Route::get('/vouchers/{id}/book', [App\Http\Controllers\VouchersController::class, 'book'])->name('vouchers.book');
-    Route::get('/vouchers/daybook', [App\Http\Controllers\VouchersController::class, 'getDaybook'])->name('vouchers.daybook');
-    Route::resource('vouchers', App\Http\Controllers\VouchersController::class);
+    Route::post('/vouchers/delete', [
+        'as' => 'vouchers.delete',
+        'uses' => 'VouchersController@delete'
+    ]);
+    Route::post('/vouchers/{id}/approve', [
+        'as' => 'vouchers.approve',
+        'uses' => 'VouchersController@approve'
+    ]);
+    Route::post('/vouchers/{id}/decline', [
+        'as' => 'vouchers.decline',
+        'uses' => 'VouchersController@decline'
+    ]);
+    Route::post('/vouchers/approve-multiple', [
+        'as' => 'vouchers.approve-multiple',
+        'uses' => 'VouchersController@approveMultiple'
+    ]);
+    Route::post('/vouchers/decline-multiple', [
+        'as' => 'vouchers.decline-multiple',
+        'uses' => 'VouchersController@declineMultiple'
+    ]);
 
     Route::post('/vouchers/update', 'VouchersController@update');
 
@@ -234,6 +304,19 @@ Route::group(['middleware' => 'api'], function () {
     ]);
 
     Route::resource('dispatch', 'DispatchController');
+
+
+    // Audit Logs (admin only)
+    //----------------------------------
+    Route::get('/audit-logs', [
+        'as' => 'audit-logs.index',
+        'uses' => 'AuditLogsController@index'
+    ]);
+
+    Route::get('/audit-logs/{id}', [
+        'as' => 'audit-logs.show',
+        'uses' => 'AuditLogsController@show'
+    ]);
 
 
     Route::post('/whatsapp-send-pdf', [

@@ -38,6 +38,7 @@ class AccountLedgersController extends Controller
         foreach ($ledgers as $ledger) {
             $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
                 ->whereCompany($request->header('company'))
+                ->visibleOutsideApproval()
                 ->whereNotNull('related_voucher')
                 ->get();
             $each_ids = null;
@@ -52,10 +53,13 @@ class AccountLedgersController extends Controller
             $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
                 ->where('account_ledger_id', '!=', $ledger->id)
                 ->whereCompany($request->header('company'))
+                ->visibleOutsideApproval()
                 ->orderBy('date', 'desc')
                 ->get();
             //Update balance according to 'debit' or 'credit'
-            $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)->get();
+            $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)
+                ->visibleOutsideApproval()
+                ->get();
 
             $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
 
@@ -290,15 +294,22 @@ class AccountLedgersController extends Controller
         $all_voucher_ids = Voucher::whereCompany($request->header('company'))
             ->where('date', Carbon::now()->format('Y-m-d'))
             ->where('account', '!=', 'Sales')
+            ->whereNotNull('invoice_id')
+            ->visibleOutsideApproval()
             ->groupBy('account_ledger_id')
             ->get();
 
         $ledgers = [];
         foreach ($all_voucher_ids as $each) {
-            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)->where('date', Carbon::now()->format('Y-m-d'))->count();
+            $lot = Voucher::where('account_ledger_id', $each->account_ledger_id)
+                ->where('date', Carbon::now()->format('Y-m-d'))
+                ->whereNotNull('invoice_id')
+                ->visibleOutsideApproval()
+                ->count();
             $each['lot'] = $lot;
             $each['party'] = $each->account;
-            $each['reference_number'] = Invoice::where('id', $each->invoice_id)->first()->reference_number;
+            $invoice = $each->invoice_id ? Invoice::find($each->invoice_id) : null;
+            $each['reference_number'] = $invoice ? $invoice->reference_number : null;
             array_push($ledgers, $each);
         }
 

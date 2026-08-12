@@ -83,6 +83,8 @@ import BanksReport from './views/reports/BanksReport.vue'
 // Users
 import UserIndex from './views/users/Index.vue'
 import UserCreate from './views/users/Create.vue'
+import AuditLogsIndex from './views/audit-logs/Index.vue'
+
 
 // Settings
 import SettingsLayout from './views/settings/layout/Index.vue'
@@ -286,8 +288,16 @@ const routes = [
             // Voucher
             {
               path: 'vouchers',
+              name: 'vouchers.index',
               component: VouchersIndex,
               meta: ['admin', 'accountant']
+            },
+            {
+              path: 'vouchers/approvals',
+              name: 'vouchers.approvals',
+              component: VouchersIndex,
+              meta: ['admin'],
+              props: { approvalMode: true }
             },
             {
                 path: 'vouchers/create',
@@ -413,7 +423,7 @@ const routes = [
                 path: 'invoices/:id/edit',
                 name: 'invoices.edit',
                 component: InvoiceCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             // Payments
@@ -439,7 +449,7 @@ const routes = [
                 path: 'payments/:id/edit',
                 name: 'payments.edit',
                 component: PaymentCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             //Receipt
@@ -448,6 +458,13 @@ const routes = [
               name: 'receipts.create',
               component: ReceiptCreate,
               meta: ['admin', 'accountant']
+            },
+            {
+                path: 'receipts/approvals',
+                name: 'receipts.approvals',
+                component: ReceiptIndex,
+                meta: ['admin'],
+                props: { approvalMode: true }
             },
             {
                 path: 'receipts/:id/create',
@@ -459,7 +476,7 @@ const routes = [
                 path: 'receipts/:id/edit',
                 name: 'receipts.edit',
                 component: ReceiptCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'receipts',
@@ -645,6 +662,14 @@ const routes = [
                 path: 'users/:id/edit',
                 name: 'users.edit',
                 component: UserCreate,
+                meta: ['admin']
+            },
+
+            // Audit Logs
+            {
+                path: 'audit-logs',
+                name: 'audit.logs',
+                component: AuditLogsIndex,
                 meta: ['admin']
             },
 

@@ -8,10 +8,11 @@ use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use App\Traits\Auditable;
 
 class Invoice extends Model
 {
-    use SoftDeletes;
+    use Auditable;
 
     public const STATUS_PAID = 'PAID';
     public const DISPATCH = 'DISPATCH';

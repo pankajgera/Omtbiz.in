@@ -9,6 +9,7 @@
             )"
             :key="index1"
             :to="item.route"
+            :exact="!!item.exact"
             class="menu-item"
             @click.native="Toggle"
           >
@@ -115,6 +116,12 @@ export default {
             meta: ["admin", "accountant"],
           },
           {
+            title: "navigation.receipt_approvals",
+            icon: "check-circle",
+            route: "/receipts/approvals",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.payments",
             icon: "credit-card",
             route: "/payments",
@@ -124,7 +131,14 @@ export default {
             title: "navigation.voucher",
             icon: "file-alt",
             route: "/vouchers",
+            exact: true,
             meta: ["admin", "accountant"],
+          },
+          {
+            title: "navigation.voucher_approvals",
+            icon: "check-circle",
+            route: "/vouchers/approvals",
+            meta: ["admin"],
           },
           {
             title: "navigation.notes",
@@ -180,6 +194,12 @@ export default {
             iconType: "fa",
             route: "/users",
             meta: ["admin", "accountant"],
+          },
+          {
+            title: "navigation.audit_logs",
+            icon: "history",
+            route: "/audit-logs",
+            meta: ["admin"],
           },
           {
             title: "navigation.settings",

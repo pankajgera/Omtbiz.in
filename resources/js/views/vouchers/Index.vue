@@ -1,7 +1,7 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-      <Header :title="$tc('vouchers.voucher', 2)" :bread-crumb-links="breadCrumbLinks">
+      <Header :title="isApprovalMode ? $t('vouchers.approvals_title') : $tc('vouchers.voucher', 2)" :bread-crumb-links="breadCrumbLinks">
         <div v-show="totalVouchers || filtersApplied" class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
@@ -14,7 +14,18 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div>
+        <div v-if="role === 'admin' && !isApprovalMode" class="mr-4 mb-3 mb-sm-0">
+          <router-link :to="{ name: 'vouchers.approvals' }">
+            <base-button
+              :outline="true"
+              color="theme"
+              size="large"
+            >
+              {{ $t('vouchers.need_approval') }}
+            </base-button>
+          </router-link>
+        </div>
+        <div v-if="!isApprovalMode">
         <router-link slot="item-title" to="vouchers/create">
           <base-button
             color="theme"
@@ -77,12 +88,12 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <satellite-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('vouchers.no_vouchers') }}</label>
+        <label class="col title">{{ isApprovalMode ? $t('vouchers.no_vouchers_pending_approval') : $t('vouchers.no_vouchers') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('vouchers.list_of_vouchers') }}</label>
+        <label class="description col mt-1" align="center">{{ isApprovalMode ? $t('vouchers.list_of_vouchers_pending_approval') : $t('vouchers.list_of_vouchers') }}</label>
       </div>
-      <div class="btn-container">
+      <div v-if="!isApprovalMode" class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -99,7 +110,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ vouchers.length }}</b> {{ $t('general.of') }} <b>{{ totalVouchers }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedVouchers.length" :show-arrow="false">
+          <v-dropdown v-if="role === 'admin' && selectedVouchers.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -107,6 +118,12 @@
               <div class="dropdown-item" @click="removeMultipleVouchers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item v-if="isApprovalMode">
+              <div class="dropdown-item" @click="approveMultipleVouchersAction">
+                <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
+                {{ $t('vouchers.approve_voucher') }}
               </div>
             </v-dropdown-item>
           </v-dropdown>
@@ -156,9 +173,13 @@
           show="account"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `vouchers/${row.id}/edit`}">
+            <router-link v-if="role === 'admin'" :to="{ name: 'vouchers.edit', params: { id: row.id } }">
               {{ row.account }}
             </router-link>
+            <router-link v-else-if="role === 'accountant'" :to="{ name: 'vouchers.edit', params: { id: row.id } }">
+              {{ row.account }}
+            </router-link>
+            <span v-else>{{ row.account }}</span>
           </template>
         </table-column>
         <table-column
@@ -186,6 +207,11 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('vouchers.date')"
+          sort-as="date"
+          show="formattedDate"
+        />
+        <table-column
           :key="Math.random()"
           :sortable="false"
           :filterable="false"
@@ -199,14 +225,30 @@
             </span>
             <v-dropdown-item>
 
-              <router-link :to="{path: `vouchers/${row.id}/edit`}" class="dropdown-item">
+              <router-link v-if="role === 'admin'" :to="{ name: 'vouchers.edit', params: { id: row.id } }" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}
+              </router-link>
+              <router-link v-else-if="role === 'accountant'" :to="{ name: 'vouchers.edit', params: { id: row.id } }" class="dropdown-item">
+                <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                {{ $t('invoices.view') }}
               </router-link>
 
             </v-dropdown-item>
             <v-dropdown-item>
-              <div class="dropdown-item" @click="removeVouchers(row.id)">
+              <div v-if="role === 'admin' && row.voucher_status === 'To Be Approved'" class="dropdown-item" @click="approveVoucherAction(row.id)">
+                <font-awesome-icon icon="check-circle" class="dropdown-item-icon" />
+                {{ $t('vouchers.approve_voucher') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div v-if="role === 'admin' && row.voucher_status === 'To Be Approved'" class="dropdown-item" @click="declineVoucherAction(row.id)">
+                <font-awesome-icon icon="times-circle" class="dropdown-item-icon" />
+                {{ $t('vouchers.decline_voucher') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div v-if="role === 'admin'" class="dropdown-item" @click="removeVouchers(row.id)">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                 {{ $t('general.delete') }}
               </div>
@@ -234,6 +276,12 @@ import BaseButton from '../../../js/components/base/BaseButton'
 import GlobalMixin from '../../helpers/mixins.js';
 import moment from 'moment'
 export default {
+  props: {
+    approvalMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     DotIcon,
     SatelliteIcon,
@@ -254,7 +302,7 @@ export default {
       },
       {
         url:'#',
-        title:this.$tc('vouchers.voucher')
+        title:this.$route.name === 'vouchers.approvals' ? this.$t('vouchers.approvals_title') : this.$tc('vouchers.voucher')
       }
     ],
       filters: {
@@ -263,7 +311,8 @@ export default {
         from_date: '',
         to_date: '',
       },
-      index: null
+      index: null,
+      role: this.$store.state.user.currentUser.role
     }
   },
   computed: {
@@ -273,6 +322,9 @@ export default {
       'totalVouchers',
       'selectAllField'
     ]),
+    isApprovalMode () {
+      return this.$route.name === 'vouchers.approvals'
+    },
     showEmptyScreen () {
       return !this.totalVouchers && !this.isRequestOngoing && !this.filtersApplied
     },
@@ -300,7 +352,22 @@ export default {
     filters: {
       handler: 'setFilters',
       deep: true
+    },
+    '$route.name' () {
+      this.updateBreadCrumbTitle()
+      this.filtersApplied = false
+      if (this.selectAllField) {
+        this.selectAllVouchers()
+      }
+      this.$nextTick(() => {
+        if (this.$refs.table) {
+          this.$refs.table.refresh()
+        }
+      })
     }
+  },
+  mounted () {
+    this.updateBreadCrumbTitle()
   },
   destroyed () {
     if (this.selectAllField) {
@@ -314,7 +381,10 @@ export default {
       'selectVoucher',
       'deleteVoucher',
       'deleteMultipleVouchers',
-      'setSelectAllState'
+      'setSelectAllState',
+      'approveVoucher',
+      'approveMultipleVouchers',
+      'declineVoucher'
     ]),
     refreshTable () {
       this.$refs.table.refresh()
@@ -325,6 +395,8 @@ export default {
         groups: this.filters.groups !== null ? this.filters.groups : '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
+        approval_mode: this.isApprovalMode,
+        voucher_status: this.isApprovalMode ? 'To Be Approved' : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -418,8 +490,66 @@ export default {
         }
       })
     },
+    async approveVoucherAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('vouchers.confirm_approve'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (approved) => {
+        if (approved) {
+          let response = await this.approveVoucher(id)
+          if (response.data && response.data.success) {
+            window.toastr['success'](this.$t('vouchers.approved_message'))
+            this.$refs.table.refresh()
+          }
+        }
+      })
+    },
+    async approveMultipleVouchersAction () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('vouchers.confirm_approve'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (approved) => {
+        if (approved) {
+          let response = await this.approveMultipleVouchers()
+          if (response.data && response.data.success) {
+            window.toastr['success'](this.$t('vouchers.approved_message'))
+            this.$refs.table.refresh()
+          }
+        }
+      })
+    },
+    async declineVoucherAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('vouchers.confirm_decline'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (declined) => {
+        if (declined) {
+          let response = await this.declineVoucher(id)
+          if (response.data && response.data.success) {
+            window.toastr['success'](this.$t('vouchers.declined_message'))
+            this.$refs.table.refresh()
+          }
+        }
+      })
+    },
     setIndex(index) {
       this.index = index
+    },
+    updateBreadCrumbTitle () {
+      if (this.breadCrumbLinks && this.breadCrumbLinks[1]) {
+        this.breadCrumbLinks[1].title = this.isApprovalMode
+          ? this.$t('vouchers.approvals_title')
+          : this.$tc('vouchers.voucher')
+      }
     }
   }
 }

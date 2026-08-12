@@ -9,4 +9,17 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected function adminOnlyResponse()
+    {
+        $user = auth()->user();
+
+        if (!$user || !$user->isAdmin()) {
+            return response()->json([
+                'error' => 'admin_only',
+            ], 403);
+        }
+
+        return null;
+    }
 }

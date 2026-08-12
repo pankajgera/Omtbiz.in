@@ -56,6 +56,11 @@ export const setSelectAllState = ({ commit, receipt, state }, data) => {
   commit(types.SET_SELECT_ALL_STATE, data)
 }
 
+export const resetSelectedReceipts = ({ commit }) => {
+  commit(types.RESET_SELECTED_RECEIPT)
+  commit(types.SET_SELECT_ALL_STATE, false)
+}
+
 export const selectReceipt = ({ commit, receipt, state }, data) => {
   commit(types.SET_SELECTED_RECEIPTS, data)
   if (state.selectedReceipts.length === state.receipts.length) {
@@ -68,6 +73,46 @@ export const selectReceipt = ({ commit, receipt, state }, data) => {
 export const updateReceipt = ({ commit, receipt, state }, data) => {
   return new Promise((resolve, reject) => {
     window.axios.put(`/api/receipts/${data.id}`, data.editData).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const approveReceipt = ({ commit, receipt, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/${id}/approve`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const declineReceipt = ({ commit, receipt, state }, id) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/${id}/decline`).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const approveMultipleReceipts = ({ commit, receipt, state }) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/approve-multiple`, { 'id': state.selectedReceipts }).then((response) => {
+      resolve(response)
+    }).catch((err) => {
+      reject(err)
+    })
+  })
+}
+
+export const declineMultipleReceipts = ({ commit, receipt, state }) => {
+  return new Promise((resolve, reject) => {
+    window.axios.post(`/api/receipts/decline-multiple`, { 'id': state.selectedReceipts }).then((response) => {
       resolve(response)
     }).catch((err) => {
       reject(err)

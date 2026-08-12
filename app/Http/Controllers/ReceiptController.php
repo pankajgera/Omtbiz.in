@@ -55,7 +55,7 @@ class ReceiptController extends Controller
         $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
         return response()->json([
             'receipts' => $receipts,
-            'total' => Receipt::count(),
+            'total' => $receipts->total(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }
@@ -132,22 +132,9 @@ class ReceiptController extends Controller
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
         try {
-            if ($request->has('invoice_id') && $request->invoice_id != null) {
-                $invoice = Invoice::find($request->invoice_id);
-                $invoice->status = Invoice::DISPATCH;
-                $invoice->paid_status = Invoice::STATUS_PAID;
-                $invoice->due_amount = 0;
-                $invoice->save();
-            }
-
-            $receipt_status = 'Draft';
-
-            if ('admin' === Auth::user()->role) {
-                $receipt_status = 'Done';
-            }
-            $voucher_ids = [];
+            $isAdmin = ('admin' === Auth::user()->role);
+            $receipt_status = $isAdmin ? Receipt::STATUS_DONE : Receipt::STATUS_TO_BE_APPROVED;
             $company_id = (int) $request->header('company');
-            $dr_account_master = AccountMaster::where('name', '=', $request->receipt_mode)->firstOrFail();
 
             //Create receipt
             $receipt = Receipt::create([
@@ -163,65 +150,8 @@ class ReceiptController extends Controller
                 'account_master_id' => $request->list['id'],
             ]);
 
-            $dr_account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $dr_account_master->id,
-                'account' => $request->receipt_mode,
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'debit' => $req_amount,
-                'type' => 'Dr',
-                'credit' => 0,
-                'balance' => $req_amount,
-            ]);
-            $cr_account_ledger = AccountLedger::firstOrCreate([
-                'account_master_id' => $request->list['id'],
-                'account' => $request->list['name'],
-                'company_id' => $company_id,
-            ], [
-                'date' => Carbon::now()->toDateTimeString(),
-                'debit' => 0,
-                'type' => 'Cr',
-                'credit' => $req_amount,
-                'balance' => $req_amount,
-            ]);
-
-            $cr_voucher = Voucher::create([
-                'account_master_id' => $request->list['id'],
-                'account' => $request->list['name'],
-                'credit' => $req_amount,
-                'debit' => 0,
-                'account_ledger_id' => $cr_account_ledger->id,
-                'date' => $receipt_date,
-                'related_voucher' => null,
-                'type' => 'Cr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Receipt',
-                'receipt_id' => $receipt->id,
-            ]);
-            $dr_voucher = Voucher::create([
-                'account_master_id' => $dr_account_master->id,
-                'account' => $request->receipt_mode,
-                'credit' => 0,
-                'debit' => $req_amount,
-                'account_ledger_id' => $dr_account_ledger->id,
-                'date' => $receipt_date,
-                'related_voucher' => null,
-                'type' => 'Dr',
-                'company_id' => $company_id,
-                'voucher_type' => 'Receipt',
-                'receipt_id' => $receipt->id,
-            ]);
-
-            $voucher_ids = $cr_voucher->id . ', ' . $dr_voucher->id;
-            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-
-            foreach ($voucher as $key => $each) {
-                if ($key < substr_count($voucher_ids, ',') + 1) {
-                    $each->update([
-                        'related_voucher' => $voucher_ids,
-                    ]);
-                }
+            if ($isAdmin) {
+                $this->postReceiptVouchersAndJournal($receipt);
             }
         } catch (Exception $e) {
             Log::error('Error while saving payment', [$e]);
@@ -264,6 +194,10 @@ class ReceiptController extends Controller
      */
     public function edit(Request $request, $id)
     {
+        if ($response = $this->adminOrAccountantOnlyResponse()) {
+            return $response;
+        }
+
         $receipt = Receipt::with('user', 'invoice')->find($id);
 
         $usersOfSundryDebitors = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance', 'type', 'mobile_number')->get();
@@ -306,13 +240,19 @@ class ReceiptController extends Controller
      */
     public function update(ReceiptRequest $request, $id)
     {
+        if ($response = $this->adminOrAccountantOnlyResponse()) {
+            return $response;
+        }
+
         $receipt_date = Carbon::createFromFormat('d/m/Y', $request->receipt_date);
 
         $receipt = Receipt::find($id);
         $oldAmount = $receipt->amount;
 
         $receipt->receipt_date = $receipt_date;
-        $receipt->receipt_status = $request->receipt_status;
+        if (Auth::user()->isAdmin()) {
+            $receipt->receipt_status = $request->receipt_status;
+        }
         $receipt->user_id = $request->user_id;
         $receipt->amount = $request->amount;
         $receipt->notes = $request->notes;
@@ -323,23 +263,166 @@ class ReceiptController extends Controller
             'receipt_id' => $receipt->id,
             'type' => 'Dr',
         ])->first();
-        $dr_voucher->update([
-            'debit' => $request->amount,
-            'date' => $receipt_date,
-        ]);
+        if ($dr_voucher) {
+            $dr_voucher->update([
+                'debit' => $request->amount,
+                'date' => $receipt_date,
+            ]);
+        }
 
         $cr_voucher = Voucher::where([
             'receipt_id' => $receipt->id,
             'type' => 'Cr',
         ])->first();
-        $cr_voucher->update([
-            'credit' => $request->amount,
-            'date' => $receipt_date,
-        ]);
+        if ($cr_voucher) {
+            $cr_voucher->update([
+                'credit' => $request->amount,
+                'date' => $receipt_date,
+            ]);
+        }
 
         return response()->json([
             'receipt' => $receipt,
             'success' => true
+        ]);
+    }
+
+    public function approve(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $receipt = Receipt::whereCompany($request->header('company'))->findOrFail($id);
+
+        if ($receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+            return response()->json([
+                'error' => 'receipt_not_pending_approval',
+            ], 422);
+        }
+
+        try {
+            $this->postReceiptVouchersAndJournal($receipt);
+            $receipt->update([
+                'receipt_status' => Receipt::STATUS_DONE,
+            ]);
+            $whatsappResult = $this->sendReceiptOnWhatsapp($receipt);
+        } catch (Exception $e) {
+            Log::error('Error while approving receipt', [$e]);
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 400);
+        }
+
+        return response()->json([
+            'receipt' => $receipt->fresh(),
+            'success' => true,
+            'whatsapp_sent' => $whatsappResult['sent'],
+            'whatsapp_error' => $whatsappResult['error'],
+        ]);
+    }
+
+    public function decline(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $receipt = Receipt::whereCompany($request->header('company'))->findOrFail($id);
+
+        if ($receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+            return response()->json([
+                'error' => 'receipt_not_pending_approval',
+            ], 422);
+        }
+
+        $receipt->update([
+            'receipt_status' => Receipt::STATUS_DECLINED,
+        ]);
+
+        return response()->json([
+            'receipt' => $receipt->fresh(),
+            'success' => true,
+        ]);
+    }
+
+    public function approveMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? array_values(array_unique($request->id)) : [];
+        $processed = [];
+        $skipped = [];
+        $whatsappFailed = [];
+        $approvedReceipts = [];
+
+        foreach ($ids as $id) {
+            $receipt = Receipt::whereCompany($request->header('company'))->find($id);
+            if (!$receipt || $receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            try {
+                $this->postReceiptVouchersAndJournal($receipt);
+                $receipt->update([
+                    'receipt_status' => Receipt::STATUS_DONE,
+                ]);
+                $processed[] = $id;
+                $approvedReceipts[] = $receipt->fresh();
+            } catch (Exception $e) {
+                Log::error('Error while approving receipt in bulk', [$e]);
+                $skipped[] = $id;
+            }
+        }
+
+        foreach ($approvedReceipts as $approvedReceipt) {
+            $whatsappResult = $this->sendReceiptOnWhatsapp($approvedReceipt);
+            if (!$whatsappResult['sent']) {
+                $whatsappFailed[] = [
+                    'id' => $approvedReceipt->id,
+                    'error' => $whatsappResult['error'],
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
+            'whatsapp_failed' => $whatsappFailed,
+        ]);
+    }
+
+    public function declineMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? $request->id : [];
+        $processed = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $receipt = Receipt::whereCompany($request->header('company'))->find($id);
+            if (!$receipt || $receipt->receipt_status !== Receipt::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            $receipt->update([
+                'receipt_status' => Receipt::STATUS_DECLINED,
+            ]);
+            $processed[] = $id;
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
         ]);
     }
 
@@ -351,9 +434,15 @@ class ReceiptController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $receipt = Receipt::find($id);
 
-        if ($receipt->invoice_id != null) {
+        $vouchers = Voucher::where('receipt_id', $id)->get();
+
+        if ($receipt->invoice_id != null && $vouchers->isNotEmpty()) {
             $invoice = Invoice::find($receipt->invoice_id);
             $invoice->due_amount = (float) $invoice->due_amount + (float) $receipt->amount;
             $invoice->paid_status = Invoice::STATUS_PAID;
@@ -361,7 +450,6 @@ class ReceiptController extends Controller
             $invoice->save();
         }
 
-        $vouchers = Voucher::where('receipt_id', $id)->get();
         foreach($vouchers as $each) {
             $each->delete();
         }
@@ -380,10 +468,15 @@ class ReceiptController extends Controller
      */
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         foreach ($request->id as $id) {
             $receipt = Receipt::find($id);
+            $vouchers = Voucher::where('receipt_id', $id)->get();
 
-            if ($receipt->invoice_id != null) {
+            if ($receipt->invoice_id != null && $vouchers->isNotEmpty()) {
                 $invoice = Invoice::find($receipt->invoice_id);
                 $invoice->due_amount = (float) $invoice->due_amount + (float) $receipt->amount;
                 $invoice->paid_status = Invoice::STATUS_PAID;
@@ -391,7 +484,6 @@ class ReceiptController extends Controller
                 $invoice->save();
             }
 
-            $vouchers = Voucher::where('receipt_id', $id)->get();
             foreach($vouchers as $each) {
                 $each->delete();
             }
@@ -402,5 +494,120 @@ class ReceiptController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+    private function postReceiptVouchersAndJournal(Receipt $receipt)
+    {
+        if (Voucher::where('receipt_id', $receipt->id)->exists()) {
+            return;
+        }
+
+        if ($receipt->invoice_id != null) {
+            $invoice = Invoice::find($receipt->invoice_id);
+            if ($invoice) {
+                $invoice->status = Invoice::DISPATCH;
+                $invoice->paid_status = Invoice::STATUS_PAID;
+                $invoice->due_amount = 0;
+                $invoice->save();
+            }
+        }
+
+        $req_amount = (int) $receipt->amount;
+        $company_id = (int) $receipt->company_id;
+        $receipt_date = Carbon::parse($receipt->receipt_date);
+        $dr_account_master = AccountMaster::where('name', '=', $receipt->receipt_mode)->firstOrFail();
+        $cr_account_master = AccountMaster::findOrFail($receipt->account_master_id);
+
+        $dr_account_ledger = AccountLedger::firstOrCreate([
+            'account_master_id' => $dr_account_master->id,
+            'account' => $receipt->receipt_mode,
+            'company_id' => $company_id,
+        ], [
+            'date' => Carbon::now()->toDateTimeString(),
+            'debit' => $req_amount,
+            'type' => 'Dr',
+            'credit' => 0,
+            'balance' => $req_amount,
+        ]);
+        $cr_account_ledger = AccountLedger::firstOrCreate([
+            'account_master_id' => $cr_account_master->id,
+            'account' => $cr_account_master->name,
+            'company_id' => $company_id,
+        ], [
+            'date' => Carbon::now()->toDateTimeString(),
+            'debit' => 0,
+            'type' => 'Cr',
+            'credit' => $req_amount,
+            'balance' => $req_amount,
+        ]);
+
+        $cr_voucher = Voucher::create([
+            'account_master_id' => $cr_account_master->id,
+            'account' => $cr_account_master->name,
+            'credit' => $req_amount,
+            'debit' => 0,
+            'account_ledger_id' => $cr_account_ledger->id,
+            'date' => $receipt_date,
+            'related_voucher' => null,
+            'type' => 'Cr',
+            'company_id' => $company_id,
+            'voucher_type' => 'Receipt',
+            'receipt_id' => $receipt->id,
+        ]);
+        $dr_voucher = Voucher::create([
+            'account_master_id' => $dr_account_master->id,
+            'account' => $receipt->receipt_mode,
+            'credit' => 0,
+            'debit' => $req_amount,
+            'account_ledger_id' => $dr_account_ledger->id,
+            'date' => $receipt_date,
+            'related_voucher' => null,
+            'type' => 'Dr',
+            'company_id' => $company_id,
+            'voucher_type' => 'Receipt',
+            'receipt_id' => $receipt->id,
+        ]);
+
+        $voucher_ids = $cr_voucher->id . ', ' . $dr_voucher->id;
+        $vouchers = Voucher::whereCompany($company_id)->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+
+        foreach ($vouchers as $voucher) {
+            $voucher->update([
+                'related_voucher' => $voucher_ids,
+            ]);
+        }
+    }
+
+    private function adminOrAccountantOnlyResponse()
+    {
+        $user = auth()->user();
+
+        if (!$user || (!$user->isAdmin() && !$user->isAccountant())) {
+            return response()->json([
+                'error' => 'admin_or_accountant_only',
+            ], 403);
+        }
+
+        return null;
+    }
+
+    private function sendReceiptOnWhatsapp(Receipt $receipt)
+    {
+        $accountMaster = AccountMaster::find($receipt->account_master_id);
+        if (!$accountMaster || !$accountMaster->mobile_number) {
+            return [
+                'sent' => false,
+                'error' => 'mobile_number_not_found',
+            ];
+        }
+
+        $fileName = 'Receipt ' . $receipt->receipt_number . ' - ' . Carbon::parse($receipt->receipt_date)->format('d-m-Y');
+        $filePath = url('/receipts/pdf/' . $receipt->id);
+
+        return WhatsappController::sendPdfMessage(
+            $accountMaster->mobile_number,
+            $fileName,
+            $filePath
+        );
     }
 }

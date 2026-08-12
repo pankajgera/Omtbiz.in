@@ -1,8 +1,8 @@
 <template>
   <div class="items receipt-index-page main-content">
     <div class="page-header">
-      <Header :title="$tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalReceipts || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+      <Header :title="approvalMode ? $t('receipts.approvals_title') : $tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
+        <div class="mr-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -14,7 +14,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div>
+        <div v-if="!approvalMode">
           <router-link slot="item-title" to="/receipts/create">
             <base-button
               size="large"
@@ -71,6 +71,16 @@
               v-model="filters.receipt_number"
               icon="hashtag"/>
           </div>
+          <div class="filter-status">
+            <label>{{ $t('receipts.receipt_status') }}</label>
+            <base-select
+              v-model="filters.receipt_status"
+              :options="receiptStatusOptions"
+              :show-labels="false"
+              :searchable="false"
+              :allow-empty="true"
+            />
+          </div>
         </div>
         <label class="clear-filter" @click="clearFilter">{{ $t('general.clear_all') }}</label>
       </div>
@@ -79,12 +89,12 @@
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <moon-walker-icon class="mt-5 mb-4"/>
       <div class="row" align="center">
-        <label class="col title">{{ $t('receipts.no_receipts') }}</label>
+        <label class="col title">{{ approvalMode ? $t('receipts.no_receipts_pending_approval') : $t('receipts.no_receipts') }}</label>
       </div>
       <div class="row">
-        <label class="description col mt-1" align="center">{{ $t('receipts.list_of_receipts') }}</label>
+        <label class="description col mt-1" align="center">{{ approvalMode ? $t('receipts.list_of_receipts_pending_approval') : $t('receipts.list_of_receipts') }}</label>
       </div>
-      <div class="btn-container">
+      <div v-if="!approvalMode" class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -101,10 +111,22 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ total_counts }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedReceipts && selectedReceipts.length" :show-arrow="false">
+          <v-dropdown v-if="role === 'admin' && selectedReceipts && selectedReceipts.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="approveMultipleReceiptsAction">
+                <font-awesome-icon :icon="['fas', 'check']" class="dropdown-item-icon" />
+                {{ $t('receipts.approve_receipt') }}
+              </div>
+            </v-dropdown-item>
+            <v-dropdown-item>
+              <div class="dropdown-item" @click="declineMultipleReceiptsAction">
+                <font-awesome-icon :icon="['fas', 'times']" class="dropdown-item-icon" />
+                {{ $t('receipts.decline_receipt') }}
+              </div>
+            </v-dropdown-item>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleReceipts">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -156,9 +178,14 @@
           show="receipt_number"
         >
           <template slot-scope="row">
-            <router-link :to="{path: role==='admin' ? `receipts/${row.id}/edit?d=true` : `receipts/${row.id}/view`}">
-               {{ row.receipt_number }}
-              </router-link>
+            <a
+              :href="getReceiptLink(row)"
+              class="receipt-number-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ row.receipt_number }}
+            </a>
           </template>
         </table-column>
         <table-column
@@ -182,6 +209,11 @@
           show="amount"
         />
         <table-column
+          :label="$t('receipts.receipt_status')"
+          width="20%"
+          show="receipt_status"
+        />
+        <table-column
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown no-click"
@@ -193,7 +225,7 @@
                 <dot-icon />
               </span>
               <v-dropdown-item>
-                <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
+                <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -206,6 +238,16 @@
                 <div class="dropdown-item" @click="removeReceipt(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+              <v-dropdown-item v-if="role === 'admin' && row.receipt_status === 'To Be Approved'">
+                <div class="dropdown-item" @click="approveReceiptAction(row.id)">
+                  <font-awesome-icon :icon="['fas', 'check']" class="dropdown-item-icon" />
+                  {{ $t('receipts.approve_receipt') }}
+                </div>
+                <div class="dropdown-item" @click="declineReceiptAction(row.id)">
+                  <font-awesome-icon :icon="['fas', 'times']" class="dropdown-item-icon" />
+                  {{ $t('receipts.decline_receipt') }}
                 </div>
               </v-dropdown-item>
             </v-dropdown>
@@ -223,6 +265,12 @@ import moment from 'moment'
 import BaseButton from '../../components/base/BaseButton'
 
 export default {
+  props: {
+    approvalMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     'moon-walker-icon': MoonWalkerIcon,
     BaseButton,
@@ -240,7 +288,7 @@ export default {
         },
         {
           url:'#',
-          title:this.$tc('receipts.receipt', 2)
+          title:this.approvalMode ? this.$t('receipts.approvals_title') : this.$tc('receipts.receipt', 2)
         }
       ],
       status: [
@@ -270,16 +318,18 @@ export default {
       filters: {
         receipt_number: '',
         customer: '',
+        receipt_status: '',
         status: { name: 'DUE', value: 'UNPAID' },
         from_date: '',
         to_date: ''
       },
+      receiptStatusOptions: ['Draft', 'To Be Approved', 'Done', 'Declined'],
       role: this.$store.state.user.currentUser.role
     }
   },
   computed: {
       applyFilter() {
-        if (this.filters.receipt_number || this.filters.customer || this.filters.from_date || this.filters.to_date) {
+        if (this.filters.receipt_number || this.filters.customer || this.filters.receipt_status || this.filters.from_date || this.filters.to_date) {
         return true;
       } return false;
     },
@@ -338,6 +388,10 @@ export default {
       'selectAllReceipts',
       'deleteReceipt',
       'deleteMultipleReceipts',
+      'approveReceipt',
+      'declineReceipt',
+      'approveMultipleReceipts',
+      'declineMultipleReceipts',
       'sendEmail',
       'setSelectAllState'
     ]),
@@ -377,6 +431,7 @@ export default {
       let data = {
         receipt_number: this.filters.receipt_number,
         customer_id: this.filters.customer === '' ? this.filters.customer : this.filters.customer.id,
+        receipt_status: this.approvalMode ? 'To Be Approved' : this.filters.receipt_status,
         status: '',
         from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
@@ -421,6 +476,7 @@ export default {
       this.filters = {
         receipt_number: '',
         customer: '',
+        receipt_status: '',
         status: '',
         from_date: '',
         to_date: ''
@@ -505,6 +561,103 @@ export default {
     async clearStatusSearch (removedOption, id) {
       this.filters.status = ''
       this.refreshTable()
+    },
+    async approveReceiptAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_approve'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.approveReceipt(id)
+          if (response.data.success) {
+            window.toastr['success'](this.$t('receipts.approved_message'))
+            if (response.data.whatsapp_sent === false) {
+              window.toastr['warning'](`Approved, but WhatsApp failed: ${response.data.whatsapp_error || 'unknown_error'}`)
+            }
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    async declineReceiptAction (id) {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_decline'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.declineReceipt(id)
+          if (response.data.success) {
+            window.toastr['success'](this.$t('receipts.declined_message'))
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    async approveMultipleReceiptsAction () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_approve'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: false
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.approveMultipleReceipts()
+          if (response.data.success) {
+            const processedCount = response.data.processed ? response.data.processed.length : 0
+            const skippedCount = response.data.skipped ? response.data.skipped.length : 0
+            if (processedCount > 0) {
+              window.toastr['success'](`${processedCount} receipt(s) approved successfully`)
+            }
+            if (skippedCount > 0) {
+              window.toastr['warning'](`${skippedCount} receipt(s) were skipped (not pending approval)`)
+            }
+            if (response.data.whatsapp_failed && response.data.whatsapp_failed.length > 0) {
+              window.toastr['warning'](`${response.data.whatsapp_failed.length} approved receipt(s) could not be sent on WhatsApp`)
+            }
+            this.resetSelectedReceipts()
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    async declineMultipleReceiptsAction () {
+      swal({
+        title: this.$t('general.are_you_sure'),
+        text: this.$t('receipts.confirm_decline'),
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true
+      }).then(async (value) => {
+        if (value) {
+          let response = await this.declineMultipleReceipts()
+          if (response.data.success) {
+            const processedCount = response.data.processed ? response.data.processed.length : 0
+            const skippedCount = response.data.skipped ? response.data.skipped.length : 0
+            if (processedCount > 0) {
+              window.toastr['success'](`${processedCount} receipt(s) declined successfully`)
+            }
+            if (skippedCount > 0) {
+              window.toastr['warning'](`${skippedCount} receipt(s) were skipped (not pending approval)`)
+            }
+            this.resetSelectedReceipts()
+            this.refreshTable()
+          }
+        }
+      })
+    },
+    getReceiptLink (row) {
+      const path = (this.role === 'admin' || this.role === 'accountant')
+        ? `/receipts/${row.id}/edit?d=true`
+        : `/receipts/${row.id}/view`
+
+      return this.$router.resolve({ path }).href
     }
   }
 }

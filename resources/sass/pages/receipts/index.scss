@@ -27,11 +27,8 @@
         justify-content: space-between;
     }
 
-    .filter-customer {
-        margin-right: 40px;
-        flex: 1;
-    }
-
+    .filter-customer,
+    .filter-receipt,
     .filter-status {
         margin-right: 40px;
         flex: 1;
@@ -50,8 +47,8 @@
         }
     }
 
-    .filter-order {
-        flex: 1;
+    .filter-status {
+        margin-right: 0;
     }
 
     .dashed {
@@ -60,19 +57,27 @@
         margin-top: 28px;
     }
 
+    .receipt-number-link {
+        color: $ls-color-primary;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+
+        &:hover,
+        &:focus {
+            color: darken($ls-color-primary, 8%);
+        }
+    }
+
     @media(max-width: $large-breakpoint ) {
         .filter-container {
             flex-direction: column;
         }
 
-        .filter-order {
-            margin-right: 40px;
-        }
-
         .filter-customer,
-        .filter-status,
         .filter-date,
-        .filter-order {
+        .filter-receipt,
+        .filter-status {
             margin-bottom: 10px;
             margin-right: 0px;
         }

@@ -7,6 +7,7 @@ use App\Models\AccountLedger;
 use App\Models\AccountMaster;
 use App\Models\State;
 use App\Models\Voucher;
+use App\Services\AuditLogger;
 use Carbon\Carbon;
 use App\Models\Credits;
 use Exception;
@@ -73,20 +74,20 @@ class AccountMastersController extends Controller
 
             $master = AccountMaster::find($master->id);
 
-            //Now add ledger as well
-            $ledger = new AccountLedger();
-            $ledger->date = Carbon::now('Asia/Kolkata');
-            $ledger->type = $request->type;
-            $ledger->account = $request->name;
-            $ledger->debit = 'Dr' === $request->type ? $request->opening_balance : 0;
-            $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
-            $ledger->balance = $request->opening_balance;
-            $ledger->short_narration = null;
-            $ledger->credits = $request->credits;
-            $ledger->credits_date = $request->credits_date;
-            $ledger->account_master_id = $master->id;
-            $ledger->company_id = $request->header('company');
-            $ledger->save();
+            // Sync opening ledger without a second audit entry (master create is the user action).
+            AuditLogger::withoutAuditing(function () use ($request, $master) {
+                $ledger = new AccountLedger();
+                $ledger->date = Carbon::now('Asia/Kolkata');
+                $ledger->type = $request->type;
+                $ledger->account = $request->name;
+                $ledger->debit = 'Dr' === $request->type ? $request->opening_balance : 0;
+                $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
+                $ledger->balance = $request->opening_balance;
+                $ledger->short_narration = null;
+                $ledger->account_master_id = $master->id;
+                $ledger->company_id = $request->header('company');
+                $ledger->save();
+            });
 
             $creditsStore = Credits::create([
                 'account_ledger_id' => $ledger->id,
@@ -141,6 +142,9 @@ class AccountMastersController extends Controller
             }
 
 
+            $oldOpeningBalance = (float) $master->opening_balance;
+            $oldType = $master->type;
+
             $master->name = $request->name;
             $master->mobile_number = $request->mobile_number;
             $master->groups = $request->groups;
@@ -151,30 +155,56 @@ class AccountMastersController extends Controller
             $master->type = $request->type;
             $master->save();
 
-            //Now add ledger as well
-            $ledger->date = Carbon::now('Asia/Kolkata');
-            $ledger->type = $request->type;
-            $ledger->account = $request->name;
-            $ledger->credits = $request->credits;
-            $ledger->credits_date = $request->credits_date;
-            $ledger->debit = 'Dr' === $request->type ? $request->opening_balance : 0;
-            $ledger->credit = 'Cr' === $request->type ? $request->opening_balance : 0;
-            $ledger->balance = $request->opening_balance;
-            $ledger->short_narration = null;
-            $ledger->account_master_id = $master->id;
-            $ledger->company_id = $request->header('company');
-            $ledger->save();
+            if ($ledger) {
+                // Side-effect sync of ledger/vouchers — keep a single audit row for the master update.
+                AuditLogger::withoutAuditing(function () use ($request, $master, $ledger, $oldOpeningBalance, $oldType) {
+                    $ledger->account = $request->name;
+                    $ledger->type = $request->type;
+                    $ledger->account_master_id = $master->id;
+                    $ledger->company_id = $request->header('company');
 
-            //Update ledger name in vouchers
-            $ledger_vouchers = Voucher::where('account_ledger_id', $ledger->id)->get();
+                    // Ledger debit/credit already include vouchers. Never replace them with
+                    // opening_balance alone — only apply the opening-balance delta when it changes.
+                    $newOpeningBalance = (float) $request->opening_balance;
+                    $openingDelta = $newOpeningBalance - $oldOpeningBalance;
 
+                    if (abs($openingDelta) > 0.00001 || $oldType !== $request->type) {
+                        if ($oldType === $request->type) {
+                            if ('Dr' === $request->type) {
+                                $ledger->debit = (float) $ledger->debit + $openingDelta;
+                            } else {
+                                $ledger->credit = (float) $ledger->credit + $openingDelta;
+                            }
+                            $ledger->balance = (float) $ledger->balance + $openingDelta;
+                        } else {
+                            // Type flipped: remove old opening from previous side, add new opening to new side.
+                            if ('Dr' === $oldType) {
+                                $ledger->debit = (float) $ledger->debit - $oldOpeningBalance;
+                            } else {
+                                $ledger->credit = (float) $ledger->credit - $oldOpeningBalance;
+                            }
 
-            
-            foreach ($ledger_vouchers as $voucher) {
-                $voucher->update([
-                    'account' => $request->name,
-                ]);
+                            if ('Dr' === $request->type) {
+                                $ledger->debit = (float) $ledger->debit + $newOpeningBalance;
+                                $ledger->balance = (float) $ledger->debit;
+                            } else {
+                                $ledger->credit = (float) $ledger->credit + $newOpeningBalance;
+                                $ledger->balance = (float) $ledger->credit;
+                            }
+                        }
+                    }
+
+                    $ledger->save();
+
+                    $ledger_vouchers = Voucher::where('account_ledger_id', $ledger->id)->get();
+                    foreach ($ledger_vouchers as $voucher) {
+                        $voucher->update([
+                            'account' => $request->name,
+                        ]);
+                    }
+                });
             }
+
             return response()->json([
                 'master' => $master,
             ]);

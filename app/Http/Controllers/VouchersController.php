@@ -7,6 +7,7 @@ use App\Models\AccountLedger;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Voucher;
+use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Log;
@@ -16,10 +17,13 @@ class VouchersController extends Controller
     public function index(Request $request)
     {
         $limit = $request->has('limit') ? $request->limit : 20;
+        $voucherStatus = $request->get('voucher_status');
+        $approvalMode = filter_var($request->get('approval_mode'), FILTER_VALIDATE_BOOLEAN);
 
-        $vouchers = Voucher::applyFilters($request->only([
+        $vouchersQuery = Voucher::applyFilters($request->only([
             'name',
             'groups',
+            'voucher_status',
             'orderByField',
             'orderBy',
             'from_date',
@@ -28,8 +32,20 @@ class VouchersController extends Controller
             ->whereCompany($request->header('company'))
             ->with(['accountMaster'])
             ->where('voucher_type', 'Voucher')
-            ->latest()
-            ->paginate($limit);
+            ->latest();
+
+        // By default, keep pending-approval vouchers out of main list.
+        // Approval list explicitly sends voucher_status=To Be Approved.
+        if ($approvalMode) {
+            $vouchersQuery->where('voucher_status', Voucher::STATUS_TO_BE_APPROVED);
+        } elseif (!$voucherStatus) {
+            $vouchersQuery->where(function ($query) {
+                $query->whereNull('voucher_status')
+                    ->orWhere('voucher_status', '!=', Voucher::STATUS_TO_BE_APPROVED);
+            });
+        }
+
+        $vouchers = $vouchersQuery->paginate($limit);
 
         return response()->json([
             'vouchers' => $vouchers,
@@ -38,6 +54,13 @@ class VouchersController extends Controller
 
     public function edit(Request $request, $id)
     {
+        $user = auth()->user();
+        if (!$user || (!$user->isAdmin() && !$user->isAccountant())) {
+            return response()->json([
+                'error' => 'admin_or_accountant_only',
+            ], 403);
+        }
+
         $voucher = Voucher::where('related_voucher', 'like', '%' . $id . '%')->select([
             'id',
             'type',
@@ -62,11 +85,22 @@ class VouchersController extends Controller
      */
     public function store(Request $request)
     {
+        $isEditRequest = collect($request->all())->contains(function ($entry) {
+            return is_array($entry) && !empty($entry['is_edit']);
+        });
+        $isAdmin = Auth::user() && Auth::user()->isAdmin();
+
+        if ($isEditRequest && ($response = $this->adminOnlyResponse())) {
+            return $response;
+        }
+
         $ledger = '';
         $ledger_ids = [];
         $voucher_ids = '';
         try {
             foreach ($request->all() as $each) {
+                $voucherStatus = $isAdmin ? Voucher::STATUS_DONE : Voucher::STATUS_TO_BE_APPROVED;
+
                 // If accountLedger is already present then update
                 // Credit and Debit with balance with 'type'
                 $ledgerPresent = AccountLedger::whereCompany($request->header('company'))
@@ -75,15 +109,18 @@ class VouchersController extends Controller
                         'account_master_id' => $each['account_id'],
                     ])->first();
                 $ledger = null;
+
                 if (!empty($ledgerPresent)) {
-                    $updateCredit = 0;
-                    $updateDebit = 0;
-                    if ('Cr' === $each['type']) {
-                        $updateCredit = $ledgerPresent->credit + $each['credit'];
-                        $ledgerPresent->update(['credit' => $updateCredit, 'balance' => $updateCredit]);
-                    } else {
-                        $updateDebit = $ledgerPresent->debit + $each['debit'];
-                        $ledgerPresent->update(['debit' => $updateDebit, 'balance' => $updateDebit]);
+                    if ($isAdmin) {
+                        $updateCredit = 0;
+                        $updateDebit = 0;
+                        if ('Cr' === $each['type']) {
+                            $updateCredit = $ledgerPresent->credit + $each['credit'];
+                            $ledgerPresent->update(['credit' => $updateCredit, 'balance' => $updateCredit]);
+                        } else {
+                            $updateDebit = $ledgerPresent->debit + $each['debit'];
+                            $ledgerPresent->update(['debit' => $updateDebit, 'balance' => $updateDebit]);
+                        }
                     }
                     $ledger = $ledgerPresent;
                 } else {
@@ -91,9 +128,10 @@ class VouchersController extends Controller
                         'account' => $each['account'],
                         'account_master_id' => $each['account_id'],
                         'type' => $each['type'],
-                        'debit' => $each['debit'] ?? 0,
-                        'credit' => $each['credit'] ?? 0,
-                        'balance' => $each['balance'],
+                        // For pending approvals, create ledger shell with zero values.
+                        'debit' => $isAdmin ? ($each['debit'] ?? 0) : 0,
+                        'credit' => $isAdmin ? ($each['credit'] ?? 0) : 0,
+                        'balance' => $isAdmin ? ($each['balance'] ?? 0) : 0,
                         'date' => $each['date'],
                         'company_id' => $request->header('company')
                     ]);
@@ -105,7 +143,7 @@ class VouchersController extends Controller
                         'company_id' => $request->header('company'),
                         'id' => $each['id'],
                     ])->update([
-                        'account_ledger_id' => $each['account_ledger_id'],
+                        'account_ledger_id' => $ledger->id,
                         'account_master_id' => $each['account_id'],
                         'type' => $each['type'],
                         'account' => $each['account'],
@@ -113,6 +151,7 @@ class VouchersController extends Controller
                         'credit' => $each['credit'] ?? 0,
                         'short_narration' => $each['short_narration'],
                         'date' => $each['date'],
+                        'voucher_status' => $voucherStatus,
                     ]);
                     $voucher = Voucher::find($each['id']);
                 } else {
@@ -127,6 +166,7 @@ class VouchersController extends Controller
                         'date' => $each['date'],
                         'company_id' => $request->header('company'),
                         'voucher_type' => 'Voucher',
+                        'voucher_status' => $voucherStatus,
                     ]);
                 }
 
@@ -166,6 +206,10 @@ class VouchersController extends Controller
      */
     public function destroy($id)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $data = Voucher::deleteVoucher($id);
 
         if (!$data) {
@@ -188,6 +232,10 @@ class VouchersController extends Controller
      */
     public function delete(Request $request)
     {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
         $vouchers = [];
         foreach ($request->id as $id) {
             $voucher = Voucher::deleteVoucher($id);
@@ -220,6 +268,7 @@ class VouchersController extends Controller
             'from_date',
             'to_date'
         ]))->whereCompany($request->header('company'), $request['filterBy'])
+            ->visibleOutsideApproval()
             ->get();
 
         $voucher = [];
@@ -245,6 +294,7 @@ class VouchersController extends Controller
     {
         $related_vouchers = Voucher::whereRaw("find_in_set(" . $id . ",related_voucher)")
             ->whereCompany($request->header('company'))
+            ->visibleOutsideApproval()
             ->where('updated_at', '>', Carbon::today())
             ->where('updated_at', '<', Carbon::tomorrow())
             ->get();
@@ -260,5 +310,192 @@ class VouchersController extends Controller
         return response()->json([
             'vouchers' => $related_vouchers,
         ]);
+    }
+
+    public function approve(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $voucher = Voucher::whereCompany($request->header('company'))
+            ->where('voucher_type', 'Voucher')
+            ->findOrFail($id);
+
+        if ($voucher->voucher_status !== Voucher::STATUS_TO_BE_APPROVED) {
+            return response()->json([
+                'error' => 'voucher_not_pending_approval',
+            ], 422);
+        }
+
+        $relatedVouchers = $this->getRelatedVoucherRows($request, $voucher);
+        foreach ($relatedVouchers as $each) {
+            $this->postVoucherToLedger($each, $request->header('company'));
+            $each->update([
+                'voucher_status' => Voucher::STATUS_DONE,
+            ]);
+        }
+
+        return response()->json([
+            'voucher' => $voucher->fresh(),
+            'success' => true,
+        ]);
+    }
+
+    public function decline(Request $request, $id)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $voucher = Voucher::whereCompany($request->header('company'))
+            ->where('voucher_type', 'Voucher')
+            ->findOrFail($id);
+
+        if ($voucher->voucher_status !== Voucher::STATUS_TO_BE_APPROVED) {
+            return response()->json([
+                'error' => 'voucher_not_pending_approval',
+            ], 422);
+        }
+
+        $relatedVouchers = $this->getRelatedVoucherRows($request, $voucher);
+        foreach ($relatedVouchers as $each) {
+            $each->update([
+                'voucher_status' => Voucher::STATUS_DECLINED,
+            ]);
+        }
+
+        return response()->json([
+            'voucher' => $voucher->fresh(),
+            'success' => true,
+        ]);
+    }
+
+    public function approveMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? array_values(array_unique($request->id)) : [];
+        $processed = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $voucher = Voucher::whereCompany($request->header('company'))
+                ->where('voucher_type', 'Voucher')
+                ->find($id);
+
+            if (!$voucher || $voucher->voucher_status !== Voucher::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            try {
+                $relatedVouchers = $this->getRelatedVoucherRows($request, $voucher);
+                foreach ($relatedVouchers as $each) {
+                    $this->postVoucherToLedger($each, $request->header('company'));
+                    $each->update([
+                        'voucher_status' => Voucher::STATUS_DONE,
+                    ]);
+                }
+                $processed[] = $id;
+            } catch (Exception $e) {
+                Log::error('Error while approving voucher in bulk', [$e]);
+                $skipped[] = $id;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
+        ]);
+    }
+
+    public function declineMultiple(Request $request)
+    {
+        if ($response = $this->adminOnlyResponse()) {
+            return $response;
+        }
+
+        $ids = is_array($request->id) ? array_values(array_unique($request->id)) : [];
+        $processed = [];
+        $skipped = [];
+
+        foreach ($ids as $id) {
+            $voucher = Voucher::whereCompany($request->header('company'))
+                ->where('voucher_type', 'Voucher')
+                ->find($id);
+
+            if (!$voucher || $voucher->voucher_status !== Voucher::STATUS_TO_BE_APPROVED) {
+                $skipped[] = $id;
+                continue;
+            }
+
+            $relatedVouchers = $this->getRelatedVoucherRows($request, $voucher);
+            foreach ($relatedVouchers as $each) {
+                $each->update([
+                    'voucher_status' => Voucher::STATUS_DECLINED,
+                ]);
+            }
+            $processed[] = $id;
+        }
+
+        return response()->json([
+            'success' => true,
+            'processed' => $processed,
+            'skipped' => $skipped,
+        ]);
+    }
+
+    private function getRelatedVoucherRows(Request $request, Voucher $voucher)
+    {
+        if (!$voucher->related_voucher) {
+            return collect([$voucher]);
+        }
+
+        return Voucher::whereCompany($request->header('company'))
+            ->whereIn('id', array_map('intval', explode(',', str_replace(' ', '', $voucher->related_voucher))))
+            ->where('voucher_type', 'Voucher')
+            ->get();
+    }
+
+    private function postVoucherToLedger(Voucher $voucher, $companyId)
+    {
+        $ledgerPresent = AccountLedger::whereCompany($companyId)
+            ->where([
+                'account' => $voucher->account,
+                'account_master_id' => $voucher->account_master_id,
+            ])->first();
+
+        if (!empty($ledgerPresent)) {
+            if ('Cr' === $voucher->type) {
+                $updated = $ledgerPresent->credit + $voucher->credit;
+                $ledgerPresent->update(['credit' => $updated, 'balance' => $updated]);
+            } else {
+                $updated = $ledgerPresent->debit + $voucher->debit;
+                $ledgerPresent->update(['debit' => $updated, 'balance' => $updated]);
+            }
+            $voucher->update(['account_ledger_id' => $ledgerPresent->id]);
+            return;
+        }
+
+        $balance = 'Cr' === $voucher->type
+            ? ($voucher->credit ?? 0)
+            : ($voucher->debit ?? 0);
+
+        $ledger = AccountLedger::create([
+            'account' => $voucher->account,
+            'account_master_id' => $voucher->account_master_id,
+            'type' => $voucher->type,
+            'debit' => $voucher->debit ?? 0,
+            'credit' => $voucher->credit ?? 0,
+            'balance' => $balance,
+            'date' => $voucher->date,
+            'company_id' => $companyId
+        ]);
+
+        $voucher->update(['account_ledger_id' => $ledger->id]);
     }
 }

@@ -100,7 +100,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ payments.length }}</b> {{ $t('general.of') }} <b>{{ totalPayments }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedPayments && selectedPayments.length" :show-arrow="false">
+          <v-dropdown v-if="role === 'admin' && selectedPayments && selectedPayments.length" :show-arrow="false">
             <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
               {{ $t('general.actions') }}
             </span>
@@ -155,7 +155,7 @@
           show="master.name"
         >
           <template slot-scope="row">
-            <router-link :to="{path: `payments/${row.id}/edit?d=true`}" class="dropdown-item">
+            <router-link :to="{path: role === 'admin' ? `payments/${row.id}/edit?d=true` : `/payments`}" class="dropdown-item">
                {{ row.master.name }}
               </router-link>
           </template>
@@ -187,7 +187,7 @@
                 <dot-icon />
               </span>
               <v-dropdown-item>
-                <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
+                <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -203,7 +203,7 @@
                 </a>
               </v-dropdown-item> -->
               <v-dropdown-item>
-                <div class="dropdown-item" @click="removePayment(row.id)" v-if="role === 'admin' || role === 'accountant'">
+                <div class="dropdown-item" @click="removePayment(row.id)" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                   {{ $t('general.delete') }}
                 </div>

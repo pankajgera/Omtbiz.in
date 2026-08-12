@@ -11,6 +11,7 @@ use Hash;
 use App\Models\User;
 use Auth;
 use App\Http\Controllers\Controller;
+use App\Services\AuditLogger;
 use Illuminate\Support\Facades\Session;
 
 class AccessTokensController extends Controller
@@ -116,15 +117,21 @@ class AccessTokensController extends Controller
      */
     public function destroy(Request $request)
     {
-        $accessToken = Auth::user()->token();
-        Session::flush();
-        \DB::table('oauth_refresh_tokens')
-                ->where('access_token_id', $accessToken->id)
-                ->update([
-                        'revoked' => true
-                ]);
+        $user = Auth::user();
 
-        $accessToken->revoke();
+        if ($user) {
+            AuditLogger::logout($user);
+
+            $accessToken = $user->token();
+            Session::flush();
+            \DB::table('oauth_refresh_tokens')
+                    ->where('access_token_id', $accessToken->id)
+                    ->update([
+                            'revoked' => true
+                    ]);
+
+            $accessToken->revoke();
+        }
 
         return redirect('/login');
     }
@@ -150,10 +157,14 @@ class AccessTokensController extends Controller
 
         if ($response->isSuccessful()) {
             $this->clearLoginAttempts($request);
+            if ($user) {
+                AuditLogger::login($user);
+            }
 			return $this->sendSuccessResponse($response, $user);
 		}
 
 		$this->incrementLoginAttempts($request);
+        AuditLogger::failedLogin($request->username);
 
 		return response($response->getContent(), $response->getStatusCode());
 	}
