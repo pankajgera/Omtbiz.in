@@ -109,7 +109,7 @@ div.hide-select-header div.multiselect__tags input.multiselect__input{
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { validationMixin } from 'vuelidate'
-const { required, minLength, maxLength, minValue } = require('vuelidate/lib/validators')
+import { required, minLength, maxLength, minValue } from 'vuelidate/lib/validators'
 const decimal = (value) => {
   if (value === null || value === undefined || value === '') {
     return true

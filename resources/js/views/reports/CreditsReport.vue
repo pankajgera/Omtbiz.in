@@ -77,7 +77,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
-const { required } = require('vuelidate/lib/validators')
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   mixins: [validationMixin],
