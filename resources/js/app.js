@@ -29,6 +29,30 @@ const app = new Vue({
     store,
     i18n,
     swal,
+    render(h) {
+        return h('div', {
+            attrs: { id: 'app' },
+            class: 'template-container'
+        }, [
+            h('div', {
+                class: 'mobile-menu-overlay',
+                on: {
+                    click: (event) => {
+                        event.preventDefault()
+                        this.onOverlayClick()
+                    }
+                }
+            }),
+            h('transition', {
+                props: {
+                    name: 'fade',
+                    mode: 'out-in'
+                }
+            }, [
+                h('router-view')
+            ])
+        ])
+    },
     computed: {
         ...mapGetters([
             'isAdmin'
