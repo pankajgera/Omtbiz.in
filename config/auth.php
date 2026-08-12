@@ -114,6 +114,6 @@ return [
     'proxy' => [
         'client_id' => env('PROXY_OAUTH_CLIENT_ID'),
         'client_secret' => env('PROXY_OAUTH_CLIENT_SECRET'),
-        'grant_type' => env('PROXY_OAUTH_GRANT_TYPE'),
+        'grant_type' => env('PROXY_OAUTH_GRANT_TYPE') ?: 'password',
     ],
 ];
