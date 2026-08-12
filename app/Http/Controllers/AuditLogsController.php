@@ -29,6 +29,7 @@ class AuditLogsController extends Controller
                     'user',
                     'action',
                     'module',
+                    'search',
                     'from_date',
                     'to_date',
                 ]))

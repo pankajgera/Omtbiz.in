@@ -1457,6 +1457,12 @@
     },
     "audit_logs": {
         "title": "Audit Logs",
+        "search_placeholder": "Search by number or customer name",
+        "type": "Type",
+        "select_type": "Select type",
+        "all_types": "All Types",
+        "login_logout": "Login & Logout",
+        "document": "Document",
         "user": "User",
         "user_placeholder": "Name or email",
         "action": "Action",
@@ -1471,7 +1477,13 @@
         "view_details": "View Details",
         "old_values": "Previous Values",
         "new_values": "New Values",
-        "no_logs": "No activity logs yet!",
-        "list_of_logs": "User login, logout, and create/update/delete activity will appear here."
+        "no_logs": "No activity found",
+        "list_of_logs": "Invoice/estimate/order creation & updates, plus logins and logouts, will appear here — search by number or click a row to open the record.",
+        "all_time": "All Time",
+        "today": "Today",
+        "this_week": "This Week",
+        "this_month": "This Month",
+        "show_more": "+{count} more",
+        "show_less": "Show less"
     }
 }
