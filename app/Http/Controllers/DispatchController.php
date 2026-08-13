@@ -588,25 +588,62 @@ class DispatchController extends Controller
      */
     public function getInvoices(Request $request)
     {
-        // include_ids: invoice(s) already attached to the dispatch being
-        // edited must always be returned even if COMPLETED, otherwise the
-        // edit form's invoice picker has no matching option and renders
-        // empty for any dispatch that's already been sent.
+        // This used to load every still-pending invoice unbounded (a prior
+        // fix removed a ->limit(200) specifically to stop hiding older
+        // eligible bills). For a company with tens of thousands of pending
+        // invoices, that now blows PHP's memory limit (500) or, once memory
+        // is raised, just takes too long and the gateway times out (504).
+        //
+        // Fix: make this search-driven and capped instead of "load everything".
+        // - search: filter by invoice number or party name (the frontend's
+        //   invoice picker now queries this as the user types).
+        // - include_ids: invoice(s) already attached to the dispatch being
+        //   edited are always returned regardless of status/search/limit, so
+        //   the edit form can still resolve and display them. Queried
+        //   separately from the capped/ordered list below and merged in -
+        //   an earlier version OR'd this into the same query, but a company
+        //   with enough newer pending invoices could push the specifically
+        //   requested id(s) outside the LIMIT window before the OR ever
+        //   mattered.
+        // - limit: hard cap so this endpoint can never again return an
+        //   unbounded result set, default 50.
+        $company = $request->header('company');
+        $search = trim((string) $request->query('search', ''));
         $includeIds = array_filter(array_map('intval', explode(',', (string) $request->query('include_ids'))));
+        $limit = (int) $request->query('limit', 50);
 
-        // Only return bills still pending dispatch. Limiting to newest 200 and
-        // filtering COMPLETED on the frontend was hiding older eligible bills.
         $invoices = Invoice::with('master')
-            ->whereCompany($request->header('company'))
-            ->where(function ($query) use ($includeIds) {
+            ->whereCompany($company)
+            ->where(function ($query) {
                 $query->whereNull('status')
                     ->orWhere('status', '!=', 'COMPLETED');
                 if (! empty($includeIds)) {
                     $query->orWhereIn('id', $includeIds);
                 }
             })
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($match) use ($search) {
+                    $match->where('invoice_number', 'like', '%' . $search . '%')
+                        ->orWhereHas('master', function ($masterQuery) use ($search) {
+                            $masterQuery->where('name', 'like', '%' . $search . '%');
+                        });
+                });
+            })
             ->orderBy('id', 'desc')
+            ->limit($limit)
             ->get();
+
+        if (! empty($includeIds)) {
+            $existingIds = $invoices->pluck('id')->all();
+            $missingIds = array_diff($includeIds, $existingIds);
+            if (! empty($missingIds)) {
+                $pinned = Invoice::with('master')
+                    ->whereCompany($company)
+                    ->whereIn('id', $missingIds)
+                    ->get();
+                $invoices = $invoices->concat($pinned)->values();
+            }
+        }
 
         return response()->json([
             'invoices' => $invoices
