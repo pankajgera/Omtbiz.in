@@ -496,6 +496,21 @@ Route::group(['middleware' => 'api'], function () {
         'uses' => 'DispatchController@getInvoices'
     ]);
 
+    Route::get('/dispatch/dashboard', [
+        'as' => 'dispatch.dashboard',
+        'uses' => 'DispatchController@dashboard'
+    ]);
+
+    Route::get('/dispatch/pending', [
+        'as' => 'dispatch.pending',
+        'uses' => 'DispatchController@pending'
+    ]);
+
+    Route::get('/dispatch/completed-list', [
+        'as' => 'dispatch.completedlist',
+        'uses' => 'DispatchController@completedList'
+    ]);
+
     Route::resource('dispatch', 'DispatchController');
 
 

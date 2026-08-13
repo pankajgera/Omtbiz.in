@@ -10,7 +10,7 @@
             :key="index1"
             :to="item.route"
             :exact="!!item.exact"
-            class="menu-item"
+            :class="['menu-item', { active: isRouteGroupActive(item) }]"
             @click.native="Toggle"
           >
             <font-awesome-icon :icon="item.icon" class="icon menu-icon" />
@@ -101,6 +101,19 @@ export default {
             title: "navigation.dispatch",
             icon: "file",
             route: "/dispatch",
+            exact: true,
+            meta: ["admin", "accountant", "dispatch"],
+          },
+          {
+            title: "navigation.dispatch_dashboard",
+            icon: "tachometer-alt",
+            route: "/dispatch/dashboard",
+            exact: true,
+            // These pages live off the dashboard but aren't nested under its
+            // URL (/dispatch/pending, /dispatch/completed), so router-link's
+            // own exact-match can't cover them - keep this item lit up while
+            // the user is anywhere in the dashboard's pending/completed pages.
+            activeRoutes: ["/dispatch/dashboard", "/dispatch/pending", "/dispatch/completed"],
             meta: ["admin", "accountant", "dispatch"],
           },
           {
@@ -215,6 +228,9 @@ export default {
     this.update();
   },
   methods: {
+    isRouteGroupActive(item) {
+      return !!(item.activeRoutes && item.activeRoutes.includes(this.$route.path));
+    },
     Toggle() {
       this.$utils.toggleSidebar();
     },
