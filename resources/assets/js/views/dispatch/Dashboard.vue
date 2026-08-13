@@ -55,7 +55,57 @@
     </div>
 
     <div class="row dispatch-dashboard-panels">
-      <div class="col-md-7">
+      <div class="col-md-6">
+        <div class="card dispatch-panel-card">
+          <div class="card-header">
+            <h3>{{ $t('dispatch.top_parties_pending') }}</h3>
+          </div>
+          <div class="card-body">
+            <ul v-if="topPendingParties.length" class="dispatch-party-list">
+              <li v-for="party in topPendingParties" :key="party.account_master_id" class="dispatch-party-item">
+                <div class="dispatch-party-row">
+                  <span class="dispatch-party-name">{{ party.name || $t('dispatch.unknown_party') }}</span>
+                  <span class="dispatch-party-count">{{ party.pending_count }}</span>
+                </div>
+                <div class="dispatch-party-bar-track">
+                  <div class="dispatch-party-bar-fill" :style="{ width: partyBarWidth(party.pending_count) + '%' }" />
+                </div>
+              </li>
+            </ul>
+            <p v-else class="dispatch-activity-empty">{{ $t('dispatch.no_pending_backlog') }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card dispatch-panel-card">
+          <div class="card-header">
+            <h3>{{ $t('dispatch.pending_aging_title') }}</h3>
+          </div>
+          <div class="card-body">
+            <ul v-if="pendingAging.length" class="dispatch-party-list">
+              <li v-for="bucket in pendingAging" :key="bucket.key" class="dispatch-party-item">
+                <div class="dispatch-party-row">
+                  <span class="dispatch-party-name">{{ bucket.label }}</span>
+                  <span class="dispatch-party-count">{{ bucket.count }}</span>
+                </div>
+                <div class="dispatch-party-bar-track">
+                  <div
+                    class="dispatch-party-bar-fill"
+                    :class="`dispatch-party-bar-fill--${bucket.key}`"
+                    :style="{ width: agingBarWidth(bucket.count) + '%' }"
+                  />
+                </div>
+              </li>
+            </ul>
+            <p v-else class="dispatch-activity-empty">{{ $t('dispatch.no_pending_backlog') }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row dispatch-dashboard-panels">
+      <div class="col-md-12">
         <div class="card dispatch-panel-card">
           <div class="card-header">
             <h3>{{ $t('dispatch.recent_activity') }}</h3>
@@ -85,28 +135,6 @@
               </ul>
               <p v-else class="dispatch-activity-empty">{{ $t('dispatch.no_recent_pending') }}</p>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-5">
-        <div class="card dispatch-panel-card">
-          <div class="card-header">
-            <h3>{{ $t('dispatch.top_parties_pending') }}</h3>
-          </div>
-          <div class="card-body">
-            <ul v-if="topPendingParties.length" class="dispatch-party-list">
-              <li v-for="party in topPendingParties" :key="party.account_master_id" class="dispatch-party-item">
-                <div class="dispatch-party-row">
-                  <span class="dispatch-party-name">{{ party.name || $t('dispatch.unknown_party') }}</span>
-                  <span class="dispatch-party-count">{{ party.pending_count }}</span>
-                </div>
-                <div class="dispatch-party-bar-track">
-                  <div class="dispatch-party-bar-fill" :style="{ width: partyBarWidth(party.pending_count) + '%' }" />
-                </div>
-              </li>
-            </ul>
-            <p v-else class="dispatch-activity-empty">{{ $t('dispatch.no_pending_backlog') }}</p>
           </div>
         </div>
       </div>
@@ -144,6 +172,9 @@ export default {
     topPendingParties () {
       return this.counts.top_pending_parties || []
     },
+    pendingAging () {
+      return this.counts.pending_aging || []
+    },
   },
   created () {
     this.fetchDispatchDashboard()
@@ -164,6 +195,10 @@ export default {
     },
     partyBarWidth (count) {
       const max = Math.max(...this.topPendingParties.map((p) => p.pending_count), 1)
+      return Math.max(Math.round((count / max) * 100), 6)
+    },
+    agingBarWidth (count) {
+      const max = Math.max(...this.pendingAging.map((b) => b.count), 1)
       return Math.max(Math.round((count / max) * 100), 6)
     },
   },
@@ -394,5 +429,16 @@ export default {
   height: 100%;
   border-radius: 3px;
   background: linear-gradient(90deg, #55547a, #6a94f0);
+}
+/* Aging buckets - green (fresh) through amber to red (stale), so severity
+   reads at a glance instead of needing to compare numbers. */
+.dispatch-party-bar-fill--recent {
+  background: #29c76f;
+}
+.dispatch-party-bar-fill--month {
+  background: #f0ad4e;
+}
+.dispatch-party-bar-fill--old {
+  background: #e0554f;
 }
 </style>

@@ -156,6 +156,44 @@ class DispatchController extends Controller
             ];
         })->values();
 
+        // How stale is the pending backlog - bucketed by the dispatch's
+        // date_time (the same field the Pending page's Today/Yesterday/etc.
+        // quick-filter uses), so staff can see how much is genuinely old vs
+        // recent rather than just one flat total.
+        $weekAgo = Carbon::now('Asia/Kolkata')->subDays(7);
+        $monthAgo = Carbon::now('Asia/Kolkata')->subDays(30);
+
+        $pendingAging = [
+            [
+                'key' => 'recent',
+                'label' => '0-7 days',
+                'count' => Dispatch::where('status', 'Draft')
+                    ->whereCompany($company)
+                    ->where('dispatches.date_time', '>=', $weekAgo)
+                    ->distinct('invoice_id')
+                    ->count('invoice_id'),
+            ],
+            [
+                'key' => 'month',
+                'label' => '8-30 days',
+                'count' => Dispatch::where('status', 'Draft')
+                    ->whereCompany($company)
+                    ->where('dispatches.date_time', '<', $weekAgo)
+                    ->where('dispatches.date_time', '>=', $monthAgo)
+                    ->distinct('invoice_id')
+                    ->count('invoice_id'),
+            ],
+            [
+                'key' => 'old',
+                'label' => '31+ days',
+                'count' => Dispatch::where('status', 'Draft')
+                    ->whereCompany($company)
+                    ->where('dispatches.date_time', '<', $monthAgo)
+                    ->distinct('invoice_id')
+                    ->count('invoice_id'),
+            ],
+        ];
+
         return response()->json([
             'pending_count' => $pending,
             'dispatched_count' => $dispatched,
@@ -163,6 +201,7 @@ class DispatchController extends Controller
             'recent_dispatched' => $recentDispatched,
             'recent_pending' => $recentPending,
             'top_pending_parties' => $topPendingParties,
+            'pending_aging' => $pendingAging,
         ]);
     }
 

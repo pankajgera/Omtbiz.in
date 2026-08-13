@@ -1278,6 +1278,7 @@
         "no_recent_pending": "Nothing pending right now.",
         "unknown_party": "Unknown party",
         "top_parties_pending": "Top Parties Awaiting Dispatch",
+        "pending_aging_title": "Pending Backlog Age",
         "no_pending_backlog": "No pending backlog by party.",
         "view_all": "View All",
         "search_placeholder": "Search by invoice number or party",
