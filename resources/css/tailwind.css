@@ -1201,6 +1201,189 @@ a:focus {
     color: var(--ui-accent);
 }
 
+/* Same gap on the summary box at the foot of those two pages: `.order-total`
+   and `.estimate-total` keep `background: #ffffff` from their page sass, so in
+   dark mode the panel stays white while the value inside it inherits
+   var(--ui-text). White on white - the box reads as an empty card holding only
+   the "QUANTITY" label, with the number invisible beside it. */
+.estimate-create-page .estimate-total,
+.order-create-page .order-total {
+    color: var(--ui-text);
+    background-color: var(--ui-surface) !important;
+    border-color: var(--ui-border) !important;
+}
+
+/* The label and amount inside carry their own hardcoded greys, which are too
+   close to the dark surface to read once the panel is themed. */
+.estimate-create-page .estimate-total .section .estimate-label,
+.order-create-page .order-total .section .order-label {
+    color: var(--ui-text-muted) !important;
+}
+
+.estimate-create-page .estimate-total .section .estimate-amount,
+.order-create-page .order-total .section .order-amount {
+    color: var(--ui-text) !important;
+}
+
+.estimate-create-page .estimate-total .section.border-top {
+    border-top-color: var(--ui-border) !important;
+}
+
+/* The inventory stock report builds its own bare <table> rather than going
+   through table-component, so none of the shared table styling reached it: no
+   scroll container (the seven columns pushed the page sideways on anything
+   narrower than a laptop), a hardcoded `color: blue` on the item links that is
+   near-invisible against the dark surface, and hairline row rules drawn with an
+   inline `border-top: 1px solid` in currentColor. Match the house table look. */
+.inventory-stock-page .inventory-stock-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.inventory-stock-card {
+    overflow: hidden;
+    border: 1px solid var(--ui-border) !important;
+    border-radius: 0.5rem;
+}
+
+.inventory-stock-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--ui-border);
+}
+
+.inventory-stock-card__title {
+    margin: 0;
+    color: var(--ui-text);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Row count, so the report says how much it is showing without a scroll to the
+   bottom. */
+.inventory-stock-card__count {
+    padding: 0.125rem 0.5rem;
+    color: var(--ui-text-muted);
+    background-color: var(--ui-surface-muted);
+    border: 1px solid var(--ui-border);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.inventory-stock-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+}
+
+.inventory-stock-table {
+    width: 100%;
+    min-width: 46rem;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+.inventory-stock-table thead th {
+    padding: 0.75rem 1.25rem;
+    color: var(--ui-text-muted);
+    background-color: var(--ui-surface-muted);
+    border-bottom: 1px solid var(--ui-border);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.inventory-stock-table tbody td {
+    padding: 0.75rem 1.25rem;
+    color: var(--ui-text);
+    border-top: 1px solid var(--ui-border);
+    font-size: 0.875rem;
+    vertical-align: middle;
+}
+
+.inventory-stock-table tbody tr:hover td {
+    background-color: var(--ui-surface-hover);
+}
+
+/* Quantity, price and usage are read against each other down the column, so
+   right-align them and hold the digits to one width. */
+.inventory-stock-table .is-numeric {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Negative stock is the thing this report exists to surface - it was rendering
+   in the same colour as every other figure. */
+.inventory-stock-table .is-negative {
+    color: var(--ui-danger);
+    font-weight: 600;
+}
+
+.inventory-stock-table .is-nowrap {
+    white-space: nowrap;
+}
+
+.inventory-stock-link {
+    color: var(--ui-accent) !important;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.inventory-stock-link:hover,
+.inventory-stock-link:focus-visible {
+    color: var(--ui-accent-hover) !important;
+    text-decoration: underline;
+}
+
+.inventory-stock-empty {
+    margin: 0;
+    padding: 2.5rem 1.25rem;
+    color: var(--ui-text-muted);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+@media (max-width: 767px) {
+    .inventory-stock-card__header,
+    .inventory-stock-table thead th,
+    .inventory-stock-table tbody td {
+        padding-left: 0.875rem;
+        padding-right: 0.875rem;
+    }
+}
+
+/* Both stock reports have a Print button. A scroll container prints as whatever
+   fits its box, so anything to the right of the fold would be lost on paper -
+   drop the min-width and let the table reflow to the sheet instead. */
+@media print {
+    .inventory-stock-table-wrapper {
+        overflow-x: visible;
+    }
+
+    .inventory-stock-table {
+        min-width: 0;
+    }
+
+    .inventory-stock-card {
+        break-inside: auto;
+    }
+
+    .inventory-stock-table tbody tr {
+        break-inside: avoid;
+    }
+
+    .inventory-stock-table thead {
+        display: table-header-group;
+    }
+}
+
 .ledger-filter-section {
     padding: 1rem 1.25rem 1.25rem !important;
     border: 1px solid var(--ui-border);
