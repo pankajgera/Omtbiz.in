@@ -25,6 +25,42 @@ export const dipatchedData = ({ commit, dispatch, state }, params) => {
     })
 }
 
+// Dashboard cards - counts only, no rows.
+export const fetchDispatchDashboard = ({ commit, dispatch, state }) => {
+    return new Promise((resolve, reject) => {
+        window.axios.get(`/api/dispatch/dashboard`).then((response) => {
+            commit(types.SET_DASHBOARD_COUNTS, response.data)
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+// Standalone "To Be Dispatched" page - loads only the pending list.
+export const fetchPendingDispatch = ({ commit, dispatch, state }, params) => {
+    return new Promise((resolve, reject) => {
+        window.axios.get(`/api/dispatch/pending`, { params }).then((response) => {
+            commit(types.BOOTSTRAP_TO_BE_DISPATCH, response.data.dispatch_inprogress.data)
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+// Standalone "Completed Dispatch" page - loads only the sent list.
+export const fetchCompletedDispatchList = ({ commit, dispatch, state }, params) => {
+    return new Promise((resolve, reject) => {
+        window.axios.get(`/api/dispatch/completed-list`, { params }).then((response) => {
+            commit(types.BOOTSTRAP_DISPATCH, response.data.dispatch_completed.data)
+            resolve(response)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
 export const editDispatch = ({ commit, dispatch }, id) => {
     return new Promise((resolve, reject) => {
         window.axios.get(`/api/dispatch/${id}/edit`).then((response) => {

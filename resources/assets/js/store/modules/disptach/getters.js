@@ -6,3 +6,4 @@ export const selectAllToBeField = (state) => state.selectAllToBeField
 export const selectedDispatch = (state) => state.selectedDispatch
 export const selectedToBeDispatch = (state) => state.selectedToBeDispatch
 export const totalDispatch = (state) => state.totalDispatch
+export const dashboardCounts = (state) => state.dashboardCounts

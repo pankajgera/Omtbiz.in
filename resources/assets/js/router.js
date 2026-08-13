@@ -130,6 +130,9 @@ import BankCreate from './views/bank/Create.vue'
 // Dispatch
 import DispatchIndex from './views/dispatch/Index.vue'
 import DispatchCreate from './views/dispatch/Create.vue'
+import DispatchDashboard from './views/dispatch/Dashboard.vue'
+import DispatchPending from './views/dispatch/Pending.vue'
+import DispatchCompleted from './views/dispatch/Completed.vue'
 
 Vue.use(VueRouter)
 
@@ -580,6 +583,24 @@ const routes = [
                 path: 'dispatch/create',
                 name: 'dispatch.create',
                 component: DispatchCreate,
+                meta: ['admin', 'accountant', 'dispatch']
+            },
+            {
+                path: 'dispatch/dashboard',
+                name: 'dispatch.dashboard',
+                component: DispatchDashboard,
+                meta: ['admin', 'accountant', 'dispatch']
+            },
+            {
+                path: 'dispatch/pending',
+                name: 'dispatch.pending',
+                component: DispatchPending,
+                meta: ['admin', 'accountant', 'dispatch']
+            },
+            {
+                path: 'dispatch/completed',
+                name: 'dispatch.completedList',
+                component: DispatchCompleted,
                 meta: ['admin', 'accountant', 'dispatch']
             },
             {
