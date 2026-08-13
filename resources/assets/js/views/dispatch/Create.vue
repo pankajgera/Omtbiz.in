@@ -20,6 +20,8 @@
                   :multiple="true"
                   :show-pointer="false"
                   :options="isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')"
+                  :internal-search="false"
+                  :loading="invoiceSearchLoading"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="true"
@@ -27,6 +29,7 @@
                   :custom-label="invoiceWithAmount"
                   track-by="id"
                   class="multi-select-item"
+                  @search-change="onInvoiceSearch"
                   @select="addInvoice"
                   @remove="removeInvoice"
                 />
@@ -157,6 +160,8 @@ export default {
       },
       invoice: [],
       invoiceList: [],
+      invoiceSearchLoading: false,
+      invoiceSearchTimer: null,
       assignToBeDispatch: false,
       isToBeDispatch: []
     }
@@ -225,8 +230,11 @@ export default {
         invoiceArr = this.invoiceList
       }
       if (invoiceArr) {
-        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;
-        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
+        // master can be null for an invoice whose account_master_id points
+        // at a deleted/missing party - don't let that crash the whole picker.
+        let count = master ? invoiceArr.filter(i => i.account_master_id === master.id).length : 0;
+        let masterName = master ? master.name : 'Unknown party';
+        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${masterName}) * ${count}`
       }
     },
     loadInvoice() {
@@ -261,6 +269,7 @@ export default {
           id: 2,
           name: 'Sent',
         };
+      await this.ensureInvoicesLoaded(this.formData.invoice_id)
       this.loadInvoice()
     },
     async loadIsToBeDispatch() {
@@ -273,12 +282,19 @@ export default {
       let invoiceId = []
       response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))
       this.formData.invoice_id = invoiceId
+      await this.ensureInvoicesLoaded(this.formData.invoice_id)
       this.loadInvoice()
       this.assignToBeDispatch = true
       this.formData['all_selected_dispatch'] = [];
       response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))
     },
     async fetchInvoices () {
+      // No search/limit here - this is the default page-load fetch, so it
+      // only shows the newest 50 pending invoices (the endpoint's default
+      // cap). Use the search box to find anything older/more specific -
+      // see onInvoiceSearch(). This endpoint used to load every pending
+      // invoice unbounded, which crashed (memory) or timed out (gateway)
+      // once a company's backlog grew into the tens of thousands.
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
@@ -289,6 +305,44 @@ export default {
         if (this.isToBeDispatch.length) {
           this.loadIsToBeDispatch()
         }
+      }
+    },
+    // Search-as-you-type for the invoice picker (create mode only - it's
+    // disabled while editing). Debounced so we're not firing a request per
+    // keystroke.
+    onInvoiceSearch (query) {
+      clearTimeout(this.invoiceSearchTimer)
+      this.invoiceSearchTimer = setTimeout(async () => {
+        this.invoiceSearchLoading = true
+        try {
+          let response = await axios.get(`/api/dispatch/invoices`, { params: { search: query } })
+          if (response.data) {
+            this.invoiceList = response.data.invoices
+          }
+        } finally {
+          this.invoiceSearchLoading = false
+        }
+      }, 350)
+    },
+    // The invoice picker's default/searched options are capped and only
+    // ever show still-pending bills - once a dispatch is sent its invoice(s)
+    // get marked COMPLETED and drop out of that list entirely. Without this,
+    // re-opening the edit page for an already-sent dispatch has nothing to
+    // match its invoice_id(s) against and the invoice field renders empty.
+    // Top up invoiceList with whichever ids are actually assigned to this
+    // dispatch, regardless of status, before loadInvoice() tries to resolve them.
+    async ensureInvoicesLoaded (invoiceIds) {
+      let missingIds = (invoiceIds || [])
+        .map(i => parseInt(i))
+        .filter(id => !isNaN(id) && !this.invoiceList.some(inv => inv.id === id))
+      if (! missingIds.length) {
+        return
+      }
+      let response = await axios.get(`/api/dispatch/invoices`, { params: { include_ids: missingIds.join(',') } })
+      if (response.data && response.data.invoices) {
+        let existingIds = this.invoiceList.map(inv => inv.id)
+        let toAdd = response.data.invoices.filter(inv => ! existingIds.includes(inv.id))
+        this.invoiceList = this.invoiceList.concat(toAdd)
       }
     },
     async showDispatchPopup (invoice_id, invoices_master_id) {
