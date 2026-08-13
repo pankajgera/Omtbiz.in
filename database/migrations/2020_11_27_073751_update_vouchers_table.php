@@ -13,8 +13,6 @@ class UpdateVouchersTable extends Migration
      */
     public function up()
     {
-        Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
         Schema::table('vouchers', function (Blueprint $table) {
             $table->dropColumn('type');
             $table->integer('account_ledger_id')->unsigned();

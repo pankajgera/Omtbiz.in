@@ -5,6 +5,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Address;
 use App\Models\CompanySetting;
+use Illuminate\Support\Str;
 
 class SettingsSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class SettingsSeeder extends Seeder
      */
     public function run()
     {
-        $company = Company::create(['name' => 'TEST', 'unique_hash' => str_random(60)]);
+        $company = Company::create(['name' => 'TEST', 'unique_hash' => Str::random(60)]);
 
         $user = User::find(1);
         $user->company_id = $company->id;

@@ -13,8 +13,6 @@ class UpdateAmountInVouchersTable extends Migration
      */
     public function up()
     {
-        Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
         Schema::table('vouchers', function (Blueprint $table) {
             $table->renameColumn('debit_amount', 'debit');
             $table->renameColumn('credit_amount', 'credit');

@@ -11,7 +11,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Paginator::useBootstrapThree();
     }
@@ -21,13 +21,14 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        /*ADD THIS LINES*/
-        $this->commands([
-            \Laravel\Passport\Console\InstallCommand::class,
-            \Laravel\Passport\Console\KeysCommand::class,
-            \Laravel\Passport\Console\ClientCommand::class,
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Laravel\Passport\Console\InstallCommand::class,
+                \Laravel\Passport\Console\KeysCommand::class,
+                \Laravel\Passport\Console\ClientCommand::class,
+            ]);
+        }
     }
 }
