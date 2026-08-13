@@ -22665,6 +22665,8 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       },
       invoice: [],
       invoiceList: [],
+      invoiceSearchLoading: false,
+      invoiceSearchTimer: null,
       assignToBeDispatch: false,
       isToBeDispatch: []
     };
@@ -22728,10 +22730,13 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         invoiceArr = this.invoiceList;
       }
       if (invoiceArr) {
-        var count = invoiceArr.filter(function (i) {
+        // master can be null for an invoice whose account_master_id points
+        // at a deleted/missing party - don't let that crash the whole picker.
+        var count = master ? invoiceArr.filter(function (i) {
           return i.account_master_id === master.id;
-        }).length;
-        return "".concat(invoice_number, " (\u20B9 ").concat(parseFloat(due_amount).toFixed(2), ") - (").concat(master.name, ") * ").concat(count);
+        }).length : 0;
+        var masterName = master ? master.name : 'Unknown party';
+        return "".concat(invoice_number, " (\u20B9 ").concat(parseFloat(due_amount).toFixed(2), ") - (").concat(masterName, ") * ").concat(count);
       }
     },
     loadInvoice: function loadInvoice() {
@@ -22779,8 +22784,11 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 id: 2,
                 name: 'Sent'
               };
+              _context.next = 7;
+              return _this3.ensureInvoicesLoaded(_this3.formData.invoice_id);
+            case 7:
               _this3.loadInvoice();
-            case 6:
+            case 8:
             case "end":
               return _context.stop();
           }
@@ -22810,13 +22818,16 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 });
               });
               _this4.formData.invoice_id = invoiceId;
+              _context2.next = 10;
+              return _this4.ensureInvoicesLoaded(_this4.formData.invoice_id);
+            case 10:
               _this4.loadInvoice();
               _this4.assignToBeDispatch = true;
               _this4.formData['all_selected_dispatch'] = [];
               response.data.dispatch.map(function (each) {
                 return _this4.formData.all_selected_dispatch.push(each.id);
               });
-            case 12:
+            case 14:
             case "end":
               return _context2.stop();
           }
@@ -22851,19 +22862,105 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         }, _callee3);
       }))();
     },
-    showDispatchPopup: function showDispatchPopup(invoice_id, invoices_master_id) {
+    // Search-as-you-type for the invoice picker (create mode only - it's
+    // disabled while editing). Debounced so we're not firing a request per
+    // keystroke.
+    onInvoiceSearch: function onInvoiceSearch(query) {
       var _this6 = this;
+      clearTimeout(this.invoiceSearchTimer);
+      this.invoiceSearchTimer = setTimeout(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _this6.invoiceSearchLoading = true;
+              _context4.prev = 1;
+              _context4.next = 4;
+              return axios.get("/api/dispatch/invoices", {
+                params: {
+                  search: query
+                }
+              });
+            case 4:
+              response = _context4.sent;
+              if (response.data) {
+                _this6.invoiceList = response.data.invoices;
+              }
+            case 6:
+              _context4.prev = 6;
+              _this6.invoiceSearchLoading = false;
+              return _context4.finish(6);
+            case 9:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4, null, [[1,, 6, 9]]);
+      })), 350);
+    },
+    // The invoice picker's default/searched options are capped and only
+    // ever show still-pending bills - once a dispatch is sent its invoice(s)
+    // get marked COMPLETED and drop out of that list entirely. Without this,
+    // re-opening the edit page for an already-sent dispatch has nothing to
+    // match its invoice_id(s) against and the invoice field renders empty.
+    // Top up invoiceList with whichever ids are actually assigned to this
+    // dispatch, regardless of status, before loadInvoice() tries to resolve them.
+    ensureInvoicesLoaded: function ensureInvoicesLoaded(invoiceIds) {
+      var _this7 = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var missingIds, response, existingIds, toAdd;
         return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
-              _this6.change_invoice = true;
-              _this6.filterInvoice = _this6.invoice.map(function (node) {
+              missingIds = (invoiceIds || []).map(function (i) {
+                return parseInt(i);
+              }).filter(function (id) {
+                return !isNaN(id) && !_this7.invoiceList.some(function (inv) {
+                  return inv.id === id;
+                });
+              });
+              if (missingIds.length) {
+                _context5.next = 3;
+                break;
+              }
+              return _context5.abrupt("return");
+            case 3:
+              _context5.next = 5;
+              return axios.get("/api/dispatch/invoices", {
+                params: {
+                  include_ids: missingIds.join(',')
+                }
+              });
+            case 5:
+              response = _context5.sent;
+              if (response.data && response.data.invoices) {
+                existingIds = _this7.invoiceList.map(function (inv) {
+                  return inv.id;
+                });
+                toAdd = response.data.invoices.filter(function (inv) {
+                  return !existingIds.includes(inv.id);
+                });
+                _this7.invoiceList = _this7.invoiceList.concat(toAdd);
+              }
+            case 7:
+            case "end":
+              return _context5.stop();
+          }
+        }, _callee5);
+      }))();
+    },
+    showDispatchPopup: function showDispatchPopup(invoice_id, invoices_master_id) {
+      var _this8 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              _this8.change_invoice = true;
+              _this8.filterInvoice = _this8.invoice.map(function (node) {
                 var new_node = {};
-                new_node.count = _this6.invoice.filter(function (i) {
+                new_node.count = _this8.invoice.filter(function (i) {
                   return i.account_master_id === node.account_master_id;
                 }).length;
-                new_node.data = _this6.invoice.filter(function (i) {
+                new_node.data = _this8.invoice.filter(function (i) {
                   return i.account_master_id === node.account_master_id;
                 }).sort(function (a, b) {
                   return new Date(a.created_at) - new Date(b.created_at);
@@ -22873,116 +22970,116 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 new_node.id = node.id;
                 return new_node;
               });
-              _this6.filterInvoice = _this6.filterInvoice.filter(function (v, i, a) {
+              _this8.filterInvoice = _this8.filterInvoice.filter(function (v, i, a) {
                 return a.findIndex(function (v2) {
                   return v2.account_master_id === v.account_master_id;
                 }) === i;
               });
               swal({
-                title: _this6.$t('dispatch.invoice_report_title'),
-                text: _this6.$t('dispatch.invoice_report_text'),
+                title: _this8.$t('dispatch.invoice_report_title'),
+                text: _this8.$t('dispatch.invoice_report_text'),
                 icon: '/assets/icon/check-circle-solid.svg',
                 buttons: true,
                 dangerMode: false
               }).then(/*#__PURE__*/function () {
-                var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(success) {
-                  return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                    while (1) switch (_context4.prev = _context4.next) {
+                var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(success) {
+                  return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+                    while (1) switch (_context6.prev = _context6.next) {
                       case 0:
                         if (success) {
-                          _this6.printDispatch();
+                          _this8.printDispatch();
                         } else {
-                          _this6.resetSelectedDispatch();
-                          _this6.resetSelectedToBeDispatch();
-                          _this6.$router.push('/dispatch');
+                          _this8.resetSelectedDispatch();
+                          _this8.resetSelectedToBeDispatch();
+                          _this8.$router.push('/dispatch');
                         }
-                        _this6.change_invoice = false;
+                        _this8.change_invoice = false;
                       case 2:
                       case "end":
-                        return _context4.stop();
+                        return _context6.stop();
                     }
-                  }, _callee4);
+                  }, _callee6);
                 }));
                 return function (_x) {
-                  return _ref2.apply(this, arguments);
+                  return _ref3.apply(this, arguments);
                 };
               }());
             case 4:
             case "end":
-              return _context5.stop();
+              return _context7.stop();
           }
-        }, _callee5);
+        }, _callee7);
       }))();
     },
     submitDispatch: function submitDispatch() {
-      var _this7 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var _this9 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
         var response;
-        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-          while (1) switch (_context6.prev = _context6.next) {
+        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
+          while (1) switch (_context8.prev = _context8.next) {
             case 0:
-              _this7.$v.formData.$touch();
-              if (!_this7.$v.$invalid) {
-                _context6.next = 4;
+              _this9.$v.formData.$touch();
+              if (!_this9.$v.$invalid) {
+                _context8.next = 4;
                 break;
               }
               window.toastr['error']("Error! missing required field or value is invalid.!");
-              return _context6.abrupt("return", false);
+              return _context8.abrupt("return", false);
             case 4:
-              _context6.prev = 4;
-              _this7.isLoading = true;
+              _context8.prev = 4;
+              _this9.isLoading = true;
               response = null;
-              if (!_this7.isEdit) {
-                _context6.next = 19;
+              if (!_this9.isEdit) {
+                _context8.next = 19;
                 break;
               }
-              if (!_this7.assignToBeDispatch) {
-                _context6.next = 14;
+              if (!_this9.assignToBeDispatch) {
+                _context8.next = 14;
                 break;
               }
-              _context6.next = 11;
-              return _this7.updateToBeDispatch(_this7.formData);
+              _context8.next = 11;
+              return _this9.updateToBeDispatch(_this9.formData);
             case 11:
-              response = _context6.sent;
-              _context6.next = 17;
+              response = _context8.sent;
+              _context8.next = 17;
               break;
             case 14:
-              _context6.next = 16;
-              return _this7.updateDispatch(_this7.formData);
+              _context8.next = 16;
+              return _this9.updateDispatch(_this9.formData);
             case 16:
-              response = _context6.sent;
+              response = _context8.sent;
             case 17:
-              _context6.next = 22;
+              _context8.next = 22;
               break;
             case 19:
-              _context6.next = 21;
-              return _this7.addDispatch(_this7.formData);
+              _context8.next = 21;
+              return _this9.addDispatch(_this9.formData);
             case 21:
-              response = _context6.sent;
+              response = _context8.sent;
             case 22:
               if (response.data) {
-                _this7.isLoading = false;
-                if (_this7.isEdit) {
-                  window.toastr['success'](_this7.$tc('dispatch.updated_message'));
+                _this9.isLoading = false;
+                if (_this9.isEdit) {
+                  window.toastr['success'](_this9.$tc('dispatch.updated_message'));
                 } else {
-                  window.toastr['success'](_this7.$tc('dispatch.created_message'));
+                  window.toastr['success'](_this9.$tc('dispatch.created_message'));
                 }
-                _this7.showDispatchPopup(response.data.dispatch.id, response.data.invoices);
+                _this9.showDispatchPopup(response.data.dispatch.id, response.data.invoices);
               }
-              _context6.next = 28;
+              _context8.next = 28;
               break;
             case 25:
-              _context6.prev = 25;
-              _context6.t0 = _context6["catch"](4);
-              if (_context6.t0) {
-                _this7.isLoading = false;
-                window.toastr['error'](_context6.t0);
+              _context8.prev = 25;
+              _context8.t0 = _context8["catch"](4);
+              if (_context8.t0) {
+                _this9.isLoading = false;
+                window.toastr['error'](_context8.t0);
               }
             case 28:
             case "end":
-              return _context6.stop();
+              return _context8.stop();
           }
-        }, _callee6, null, [[4, 25]]);
+        }, _callee8, null, [[4, 25]]);
       }))();
     }
   })
@@ -47344,6 +47441,8 @@ var render = function render() {
       options: _vm.isEdit ? _vm.invoiceList : _vm.invoiceList.filter(function (node) {
         return node.status !== "COMPLETED";
       }),
+      "internal-search": false,
+      loading: _vm.invoiceSearchLoading,
       searchable: true,
       "show-labels": false,
       "allow-empty": true,
@@ -47352,6 +47451,7 @@ var render = function render() {
       "track-by": "id"
     },
     on: {
+      "search-change": _vm.onInvoiceSearch,
       select: _vm.addInvoice,
       remove: _vm.removeInvoice
     },
@@ -86645,7 +86745,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Create.vue"],"names":[],"mappings":";AA0GA;EACA,WAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,mBAAA;EACA,yBAAA;EACA,sBAAA;EACA,mBAAA;EACA,qBAAA;EACA,0BAAA;EACA,eAAA;EACA,gBAAA;EACA,eAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/dispatch\">{{ $tc('dispatch.dispatch',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col col-12 col-md-12 col-lg-6\">\n        <div class=\"card\">\n          <form action=\"\" @submit.prevent=\"submitDispatch\">\n            <div class=\"card-body\" id=\"to_print\">\n              <div class=\"form-group\" v-if=\"invoiceList && invoiceList.length && !change_invoice\">\n                <label class=\"form-label\">{{ $t('receipts.invoice') }}</label>\n                <base-select\n                  v-model=\"invoice\"\n                  :multiple=\"true\"\n                  :show-pointer=\"false\"\n                  :options=\"isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :allow-empty=\"true\"\n                  :disabled=\"isEdit\"\n                  :custom-label=\"invoiceWithAmount\"\n                  track-by=\"id\"\n                  class=\"multi-select-item\"\n                  @select=\"addInvoice\"\n                  @remove=\"removeInvoice\"\n                />\n              </div>\n              <div class=\"form-group\" v-if=\"change_invoice\">\n                <span class=\"ml-2\" v-for=\"(value, index) in filterInvoice \" :key=\"index\" >\n                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}\n                </span>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.date_time') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.date_time\"\n                  format=\"Y-m-d\"\n                  :invalid=\"$v.formData.date_time.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.date_time.$touch()\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.time') }}</label><span class=\"text-danger\"> *</span>\n                <div class=\"base-date-input\">\n                  <vue-timepicker\n                    v-model=\"formData.time\"\n                    format=\"hh:mm A\"\n                    :hide-clear-button=\"true\"\n                    @change=\"$v.formData.time.$touch()\">\n                    <template v-slot:icon>\n                      <span class=\"vdp-datepicker__calendar-button input-group-prepend\">\n                        <span>\n                          <font-awesome-icon id=\"time-icon\" :icon=\"['fas', 'clock']\"/>\n                        </span>\n                      </span>\n                    </template>\n                  </vue-timepicker>\n                </div>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.person') }}</label>\n                <base-input\n                  v-model.trim=\"formData.person\"\n                  focus\n                  type=\"text\"\n                  name=\"person\"\n                />\n              </div>\n               <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.transport') }}</label>\n                <base-input\n                  v-model.trim=\"formData.transport\"\n                  focus\n                  type=\"text\"\n                  name=\"transport\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <base-button\n                  id=\"submit-dispatch\"\n                  :loading=\"isLoading\"\n                  :disabled=\"isLoading\"\n                  icon=\"save\"\n                  color=\"theme\"\n                  type=\"submit\"\n                  class=\"collapse-button\"\n                >\n                  {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}\n                </base-button>\n              </div>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\nimport VueTimepicker from 'vue2-timepicker'\nimport 'vue2-timepicker/dist/VueTimepicker.css'\nimport getTime from 'date-fns/fp/getTime/index'\n\nexport default {\n  components: { VueTimepicker },\n  mixins: {\n    validationMixin\n  },\n  data () {\n    return {\n      isLoading: false,\n      filterInvoice: [],\n      change_invoice: false,\n      invoice_count: '',\n      title: 'Add Dispatch',\n      formData: {\n        name: '',\n        invoice_id: [],\n        date_time: new Date(),\n        transport: '',\n        person: '',\n        time: '',\n        status: {\n          id: 2,\n          name: 'Sent',\n        },\n        all_selected_dispatch: []\n      },\n      invoice: [],\n      invoiceList: [],\n      assignToBeDispatch: false,\n      isToBeDispatch: []\n    }\n  },\n  computed: {\n    isEdit () {\n      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {\n        return true\n      }\n      return false\n    },\n    formatDate() {\n      if (this.formData.date_time) {\n        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')\n      }\n      return moment().format('DD-MM-YYYY HH:mm:ss');\n    }\n  },\n  created () {\n    this.fetchInvoices()\n    let current = new Date();\n    this.formData.time = current.toLocaleTimeString(\"en-US\", {\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n    });\n  },\n  destroyed() {\n    this.resetSelectedDispatch()\n    this.resetSelectedToBeDispatch()\n  },\n  validations: {\n    formData: {\n      date_time: {\n        required,\n      },\n      time: {\n        required,\n      },\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'addDispatch',\n      'editDispatch',\n      'editToBeDispatch',\n      'dipatchedData',\n      'updateDispatch',\n      'updateToBeDispatch',\n      'resetSelectedDispatch',\n      'resetSelectedToBeDispatch'\n    ]),\n    addInvoice (value) {\n      if (value) {\n        this.formData.invoice_id.push(value.id)\n      }\n    },\n    removeInvoice (value) {\n      let index = this.formData.invoice_id.findIndex(each => each === value.id)\n      if (index !== -1) {\n        this.formData.invoice_id.splice(index, 1)\n      }\n    },\n    invoiceWithAmount ({ invoice_number, due_amount, master}) {\n      let invoiceArr = this.invoice;\n      if (! invoiceArr.length) {\n        invoiceArr = this.invoiceList\n      }\n      if (invoiceArr) {\n        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;\n        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`\n      }\n    },\n    loadInvoice() {\n      this.invoice = []\n      this.formData.invoice_id.map(i => {\n        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));\n        this.invoice.push(findFromList);\n      })\n      let current = new Date();\n      this.formData.time = current.toLocaleTimeString(\"en-US\", {\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n      });\n    },\n    printDispatch() {\n      return printJS({\n            onPrintDialogClose: () => {\n              this.$router.push('/dispatch')\n            },\n            printable: 'to_print',\n            type: 'html',\n            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],\n            scanStyles: true,\n            targetStyles: ['*'],\n            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'\n          })\n    },\n    async loadEditData () {\n      let response = await this.editDispatch(this.$route.params.id)\n      this.formData = response.data.dispatch\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      this.loadInvoice()\n    },\n    async loadIsToBeDispatch() {\n      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())\n      this.formData = response.data.dispatch[0]\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      let invoiceId = []\n      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))\n      this.formData.invoice_id = invoiceId\n      this.loadInvoice()\n      this.assignToBeDispatch = true\n      this.formData['all_selected_dispatch'] = [];\n      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))\n    },\n    async fetchInvoices () {\n      let response = await axios.get(`/api/dispatch/invoices`)\n      if (response.data) {\n        this.invoiceList = response.data.invoices\n        if (this.isEdit) {\n          this.loadEditData()\n        }\n        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch\n        if (this.isToBeDispatch.length) {\n          this.loadIsToBeDispatch()\n        }\n      }\n    },\n    async showDispatchPopup (invoice_id, invoices_master_id) {\n      this.change_invoice = true;\n      this.filterInvoice =  this.invoice.map(node=>{\n           let new_node = {};\n            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;\n            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {\n              return new Date(a.created_at) - new Date(b.created_at);\n            });\n           new_node.account_master_id = node.account_master_id;\n           new_node.name = node.master.name;\n           new_node.id = node.id;\n          return new_node;\n      });\n      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);\n      swal({\n        title: this.$t('dispatch.invoice_report_title'),\n        text: this.$t('dispatch.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printDispatch();\n        } else {\n          this.resetSelectedDispatch()\n          this.resetSelectedToBeDispatch()\n          this.$router.push('/dispatch')\n        }\n        this.change_invoice = false;\n      })\n    },\n    async submitDispatch () {\n      this.$v.formData.$touch()\n      if (this.$v.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return false\n      }\n      try {\n        this.isLoading = true\n        let response = null;\n        if (this.isEdit) {\n          if (this.assignToBeDispatch) {\n            response = await this.updateToBeDispatch(this.formData)\n          } else {\n            response = await this.updateDispatch(this.formData)\n          }\n        } else {\n          response = await this.addDispatch(this.formData)\n        }\n        if (response.data) {\n          this.isLoading = false\n          if (this.isEdit) {\n            window.toastr['success'](this.$tc('dispatch.updated_message'))\n          } else {\n            window.toastr['success'](this.$tc('dispatch.created_message'))\n          }\n          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Create.vue"],"names":[],"mappings":";AA6GA;EACA,WAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,mBAAA;EACA,yBAAA;EACA,sBAAA;EACA,mBAAA;EACA,qBAAA;EACA,0BAAA;EACA,eAAA;EACA,gBAAA;EACA,eAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/dispatch\">{{ $tc('dispatch.dispatch',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col col-12 col-md-12 col-lg-6\">\n        <div class=\"card\">\n          <form action=\"\" @submit.prevent=\"submitDispatch\">\n            <div class=\"card-body\" id=\"to_print\">\n              <div class=\"form-group\" v-if=\"invoiceList && invoiceList.length && !change_invoice\">\n                <label class=\"form-label\">{{ $t('receipts.invoice') }}</label>\n                <base-select\n                  v-model=\"invoice\"\n                  :multiple=\"true\"\n                  :show-pointer=\"false\"\n                  :options=\"isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')\"\n                  :internal-search=\"false\"\n                  :loading=\"invoiceSearchLoading\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :allow-empty=\"true\"\n                  :disabled=\"isEdit\"\n                  :custom-label=\"invoiceWithAmount\"\n                  track-by=\"id\"\n                  class=\"multi-select-item\"\n                  @search-change=\"onInvoiceSearch\"\n                  @select=\"addInvoice\"\n                  @remove=\"removeInvoice\"\n                />\n              </div>\n              <div class=\"form-group\" v-if=\"change_invoice\">\n                <span class=\"ml-2\" v-for=\"(value, index) in filterInvoice \" :key=\"index\" >\n                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}\n                </span>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.date_time') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.date_time\"\n                  format=\"Y-m-d\"\n                  :invalid=\"$v.formData.date_time.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.date_time.$touch()\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.time') }}</label><span class=\"text-danger\"> *</span>\n                <div class=\"base-date-input\">\n                  <vue-timepicker\n                    v-model=\"formData.time\"\n                    format=\"hh:mm A\"\n                    :hide-clear-button=\"true\"\n                    @change=\"$v.formData.time.$touch()\">\n                    <template v-slot:icon>\n                      <span class=\"vdp-datepicker__calendar-button input-group-prepend\">\n                        <span>\n                          <font-awesome-icon id=\"time-icon\" :icon=\"['fas', 'clock']\"/>\n                        </span>\n                      </span>\n                    </template>\n                  </vue-timepicker>\n                </div>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.person') }}</label>\n                <base-input\n                  v-model.trim=\"formData.person\"\n                  focus\n                  type=\"text\"\n                  name=\"person\"\n                />\n              </div>\n               <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.transport') }}</label>\n                <base-input\n                  v-model.trim=\"formData.transport\"\n                  focus\n                  type=\"text\"\n                  name=\"transport\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <base-button\n                  id=\"submit-dispatch\"\n                  :loading=\"isLoading\"\n                  :disabled=\"isLoading\"\n                  icon=\"save\"\n                  color=\"theme\"\n                  type=\"submit\"\n                  class=\"collapse-button\"\n                >\n                  {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}\n                </base-button>\n              </div>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\nimport VueTimepicker from 'vue2-timepicker'\nimport 'vue2-timepicker/dist/VueTimepicker.css'\nimport getTime from 'date-fns/fp/getTime/index'\n\nexport default {\n  components: { VueTimepicker },\n  mixins: {\n    validationMixin\n  },\n  data () {\n    return {\n      isLoading: false,\n      filterInvoice: [],\n      change_invoice: false,\n      invoice_count: '',\n      title: 'Add Dispatch',\n      formData: {\n        name: '',\n        invoice_id: [],\n        date_time: new Date(),\n        transport: '',\n        person: '',\n        time: '',\n        status: {\n          id: 2,\n          name: 'Sent',\n        },\n        all_selected_dispatch: []\n      },\n      invoice: [],\n      invoiceList: [],\n      invoiceSearchLoading: false,\n      invoiceSearchTimer: null,\n      assignToBeDispatch: false,\n      isToBeDispatch: []\n    }\n  },\n  computed: {\n    isEdit () {\n      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {\n        return true\n      }\n      return false\n    },\n    formatDate() {\n      if (this.formData.date_time) {\n        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')\n      }\n      return moment().format('DD-MM-YYYY HH:mm:ss');\n    }\n  },\n  created () {\n    this.fetchInvoices()\n    let current = new Date();\n    this.formData.time = current.toLocaleTimeString(\"en-US\", {\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n    });\n  },\n  destroyed() {\n    this.resetSelectedDispatch()\n    this.resetSelectedToBeDispatch()\n  },\n  validations: {\n    formData: {\n      date_time: {\n        required,\n      },\n      time: {\n        required,\n      },\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'addDispatch',\n      'editDispatch',\n      'editToBeDispatch',\n      'dipatchedData',\n      'updateDispatch',\n      'updateToBeDispatch',\n      'resetSelectedDispatch',\n      'resetSelectedToBeDispatch'\n    ]),\n    addInvoice (value) {\n      if (value) {\n        this.formData.invoice_id.push(value.id)\n      }\n    },\n    removeInvoice (value) {\n      let index = this.formData.invoice_id.findIndex(each => each === value.id)\n      if (index !== -1) {\n        this.formData.invoice_id.splice(index, 1)\n      }\n    },\n    invoiceWithAmount ({ invoice_number, due_amount, master}) {\n      let invoiceArr = this.invoice;\n      if (! invoiceArr.length) {\n        invoiceArr = this.invoiceList\n      }\n      if (invoiceArr) {\n        // master can be null for an invoice whose account_master_id points\n        // at a deleted/missing party - don't let that crash the whole picker.\n        let count = master ? invoiceArr.filter(i => i.account_master_id === master.id).length : 0;\n        let masterName = master ? master.name : 'Unknown party';\n        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${masterName}) * ${count}`\n      }\n    },\n    loadInvoice() {\n      this.invoice = []\n      this.formData.invoice_id.map(i => {\n        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));\n        this.invoice.push(findFromList);\n      })\n      let current = new Date();\n      this.formData.time = current.toLocaleTimeString(\"en-US\", {\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n      });\n    },\n    printDispatch() {\n      return printJS({\n            onPrintDialogClose: () => {\n              this.$router.push('/dispatch')\n            },\n            printable: 'to_print',\n            type: 'html',\n            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],\n            scanStyles: true,\n            targetStyles: ['*'],\n            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'\n          })\n    },\n    async loadEditData () {\n      let response = await this.editDispatch(this.$route.params.id)\n      this.formData = response.data.dispatch\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      await this.ensureInvoicesLoaded(this.formData.invoice_id)\n      this.loadInvoice()\n    },\n    async loadIsToBeDispatch() {\n      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())\n      this.formData = response.data.dispatch[0]\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      let invoiceId = []\n      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))\n      this.formData.invoice_id = invoiceId\n      await this.ensureInvoicesLoaded(this.formData.invoice_id)\n      this.loadInvoice()\n      this.assignToBeDispatch = true\n      this.formData['all_selected_dispatch'] = [];\n      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))\n    },\n    async fetchInvoices () {\n      // No search/limit here - this is the default page-load fetch, so it\n      // only shows the newest 50 pending invoices (the endpoint's default\n      // cap). Use the search box to find anything older/more specific -\n      // see onInvoiceSearch(). This endpoint used to load every pending\n      // invoice unbounded, which crashed (memory) or timed out (gateway)\n      // once a company's backlog grew into the tens of thousands.\n      let response = await axios.get(`/api/dispatch/invoices`)\n      if (response.data) {\n        this.invoiceList = response.data.invoices\n        if (this.isEdit) {\n          this.loadEditData()\n        }\n        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch\n        if (this.isToBeDispatch.length) {\n          this.loadIsToBeDispatch()\n        }\n      }\n    },\n    // Search-as-you-type for the invoice picker (create mode only - it's\n    // disabled while editing). Debounced so we're not firing a request per\n    // keystroke.\n    onInvoiceSearch (query) {\n      clearTimeout(this.invoiceSearchTimer)\n      this.invoiceSearchTimer = setTimeout(async () => {\n        this.invoiceSearchLoading = true\n        try {\n          let response = await axios.get(`/api/dispatch/invoices`, { params: { search: query } })\n          if (response.data) {\n            this.invoiceList = response.data.invoices\n          }\n        } finally {\n          this.invoiceSearchLoading = false\n        }\n      }, 350)\n    },\n    // The invoice picker's default/searched options are capped and only\n    // ever show still-pending bills - once a dispatch is sent its invoice(s)\n    // get marked COMPLETED and drop out of that list entirely. Without this,\n    // re-opening the edit page for an already-sent dispatch has nothing to\n    // match its invoice_id(s) against and the invoice field renders empty.\n    // Top up invoiceList with whichever ids are actually assigned to this\n    // dispatch, regardless of status, before loadInvoice() tries to resolve them.\n    async ensureInvoicesLoaded (invoiceIds) {\n      let missingIds = (invoiceIds || [])\n        .map(i => parseInt(i))\n        .filter(id => !isNaN(id) && !this.invoiceList.some(inv => inv.id === id))\n      if (! missingIds.length) {\n        return\n      }\n      let response = await axios.get(`/api/dispatch/invoices`, { params: { include_ids: missingIds.join(',') } })\n      if (response.data && response.data.invoices) {\n        let existingIds = this.invoiceList.map(inv => inv.id)\n        let toAdd = response.data.invoices.filter(inv => ! existingIds.includes(inv.id))\n        this.invoiceList = this.invoiceList.concat(toAdd)\n      }\n    },\n    async showDispatchPopup (invoice_id, invoices_master_id) {\n      this.change_invoice = true;\n      this.filterInvoice =  this.invoice.map(node=>{\n           let new_node = {};\n            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;\n            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {\n              return new Date(a.created_at) - new Date(b.created_at);\n            });\n           new_node.account_master_id = node.account_master_id;\n           new_node.name = node.master.name;\n           new_node.id = node.id;\n          return new_node;\n      });\n      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);\n      swal({\n        title: this.$t('dispatch.invoice_report_title'),\n        text: this.$t('dispatch.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printDispatch();\n        } else {\n          this.resetSelectedDispatch()\n          this.resetSelectedToBeDispatch()\n          this.$router.push('/dispatch')\n        }\n        this.change_invoice = false;\n      })\n    },\n    async submitDispatch () {\n      this.$v.formData.$touch()\n      if (this.$v.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return false\n      }\n      try {\n        this.isLoading = true\n        let response = null;\n        if (this.isEdit) {\n          if (this.assignToBeDispatch) {\n            response = await this.updateToBeDispatch(this.formData)\n          } else {\n            response = await this.updateDispatch(this.formData)\n          }\n        } else {\n          response = await this.addDispatch(this.formData)\n        }\n        if (response.data) {\n          this.isLoading = false\n          if (this.isEdit) {\n            window.toastr['success'](this.$tc('dispatch.updated_message'))\n          } else {\n            window.toastr['success'](this.$tc('dispatch.created_message'))\n          }\n          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n  }\n}\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
