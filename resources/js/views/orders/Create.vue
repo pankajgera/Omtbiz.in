@@ -206,12 +206,20 @@ input.base-prefix-input:disabled {
 .table-responsive {
   overflow-x: inherit ;
 }
+/* The item table needs more width than a tablet or phone has. Without a scroll
+   container of its own it pushes the whole page sideways - at 665px the page
+   overflowed by 65px. This used to kick in only under 400px, which left the
+   401px-991px band spilling. The item select's dropdown is position: fixed, so
+   scrolling here does not clip it. */
+@media screen and (max-width: 991.98px) {
+  .table-responsive {
+    overflow-x: auto !important;
+    overscroll-behavior-inline: contain;
+  }
+}
 @media screen and (max-width:400px) {
   .heading-1 {
     padding: 5px 180px;
-  }
-  .table-responsive {
-    overflow-x: auto !important;
   }
   .multiselect__content-wrapper {
     overflow-x: visible !important;

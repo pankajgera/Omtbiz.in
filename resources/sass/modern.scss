@@ -757,6 +757,20 @@ input.base-prefix-input:disabled {
     text-transform: uppercase;
 }
 
+/* Estimates and orders still lay the date / number / ref fields out with `.row`
+   and plain `.col`; invoices was migrated to a Tailwind grid that stacks at md.
+   `.col` is `flex: 1 0 0%` at every breakpoint, so all three stay side by side
+   even at 375px, which leaves each number input about 36px wide against a 55px
+   prefix and renders "000206" clipped to "0(". Stack them like invoices does. */
+@media (max-width: 767.98px) {
+    .estimate-create-page .estimate-input-group .collapse-input,
+    .order-create-page .order-input-group .collapse-input {
+        flex: 1 1 100%;
+        max-width: 100%;
+        margin-bottom: 16px;
+    }
+}
+
 .invoice-items-panel {
     overflow: hidden;
     background: var(--ui-surface);

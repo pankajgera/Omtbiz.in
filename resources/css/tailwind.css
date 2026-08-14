@@ -30,6 +30,38 @@
     [style*="display: none"] {
         display: none !important;
     }
+
+    /* Touch targets. The list screens were sized for a mouse: row checkboxes are
+       16px, the row "..." menu 28px, pagination 32px and the column sort buttons
+       only 13px tall - all well under a fingertip. Grow them on touch pointers
+       only, so desktop density is untouched. These need !important in this layer
+       to outrank the `tw:size-*` utilities the buttons already carry. */
+    @media (pointer: coarse) {
+        .notes-checkbox,
+        .masters-checkbox,
+        .inventory-checkbox,
+        .users-checkbox,
+        .ledgers-checkbox,
+        .custom-control-input[type='checkbox'] {
+            width: 1.5rem !important;
+            height: 1.5rem !important;
+            flex-basis: 1.5rem !important;
+        }
+
+        .table-row-menu,
+        .page-link,
+        .nav-toggle,
+        .header-icon-button,
+        .calculator-button {
+            min-width: 44px !important;
+            min-height: 44px !important;
+        }
+
+        .table-sort-button {
+            min-height: 32px !important;
+            padding-block: 0.5rem !important;
+        }
+    }
 }
 
 :root {
@@ -876,6 +908,8 @@ a:has(button):focus {
         border: 1px solid var(--ui-border);
         border-radius: 0.5rem !important;
         box-shadow: var(--ui-shadow-sm) !important;
+        /* 50px between cards reads as a gap in the list rather than as spacing. */
+        margin-top: 1rem !important;
     }
 
     .table-component__table__body td,
@@ -902,6 +936,54 @@ a:has(button):focus {
         font-size: 0.6875rem;
         font-weight: 600;
         text-transform: uppercase;
+    }
+
+    /* Card rows are a flex-wrap of ~174px cells, so fields land two-up while the
+       checkbox cell takes a full line to itself and the row-menu cell is left as
+       a narrow stub beside a gap. Stack the fields one per line and give the
+       checkbox and row menu a shared line at the top of the card. */
+    .table-component__table__body td,
+    .table .table-component__table__body td {
+        flex: 1 1 100%;
+        max-width: 100%;
+        border-right: 0 !important;
+        border-left: 0 !important;
+        /* Centring reads fine across a wide table row; down a stacked card it
+           leaves every value on a different axis. */
+        text-align: left !important;
+    }
+
+    /* Tables that predate the data-label treatment above emit
+       `<td><span>Label</span>value</td>`, and tables.scss pins that caption span
+       to the top-left corner of the cell with `position: absolute`. That worked
+       when the cell reserved room above the value; in a stacked card it lands on
+       top of it. Same selector as tables.scss so exactly the captions it styles
+       are matched - put them back in flow and drop the pill so they read like
+       the data-label captions above. */
+    .table-component td > span:first-child {
+        position: static !important;
+        display: block;
+        margin-bottom: 0.375rem;
+        padding: 0;
+        color: var(--ui-text-muted) !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .table-component__table__body td:has(input[type='checkbox']) {
+        flex: 0 0 auto;
+        order: -2;
+        border-top: 0 !important;
+    }
+
+    .table-component__table__body td:last-child:has(button, .dropdown, .table-row-menu) {
+        flex: 0 0 auto;
+        order: -1;
+        margin-left: auto;
+        border-top: 0 !important;
     }
 }
 
@@ -1088,12 +1170,35 @@ a:focus {
     opacity: 0.9;
 }
 
+/* The estimate and order create pages were never given the theming the invoice
+   one got, so `.item-table-header { background: white }` from their page sass
+   survived while the global rules recoloured the text to var(--ui-text). In dark
+   mode that is white on white: the column headings vanish and the row reads as a
+   blank white bar. Theme the thead itself too, so no white sliver shows through
+   where the cell padding does not reach. */
 .filter-section,
 .bg-light,
 .invoice-create-page .item-table .item-table-header th,
-.invoice-create-page .add-item-action {
+.invoice-create-page .add-item-action,
+.estimate-create-page .item-table .item-table-header,
+.estimate-create-page .item-table .item-table-header th,
+.estimate-create-page .add-item-action,
+.order-create-page .item-table .item-table-header,
+.order-create-page .item-table .item-table-header th,
+.order-create-page .add-item-action {
     color: var(--ui-text);
     background-color: var(--ui-surface-muted) !important;
+}
+
+.estimate-create-page .item-table .item-table-header th,
+.order-create-page .item-table .item-table-header th {
+    color: var(--ui-text-muted);
+    border-color: var(--ui-border) !important;
+}
+
+.estimate-create-page .add-item-action,
+.order-create-page .add-item-action {
+    color: var(--ui-accent);
 }
 
 .ledger-filter-section {
