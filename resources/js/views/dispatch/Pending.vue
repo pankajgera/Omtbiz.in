@@ -2,18 +2,6 @@
   <div class="items main-content">
     <div class="page-header">
       <Header :title="$t('dispatch.to_be_dispatched_page_title')" :bread-crumb-links="breadCrumbLinks">
-        <div class="mr-4 mb-3 mb-sm-0">
-          <base-button
-            :outline="true"
-            :icon="filterIcon"
-            color="theme"
-            size="large"
-            right-icon
-            @click="toggleFilter"
-          >
-            {{ $t('general.filter') }}
-          </base-button>
-        </div>
         <div>
           <router-link slot="item-title" to="/dispatch/create">
             <base-button
@@ -65,55 +53,6 @@
         />
       </div>
     </div>
-
-    <transition name="fade">
-      <div v-show="showFilters" class="filter-section">
-        <div class="row">
-          <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('items.party_name') }} </label>
-            <base-select
-              v-model="filters.name"
-              ref="customerSelect"
-              :options="sundryDebtorsList"
-              :required="'required'"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="false"
-              label="name"
-              track-by="id"
-              @select="onSelectCustomer"
-              @deselect="clearCustomerSearch"
-            />
-          </div>
-          <div class="col-sm-2">
-            <label>{{ $t('general.from') }}</label>
-            <base-date-picker
-              v-model="filters.from_date"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-            />
-          </div>
-          <div class="col-sm-3">
-            <label>{{ $t('general.to') }}</label>
-            <base-date-picker
-              v-model="filters.to_date"
-              :calendar-button="true"
-              calendar-button-icon="calendar"
-            />
-          </div>
-          <div class="col-sm-2">
-            <label class="form-label"> {{ $tc('dispatch.status') }} </label>
-            <base-input
-              v-model.trim="filters.status"
-              type="text"
-              name="status"
-              autocomplete="off"
-            />
-          </div>
-          <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
-        </div>
-      </div>
-    </transition>
 
     <div v-cloak v-show="showEmptyScreen" class="col-xs-1 no-data-info" align="center">
       <satellite-icon class="mt-5 mb-4"/>
@@ -326,7 +265,6 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
-import moment from 'moment'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
 
@@ -362,25 +300,18 @@ export default {
           title: this.$t('dispatch.to_be_dispatched_page_title'),
         },
       ],
-      showFilters: false,
       isRequestOngoing: true,
       filtersApplied: false,
       filters: {
         search: '',
         name: '',
-        status: '',
-        from_date: '',
-        to_date: '',
         dateFilter: { value: 'today', label: this.$t('dispatch.date_filter_today') },
       },
     }
   },
   computed: {
     applyFilter () {
-      if (this.filters.name || this.filters.from_date || this.filters.to_date || this.filters.status) {
-        return true
-      }
-      return false
+      return !!this.filters.name
     },
     ...mapGetters('dispatch', [
       'toBeDispatch',
@@ -389,9 +320,6 @@ export default {
     ]),
     showEmptyScreen () {
       return !this.totalPending && !this.isRequestOngoing && !this.filtersApplied
-    },
-    filterIcon () {
-      return (this.showFilters) ? 'times' : 'filter'
     },
     selectToBeField: {
       get: function () {
@@ -439,9 +367,6 @@ export default {
       let data = {
         search: this.filters.search || '',
         name: this.filters.name === '' ? this.filters.name : this.filters.name.id,
-        status: this.filters.status !== null ? this.filters.status : '',
-        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),
-        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         date_filter: this.filters.dateFilter ? this.filters.dateFilter.value : 'today',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
@@ -478,30 +403,6 @@ export default {
         this.filtersApplied = true
         this.refreshTable()
       }, 1000)
-    },
-    clearFilter () {
-      this.filtersApplied = false
-      this.showFilters = false
-      this.filters = {
-        search: '',
-        name: '',
-        status: '',
-        from_date: '',
-        to_date: '',
-        dateFilter: this.dateFilterOptions[0],
-      }
-
-      this.$nextTick(() => {
-        this.filtersApplied = false
-      })
-    },
-    toggleFilter () {
-      if (this.showFilters && this.filtersApplied) {
-        this.clearFilter()
-        this.refreshTable()
-      }
-
-      this.showFilters = !this.showFilters
     },
     async removeDispatch (id) {
       swal({

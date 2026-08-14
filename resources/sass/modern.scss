@@ -598,6 +598,21 @@ textarea {
     box-shadow: none;
 }
 
+/* Bootstrap used to supply this via .form-group { margin-bottom: 1rem };
+   that rule disappeared along with Bootstrap itself in the Vue 3 migration,
+   so every form built from stacked .form-group divs (dispatch, payments,
+   receipts, etc.) lost its field-to-field spacing and now relies on
+   whatever margin each individual input component happens to bring (some,
+   like vue3-timepicker, ship their own; the in-house base-input/base-select
+   components don't), which is why gaps look inconsistent from field to
+   field. Restoring the rule here fixes it everywhere at once. */
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-group.collapse-button-container {
+    margin-top: 0.5rem;
+}
+
 .btn-primary {
     background: var(--ui-primary);
     border-color: var(--ui-primary);
@@ -634,6 +649,23 @@ input.base-prefix-input,
 .base-input .input-field,
 .base-prefix-input,
 input.base-prefix-input {
+    min-height: 44px;
+}
+
+/* Filter rows mix all three field components in one line of columns, so any
+   difference between them shows up as a stagger. Two differences exist:
+   base-select/base-date-picker never got the 44px above, and only some filter
+   labels carry .form-label (the only thing that class does in Bootstrap 5 is
+   add the 8px gap under the label), which left date pickers riding 8px higher
+   than their neighbours. Normalise both here rather than per screen - every
+   filter row has the same mix. .clear-filter is excluded because it is also a
+   label, but a floating action rather than a field caption. */
+.filter-section label:not(.clear-filter) {
+    margin-bottom: 8px;
+}
+
+.filter-section .base-date-input .date-field,
+.filter-section .multiselect__tags {
     min-height: 44px;
 }
 
