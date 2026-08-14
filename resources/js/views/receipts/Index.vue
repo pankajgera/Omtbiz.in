@@ -71,7 +71,11 @@
               v-model="filters.receipt_number"
               icon="hashtag"/>
           </div>
-          <div class="filter-status">
+          <!-- The approvals queue is, by definition, the receipts whose status is
+               "To Be Approved" - fetchData pins receipt_status to that in approval
+               mode. Leaving the dropdown on screen there just invited picking
+               "Done" and getting a list of To Be Approved rows back. -->
+          <div v-if="!approvalMode" class="filter-status">
             <label>{{ $t('receipts.receipt_status') }}</label>
             <base-select
               v-model="filters.receipt_status"
@@ -437,7 +441,14 @@ export default {
         to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),
         receiptByField: sort.fieldName || 'created_at',
         receiptBy: sort.receipt || 'desc',
-        filterBy: this.applyFilter,
+        // Receipt::scopeWhereCompany narrows the query to receipts dated *today*
+        // when filterBy arrives as false. That is the intended default for the
+        // main receipts list, but an approvals queue has to show everything
+        // still awaiting approval whatever its date - otherwise the page reads
+        // as empty until you happen to touch a filter, which then lifts the
+        // narrowing and makes every pending receipt appear at once. The
+        // vouchers approvals screen sends no filterBy at all for this reason.
+        filterBy: this.approvalMode ? true : this.applyFilter,
         page
       }
 
