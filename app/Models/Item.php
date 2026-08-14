@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Image;
 use Storage;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 use App\Traits\Auditable;
@@ -31,6 +30,13 @@ class Item extends Model
         'price' => 'integer',
     ];
 
+    // Sibling models (Invoice, Expense, Receipt, Payment, User, ...) all
+    // append formattedCreatedAt so the frontend's "Added On" column
+    // (show="formattedCreatedAt") has something to read - Item never did,
+    // so that column silently rendered blank despite created_at being set
+    // and the accessor itself working fine when called directly.
+    protected $appends = ['formattedCreatedAt'];
+
     public function scopeWhereSearch($query, $search)
     {
         return $query->where('name', 'LIKE', '%' . $search . '%');
@@ -51,12 +57,17 @@ class Item extends Model
         $invoices = Invoice::where('account_master_id', $name)->pluck('dispatch_id')->toArray();
         return $query->whereIn('dispatch_id', $invoices);
     }
-    public function scopeWhereCompany($query, $company_id, $filter=null)
+    public function scopeWhereCompany($query, $company_id)
     {
+        // Used to also restrict to today's rows whenever $filter (the
+        // 'filterBy' request param) came in as the literal string 'false' -
+        // that string check was backwards from the caller's intent
+        // (resources/js/views/items/Index.vue sends the JS boolean
+        // `applyFilter`, which axios serializes as the *string* "false"
+        // whenever no filter is actually applied), so the Pending list was
+        // silently limited to today-only on every normal, unfiltered page
+        // load and only showed its full history once a filter was applied.
         $query->where('company_id', $company_id);
-        if ($filter==='false') {
-            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
-        }
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -106,7 +117,12 @@ class Item extends Model
 
     public function dispatch()
     {
-        return $this->hasMany(Dispatch::class, 'id', 'dispatch_id');
+        // hasOne, not hasMany: dispatch_id holds a single dispatch's id (as a
+        // string), so this always matches at most one Dispatch row. The
+        // frontend (resources/js/views/items/Index.vue) reads it as a single
+        // object - `row.dispatch.name` - which hasMany broke by serializing
+        // it as a one-element array instead, silently rendering blank.
+        return $this->hasOne(Dispatch::class, 'id', 'dispatch_id');
     }
 
     public static function deleteItem($id)

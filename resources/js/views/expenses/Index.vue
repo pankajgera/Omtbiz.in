@@ -143,7 +143,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -170,7 +170,7 @@
           :label="$t('expenses.note')"
           sort-as="expense_date"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('expenses.note') }}</span>
             <div class="notes">
               <div class="note">{{ row.notes }}</div>
@@ -182,7 +182,7 @@
           sort-as="amount"
           show="category.amount"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('expenses.amount') }}</span>
             <div v-html="$utils.formatMoney(row.amount, defaultCurrency)" />
           </template>
@@ -192,7 +192,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('expenses.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

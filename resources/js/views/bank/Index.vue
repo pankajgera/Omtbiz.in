@@ -156,7 +156,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -190,7 +190,7 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-        <template slot-scope="row">
+        <template #default="row">
           <span> {{ $t('banks.action') }} </span>
           <v-dropdown>
             <span slot="activator" href="#">

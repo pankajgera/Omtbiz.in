@@ -138,7 +138,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -155,7 +155,7 @@
           :label="$t('invoices.number')"
           show="invoice_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: role === 'admin' ? `invoices/${row.id}/edit?nondis=${row.paid_status !== 'DISPATCHED'}` : `invoices/${row.id}/view`}" class="dropdown-item">
                {{ row.invoice_number }}
               </router-link>
@@ -171,7 +171,7 @@
           width="20%"
           sort-as="name"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.master.name }}
           </template>
         </table-column>
@@ -179,7 +179,7 @@
           :label="$t('invoices.total')"
           sort-as="total"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('invoices.amount') }}</span>
             ₹ {{ numberWithCommas((row.total).toFixed(2)) }}
           </template>
@@ -189,7 +189,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('invoices.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

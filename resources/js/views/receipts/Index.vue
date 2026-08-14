@@ -160,7 +160,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -177,7 +177,7 @@
           :label="$t('receipts.number')"
           show="receipt_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <a
               :href="getReceiptLink(row)"
               class="receipt-number-link"
@@ -218,7 +218,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('receipts.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

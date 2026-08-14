@@ -140,7 +140,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -157,7 +157,7 @@
           :label="$t('estimates.number')"
           show="estimate_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: `estimates/${row.id}/edit?d=true`}" class="dropdown-item">
                {{ row.estimate_number }}
               </router-link>
@@ -182,7 +182,7 @@
           :label="$t('estimates.total')"
           sort-as="total"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.amount') }}</span>
             ₹ {{ numberWithCommas((row.total).toFixed(2)) }}
           </template>
@@ -192,7 +192,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">
@@ -266,7 +266,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -283,7 +283,7 @@
           :label="$t('estimates.number')"
           show="estimate_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.estimate_number }}
           </template>
         </table-column>
@@ -306,7 +306,7 @@
           :label="$t('estimates.total')"
           sort-as="total"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.amount') }}</span>
             ₹ {{ numberWithCommas((row.total).toFixed(2)) }}
           </template>
@@ -316,7 +316,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

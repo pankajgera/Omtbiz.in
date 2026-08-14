@@ -68,7 +68,7 @@
               table-class="table display-ledger"
             >
               <table-column :label="$t('ledgers.date')" show="date">
-                <template slot-scope="row">
+                <template #default="row">
                   {{ getFormattedDate(row.date) }}
                 </template>
               </table-column>
@@ -76,7 +76,7 @@
                 :label="$t('ledgers.particulars')"
                 show="particulars"
               >
-                <template slot-scope="row">
+                <template #default="row">
                     <router-link
                       :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` :
                         row.receipt_id ? `/receipts/${row.receipt_id}/edit` :
@@ -91,12 +91,12 @@
                 :label="$t('ledgers.voucher_type')"
                 show="voucher_type"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.voucher_type }}
                 </template>
               </table-column>
               <table-column :label="$t('ledgers.voucher_id')" show="id">
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.id }}
                 </template>
               </table-column>
@@ -104,24 +104,24 @@
                 :label="$t('ledgers.inventory_item_quantity')"
                 show="quantity"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.invoice ? row.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b) : 0 }}
                 </template>
               </table-column>
               <!--- Debitor will be debit but for ledger display it will show credit amount -->
               <table-column :label="$t('ledgers.debit')" show="debit">
-                <template slot-scope="row">
+                <template #default="row">
                   ₹ {{ row.credit ? numberWithCommas(row.credit) : "0.00" }}
                 </template>
               </table-column>
               <!--- Creditor will be credit but for ledger display it will show debit amount -->
               <table-column :label="$t('ledgers.credit')" show="credit">
-                <template slot-scope="row">
+                <template #default="row">
                   ₹ {{ row.debit ? numberWithCommas(row.debit) : "0.00" }}
                 </template>
               </table-column>
               <table-column :label="$t('general.delete')">
-                <template slot-scope="row">
+                <template #default="row">
                   <a v-if="'Voucher' === row.voucher_type" href="#" class="d-block text-center" @click="removeVoucher(row.id)">
                     <font-awesome-icon :icon="['fas', 'trash']" />
                   </a>

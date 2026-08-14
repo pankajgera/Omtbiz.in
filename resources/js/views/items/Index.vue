@@ -87,9 +87,9 @@
     </div>
 
     <div v-show="showTableScreen">
-      <h4>Pending Bill-Ty</h4>
       <div class="table-container">
         <div class="table-actions mt-5">
+          <h4>Pending Bill-Ty</h4>
           <transition name="fade">
             <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
               <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -129,7 +129,7 @@
             :filterable="false"
             cell-class="no-click"
           >
-            <template slot-scope="row">
+            <template #default="row">
               <div class="custom-control custom-checkbox">
                 <input
                   :id="row.id"
@@ -146,7 +146,7 @@
             :label="$t('items.party_name')"
             show="party_name"
           >
-            <template slot-scope="row">
+            <template #default="row">
               <router-link :to="{path: `bill-ty/${row.id}/edit`}">
                 {{ row.party_name ? row.party_name : row.name }}
                 </router-link>
@@ -156,7 +156,7 @@
             :label="$t('items.invoice_number')"
             show="invoice_number"
           >
-            <template slot-scope="row">
+            <template #default="row">
                 {{ row && row.dispatch ? row.dispatch.name : row.name }}
             </template>
           </table-column>
@@ -187,7 +187,7 @@
             :filterable="false"
             cell-class="action-dropdown"
           >
-            <template slot-scope="row">
+            <template #default="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
                 <span slot="activator" href="#">
@@ -213,9 +213,9 @@
         </table-component>
       </div>
 
-      <h4>Completed Bill-Ty</h4>
       <div class="table-container">
         <div class="table-actions mt-5">
+          <h4>Completed Bill-Ty</h4>
           <transition name="fade">
             <v-dropdown v-if="selectedItems.length" :show-arrow="false">
               <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
@@ -256,7 +256,7 @@
             :filterable="false"
             cell-class="no-click"
           >
-            <template slot-scope="row">
+            <template #default="row">
               <div class="custom-control custom-checkbox">
                 <input
                   :id="row.id"
@@ -273,7 +273,7 @@
             :label="$t('items.party_name')"
             show="party_name"
           >
-            <template slot-scope="row">
+            <template #default="row">
               <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                 {{ row.party_name ? row.party_name : row.name }}
               </router-link>
@@ -283,7 +283,7 @@
             :label="$t('items.invoice_number')"
             show="invoice_number"
           >
-            <template slot-scope="row">
+            <template #default="row">
                 {{ row && row.dispatch ? row.dispatch.name : row.name }}
             </template>
           </table-column>
@@ -314,7 +314,7 @@
             :filterable="false"
             cell-class="action-dropdown"
           >
-            <template slot-scope="row">
+            <template #default="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
                 <span slot="activator" href="#">
@@ -374,6 +374,17 @@ export default {
         pending: false,
         completed: false
       },
+      // Local, not Vuex: the Pending and Completed tables each fetch
+      // independently (fetchDataToBe / fetchData below), and both used to
+      // write the SAME shared Vuex totals (mapGetters('item', ['totalItems',
+      // 'totalItemsToBe'])) from their own separate, uncoordinated
+      // responses. Whichever request resolved last silently overwrote the
+      // other table's totals, so showEmptyScreen/showTableScreen could see
+      // stale/wrong counts and disagree with what was actually rendered.
+      // Keeping each table's own total local, written only by that table's
+      // own fetch, removes the race entirely.
+      totalItems: 0,
+      totalItemsToBe: 0,
       filtersApplied: false,
       filters: {
         name: '',
@@ -396,8 +407,6 @@ export default {
       'itemsToBe',
       'selectedItems',
       'selectedItemsToBe',
-      'totalItems',
-      'totalItemsToBe',
       'selectAllField',
       'selectAllFieldToBe',
     ]),
@@ -497,6 +506,7 @@ export default {
       try {
         let response = await this.fetchItems(data)
         this.sundryDebtorsList = response.data.sundryDebtorsList
+        this.totalItems = response.data.items.total
         return {
           data: response.data.items.data,
           pagination: {
@@ -517,13 +527,20 @@ export default {
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         filterBy: this.applyFilter,
-        page
+        // Sent as itemsToBePage, not page - the Completed table's own
+        // fetchData() sends its page under the plain 'page' key (matching
+        // ItemsController@index's $items paginator). Both tables used to
+        // send the same 'page' key for two unrelated lists, so paging one
+        // table silently re-paginated the other's query whenever both
+        // requests fired close together (see ItemsController@index).
+        itemsToBePage: page
       }
 
       this.activeRequestCount += 1
       try {
         let response = await this.fetchItems(data)
         this.sundryDebtorsList = response.data.sundryDebtorsList
+        this.totalItemsToBe = response.data.itemsToBe.total
         return {
           data: response.data.itemsToBe.data,
           pagination: {
