@@ -24,6 +24,7 @@
                   :show-labels="false"
                   :allow-empty="true"
                   :disabled="isEdit"
+                  :placeholder="$t('invoices.select_invoice')"
                   :custom-label="invoiceWithAmount"
                   track-by="id"
                   class="multi-select-item"
@@ -83,7 +84,7 @@
                   name="transport"
                 />
               </div>
-              <div class="form-group">
+              <div class="form-group collapse-button-container">
                 <base-button
                   id="submit-dispatch"
                   :loading="isLoading"
