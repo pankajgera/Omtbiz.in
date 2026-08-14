@@ -675,6 +675,19 @@ input.base-prefix-input {
     margin-bottom: 8px;
 }
 
+/* .clear-filter is `position: absolute; top: 10px; right: 15px` (base.scss), so
+   it should sit in the panel's top-right corner. It is written as a direct child
+   of the filter `.row`, though, and Bootstrap 5's `.row > *` forces `width: 100%`
+   on every direct child - the box then stretches the full panel and the text
+   inside it renders at the far left, above the fields rather than beside them.
+   Shrink it back to its content so `right` actually places it. */
+.filter-section .clear-filter {
+    width: auto;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .filter-section .base-date-input .date-field,
 .filter-section .multiselect__tags {
     min-height: 44px;
@@ -852,6 +865,45 @@ input.base-prefix-input:disabled {
     justify-content: flex-end;
     gap: 8px;
     padding-bottom: 16px;
+}
+
+/* A form's own action row (estimates, orders) is still markup from before the
+   Vue 3 migration: the buttons sit directly inside a `.row`, and Bootstrap 5's
+   `.row > *` puts `width: 100%` on every direct child. Those children are
+   buttons, not grid columns, so the save button stretched the full width of the
+   page. Left-align them at their natural width instead.
+
+   Scoped to `form >` on purpose: the identically-named `.page-actions` in
+   `.page-header` sits outside the form and keeps its own absolute positioning. */
+form > .page-actions.row {
+    justify-content: flex-start;
+    gap: 8px;
+    padding-bottom: 16px;
+    /* `.row` also carries negative gutter margins meant to cancel out the
+       padding on `.col-*` children. There are no columns here, so those margins
+       just pull the button half a gutter left of every other field on the form. */
+    margin-left: 0;
+    margin-right: 0;
+}
+
+form > .page-actions.row > .base-button,
+form > .page-actions.row > .btn,
+form > .page-actions.row > a {
+    width: auto;
+    max-width: 100%;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Sibling buttons at the foot of a form. `.btn { margin: 0 }` above is what
+   keeps buttons from drifting inside the header and table rows, but it also
+   leaves a pair like "Add new" + "Save Voucher" touching edge to edge, since
+   Bootstrap's spacing utilities went away with the rest of it. */
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
 }
 
 @media (max-width: 991px) {

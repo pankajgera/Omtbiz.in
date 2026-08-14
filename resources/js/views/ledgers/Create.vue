@@ -32,8 +32,10 @@
                 </template>
               </vue-editable-grid>
               <!--- Grid table end -->
-              <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button @click="submitVoucher()" class="btn btn-primary">Save Voucher</button>
+              <div class="form-actions">
+                <button @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
+                <button @click="submitVoucher()" class="btn btn-primary">Save Voucher</button>
+              </div>
             </div>
         </div>
       </div>

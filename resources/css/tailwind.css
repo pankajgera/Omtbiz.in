@@ -20,6 +20,16 @@
         transition: none !important;
         scroll-behavior: auto !important;
     }
+
+    /* The utilities import above carries `important`, so `tw:flex` emits
+       `display: flex !important` — which outranks the inline `display: none`
+       that `v-show` writes, leaving the element permanently visible. (For
+       `!important` declarations the layer order is reversed, so an unlayered
+       rule can't win this; it has to sit in the first layer, same as above.)
+       Any element carrying both v-show and a tw: display utility hits this. */
+    [style*="display: none"] {
+        display: none !important;
+    }
 }
 
 :root {
@@ -656,11 +666,17 @@ a:has(button):focus {
     white-space: nowrap;
 }
 
+/* `.custom-control-input` is the pre-migration Bootstrap checkbox: the input
+   used to be hidden and the box drawn by `.custom-control-label::before`. That
+   rendering left with Bootstrap, so those pages fall back to a native browser
+   checkbox in the default blue while the migrated pages (notes, masters, …)
+   show the brand red. Same treatment for both until the markup is unified. */
 .notes-checkbox,
 .masters-checkbox,
 .inventory-checkbox,
 .users-checkbox,
-.ledgers-checkbox {
+.ledgers-checkbox,
+.custom-control-input[type='checkbox'] {
     width: 1.125rem;
     height: 1.125rem;
     flex: 0 0 1.125rem;
@@ -673,7 +689,8 @@ a:has(button):focus {
 .masters-checkbox:focus-visible,
 .inventory-checkbox:focus-visible,
 .users-checkbox:focus-visible,
-.ledgers-checkbox:focus-visible {
+.ledgers-checkbox:focus-visible,
+.custom-control-input[type='checkbox']:focus-visible {
     outline: 3px solid var(--ui-focus);
     outline-offset: 2px;
 }

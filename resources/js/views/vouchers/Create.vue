@@ -58,8 +58,10 @@
                   </div>
               </div>
               </div>
-              <button v-if="!isReadOnly" @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button v-if="!isReadOnly" @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
+              <div class="form-actions">
+                <button v-if="!isReadOnly" @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
+                <button v-if="!isReadOnly" @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
+              </div>
             </div>
         </div>
       </div>
