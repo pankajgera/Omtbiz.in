@@ -167,11 +167,11 @@
           </tbody>
         </table>
       </div>
-      <button v-if="showAddNewInventory" class="add-item-action add-invoice-item tw:flex tw:min-h-12 tw:w-full tw:items-center tw:justify-center tw:border-0 tw:border-t tw:border-line tw:bg-surface-muted tw:text-accent tw:hover:bg-surface-hover" :disabled="isDisabled" @click="addInventory">
+      <button v-if="showAddNewInventory" type="button" class="add-item-action add-invoice-item tw:flex tw:min-h-12 tw:w-full tw:items-center tw:justify-center tw:border-0 tw:border-t tw:border-line tw:bg-surface-muted tw:text-accent tw:hover:bg-surface-hover" :disabled="isDisabled" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('invoices.add_item') }}
       </button>
-      <button v-if="showEndOfList" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
+      <button v-if="showEndOfList" type="button" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
         End Of List
       </button>
       </section>

@@ -140,7 +140,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -157,7 +157,7 @@
           :label="$t('orders.number')"
           show="order_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: `orders/${row.id}/edit?d=true`}">
                {{ row.order_number }}
               </router-link>
@@ -182,7 +182,7 @@
           :label="$t('orders.quantity')"
           width="20%"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.order_items.reduce((i, j) => i + parseInt(j.quantity), 0) }}
           </template>
         </table-column>
@@ -190,7 +190,7 @@
           :label="$t('orders.remaining_quantity')"
           width="20%"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.order_items.reduce((i, j) => i + parseInt(j.remaining_quantity), 0) }}
           </template>
         </table-column>
@@ -199,7 +199,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('orders.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">
@@ -270,7 +270,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -287,7 +287,7 @@
           :label="$t('orders.number')"
           show="order_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: `orders/${row.id}/edit?d=true`}" class="dropdown-item">
                {{ row.order_number }}
               </router-link>
@@ -312,7 +312,7 @@
           :label="$t('orders.quantity')"
           width="20%"
         >
-        <template slot-scope="row">
+        <template #default="row">
             {{ row.order_items.reduce((i, j) => i + parseInt(j.quantity), 0) }}
           </template>
         </table-column>
@@ -320,7 +320,7 @@
           :label="$t('orders.remaining_quantity')"
           width="20%"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.order_items.reduce((i, j) => i + parseInt(j.remaining_quantity), 0) }}
           </template>
         </table-column>
@@ -329,7 +329,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('orders.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

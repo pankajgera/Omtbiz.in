@@ -37,12 +37,12 @@
                 :label="$tc('daysheet.lot')"
                 show="lot"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.lot }}
                 </template>
               </table-column>
               <table-column :label="$tc('daysheet.reference-number')" show="reference_number">
-                <template slot-scope="row">
+                <template #default="row">
                   {{ formatReferenceNumber(row.reference_number) }}
                 </template>
               </table-column>
@@ -50,7 +50,7 @@
                 :label="$tc('daysheet.party-name')"
                 show="party"
               >
-                <template slot-scope="row">
+                <template #default="row">
                    {{ row.party }}
                 </template>
               </table-column>
@@ -73,7 +73,7 @@
                 :label="$tc('daysheet.lot')"
                 show="lot"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.lot }}
                 </template>
               </table-column>
@@ -81,12 +81,12 @@
                 :label="$tc('daysheet.sign')"
                 show="sign"
               >
-                <template slot-scope="row">
+                <template #default="row">
 
                 </template>
               </table-column>
               <table-column :label="$tc('daysheet.pm')" show="reference_number">
-                <template slot-scope="row">
+                <template #default="row">
                   {{ formatReferenceNumber(row.reference_number) }}
                 </template>
               </table-column>
@@ -94,7 +94,7 @@
                 :label="$tc('daysheet.name')"
                 show="name"
               >
-                <template slot-scope="row">
+                <template #default="row">
                    {{ row.party }}
                 </template>
               </table-column>
@@ -102,7 +102,7 @@
                 :label="$tc('daysheet.city')"
                 show="city"
               >
-                <template slot-scope="row">
+                <template #default="row">
 
                 </template>
               </table-column>
@@ -110,7 +110,7 @@
                 :label="$tc('daysheet.transport')"
                 show="transport"
               >
-                <template slot-scope="row">
+                <template #default="row">
 
                 </template>
               </table-column>

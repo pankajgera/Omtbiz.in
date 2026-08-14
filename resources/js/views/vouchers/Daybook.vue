@@ -185,7 +185,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -202,7 +202,7 @@
           :label="$t('daybook.date')"
           show="date"
         >
-          <template slot-scope="row">
+          <template #default="row">
           {{ getFormattedDate(row.date) }}
           </template>
         </table-column>
@@ -210,7 +210,7 @@
           :label="$t('daybook.account')"
           show="account"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link
               :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` :
                 row.receipt_id ? `/receipts/${row.receipt_id}/edit` :
@@ -225,7 +225,7 @@
           :label="$t('daybook.voucher_type')"
           show="voucher_type"
         >
-          <template slot-scope="row">
+          <template #default="row">
              {{ row.voucher_type }}
           </template>
         </table-column>
@@ -233,7 +233,7 @@
           :label="$t('daybook.quantity')"
           show="quantity"
         >
-        <template slot-scope="row">
+        <template #default="row">
              {{ parseInt(row.quantity) }}
           </template>
         </table-column>
@@ -241,7 +241,7 @@
           :label="$t('daybook.voucher_debit')"
           show="voucher_debit"
         >
-          <template slot-scope="row">
+          <template #default="row">
             ₹ {{ row.voucher_debit }}
           </template>
         </table-column>
@@ -249,7 +249,7 @@
           :label="$t('daybook.voucher_credit')"
           show="voucher_credit"
         >
-          <template slot-scope="row">
+          <template #default="row">
             ₹ {{ row.voucher_credit }}
           </template>
         </table-column>
@@ -258,7 +258,7 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-        <template slot-scope="row">
+        <template #default="row">
           <span> {{ $t('daybook.action') }} </span>
           <v-dropdown>
             <span slot="activator" href="#">

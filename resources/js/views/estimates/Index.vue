@@ -118,13 +118,13 @@
       </div>
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
+          id="select-all-draft"
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
           @change="selectAllEstimates"
         >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+        <label v-show="!isRequestOngoing" for="select-all-draft" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
@@ -140,7 +140,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -157,7 +157,7 @@
           :label="$t('estimates.number')"
           show="estimate_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: `estimates/${row.id}/edit?d=true`}" class="dropdown-item">
                {{ row.estimate_number }}
               </router-link>
@@ -182,7 +182,7 @@
           :label="$t('estimates.total')"
           sort-as="total"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.amount') }}</span>
             ₹ {{ numberWithCommas((row.total).toFixed(2)) }}
           </template>
@@ -192,7 +192,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">
@@ -244,13 +244,13 @@
       </div>
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
+          id="select-all-sent"
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
           @change="selectAllEstimates"
         >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+        <label v-show="!isRequestOngoing" for="select-all-sent" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
@@ -266,7 +266,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -283,7 +283,7 @@
           :label="$t('estimates.number')"
           show="estimate_number"
         >
-          <template slot-scope="row">
+          <template #default="row">
             {{ row.estimate_number }}
           </template>
         </table-column>
@@ -306,7 +306,7 @@
           :label="$t('estimates.total')"
           sort-as="total"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.amount') }}</span>
             ₹ {{ numberWithCommas((row.total).toFixed(2)) }}
           </template>
@@ -316,7 +316,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('estimates.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

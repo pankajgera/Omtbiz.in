@@ -58,8 +58,10 @@
                   </div>
               </div>
               </div>
-              <button v-if="!isReadOnly" @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
-              <button v-if="!isReadOnly" @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
+              <div class="form-actions">
+                <button v-if="!isReadOnly" @click="addNewRow()" class="btn btn-theme-outline">Add new</button>
+                <button v-if="!isReadOnly" @click="validateSubmitVoucher()" class="btn btn-primary">Save Voucher</button>
+              </div>
             </div>
         </div>
       </div>
@@ -69,6 +71,16 @@
 <style scoped>
 .my-grid-class {
   height: 400px;
+}
+/* 400px of grid for one or two voucher lines leaves most of a phone screen
+   empty above the Save button. Let it size to its rows there, capped so a long
+   voucher still scrolls rather than pushing the actions off-screen. */
+@media screen and (max-width: 767.98px) {
+  .my-grid-class {
+    height: auto;
+    min-height: 160px;
+    max-height: 60vh;
+  }
 }
 </style>
 <script>

@@ -124,31 +124,37 @@
               </th>
             </tr>
           </thead>
-          <draggable v-model="inventoryBind" class="item-body" tag="tbody" handle=".handle">
-            <invoice-inventory
-              v-for="(each, index) in inventoryBind"
-              ref="estimateInventory"
-              :key="each.name+index"
-              :index="index"
-              :inventory-data="each"
-              :currency="currency"
-              :discount-per-inventory="discountPerInventory"
-              :inventory-type="'estimate'"
-              :inventory-list="inventoryListBind"
-              :inventory-negative="inventoryNegative"
-              @remove="removeInventory"
-              @update="updateInventoryBounce"
-              @inventoryValidate="checkInventoryData"
-              @endlist="showEndList"
-            />
+          <draggable
+            :list="inventoryBind"
+            :item-key="inventoryKey"
+            class="item-body"
+            tag="tbody"
+            handle=".handle"
+          >
+            <template #item="{ element, index }">
+              <invoice-inventory
+                :ref="el => setInventoryRow(el, index)"
+                :index="index"
+                :inventory-data="element"
+                :currency="currency"
+                :discount-per-inventory="discountPerInventory"
+                :inventory-type="'estimate'"
+                :inventory-list="inventoryListBind"
+                :inventory-negative="inventoryNegative"
+                @remove="removeInventory"
+                @update="updateInventoryBounce"
+                @inventoryValidate="checkInventoryData"
+                @endlist="showEndList"
+              />
+            </template>
           </draggable>
         </table>
       </div>
-      <button v-if="showAddNewInventory" class="add-item-action add-estimate-item" @click="addInventory">
+      <button v-if="showAddNewInventory" type="button" class="add-item-action add-estimate-item" @click="addInventory">
         <font-awesome-icon icon="shopping-basket" class="mr-2"/>
         {{ $t('estimates.add_item') }}
       </button>
-      <button v-if="showEndOfList" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
+      <button v-if="showEndOfList" type="button" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
         End Of List
       </button>
 
@@ -220,12 +226,20 @@ input.base-prefix-input:disabled {
 .table-responsive {
   overflow-x: inherit ;
 }
+/* The item table needs more width than a tablet or phone has. Without a scroll
+   container of its own it pushes the whole page sideways - at 665px the page
+   overflowed by 65px. This used to kick in only under 400px, which left the
+   401px-991px band spilling. The item select's dropdown is position: fixed, so
+   scrolling here does not clip it. */
+@media screen and (max-width: 991.98px) {
+  .table-responsive {
+    overflow-x: auto !important;
+    overscroll-behavior-inline: contain;
+  }
+}
 @media screen and (max-width:400px) {
   .heading-1 {
     padding: 5px 180px;
-  }
-  .table-responsive {
-    overflow-x: auto !important;
   }
   .multiselect__content-wrapper {
     overflow-x: visible !important;
@@ -233,7 +247,7 @@ input.base-prefix-input:disabled {
 }
 </style>
 <script>
-import draggable from 'vuedraggable'
+import draggable from '../../compat/draggable'
 import MultiSelect from 'vue-multiselect'
 import InvoiceInventory from '../invoices/Inventory'
 import EstimateStub from '../../stub/estimate'
@@ -406,6 +420,7 @@ export default {
     }
   },
   created () {
+    this.inventoryRows = []
     this.loadData()
     this.fetchInitialInventory()
     this.updateInventoryBounce = _.debounce((data) => {
@@ -426,11 +441,8 @@ export default {
     ...mapActions('inventory', [
       'fetchAllInventory'
     ]),
-    totalQuantity(inventory){
-      if (inventory.length) {
-        return inventory.map(i => parseInt(i.quantity)).reduce((a,b) => a + b)
-      }
-      return 0
+    totalQuantity(inventory = []){
+      return inventory.reduce((total, item) => total + (parseInt(item.quantity, 10) || 0), 0)
     },
     async fetchInitialInventory () {
       await this.fetchAllInventory({
@@ -488,9 +500,32 @@ export default {
     addInventory () {
       this.inventoryBind.push({...EstimateStub})
       this.$nextTick(() => {
-        this.$refs.estimateInventory[this.inventoryBind.length-1].$el.focus()
-        this.$refs.estimateInventory[this.inventoryBind.length-1].$children[0].$refs.baseSelect.$el.focus()
+        const inventoryRow = this.getInventoryRow(this.inventoryBind.length - 1)
+        if (!inventoryRow) {
+          return
+        }
+
+        inventoryRow.$el?.focus?.()
+        inventoryRow.$refs.inventorySelect?.$refs.baseSelect?.$el?.focus?.()
       })
+    },
+    // Vue only collects `ref` into an array for a v-for it renders itself, and
+    // these rows come from draggable's `item` slot, so a plain string ref would
+    // only ever hold the last row. Track them by index instead.
+    setInventoryRow (component, index) {
+      if (component) {
+        this.inventoryRows[index] = component
+      } else {
+        delete this.inventoryRows[index]
+      }
+    },
+    getInventoryRow (index) {
+      return this.inventoryRows[index] || null
+    },
+    // Rows carry no unique id of their own (see EstimateStub), and two rows can
+    // hold the same item, so identity-by-position is the only key that stays unique.
+    inventoryKey (item) {
+      return this.inventoryBind.indexOf(item)
     },
     removeInventory (index) {
       this.inventoryBind.splice(index, 1)
@@ -505,15 +540,20 @@ export default {
       }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
       this.$nextTick(() => {
-        this.$refs.estimateInventory[data.index].$el.focus()
+        const inventoryRow = this.getInventoryRow(data.index)
+        if (!inventoryRow) {
+          return
+        }
+
+        inventoryRow.$el?.focus?.()
+
         if (data.updatingInput === 'sale_price') {
-          this.$refs.estimateInventory[data.index].$children[3].$refs.baseInput.focus()
+          inventoryRow.$refs.inventoryPrice?.$refs?.baseInput?.focus?.()
         }
         if (data.updatingInput === 'quantity') {
-          this.$refs.estimateInventory[data.index].$children[1].$refs.baseInput.focus()
+          inventoryRow.$refs.inventoryQuantity?.$refs?.baseInput?.focus?.()
         }
       })
-
     },
     submitEstimateData () {
       if (!this.checkValid()) {

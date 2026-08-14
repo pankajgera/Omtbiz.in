@@ -10,6 +10,17 @@
         align-items: center;
     }
 
+    /* The global .table-actions (resources/sass/components/tables.scss) is
+       height: 40px, sized for a bare actions dropdown. This page also puts
+       a "Pending Bill-Ty" / "Completed Bill-Ty" <h4> in that row (moved there
+       from being a separate element above .table-container, which otherwise
+       left .table-actions rendering as an empty 40px gap above the table),
+       matching the pattern already used on the dispatch pages - bump the
+       height the same way dispatch/Pending.vue and dispatch/Completed.vue do. */
+    .table-actions {
+        height: 55px;
+    }
+
 }
 
 @media(max-width: $x-small-breakpoint ) {

@@ -14,6 +14,8 @@
         color: $white;
         transform: translate(-50%, -60%);
         width: 800px;
+        // The fixed width overflowed the viewport by ~210px on a phone.
+        max-width: calc(100% - 32px);
     }
 
     h1 {
@@ -26,6 +28,18 @@
         font-size: 2rem;
         color: $white;
         margin-bottom: 40px;
+    }
+
+    @media (max-width: 575.98px) {
+        h1 {
+            font-size: 5.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h5 {
+            font-size: 1.25rem;
+            margin-bottom: 24px;
+        }
     }
 
 }

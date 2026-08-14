@@ -33,7 +33,13 @@ class ItemsController extends Controller
         ]))->with('images', 'dispatch')
             ->whereCompany($request->header('company'))
             ->latest()
-            ->paginate($limit);
+            // Named page param, paired with the itemsToBe paginator below:
+            // the Pending and Completed tables on the frontend page
+            // independently, but both used to share the plain 'page' query
+            // key, so paging one table silently re-paginated the other
+            // list's query too whenever both requests happened to fire
+            // close together.
+            ->paginate($limit, ['*'], 'page');
 
         foreach ($items as $each) {
             $master = Invoice::where('dispatch_id', $each->dispatch_id)->first();
@@ -58,9 +64,9 @@ class ItemsController extends Controller
             'orderByField',
             'orderBy',
         ]))->with('images', 'dispatch')
-            ->whereCompany($request->header('company'), $request['filterBy'])
+            ->whereCompany($request->header('company'))
             ->latest()
-            ->paginate($limit);
+            ->paginate($limit, ['*'], 'itemsToBePage');
 
         foreach ($itemsToBe as $each) {
             $master = Invoice::where('dispatch_id', $each->dispatch_id)->first();

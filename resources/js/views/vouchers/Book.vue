@@ -28,7 +28,7 @@
               table-class="table display-ledger"
             >
               <table-column :label="$t('ledgers.date')" show="date">
-                <template slot-scope="row">
+                <template #default="row">
                   {{ getFormattedDate(row.date) }}
                 </template>
               </table-column>
@@ -36,7 +36,7 @@
                 :label="$t('ledgers.particulars')"
                 show="particulars"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   <router-link
                     :to="{ path: row.invoice_id ? `/invoices/${row.invoice_id}/edit` :
                       row.receipt_id ? `/receipts/${row.receipt_id}/edit` :
@@ -51,12 +51,12 @@
                 :label="$t('ledgers.voucher_type')"
                 show="voucher_type"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.voucher_type }}
                 </template>
               </table-column>
               <table-column :label="$t('ledgers.voucher_id')" show="id">
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.id }}
                 </template>
               </table-column>
@@ -64,17 +64,17 @@
                 :label="$t('daybook.inventory_item_quantity')"
                 show="quantity"
               >
-                <template slot-scope="row">
+                <template #default="row">
                   {{ row.invoice ? row.invoice.inventories.map(k => parseInt(k.quantity)).reduce((a, b) => a + b) : 0 }}
                 </template>
               </table-column>
               <table-column :label="$t('ledgers.debit')" show="debit">
-                <template slot-scope="row">
+                <template #default="row">
                   ₹ {{ row.debit ? row.debit : "0.00" }}
                 </template>
               </table-column>
               <table-column :label="$t('ledgers.credit')" show="credit">
-                <template slot-scope="row">
+                <template #default="row">
                   ₹ {{ row.credit ? row.credit : "0.00" }}
                 </template>
               </table-column>

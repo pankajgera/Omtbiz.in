@@ -34,7 +34,7 @@
           :filterable="true"
           :label="$t('settings.expense_category.category_description')"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('settings.expense_category.category_description') }}</span>
             <div class="notes">
               <div class="note">{{ row.description }}</div>
@@ -46,7 +46,7 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('settings.expense_category.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

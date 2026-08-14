@@ -142,7 +142,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -171,7 +171,7 @@
           :label="$t('customers.due_amount')"
           show="due_amount"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span> {{ $t('customers.due_amount') }} </span>
             <div v-html="$utils.formatMoney(row.due_amount, row.currency)"/>
           </template>
@@ -186,7 +186,7 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span> {{ $t('customers.action') }} </span>
             <v-dropdown>
               <span slot="activator" href="#">
