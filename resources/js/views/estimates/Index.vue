@@ -118,13 +118,13 @@
       </div>
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
+          id="select-all-draft"
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
           @change="selectAllEstimates"
         >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+        <label v-show="!isRequestOngoing" for="select-all-draft" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>
@@ -244,13 +244,13 @@
       </div>
       <div class="custom-control custom-checkbox">
         <input
-          id="select-all"
+          id="select-all-sent"
           v-model="selectAllFieldStatus"
           type="checkbox"
           class="custom-control-input"
           @change="selectAllEstimates"
         >
-        <label v-show="!isRequestOngoing" for="select-all" class="custom-control-label selectall">
+        <label v-show="!isRequestOngoing" for="select-all-sent" class="custom-control-label selectall">
           <span class="select-all-label">{{ $t('general.select_all') }} </span>
         </label>
       </div>

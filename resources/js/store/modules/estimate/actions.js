@@ -3,10 +3,24 @@ import * as types from './mutation-types'
 export const fetchEstimates = ({ commit, estimates, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/estimates`, {params}).then((response) => {
-      commit(types.SET_ESTIMATES_DRAFT, response.data.estimates_draft.data)
-      commit(types.SET_ESTIMATES_SENT, response.data.estimates_sent.data)
-      commit(types.SET_TOTAL_ESTIMATES_DRAFT, response.data.draft_count)
-      commit(types.SET_TOTAL_ESTIMATES_SENT, response.data.sent_count)
+      // The endpoint always returns both buckets, but it also applies the
+      // request's `status` filter to each of them — so a DRAFT request comes
+      // back with an empty `estimates_sent` and vice versa. The index page runs
+      // both tables at once, so committing both buckets every time lets each
+      // table wipe the other's list and leaves "select all" with nothing to
+      // select. Only store the bucket this request actually asked for.
+      const status = params && params.status
+
+      if (status !== 'SENT') {
+        commit(types.SET_ESTIMATES_DRAFT, response.data.estimates_draft.data)
+        commit(types.SET_TOTAL_ESTIMATES_DRAFT, response.data.draft_count)
+      }
+
+      if (status !== 'DRAFT') {
+        commit(types.SET_ESTIMATES_SENT, response.data.estimates_sent.data)
+        commit(types.SET_TOTAL_ESTIMATES_SENT, response.data.sent_count)
+      }
+
       resolve(response)
     }).catch((err) => {
       reject(err)
@@ -133,9 +147,17 @@ export const searchEstimate = ({ commit, estimates, state }, data) => {
   })
 }
 
+// Both tables on the index page feed one shared selection, so "all" means
+// every row currently listed across the pending and completed tables.
+const listedEstimateIds = (state) => [
+  ...state.estimatesDraft,
+  ...state.estimatesSent
+].map(estimate => estimate.id)
+
 export const selectEstimate = ({ commit, estimates, state }, data) => {
   commit(types.SET_SELECTED_ESTIMATES, data)
-  if (state.selectedEstimates.length === state.estimatesDraft.length) {
+  const listed = listedEstimateIds(state)
+  if (listed.length && state.selectedEstimates.length === listed.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)
@@ -147,11 +169,12 @@ export const setSelectAllState = ({ commit, estimates, state }, data) => {
 }
 
 export const selectAllEstimates = ({ commit, estimates, state }) => {
-  if (state.selectedEstimates.length === state.estimatesDraft.length) {
+  let allEstimateIds = listedEstimateIds(state)
+
+  if (state.selectedEstimates.length === allEstimateIds.length) {
     commit(types.SET_SELECTED_ESTIMATES, [])
     commit(types.SET_SELECT_ALL_STATE, false)
   } else {
-    let allEstimateIds = state.estimatesDraft.map(estimt => estimt.id)
     commit(types.SET_SELECTED_ESTIMATES, allEstimateIds)
     commit(types.SET_SELECT_ALL_STATE, true)
   }
