@@ -137,7 +137,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -154,7 +154,7 @@
           :label="$t('payments.party_name')"
           show="master.name"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: role === 'admin' ? `payments/${row.id}/edit?d=true` : `/payments`}" class="dropdown-item">
                {{ row.master.name }}
               </router-link>
@@ -180,7 +180,7 @@
           :filterable="false"
           cell-class="action-dropdown no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span>{{ $t('payments.action') }}</span>
             <v-dropdown>
               <span slot="activator" href="#">

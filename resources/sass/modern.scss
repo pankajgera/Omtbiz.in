@@ -290,6 +290,17 @@ textarea {
     color: #fff !important;
 }
 
+/* Active items force a white icon for the teal selected state, but the
+   menu-item also carries tw:hover:bg-sidebar-hover (utilities !important),
+   which replaces that teal with the light hover wash. Keep the icon on
+   --ui-sidebar-text so it stays black on light hover / white on dark hover. */
+.skin-omtbiz .sidebar-left .menu-item:hover .menu-icon,
+.skin-omtbiz .sidebar-left .menu-item:focus-visible .menu-icon,
+.skin-omtbiz .sidebar-left .menu-item.active:hover .menu-icon,
+.skin-omtbiz .sidebar-left .menu-item.active:focus-visible .menu-icon {
+    color: var(--ui-sidebar-text) !important;
+}
+
 .sidebar-left .menu-item.active::after {
     display: none;
 }
