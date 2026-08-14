@@ -124,7 +124,7 @@
           :label="$t('audit_logs.date_time')"
           show="formatted_created_at"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div>{{ row.formatted_created_at }}</div>
             <small class="text-muted">{{ relativeTime(row.created_at) }}</small>
           </template>
@@ -133,7 +133,7 @@
           :label="$t('audit_logs.document')"
           show="module"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link v-if="row.document_path" :to="{ path: row.document_path }" class="document-link">
               <span class="document-type">{{ row.module }}</span>
               <span class="document-number">{{ row.document_number || ('#' + row.auditable_id) }}</span>
@@ -148,7 +148,7 @@
           :label="$t('audit_logs.action')"
           show="action_label"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div :class="actionBadgeClass(row.action)">{{ row.action_label || row.action }}</div>
           </template>
         </table-column>
@@ -156,7 +156,7 @@
           :label="$t('audit_logs.user')"
           show="user_name"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div>{{ row.user_name || '—' }}</div>
             <small class="text-muted">{{ row.user_email }}</small>
           </template>
@@ -167,7 +167,7 @@
           :label="$t('audit_logs.description')"
           show="description"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div>{{ row.description }}</div>
             <ul v-if="row.change_summary && row.change_summary.length" class="change-summary">
               <li v-for="(change, idx) in visibleChanges(row)" :key="idx">

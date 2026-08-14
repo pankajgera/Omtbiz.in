@@ -156,7 +156,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -172,7 +172,7 @@
         <table-column
           :label="$t('dispatch.invoice_id')"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: `/dispatch/${row.id}/edit`}" >
               <span> {{ $t('dispatch.invoice_id') }} </span>
               <span v-if="row.invoices.length ">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>
@@ -182,7 +182,7 @@
         <table-column
           :label="$t('dispatch.name')"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span> {{ $t('dispatch.name') }} </span>
             <span v-if="row.master">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>
           </template>
@@ -200,7 +200,7 @@
           :filterable="false"
           cell-class="action-dropdown"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span> {{ $t('dispatch.action') }} </span>
             <v-dropdown>
               <span slot="activator" href="#">
@@ -236,7 +236,7 @@
           :filterable="false"
           cell-class="no-click"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div class="custom-control custom-checkbox">
               <input
                 :id="row.id"
@@ -250,7 +250,7 @@
           </template>
         </table-column>
         <table-column :label="$t('dispatch.invoice_id')">
-          <template slot-scope="row">
+          <template #default="row">
             <router-link :to="{path: `/dispatch/${row.id}/edit`}" >
               <span> {{ $t('dispatch.invoice_id') }} </span>
               <span v-if="row.invoices.length ">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>
@@ -260,7 +260,7 @@
         <table-column
           :label="$t('dispatch.name')"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <span> {{ $t('dispatch.name') }} </span>
             <span v-if="row.master">{{ row.master.name }}</span>
           </template>

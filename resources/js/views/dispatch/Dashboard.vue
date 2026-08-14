@@ -267,7 +267,7 @@ export default {
 }
 .dispatch-dashboard-card-label {
   margin-bottom: 2px;
-  color: #74767f;
+  color: var(--ui-text-muted);
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -277,11 +277,11 @@ export default {
   margin-bottom: 0;
   font-size: 30px;
   font-weight: 700;
-  color: #2b2b40;
+  color: var(--ui-text);
 }
 .dispatch-dashboard-card-arrow {
   flex: 0 0 auto;
-  color: #c4c4d0;
+  color: var(--ui-text-muted);
   font-size: 14px;
 }
 
@@ -312,7 +312,7 @@ export default {
   border-radius: 0 !important;
   font-size: 13px;
   font-weight: 600;
-  color: #55547a !important;
+  color: var(--ui-text-muted) !important;
   text-decoration: none !important;
   white-space: nowrap;
 }
@@ -327,7 +327,7 @@ export default {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
-  color: #74767f;
+  color: var(--ui-text-muted);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -338,7 +338,7 @@ export default {
   font-size: 13px;
 }
 .dispatch-activity-section-icon--pending {
-  color: #55547a;
+  color: var(--ui-text-muted);
 }
 .dispatch-activity-list {
   list-style: none;
@@ -356,10 +356,10 @@ export default {
   text-decoration: none;
 }
 .dispatch-activity-item:hover {
-  background: #f5f6fa;
+  background: var(--ui-surface-hover);
 }
 .dispatch-activity-item + .dispatch-activity-item {
-  border-top: 1px solid #f0f0f4;
+  border-top: 1px solid var(--ui-border);
 }
 .dispatch-activity-party {
   flex: 0 0 auto;
@@ -368,25 +368,25 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   font-weight: 600;
-  color: #2b2b40;
+  color: var(--ui-text);
 }
 .dispatch-activity-invoices {
   flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  color: #74767f;
+  color: var(--ui-text-muted);
   font-size: 13px;
 }
 .dispatch-activity-meta {
   flex: 0 0 auto;
-  color: #a4a6b3;
+  color: var(--ui-text-muted);
   font-size: 12px;
   white-space: nowrap;
 }
 .dispatch-activity-empty {
   margin: 0;
-  color: #a4a6b3;
+  color: var(--ui-text-muted);
   font-size: 13px;
 }
 
@@ -407,7 +407,7 @@ export default {
 }
 .dispatch-party-name {
   font-weight: 600;
-  color: #2b2b40;
+  color: var(--ui-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -415,14 +415,14 @@ export default {
 }
 .dispatch-party-count {
   flex: 0 0 auto;
-  color: #74767f;
+  color: var(--ui-text-muted);
   font-size: 13px;
   font-weight: 700;
 }
 .dispatch-party-bar-track {
   height: 6px;
   border-radius: 3px;
-  background: #f0f0f4;
+  background: var(--ui-border);
   overflow: hidden;
 }
 .dispatch-party-bar-fill {
