@@ -259,6 +259,7 @@ export default {
           id: 2,
           name: 'Sent',
         };
+      await this.ensureInvoicesLoaded(this.formData.invoice_id)
       this.loadInvoice()
     },
     async loadIsToBeDispatch() {
@@ -271,10 +272,32 @@ export default {
       let invoiceId = []
       response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))
       this.formData.invoice_id = invoiceId
+      await this.ensureInvoicesLoaded(this.formData.invoice_id)
       this.loadInvoice()
       this.assignToBeDispatch = true
       this.formData['all_selected_dispatch'] = [];
       response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))
+    },
+    // The invoice picker's options list (fetchInvoices) only returns bills
+    // still pending dispatch - once a dispatch is sent, its invoice(s) get
+    // marked COMPLETED and drop out of that list, so re-opening the edit
+    // page for an already-sent dispatch would otherwise have nothing to
+    // match against and render the invoice field empty. Top up invoiceList
+    // with whichever ids are actually assigned to this dispatch, regardless
+    // of their status, before trying to resolve them in loadInvoice().
+    async ensureInvoicesLoaded (invoiceIds) {
+      let missingIds = (invoiceIds || [])
+        .map(i => parseInt(i))
+        .filter(id => !isNaN(id) && !this.invoiceList.some(inv => inv.id === id))
+      if (! missingIds.length) {
+        return
+      }
+      let response = await axios.get(`/api/dispatch/invoices`, { params: { include_ids: missingIds.join(',') } })
+      if (response.data && response.data.invoices) {
+        let existingIds = this.invoiceList.map(inv => inv.id)
+        let toAdd = response.data.invoices.filter(inv => ! existingIds.includes(inv.id))
+        this.invoiceList = this.invoiceList.concat(toAdd)
+      }
     },
     async fetchInvoices () {
       let response = await axios.get(`/api/dispatch/invoices`)

@@ -15,6 +15,12 @@ export default {
     }
   },
   [types.SET_SELECTED_COMPANY] (state, company) {
+    if (! company) {
+      // $user->company can resolve to null (e.g. an account not yet
+      // assigned to a company) - keep whatever BOOTSTRAP_COMPANIES already
+      // defaulted state.selectedCompany to instead of crashing here.
+      return
+    }
     Ls.set('selectedCompany', company.id)
     state.selectedCompany = company
   }

@@ -39,12 +39,12 @@ class Dispatch extends Model
     public function scopeWhereDesignNo($query, $date_time)
     {
         $date = Carbon::parse($date_time)->format('Y-m-d');
-        return $query->where(DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"), $date);
+        return $query->where(DB::raw("(DATE_FORMAT(dispatches.date_time,'%Y-%m-%d'))"), $date);
     }
     public function scopeDisptachBetween($query, $start, $end)
     {
         return $query->whereBetween(
-            'date_time',
+            'dispatches.date_time',
             [$start->copy()->startOfDay()->format('Y-m-d H:i:s'), $end->copy()->endOfDay()->format('Y-m-d H:i:s')]
         );
     }
@@ -55,16 +55,95 @@ class Dispatch extends Model
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
     {
-        $query->orderBy($orderByField, $orderBy);
+        // Table-qualified so this stays unambiguous once whereSearch()'s join
+        // onto invoices (which also has a created_at column) is in play.
+        $query->orderBy('dispatches.' . $orderByField, $orderBy);
+    }
+
+    /**
+     * Free-text search by invoice number (and optionally party name).
+     *
+     * Joins on the *first* invoice id in each dispatch's (possibly
+     * comma-separated) invoice_id via SUBSTRING_INDEX rather than a
+     * FIND_IN_SET correlated subquery - FIND_IN_SET can't use the invoices
+     * primary key index and times out once the dispatches table is large
+     * (tested: 30s+ against ~28k rows). Multi-invoice bundles are only
+     * created once a dispatch is actually sent (see Dispatch::moveDispatch),
+     * so on the pending/Draft worklist this join is exact in practice; on
+     * the completed/Sent worklist (where bundles are more common) a search
+     * term matching only a later invoice in a bundle can be missed - an
+     * accepted tradeoff for staying fast at scale.
+     *
+     * @param bool $matchParty also match the linked invoice's party name,
+     *             not just its invoice number (the Pending page's search
+     *             covers both; the Completed page's search is invoice-number-only).
+     */
+    public function scopeWhereSearch($query, $search, $matchParty = true)
+    {
+        $query
+            ->join('invoices', DB::raw('CAST(SUBSTRING_INDEX(dispatches.invoice_id, \',\', 1) AS UNSIGNED)'), '=', 'invoices.id')
+            ->select('dispatches.*');
+
+        if (! $matchParty) {
+            return $query->where('invoices.invoice_number', 'like', '%' . $search . '%');
+        }
+
+        return $query
+            ->leftJoin('account_masters', 'account_masters.id', '=', 'invoices.account_master_id')
+            ->where(function ($w) use ($search) {
+                $w->where('invoices.invoice_number', 'like', '%' . $search . '%')
+                    ->orWhere('account_masters.name', 'like', '%' . $search . '%');
+            });
+    }
+
+    /**
+     * Named date-range filter for the dispatch worklists (all time/today/
+     * yesterday/next day/this week/this month), based on the dispatch's
+     * date_time.
+     */
+    public function scopeWhereDateFilter($query, $filter)
+    {
+        $today = Carbon::now('Asia/Kolkata');
+
+        switch ($filter) {
+            case 'all':
+                return $query;
+            case 'yesterday':
+                return $query->where(
+                    DB::raw("(DATE_FORMAT(dispatches.date_time,'%Y-%m-%d'))"),
+                    $today->copy()->subDay()->format('Y-m-d')
+                );
+            case 'next_day':
+                return $query->where(
+                    DB::raw("(DATE_FORMAT(dispatches.date_time,'%Y-%m-%d'))"),
+                    $today->copy()->addDay()->format('Y-m-d')
+                );
+            case 'this_week':
+                return $query->whereBetween('dispatches.date_time', [
+                    $today->copy()->startOfWeek()->format('Y-m-d H:i:s'),
+                    $today->copy()->endOfWeek()->format('Y-m-d H:i:s'),
+                ]);
+            case 'this_month':
+                return $query->whereBetween('dispatches.date_time', [
+                    $today->copy()->startOfMonth()->format('Y-m-d H:i:s'),
+                    $today->copy()->endOfMonth()->format('Y-m-d H:i:s'),
+                ]);
+            case 'today':
+            default:
+                return $query->where(
+                    DB::raw("(DATE_FORMAT(dispatches.date_time,'%Y-%m-%d'))"),
+                    $today->format('Y-m-d')
+                );
+        }
     }
 
     public function scopeWhereCompany($query, $company_id, $filter=null)
     {
-        $query->where('company_id', $company_id);
+        $query->where('dispatches.company_id', $company_id);
         // Default list (no filters) shows today's dispatches in Asia/Kolkata
         if ($filter === 'false' || $filter === false || $filter === 0 || $filter === '0') {
             $query->where(
-                DB::raw("(DATE_FORMAT(date_time,'%Y-%m-%d'))"),
+                DB::raw("(DATE_FORMAT(dispatches.date_time,'%Y-%m-%d'))"),
                 Carbon::now('Asia/Kolkata')->format('Y-m-d')
             );
         }

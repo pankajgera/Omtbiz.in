@@ -200,6 +200,9 @@ Route::group(['middleware' => 'api'], function () {
     Route::post('/dispatch/update-to-be', [App\Http\Controllers\DispatchController::class, 'updateToBeDispatch'])->name('dispatch.updatetobe');
     Route::post('/dispatch/to-be-edit', [App\Http\Controllers\DispatchController::class, 'tobeEdit'])->name('dispatch.tobeedit');
     Route::get('/dispatch/invoices', [App\Http\Controllers\DispatchController::class, 'getInvoices'])->name('dispatch');
+    Route::get('/dispatch/dashboard', [App\Http\Controllers\DispatchController::class, 'dashboard'])->name('dispatch.dashboard');
+    Route::get('/dispatch/pending', [App\Http\Controllers\DispatchController::class, 'pending'])->name('dispatch.pending');
+    Route::get('/dispatch/completed-list', [App\Http\Controllers\DispatchController::class, 'completedList'])->name('dispatch.completedlist');
     Route::resource('dispatch', App\Http\Controllers\DispatchController::class);
 
     // Audit Logs (admin only)

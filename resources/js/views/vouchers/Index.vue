@@ -207,6 +207,11 @@
           </template>
         </table-column>
         <table-column
+          :label="$t('vouchers.date')"
+          sort-as="date"
+          show="formattedDate"
+        />
+        <table-column
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"

@@ -18,6 +18,50 @@
       </Header>
     </div>
 
+    <div class="search-bar row">
+      <div class="col-sm-4">
+        <base-input
+          v-model="searchInput"
+          type="text"
+          name="search"
+          icon="search"
+          autocomplete="off"
+          :placeholder="$t('audit_logs.search_placeholder')"
+          @input="handleSearchInput"
+        />
+      </div>
+      <div class="col-sm-4">
+        <base-select
+          v-model="filters.type"
+          :options="typeOptions"
+          :searchable="false"
+          :show-labels="false"
+          :allow-empty="false"
+          label="label"
+          track-by="value"
+        />
+      </div>
+      <div class="col-sm-4">
+        <base-select
+          v-model="dateRangeOption"
+          :options="dateRangeOptions"
+          :searchable="false"
+          :show-labels="false"
+          :allow-empty="false"
+          label="label"
+          track-by="value"
+        />
+      </div>
+    </div>
+
+    <div v-if="activeFilterChips.length" class="filter-chips">
+      <span v-for="chip in activeFilterChips" :key="chip.key" class="filter-chip">
+        {{ chip.label }}
+        <a href="#" class="filter-chip-remove" @click.prevent="clearFilterKey(chip.key)">×</a>
+      </span>
+      <a href="#" class="clear-all-chip" @click.prevent="clearFilter">{{ $t('general.clear_all') }}</a>
+    </div>
+
     <transition name="fade">
       <div v-show="showFilters" class="filter-section">
         <div class="row">
@@ -32,32 +76,6 @@
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label">{{ $t('audit_logs.action') }}</label>
-            <base-select
-              v-model="filters.action"
-              :options="actionOptions"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="true"
-              :placeholder="$t('audit_logs.select_action')"
-              label="label"
-              track-by="value"
-            />
-          </div>
-          <div class="col-sm-3">
-            <label class="form-label">{{ $t('audit_logs.module') }}</label>
-            <base-select
-              v-model="filters.module"
-              :options="moduleOptions"
-              :searchable="true"
-              :show-labels="false"
-              :allow-empty="true"
-              :placeholder="$t('audit_logs.select_module')"
-              label="label"
-              track-by="value"
-            />
-          </div>
-          <div class="col-sm-3">
             <label class="form-label">{{ $t('general.from_date') }}</label>
             <base-input
               v-model="filters.from_date"
@@ -65,7 +83,7 @@
               name="from_date"
             />
           </div>
-          <div class="col-sm-3 mt-2">
+          <div class="col-sm-3">
             <label class="form-label">{{ $t('general.to_date') }}</label>
             <base-input
               v-model="filters.to_date"
@@ -105,40 +123,69 @@
         <table-column
           :label="$t('audit_logs.date_time')"
           show="formatted_created_at"
-        />
-        <table-column
-          :label="$t('audit_logs.user')"
-          show="user_name"
         >
-          <template slot-scope="row">
-            <div>{{ row.user_name || '—' }}</div>
-            <small class="text-muted">{{ row.user_email }}</small>
+          <template #default="row">
+            <div>{{ row.formatted_created_at }}</div>
+            <small class="text-muted">{{ relativeTime(row.created_at) }}</small>
+          </template>
+        </table-column>
+        <table-column
+          :label="$t('audit_logs.document')"
+          show="module"
+        >
+          <template #default="row">
+            <router-link v-if="row.document_path" :to="{ path: row.document_path }" class="document-link">
+              <span class="document-type">{{ row.module }}</span>
+              <span class="document-number">{{ row.document_number || ('#' + row.auditable_id) }}</span>
+            </router-link>
+            <div v-else>
+              <span class="document-type">{{ row.module }}</span>
+              <span v-if="row.document_number" class="document-number">{{ row.document_number }}</span>
+            </div>
           </template>
         </table-column>
         <table-column
           :label="$t('audit_logs.action')"
           show="action_label"
         >
-          <template slot-scope="row">
+          <template #default="row">
             <div :class="actionBadgeClass(row.action)">{{ row.action_label || row.action }}</div>
           </template>
         </table-column>
         <table-column
-          :label="$t('audit_logs.module')"
-          show="module"
-        />
+          :label="$t('audit_logs.user')"
+          show="user_name"
+        >
+          <template #default="row">
+            <div>{{ row.user_name || '—' }}</div>
+            <small class="text-muted">{{ row.user_email }}</small>
+          </template>
+        </table-column>
         <table-column
           :sortable="false"
           :filterable="false"
           :label="$t('audit_logs.description')"
           show="description"
-        />
-        <table-column
-          :sortable="false"
-          :filterable="false"
-          :label="$t('audit_logs.ip')"
-          show="ip_address"
-        />
+        >
+          <template #default="row">
+            <div>{{ row.description }}</div>
+            <ul v-if="row.change_summary && row.change_summary.length" class="change-summary">
+              <li v-for="(change, idx) in visibleChanges(row)" :key="idx">
+                <b>{{ change.field }}:</b> {{ change.old }} → {{ change.new }}
+              </li>
+            </ul>
+            <a
+              v-if="row.change_summary && row.change_summary.length > changeSummaryLimit"
+              href="#"
+              class="change-toggle"
+              @click.prevent="toggleChanges(row.id)"
+            >
+              {{ expandedChanges[row.id]
+                ? $t('audit_logs.show_less')
+                : $t('audit_logs.show_more', { count: row.change_summary.length - changeSummaryLimit }) }}
+            </a>
+          </template>
+        </table-column>
       </table-component>
     </div>
   </div>
@@ -151,6 +198,80 @@
 .badge-login { color: #0b5ed7; font-weight: 600; }
 .badge-logout { color: #6c757d; font-weight: 600; }
 .badge-failed { color: #b00020; font-weight: 600; }
+
+.search-bar {
+  margin-bottom: 12px;
+  align-items: flex-start;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #eef1f7;
+  border-radius: 14px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #40495c;
+}
+
+.filter-chip-remove {
+  margin-left: 6px;
+  color: #6c757d;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.clear-all-chip {
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.document-link {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.change-summary {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+}
+
+.change-summary li {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.change-toggle {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.document-type {
+  font-size: 12px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.document-number {
+  font-weight: 600;
+}
+
+.document-link .document-number {
+  color: #2a5bd7;
+}
+
 </style>
 
 <style>
@@ -160,6 +281,10 @@
   min-height: 40px;
   margin-bottom: 16px;
   padding-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 .audit-logs .table-container .table-component {
   margin-top: 8px;
@@ -184,6 +309,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import moment from 'moment'
 import AstronautIcon from '../../components/icon/AstronautIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
 
@@ -193,46 +319,46 @@ export default {
     BaseButton
   },
   data () {
+    const typeOptions = [
+      { label: this.$t('audit_logs.all_types'), value: '' },
+      { label: this.$t('navigation.invoices'), value: 'invoice' },
+      { label: this.$t('navigation.estimates'), value: 'estimate' },
+      { label: this.$t('navigation.orders'), value: 'order' },
+      { label: this.$t('navigation.inventory'), value: 'inventory' },
+      { label: this.$t('navigation.voucher'), value: 'voucher' },
+      { label: this.$t('navigation.receipts'), value: 'receipt' },
+      { label: this.$t('audit_logs.login_logout'), value: 'auth' }
+    ]
+    // Default to Invoice only — a full "All Types" load pulls in every
+    // module and is exactly the noisy view this page was built to avoid.
+    const defaultTypeValue = 'invoice'
+    const defaultType = typeOptions.find(o => o.value === defaultTypeValue)
+
     return {
       showFilters: false,
       filtersApplied: false,
       isRequestOngoing: true,
       currentPage: 1,
       perPage: 15,
+      searchInput: '',
+      searchDebounce: null,
+      changeSummaryLimit: 3,
+      expandedChanges: {},
+      defaultTypeValue,
       filters: {
+        search: '',
+        type: defaultType,
         user: '',
-        action: '',
-        module: '',
         from_date: '',
         to_date: ''
       },
-      actionOptions: [
-        { label: 'Login', value: 'login' },
-        { label: 'Logout', value: 'logout' },
-        { label: 'Login Failed', value: 'login_failed' },
-        { label: 'Created', value: 'created' },
-        { label: 'Updated', value: 'updated' },
-        { label: 'Deleted', value: 'deleted' }
-      ],
-      moduleOptions: [
-        { label: 'Auth', value: 'auth' },
-        { label: 'User', value: 'user' },
-        { label: 'Invoice', value: 'invoice' },
-        { label: 'Order', value: 'order' },
-        { label: 'Estimate', value: 'estimate' },
-        { label: 'Inventory', value: 'inventory' },
-        { label: 'Voucher', value: 'voucher' },
-        { label: 'Receipt', value: 'receipt' },
-        { label: 'Payment', value: 'payment' },
-        { label: 'Bill-ty', value: 'item' },
-        { label: 'Dispatch', value: 'dispatch' },
-        { label: 'Note', value: 'note' },
-        { label: 'Account Master', value: 'master' },
-        { label: 'Ledger', value: 'ledger' },
-        { label: 'Group', value: 'group' },
-        { label: 'Expense', value: 'expense' },
-        { label: 'Bank', value: 'bank' },
-        { label: 'Company', value: 'company' }
+      typeOptions,
+      dateRangeOption: { label: this.$t('audit_logs.all_time'), value: '' },
+      dateRangeOptions: [
+        { label: this.$t('audit_logs.all_time'), value: '' },
+        { label: this.$t('audit_logs.today'), value: 'today' },
+        { label: this.$t('audit_logs.this_week'), value: 'week' },
+        { label: this.$t('audit_logs.this_month'), value: 'month' }
       ],
       breadCrumbLinks: [
         {
@@ -255,10 +381,11 @@ export default {
       return !this.totalAuditLogs && !this.isRequestOngoing && !this.hasCustomFilters
     },
     hasCustomFilters () {
+      const typeValue = this.filters.type && this.filters.type.value
       return !!(
+        this.filters.search ||
+        (typeValue && typeValue !== this.defaultTypeValue) ||
         this.filters.user ||
-        this.filters.action ||
-        this.filters.module ||
         this.filters.from_date ||
         this.filters.to_date
       )
@@ -274,6 +401,33 @@ export default {
     },
     pageEnd () {
       return Math.min(this.currentPage * this.perPage, this.totalAuditLogs)
+    },
+    activeFilterChips () {
+      const chips = []
+
+      if (this.filters.search) {
+        chips.push({ key: 'search', label: `"${this.filters.search}"` })
+      }
+
+      const typeValue = this.filters.type && this.filters.type.value
+      if (typeValue && typeValue !== this.defaultTypeValue) {
+        const option = this.typeOptions.find(o => o.value === typeValue)
+        chips.push({ key: 'type', label: option ? option.label : typeValue })
+      }
+
+      if (this.filters.user) {
+        chips.push({ key: 'user', label: `${this.$t('audit_logs.user')}: ${this.filters.user}` })
+      }
+
+      if (this.filters.from_date) {
+        chips.push({ key: 'from_date', label: `${this.$t('general.from_date')}: ${this.filters.from_date}` })
+      }
+
+      if (this.filters.to_date) {
+        chips.push({ key: 'to_date', label: `${this.$t('general.to_date')}: ${this.filters.to_date}` })
+      }
+
+      return chips
     }
   },
   watch: {
@@ -282,6 +436,15 @@ export default {
         this.$refs.table && this.$refs.table.refresh()
       },
       deep: true
+    },
+    dateRangeOption (option) {
+      const value = option && option.value
+      if (!value) {
+        this.filters.from_date = ''
+        this.filters.to_date = ''
+      } else {
+        this.setQuickRange(value)
+      }
     }
   },
   methods: {
@@ -291,29 +454,72 @@ export default {
     toggleFilter () {
       this.showFilters = !this.showFilters
     },
+    handleSearchInput (value) {
+      clearTimeout(this.searchDebounce)
+      this.searchDebounce = setTimeout(() => {
+        this.filters.search = value
+      }, 300)
+    },
+    clearFilterKey (key) {
+      if (key === 'search') {
+        this.searchInput = ''
+        this.filters.search = ''
+      } else if (key === 'type') {
+        this.filters.type = this.defaultTypeOption()
+      } else if (key === 'from_date' || key === 'to_date') {
+        this.filters.from_date = ''
+        this.filters.to_date = ''
+        this.dateRangeOption = { label: this.$t('audit_logs.all_time'), value: '' }
+      } else {
+        this.filters[key] = ''
+      }
+    },
     clearFilter () {
+      this.searchInput = ''
+      this.dateRangeOption = { label: this.$t('audit_logs.all_time'), value: '' }
       this.filters = {
+        search: '',
+        type: this.defaultTypeOption(),
         user: '',
-        action: '',
-        module: '',
         from_date: '',
         to_date: ''
       }
       this.filtersApplied = false
       this.$refs.table && this.$refs.table.refresh()
     },
+    defaultTypeOption () {
+      return this.typeOptions.find(o => o.value === this.defaultTypeValue)
+    },
+    setQuickRange (range) {
+      const pad = (n) => String(n).padStart(2, '0')
+      const toInputDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+      const now = new Date()
+      let from = now
+
+      if (range === 'week') {
+        const day = now.getDay() === 0 ? 7 : now.getDay()
+        from = new Date(now)
+        from.setDate(now.getDate() - day + 1)
+      } else if (range === 'month') {
+        from = new Date(now.getFullYear(), now.getMonth(), 1)
+      }
+
+      this.filters.from_date = toInputDate(from)
+      this.filters.to_date = toInputDate(now)
+    },
     getFilterParams () {
-      const action = this.filters.action && this.filters.action.value
-        ? this.filters.action.value
-        : (this.filters.action || '')
-      const module = this.filters.module && this.filters.module.value
-        ? this.filters.module.value
-        : (this.filters.module || '')
+      const type = (this.filters.type && this.filters.type.value) || ''
+      // Default view covers invoices/estimates/orders/inventory/vouchers/
+      // receipts (create/update/delete) plus login/logout activity. Other
+      // modules (users, banks, etc.) stay out to keep this readable; the
+      // Type filter narrows further.
+      const module = type || 'invoice,estimate,order,inventory,voucher,receipt,auth'
 
       return {
-        user: this.filters.user,
-        action,
+        search: this.filters.search,
         module,
+        action: 'created,updated,deleted,login,logout,login_failed',
+        user: this.filters.user,
         from_date: this.filters.from_date,
         to_date: this.filters.to_date
       }
@@ -362,6 +568,18 @@ export default {
       if (action === 'logout') return 'badge-logout'
       if (action === 'login_failed') return 'badge-failed'
       return ''
+    },
+    relativeTime (date) {
+      return date ? moment(date).fromNow() : ''
+    },
+    visibleChanges (row) {
+      if (this.expandedChanges[row.id] || row.change_summary.length <= this.changeSummaryLimit) {
+        return row.change_summary
+      }
+      return row.change_summary.slice(0, this.changeSummaryLimit)
+    },
+    toggleChanges (id) {
+      this.$set(this.expandedChanges, id, !this.expandedChanges[id])
     }
   }
 }

@@ -122,6 +122,9 @@ const BankCreate = () => import('./views/bank/Create.vue')
 // Dispatch
 const DispatchIndex = () => import('./views/dispatch/Index.vue')
 const DispatchCreate = () => import('./views/dispatch/Create.vue')
+const DispatchDashboard = () => import('./views/dispatch/Dashboard.vue')
+const DispatchPending = () => import('./views/dispatch/Pending.vue')
+const DispatchCompleted = () => import('./views/dispatch/Completed.vue')
 
 const routes = [
     /*
@@ -570,6 +573,24 @@ const routes = [
                 path: 'dispatch/create',
                 name: 'dispatch.create',
                 component: DispatchCreate,
+                meta: ['admin', 'accountant', 'dispatch']
+            },
+            {
+                path: 'dispatch/dashboard',
+                name: 'dispatch.dashboard',
+                component: DispatchDashboard,
+                meta: ['admin', 'accountant', 'dispatch']
+            },
+            {
+                path: 'dispatch/pending',
+                name: 'dispatch.pending',
+                component: DispatchPending,
+                meta: ['admin', 'accountant', 'dispatch']
+            },
+            {
+                path: 'dispatch/completed',
+                name: 'dispatch.completedList',
+                component: DispatchCompleted,
                 meta: ['admin', 'accountant', 'dispatch']
             },
             {

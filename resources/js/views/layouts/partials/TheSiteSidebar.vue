@@ -162,6 +162,14 @@ export default {
             title: "navigation.dispatch",
             icon: "truck",
             route: "/dispatch",
+            exact: true,
+            meta: ["admin", "accountant", "dispatch"],
+          },
+          {
+            title: "navigation.dispatch_dashboard",
+            icon: "tachometer-alt",
+            route: "/dispatch/dashboard",
+            exact: true,
             meta: ["admin", "accountant", "dispatch"],
           },
           {

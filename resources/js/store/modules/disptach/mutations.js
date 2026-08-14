@@ -20,6 +20,9 @@ export default {
     [types.SET_TOTAL_DISPATCH](state, totalDispatch) {
         state.totalDispatch = totalDispatch
     },
+    [types.SET_DASHBOARD_COUNTS](state, counts) {
+        state.dashboardCounts = counts
+    },
     [types.ADD_DISPATCH](state, data) {
         state.dispatch.push(data.dispatch)
     },

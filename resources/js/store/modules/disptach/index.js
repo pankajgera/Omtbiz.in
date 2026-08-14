@@ -11,6 +11,11 @@ const initialState = {
   selectAllToBeField: false,
   selectedDispatch: [],
   selectedToBeDispatch: [],
+  dashboardCounts: {
+    pending_count: 0,
+    dispatched_count: 0,
+    total_count: 0,
+  },
 }
 
 export default {
