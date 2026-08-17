@@ -316,31 +316,33 @@
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>Dispatched</h4>
-        <base-button
-          v-show="dipatchedCompletedData"
-          :outline="true"
-          :icon="['fas', 'print']"
-          color="theme"
-          size="large"
-          class="dispatch-print-button"
-          right-icon
-          @click="printDispatched"
-        >
-          Print
-        </base-button>
-        <transition name="fade">
-          <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleDispatch('sent')">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
+        <div class="dispatch-table-actions">
+          <base-button
+            v-show="dipatchedCompletedData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            class="dispatch-print-button"
+            right-icon
+            @click="printDispatched"
+          >
+            Print
+          </base-button>
+          <transition name="fade">
+            <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleDispatch('sent')">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </transition>
+        </div>
       </div>
 
       <div class="custom-control custom-checkbox">

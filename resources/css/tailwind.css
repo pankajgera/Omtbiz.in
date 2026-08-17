@@ -1523,6 +1523,122 @@ a:focus {
     width: auto;
 }
 
+/* In-page camera capture (components/base/CameraCapture.vue). */
+.camera-capture {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: var(--ui-overlay);
+}
+
+.camera-capture__panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 40rem;
+    max-height: 100%;
+    overflow: hidden;
+    color: var(--ui-text);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--ui-shadow-md);
+}
+
+.camera-capture__header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1.25rem;
+    border-bottom: 1px solid var(--ui-border);
+}
+
+.camera-capture__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.camera-capture__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    padding: 0;
+    color: var(--ui-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.camera-capture__close:hover,
+.camera-capture__close:focus-visible {
+    color: var(--ui-text);
+    background: var(--ui-surface-hover);
+}
+
+/* Black behind the preview so the letterboxing either side of the video does
+   not read as a broken panel - phone sensors are 4:3/16:9 and rarely match. */
+.camera-capture__stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 14rem;
+    overflow: hidden;
+    background: #000;
+}
+
+.camera-capture__video,
+.camera-capture__preview {
+    display: block;
+    width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+}
+
+.camera-capture__status,
+.camera-capture__error {
+    margin: 0;
+    padding: 1.5rem 1.25rem;
+    color: #fff;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.camera-capture__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    border-top: 1px solid var(--ui-border);
+}
+
+.camera-capture__actions .base-button,
+.camera-capture__actions .btn {
+    margin: 0 !important;
+}
+
+/* Camera and file-picker buttons side by side on the bill-ty form. */
+.bill-image-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.bill-image-actions .base-button,
+.bill-image-actions .btn {
+    margin: 0 !important;
+}
+
 .ledger-filter-section {
     padding: 1rem 1.25rem 1.25rem !important;
     border: 1px solid var(--ui-border);

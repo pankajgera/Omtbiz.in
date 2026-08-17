@@ -86,11 +86,25 @@
                 </div>
               </div>
               <div class="form-group">
-                <div class="fileUpload btn btn-default">
-                  <label class="upload mb-0">
-                    <input type="file" accept="image/*" name="image" @change="uploadImage">
-                      Upload Image
-                  </label>
+                <div class="bill-image-actions">
+                  <!-- Straight to the camera, frame captured in-page. Shown
+                       whenever the browser exposes a camera, which covers
+                       phones and any laptop with a webcam. -->
+                  <base-button
+                    v-if="canUseCamera"
+                    color="theme"
+                    :icon="['fas', 'camera']"
+                    type="button"
+                    @click="showCamera = true"
+                  >
+                    {{ $t('general.take_photo') }}
+                  </base-button>
+                  <div class="fileUpload btn btn-default">
+                    <label class="upload mb-0">
+                      <input type="file" accept="image/*" name="image" @change="uploadImage">
+                        Upload Image
+                    </label>
+                  </div>
                 </div>
                 <div v-if="formData.image">
                   <a style="font-size: 12px" :href="formData.image" target="_blank"></a>
@@ -116,6 +130,12 @@
         <img :src="previewImage" class="uploading-image" style="width: 100%; height: 90%">
       </div>
     </div>
+
+    <camera-capture
+      v-if="showCamera"
+      @capture="onCameraCapture"
+      @close="showCamera = false"
+    />
   </div>
 </template>
 <style scoped>
@@ -132,11 +152,14 @@ input[type="file"]
 import { validationMixin } from 'vuelidate'
 import { mapActions } from 'vuex'
 import { required, minLength, maxLength } from '@vuelidate/validators';
+import CameraCapture from '../../components/base/CameraCapture'
 export default {
+  components: { CameraCapture },
   mixins: [validationMixin],
   data () {
     return {
       isLoading: false,
+      showCamera: false,
       title: 'Add Item',
       units: [
         { name: 'box', value: 'box' },
@@ -181,6 +204,12 @@ export default {
         return true
       }
       return false
+    },
+    // Absent on plain http (getUserMedia is secure-context only), so over an
+    // unencrypted LAN address the camera button simply doesn't appear and the
+    // file picker stays as the only route.
+    canUseCamera () {
+      return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
     }
   },
   mounted() {
@@ -261,7 +290,10 @@ export default {
     },
     async submitItem () {
       this.$v.formData.$touch()
-      if (this.$v.$invalid) {
+      // The date is checked by hand as well as through $v: existing rows can
+      // have a null date (the column is nullable), the edit form seeds itself
+      // from the record, and posting that null used to 500 the save.
+      if (this.$v.$invalid || ! this.formData.date) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }
@@ -288,12 +320,21 @@ export default {
     },
     uploadImage (e) {
       const image = e.target.files[0]
+      if (! image) {
+        return
+      }
       const reader = new FileReader()
       reader.readAsDataURL(image)
       reader.onload = e => {
         this.previewImage = e.target.result
         this.formData.image = this.previewImage
       }
+    },
+    // The camera hands back the same JPEG data URL the file reader produces, so
+    // this lands in exactly the state an uploaded file would.
+    onCameraCapture (dataUrl) {
+      this.previewImage = dataUrl
+      this.formData.image = dataUrl
     }
   }
 }

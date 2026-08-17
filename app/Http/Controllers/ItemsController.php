@@ -123,11 +123,7 @@ class ItemsController extends Controller
         if (!$request->price) {
             throw new Exception('Price cannot be null');
         }
-        $date_format = 'Y-m-d\TH:i:s.v\Z';
-        if (strpos($request->date, ' ') !== false) {
-            $date_format = 'Y-m-d H:i:s';
-        }
-        $date = Carbon::createFromFormat($date_format, $request->date);
+        $date = $this->parseItemDate($request->date);
 
         $item = new Item();
         $item->name = $request->name;
@@ -167,11 +163,7 @@ class ItemsController extends Controller
         if (!$request->price) {
             throw new Exception('Price cannot be null');
         }
-        $date_format = 'Y-m-d\TH:i:s.v\Z';
-        if (strpos($request->date, ' ') !== false) {
-            $date_format = 'Y-m-d H:i:s';
-        }
-        $date = Carbon::createFromFormat($date_format, $request->date);
+        $date = $this->parseItemDate($request->date);
 
         $item = Item::find($id);
         $item->name = $request->name;
@@ -196,6 +188,51 @@ class ItemsController extends Controller
             'item' => $item,
             'image' => $image,
         ]);
+    }
+
+    /**
+     * Parse the date posted by the bill-ty form.
+     *
+     * `items.date` is nullable and plenty of existing rows have no date. The
+     * edit form seeds itself from the record, so opening one of those rows and
+     * saving posts `date: null` - which used to reach
+     * Carbon::createFromFormat('Y-m-d\TH:i:s.v\Z', null) and 500 the request
+     * with "Not enough data available to satisfy format".
+     *
+     * The format is still matched rather than handed to Carbon::parse() on
+     * purpose: the ISO string the date picker sends carries a `Z`, and the
+     * literal-escaped `\Z` here reads it as a wall-clock time in the app
+     * timezone. Carbon::parse() would read the same string as UTC and shift
+     * every saved date by the offset.
+     *
+     * Fractional seconds are matched with `.u`, not the `.v` this used before.
+     * `v` caps at three digits, but a date round-tripped through the API comes
+     * back with six ("2026-08-17T08:44:56.000000Z"), which threw a second
+     * InvalidFormatException - "Trailing data" - on any record that did have a
+     * date. `u` accepts both widths and yields the same instant.
+     *
+     * @param string|null $value
+     *
+     * @return \Carbon\Carbon|null
+     */
+    private function parseItemDate($value)
+    {
+        $value = is_string($value) ? trim($value) : $value;
+        if (empty($value)) {
+            return null;
+        }
+
+        if (strpos($value, ' ') !== false) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $value);
+        }
+
+        // Date-only, e.g. "2026-08-17". createFromFormat would otherwise fill
+        // the time from the current clock.
+        if (strpos($value, 'T') === false) {
+            return Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
+        }
+
+        return Carbon::createFromFormat('Y-m-d\TH:i:s.u\Z', $value);
     }
 
     /**

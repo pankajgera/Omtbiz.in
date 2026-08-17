@@ -255,7 +255,11 @@ export default {
     },
     async submitDispatch () {
       this.$v.formData.$touch()
-      if (this.$v.$invalid) {
+      // Explicit rather than leaning on $v.$invalid alone: the date and time
+      // are what the controller feeds to Carbon::createFromFormat, and an
+      // empty one there is a 500 ("Not enough data available to satisfy
+      // format"), not a validation message.
+      if (this.$v.$invalid || ! this.formData.date_time || ! this.formData.time) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }
