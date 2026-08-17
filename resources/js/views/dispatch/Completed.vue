@@ -69,30 +69,36 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <h4>{{ $t('dispatch.dispatched') }}</h4>
-        <base-button
-          v-show="dipatchedCompletedData"
-          :outline="true"
-          :icon="['fas', 'print']"
-          color="theme"
-          size="large"
-          right-icon
-          @click="printDispatched"
-        >
-          Print
-        </base-button>
-        <transition name="fade">
-          <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleDispatch">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
+        <!-- Grouped so `.table-actions`' space-between only has two children to
+             spread. Left ungrouped, ticking a row added the Actions dropdown as
+             a third child and space-between moved Print from the right edge to
+             the middle of the row. -->
+        <div class="dispatch-table-actions">
+          <base-button
+            v-show="dipatchedCompletedData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="printDispatched"
+          >
+            Print
+          </base-button>
+          <transition name="fade">
+            <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleDispatch">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </transition>
+        </div>
       </div>
 
       <div class="custom-control custom-checkbox">

@@ -20,6 +20,8 @@
                   :multiple="true"
                   :show-pointer="false"
                   :options="isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')"
+                  :internal-search="false"
+                  :loading="invoiceSearchLoading"
                   :searchable="true"
                   :show-labels="false"
                   :allow-empty="true"
@@ -28,6 +30,7 @@
                   :custom-label="invoiceWithAmount"
                   track-by="id"
                   class="multi-select-item"
+                  @search-change="onInvoiceSearch"
                   @select="addInvoice"
                   @remove="removeInvoice"
                 />
@@ -104,56 +107,7 @@
     </div>
   </div>
 </template>
-<style>
-.vue__time-picker {
-  width: 100%;
-}
-/* vue3-timepicker renamed the field class from `display-time` (what vue2-timepicker
-   used, and what this rule targeted) to `vue__time-picker-input`, so none of this
-   applied after the upgrade. The field kept the library's own 140px width and
-   25px left padding, which left it short of the Date and Person name inputs and
-   ran the placeholder underneath the custom clock icon. Geometry only - the
-   colours already come from the global input theming, and hard-coding the old
-   white background here would break dark mode. */
-.base-date-input .vue__time-picker input.vue__time-picker-input {
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  display: inline-block;
-  /* 40px matches the calendar-icon inset the sibling date field uses. */
-  padding: 0 12px 0 40px;
-  line-height: 1.4;
-  cursor: pointer;
-}
-/* The library hard-codes a white dropdown panel, which leaves a white card
-   floating over the dark theme and puts globally-themed white list text on a
-   white background. Same treatment as the rest of the app's surfaces. */
-.vue__time-picker .dropdown {
-  color: var(--ui-text);
-  background: var(--ui-surface);
-  border: 1px solid var(--ui-border);
-  border-radius: 5px;
-  box-shadow: var(--ui-shadow-md);
-}
-.vue__time-picker .dropdown ul li:not(.hint) {
-  color: var(--ui-text);
-}
-.vue__time-picker .dropdown ul li.hint {
-  color: var(--ui-text-muted);
-}
-/* Matches the library's own selector specificity, which is what keeps its
-   default green (#41b883) on the selected hour/minute otherwise. */
-.vue__time-picker .dropdown ul li:not([disabled]).active,
-.vue__time-picker .dropdown ul li:not([disabled]).active:focus,
-.vue__time-picker .dropdown ul li:not([disabled]).active:hover {
-  color: #fff;
-  background: var(--ui-primary);
-}
-.vue__time-picker .dropdown ul li:not([disabled]):not(.active):hover {
-  background: var(--ui-surface-muted);
-}
-</style>
+<style src="../../../css/vue-timepicker-theme.css"></style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
@@ -188,6 +142,8 @@ export default {
       },
       invoice: [],
       invoiceList: [],
+      invoiceSearchLoading: false,
+      invoiceSearchTimer: null,
       assignToBeDispatch: false,
       isToBeDispatch: []
     }
@@ -256,8 +212,11 @@ export default {
         invoiceArr = this.invoiceList
       }
       if (invoiceArr) {
-        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;
-        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`
+        // master can be null for an invoice whose account_master_id points
+        // at a deleted/missing party - don't let that crash the whole picker.
+        let count = master ? invoiceArr.filter(i => i.account_master_id === master.id).length : 0;
+        let masterName = master ? master.name : 'Unknown party';
+        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${masterName}) * ${count}`
       }
     },
     loadInvoice() {
@@ -333,6 +292,12 @@ export default {
       }
     },
     async fetchInvoices () {
+      // No search/limit here - this is the default page-load fetch, so it
+      // only shows the newest 50 pending invoices (the endpoint's default
+      // cap). Use the search box to find anything older/more specific -
+      // see onInvoiceSearch(). This endpoint used to load every pending
+      // invoice unbounded, which crashed (memory) or timed out (gateway)
+      // once a company's backlog grew into the tens of thousands.
       let response = await axios.get(`/api/dispatch/invoices`)
       if (response.data) {
         this.invoiceList = response.data.invoices
@@ -344,6 +309,23 @@ export default {
           this.loadIsToBeDispatch()
         }
       }
+    },
+    // Search-as-you-type for the invoice picker (create mode only - it's
+    // disabled while editing). Debounced so we're not firing a request per
+    // keystroke.
+    onInvoiceSearch (query) {
+      clearTimeout(this.invoiceSearchTimer)
+      this.invoiceSearchTimer = setTimeout(async () => {
+        this.invoiceSearchLoading = true
+        try {
+          let response = await axios.get(`/api/dispatch/invoices`, { params: { search: query } })
+          if (response.data) {
+            this.invoiceList = response.data.invoices
+          }
+        } finally {
+          this.invoiceSearchLoading = false
+        }
+      }, 350)
     },
     async showDispatchPopup (invoice_id, invoices_master_id) {
       this.change_invoice = true;

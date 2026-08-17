@@ -4,7 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Image;
+// Intervention's manager is imported by class rather than through the bare
+// `Image` alias. Laravel 13 ships its own image component whose facade uses the
+// same 'image' container binding, and it wins - so `Image::make()` was
+// resolving to Illuminate\Image\ImageManager, whose GD driver calls
+// ImageManager::usingDriver(), an Intervention v3 API. This project is on
+// intervention/image 2.7, which has no such method, so every upload died with
+// "Call to undefined method Intervention\Image\ImageManager::usingDriver()".
+use Intervention\Image\ImageManager as InterventionImageManager;
 use Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -154,7 +161,10 @@ class Item extends Model
     public function uploadImage($request_image)
     {
         //make an Intervention Image object
-        $image = Image::make($request_image);
+        // Driver comes from config/image.php, which is what Intervention's own
+        // service provider used to feed the container binding.
+        $manager = new InterventionImageManager(['driver' => config('image.driver', 'gd')]);
+        $image = $manager->make($request_image);
         $fileName = Str::random(30) . '-' . time() . '.jpg';
 
         // store our uploaded file in our uploads folder

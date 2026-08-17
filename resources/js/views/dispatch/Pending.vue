@@ -1,19 +1,7 @@
 <template>
   <div class="items main-content">
     <div class="page-header">
-      <Header :title="$t('dispatch.to_be_dispatched_page_title')" :bread-crumb-links="breadCrumbLinks">
-        <div>
-          <router-link slot="item-title" to="/dispatch/create">
-            <base-button
-              color="theme"
-              icon="plus"
-              size="large"
-            >
-              {{ $t('dispatch.new_dispatch') }}
-            </base-button>
-          </router-link>
-        </div>
-      </Header>
+      <Header :title="$t('dispatch.to_be_dispatched_page_title')" :bread-crumb-links="breadCrumbLinks" />
     </div>
 
     <div class="dispatch-toolbar row">
@@ -78,32 +66,63 @@
     <div v-show="!showEmptyScreen" class="table-container">
       <div class="table-actions mt-5">
         <h4>{{ $t('dispatch.to_be_dispatched') }}</h4>
-        <base-button
-          v-show="toBeDispatchedData"
-          :outline="true"
-          :icon="['fas', 'print']"
-          color="theme"
-          size="large"
-          class="dispatch-print-button"
-          right-icon
-          @click="printToBeDispatch"
-        >
-          Print
-        </base-button>
-        <transition name="fade">
-          <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleDispatch">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
+        <!-- `.table-actions` is space-between, which spreads the title away
+             from the buttons but leaves the buttons themselves flush against
+             each other. Group them so they get a gap of their own. -->
+        <div class="dispatch-table-actions">
+          <base-button
+            v-show="toBeDispatchedData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            class="dispatch-print-button"
+            right-icon
+            @click="printToBeDispatch"
+          >
+            Print
+          </base-button>
+          <transition name="fade">
+            <base-button
+              v-if="selectedToBeDispatch && selectedToBeDispatch.length"
+              color="theme"
+              size="large"
+              :icon="['fas', 'truck']"
+              class="dispatch-selected-button"
+              @click="openDispatchForm(selectedToBeDispatch)"
+            >
+              {{ $t('dispatch.dispatch_selected', { count: selectedToBeDispatch.length }) }}
+            </base-button>
+          </transition>
+          <transition name="fade">
+            <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleDispatch">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </transition>
+        </div>
       </div>
+
+      <!-- The dispatch form itself, opened in place by the row button or the
+           bulk one above. Keyed on the id list so switching selection while
+           it's open re-seeds the fields instead of keeping stale ones. -->
+      <transition name="fade">
+        <dispatch-inline-form
+          v-if="dispatchFormIds.length"
+          :key="dispatchFormIds.join(',')"
+          :ids="dispatchFormIds"
+          class="mb-4"
+          @cancel="closeDispatchForm"
+          @saved="onDispatched"
+        />
+      </transition>
 
       <div class="custom-control custom-checkbox">
         <input
@@ -174,16 +193,24 @@
         >
           <template #default="row">
             <span> {{ $t('dispatch.action') }} </span>
-            <v-dropdown>
+            <div class="dispatch-row-actions">
+              <!-- Dispatching is what this list is for, so it gets its own
+                   control rather than sitting a click deep in the menu. Icon
+                   only - a labelled button is too heavy to repeat down every
+                   row next to the overflow menu. -->
+              <button
+                type="button"
+                class="dispatch-row-button"
+                :title="$t('general.dispatch')"
+                :aria-label="$t('general.dispatch')"
+                @click="openDispatchForm([row.id])"
+              >
+                <font-awesome-icon :icon="['fas', 'truck']" />
+              </button>
+              <v-dropdown>
               <span slot="activator" href="#">
                 <dot-icon />
               </span>
-              <v-dropdown-item>
-                <div @click="singleDispatch(row.id)" class="dropdown-item">
-                  <font-awesome-icon :icon="['fas', 'circle']" class="dropdown-item-icon" />
-                  {{ $t('general.dispatch') }}
-                </div>
-              </v-dropdown-item>
               <v-dropdown-item>
                 <router-link :to="{path: `/dispatch/${row.id}/edit`}" class="dropdown-item">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -196,7 +223,8 @@
                   {{ $t('general.delete') }}
                 </div>
               </v-dropdown-item>
-            </v-dropdown>
+              </v-dropdown>
+            </div>
           </template>
         </table-column>
       </table-component>
@@ -267,15 +295,19 @@ import { mapActions, mapGetters } from 'vuex'
 import DotIcon from '../../components/icon/DotIcon'
 import SatelliteIcon from '../../components/icon/SatelliteIcon'
 import BaseButton from '../../../js/components/base/BaseButton'
+import DispatchInlineForm from './DispatchInlineForm'
 
 export default {
   components: {
     DotIcon,
     SatelliteIcon,
     BaseButton,
+    DispatchInlineForm,
   },
   data () {
     return {
+      // Dispatch ids the inline form is currently open for. Empty = closed.
+      dispatchFormIds: [],
       sundryDebtorsList: [],
       totalPending: 0,
       dateFilterOptions: [
@@ -314,7 +346,6 @@ export default {
       return !!this.filters.name
     },
     ...mapGetters('dispatch', [
-      'toBeDispatch',
       'selectedToBeDispatch',
       'selectAllToBeField'
     ]),
@@ -352,7 +383,6 @@ export default {
   methods: {
     ...mapActions('dispatch', [
       'fetchPendingDispatch',
-      'updateDispatch',
       'selectAllToBeDispatch',
       'selectToBeDispatch',
       'deleteDispatch',
@@ -444,25 +474,31 @@ export default {
         }
       })
     },
-    async singleDispatch (id) {
-      let data = this.toBeDispatch.find(i => i.id === id)
-      data.invoice_id = data.invoices.map(i => i.id.toString())
-      data.status = {
-        id: 2,
-        name: 'Sent',
-      }
-      if (data) {
-        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {
-          window.open('/dispatch/' + id + '/edit', '_blank').focus()
-        } else {
-          let res = await this.updateDispatch(data)
-          if (res.data.dispatch) {
-            window.location.reload()
-          } else if (res.data.error) {
-            window.toastr['error'](res.data.message)
-          }
+    // Opens the dispatch form in place, below the toolbar. `ids` is one row for
+    // the row button, or every ticked row for the bulk button. This replaces
+    // the old `singleDispatch`, which either dispatched blind with whatever
+    // person/transport happened to be on the row, or - when either was missing
+    // - popped `/dispatch/:id/edit` open in a new tab.
+    openDispatchForm (ids) {
+      this.dispatchFormIds = [...ids]
+      this.$nextTick(() => {
+        let panel = this.$el.querySelector('.dispatch-inline-form')
+        if (panel) {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
         }
+      })
+    },
+    closeDispatchForm () {
+      this.dispatchFormIds = []
+    },
+    onDispatched () {
+      this.closeDispatchForm()
+      // Dispatched rows leave this list, so anything ticked is now stale.
+      if (this.selectAllToBeField) {
+        this.setSelectAllToBeState(false)
       }
+      this.selectToBeDispatch([])
+      this.refreshTable()
     },
     printToBeDispatch () {
       printJS({

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content item-create">
+  <div class="main-content item-create inventory-stock-page">
     <div class="page-header">
       <div class="d-flex flex-row flex-wrap justify-content-between align-items-center">
         <div class="d-flex flex-column">
@@ -10,9 +10,20 @@
         <li class="breadcrumb-item"><a href="#"> {{ $t('general.inventory_stock') }}</a></li>
       </ol>
         </div>
-        <div class="d-flex flex-wrap">
-        <div v-show="inventoryItems.length || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div class="inventory-stock-actions">
           <base-button
+            v-show="inventoryItems.length"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            right-icon
+            @click="print"
+          >
+            Print
+          </base-button>
+          <base-button
+            v-show="inventoryItems.length || filtersApplied"
             :outline="true"
             :icon="filterIcon"
             color="theme"
@@ -23,7 +34,6 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-      </div>
 
       </div>
 
@@ -76,54 +86,41 @@
     </transition>
     </div>
     <div class="row">
-      <div class="col-sm-12 mb-2 print">
-      <base-button
-            v-show="inventoryItems"
-            :outline="true"
-            :icon="['fas', 'print']"
-            color="theme"
-            size="large"
-            right-icon
-            @click="print"
-          >
-            Print
-          </base-button>
-      </div>
       <div class="col col-12 col-md-12 col-lg-12">
-        <div class="card">
-          <h5 class="p-3">Inventory Item</h5>
-          <table class="p-3 m-3" ref="inventoryStock" v-if="inventoryItems.length > 0">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Worker Name</th>
-                <th>Quantity</th>
-                <th>Sale Price</th>
-                <th>Unit</th>
-                <th>Item Used</th>
-                <th>Date/Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(each, index) in inventoryItems" :key="index" style="border-top: 1px solid;">
-                <td><a style="color:blue" :href="`/inventory/${each.id}/stock`">{{each.name}}</a></td>
-                <td>{{each.worker_name ? each.worker_name : '-'}}</td>
-                <td>{{each.quantity}}</td>
-                <td>₹ {{each.sale_price}}</td>
-                <td>{{each.unit}}</td>
-                <td>{{each.item_count}}</td>
-                <td>{{each.date_time}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <table class="p-3 m-3" v-else>
-            <tbody>
-              <tr><td colspan="7">
-                No Record Found..
-              </td></tr>
-            </tbody>
-          </table>
-
+        <div class="card inventory-stock-card">
+          <div class="inventory-stock-card__header">
+            <h5 class="inventory-stock-card__title">Inventory Item</h5>
+            <span v-if="inventoryItems.length" class="inventory-stock-card__count">
+              {{ inventoryItems.length }}
+            </span>
+          </div>
+          <div v-if="inventoryItems.length > 0" class="inventory-stock-table-wrapper">
+            <table class="inventory-stock-table" ref="inventoryStock">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Worker Name</th>
+                  <th class="is-numeric">Quantity</th>
+                  <th class="is-numeric">Sale Price</th>
+                  <th>Unit</th>
+                  <th class="is-numeric">Item Used</th>
+                  <th>Date/Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(each, index) in inventoryItems" :key="index">
+                  <td><a class="inventory-stock-link" :href="`/inventory/${each.id}/stock`">{{each.name}}</a></td>
+                  <td>{{each.worker_name ? each.worker_name : '-'}}</td>
+                  <td class="is-numeric" :class="{ 'is-negative': Number(each.quantity) < 0 }">{{each.quantity}}</td>
+                  <td class="is-numeric">₹ {{each.sale_price}}</td>
+                  <td>{{each.unit}}</td>
+                  <td class="is-numeric">{{each.item_count}}</td>
+                  <td class="is-nowrap">{{each.date_time}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p v-else class="inventory-stock-empty">No Record Found..</p>
         </div>
       </div>
     </div>

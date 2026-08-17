@@ -4,7 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Image;
+// See the note in Item.php: the bare `Image` alias resolves to Laravel 13's own
+// image manager, which speaks the Intervention v3 API this project doesn't have.
+use Intervention\Image\ImageManager as InterventionImageManager;
 use Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -97,7 +99,8 @@ class Note extends Model
     public function uploadImage($request_image)
     {
         //make an Intervention Image object
-        $image = Image::make($request_image);
+        $manager = new InterventionImageManager(['driver' => config('image.driver', 'gd')]);
+        $image = $manager->make($request_image);
         $fileName = Str::random(30) . '-' . time() . '.jpg';
 
         // store our uploaded file in our uploads folder
