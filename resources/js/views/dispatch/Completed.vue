@@ -73,7 +73,7 @@
              spread. Left ungrouped, ticking a row added the Actions dropdown as
              a third child and space-between moved Print from the right edge to
              the middle of the row. -->
-        <div class="dispatch-table-actions">
+        <div class="table-actions-group">
           <base-button
             v-show="dipatchedCompletedData"
             :outline="true"

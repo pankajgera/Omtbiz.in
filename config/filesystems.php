@@ -55,12 +55,26 @@ return [
             'visibility' => 'public',
         ],
 
+        /*
+         * The standard AWS_* names are read first, with the legacy short names
+         * kept as a fallback.
+         *
+         * This block only read AWS_KEY / AWS_SECRET / AWS_REGION, but .env
+         * (like Laravel's own defaults) sets AWS_ACCESS_KEY_ID /
+         * AWS_SECRET_ACCESS_KEY / AWS_DEFAULT_REGION. So a configured region
+         * still resolved to null and every upload died in the AWS SDK with
+         * "Missing required client configuration options: region: (string)".
+         * Reading both means whichever convention a given .env uses works.
+         */
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_KEY'),
-            'secret' => env('AWS_SECRET'),
-            'region' => env('AWS_REGION'),
+            'key' => env('AWS_ACCESS_KEY_ID', env('AWS_KEY')),
+            'secret' => env('AWS_SECRET_ACCESS_KEY', env('AWS_SECRET')),
+            'region' => env('AWS_DEFAULT_REGION', env('AWS_REGION')),
             'bucket' => env('AWS_BUCKET'),
+            'url' => env('AWS_URL'),
+            'endpoint' => env('AWS_ENDPOINT'),
+            'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
         'media' => [

@@ -101,20 +101,26 @@
     <div v-show="!showEmptyScreenDraft" class="table-container">
       <div class="table-actions mt-5">
         <h4>Pending Estimates</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ current_page_count }}</b> {{ $t('general.of') }} <b>{{ draftCount }}</b></p>
-        <transition name="fade">
-          <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleEstimates">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
+        <!-- Grouped so `.table-actions`' space-between only ever spreads two
+             children. Ungrouped, ticking a row added the Actions dropdown as a
+             third child and space-between dragged the "Showing: x of y" line
+             from the right edge into the middle of the row. -->
+        <div class="table-actions-group">
+          <p class="table-stats">{{ $t('general.showing') }}: <b>{{ current_page_count }}</b> {{ $t('general.of') }} <b>{{ draftCount }}</b></p>
+          <transition name="fade">
+            <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleEstimates">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </transition>
+        </div>
       </div>
       <div class="custom-control custom-checkbox">
         <input
@@ -227,20 +233,22 @@
     <div v-show="!showEmptyScreenSent" class="table-container">
       <div class="table-actions mt-5">
         <h4>Completed Estimates</h4>
-        <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesSent.length }}</b> {{ $t('general.of') }} <b>{{ sentCount }}</b></p>
-        <transition name="fade">
-          <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleEstimates">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
+        <div class="table-actions-group">
+          <p class="table-stats">{{ $t('general.showing') }}: <b>{{ estimatesSent.length }}</b> {{ $t('general.of') }} <b>{{ sentCount }}</b></p>
+          <transition name="fade">
+            <v-dropdown v-if="selectedEstimates.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleEstimates">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </transition>
+        </div>
       </div>
       <div class="custom-control custom-checkbox">
         <input
