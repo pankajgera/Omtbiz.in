@@ -1384,6 +1384,145 @@ a:focus {
     }
 }
 
+/* The dispatch form rendered inline on the pending list (DispatchInlineForm.vue),
+   opened by the row or bulk Dispatch button. */
+.dispatch-inline-form {
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border: 1px solid var(--ui-border) !important;
+    border-radius: 0.5rem;
+}
+
+.dispatch-inline-form__header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--ui-border);
+}
+
+.dispatch-inline-form__title {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin: 0;
+    color: var(--ui-text);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.dispatch-inline-form__count {
+    padding: 0.125rem 0.5rem;
+    color: var(--ui-text-muted);
+    background-color: var(--ui-surface-muted);
+    border: 1px solid var(--ui-border);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+.dispatch-inline-form__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    padding: 0;
+    color: var(--ui-text-muted);
+    background: transparent;
+    border: 0;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.dispatch-inline-form__close:hover,
+.dispatch-inline-form__close:focus-visible {
+    color: var(--ui-text);
+    background: var(--ui-surface-hover);
+}
+
+.dispatch-inline-form__loading {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1.25rem;
+}
+
+/* Date, time, person and transport sit one per row on the full-page form,
+   which is a lot of vertical travel for a panel wedged above a table. */
+.dispatch-inline-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1rem;
+}
+
+.dispatch-inline-form__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 767px) {
+    .dispatch-inline-form__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* Toolbar above the pending table. The buttons need their own gap because
+   `.table-actions` only spaces the title away from them, not them from each
+   other, and `.btn { margin: 0 }` from the Bootstrap teardown leaves siblings
+   touching edge to edge. */
+.dispatch-table-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dispatch-table-actions .base-button,
+.dispatch-table-actions .btn {
+    margin: 0 !important;
+}
+
+/* Row-level actions on the pending list: the Dispatch control and the existing
+   overflow menu on one line, so neither pushes the other onto a second row in
+   the narrow action column. */
+.dispatch-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.375rem;
+}
+
+/* Icon-only, sized to sit level with the dot menu next to it. */
+.dispatch-row-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--ui-primary);
+    background: transparent;
+    border: 1px solid var(--ui-border);
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.dispatch-row-button:hover,
+.dispatch-row-button:focus-visible {
+    color: #fff;
+    background: var(--ui-primary);
+    border-color: var(--ui-primary);
+}
+
+.table-component__table .action-dropdown:has(.dispatch-row-actions) {
+    width: auto;
+}
+
 .ledger-filter-section {
     padding: 1rem 1.25rem 1.25rem !important;
     border: 1px solid var(--ui-border);

@@ -617,9 +617,6 @@ class DispatchController extends Controller
             ->where(function ($query) {
                 $query->whereNull('status')
                     ->orWhere('status', '!=', 'COMPLETED');
-                if (! empty($includeIds)) {
-                    $query->orWhereIn('id', $includeIds);
-                }
             })
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($match) use ($search) {

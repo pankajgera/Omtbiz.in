@@ -114,37 +114,41 @@
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>To Be Dispatch</h4>
-        <base-button
-          v-show="toBeDispatchedData"
-          :outline="true"
-          :icon="['fas', 'print']"
-          color="theme"
-          size="large"
-          class="dispatch-print-button"
-          right-icon
-          @click="printToBeDispatch"
-        >
-          Print
-        </base-button>
-        <transition name="fade">
-          <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
-            <!-- <v-dropdown-item>
-              <div class="dropdown-item" @click="multipleDispatch('draft')">
-                <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
-                {{ $t('general.dispatch') }}
-              </div>
-            </v-dropdown-item> -->
-            <v-dropdown-item>
-              <div class="dropdown-item" @click="removeMultipleDispatch('draft')">
-                <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
-                {{ $t('general.delete') }}
-              </div>
-            </v-dropdown-item>
-          </v-dropdown>
-        </transition>
+        <!-- Grouped so space-between only spreads title vs. buttons - see the
+             same wrapper on Pending.vue / Completed.vue. -->
+        <div class="dispatch-table-actions">
+          <base-button
+            v-show="toBeDispatchedData"
+            :outline="true"
+            :icon="['fas', 'print']"
+            color="theme"
+            size="large"
+            class="dispatch-print-button"
+            right-icon
+            @click="printToBeDispatch"
+          >
+            Print
+          </base-button>
+          <transition name="fade">
+            <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
+              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+              <!-- <v-dropdown-item>
+                <div class="dropdown-item" @click="multipleDispatch('draft')">
+                  <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
+                  {{ $t('general.dispatch') }}
+                </div>
+              </v-dropdown-item> -->
+              <v-dropdown-item>
+                <div class="dropdown-item" @click="removeMultipleDispatch('draft')">
+                  <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
+                  {{ $t('general.delete') }}
+                </div>
+              </v-dropdown-item>
+            </v-dropdown>
+          </transition>
+        </div>
       </div>
 
       <div class="custom-control custom-checkbox">

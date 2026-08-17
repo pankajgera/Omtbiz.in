@@ -107,56 +107,7 @@
     </div>
   </div>
 </template>
-<style>
-.vue__time-picker {
-  width: 100%;
-}
-/* vue3-timepicker renamed the field class from `display-time` (what vue2-timepicker
-   used, and what this rule targeted) to `vue__time-picker-input`, so none of this
-   applied after the upgrade. The field kept the library's own 140px width and
-   25px left padding, which left it short of the Date and Person name inputs and
-   ran the placeholder underneath the custom clock icon. Geometry only - the
-   colours already come from the global input theming, and hard-coding the old
-   white background here would break dark mode. */
-.base-date-input .vue__time-picker input.vue__time-picker-input {
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-  border-radius: 5px;
-  display: inline-block;
-  /* 40px matches the calendar-icon inset the sibling date field uses. */
-  padding: 0 12px 0 40px;
-  line-height: 1.4;
-  cursor: pointer;
-}
-/* The library hard-codes a white dropdown panel, which leaves a white card
-   floating over the dark theme and puts globally-themed white list text on a
-   white background. Same treatment as the rest of the app's surfaces. */
-.vue__time-picker .dropdown {
-  color: var(--ui-text);
-  background: var(--ui-surface);
-  border: 1px solid var(--ui-border);
-  border-radius: 5px;
-  box-shadow: var(--ui-shadow-md);
-}
-.vue__time-picker .dropdown ul li:not(.hint) {
-  color: var(--ui-text);
-}
-.vue__time-picker .dropdown ul li.hint {
-  color: var(--ui-text-muted);
-}
-/* Matches the library's own selector specificity, which is what keeps its
-   default green (#41b883) on the selected hour/minute otherwise. */
-.vue__time-picker .dropdown ul li:not([disabled]).active,
-.vue__time-picker .dropdown ul li:not([disabled]).active:focus,
-.vue__time-picker .dropdown ul li:not([disabled]).active:hover {
-  color: #fff;
-  background: var(--ui-primary);
-}
-.vue__time-picker .dropdown ul li:not([disabled]):not(.active):hover {
-  background: var(--ui-surface-muted);
-}
-</style>
+<style src="../../../css/vue-timepicker-theme.css"></style>
 <script>
 import { validationMixin } from 'vuelidate'
 import { mapActions, mapGetters } from 'vuex'
