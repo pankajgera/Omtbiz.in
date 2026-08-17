@@ -97,7 +97,11 @@ export default {
         return
       }
 
-      if (event?.target && menu.contains(event.target)) {
+      // Node check, not just a truthiness check: this same handler is bound to
+      // `resize` as well as `scroll`, and a resize event's target is `window`,
+      // which is not a Node. `menu.contains(window)` throws a TypeError, which
+      // aborted the repositioning below and left the menu where it was.
+      if (event?.target instanceof Node && menu.contains(event.target)) {
         return
       }
 
