@@ -69,7 +69,7 @@
         <!-- `.table-actions` is space-between, which spreads the title away
              from the buttons but leaves the buttons themselves flush against
              each other. Group them so they get a gap of their own. -->
-        <div class="dispatch-table-actions">
+        <div class="table-actions-group">
           <base-button
             v-show="toBeDispatchedData"
             :outline="true"

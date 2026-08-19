@@ -116,7 +116,7 @@
         <h4>To Be Dispatch</h4>
         <!-- Grouped so space-between only spreads title vs. buttons - see the
              same wrapper on Pending.vue / Completed.vue. -->
-        <div class="dispatch-table-actions">
+        <div class="table-actions-group">
           <base-button
             v-show="toBeDispatchedData"
             :outline="true"
@@ -316,7 +316,7 @@
       <div class="table-actions mt-5">
         <!-- <p class="table-stats">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->
         <h4>Dispatched</h4>
-        <div class="dispatch-table-actions">
+        <div class="table-actions-group">
           <base-button
             v-show="dipatchedCompletedData"
             :outline="true"

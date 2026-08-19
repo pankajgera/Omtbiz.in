@@ -1474,15 +1474,21 @@ a:focus {
    `.table-actions` only spaces the title away from them, not them from each
    other, and `.btn { margin: 0 }` from the Bootstrap teardown leaves siblings
    touching edge to edge. */
-.dispatch-table-actions {
+.table-actions-group {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
 }
 
-.dispatch-table-actions .base-button,
-.dispatch-table-actions .btn {
+/* Buttons carry `margin: 0` from the Bootstrap teardown, which leaves siblings
+   touching; the stats paragraph carries the browser's default block margins,
+   which would push it off the shared centre line. Neutralise both so the gap
+   above is the only spacing in play. */
+.table-actions-group .base-button,
+.table-actions-group .btn,
+.table-actions-group .table-stats,
+.table-actions-group p {
     margin: 0 !important;
 }
 

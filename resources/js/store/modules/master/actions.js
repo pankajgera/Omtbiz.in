@@ -3,8 +3,22 @@ import * as types from './mutation-types'
 export const fetchMasters = ({ commit, dispatch, state }, params) => {
   return new Promise((resolve, reject) => {
     window.axios.get(`/api/masters`, {params}).then((response) => {
-      commit(types.BOOTSTRAP_MASTERS, response.data.masters.data)
-      commit(types.SET_TOTAL_MASTERS, response.data.masters.total)
+      // /api/masters answers in two shapes: a paginator normally, but a bare
+      // collection when called with limit=false - which is what the party
+      // dropdowns on the voucher and ledger forms do. Only the paginated shape
+      // belongs in the store.
+      //
+      // Committing unconditionally meant those dropdown calls wrote
+      // `undefined` (a plain array has no `.data`) over state.masters, so the
+      // masters list page then blew up on `masters.length` and rendered blank -
+      // reachable by opening a voucher or ledger form and navigating to it.
+      // Both callers read the response directly, so skipping the commit costs
+      // them nothing.
+      let masters = response.data.masters
+      if (masters && Array.isArray(masters.data)) {
+        commit(types.BOOTSTRAP_MASTERS, masters.data)
+        commit(types.SET_TOTAL_MASTERS, masters.total)
+      }
       resolve(response)
     }).catch((err) => {
       reject(err)

@@ -647,4 +647,78 @@ export default {
 	color: #999;
 	cursor: default;
 }
+
+/* Theming for the calendar popup.
+ *
+ * Everything above is the library's stock stylesheet, which paints the panel
+ * `background: #fff` and then leaves the day numbers to inherit their colour.
+ * The app's global text colour is var(--ui-text), which is white in dark mode -
+ * so the panel came up white with white text, i.e. an empty white box with only
+ * the selected day (which has its own background) and the two arrows visible.
+ *
+ * These live here rather than in tailwind.css deliberately: the block above is
+ * injected as a component style, which lands after any entry stylesheet, so
+ * equal-specificity rules over there would lose on source order. That is what
+ * the !important in sass/components/vue-date-picker.scss is working around.
+ */
+.vdp-datepicker__calendar {
+	color: var(--ui-text);
+	background: var(--ui-surface);
+	border-color: var(--ui-border);
+	border-radius: 5px;
+	box-shadow: var(--ui-shadow-md);
+	overflow: hidden;
+}
+
+.vdp-datepicker__calendar header .prev:not(.disabled):hover,
+.vdp-datepicker__calendar header .next:not(.disabled):hover,
+.vdp-datepicker__calendar header .up:not(.disabled):hover {
+	background: var(--ui-surface-hover);
+}
+
+/* The arrows are drawn as CSS triangles in a hardcoded #000, which disappears
+   against a dark panel. currentColor makes them follow the theme. */
+.vdp-datepicker__calendar header .prev:after {
+	border-right-color: currentColor;
+}
+
+.vdp-datepicker__calendar header .next:after {
+	border-left-color: currentColor;
+}
+
+.vdp-datepicker__calendar header .prev.disabled:after {
+	border-right-color: var(--ui-border-strong);
+}
+
+.vdp-datepicker__calendar header .next.disabled:after {
+	border-left-color: var(--ui-border-strong);
+}
+
+/* Mon/Tue/Wed row. */
+.vdp-datepicker__calendar .cell.day-header {
+	color: var(--ui-text-muted);
+	opacity: 0.75;
+}
+
+/* Days spilling in from the neighbouring month, and unselectable days: both
+   were fixed light greys (#888 / #ddd) picked to sit on white. */
+.vdp-datepicker__calendar .cell.grey {
+	color: var(--ui-text-muted);
+	opacity: 0.55;
+}
+
+.vdp-datepicker__calendar .disabled {
+	color: var(--ui-text-muted);
+	opacity: 0.4;
+}
+
+.vdp-datepicker__calendar .cell.highlighted.disabled {
+	color: var(--ui-text-muted);
+}
+
+.vdp-datepicker__clear-button.disabled,
+.vdp-datepicker__calendar-button.disabled {
+	color: var(--ui-text-muted);
+	opacity: 0.6;
+}
 </style>
