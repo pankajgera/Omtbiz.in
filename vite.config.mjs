@@ -2,10 +2,9 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import tailwindcss from '@tailwindcss/vite';
-import path from 'path';
+import path from 'node:path';
 
 export default defineConfig(({ mode }) => ({
-    publicDir: 'public',
     plugins: [
         laravel({
             input: ['resources/js/app.js', 'resources/sass/omtbiz.scss', 'resources/css/tailwind.css'],
@@ -23,18 +22,18 @@ export default defineConfig(({ mode }) => ({
     },
     resolve: {
         alias: [
-            // Map Babel runtime helper subpaths explicitly for esbuild/rollup.
+            // Keep the legacy avatar cropper's Babel helper imports resolvable.
             {
                 find: /^@babel\/runtime\/helpers\/(.*)$/,
-                replacement: path.resolve(__dirname, 'node_modules/@babel/runtime/helpers/$1.js'),
+                replacement: path.resolve(import.meta.dirname, 'node_modules/@babel/runtime/helpers/$1.js'),
             },
             {
                 find: /^@babel\/runtime\/regenerator$/,
-                replacement: path.resolve(__dirname, 'node_modules/@babel/runtime/regenerator/index.js'),
+                replacement: path.resolve(import.meta.dirname, 'node_modules/@babel/runtime/regenerator/index.js'),
             },
             {
                 find: '@',
-                replacement: path.resolve(__dirname, 'resources/js'),
+                replacement: path.resolve(import.meta.dirname, 'resources/js'),
             },
             {
                 find: 'vue',
@@ -46,25 +45,17 @@ export default defineConfig(({ mode }) => ({
             },
             {
                 find: 'vuelidate',
-                replacement: path.resolve(__dirname, 'resources/js/compat/vuelidate.js'),
+                replacement: path.resolve(import.meta.dirname, 'resources/js/compat/vuelidate.js'),
             },
             {
                 find: 'vuelidate/lib/validators',
-                replacement: path.resolve(__dirname, 'resources/js/compat/validators.js'),
+                replacement: path.resolve(import.meta.dirname, 'resources/js/compat/validators.js'),
             },
         ],
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     },
     optimizeDeps: {
         exclude: ['sweet-modal-vue', 'vue-tabs-component', 'vue-avatar-cropper'],
-        esbuildOptions: {
-            // Ensure esbuild can resolve Babel runtime helper subpaths.
-            alias: {
-                '@babel/runtime/helpers/slicedToArray': path.resolve(__dirname, 'node_modules/@babel/runtime/helpers/slicedToArray.js'),
-                '@babel/runtime/helpers/asyncToGenerator': path.resolve(__dirname, 'node_modules/@babel/runtime/helpers/asyncToGenerator.js'),
-                '@babel/runtime/regenerator': path.resolve(__dirname, 'node_modules/@babel/runtime/regenerator/index.js'),
-            },
-        },
     },
     css: {
         preprocessorOptions: {

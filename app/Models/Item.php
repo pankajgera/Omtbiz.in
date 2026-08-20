@@ -4,13 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-// Intervention's manager is imported by class rather than through the bare
-// `Image` alias. Laravel 13 ships its own image component whose facade uses the
-// same 'image' container binding, and it wins - so `Image::make()` was
-// resolving to Illuminate\Image\ImageManager, whose GD driver calls
-// ImageManager::usingDriver(), an Intervention v3 API. This project is on
-// intervention/image 2.7, which has no such method, so every upload died with
-// "Call to undefined method Intervention\Image\ImageManager::usingDriver()".
+use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\ImageManager as InterventionImageManager;
 use Storage;
 use Illuminate\Support\Facades\Log;
@@ -160,11 +154,8 @@ class Item extends Model
      */
     public function uploadImage($request_image)
     {
-        //make an Intervention Image object
-        // Driver comes from config/image.php, which is what Intervention's own
-        // service provider used to feed the container binding.
-        $manager = new InterventionImageManager(['driver' => config('image.driver', 'gd')]);
-        $image = $manager->make($request_image);
+        $manager = InterventionImageManager::usingDriver(config('image.driver'));
+        $image = $manager->decode($request_image);
         $fileName = Str::random(30) . '-' . time() . '.jpg';
 
         // store our uploaded file in our uploads folder
@@ -184,26 +175,14 @@ class Item extends Model
         //     }
         // }
 
-        //save Original
-        //$image->save($save_paths['original'].$ds.$fileName);
-        $save_to_s3_screen_original = $image->stream();
+        $original = $image->encode(new JpegEncoder());
+        $screen = (clone $image)->scale(height: 500)->encode(new JpegEncoder());
+        $thumbnail = (clone $image)->cover(181, 121)->encode(new JpegEncoder());
+        $filesize = strlen((string) $screen);
 
-        //resize
-        $resized_image = $image->resize(null, 500, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-
-        //now save it
-        $save_to_s3_screen = $resized_image->stream();
-        $filesize = $resized_image->filesize();
-
-        //thumbnail
-
-        $save_to_s3_thumb = $image->fit('181', '121')->stream();
-
-        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, $save_to_s3_screen_original->__toString());
-        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, $save_to_s3_screen->__toString());
-        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, $save_to_s3_thumb->__toString());
+        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, (string) $original);
+        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, (string) $screen);
+        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, (string) $thumbnail);
 
         //get the data for response
         $url = url($save_paths['screen']);
@@ -217,8 +196,7 @@ class Item extends Model
         $success->size = $filesize;
         $success->thumbnailUrl = $thumbnailUrl;
 
-        //finally free the memory
-        $image->destroy();
+        unset($image);
 
         //make an entry in the database
         $photo = new \App\Models\Images();

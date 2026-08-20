@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-// See the note in Item.php: the bare `Image` alias resolves to Laravel 13's own
-// image manager, which speaks the Intervention v3 API this project doesn't have.
+use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\ImageManager as InterventionImageManager;
 use Storage;
 use Illuminate\Support\Facades\Log;
@@ -98,9 +97,8 @@ class Note extends Model
      */
     public function uploadImage($request_image)
     {
-        //make an Intervention Image object
-        $manager = new InterventionImageManager(['driver' => config('image.driver', 'gd')]);
-        $image = $manager->make($request_image);
+        $manager = InterventionImageManager::usingDriver(config('image.driver'));
+        $image = $manager->decode($request_image);
         $fileName = Str::random(30) . '-' . time() . '.jpg';
 
         // store our uploaded file in our uploads folder
@@ -120,26 +118,14 @@ class Note extends Model
         //     }
         // }
 
-        //save Original
-        //$image->save($save_paths['original'].$ds.$fileName);
-        $save_to_s3_screen_original = $image->stream();
+        $original = $image->encode(new JpegEncoder());
+        $screen = (clone $image)->scale(height: 500)->encode(new JpegEncoder());
+        $thumbnail = (clone $image)->cover(181, 121)->encode(new JpegEncoder());
+        $filesize = strlen((string) $screen);
 
-        //resize
-        $resized_image = $image->resize(null, 500, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-
-        //now save it
-        $save_to_s3_screen = $resized_image->stream();
-        $filesize = $resized_image->filesize();
-
-        //thumbnail
-
-        $save_to_s3_thumb = $image->fit('181', '121')->stream();
-
-        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, $save_to_s3_screen_original->__toString());
-        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, $save_to_s3_screen->__toString());
-        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, $save_to_s3_thumb->__toString());
+        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, (string) $original);
+        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, (string) $screen);
+        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, (string) $thumbnail);
 
         //get the data for response
         $url = url($save_paths['screen']);
@@ -153,8 +139,7 @@ class Note extends Model
         $success->size = $filesize;
         $success->thumbnailUrl = $thumbnailUrl;
 
-        //finally free the memory
-        $image->destroy();
+        unset($image);
 
         //make an entry in the database
         $photo = new \App\Models\Images();

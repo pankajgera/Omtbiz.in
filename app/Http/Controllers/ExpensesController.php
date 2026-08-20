@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use App\Models\ExpenseCategory;
 use App\Http\Requests\ExpenseRequest;
 use Carbon\Carbon;
-use Intervention\Image\Facades\Image;
 
 class ExpensesController extends Controller
 {

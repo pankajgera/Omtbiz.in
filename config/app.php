@@ -133,7 +133,6 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
-        Intervention\Image\ImageServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
@@ -157,7 +156,6 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Flash' => Laracasts\Flash\Flash::class,
         'Pusher' => Pusher\Pusher::class,
-        'Image' => Intervention\Image\Facades\Image::class,
     ])->toArray(),
 
     /*
