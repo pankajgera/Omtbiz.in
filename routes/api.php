@@ -42,7 +42,7 @@ Route::get('/countries', [App\Http\Controllers\LocationController::class, 'getCo
 // ----------------------------------
 Route::get('/settings/app/version', [App\Http\Controllers\SettingsController::class, 'getAppVersion'])->name('settings.app.version');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => ['auth:api', 'company.context']], function () {
     Route::get('/bootstrap', [App\Http\Controllers\UsersController::class, 'getBootstrap'])->name('bootstrap');
 
     // Customers

@@ -69,17 +69,8 @@ export default {
     ...mapActions(['bootstrap']),
     ...mapActions('company', ['setSelectedCompany']),
     setInitialCompany () {
-      let selectedCompany = Ls.get('selectedCompany') !== null
-
-      if (selectedCompany) {
-        let foundCompany = this.companies.find((company) => company.id === parseInt(selectedCompany))
-
-        if (foundCompany) {
-          this.setSelectedCompany(foundCompany)
-          return
-        }
-      }
-
+      // The API returns only the authenticated user's company. Overwrite any
+      // stale or attacker-controlled local selection from older releases.
       this.setSelectedCompany(this.companies[0])
     }
   }

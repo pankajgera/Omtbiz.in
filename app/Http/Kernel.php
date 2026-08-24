@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'admin' => AdminMiddleware::class,
         'accountant' => AccountantMiddleware::class,
         'employee' => EmployeeMiddleware::class,
+        'company.context' => \App\Http\Middleware\EnsureCompanyContext::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'install' => \App\Http\Middleware\InstallationMiddleware::class,
         'redirect-if-installed' => \App\Http\Middleware\RedirectIfInstalled::class,
