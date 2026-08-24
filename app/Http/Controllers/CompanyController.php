@@ -440,7 +440,7 @@ class CompanyController extends Controller
             ],
         ]);
 
-        EraseData::dispatch();
+        EraseData::dispatch((int) $user->company_id, (int) $user->id);
 
         return response()->json([
             'success' => true
