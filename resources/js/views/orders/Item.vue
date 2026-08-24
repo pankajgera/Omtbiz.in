@@ -101,7 +101,7 @@
             <td class="text-right">
               <div class="item-amount">
                 <span>
-                  <div v-html="$utils.formatMoney(total, currency)" />
+                  <div>{{ $utils.formatMoney(total, currency) }}</div>
                 </span>
 
                 <div class="remove-icon-wrapper">

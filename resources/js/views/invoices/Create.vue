@@ -194,7 +194,7 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
-              <div v-html="totalQuantity(inventoryBind)" />
+              <div>{{ totalQuantity(inventoryBind) }}</div>
             </label>
           </div>
           <div class="section">

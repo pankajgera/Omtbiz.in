@@ -101,7 +101,7 @@
             <div class="inv-number">{{ estimate.estimate_number }}</div>
           </div>
           <div class="right">
-            <div class="inv-amount" v-html="$utils.formatMoney(estimate.total, estimate.user.currency)" />
+            <div class="inv-amount">{{ $utils.formatMoney(estimate.total, estimate.user.currency) }}</div>
             <div class="inv-date">{{ estimate.formattedEstimateDate }}</div>
           </div>
         </router-link>

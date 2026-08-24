@@ -96,7 +96,7 @@
             <div class="inv-number">{{ invoice.invoice_number }}</div>
           </div>
           <div class="right">
-            <div class="inv-amount" v-html="'₹ ' + (invoice.due_amount)" />
+            <div class="inv-amount">₹ {{ invoice.due_amount }}</div>
             <div class="inv-date">{{ invoice.formattedInvoiceDate }}</div>
           </div>
         </router-link>

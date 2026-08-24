@@ -184,7 +184,7 @@
         >
           <template #default="row">
             <span>{{ $t('expenses.amount') }}</span>
-            <div v-html="$utils.formatMoney(row.amount, defaultCurrency)" />
+            <div>{{ $utils.formatMoney(row.amount, defaultCurrency) }}</div>
           </template>
         </table-column>
         <table-column

@@ -173,7 +173,7 @@
         >
           <template #default="row">
             <span> {{ $t('customers.due_amount') }} </span>
-            <div v-html="$utils.formatMoney(row.due_amount, row.currency)"/>
+            <div>{{ $utils.formatMoney(row.due_amount, row.currency) }}</div>
           </template>
         </table-column>
         <table-column

@@ -101,7 +101,7 @@
             <div class="inv-number">{{ receipt.receipt_number }}</div>
           </div>
           <div class="right">
-            <div class="inv-amount" v-html="$utils.formatMoney(receipt.total, receipt.user.currency)" />
+            <div class="inv-amount">{{ $utils.formatMoney(receipt.total, receipt.user.currency) }}</div>
             <div class="inv-date">{{ receipt.formattedReceiptDate }}</div>
           </div>
         </router-link>
