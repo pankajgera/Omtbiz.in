@@ -18,6 +18,7 @@ use App\Models\Note;
 use App\Models\OrderItems;
 use App\Models\Orders;
 use App\Models\Payment;
+use App\Models\PublicShare;
 use App\Models\Receipt;
 use App\Models\User;
 use App\Models\Voucher;
@@ -90,6 +91,7 @@ class AppServiceProvider extends ServiceProvider
             OrderItems::class,
             Orders::class,
             Payment::class,
+            PublicShare::class,
             Receipt::class,
             User::class,
             Voucher::class,

@@ -60,6 +60,7 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import { required } from '@vuelidate/validators';
+import { createReportShare } from '@/helpers/publicShares'
 export default {
   mixins: [validationMixin],
   data () {
@@ -114,8 +115,7 @@ export default {
     }
   },
   mounted () {
-    this.siteURL = `/reports/expenses/${this.getSelectedCompany.unique_hash}`
-    this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
+    this.getReports()
   },
   methods: {
     getThisDate (type, time) {
@@ -192,21 +192,17 @@ export default {
         return true
       }
 
-      this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
+      this.url = await createReportShare('expenses', {
+        from_date: moment(this.formData.from_date).format('DD/MM/YYYY'),
+        to_date: moment(this.formData.to_date).format('DD/MM/YYYY')
+      })
       return true
     },
-    downloadReport () {
-      if (!this.getReports()) {
+    async downloadReport () {
+      if (!await this.getReports()) {
         return false
       }
-      if (navigator.appVersion.indexOf('Mac') !== -1) {
-        this.url += '&download=true'
-      } else {
-        window.open(this.getReportUrl + '&download=true')
-      }
-      setTimeout(() => {
-        this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
-      }, 200)
+      window.open(this.getReportUrl + '?download=true')
     }
   }
 }

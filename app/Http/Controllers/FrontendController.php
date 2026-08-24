@@ -19,6 +19,7 @@ use App\Models\EstimateItem;
 use App\Models\InvoiceItem;
 use App\Models\Receipt;
 use App\Models\Voucher;
+use App\Models\PublicShare;
 use Carbon\Carbon;
 
 class FrontendController extends Controller
@@ -33,14 +34,12 @@ class FrontendController extends Controller
      */
     public function getCustomerEstimatePdf($id)
     {
-        $estimate = Estimate::with(
+        $estimate = $this->sharedResource($id, 'estimate', Estimate::class, [
             'user',
             'items',
             'user.billingAddress',
-            'user.shippingAddress'
-        )
-            ->where('unique_hash', $id)
-            ->first();
+            'user.shippingAddress',
+        ]);
 
         $labels = [];
 
@@ -72,7 +71,7 @@ class FrontendController extends Controller
             }
         }
 
-        $companyAddress = User::with(['addresses', 'addresses.country'])->find(1);
+        $companyAddress = $this->companyAddress($estimate->company_id);
 
         $colors = [
             'invoice_primary_color',
@@ -107,13 +106,11 @@ class FrontendController extends Controller
      */
     public function getCustomerInvoicePdf($id)
     {
-        $invoice = Invoice::with([
+        $invoice = $this->sharedResource($id, 'invoice', Invoice::class, [
             'inventories',
             'user',
             'invoiceTemplate',
-        ])
-            ->where('unique_hash', $id)
-            ->first();
+        ]);
 
         $labels = [];
 
@@ -144,7 +141,7 @@ class FrontendController extends Controller
             // }
         }
 
-        $companyAddress = User::with(['addresses', 'addresses.country'])->find(1);
+        $companyAddress = $this->companyAddress($invoice->company_id);
 
         $colors = [
             'invoice_primary_color',
@@ -176,18 +173,18 @@ class FrontendController extends Controller
      */
     public function getEstimatePdf($id)
     {
-        $estimate = Estimate::with([
+        $estimate = $this->sharedResource($id, 'estimate', Estimate::class, [
             'items',
             'user',
             'estimateTemplate',
-        ])->where('unique_hash', $id)->first();
+        ]);
 
         $labels = [];
 
         $estimateTemplate = EstimateTemplate::find($estimate->estimate_template_id);
 
         $company = Company::find($estimate->company_id);
-        $companyAddress = User::with(['addresses', 'addresses.country'])->find(1);
+        $companyAddress = $this->companyAddress($estimate->company_id);
         $logo = $company->getMedia('logo')->first();
 
         if ($logo) {
@@ -234,18 +231,26 @@ class FrontendController extends Controller
      */
     public function getInvoicePdf($id)
     {
-        $invoice = Invoice::with([
+        $invoice = $this->sharedResource($id, 'invoice', Invoice::class, [
             'inventories',
             'user',
             'invoiceTemplate',
-        ])->where('unique_hash', $id)->first();
+        ]);
 
         $invoiceTemplate = InvoiceTemplate::find($invoice->invoice_template_id);
         $company = Company::where('id', $invoice->company_id)->first();
         $master = AccountMaster::find($invoice->account_master_id);
-        $ledger = AccountLedger::where('account_master_id', $master->id)->where('account', $master->name)->first();
+        $ledger = AccountLedger::withoutGlobalScopes()
+            ->where('company_id', $invoice->company_id)
+            ->where('account_master_id', $master->id)
+            ->where('account', $master->name)
+            ->firstOrFail();
 
-        $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)->whereNotNull('related_voucher')->get();
+        $all_voucher_ids = Voucher::withoutGlobalScopes()
+            ->where('company_id', $invoice->company_id)
+            ->where('account_ledger_id', $ledger->id)
+            ->whereNotNull('related_voucher')
+            ->get();
         $each_ids = null;
         foreach ($all_voucher_ids as $each) {
             if ($each_ids) {
@@ -255,7 +260,9 @@ class FrontendController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
+        $related_vouchers = Voucher::withoutGlobalScopes()->with(['invoice.inventories'])
+            ->where('company_id', $invoice->company_id)
+            ->whereIn('id', explode(',', $unique_ids))
             ->where('account_ledger_id', '!=', $ledger->id)
             ->orderBy('date')
             ->get();
@@ -329,7 +336,10 @@ class FrontendController extends Controller
             ->whereCompany($company->id)
             ->get();
 
-        $invoice_i = InvoiceItem::with('inventory')->where('type', 'invoice')->where('invoice_id', $invoice->id);
+        $invoice_i = InvoiceItem::withoutGlobalScopes()->with('inventory')
+            ->where('company_id', $invoice->company_id)
+            ->where('type', 'invoice')
+            ->where('invoice_id', $invoice->id);
         $invoice_items = $invoice_i->get();
 
         $time = substr($invoice->created_at, -8);
@@ -359,10 +369,10 @@ class FrontendController extends Controller
      */
     public function getReceiptPdf($id)
     {
-        $receipt = Receipt::with([
+        $receipt = $this->sharedResource($id, 'receipt', Receipt::class, [
             'user',
             'master',
-        ])->where('id', $id)->first();
+        ]);
 
         $company = Company::find($receipt->company_id);
 
@@ -395,6 +405,29 @@ class FrontendController extends Controller
         $pdf = PDF::loadView('app.pdf.receipt.receipt');
 
         return $pdf->stream();
+    }
+
+    private function sharedResource(string $token, string $type, string $model, array $relations)
+    {
+        $share = PublicShare::withoutGlobalScopes()
+            ->active()
+            ->where('token', $token)
+            ->where('resource_type', $type)
+            ->firstOrFail();
+
+        return $model::withoutGlobalScopes()
+            ->with($relations)
+            ->where('company_id', $share->company_id)
+            ->findOrFail($share->resource_id);
+    }
+
+    private function companyAddress(int $companyId): ?User
+    {
+        return User::withoutGlobalScopes()
+            ->with(['addresses', 'addresses.country'])
+            ->where('company_id', $companyId)
+            ->where('role', 'admin')
+            ->first();
     }
 
 }

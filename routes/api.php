@@ -189,6 +189,10 @@ Route::group(['middleware' => ['auth:api', 'company.context']], function () {
     // Get ledgers for report
     Route::get('reports/ledgers', [App\Http\Controllers\ReportController::class, 'getLedgersInReport']);
 
+    Route::get('/public-shares', [App\Http\Controllers\PublicShareController::class, 'index'])->name('public-shares.index');
+    Route::post('/public-shares', [App\Http\Controllers\PublicShareController::class, 'store'])->name('public-shares.store');
+    Route::delete('/public-shares/{share}', [App\Http\Controllers\PublicShareController::class, 'destroy'])->whereNumber('share')->name('public-shares.destroy');
+
     // Banks
     //----------------------------------
     Route::post('/banks/delete', [App\Http\Controllers\BanksController::class, 'delete'])->name('banks.delete');

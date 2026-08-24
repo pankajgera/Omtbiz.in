@@ -368,7 +368,7 @@ export default {
         this.accountLedger = response.data.account_ledger
         this.receiptMode = response.data.receipt_mode
 
-        this.siteURL = `/receipts/pdf/${this.formData.id}`
+        this.siteURL = response.data.shareable_link
         if (response.data.receipt.invoice !== null) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
         }
@@ -448,7 +448,7 @@ export default {
               }, 1000)
               return true
             }
-            this.siteURL = `/receipts/pdf/${response.data.receipt.id}`
+            this.siteURL = response.data.shareable_link
             window.swal({
               title: 'Send Receipt',
               text: 'Do you want to send receipt on whatsapp?',
