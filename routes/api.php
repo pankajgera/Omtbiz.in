@@ -22,14 +22,17 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('password/email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendResetLinkEmail']);
     // handle reset password form process
     Route::post('reset/password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset']);
-    Route::get('logout', [App\Http\Controllers\Auth\AccessTokensController::class, 'destroy']);
+    Route::get('logout', [App\Http\Controllers\Auth\AccessTokensController::class, 'destroy'])
+        ->middleware('auth:api');
 });
 
 Route::post('is-registered', [App\Http\Controllers\Auth\AccessTokensController::class, 'isRegistered'])->name('is-registered');
 
 Route::get('/ping', [App\Http\Controllers\UsersController::class, 'ping'])->name('ping');
 
-Route::get('/logout', [App\Http\Controllers\Auth\AccessTokensController::class, 'destroy'])->name('logout');
+Route::get('/logout', [App\Http\Controllers\Auth\AccessTokensController::class, 'destroy'])
+    ->middleware('auth:api')
+    ->name('logout');
 
 // Country, State & City
 //----------------------------------
@@ -39,7 +42,7 @@ Route::get('/countries', [App\Http\Controllers\LocationController::class, 'getCo
 // ----------------------------------
 Route::get('/settings/app/version', [App\Http\Controllers\SettingsController::class, 'getAppVersion'])->name('settings.app.version');
 
-Route::group(['middleware' => 'api'], function () {
+Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/bootstrap', [App\Http\Controllers\UsersController::class, 'getBootstrap'])->name('bootstrap');
 
     // Customers
@@ -115,27 +118,27 @@ Route::group(['middleware' => 'api'], function () {
             ->name('admin.data.delete');
         Route::put('/profile', [App\Http\Controllers\CompanyController::class, 'updateAdminProfile'])->name('admin.put.profile');
         Route::post('/profile/upload-avatar', [App\Http\Controllers\CompanyController::class, 'uploadAdminAvatar'])->name('admin.profile.avatar');
-        Route::post('/company/upload-logo', [App\Http\Controllers\CompanyController::class, 'uploadCompanyLogo'])->name('upload.admin.company.logo');
+        Route::post('/company/upload-logo', [App\Http\Controllers\CompanyController::class, 'uploadCompanyLogo'])->middleware('admin:api')->name('upload.admin.company.logo');
         Route::get('/company', [App\Http\Controllers\CompanyController::class, 'getAdminCompany'])->name('get.admin.company');
-        Route::post('/company', [App\Http\Controllers\CompanyController::class, 'updateAdminCompany'])->name('admin.company');
+        Route::post('/company', [App\Http\Controllers\CompanyController::class, 'updateAdminCompany'])->middleware('admin:api')->name('admin.company');
         Route::get('/general', [App\Http\Controllers\CompanyController::class, 'getGeneralSettings'])->name('get.admin.company.setting');
-        Route::put('/general', [App\Http\Controllers\CompanyController::class, 'updateGeneralSettings'])->name('admin.company.setting');
+        Route::put('/general', [App\Http\Controllers\CompanyController::class, 'updateGeneralSettings'])->middleware('admin:api')->name('admin.company.setting');
         Route::get('/colors', [App\Http\Controllers\CompanyController::class, 'getColors'])->name('admin.colors.setting');
         Route::get('/get-setting', [App\Http\Controllers\CompanyController::class, 'getSetting'])->name('get.admin.setting');
         Route::get('/get-inventory-type', [App\Http\Controllers\CompanyController::class, 'getInventoryType'])->name('get.inventory.type');
-        Route::put('/update-setting', [App\Http\Controllers\CompanyController::class, 'updateSetting'])->name('admin.update.setting');
+        Route::put('/update-setting', [App\Http\Controllers\CompanyController::class, 'updateSetting'])->middleware('admin:api')->name('admin.update.setting');
         Route::get('/get-customize-setting', [App\Http\Controllers\CompanyController::class, 'getCustomizeSetting'])->name('admin.get.customize.setting');
-        Route::put('/update-customize-setting', [App\Http\Controllers\CompanyController::class, 'updateCustomizeSetting'])->name('admin.update.customize.setting');
-        Route::get('/environment/mail', [App\Http\Controllers\EnvironmentController::class, 'getMailDrivers'])->name('admin.environment.mail');
-        Route::get('/environment/mail-env', [App\Http\Controllers\EnvironmentController::class, 'getMailEnvironment'])->name('admin.mail.env');
-        Route::post('/environment/mail', [App\Http\Controllers\EnvironmentController::class, 'saveMailEnvironment'])->name('admin.environment.mail.save');
+        Route::put('/update-customize-setting', [App\Http\Controllers\CompanyController::class, 'updateCustomizeSetting'])->middleware('admin:api')->name('admin.update.customize.setting');
+        Route::get('/environment/mail', [App\Http\Controllers\EnvironmentController::class, 'getMailDrivers'])->middleware('admin:api')->name('admin.environment.mail');
+        Route::get('/environment/mail-env', [App\Http\Controllers\EnvironmentController::class, 'getMailEnvironment'])->middleware('admin:api')->name('admin.mail.env');
+        Route::post('/environment/mail', [App\Http\Controllers\EnvironmentController::class, 'saveMailEnvironment'])->middleware('admin:api')->name('admin.environment.mail.save');
     });
 
     // Users Routes
     //----------------------------------
-    Route::post('/users/delete', [App\Http\Controllers\UsersController::class, 'delete'])->name('users.delete');
-    Route::get('/users/fetch-roles-and-companies', [App\Http\Controllers\UsersController::class, 'getRolesAndCompanies']);
-    Route::resource('users', App\Http\Controllers\UsersController::class);
+    Route::post('/users/delete', [App\Http\Controllers\UsersController::class, 'delete'])->middleware('admin:api')->name('users.delete');
+    Route::get('/users/fetch-roles-and-companies', [App\Http\Controllers\UsersController::class, 'getRolesAndCompanies'])->middleware('admin:api');
+    Route::resource('users', App\Http\Controllers\UsersController::class)->middleware('admin:api');
 
     // Notes
     //----------------------------------
@@ -207,8 +210,8 @@ Route::group(['middleware' => 'api'], function () {
 
     // Audit Logs (admin only)
     //----------------------------------
-    Route::get('/audit-logs', [App\Http\Controllers\AuditLogsController::class, 'index'])->name('audit-logs.index');
-    Route::get('/audit-logs/{id}', [App\Http\Controllers\AuditLogsController::class, 'show'])->name('audit-logs.show');
+    Route::get('/audit-logs', [App\Http\Controllers\AuditLogsController::class, 'index'])->middleware('admin:api')->name('audit-logs.index');
+    Route::get('/audit-logs/{id}', [App\Http\Controllers\AuditLogsController::class, 'show'])->middleware('admin:api')->name('audit-logs.show');
 
     Route::post('/whatsapp-send-pdf', [App\Http\Controllers\WhatsappController::class, 'sendPdf'])->name('whatsapp');
 });
