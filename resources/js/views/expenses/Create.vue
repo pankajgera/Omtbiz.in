@@ -182,6 +182,7 @@ export default {
       passData: [],
       contacts: [],
       previewReceipt: null,
+      receiptShareUrl: null,
       fileSendUrl: '/api/expenses'
     }
   },
@@ -225,9 +226,7 @@ export default {
       'getSelectedCompany'
     ]),
     getReceiptUrl () {
-      if (this.isEdit) {
-        return `/expenses/${this.$route.params.id}/receipt/${this.getSelectedCompany.unique_hash}`
-      }
+      return this.receiptShareUrl
     }
   },
   watch: {
@@ -288,6 +287,7 @@ export default {
 
       this.isReceiptAvailable = true
       this.previewReceipt = res.data.image
+      this.receiptShareUrl = res.data.shareable_link
     },
     async fetchInitialData () {
       this.fetchCategories()

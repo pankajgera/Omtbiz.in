@@ -101,7 +101,7 @@
             <div class="inv-number">{{ order.order_number }}</div>
           </div>
           <div class="right">
-            <div class="inv-amount" v-html="$utils.formatMoney(order.total, order.user.currency)" />
+            <div class="inv-amount">{{ $utils.formatMoney(order.total, order.user.currency) }}</div>
             <div class="inv-date">{{ order.formattedOrderDate }}</div>
           </div>
         </router-link>

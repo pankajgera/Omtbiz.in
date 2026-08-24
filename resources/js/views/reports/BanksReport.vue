@@ -60,6 +60,7 @@ import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import { required } from '@vuelidate/validators';
+import { createReportShare } from '@/helpers/publicShares'
 export default {
   mixins: [validationMixin],
   data () {
@@ -119,8 +120,7 @@ export default {
     }
   },
   mounted () {
-    this.siteURL = `/reports/banks/${this.getSelectedCompany.unique_hash}`
-    this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
+    this.getReports()
   },
   methods: {
     ...mapActions('banks', [
@@ -199,19 +199,17 @@ export default {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
-      this.url = `${this.siteURL}?
-        from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
+      this.url = await createReportShare('banks', {
+        from_date: moment(this.formData.from_date).format('DD/MM/YYYY'),
+        to_date: moment(this.formData.to_date).format('DD/MM/YYYY')
+      })
       return true
     },
-    downloadReport () {
-      if (!this.getReports()) {
+    async downloadReport () {
+      if (!await this.getReports()) {
         return false
       }
-
-      window.open(this.getReportUrl + '&download=true')
-      setTimeout(() => {
-        this.url = `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}`
-      }, 200)
+      window.open(this.getReportUrl + '?download=true')
     },
     async loadBankData () {
       let response = await this.fetchBanksReport()

@@ -18,6 +18,7 @@ use App\Models\Estimate;
 use App\Models\EstimateItem;
 use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Builder;
+use App\Models\PublicShare;
 
 class ReportController extends Controller
 {
@@ -30,7 +31,7 @@ class ReportController extends Controller
      */
     public function customersSalesReport($hash, Request $request)
     {
-        $company = Company::where('unique_hash', $hash)->first();
+        $company = $this->sharedReportCompany($hash, 'sales-customers', $request);
 
         $start = Carbon::createFromFormat('d/m/Y', $request->from_date);
         $end = Carbon::createFromFormat('d/m/Y', $request->to_date);
@@ -101,7 +102,7 @@ class ReportController extends Controller
      */
     public function itemsSalesReport($hash, Request $request)
     {
-        $company = Company::where('unique_hash', $hash)->first();
+        $company = $this->sharedReportCompany($hash, 'sales-items', $request);
 
         $items = InvoiceItem::whereCompany($company->id)
             ->where('type', 'invoice')
@@ -159,7 +160,7 @@ class ReportController extends Controller
      */
     public function expensesReport($hash, Request $request)
     {
-        $company = Company::where('unique_hash', $hash)->first();
+        $company = $this->sharedReportCompany($hash, 'expenses', $request);
 
         $expenseCategories = Expense::with('category')
             ->whereCompany($company->id)
@@ -217,7 +218,7 @@ class ReportController extends Controller
      */
     public function profitLossReport($hash, Request $request)
     {
-        $company = Company::where('unique_hash', $hash)->first();
+        $company = $this->sharedReportCompany($hash, 'profit-loss', $request);
 
         $invoicesAmount = Invoice::whereCompany($company->id)
             ->applyFilters($request->only(['from_date', 'to_date']))
@@ -282,8 +283,10 @@ class ReportController extends Controller
      */
     public function customersReport($hash, Request $request)
     {
-        $company = Company::where('unique_hash', $hash)->first();
-        $ledger = AccountLedger::findOrFail($request->ledger_id);
+        $company = $this->sharedReportCompany($hash, 'customers', $request);
+        $ledger = AccountLedger::withoutGlobalScopes()
+            ->where('company_id', $company->id)
+            ->findOrFail($request->ledger_id);
         $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
 
@@ -361,6 +364,7 @@ class ReportController extends Controller
      */
     public function banksReport($hash, Request $request)
     {
+        $company = $this->sharedReportCompany($hash, 'banks', $request);
         $related_vouchers = [];
         $related_masters = AccountMaster::where('name', 'LIKE', 'Bank')->get();
         $balance_array = [];
@@ -369,7 +373,11 @@ class ReportController extends Controller
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
 
         foreach ($related_masters as $key => $master) {
-            $all_voucher_ids = Voucher::where('account_master_id', $master->id)->whereNotNull('related_voucher')->get();
+            $all_voucher_ids = Voucher::withoutGlobalScopes()
+                ->where('company_id', $company->id)
+                ->where('account_master_id', $master->id)
+                ->whereNotNull('related_voucher')
+                ->get();
             $each_ids = null;
             foreach ($all_voucher_ids as $each) {
                 if ($each_ids) {
@@ -381,7 +389,9 @@ class ReportController extends Controller
             $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
             $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
             $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
-            $vouchers = Voucher::with(['invoice', 'receipt'])->whereIn('id', explode(',', $unique_ids))
+            $vouchers = Voucher::withoutGlobalScopes()->with(['invoice', 'receipt'])
+                ->where('company_id', $company->id)
+                ->whereIn('id', explode(',', $unique_ids))
                 ->where('account_master_id', '!=', $master->id)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)
@@ -392,7 +402,9 @@ class ReportController extends Controller
             }
             array_push($master_ledger_type, $master->type);
 
-            $calc_sum = AccountLedger::where('account_master_id', $master->id)
+            $calc_sum = AccountLedger::withoutGlobalScopes()
+                ->where('company_id', $company->id)
+                ->where('account_master_id', $master->id)
                 ->where('account', '<>', $master->name)
                 ->whereDate('date', '>=', $from)
                 ->whereDate('date', '<=', $to)
@@ -417,8 +429,6 @@ class ReportController extends Controller
         $debit_sum = array_sum($vouchers_debit_sum);
         $credit_sum = array_sum($vouchers_credit_sum);
         $credit_debit_sum = $debit_sum > $credit_sum ? $debit_sum - $credit_sum : $credit_sum - $debit_sum;
-        $company = Company::where('unique_hash', $hash)->first();
-
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $company->id);
         $from_date = Carbon::createFromFormat('d/m/Y', $request->from_date)->format($dateFormat);
         $to_date = Carbon::createFromFormat('d/m/Y', $request->to_date)->format($dateFormat);
@@ -473,7 +483,8 @@ class ReportController extends Controller
      */
     public function invoiceReport(Request $request, $id)
     {
-        $company = Company::findOrFail($request->company_id);
+        $invoiceWith = $this->sharedDocument($id, 'invoice', Invoice::class, ['master']);
+        $company = Company::findOrFail($invoiceWith->company_id);
         $colors = [
             'primary_text_color',
             'heading_text_color',
@@ -490,10 +501,11 @@ class ReportController extends Controller
             ->get();
 
 
-        $invoice_i = InvoiceItem::with('inventory')->where('type', 'invoice')->where('invoice_id', $id);
+        $invoice_i = InvoiceItem::withoutGlobalScopes()->with('inventory')
+            ->where('company_id', $company->id)
+            ->where('type', 'invoice')
+            ->where('invoice_id', $invoiceWith->id);
         $invoice_items = $invoice_i->get();
-
-        $invoiceWith = Invoice::with(['master'])->where('id', $id)->first();
         $time = substr($invoiceWith->created_at, -8);
         $date = substr($invoiceWith->invoice_date, 0, 10);
         $invoiceWith->invoice_date = Carbon::parse($date . ' ' . $time, 'Asia/Kolkata')->toDateTimeString();
@@ -559,6 +571,33 @@ class ReportController extends Controller
         return $pdf->stream();
     }
 
+    private function sharedReportCompany(string $token, string $type, Request $request): Company
+    {
+        $share = PublicShare::withoutGlobalScopes()
+            ->active()
+            ->where('token', $token)
+            ->where('resource_type', 'report:' . $type)
+            ->firstOrFail();
+
+        $request->merge($share->parameters ?? []);
+
+        return Company::findOrFail($share->company_id);
+    }
+
+    private function sharedDocument(string $token, string $type, string $model, array $relations)
+    {
+        $share = PublicShare::withoutGlobalScopes()
+            ->active()
+            ->where('token', $token)
+            ->where('resource_type', $type)
+            ->firstOrFail();
+
+        return $model::withoutGlobalScopes()
+            ->with($relations)
+            ->where('company_id', $share->company_id)
+            ->findOrFail($share->resource_id);
+    }
+
     /**
      * Invoice slip report
      *
@@ -568,7 +607,7 @@ class ReportController extends Controller
      */
     public function slipReport(Request $request, $id)
     {
-        $invoice = Invoice::with(['master'])->where('id', $id)->first();
+        $invoice = $this->sharedDocument($id, 'invoice', Invoice::class, ['master']);
         view()->share([
             'party_name' => $invoice->master->name,
             'invoice_number' => $invoice->invoice_number,

@@ -4,7 +4,9 @@ use App\Models\Address;
 use Illuminate\Database\Seeder;
 use App\Models\Company;
 use App\Models\CompanySetting;
+use App\Support\InitialAdminCredentials;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class CompanySeeder extends Seeder
 {
@@ -15,13 +17,15 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
+        $credentials = InitialAdminCredentials::fromConfig();
+
         Company::create([
             'name' => 'Local Company',
             'logo' => null,
-            'unique_hash' => 'Rd3ZDw9IiawGQZDJAVRSsUNjNHtpskFGOeqhKN0f4uln8aIJSbNpC5k9Z4ff',
+            'unique_hash' => Str::random(64),
         ]);
 
-        CompanySetting::create(['option' => 'notification_email', 'value' => 'testing@gmail.com', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'notification_email', 'value' => $credentials['email'], 'company_id' => 1]);
         CompanySetting::create(['option' => 'currency', 'value' => '12', 'company_id' => 1]);
         CompanySetting::create(['option' => 'time_zone', 'value' => 'UTC', 'company_id' => 1]);
         CompanySetting::create(['option' => 'language', 'value' => 'en', 'company_id' => 1]);

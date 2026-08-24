@@ -156,7 +156,7 @@
           <div class="section">
             <label class="order-label">{{ $t('orders.quantity') }}</label>
             <label class="">
-              <div v-html="totalQuantity(inventoryBind)" />
+              <div>{{ totalQuantity(inventoryBind) }}</div>
             </label>
           </div>
           <!-- <div class="section">

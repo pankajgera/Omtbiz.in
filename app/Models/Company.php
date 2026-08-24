@@ -17,6 +17,13 @@ class Company extends Model implements HasMedia
 
     protected $appends=['logo'];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('logo')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->singleFile();
+    }
+
     public function getLogoAttribute()
     {
         $logo = $this->getMedia('logo')->first();

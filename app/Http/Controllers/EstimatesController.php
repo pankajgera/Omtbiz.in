@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Support\PublicShareService;
 
 class EstimatesController extends Controller
 {
@@ -220,7 +221,7 @@ class EstimatesController extends Controller
         
         return response()->json([
             'estimate' => $estimate,
-            'url' => url('/estimates/pdf/' . $estimate->unique_hash),
+            'url' => $this->shareableLink($estimate),
         ]);
     }
 
@@ -341,7 +342,7 @@ class EstimatesController extends Controller
 
         $siteData = [
             'estimate' => $estimate,
-            'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash)
+            'shareable_link' => $this->shareableLink($estimate)
         ];
 
         return response()->json($siteData);
@@ -369,7 +370,7 @@ class EstimatesController extends Controller
             'estimateNumber' => $estimate->getEstimateNumAttribute(),
             'estimate' => $estimate,
             'estimateTemplates' => EstimateTemplate::all(),
-            'shareable_link' => url('/estimates/pdf/' . $estimate->unique_hash),
+            'shareable_link' => $this->shareableLink($estimate),
             'estimate_prefix' => $estimate->getEstimatePrefixAttribute(),
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
@@ -412,7 +413,7 @@ class EstimatesController extends Controller
 
         return response()->json([
             'estimate' => $estimate,
-            'url' => url('/estimates/pdf/' . $estimate->unique_hash),
+            'url' => $this->shareableLink($estimate),
         ]);
     }
 
@@ -453,6 +454,14 @@ class EstimatesController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
+    private function shareableLink(Estimate $estimate): string
+    {
+        $service = app(PublicShareService::class);
+        $share = $service->document($estimate, 'estimate', request()->user('api')?->id);
+
+        return $service->url($share);
+    }
+
     public function sendEstimate(Request $request)
     {
         $estimate = Estimate::findOrFail($request->id);

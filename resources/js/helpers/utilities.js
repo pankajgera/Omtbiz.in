@@ -69,7 +69,7 @@ export default {
       let i = parseInt(amount = Math.abs(Number(amount) || 0).toFixed(precision)).toString()
       let j = (i.length > 3) ? i.length % 3 : 0
 
-      let moneySymbol = `<span style="font-family: sans-serif">${symbol}</span>`
+      let moneySymbol = String(symbol)
 
       return moneySymbol + ' ' + negativeSign + (j ? i.substr(0, j) + thousand_separator : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thousand_separator) + (precision ? decimal_separator + Math.abs(amount - i).toFixed(precision).slice(2) : '')
     } catch (e) {

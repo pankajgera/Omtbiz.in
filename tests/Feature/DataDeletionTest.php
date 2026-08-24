@@ -21,7 +21,10 @@ class DataDeletionTest extends TestCase
         );
 
         $this->assertSame(200, $response->getStatusCode());
-        Bus::assertDispatched(EraseData::class);
+        Bus::assertDispatched(
+            EraseData::class,
+            fn (EraseData $job) => $job->companyId === 17 && $job->initiatedBy === 42
+        );
     }
 
     public function test_non_admin_cannot_queue_data_deletion(): void
@@ -58,7 +61,9 @@ class DataDeletionTest extends TestCase
             'name' => 'Deletion Test User',
             'email' => 'delete-test@example.com',
             'role' => $role,
+            'company_id' => 17,
         ]);
+        $user->id = 42;
 
         $request = Request::create('/api/settings/data/delete', 'DELETE', [
             'confirmation' => $confirmation,

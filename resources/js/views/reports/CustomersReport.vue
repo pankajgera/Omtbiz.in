@@ -119,6 +119,7 @@ import moment from 'moment'
 import { validationMixin } from 'vuelidate'
 import { required } from '@vuelidate/validators';
 import whatsappIconUrl from '@fortawesome/fontawesome-free/svgs/brands/whatsapp.svg'
+import { createReportShare } from '@/helpers/publicShares'
 export default {
   mixins: [validationMixin],
   data () {
@@ -195,7 +196,6 @@ export default {
     }
   },
   mounted () {
-    this.siteURL = `/reports/customers/${this.getSelectedCompany.unique_hash}`
   },
   methods: {
      ...mapActions('customer', [
@@ -295,7 +295,7 @@ export default {
       window.open(this.getReportUrl, '_blank')
       return true
     },
-    prepareReportUrl () {
+    prepareReportParameters () {
       this.vRange.$touch()
       this.vFormData.$touch()
       if (this.selectedRange === 'Till Date') {
@@ -312,18 +312,22 @@ export default {
         return false
       }
 
-      return `${this.siteURL}?from_date=${moment(this.formData.from_date).format('DD/MM/YYYY')}&to_date=${moment(this.formData.to_date).format('DD/MM/YYYY')}&ledger_id=${this.selectedLedger.id}`
+      return {
+        from_date: moment(this.formData.from_date).format('DD/MM/YYYY'),
+        to_date: moment(this.formData.to_date).format('DD/MM/YYYY'),
+        ledger_id: this.selectedLedger.id
+      }
     },
-    getReports () {
-      const reportUrl = this.prepareReportUrl()
-      if (!reportUrl) {
+    async getReports () {
+      const parameters = this.prepareReportParameters()
+      if (!parameters) {
         this.isReportLoading = false
         return false
       }
 
       this.isReportLoading = true
       this.reportPreviewKey += 1
-      this.url = reportUrl
+      this.url = await createReportShare('customers', parameters)
       return true
     },
     downloadReport () {
@@ -332,7 +336,7 @@ export default {
       }
 
       const downloadLink = document.createElement('a')
-      downloadLink.href = this.getReportUrl + '&download=true'
+      downloadLink.href = this.getReportUrl + '?download=true'
       downloadLink.download = ''
       document.body.appendChild(downloadLink)
       downloadLink.click()

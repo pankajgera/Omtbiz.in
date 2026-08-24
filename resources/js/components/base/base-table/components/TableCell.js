@@ -20,7 +20,7 @@ export default {
 
       return h('td', cellProps, [
         h('span', props.responsiveLabel),
-        h('span', { innerHTML: value === null || value === undefined ? '' : value })
+        h('span', value === null || value === undefined ? '' : String(value))
       ])
     }
   }

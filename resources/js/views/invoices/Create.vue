@@ -194,7 +194,7 @@
           <div class="section">
             <label class="invoice-label">{{ $t('invoices.quantity') }}</label>
             <label class="">
-              <div v-html="totalQuantity(inventoryBind)" />
+              <div>{{ totalQuantity(inventoryBind) }}</div>
             </label>
           </div>
           <div class="section">
@@ -838,9 +838,9 @@ export default {
         window.location.reload()
       }, 1000)
     },
-    printInvoice(invoice_id) {
-      this.siteURL = `/reports/invoice/${invoice_id}`
-      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+    printInvoice(invoiceToken) {
+      this.siteURL = `/reports/invoice/${invoiceToken}`
+      this.url = this.siteURL
 
       const pdfWindow = window.open(this.url, '_blank')
 
@@ -852,10 +852,10 @@ export default {
       pdfWindow.opener = null
       this.reset()
     },
-    printSlip(invoice_id) {
+    printSlip(invoiceToken) {
       //print slip
-      this.siteURL = `/reports/slip/${invoice_id}`
-      this.url = `${this.siteURL}?company_id=${this.user.company_id}`
+      this.siteURL = `/reports/slip/${invoiceToken}`
+      this.url = this.siteURL
       printJS({
         printable: this.url,
         type: 'pdf',
@@ -864,7 +864,7 @@ export default {
         }
       })
     },
-    async showInvoicePopup (invoice_id) {
+    async showInvoicePopup (invoice) {
       swal({
         title: this.$t('invoices.invoice_report_title'),
         text: this.$t('invoices.invoice_report_text'),
@@ -873,7 +873,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.printInvoice(invoice_id)
+          this.printInvoice(invoice.unique_hash)
         } else {
           this.reset()
         }
@@ -889,7 +889,7 @@ export default {
 
         if (res.data && res.data.invoice) {
           window.toastr['success'](this.$t('invoices.created_message'))
-          this.showInvoicePopup(res.data.invoice.id)
+          this.showInvoicePopup(res.data.invoice)
         }
       }).catch((err) => {
         this.isLoading = false
@@ -908,7 +908,7 @@ export default {
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
           this.isLoading = false
-          this.showInvoicePopup(res.data.invoice.id)
+          this.showInvoicePopup(res.data.invoice)
         }
 
         if (res.data.error === 'invalid_due_amount') {

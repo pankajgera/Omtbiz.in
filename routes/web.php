@@ -21,7 +21,7 @@ Route::get('/receipts/pdf/{id}', [FrontendController::class, 'getReceiptPdf'])->
 Route::get('/estimates/pdf/{id}', [FrontendController::class, 'getEstimatePdf'])->name('get.estimate.pdf');
 Route::get('/customer/invoices/pdf/{id}', [FrontendController::class, 'getCustomerInvoicePdf'])->name('get.customer.invoice.pdf');
 Route::get('/customer/estimates/pdf/{id}', [FrontendController::class, 'getCustomerEstimatePdf'])->name('get.customer.estimate.pdf');
-Route::get('/expenses/{id}/receipt/{hash}', [ExpensesController::class, 'downloadReceipt'])->name('download.expense.receipt');
+Route::get('/expenses/receipt/{token}', [ExpensesController::class, 'downloadReceipt'])->name('download.expense.receipt');
 
 Route::get('/{vue?}', function () {
     return view('app');
