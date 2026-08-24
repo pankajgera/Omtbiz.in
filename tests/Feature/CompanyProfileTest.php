@@ -18,7 +18,7 @@ class CompanyProfileTest extends TestCase
         ]);
         $user->id = 42;
 
-        $this->actingAs($user);
+        $this->actingAs($user, 'web');
 
         $profile = app(CompanyController::class)->getAdmin();
 
