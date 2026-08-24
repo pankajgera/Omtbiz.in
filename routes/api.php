@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth:api', 'company.context']], function () {
     Route::post('/vouchers/approve-multiple', [App\Http\Controllers\VouchersController::class, 'approveMultiple'])->name('vouchers.approve-multiple');
     Route::post('/vouchers/decline-multiple', [App\Http\Controllers\VouchersController::class, 'declineMultiple'])->name('vouchers.decline-multiple');
     Route::post('/vouchers/update', [App\Http\Controllers\VouchersController::class, 'update']);
-    Route::get('/vouchers/{id}/book', [App\Http\Controllers\VouchersController::class, 'book'])->name('vouchers.book');
+    Route::get('/vouchers/{id}/book', [App\Http\Controllers\VouchersController::class, 'book'])->whereNumber('id')->name('vouchers.book');
     Route::get('/vouchers/daybook', [App\Http\Controllers\VouchersController::class, 'getDaybook'])->name('vouchers.daybook');
     Route::resource('vouchers', App\Http\Controllers\VouchersController::class);
 
