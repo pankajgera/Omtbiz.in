@@ -2,6 +2,18 @@
 
 Laravel 13 and Vue 3/Vite application for Omtbiz accounting workflows.
 
+## Initial Administrator
+
+Before running `php artisan migrate --seed` for a new installation, supply a unique administrator identity through the environment:
+
+```dotenv
+INITIAL_ADMIN_NAME="Production Administrator"
+INITIAL_ADMIN_EMAIL=admin@example.com
+INITIAL_ADMIN_PASSWORD="replace-with-a-unique-strong-password"
+```
+
+The password must be at least 16 characters and include uppercase, lowercase, a number, and a symbol. Installation stops without valid credentials; there is no default administrator password.
+
 ## Docker Local Stack
 
 The Compose project is named `local` and runs Nginx, PHP 8.5 FPM, MySQL 8.4, and dnsmasq. The application is available at `http://omtbiz.test`.
