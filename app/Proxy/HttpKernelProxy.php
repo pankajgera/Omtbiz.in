@@ -12,6 +12,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 class HttpKernelProxy
 {
     /**
+     * The application container.
+     *
+     * @var \Illuminate\Contracts\Container\Container
+     */
+    protected Container $app;
+
+    /**
      * Additional headers for the request.
      *
      * @var array

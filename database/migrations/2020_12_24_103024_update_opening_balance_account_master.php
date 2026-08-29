@@ -13,8 +13,6 @@ class UpdateOpeningBalanceAccountMaster extends Migration
      */
     public function up()
     {
-        Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
         Schema::table('account_masters', function (Blueprint $table) {
             $table->decimal('opening_balance', 15, 2)->change();
         });

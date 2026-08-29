@@ -26,6 +26,8 @@ use App\Models\Voucher;
 use App\Services\AuditLogger;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Str;
+use App\Support\PublicShareService;
 
 class InvoicesController extends Controller
 {
@@ -215,7 +217,7 @@ class InvoicesController extends Controller
                     'indirect_income_value' => $request->income_ledger_value,
                     'indirect_expense' => $request->expense_ledger ? $request->expense_ledger['name'] : null,
                     'indirect_expense_value' => $request->expense_ledger_value,
-                    'unique_hash' => str_random(60),
+                    'unique_hash' => Str::random(60),
                     'account_master_id' => $request->debtors['id'],
                 ]);
             }, 3);
@@ -377,7 +379,7 @@ class InvoicesController extends Controller
 
             if ($invoice) {
                 return response()->json([
-                    'url' => url('/invoices/pdf/' . $invoice->unique_hash),
+                    'url' => $this->shareableLink($invoice),
                     'invoice' => $invoice
                 ]);
             }
@@ -479,7 +481,7 @@ class InvoicesController extends Controller
 
         $siteData = [
             'invoice' => $invoice,
-            'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash)
+            'shareable_link' => $this->shareableLink($invoice)
         ];
 
         return response()->json($siteData);
@@ -522,7 +524,7 @@ class InvoicesController extends Controller
             'incomeIndirectLedgers' => $income_indirect_ledgers,
             'expenseIndirectLedgers' => $expense_indirect_ledgers,
             'invoiceTemplates' => InvoiceTemplate::all(),
-            'shareable_link' => url('/invoices/pdf/' . $invoice->unique_hash),
+            'shareable_link' => $this->shareableLink($invoice),
             'sundryDebtorsList' => $sundryDebtorsList,
             'estimateList' => $estimateList,
             'InvoiceEstimate' => $find_invoice_estimate,
@@ -749,7 +751,7 @@ class InvoicesController extends Controller
         $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
 
         return response()->json([
-            'url' => url('/invoices/pdf/' . $invoice->unique_hash),
+            'url' => $this->shareableLink($invoice),
             'invoice' => $invoice,
             'success' => true
         ]);
@@ -939,6 +941,14 @@ class InvoicesController extends Controller
         return response()->json([
             'invoice' => $find_today_first_invoice
         ]);
+    }
+
+    private function shareableLink(Invoice $invoice): string
+    {
+        $service = app(PublicShareService::class);
+        $share = $service->document($invoice, 'invoice', request()->user('api')?->id);
+
+        return $service->url($share);
     }
 
     private function parseInvoiceDateForReference($invoiceDate)

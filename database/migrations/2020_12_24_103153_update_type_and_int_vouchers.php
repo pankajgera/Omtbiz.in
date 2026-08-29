@@ -13,8 +13,6 @@ class UpdateTypeAndIntVouchers extends Migration
      */
     public function up()
     {
-        Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
         // Schema::table('vouchers', function (Blueprint $table) {
         //     $table->dropColumn('type');
         // });

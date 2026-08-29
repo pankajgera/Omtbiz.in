@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Image;
+use Intervention\Image\Encoders\JpegEncoder;
+use Intervention\Image\ImageManager as InterventionImageManager;
 use Storage;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 use App\Traits\Auditable;
 
@@ -30,6 +31,13 @@ class Item extends Model
         'price' => 'integer',
     ];
 
+    // Sibling models (Invoice, Expense, Receipt, Payment, User, ...) all
+    // append formattedCreatedAt so the frontend's "Added On" column
+    // (show="formattedCreatedAt") has something to read - Item never did,
+    // so that column silently rendered blank despite created_at being set
+    // and the accessor itself working fine when called directly.
+    protected $appends = ['formattedCreatedAt'];
+
     public function scopeWhereSearch($query, $search)
     {
         return $query->where('name', 'LIKE', '%' . $search . '%');
@@ -50,12 +58,17 @@ class Item extends Model
         $invoices = Invoice::where('account_master_id', $name)->pluck('dispatch_id')->toArray();
         return $query->whereIn('dispatch_id', $invoices);
     }
-    public function scopeWhereCompany($query, $company_id, $filter=null)
+    public function scopeWhereCompany($query, $company_id)
     {
+        // Used to also restrict to today's rows whenever $filter (the
+        // 'filterBy' request param) came in as the literal string 'false' -
+        // that string check was backwards from the caller's intent
+        // (resources/js/views/items/Index.vue sends the JS boolean
+        // `applyFilter`, which axios serializes as the *string* "false"
+        // whenever no filter is actually applied), so the Pending list was
+        // silently limited to today-only on every normal, unfiltered page
+        // load and only showed its full history once a filter was applied.
         $query->where('company_id', $company_id);
-        if ($filter==='false') {
-            $query->where('company_id', $company_id)->where(DB::raw("(DATE_FORMAT(created_at,'%Y-%m-%d'))"), Carbon::now()->format('Y-m-d'));
-        }
     }
 
     public function scopeWhereOrder($query, $orderByField, $orderBy)
@@ -105,7 +118,12 @@ class Item extends Model
 
     public function dispatch()
     {
-        return $this->hasMany(Dispatch::class, 'id', 'dispatch_id');
+        // hasOne, not hasMany: dispatch_id holds a single dispatch's id (as a
+        // string), so this always matches at most one Dispatch row. The
+        // frontend (resources/js/views/items/Index.vue) reads it as a single
+        // object - `row.dispatch.name` - which hasMany broke by serializing
+        // it as a one-element array instead, silently rendering blank.
+        return $this->hasOne(Dispatch::class, 'id', 'dispatch_id');
     }
 
     public static function deleteItem($id)
@@ -136,9 +154,9 @@ class Item extends Model
      */
     public function uploadImage($request_image)
     {
-        //make an Intervention Image object
-        $image = Image::make($request_image);
-        $fileName = str_random(30) . '-' . time() . '.jpg';
+        $manager = InterventionImageManager::usingDriver(config('image.driver'));
+        $image = $manager->decode($request_image);
+        $fileName = Str::random(30) . '-' . time() . '.jpg';
 
         // store our uploaded file in our uploads folder
         // set our results to have our asset path
@@ -157,26 +175,14 @@ class Item extends Model
         //     }
         // }
 
-        //save Original
-        //$image->save($save_paths['original'].$ds.$fileName);
-        $save_to_s3_screen_original = $image->stream();
+        $original = $image->encode(new JpegEncoder());
+        $screen = (clone $image)->scale(height: 500)->encode(new JpegEncoder());
+        $thumbnail = (clone $image)->cover(181, 121)->encode(new JpegEncoder());
+        $filesize = strlen((string) $screen);
 
-        //resize
-        $resized_image = $image->resize(null, 500, function ($constraint) {
-            $constraint->aspectRatio();
-        });
-
-        //now save it
-        $save_to_s3_screen = $resized_image->stream();
-        $filesize = $resized_image->filesize();
-
-        //thumbnail
-
-        $save_to_s3_thumb = $image->fit('181', '121')->stream();
-
-        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, $save_to_s3_screen_original->__toString());
-        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, $save_to_s3_screen->__toString());
-        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, $save_to_s3_thumb->__toString());
+        Storage::disk('s3')->put($save_paths['original'] . $ds . $fileName, (string) $original);
+        Storage::disk('s3')->put($save_paths['screen'] . $ds . 'screen-' . $fileName, (string) $screen);
+        Storage::disk('s3')->put($save_paths['thumb'] . $ds . 'thumb-' . $fileName, (string) $thumbnail);
 
         //get the data for response
         $url = url($save_paths['screen']);
@@ -190,8 +196,7 @@ class Item extends Model
         $success->size = $filesize;
         $success->thumbnailUrl = $thumbnailUrl;
 
-        //finally free the memory
-        $image->destroy();
+        unset($image);
 
         //make an entry in the database
         $photo = new \App\Models\Images();

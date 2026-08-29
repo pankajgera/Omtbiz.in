@@ -79,6 +79,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Cache Serializable Classes
+    |--------------------------------------------------------------------------
+    |
+    | Laravel 13 hardens cache unserialization by default. This application
+    | does not intentionally cache PHP objects, so arbitrary classes remain
+    | disallowed unless a future cache payload explicitly requires them.
+    |
+    */
+
+    'serializable_classes' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Cache Key Prefix
     |--------------------------------------------------------------------------
     |

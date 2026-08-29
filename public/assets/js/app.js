@@ -12711,14 +12711,14 @@ function buildURL(url, params, options) {
   if (!params) {
     return url;
   }
-  
+
   const _encode = options && options.encode || encode;
 
   if (utils$1.isFunction(options)) {
     options = {
       serialize: options
     };
-  } 
+  }
 
   const serializeFn = options && options.serialize;
 
@@ -22597,6 +22597,344 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=script&lang=js":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=script&lang=js ***!
+  \**************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_icon_DotIcon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/icon/DotIcon */ "./resources/assets/js/components/icon/DotIcon.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_icon_SatelliteIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/icon/SatelliteIcon */ "./resources/assets/js/components/icon/SatelliteIcon.vue");
+/* harmony import */ var _js_components_base_BaseButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../js/components/base/BaseButton */ "./resources/assets/js/components/base/BaseButton.vue");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    DotIcon: _components_icon_DotIcon__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SatelliteIcon: _components_icon_SatelliteIcon__WEBPACK_IMPORTED_MODULE_2__["default"],
+    BaseButton: _js_components_base_BaseButton__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  data: function data() {
+    return {
+      sundryDebtorsList: [],
+      totalCompleted: 0,
+      dateFilterOptions: [{
+        value: 'today',
+        label: this.$t('dispatch.date_filter_today')
+      }, {
+        value: 'yesterday',
+        label: this.$t('dispatch.date_filter_yesterday')
+      }, {
+        value: 'next_day',
+        label: this.$t('dispatch.date_filter_next_day')
+      }, {
+        value: 'this_week',
+        label: this.$t('dispatch.date_filter_this_week')
+      }, {
+        value: 'this_month',
+        label: this.$t('dispatch.date_filter_this_month')
+      }, {
+        value: 'all',
+        label: this.$t('dispatch.date_filter_all')
+      }],
+      breadCrumbLinks: [{
+        url: 'dashboard',
+        title: this.$t('general.home')
+      }, {
+        url: '/dispatch/dashboard',
+        title: this.$t('dispatch.dashboard_title')
+      }, {
+        url: '#',
+        title: this.$t('dispatch.completed_dispatch_page_title')
+      }],
+      showFilters: false,
+      isRequestOngoing: true,
+      filtersApplied: false,
+      filters: {
+        name: '',
+        from_date: '',
+        to_date: '',
+        dateFilter: {
+          value: 'today',
+          label: this.$t('dispatch.date_filter_today')
+        }
+      }
+    };
+  },
+  computed: _objectSpread(_objectSpread({
+    applyFilter: function applyFilter() {
+      if (this.filters.name || this.filters.from_date || this.filters.to_date) {
+        return true;
+      }
+      return false;
+    }
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('dispatch', ['dispatch', 'selectedDispatch', 'selectAllField'])), {}, {
+    showEmptyScreen: function showEmptyScreen() {
+      return !this.totalCompleted && !this.isRequestOngoing && !this.filtersApplied;
+    },
+    filterIcon: function filterIcon() {
+      return this.showFilters ? 'times' : 'filter';
+    },
+    selectField: {
+      get: function get() {
+        return this.selectedDispatch;
+      },
+      set: function set(val) {
+        this.selectDispatch(val);
+      }
+    },
+    selectAllFieldStatus: {
+      get: function get() {
+        return this.selectAllField;
+      },
+      set: function set(val) {
+        this.setSelectAllState(val);
+      }
+    }
+  }),
+  watch: {
+    filters: {
+      handler: 'setFilters',
+      deep: true
+    }
+  },
+  destroyed: function destroyed() {
+    if (this.selectAllField) {
+      this.selectAllDispatch();
+    }
+  },
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('dispatch', ['fetchCompletedDispatchList', 'selectAllDispatch', 'selectDispatch', 'deleteDispatch', 'deleteMultipleDispatch', 'setSelectAllState'])), {}, {
+    refreshTable: function refreshTable() {
+      this.$refs.tableDispatch.refresh();
+      this.$refs.tableDispatch1.refresh();
+    },
+    dipatchedCompletedData: function dipatchedCompletedData(_ref) {
+      var _this = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var page, filter, sort, data, response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              page = _ref.page, filter = _ref.filter, sort = _ref.sort;
+              data = {
+                name: _this.filters.name === '' ? _this.filters.name : _this.filters.name.id,
+                from_date: _this.filters.from_date === '' ? _this.filters.from_date : moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.filters.from_date).format('DD/MM/YYYY'),
+                to_date: _this.filters.to_date === '' ? _this.filters.to_date : moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.filters.to_date).format('DD/MM/YYYY'),
+                date_filter: _this.filters.dateFilter ? _this.filters.dateFilter.value : 'today',
+                orderByField: sort.fieldName || 'created_at',
+                orderBy: sort.order || 'desc',
+                filterBy: _this.applyFilter,
+                page: page
+              };
+              _this.isRequestOngoing = true;
+              _context.next = 5;
+              return _this.fetchCompletedDispatchList(data);
+            case 5:
+              response = _context.sent;
+              _this.isRequestOngoing = false;
+              _this.sundryDebtorsList = response.data.sundryDebtorsList;
+              _this.totalCompleted = response.data.dispatch_completed.total;
+              return _context.abrupt("return", {
+                data: response.data.dispatch_completed.data,
+                pagination: {
+                  totalPages: response.data.dispatch_completed.last_page,
+                  currentPage: response.data.dispatch_completed.current_page
+                }
+              });
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
+    onSelectCustomer: function onSelectCustomer(customer) {
+      this.filters.name = customer;
+    },
+    clearCustomerSearch: function clearCustomerSearch(removedOption, id) {
+      var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _this2.filters.name = '';
+              _this2.refreshTable();
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
+    },
+    setFilters: function setFilters() {
+      var _this3 = this;
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(function () {
+        _this3.filtersApplied = true;
+        _this3.refreshTable();
+      }, 1000);
+    },
+    clearFilter: function clearFilter() {
+      var _this4 = this;
+      this.filtersApplied = false;
+      this.showFilters = false;
+      this.filters = {
+        name: '',
+        from_date: '',
+        to_date: '',
+        dateFilter: this.dateFilterOptions[0]
+      };
+      this.$nextTick(function () {
+        _this4.filtersApplied = false;
+      });
+    },
+    toggleFilter: function toggleFilter() {
+      if (this.showFilters && this.filtersApplied) {
+        this.clearFilter();
+        this.refreshTable();
+      }
+      this.showFilters = !this.showFilters;
+    },
+    removeDispatch: function removeDispatch(id) {
+      var _this5 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              swal({
+                title: _this5.$t('general.are_you_sure'),
+                text: _this5.$tc('dispatch.confirm_delete'),
+                icon: '/assets/icon/trash-solid.svg',
+                buttons: true,
+                dangerMode: true
+              }).then(/*#__PURE__*/function () {
+                var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(willDelete) {
+                  var res;
+                  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                    while (1) switch (_context3.prev = _context3.next) {
+                      case 0:
+                        if (!willDelete) {
+                          _context3.next = 10;
+                          break;
+                        }
+                        _context3.next = 3;
+                        return _this5.deleteDispatch(id);
+                      case 3:
+                        res = _context3.sent;
+                        if (!res.data.dispatch) {
+                          _context3.next = 8;
+                          break;
+                        }
+                        window.toastr['success'](_this5.$tc('dispatch.deleted_message', 1));
+                        _this5.refreshTable();
+                        return _context3.abrupt("return", true);
+                      case 8:
+                        window.toastr['error'](res.data.message);
+                        return _context3.abrupt("return", true);
+                      case 10:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }, _callee3);
+                }));
+                return function (_x) {
+                  return _ref2.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }))();
+    },
+    removeMultipleDispatch: function removeMultipleDispatch() {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              swal({
+                title: _this6.$t('general.are_you_sure'),
+                text: _this6.$tc('dispatch.confirm_delete', 2),
+                icon: '/assets/icon/trash-solid.svg',
+                buttons: true,
+                dangerMode: true
+              }).then(/*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(willDelete) {
+                  var res;
+                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                    while (1) switch (_context5.prev = _context5.next) {
+                      case 0:
+                        if (!willDelete) {
+                          _context5.next = 5;
+                          break;
+                        }
+                        _context5.next = 3;
+                        return _this6.deleteMultipleDispatch(_this6.selectedDispatch);
+                      case 3:
+                        res = _context5.sent;
+                        if (res.data.dispatch) {
+                          window.toastr['success'](_this6.$tc('dispatch.deleted_message', 2));
+                          _this6.refreshTable();
+                        } else if (res.data.error) {
+                          window.toastr['error'](res.data.message);
+                        }
+                      case 5:
+                      case "end":
+                        return _context5.stop();
+                    }
+                  }, _callee5);
+                }));
+                return function (_x2) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6);
+      }))();
+    },
+    printDispatched: function printDispatched() {
+      printJS({
+        printable: 'to_print_dispatched',
+        type: 'html',
+        ignoreElements: ['no-print-check', 'no-print-option'],
+        scanStyles: true,
+        targetStyles: ['*'],
+        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+      });
+    }
+  })
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=script&lang=js":
 /*!***********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=script&lang=js ***!
@@ -22665,8 +23003,6 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
       },
       invoice: [],
       invoiceList: [],
-      invoiceSearchLoading: false,
-      invoiceSearchTimer: null,
       assignToBeDispatch: false,
       isToBeDispatch: []
     };
@@ -22730,13 +23066,10 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         invoiceArr = this.invoiceList;
       }
       if (invoiceArr) {
-        // master can be null for an invoice whose account_master_id points
-        // at a deleted/missing party - don't let that crash the whole picker.
-        var count = master ? invoiceArr.filter(function (i) {
+        var count = invoiceArr.filter(function (i) {
           return i.account_master_id === master.id;
-        }).length : 0;
-        var masterName = master ? master.name : 'Unknown party';
-        return "".concat(invoice_number, " (\u20B9 ").concat(parseFloat(due_amount).toFixed(2), ") - (").concat(masterName, ") * ").concat(count);
+        }).length;
+        return "".concat(invoice_number, " (\u20B9 ").concat(parseFloat(due_amount).toFixed(2), ") - (").concat(master.name, ") * ").concat(count);
       }
     },
     loadInvoice: function loadInvoice() {
@@ -22834,133 +23167,98 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
         }, _callee2);
       }))();
     },
-    fetchInvoices: function fetchInvoices() {
+    // The invoice picker's options list (fetchInvoices) only returns bills
+    // still pending dispatch - once a dispatch is sent, its invoice(s) get
+    // marked COMPLETED and drop out of that list, so re-opening the edit
+    // page for an already-sent dispatch would otherwise have nothing to
+    // match against and render the invoice field empty. Top up invoiceList
+    // with whichever ids are actually assigned to this dispatch, regardless
+    // of their status, before trying to resolve them in loadInvoice().
+    ensureInvoicesLoaded: function ensureInvoicesLoaded(invoiceIds) {
       var _this5 = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-        var response;
+        var missingIds, response, existingIds, toAdd;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
-            case 0:
-              _context3.next = 2;
-              return axios.get("/api/dispatch/invoices");
-            case 2:
-              response = _context3.sent;
-              if (response.data) {
-                _this5.invoiceList = response.data.invoices;
-                if (_this5.isEdit) {
-                  _this5.loadEditData();
-                }
-                _this5.isToBeDispatch = _this5.$store.state.dispatch.selectedToBeDispatch;
-                if (_this5.isToBeDispatch.length) {
-                  _this5.loadIsToBeDispatch();
-                }
-              }
-            case 4:
-            case "end":
-              return _context3.stop();
-          }
-        }, _callee3);
-      }))();
-    },
-    // Search-as-you-type for the invoice picker (create mode only - it's
-    // disabled while editing). Debounced so we're not firing a request per
-    // keystroke.
-    onInvoiceSearch: function onInvoiceSearch(query) {
-      var _this6 = this;
-      clearTimeout(this.invoiceSearchTimer);
-      this.invoiceSearchTimer = setTimeout(/*#__PURE__*/_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var response;
-        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-          while (1) switch (_context4.prev = _context4.next) {
-            case 0:
-              _this6.invoiceSearchLoading = true;
-              _context4.prev = 1;
-              _context4.next = 4;
-              return axios.get("/api/dispatch/invoices", {
-                params: {
-                  search: query
-                }
-              });
-            case 4:
-              response = _context4.sent;
-              if (response.data) {
-                _this6.invoiceList = response.data.invoices;
-              }
-            case 6:
-              _context4.prev = 6;
-              _this6.invoiceSearchLoading = false;
-              return _context4.finish(6);
-            case 9:
-            case "end":
-              return _context4.stop();
-          }
-        }, _callee4, null, [[1,, 6, 9]]);
-      })), 350);
-    },
-    // The invoice picker's default/searched options are capped and only
-    // ever show still-pending bills - once a dispatch is sent its invoice(s)
-    // get marked COMPLETED and drop out of that list entirely. Without this,
-    // re-opening the edit page for an already-sent dispatch has nothing to
-    // match its invoice_id(s) against and the invoice field renders empty.
-    // Top up invoiceList with whichever ids are actually assigned to this
-    // dispatch, regardless of status, before loadInvoice() tries to resolve them.
-    ensureInvoicesLoaded: function ensureInvoicesLoaded(invoiceIds) {
-      var _this7 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-        var missingIds, response, existingIds, toAdd;
-        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-          while (1) switch (_context5.prev = _context5.next) {
             case 0:
               missingIds = (invoiceIds || []).map(function (i) {
                 return parseInt(i);
               }).filter(function (id) {
-                return !isNaN(id) && !_this7.invoiceList.some(function (inv) {
+                return !isNaN(id) && !_this5.invoiceList.some(function (inv) {
                   return inv.id === id;
                 });
               });
               if (missingIds.length) {
-                _context5.next = 3;
+                _context3.next = 3;
                 break;
               }
-              return _context5.abrupt("return");
+              return _context3.abrupt("return");
             case 3:
-              _context5.next = 5;
+              _context3.next = 5;
               return axios.get("/api/dispatch/invoices", {
                 params: {
                   include_ids: missingIds.join(',')
                 }
               });
             case 5:
-              response = _context5.sent;
+              response = _context3.sent;
               if (response.data && response.data.invoices) {
-                existingIds = _this7.invoiceList.map(function (inv) {
+                existingIds = _this5.invoiceList.map(function (inv) {
                   return inv.id;
                 });
                 toAdd = response.data.invoices.filter(function (inv) {
                   return !existingIds.includes(inv.id);
                 });
-                _this7.invoiceList = _this7.invoiceList.concat(toAdd);
+                _this5.invoiceList = _this5.invoiceList.concat(toAdd);
               }
             case 7:
             case "end":
-              return _context5.stop();
+              return _context3.stop();
           }
-        }, _callee5);
+        }, _callee3);
+      }))();
+    },
+    fetchInvoices: function fetchInvoices() {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return axios.get("/api/dispatch/invoices");
+            case 2:
+              response = _context4.sent;
+              if (response.data) {
+                _this6.invoiceList = response.data.invoices;
+                if (_this6.isEdit) {
+                  _this6.loadEditData();
+                }
+                _this6.isToBeDispatch = _this6.$store.state.dispatch.selectedToBeDispatch;
+                if (_this6.isToBeDispatch.length) {
+                  _this6.loadIsToBeDispatch();
+                }
+              }
+            case 4:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
       }))();
     },
     showDispatchPopup: function showDispatchPopup(invoice_id, invoices_master_id) {
-      var _this8 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-          while (1) switch (_context7.prev = _context7.next) {
+      var _this7 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
             case 0:
-              _this8.change_invoice = true;
-              _this8.filterInvoice = _this8.invoice.map(function (node) {
+              _this7.change_invoice = true;
+              _this7.filterInvoice = _this7.invoice.map(function (node) {
                 var new_node = {};
-                new_node.count = _this8.invoice.filter(function (i) {
+                new_node.count = _this7.invoice.filter(function (i) {
                   return i.account_master_id === node.account_master_id;
                 }).length;
-                new_node.data = _this8.invoice.filter(function (i) {
+                new_node.data = _this7.invoice.filter(function (i) {
                   return i.account_master_id === node.account_master_id;
                 }).sort(function (a, b) {
                   return new Date(a.created_at) - new Date(b.created_at);
@@ -22970,117 +23268,204 @@ var _require = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modul
                 new_node.id = node.id;
                 return new_node;
               });
-              _this8.filterInvoice = _this8.filterInvoice.filter(function (v, i, a) {
+              _this7.filterInvoice = _this7.filterInvoice.filter(function (v, i, a) {
                 return a.findIndex(function (v2) {
                   return v2.account_master_id === v.account_master_id;
                 }) === i;
               });
               swal({
-                title: _this8.$t('dispatch.invoice_report_title'),
-                text: _this8.$t('dispatch.invoice_report_text'),
+                title: _this7.$t('dispatch.invoice_report_title'),
+                text: _this7.$t('dispatch.invoice_report_text'),
                 icon: '/assets/icon/check-circle-solid.svg',
                 buttons: true,
                 dangerMode: false
               }).then(/*#__PURE__*/function () {
-                var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6(success) {
-                  return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-                    while (1) switch (_context6.prev = _context6.next) {
+                var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(success) {
+                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                    while (1) switch (_context5.prev = _context5.next) {
                       case 0:
                         if (success) {
-                          _this8.printDispatch();
+                          _this7.printDispatch();
                         } else {
-                          _this8.resetSelectedDispatch();
-                          _this8.resetSelectedToBeDispatch();
-                          _this8.$router.push('/dispatch');
+                          _this7.resetSelectedDispatch();
+                          _this7.resetSelectedToBeDispatch();
+                          _this7.$router.push('/dispatch');
                         }
-                        _this8.change_invoice = false;
+                        _this7.change_invoice = false;
                       case 2:
                       case "end":
-                        return _context6.stop();
+                        return _context5.stop();
                     }
-                  }, _callee6);
+                  }, _callee5);
                 }));
                 return function (_x) {
-                  return _ref3.apply(this, arguments);
+                  return _ref2.apply(this, arguments);
                 };
               }());
             case 4:
             case "end":
-              return _context7.stop();
+              return _context6.stop();
           }
-        }, _callee7);
+        }, _callee6);
       }))();
     },
     submitDispatch: function submitDispatch() {
-      var _this9 = this;
-      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee8() {
+      var _this8 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
         var response;
-        return _regeneratorRuntime().wrap(function _callee8$(_context8) {
-          while (1) switch (_context8.prev = _context8.next) {
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
             case 0:
-              _this9.$v.formData.$touch();
-              if (!_this9.$v.$invalid) {
-                _context8.next = 4;
+              _this8.$v.formData.$touch();
+              if (!_this8.$v.$invalid) {
+                _context7.next = 4;
                 break;
               }
               window.toastr['error']("Error! missing required field or value is invalid.!");
-              return _context8.abrupt("return", false);
+              return _context7.abrupt("return", false);
             case 4:
-              _context8.prev = 4;
-              _this9.isLoading = true;
+              _context7.prev = 4;
+              _this8.isLoading = true;
               response = null;
-              if (!_this9.isEdit) {
-                _context8.next = 19;
+              if (!_this8.isEdit) {
+                _context7.next = 19;
                 break;
               }
-              if (!_this9.assignToBeDispatch) {
-                _context8.next = 14;
+              if (!_this8.assignToBeDispatch) {
+                _context7.next = 14;
                 break;
               }
-              _context8.next = 11;
-              return _this9.updateToBeDispatch(_this9.formData);
+              _context7.next = 11;
+              return _this8.updateToBeDispatch(_this8.formData);
             case 11:
-              response = _context8.sent;
-              _context8.next = 17;
+              response = _context7.sent;
+              _context7.next = 17;
               break;
             case 14:
-              _context8.next = 16;
-              return _this9.updateDispatch(_this9.formData);
+              _context7.next = 16;
+              return _this8.updateDispatch(_this8.formData);
             case 16:
-              response = _context8.sent;
+              response = _context7.sent;
             case 17:
-              _context8.next = 22;
+              _context7.next = 22;
               break;
             case 19:
-              _context8.next = 21;
-              return _this9.addDispatch(_this9.formData);
+              _context7.next = 21;
+              return _this8.addDispatch(_this8.formData);
             case 21:
-              response = _context8.sent;
+              response = _context7.sent;
             case 22:
               if (response.data) {
-                _this9.isLoading = false;
-                if (_this9.isEdit) {
-                  window.toastr['success'](_this9.$tc('dispatch.updated_message'));
+                _this8.isLoading = false;
+                if (_this8.isEdit) {
+                  window.toastr['success'](_this8.$tc('dispatch.updated_message'));
                 } else {
-                  window.toastr['success'](_this9.$tc('dispatch.created_message'));
+                  window.toastr['success'](_this8.$tc('dispatch.created_message'));
                 }
-                _this9.showDispatchPopup(response.data.dispatch.id, response.data.invoices);
+                _this8.showDispatchPopup(response.data.dispatch.id, response.data.invoices);
               }
-              _context8.next = 28;
+              _context7.next = 28;
               break;
             case 25:
-              _context8.prev = 25;
-              _context8.t0 = _context8["catch"](4);
-              if (_context8.t0) {
-                _this9.isLoading = false;
-                window.toastr['error'](_context8.t0);
+              _context7.prev = 25;
+              _context7.t0 = _context7["catch"](4);
+              if (_context7.t0) {
+                _this8.isLoading = false;
+                window.toastr['error'](_context7.t0);
               }
             case 28:
             case "end":
-              return _context8.stop();
+              return _context7.stop();
           }
-        }, _callee8, null, [[4, 25]]);
+        }, _callee7, null, [[4, 25]]);
       }))();
+    }
+  })
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=script&lang=js":
+/*!**************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=script&lang=js ***!
+  \**************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      breadCrumbLinks: [{
+        url: 'dashboard',
+        title: this.$t('general.home')
+      }, {
+        url: '#',
+        title: this.$t('dispatch.dashboard_title')
+      }]
+    };
+  },
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)('dispatch', ['dashboardCounts'])), {}, {
+    counts: function counts() {
+      return this.dashboardCounts;
+    },
+    recentPending: function recentPending() {
+      return this.counts.recent_pending || [];
+    },
+    topPendingParties: function topPendingParties() {
+      return this.counts.top_pending_parties || [];
+    },
+    pendingAging: function pendingAging() {
+      return this.counts.pending_aging || [];
+    }
+  }),
+  created: function created() {
+    this.fetchDispatchDashboard();
+  },
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)('dispatch', ['fetchDispatchDashboard'])), {}, {
+    formatDate: function formatDate(value) {
+      return value ? moment__WEBPACK_IMPORTED_MODULE_0___default()(value).format('DD MMM YYYY') : '';
+    },
+    invoiceSummary: function invoiceSummary(row) {
+      if (!row.invoices || !row.invoices.length) {
+        return '';
+      }
+      if (row.invoices.length === 1) {
+        return row.invoices[0].invoice_number;
+      }
+      return "".concat(row.invoices[0].invoice_number, " +").concat(row.invoices.length - 1, " more");
+    },
+    partyBarWidth: function partyBarWidth(count) {
+      var max = Math.max.apply(Math, _toConsumableArray(this.topPendingParties.map(function (p) {
+        return p.pending_count;
+      })).concat([1]));
+      return Math.max(Math.round(count / max * 100), 6);
+    },
+    agingBarWidth: function agingBarWidth(count) {
+      var max = Math.max.apply(Math, _toConsumableArray(this.pendingAging.map(function (b) {
+        return b.count;
+      })).concat([1]));
+      return Math.max(Math.round(count / max * 100), 6);
     }
   })
 });
@@ -23579,6 +23964,395 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     printDispatched: function printDispatched() {
       printJS({
         printable: 'to_print_dispatched',
+        type: 'html',
+        ignoreElements: ['no-print-check', 'no-print-option'],
+        scanStyles: true,
+        targetStyles: ['*'],
+        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'
+      });
+    }
+  })
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=script&lang=js":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=script&lang=js ***!
+  \************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _components_icon_DotIcon__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/icon/DotIcon */ "./resources/assets/js/components/icon/DotIcon.vue");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_icon_SatelliteIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/icon/SatelliteIcon */ "./resources/assets/js/components/icon/SatelliteIcon.vue");
+/* harmony import */ var _js_components_base_BaseButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../js/components/base/BaseButton */ "./resources/assets/js/components/base/BaseButton.vue");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  components: {
+    DotIcon: _components_icon_DotIcon__WEBPACK_IMPORTED_MODULE_0__["default"],
+    SatelliteIcon: _components_icon_SatelliteIcon__WEBPACK_IMPORTED_MODULE_2__["default"],
+    BaseButton: _js_components_base_BaseButton__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  data: function data() {
+    return {
+      sundryDebtorsList: [],
+      totalPending: 0,
+      dateFilterOptions: [{
+        value: 'today',
+        label: this.$t('dispatch.date_filter_today')
+      }, {
+        value: 'yesterday',
+        label: this.$t('dispatch.date_filter_yesterday')
+      }, {
+        value: 'next_day',
+        label: this.$t('dispatch.date_filter_next_day')
+      }, {
+        value: 'this_week',
+        label: this.$t('dispatch.date_filter_this_week')
+      }, {
+        value: 'this_month',
+        label: this.$t('dispatch.date_filter_this_month')
+      }, {
+        value: 'all',
+        label: this.$t('dispatch.date_filter_all')
+      }],
+      breadCrumbLinks: [{
+        url: 'dashboard',
+        title: this.$t('general.home')
+      }, {
+        url: '/dispatch/dashboard',
+        title: this.$t('dispatch.dashboard_title')
+      }, {
+        url: '#',
+        title: this.$t('dispatch.to_be_dispatched_page_title')
+      }],
+      showFilters: false,
+      isRequestOngoing: true,
+      filtersApplied: false,
+      filters: {
+        search: '',
+        name: '',
+        status: '',
+        from_date: '',
+        to_date: '',
+        dateFilter: {
+          value: 'today',
+          label: this.$t('dispatch.date_filter_today')
+        }
+      }
+    };
+  },
+  computed: _objectSpread(_objectSpread({
+    applyFilter: function applyFilter() {
+      if (this.filters.name || this.filters.from_date || this.filters.to_date || this.filters.status) {
+        return true;
+      }
+      return false;
+    }
+  }, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapGetters)('dispatch', ['toBeDispatch', 'selectedToBeDispatch', 'selectAllToBeField'])), {}, {
+    showEmptyScreen: function showEmptyScreen() {
+      return !this.totalPending && !this.isRequestOngoing && !this.filtersApplied;
+    },
+    filterIcon: function filterIcon() {
+      return this.showFilters ? 'times' : 'filter';
+    },
+    selectToBeField: {
+      get: function get() {
+        return this.selectedToBeDispatch;
+      },
+      set: function set(val) {
+        this.selectToBeDispatch(val);
+      }
+    },
+    selectAllToBeFieldStatus: {
+      get: function get() {
+        return this.selectAllToBeField;
+      },
+      set: function set(val) {
+        this.setSelectAllToBeState(val);
+      }
+    }
+  }),
+  watch: {
+    filters: {
+      handler: 'setFilters',
+      deep: true
+    }
+  },
+  destroyed: function destroyed() {
+    if (this.selectAllToBeField) {
+      this.selectAllToBeDispatch();
+    }
+  },
+  methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_4__.mapActions)('dispatch', ['fetchPendingDispatch', 'updateDispatch', 'selectAllToBeDispatch', 'selectToBeDispatch', 'deleteDispatch', 'deleteMultipleDispatch', 'setSelectAllToBeState'])), {}, {
+    refreshTable: function refreshTable() {
+      this.$refs.toBeTableDispatch1.refresh();
+      this.$refs.toBeTableDispatch.refresh();
+    },
+    toBeDispatchedData: function toBeDispatchedData(_ref) {
+      var _this = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var page, filter, sort, data, response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              page = _ref.page, filter = _ref.filter, sort = _ref.sort;
+              data = {
+                search: _this.filters.search || '',
+                name: _this.filters.name === '' ? _this.filters.name : _this.filters.name.id,
+                status: _this.filters.status !== null ? _this.filters.status : '',
+                from_date: _this.filters.from_date === '' ? _this.filters.from_date : moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.filters.from_date).format('DD/MM/YYYY'),
+                to_date: _this.filters.to_date === '' ? _this.filters.to_date : moment__WEBPACK_IMPORTED_MODULE_1___default()(_this.filters.to_date).format('DD/MM/YYYY'),
+                date_filter: _this.filters.dateFilter ? _this.filters.dateFilter.value : 'today',
+                orderByField: sort.fieldName || 'created_at',
+                orderBy: sort.order || 'desc',
+                filterBy: _this.applyFilter,
+                page: page
+              };
+              _this.isRequestOngoing = true;
+              _context.next = 5;
+              return _this.fetchPendingDispatch(data);
+            case 5:
+              response = _context.sent;
+              _this.isRequestOngoing = false;
+              _this.sundryDebtorsList = response.data.sundryDebtorsList;
+              _this.totalPending = response.data.dispatch_inprogress.total;
+              return _context.abrupt("return", {
+                data: response.data.dispatch_inprogress.data,
+                pagination: {
+                  totalPages: response.data.dispatch_inprogress.last_page,
+                  currentPage: response.data.dispatch_inprogress.current_page
+                }
+              });
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }))();
+    },
+    onSelectCustomer: function onSelectCustomer(customer) {
+      this.filters.name = customer;
+    },
+    clearCustomerSearch: function clearCustomerSearch(removedOption, id) {
+      var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _this2.filters.name = '';
+              _this2.refreshTable();
+            case 2:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
+    },
+    setFilters: function setFilters() {
+      var _this3 = this;
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(function () {
+        _this3.filtersApplied = true;
+        _this3.refreshTable();
+      }, 1000);
+    },
+    clearFilter: function clearFilter() {
+      var _this4 = this;
+      this.filtersApplied = false;
+      this.showFilters = false;
+      this.filters = {
+        search: '',
+        name: '',
+        status: '',
+        from_date: '',
+        to_date: '',
+        dateFilter: this.dateFilterOptions[0]
+      };
+      this.$nextTick(function () {
+        _this4.filtersApplied = false;
+      });
+    },
+    toggleFilter: function toggleFilter() {
+      if (this.showFilters && this.filtersApplied) {
+        this.clearFilter();
+        this.refreshTable();
+      }
+      this.showFilters = !this.showFilters;
+    },
+    removeDispatch: function removeDispatch(id) {
+      var _this5 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              swal({
+                title: _this5.$t('general.are_you_sure'),
+                text: _this5.$tc('dispatch.confirm_delete'),
+                icon: '/assets/icon/trash-solid.svg',
+                buttons: true,
+                dangerMode: true
+              }).then(/*#__PURE__*/function () {
+                var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(willDelete) {
+                  var res;
+                  return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                    while (1) switch (_context3.prev = _context3.next) {
+                      case 0:
+                        if (!willDelete) {
+                          _context3.next = 10;
+                          break;
+                        }
+                        _context3.next = 3;
+                        return _this5.deleteDispatch(id);
+                      case 3:
+                        res = _context3.sent;
+                        if (!res.data.dispatch) {
+                          _context3.next = 8;
+                          break;
+                        }
+                        window.toastr['success'](_this5.$tc('dispatch.deleted_message', 1));
+                        _this5.refreshTable();
+                        return _context3.abrupt("return", true);
+                      case 8:
+                        window.toastr['error'](res.data.message);
+                        return _context3.abrupt("return", true);
+                      case 10:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }, _callee3);
+                }));
+                return function (_x) {
+                  return _ref2.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }))();
+    },
+    removeMultipleDispatch: function removeMultipleDispatch() {
+      var _this6 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+        return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+          while (1) switch (_context6.prev = _context6.next) {
+            case 0:
+              swal({
+                title: _this6.$t('general.are_you_sure'),
+                text: _this6.$tc('dispatch.confirm_delete', 2),
+                icon: '/assets/icon/trash-solid.svg',
+                buttons: true,
+                dangerMode: true
+              }).then(/*#__PURE__*/function () {
+                var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5(willDelete) {
+                  var res;
+                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                    while (1) switch (_context5.prev = _context5.next) {
+                      case 0:
+                        if (!willDelete) {
+                          _context5.next = 5;
+                          break;
+                        }
+                        _context5.next = 3;
+                        return _this6.deleteMultipleDispatch(_this6.selectedToBeDispatch);
+                      case 3:
+                        res = _context5.sent;
+                        if (res.data.dispatch) {
+                          window.toastr['success'](_this6.$tc('dispatch.deleted_message', 2));
+                          _this6.refreshTable();
+                        } else if (res.data.error) {
+                          window.toastr['error'](res.data.message);
+                        }
+                      case 5:
+                      case "end":
+                        return _context5.stop();
+                    }
+                  }, _callee5);
+                }));
+                return function (_x2) {
+                  return _ref3.apply(this, arguments);
+                };
+              }());
+            case 1:
+            case "end":
+              return _context6.stop();
+          }
+        }, _callee6);
+      }))();
+    },
+    singleDispatch: function singleDispatch(id) {
+      var _this7 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+        var data, res;
+        return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+          while (1) switch (_context7.prev = _context7.next) {
+            case 0:
+              data = _this7.toBeDispatch.find(function (i) {
+                return i.id === id;
+              });
+              data.invoice_id = data.invoices.map(function (i) {
+                return i.id.toString();
+              });
+              data.status = {
+                id: 2,
+                name: 'Sent'
+              };
+              if (!data) {
+                _context7.next = 12;
+                break;
+              }
+              if (!(!data.person || !data.transport || data.invoices && !data.invoices.length)) {
+                _context7.next = 8;
+                break;
+              }
+              window.open('/dispatch/' + id + '/edit', '_blank').focus();
+              _context7.next = 12;
+              break;
+            case 8:
+              _context7.next = 10;
+              return _this7.updateDispatch(data);
+            case 10:
+              res = _context7.sent;
+              if (res.data.dispatch) {
+                window.location.reload();
+              } else if (res.data.error) {
+                window.toastr['error'](res.data.message);
+              }
+            case 12:
+            case "end":
+              return _context7.stop();
+          }
+        }, _callee7);
+      }))();
+    },
+    printToBeDispatch: function printToBeDispatch() {
+      printJS({
+        printable: 'to_print_to_be_dispatch',
         type: 'html',
         ignoreElements: ['no-print-check', 'no-print-option'],
         scanStyles: true,
@@ -29273,6 +30047,18 @@ __webpack_require__.r(__webpack_exports__);
         title: "navigation.dispatch",
         icon: "file",
         route: "/dispatch",
+        exact: true,
+        meta: ["admin", "accountant", "dispatch"]
+      }, {
+        title: "navigation.dispatch_dashboard",
+        icon: "tachometer-alt",
+        route: "/dispatch/dashboard",
+        exact: true,
+        // These pages live off the dashboard but aren't nested under its
+        // URL (/dispatch/pending, /dispatch/completed), so router-link's
+        // own exact-match can't cover them - keep this item lit up while
+        // the user is anywhere in the dashboard's pending/completed pages.
+        activeRoutes: ["/dispatch/dashboard", "/dispatch/pending", "/dispatch/completed"],
         meta: ["admin", "accountant", "dispatch"]
       }, {
         title: "navigation.items",
@@ -29373,6 +30159,9 @@ __webpack_require__.r(__webpack_exports__);
     this.update();
   },
   methods: {
+    isRouteGroupActive: function isRouteGroupActive(item) {
+      return !!(item.activeRoutes && item.activeRoutes.includes(this.$route.path));
+    },
     Toggle: function Toggle() {
       this.$utils.toggleSidebar();
     },
@@ -47363,6 +48152,544 @@ render._withStripped = true;
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=template&id=44032a6e&scoped=true":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=template&id=44032a6e&scoped=true ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "items main-content"
+  }, [_c("div", {
+    staticClass: "page-header"
+  }, [_c("Header", {
+    attrs: {
+      title: _vm.$t("dispatch.completed_dispatch_page_title"),
+      "bread-crumb-links": _vm.breadCrumbLinks
+    }
+  }, [_c("div", {
+    staticClass: "mr-4 mb-3 mb-sm-0"
+  }, [_c("base-button", {
+    attrs: {
+      outline: true,
+      icon: _vm.filterIcon,
+      color: "theme",
+      size: "large",
+      "right-icon": ""
+    },
+    on: {
+      click: _vm.toggleFilter
+    }
+  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1), _vm._v(" "), _c("div", [_c("router-link", {
+    attrs: {
+      slot: "item-title",
+      to: "/dispatch/create"
+    },
+    slot: "item-title"
+  }, [_c("base-button", {
+    attrs: {
+      color: "theme",
+      icon: "plus",
+      size: "large"
+    }
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("dispatch.new_dispatch")) + "\n          ")])], 1)], 1)])], 1), _vm._v(" "), _c("div", {
+    staticClass: "dispatch-toolbar row"
+  }, [_c("div", {
+    staticClass: "col-md-3"
+  }, [_c("base-select", {
+    attrs: {
+      options: _vm.dateFilterOptions,
+      searchable: false,
+      "show-labels": false,
+      "allow-empty": false,
+      label: "label",
+      "track-by": "value"
+    },
+    model: {
+      value: _vm.filters.dateFilter,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "dateFilter", $$v);
+      },
+      expression: "filters.dateFilter"
+    }
+  })], 1)]), _vm._v(" "), _c("transition", {
+    attrs: {
+      name: "fade"
+    }
+  }, [_c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showFilters,
+      expression: "showFilters"
+    }],
+    staticClass: "filter-section"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", {
+    staticClass: "form-label"
+  }, [_vm._v(" " + _vm._s(_vm.$tc("items.party_name")) + " ")]), _vm._v(" "), _c("base-select", {
+    ref: "customerSelect",
+    attrs: {
+      options: _vm.sundryDebtorsList,
+      required: "required",
+      searchable: true,
+      "show-labels": false,
+      "allow-empty": false,
+      label: "name",
+      "track-by": "id"
+    },
+    on: {
+      select: _vm.onSelectCustomer,
+      deselect: _vm.clearCustomerSearch
+    },
+    model: {
+      value: _vm.filters.name,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "name", $$v);
+      },
+      expression: "filters.name"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-2"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("general.from")))]), _vm._v(" "), _c("base-date-picker", {
+    attrs: {
+      "calendar-button": true,
+      "calendar-button-icon": "calendar"
+    },
+    model: {
+      value: _vm.filters.from_date,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "from_date", $$v);
+      },
+      expression: "filters.from_date"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("general.to")))]), _vm._v(" "), _c("base-date-picker", {
+    attrs: {
+      "calendar-button": true,
+      "calendar-button-icon": "calendar"
+    },
+    model: {
+      value: _vm.filters.to_date,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "to_date", $$v);
+      },
+      expression: "filters.to_date"
+    }
+  })], 1), _vm._v(" "), _c("label", {
+    staticClass: "clear-filter",
+    on: {
+      click: _vm.clearFilter
+    }
+  }, [_vm._v(" " + _vm._s(_vm.$t("general.clear_all")))])])])]), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showEmptyScreen,
+      expression: "showEmptyScreen"
+    }],
+    staticClass: "col-xs-1 no-data-info",
+    attrs: {
+      align: "center"
+    }
+  }, [_c("satellite-icon", {
+    staticClass: "mt-5 mb-4"
+  }), _vm._v(" "), _c("div", {
+    staticClass: "row",
+    attrs: {
+      align: "center"
+    }
+  }, [_c("label", {
+    staticClass: "col title"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.no_dispatch")))])]), _vm._v(" "), _c("div", {
+    staticClass: "row"
+  }, [_c("label", {
+    staticClass: "description col mt-1",
+    attrs: {
+      align: "center"
+    }
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.list_of_dispatch")))])]), _vm._v(" "), _c("div", {
+    staticClass: "btn-container"
+  }, [_c("base-button", {
+    staticClass: "mt-3",
+    attrs: {
+      outline: true,
+      color: "theme",
+      size: "large"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.$router.push("/dispatch/create");
+      }
+    }
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("dispatch.add_new_dispatch")) + "\n      ")])], 1)], 1), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.showEmptyScreen,
+      expression: "!showEmptyScreen"
+    }],
+    staticClass: "table-container"
+  }, [_c("div", {
+    staticClass: "table-actions mt-5"
+  }, [_c("h4", [_vm._v(_vm._s(_vm.$t("dispatch.dispatched")))]), _vm._v(" "), _c("base-button", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.dipatchedCompletedData,
+      expression: "dipatchedCompletedData"
+    }],
+    attrs: {
+      outline: true,
+      icon: ["fas", "print"],
+      color: "theme",
+      size: "large",
+      "right-icon": ""
+    },
+    on: {
+      click: _vm.printDispatched
+    }
+  }, [_vm._v("\n        Print\n      ")]), _vm._v(" "), _c("transition", {
+    attrs: {
+      name: "fade"
+    }
+  }, [_vm.selectedDispatch && _vm.selectedDispatch.length ? _c("v-dropdown", {
+    attrs: {
+      "show-arrow": false
+    }
+  }, [_c("span", {
+    staticClass: "table-actions-button dropdown-toggle",
+    attrs: {
+      slot: "activator",
+      href: "#"
+    },
+    slot: "activator"
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("general.actions")) + "\n          ")]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+    staticClass: "dropdown-item",
+    on: {
+      click: _vm.removeMultipleDispatch
+    }
+  }, [_c("font-awesome-icon", {
+    staticClass: "dropdown-item-icon",
+    attrs: {
+      icon: ["fas", "trash"]
+    }
+  }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1)])], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c("div", {
+    staticClass: "custom-control custom-checkbox"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.selectAllFieldStatus,
+      expression: "selectAllFieldStatus"
+    }],
+    staticClass: "custom-control-input",
+    attrs: {
+      id: "select-all",
+      type: "checkbox"
+    },
+    domProps: {
+      checked: Array.isArray(_vm.selectAllFieldStatus) ? _vm._i(_vm.selectAllFieldStatus, null) > -1 : _vm.selectAllFieldStatus
+    },
+    on: {
+      change: [function ($event) {
+        var $$a = _vm.selectAllFieldStatus,
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.selectAllFieldStatus = $$a.concat([$$v]));
+          } else {
+            $$i > -1 && (_vm.selectAllFieldStatus = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+          }
+        } else {
+          _vm.selectAllFieldStatus = $$c;
+        }
+      }, _vm.selectAllDispatch]
+    }
+  }), _vm._v(" "), _c("label", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isRequestOngoing,
+      expression: "!isRequestOngoing"
+    }],
+    staticClass: "custom-control-label selectall",
+    attrs: {
+      "for": "select-all"
+    }
+  }, [_c("span", {
+    staticClass: "select-all-label"
+  }, [_vm._v(_vm._s(_vm.$t("general.select_all")) + " ")])])]), _vm._v(" "), _c("table-component", {
+    ref: "tableDispatch",
+    attrs: {
+      data: _vm.dipatchedCompletedData,
+      "show-filter": false,
+      "table-class": "table"
+    }
+  }, [_c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      "cell-class": "no-click"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", {
+          staticClass: "custom-control custom-checkbox"
+        }, [_c("input", {
+          directives: [{
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selectField,
+            expression: "selectField"
+          }],
+          staticClass: "custom-control-input",
+          attrs: {
+            id: row.id,
+            type: "checkbox"
+          },
+          domProps: {
+            value: row.id,
+            checked: Array.isArray(_vm.selectField) ? _vm._i(_vm.selectField, row.id) > -1 : _vm.selectField
+          },
+          on: {
+            change: function change($event) {
+              var $$a = _vm.selectField,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false;
+              if (Array.isArray($$a)) {
+                var $$v = row.id,
+                  $$i = _vm._i($$a, $$v);
+                if ($$el.checked) {
+                  $$i < 0 && (_vm.selectField = $$a.concat([$$v]));
+                } else {
+                  $$i > -1 && (_vm.selectField = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+                }
+              } else {
+                _vm.selectField = $$c;
+              }
+            }
+          }
+        }), _vm._v(" "), _c("label", {
+          staticClass: "custom-control-label",
+          attrs: {
+            "for": row.id
+          }
+        })])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.invoice_id")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("router-link", {
+          attrs: {
+            to: {
+              path: "/dispatch/".concat(row.id, "/edit")
+            }
+          }
+        }, [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.invoice_id")) + " ")]), _vm._v(" "), row.invoices.length ? _c("span", [_vm._v(_vm._s(row.invoices.map(function (i) {
+          return " " + i.invoice_number;
+        }).toString()))]) : _vm._e()])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.name")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.name")) + " ")]), _vm._v(" "), row.master ? _c("span", [_vm._v(_vm._s(row.invoices.map(function (i) {
+          return " " + i.master.name;
+        }).toString()))]) : _vm._e()];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.date_time"),
+      show: "date_time"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.transport"),
+      show: "transport"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      "cell-class": "action-dropdown"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.action")) + " ")]), _vm._v(" "), _c("v-dropdown", [_c("span", {
+          attrs: {
+            slot: "activator",
+            href: "#"
+          },
+          slot: "activator"
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_c("router-link", {
+          staticClass: "dropdown-item",
+          attrs: {
+            to: {
+              path: "/dispatch/".concat(row.id, "/edit")
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "pencil-alt"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.edit")) + "\n              ")], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.removeDispatch(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "trash"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.delete")) + "\n              ")], 1)])], 1)];
+      }
+    }])
+  })], 1), _vm._v(" "), _c("table-component", {
+    ref: "tableDispatch1",
+    attrs: {
+      id: "to_print_dispatched",
+      data: _vm.dipatchedCompletedData,
+      "show-filter": false,
+      "table-class": "table"
+    }
+  }, [_c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      "cell-class": "no-click"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", {
+          staticClass: "custom-control custom-checkbox"
+        }, [_c("input", {
+          directives: [{
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selectField,
+            expression: "selectField"
+          }],
+          staticClass: "custom-control-input",
+          attrs: {
+            id: row.id,
+            type: "checkbox"
+          },
+          domProps: {
+            value: row.id,
+            checked: Array.isArray(_vm.selectField) ? _vm._i(_vm.selectField, row.id) > -1 : _vm.selectField
+          },
+          on: {
+            change: function change($event) {
+              var $$a = _vm.selectField,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false;
+              if (Array.isArray($$a)) {
+                var $$v = row.id,
+                  $$i = _vm._i($$a, $$v);
+                if ($$el.checked) {
+                  $$i < 0 && (_vm.selectField = $$a.concat([$$v]));
+                } else {
+                  $$i > -1 && (_vm.selectField = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+                }
+              } else {
+                _vm.selectField = $$c;
+              }
+            }
+          }
+        }), _vm._v(" "), _c("label", {
+          staticClass: "custom-control-label",
+          attrs: {
+            "for": row.id
+          }
+        })])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.invoice_id")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("router-link", {
+          attrs: {
+            to: {
+              path: "/dispatch/".concat(row.id, "/edit")
+            }
+          }
+        }, [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.invoice_id")) + " ")]), _vm._v(" "), row.invoices.length ? _c("span", [_vm._v(_vm._s(row.invoices.filter(function (v, i, a) {
+          return a.findIndex(function (v2) {
+            return v2.account_master_id === v.account_master_id;
+          }) === i;
+        }).map(function (i) {
+          return " " + i.invoice_number + "*" + row.invoices.filter(function (j) {
+            return j.account_master_id === i.account_master_id;
+          }).length;
+        }).toString()))]) : _vm._e()])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.name")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.name")) + " ")]), _vm._v(" "), row.master ? _c("span", [_vm._v(_vm._s(row.master.name))]) : _vm._e()];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.date_time"),
+      show: "date_time"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.transport"),
+      show: "transport"
+    }
+  })], 1)], 1)], 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=template&id=52d73fee":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=template&id=52d73fee ***!
@@ -47441,8 +48768,6 @@ var render = function render() {
       options: _vm.isEdit ? _vm.invoiceList : _vm.invoiceList.filter(function (node) {
         return node.status !== "COMPLETED";
       }),
-      "internal-search": false,
-      loading: _vm.invoiceSearchLoading,
       searchable: true,
       "show-labels": false,
       "allow-empty": true,
@@ -47451,7 +48776,6 @@ var render = function render() {
       "track-by": "id"
     },
     on: {
-      "search-change": _vm.onInvoiceSearch,
       select: _vm.addInvoice,
       remove: _vm.removeInvoice
     },
@@ -47580,6 +48904,226 @@ var render = function render() {
       type: "submit"
     }
   }, [_vm._v("\n                " + _vm._s(_vm.isEdit ? _vm.$t("dispatch.update_dispatch") : _vm.$t("dispatch.save_dispatch")) + "\n              ")])], 1)])])])])])]);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=template&id=add9dadc&scoped=true":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=template&id=add9dadc&scoped=true ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "items main-content"
+  }, [_c("div", {
+    staticClass: "page-header"
+  }, [_c("Header", {
+    attrs: {
+      title: _vm.$t("dispatch.dashboard_title"),
+      "bread-crumb-links": _vm.breadCrumbLinks
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "row dispatch-dashboard-cards"
+  }, [_c("div", {
+    staticClass: "col-md-4"
+  }, [_c("router-link", {
+    staticClass: "dispatch-dashboard-card-link",
+    attrs: {
+      to: "/dispatch/pending"
+    }
+  }, [_c("div", {
+    staticClass: "card dispatch-dashboard-card dispatch-dashboard-card--pending"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "dispatch-dashboard-card-icon"
+  }, [_c("font-awesome-icon", {
+    attrs: {
+      icon: ["fas", "clock"]
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "dispatch-dashboard-card-text"
+  }, [_c("p", {
+    staticClass: "dispatch-dashboard-card-label"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.to_be_dispatched")))]), _vm._v(" "), _c("p", {
+    staticClass: "dispatch-dashboard-card-value"
+  }, [_vm._v(_vm._s(_vm.counts.pending_count))])]), _vm._v(" "), _c("font-awesome-icon", {
+    staticClass: "dispatch-dashboard-card-arrow",
+    attrs: {
+      icon: ["fas", "arrow-right"]
+    }
+  })], 1)])])], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-md-4"
+  }, [_c("router-link", {
+    staticClass: "dispatch-dashboard-card-link",
+    attrs: {
+      to: "/dispatch/completed"
+    }
+  }, [_c("div", {
+    staticClass: "card dispatch-dashboard-card dispatch-dashboard-card--dispatched"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "dispatch-dashboard-card-icon"
+  }, [_c("font-awesome-icon", {
+    attrs: {
+      icon: ["fas", "check-circle"]
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "dispatch-dashboard-card-text"
+  }, [_c("p", {
+    staticClass: "dispatch-dashboard-card-label"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.dispatched")))]), _vm._v(" "), _c("p", {
+    staticClass: "dispatch-dashboard-card-value"
+  }, [_vm._v(_vm._s(_vm.counts.dispatched_count))])]), _vm._v(" "), _c("font-awesome-icon", {
+    staticClass: "dispatch-dashboard-card-arrow",
+    attrs: {
+      icon: ["fas", "arrow-right"]
+    }
+  })], 1)])])], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-md-4"
+  }, [_c("div", {
+    staticClass: "card dispatch-dashboard-card dispatch-dashboard-card--total"
+  }, [_c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "dispatch-dashboard-card-icon"
+  }, [_c("font-awesome-icon", {
+    attrs: {
+      icon: ["fas", "file-alt"]
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "dispatch-dashboard-card-text"
+  }, [_c("p", {
+    staticClass: "dispatch-dashboard-card-label"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.total_dispatches")))]), _vm._v(" "), _c("p", {
+    staticClass: "dispatch-dashboard-card-value"
+  }, [_vm._v(_vm._s(_vm.counts.total_count))])])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "row dispatch-dashboard-panels"
+  }, [_c("div", {
+    staticClass: "col-md-6"
+  }, [_c("div", {
+    staticClass: "card dispatch-panel-card"
+  }, [_c("div", {
+    staticClass: "card-header"
+  }, [_c("h3", [_vm._v(_vm._s(_vm.$t("dispatch.top_parties_pending")))])]), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_vm.topPendingParties.length ? _c("ul", {
+    staticClass: "dispatch-party-list"
+  }, _vm._l(_vm.topPendingParties, function (party) {
+    return _c("li", {
+      key: party.account_master_id,
+      staticClass: "dispatch-party-item"
+    }, [_c("div", {
+      staticClass: "dispatch-party-row"
+    }, [_c("span", {
+      staticClass: "dispatch-party-name"
+    }, [_vm._v(_vm._s(party.name || _vm.$t("dispatch.unknown_party")))]), _vm._v(" "), _c("span", {
+      staticClass: "dispatch-party-count"
+    }, [_vm._v(_vm._s(party.pending_count))])]), _vm._v(" "), _c("div", {
+      staticClass: "dispatch-party-bar-track"
+    }, [_c("div", {
+      staticClass: "dispatch-party-bar-fill",
+      style: {
+        width: _vm.partyBarWidth(party.pending_count) + "%"
+      }
+    })])]);
+  }), 0) : _c("p", {
+    staticClass: "dispatch-activity-empty"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.no_pending_backlog")))])])])]), _vm._v(" "), _c("div", {
+    staticClass: "col-md-6"
+  }, [_c("div", {
+    staticClass: "card dispatch-panel-card"
+  }, [_c("div", {
+    staticClass: "card-header"
+  }, [_c("h3", [_vm._v(_vm._s(_vm.$t("dispatch.pending_aging_title")))])]), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_vm.pendingAging.length ? _c("ul", {
+    staticClass: "dispatch-party-list"
+  }, _vm._l(_vm.pendingAging, function (bucket) {
+    return _c("li", {
+      key: bucket.key,
+      staticClass: "dispatch-party-item"
+    }, [_c("div", {
+      staticClass: "dispatch-party-row"
+    }, [_c("span", {
+      staticClass: "dispatch-party-name"
+    }, [_vm._v(_vm._s(bucket.label))]), _vm._v(" "), _c("span", {
+      staticClass: "dispatch-party-count"
+    }, [_vm._v(_vm._s(bucket.count))])]), _vm._v(" "), _c("div", {
+      staticClass: "dispatch-party-bar-track"
+    }, [_c("div", {
+      staticClass: "dispatch-party-bar-fill",
+      "class": "dispatch-party-bar-fill--".concat(bucket.key),
+      style: {
+        width: _vm.agingBarWidth(bucket.count) + "%"
+      }
+    })])]);
+  }), 0) : _c("p", {
+    staticClass: "dispatch-activity-empty"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.no_pending_backlog")))])])])])]), _vm._v(" "), _c("div", {
+    staticClass: "row dispatch-dashboard-panels"
+  }, [_c("div", {
+    staticClass: "col-md-12"
+  }, [_c("div", {
+    staticClass: "card dispatch-panel-card"
+  }, [_c("div", {
+    staticClass: "card-header"
+  }, [_c("h3", [_vm._v(_vm._s(_vm.$t("dispatch.recent_activity")))]), _vm._v(" "), _c("router-link", {
+    staticClass: "dispatch-view-all-link",
+    attrs: {
+      to: "/dispatch/pending"
+    }
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("dispatch.view_all")) + "\n            "), _c("font-awesome-icon", {
+    attrs: {
+      icon: ["fas", "arrow-right"]
+    }
+  })], 1)], 1), _vm._v(" "), _c("div", {
+    staticClass: "card-body"
+  }, [_c("div", {
+    staticClass: "dispatch-activity-section"
+  }, [_c("h6", {
+    staticClass: "dispatch-activity-section-title"
+  }, [_c("font-awesome-icon", {
+    staticClass: "dispatch-activity-section-icon dispatch-activity-section-icon--pending",
+    attrs: {
+      icon: ["fas", "clock"]
+    }
+  }), _vm._v("\n              " + _vm._s(_vm.$t("dispatch.recently_added_pending")) + "\n            ")], 1), _vm._v(" "), _vm.recentPending.length ? _c("ul", {
+    staticClass: "dispatch-activity-list"
+  }, _vm._l(_vm.recentPending, function (row) {
+    return _c("router-link", {
+      key: "pending-" + row.id,
+      staticClass: "dispatch-activity-item",
+      attrs: {
+        to: {
+          path: "/dispatch/".concat(row.id, "/edit")
+        },
+        tag: "li"
+      }
+    }, [_c("span", {
+      staticClass: "dispatch-activity-party"
+    }, [_vm._v(_vm._s(row.master ? row.master.name : _vm.$t("dispatch.unknown_party")))]), _vm._v(" "), _c("span", {
+      staticClass: "dispatch-activity-invoices"
+    }, [_vm._v(_vm._s(_vm.invoiceSummary(row)))]), _vm._v(" "), _c("span", {
+      staticClass: "dispatch-activity-meta"
+    }, [_vm._v(_vm._s(_vm.formatDate(row.created_at)))])]);
+  }), 1) : _c("p", {
+    staticClass: "dispatch-activity-empty"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.no_recent_pending")))])])])])])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;
@@ -48487,6 +50031,612 @@ var render = function render() {
       key: "default",
       fn: function fn(row) {
         return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.name")) + " ")]), _vm._v(" "), row.master ? _c("span", [_vm._v(_vm._s(row.master.name))]) : _vm._e()];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.date_time"),
+      show: "date_time"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.transport"),
+      show: "transport"
+    }
+  })], 1)], 1)], 1);
+};
+var staticRenderFns = [];
+render._withStripped = true;
+
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=template&id=6a781995&scoped=true":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=template&id=6a781995&scoped=true ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* binding */ render),
+/* harmony export */   staticRenderFns: () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function render() {
+  var _vm = this,
+    _c = _vm._self._c;
+  return _c("div", {
+    staticClass: "items main-content"
+  }, [_c("div", {
+    staticClass: "page-header"
+  }, [_c("Header", {
+    attrs: {
+      title: _vm.$t("dispatch.to_be_dispatched_page_title"),
+      "bread-crumb-links": _vm.breadCrumbLinks
+    }
+  }, [_c("div", {
+    staticClass: "mr-4 mb-3 mb-sm-0"
+  }, [_c("base-button", {
+    attrs: {
+      outline: true,
+      icon: _vm.filterIcon,
+      color: "theme",
+      size: "large",
+      "right-icon": ""
+    },
+    on: {
+      click: _vm.toggleFilter
+    }
+  }, [_vm._v("\n          " + _vm._s(_vm.$t("general.filter")) + "\n        ")])], 1), _vm._v(" "), _c("div", [_c("router-link", {
+    attrs: {
+      slot: "item-title",
+      to: "/dispatch/create"
+    },
+    slot: "item-title"
+  }, [_c("base-button", {
+    attrs: {
+      color: "theme",
+      icon: "plus",
+      size: "large"
+    }
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("dispatch.new_dispatch")) + "\n          ")])], 1)], 1)])], 1), _vm._v(" "), _c("div", {
+    staticClass: "dispatch-toolbar row"
+  }, [_c("div", {
+    staticClass: "col-md-5"
+  }, [_c("base-input", {
+    attrs: {
+      type: "text",
+      name: "search",
+      autocomplete: "off",
+      placeholder: _vm.$t("dispatch.search_placeholder")
+    },
+    model: {
+      value: _vm.filters.search,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "search", typeof $$v === "string" ? $$v.trim() : $$v);
+      },
+      expression: "filters.search"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-md-4"
+  }, [_c("base-select", {
+    ref: "toolbarCustomerSelect",
+    attrs: {
+      options: _vm.sundryDebtorsList,
+      searchable: true,
+      "show-labels": false,
+      "allow-empty": true,
+      placeholder: _vm.$tc("items.party_name"),
+      label: "name",
+      "track-by": "id"
+    },
+    on: {
+      select: _vm.onSelectCustomer,
+      deselect: _vm.clearCustomerSearch
+    },
+    model: {
+      value: _vm.filters.name,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "name", $$v);
+      },
+      expression: "filters.name"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-md-3"
+  }, [_c("base-select", {
+    attrs: {
+      options: _vm.dateFilterOptions,
+      searchable: false,
+      "show-labels": false,
+      "allow-empty": false,
+      label: "label",
+      "track-by": "value"
+    },
+    model: {
+      value: _vm.filters.dateFilter,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "dateFilter", $$v);
+      },
+      expression: "filters.dateFilter"
+    }
+  })], 1)]), _vm._v(" "), _c("transition", {
+    attrs: {
+      name: "fade"
+    }
+  }, [_c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showFilters,
+      expression: "showFilters"
+    }],
+    staticClass: "filter-section"
+  }, [_c("div", {
+    staticClass: "row"
+  }, [_c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", {
+    staticClass: "form-label"
+  }, [_vm._v(" " + _vm._s(_vm.$tc("items.party_name")) + " ")]), _vm._v(" "), _c("base-select", {
+    ref: "customerSelect",
+    attrs: {
+      options: _vm.sundryDebtorsList,
+      required: "required",
+      searchable: true,
+      "show-labels": false,
+      "allow-empty": false,
+      label: "name",
+      "track-by": "id"
+    },
+    on: {
+      select: _vm.onSelectCustomer,
+      deselect: _vm.clearCustomerSearch
+    },
+    model: {
+      value: _vm.filters.name,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "name", $$v);
+      },
+      expression: "filters.name"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-2"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("general.from")))]), _vm._v(" "), _c("base-date-picker", {
+    attrs: {
+      "calendar-button": true,
+      "calendar-button-icon": "calendar"
+    },
+    model: {
+      value: _vm.filters.from_date,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "from_date", $$v);
+      },
+      expression: "filters.from_date"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-3"
+  }, [_c("label", [_vm._v(_vm._s(_vm.$t("general.to")))]), _vm._v(" "), _c("base-date-picker", {
+    attrs: {
+      "calendar-button": true,
+      "calendar-button-icon": "calendar"
+    },
+    model: {
+      value: _vm.filters.to_date,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "to_date", $$v);
+      },
+      expression: "filters.to_date"
+    }
+  })], 1), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-2"
+  }, [_c("label", {
+    staticClass: "form-label"
+  }, [_vm._v(" " + _vm._s(_vm.$tc("dispatch.status")) + " ")]), _vm._v(" "), _c("base-input", {
+    attrs: {
+      type: "text",
+      name: "status",
+      autocomplete: "off"
+    },
+    model: {
+      value: _vm.filters.status,
+      callback: function callback($$v) {
+        _vm.$set(_vm.filters, "status", typeof $$v === "string" ? $$v.trim() : $$v);
+      },
+      expression: "filters.status"
+    }
+  })], 1), _vm._v(" "), _c("label", {
+    staticClass: "clear-filter",
+    on: {
+      click: _vm.clearFilter
+    }
+  }, [_vm._v(" " + _vm._s(_vm.$t("general.clear_all")))])])])]), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.showEmptyScreen,
+      expression: "showEmptyScreen"
+    }],
+    staticClass: "col-xs-1 no-data-info",
+    attrs: {
+      align: "center"
+    }
+  }, [_c("satellite-icon", {
+    staticClass: "mt-5 mb-4"
+  }), _vm._v(" "), _c("div", {
+    staticClass: "row",
+    attrs: {
+      align: "center"
+    }
+  }, [_c("label", {
+    staticClass: "col title"
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.no_dispatch")))])]), _vm._v(" "), _c("div", {
+    staticClass: "row"
+  }, [_c("label", {
+    staticClass: "description col mt-1",
+    attrs: {
+      align: "center"
+    }
+  }, [_vm._v(_vm._s(_vm.$t("dispatch.list_of_dispatch")))])]), _vm._v(" "), _c("div", {
+    staticClass: "btn-container"
+  }, [_c("base-button", {
+    staticClass: "mt-3",
+    attrs: {
+      outline: true,
+      color: "theme",
+      size: "large"
+    },
+    on: {
+      click: function click($event) {
+        return _vm.$router.push("/dispatch/create");
+      }
+    }
+  }, [_vm._v("\n        " + _vm._s(_vm.$t("dispatch.add_new_dispatch")) + "\n      ")])], 1)], 1), _vm._v(" "), _c("div", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.showEmptyScreen,
+      expression: "!showEmptyScreen"
+    }],
+    staticClass: "table-container"
+  }, [_c("div", {
+    staticClass: "table-actions mt-5"
+  }, [_c("h4", [_vm._v(_vm._s(_vm.$t("dispatch.to_be_dispatched")))]), _vm._v(" "), _c("base-button", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: _vm.toBeDispatchedData,
+      expression: "toBeDispatchedData"
+    }],
+    style: ["position: absolute", " margin-right: 5%"],
+    attrs: {
+      outline: true,
+      icon: ["fas", "print"],
+      color: "theme",
+      size: "large",
+      "right-icon": ""
+    },
+    on: {
+      click: _vm.printToBeDispatch
+    }
+  }, [_vm._v("\n        Print\n      ")]), _vm._v(" "), _c("transition", {
+    attrs: {
+      name: "fade"
+    }
+  }, [_vm.selectedToBeDispatch && _vm.selectedToBeDispatch.length ? _c("v-dropdown", {
+    attrs: {
+      "show-arrow": false
+    }
+  }, [_c("span", {
+    staticClass: "table-actions-button dropdown-toggle",
+    attrs: {
+      slot: "activator",
+      href: "#"
+    },
+    slot: "activator"
+  }, [_vm._v("\n            " + _vm._s(_vm.$t("general.actions")) + "\n          ")]), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+    staticClass: "dropdown-item",
+    on: {
+      click: _vm.removeMultipleDispatch
+    }
+  }, [_c("font-awesome-icon", {
+    staticClass: "dropdown-item-icon",
+    attrs: {
+      icon: ["fas", "trash"]
+    }
+  }), _vm._v("\n              " + _vm._s(_vm.$t("general.delete")) + "\n            ")], 1)])], 1) : _vm._e()], 1)], 1), _vm._v(" "), _c("div", {
+    staticClass: "custom-control custom-checkbox"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.selectAllToBeFieldStatus,
+      expression: "selectAllToBeFieldStatus"
+    }],
+    staticClass: "custom-control-input",
+    attrs: {
+      id: "select-to-be-all",
+      type: "checkbox"
+    },
+    domProps: {
+      checked: Array.isArray(_vm.selectAllToBeFieldStatus) ? _vm._i(_vm.selectAllToBeFieldStatus, null) > -1 : _vm.selectAllToBeFieldStatus
+    },
+    on: {
+      change: [function ($event) {
+        var $$a = _vm.selectAllToBeFieldStatus,
+          $$el = $event.target,
+          $$c = $$el.checked ? true : false;
+        if (Array.isArray($$a)) {
+          var $$v = null,
+            $$i = _vm._i($$a, $$v);
+          if ($$el.checked) {
+            $$i < 0 && (_vm.selectAllToBeFieldStatus = $$a.concat([$$v]));
+          } else {
+            $$i > -1 && (_vm.selectAllToBeFieldStatus = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+          }
+        } else {
+          _vm.selectAllToBeFieldStatus = $$c;
+        }
+      }, _vm.selectAllToBeDispatch]
+    }
+  }), _vm._v(" "), _c("label", {
+    directives: [{
+      name: "show",
+      rawName: "v-show",
+      value: !_vm.isRequestOngoing,
+      expression: "!isRequestOngoing"
+    }],
+    staticClass: "custom-control-label selectall",
+    attrs: {
+      "for": "select-to-be-all"
+    }
+  })]), _vm._v(" "), _c("table-component", {
+    ref: "toBeTableDispatch",
+    attrs: {
+      data: _vm.toBeDispatchedData,
+      "show-filter": false,
+      "table-class": "table"
+    }
+  }, [_c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      "cell-class": "no-click"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", {
+          staticClass: "custom-control custom-checkbox"
+        }, [_c("input", {
+          directives: [{
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selectToBeField,
+            expression: "selectToBeField"
+          }],
+          staticClass: "custom-control-input",
+          attrs: {
+            id: "to_be_" + row.id,
+            type: "checkbox"
+          },
+          domProps: {
+            value: row.id,
+            checked: Array.isArray(_vm.selectToBeField) ? _vm._i(_vm.selectToBeField, row.id) > -1 : _vm.selectToBeField
+          },
+          on: {
+            change: function change($event) {
+              var $$a = _vm.selectToBeField,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false;
+              if (Array.isArray($$a)) {
+                var $$v = row.id,
+                  $$i = _vm._i($$a, $$v);
+                if ($$el.checked) {
+                  $$i < 0 && (_vm.selectToBeField = $$a.concat([$$v]));
+                } else {
+                  $$i > -1 && (_vm.selectToBeField = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+                }
+              } else {
+                _vm.selectToBeField = $$c;
+              }
+            }
+          }
+        }), _vm._v(" "), _c("label", {
+          staticClass: "custom-control-label",
+          attrs: {
+            "for": "to_be_" + row.id
+          }
+        })])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.invoice_id")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("router-link", {
+          attrs: {
+            to: {
+              path: "/dispatch/".concat(row.id, "/edit")
+            }
+          }
+        }, [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.invoice_id")) + " ")]), _vm._v(" "), row.invoices.length ? _c("span", [_vm._v(_vm._s(row.invoices.map(function (i) {
+          return " " + i.invoice_number;
+        }).toString()))]) : _vm._e()])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.name")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.name")) + " ")]), _vm._v(" "), row.master ? _c("span", [_vm._v(_vm._s(row.master.name))]) : _vm._e()];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.date_time"),
+      show: "date_time"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.transport"),
+      show: "transport"
+    }
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      "cell-class": "action-dropdown"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.action")) + " ")]), _vm._v(" "), _c("v-dropdown", [_c("span", {
+          attrs: {
+            slot: "activator",
+            href: "#"
+          },
+          slot: "activator"
+        }, [_c("dot-icon")], 1), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.singleDispatch(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "circle"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.dispatch")) + "\n              ")], 1)]), _vm._v(" "), _c("v-dropdown-item", [_c("router-link", {
+          staticClass: "dropdown-item",
+          attrs: {
+            to: {
+              path: "/dispatch/".concat(row.id, "/edit")
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "pencil-alt"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.edit")) + "\n              ")], 1)], 1), _vm._v(" "), _c("v-dropdown-item", [_c("div", {
+          staticClass: "dropdown-item",
+          on: {
+            click: function click($event) {
+              return _vm.removeDispatch(row.id);
+            }
+          }
+        }, [_c("font-awesome-icon", {
+          staticClass: "dropdown-item-icon",
+          attrs: {
+            icon: ["fas", "trash"]
+          }
+        }), _vm._v("\n                " + _vm._s(_vm.$t("general.delete")) + "\n              ")], 1)])], 1)];
+      }
+    }])
+  })], 1), _vm._v(" "), _c("table-component", {
+    ref: "toBeTableDispatch1",
+    attrs: {
+      id: "to_print_to_be_dispatch",
+      data: _vm.toBeDispatchedData,
+      "show-filter": false,
+      "table-class": "table"
+    }
+  }, [_c("table-column", {
+    attrs: {
+      sortable: false,
+      filterable: false,
+      "cell-class": "no-click"
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("div", {
+          staticClass: "custom-control custom-checkbox"
+        }, [_c("input", {
+          directives: [{
+            name: "model",
+            rawName: "v-model",
+            value: _vm.selectToBeField,
+            expression: "selectToBeField"
+          }],
+          staticClass: "custom-control-input",
+          attrs: {
+            id: "to_be_" + row.id,
+            type: "checkbox"
+          },
+          domProps: {
+            value: row.id,
+            checked: Array.isArray(_vm.selectToBeField) ? _vm._i(_vm.selectToBeField, row.id) > -1 : _vm.selectToBeField
+          },
+          on: {
+            change: function change($event) {
+              var $$a = _vm.selectToBeField,
+                $$el = $event.target,
+                $$c = $$el.checked ? true : false;
+              if (Array.isArray($$a)) {
+                var $$v = row.id,
+                  $$i = _vm._i($$a, $$v);
+                if ($$el.checked) {
+                  $$i < 0 && (_vm.selectToBeField = $$a.concat([$$v]));
+                } else {
+                  $$i > -1 && (_vm.selectToBeField = $$a.slice(0, $$i).concat($$a.slice($$i + 1)));
+                }
+              } else {
+                _vm.selectToBeField = $$c;
+              }
+            }
+          }
+        }), _vm._v(" "), _c("label", {
+          staticClass: "custom-control-label",
+          attrs: {
+            "for": "to_be_" + row.id
+          }
+        })])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.invoice_id")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("router-link", {
+          attrs: {
+            to: {
+              path: "/dispatch/".concat(row.id, "/edit")
+            }
+          }
+        }, [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.invoice_id")) + " ")]), _vm._v(" "), row.invoices.length ? _c("span", [_vm._v(_vm._s(row.invoices.filter(function (v, i, a) {
+          return a.findIndex(function (v2) {
+            return v2.account_master_id === v.account_master_id;
+          }) === i;
+        }).map(function (i) {
+          return " " + i.invoice_number + "*" + row.invoices.filter(function (j) {
+            return j.account_master_id === i.account_master_id;
+          }).length;
+        }).toString()))]) : _vm._e()])];
+      }
+    }])
+  }), _vm._v(" "), _c("table-column", {
+    attrs: {
+      label: _vm.$t("dispatch.name")
+    },
+    scopedSlots: _vm._u([{
+      key: "default",
+      fn: function fn(row) {
+        return [_c("span", [_vm._v(" " + _vm._s(_vm.$t("dispatch.name")) + " ")]), _vm._v(" "), row.invoices.length && row.invoices[0].master ? _c("span", [_vm._v(_vm._s(row.invoices.map(function (i) {
+          return " " + i.master.name;
+        }).toString()))]) : _vm._e()];
       }
     }])
   }), _vm._v(" "), _c("table-column", {
@@ -54720,7 +56870,9 @@ var render = function render() {
     }), function (item, index1) {
       return _c("router-link", {
         key: index1,
-        staticClass: "menu-item",
+        "class": ["menu-item", {
+          active: _vm.isRouteGroupActive(item)
+        }],
         attrs: {
           to: item.route,
           exact: !!item.exact
@@ -74997,16 +77149,16 @@ function toDate(argument) {
 
   function Guid(guid) {
     if (!guid) throw new TypeError("Invalid argument; `value` has no value.");
-      
+
     this.value = Guid.EMPTY;
-    
+
     if (guid && guid instanceof Guid) {
       this.value = guid.toString();
 
     } else if (guid && Object.prototype.toString.call(guid) === "[object String]" && Guid.isGuid(guid)) {
       this.value = guid;
     }
-    
+
     this.equals = function(other) {
       // Comparing string `value` against provided `guid` will auto-call
       // toString on `guid` for comparison
@@ -75016,11 +77168,11 @@ function toDate(argument) {
     this.isEmpty = function() {
       return this.value === Guid.EMPTY;
     };
-    
+
     this.toString = function() {
       return this.value;
     };
-    
+
     this.toJSON = function() {
       return this.value;
     };
@@ -86725,6 +88877,60 @@ ___CSS_LOADER_EXPORT___.push([module.id, "\nbody > .expandable-image.expanded {\
 
 /***/ }),
 
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n#to_print_dispatched {\n  display:none;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Completed.vue"],"names":[],"mappings":";AAwRA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('dispatch.completed_dispatch_page_title')\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n          <router-link slot=\"item-title\" to=\"/dispatch/create\">\n            <base-button\n              color=\"theme\"\n              icon=\"plus\"\n              size=\"large\"\n            >\n              {{ $t('dispatch.new_dispatch') }}\n            </base-button>\n          </router-link>\n        </div>\n      </Header>\n    </div>\n\n    <div class=\"dispatch-toolbar row\">\n      <div class=\"col-md-3\">\n        <base-select\n          v-model=\"filters.dateFilter\"\n          :options=\"dateFilterOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label>{{ $t('general.from') }}</label>\n            <base-date-picker\n              v-model=\"filters.from_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label>{{ $t('general.to') }}</label>\n            <base-date-picker\n              v-model=\"filters.to_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('/dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <h4>{{ $t('dispatch.dispatched') }}</h4>\n        <base-button\n          v-show=\"dipatchedCompletedData\"\n          :outline=\"true\"\n          :icon=\"['fas', 'print']\"\n          color=\"theme\"\n          size=\"large\"\n          right-icon\n          @click=\"printDispatched\"\n        >\n          Print\n        </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.action') }} </span>\n            <v-dropdown>\n              <span slot=\"activator\" href=\"#\">\n                <dot-icon />\n              </span>\n              <v-dropdown-item>\n                <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                  <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.edit') }}\n                </router-link>\n              </v-dropdown-item>\n              <v-dropdown-item>\n                <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                  <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.delete') }}\n                </div>\n              </v-dropdown-item>\n            </v-dropdown>\n          </template>\n        </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\n#to_print_dispatched {\n  display:none;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      sundryDebtorsList: [],\n      totalCompleted: 0,\n      dateFilterOptions: [\n        { value: 'today', label: this.$t('dispatch.date_filter_today') },\n        { value: 'yesterday', label: this.$t('dispatch.date_filter_yesterday') },\n        { value: 'next_day', label: this.$t('dispatch.date_filter_next_day') },\n        { value: 'this_week', label: this.$t('dispatch.date_filter_this_week') },\n        { value: 'this_month', label: this.$t('dispatch.date_filter_this_month') },\n        { value: 'all', label: this.$t('dispatch.date_filter_all') },\n      ],\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home'),\n        },\n        {\n          url: '/dispatch/dashboard',\n          title: this.$t('dispatch.dashboard_title'),\n        },\n        {\n          url: '#',\n          title: this.$t('dispatch.completed_dispatch_page_title'),\n        },\n      ],\n      showFilters: false,\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: { value: 'today', label: this.$t('dispatch.date_filter_today') },\n      },\n    }\n  },\n  computed: {\n    applyFilter () {\n      if (this.filters.name || this.filters.from_date || this.filters.to_date) {\n        return true\n      }\n      return false\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'selectedDispatch',\n      'selectAllField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalCompleted && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'fetchCompletedDispatchList',\n      'selectAllDispatch',\n      'selectDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        date_filter: this.filters.dateFilter ? this.filters.dateFilter.value : 'today',\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.fetchCompletedDispatchList(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList\n      this.totalCompleted = response.data.dispatch_completed.total\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    setFilters () {\n      if (this.timer) {\n        clearTimeout(this.timer)\n        this.timer = null\n      }\n      this.timer = setTimeout(() => {\n        this.filtersApplied = true\n        this.refreshTable()\n      }, 1000)\n    },\n    clearFilter () {\n      this.filtersApplied = false\n      this.showFilters = false\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: this.dateFilterOptions[0],\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.refreshTable()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteMultipleDispatch(this.selectedDispatch)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.refreshTable()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    printDispatched () {\n      printJS({\n        printable: 'to_print_dispatched',\n        type: 'html',\n        ignoreElements: ['no-print-check', 'no-print-option'],\n        scanStyles: true,\n        targetStyles: ['*'],\n        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n      })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n.dispatch-toolbar {\n  margin: 25px 0 20px;\n  align-items: center;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it distorts any link wrapping a button, table row, or dropdown item.\n   Only border/border-radius are reset (those are the ones marked !important\n   in the global rule and cause the visible glitch) - padding is deliberately\n   left alone so elements with their own real padding (e.g. .dropdown-item,\n   set in tables.scss) aren't stripped of it, which misaligned the Edit\n   dropdown item (a router-link) against the Delete item (a plain div). */\na:hover,\na:focus {\n  border: none !important;\n  border-radius: 0 !important;\n}\n</style>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.table-actions[data-v-44032a6e] {\n  height: 55px;\n}\n.dispatch-toolbar[data-v-44032a6e] {\n  margin: 25px 0 20px;\n  align-items: center;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it distorts any link wrapping a button, table row, or dropdown item.\n   Only border/border-radius are reset (those are the ones marked !important\n   in the global rule and cause the visible glitch) - padding is deliberately\n   left alone so elements with their own real padding (e.g. .dropdown-item,\n   set in tables.scss) aren't stripped of it, which misaligned the Edit\n   dropdown item (a router-link) against the Delete item (a plain div). */\na[data-v-44032a6e]:hover,\na[data-v-44032a6e]:focus {\n  border: none !important;\n  border-radius: 0 !important;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Completed.vue"],"names":[],"mappings":";AA+fA;EACA,YAAA;AACA;AACA;EACA,mBAAA;EACA,mBAAA;AACA;AACA;;;;;;;yEAOA;AACA;;EAEA,uBAAA;EACA,2BAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('dispatch.completed_dispatch_page_title')\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n          <router-link slot=\"item-title\" to=\"/dispatch/create\">\n            <base-button\n              color=\"theme\"\n              icon=\"plus\"\n              size=\"large\"\n            >\n              {{ $t('dispatch.new_dispatch') }}\n            </base-button>\n          </router-link>\n        </div>\n      </Header>\n    </div>\n\n    <div class=\"dispatch-toolbar row\">\n      <div class=\"col-md-3\">\n        <base-select\n          v-model=\"filters.dateFilter\"\n          :options=\"dateFilterOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label>{{ $t('general.from') }}</label>\n            <base-date-picker\n              v-model=\"filters.from_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label>{{ $t('general.to') }}</label>\n            <base-date-picker\n              v-model=\"filters.to_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('/dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <h4>{{ $t('dispatch.dispatched') }}</h4>\n        <base-button\n          v-show=\"dipatchedCompletedData\"\n          :outline=\"true\"\n          :icon=\"['fas', 'print']\"\n          color=\"theme\"\n          size=\"large\"\n          right-icon\n          @click=\"printDispatched\"\n        >\n          Print\n        </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.action') }} </span>\n            <v-dropdown>\n              <span slot=\"activator\" href=\"#\">\n                <dot-icon />\n              </span>\n              <v-dropdown-item>\n                <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                  <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.edit') }}\n                </router-link>\n              </v-dropdown-item>\n              <v-dropdown-item>\n                <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                  <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.delete') }}\n                </div>\n              </v-dropdown-item>\n            </v-dropdown>\n          </template>\n        </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\n#to_print_dispatched {\n  display:none;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      sundryDebtorsList: [],\n      totalCompleted: 0,\n      dateFilterOptions: [\n        { value: 'today', label: this.$t('dispatch.date_filter_today') },\n        { value: 'yesterday', label: this.$t('dispatch.date_filter_yesterday') },\n        { value: 'next_day', label: this.$t('dispatch.date_filter_next_day') },\n        { value: 'this_week', label: this.$t('dispatch.date_filter_this_week') },\n        { value: 'this_month', label: this.$t('dispatch.date_filter_this_month') },\n        { value: 'all', label: this.$t('dispatch.date_filter_all') },\n      ],\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home'),\n        },\n        {\n          url: '/dispatch/dashboard',\n          title: this.$t('dispatch.dashboard_title'),\n        },\n        {\n          url: '#',\n          title: this.$t('dispatch.completed_dispatch_page_title'),\n        },\n      ],\n      showFilters: false,\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: { value: 'today', label: this.$t('dispatch.date_filter_today') },\n      },\n    }\n  },\n  computed: {\n    applyFilter () {\n      if (this.filters.name || this.filters.from_date || this.filters.to_date) {\n        return true\n      }\n      return false\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'selectedDispatch',\n      'selectAllField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalCompleted && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'fetchCompletedDispatchList',\n      'selectAllDispatch',\n      'selectDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        date_filter: this.filters.dateFilter ? this.filters.dateFilter.value : 'today',\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.fetchCompletedDispatchList(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList\n      this.totalCompleted = response.data.dispatch_completed.total\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    setFilters () {\n      if (this.timer) {\n        clearTimeout(this.timer)\n        this.timer = null\n      }\n      this.timer = setTimeout(() => {\n        this.filtersApplied = true\n        this.refreshTable()\n      }, 1000)\n    },\n    clearFilter () {\n      this.filtersApplied = false\n      this.showFilters = false\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: this.dateFilterOptions[0],\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.refreshTable()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteMultipleDispatch(this.selectedDispatch)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.refreshTable()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    printDispatched () {\n      printJS({\n        printable: 'to_print_dispatched',\n        type: 'html',\n        ignoreElements: ['no-print-check', 'no-print-option'],\n        scanStyles: true,\n        targetStyles: ['*'],\n        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n      })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n.dispatch-toolbar {\n  margin: 25px 0 20px;\n  align-items: center;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it distorts any link wrapping a button, table row, or dropdown item.\n   Only border/border-radius are reset (those are the ones marked !important\n   in the global rule and cause the visible glitch) - padding is deliberately\n   left alone so elements with their own real padding (e.g. .dropdown-item,\n   set in tables.scss) aren't stripped of it, which misaligned the Edit\n   dropdown item (a router-link) against the Delete item (a plain div). */\na:hover,\na:focus {\n  border: none !important;\n  border-radius: 0 !important;\n}\n</style>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=style&index=0&id=52d73fee&lang=css":
 /*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=style&index=0&id=52d73fee&lang=css ***!
@@ -86745,7 +88951,34 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Create.vue"],"names":[],"mappings":";AA6GA;EACA,WAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,mBAAA;EACA,yBAAA;EACA,sBAAA;EACA,mBAAA;EACA,qBAAA;EACA,0BAAA;EACA,eAAA;EACA,gBAAA;EACA,eAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/dispatch\">{{ $tc('dispatch.dispatch',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col col-12 col-md-12 col-lg-6\">\n        <div class=\"card\">\n          <form action=\"\" @submit.prevent=\"submitDispatch\">\n            <div class=\"card-body\" id=\"to_print\">\n              <div class=\"form-group\" v-if=\"invoiceList && invoiceList.length && !change_invoice\">\n                <label class=\"form-label\">{{ $t('receipts.invoice') }}</label>\n                <base-select\n                  v-model=\"invoice\"\n                  :multiple=\"true\"\n                  :show-pointer=\"false\"\n                  :options=\"isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')\"\n                  :internal-search=\"false\"\n                  :loading=\"invoiceSearchLoading\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :allow-empty=\"true\"\n                  :disabled=\"isEdit\"\n                  :custom-label=\"invoiceWithAmount\"\n                  track-by=\"id\"\n                  class=\"multi-select-item\"\n                  @search-change=\"onInvoiceSearch\"\n                  @select=\"addInvoice\"\n                  @remove=\"removeInvoice\"\n                />\n              </div>\n              <div class=\"form-group\" v-if=\"change_invoice\">\n                <span class=\"ml-2\" v-for=\"(value, index) in filterInvoice \" :key=\"index\" >\n                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}\n                </span>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.date_time') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.date_time\"\n                  format=\"Y-m-d\"\n                  :invalid=\"$v.formData.date_time.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.date_time.$touch()\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.time') }}</label><span class=\"text-danger\"> *</span>\n                <div class=\"base-date-input\">\n                  <vue-timepicker\n                    v-model=\"formData.time\"\n                    format=\"hh:mm A\"\n                    :hide-clear-button=\"true\"\n                    @change=\"$v.formData.time.$touch()\">\n                    <template v-slot:icon>\n                      <span class=\"vdp-datepicker__calendar-button input-group-prepend\">\n                        <span>\n                          <font-awesome-icon id=\"time-icon\" :icon=\"['fas', 'clock']\"/>\n                        </span>\n                      </span>\n                    </template>\n                  </vue-timepicker>\n                </div>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.person') }}</label>\n                <base-input\n                  v-model.trim=\"formData.person\"\n                  focus\n                  type=\"text\"\n                  name=\"person\"\n                />\n              </div>\n               <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.transport') }}</label>\n                <base-input\n                  v-model.trim=\"formData.transport\"\n                  focus\n                  type=\"text\"\n                  name=\"transport\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <base-button\n                  id=\"submit-dispatch\"\n                  :loading=\"isLoading\"\n                  :disabled=\"isLoading\"\n                  icon=\"save\"\n                  color=\"theme\"\n                  type=\"submit\"\n                  class=\"collapse-button\"\n                >\n                  {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}\n                </base-button>\n              </div>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\nimport VueTimepicker from 'vue2-timepicker'\nimport 'vue2-timepicker/dist/VueTimepicker.css'\nimport getTime from 'date-fns/fp/getTime/index'\n\nexport default {\n  components: { VueTimepicker },\n  mixins: {\n    validationMixin\n  },\n  data () {\n    return {\n      isLoading: false,\n      filterInvoice: [],\n      change_invoice: false,\n      invoice_count: '',\n      title: 'Add Dispatch',\n      formData: {\n        name: '',\n        invoice_id: [],\n        date_time: new Date(),\n        transport: '',\n        person: '',\n        time: '',\n        status: {\n          id: 2,\n          name: 'Sent',\n        },\n        all_selected_dispatch: []\n      },\n      invoice: [],\n      invoiceList: [],\n      invoiceSearchLoading: false,\n      invoiceSearchTimer: null,\n      assignToBeDispatch: false,\n      isToBeDispatch: []\n    }\n  },\n  computed: {\n    isEdit () {\n      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {\n        return true\n      }\n      return false\n    },\n    formatDate() {\n      if (this.formData.date_time) {\n        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')\n      }\n      return moment().format('DD-MM-YYYY HH:mm:ss');\n    }\n  },\n  created () {\n    this.fetchInvoices()\n    let current = new Date();\n    this.formData.time = current.toLocaleTimeString(\"en-US\", {\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n    });\n  },\n  destroyed() {\n    this.resetSelectedDispatch()\n    this.resetSelectedToBeDispatch()\n  },\n  validations: {\n    formData: {\n      date_time: {\n        required,\n      },\n      time: {\n        required,\n      },\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'addDispatch',\n      'editDispatch',\n      'editToBeDispatch',\n      'dipatchedData',\n      'updateDispatch',\n      'updateToBeDispatch',\n      'resetSelectedDispatch',\n      'resetSelectedToBeDispatch'\n    ]),\n    addInvoice (value) {\n      if (value) {\n        this.formData.invoice_id.push(value.id)\n      }\n    },\n    removeInvoice (value) {\n      let index = this.formData.invoice_id.findIndex(each => each === value.id)\n      if (index !== -1) {\n        this.formData.invoice_id.splice(index, 1)\n      }\n    },\n    invoiceWithAmount ({ invoice_number, due_amount, master}) {\n      let invoiceArr = this.invoice;\n      if (! invoiceArr.length) {\n        invoiceArr = this.invoiceList\n      }\n      if (invoiceArr) {\n        // master can be null for an invoice whose account_master_id points\n        // at a deleted/missing party - don't let that crash the whole picker.\n        let count = master ? invoiceArr.filter(i => i.account_master_id === master.id).length : 0;\n        let masterName = master ? master.name : 'Unknown party';\n        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${masterName}) * ${count}`\n      }\n    },\n    loadInvoice() {\n      this.invoice = []\n      this.formData.invoice_id.map(i => {\n        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));\n        this.invoice.push(findFromList);\n      })\n      let current = new Date();\n      this.formData.time = current.toLocaleTimeString(\"en-US\", {\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n      });\n    },\n    printDispatch() {\n      return printJS({\n            onPrintDialogClose: () => {\n              this.$router.push('/dispatch')\n            },\n            printable: 'to_print',\n            type: 'html',\n            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],\n            scanStyles: true,\n            targetStyles: ['*'],\n            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'\n          })\n    },\n    async loadEditData () {\n      let response = await this.editDispatch(this.$route.params.id)\n      this.formData = response.data.dispatch\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      await this.ensureInvoicesLoaded(this.formData.invoice_id)\n      this.loadInvoice()\n    },\n    async loadIsToBeDispatch() {\n      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())\n      this.formData = response.data.dispatch[0]\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      let invoiceId = []\n      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))\n      this.formData.invoice_id = invoiceId\n      await this.ensureInvoicesLoaded(this.formData.invoice_id)\n      this.loadInvoice()\n      this.assignToBeDispatch = true\n      this.formData['all_selected_dispatch'] = [];\n      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))\n    },\n    async fetchInvoices () {\n      // No search/limit here - this is the default page-load fetch, so it\n      // only shows the newest 50 pending invoices (the endpoint's default\n      // cap). Use the search box to find anything older/more specific -\n      // see onInvoiceSearch(). This endpoint used to load every pending\n      // invoice unbounded, which crashed (memory) or timed out (gateway)\n      // once a company's backlog grew into the tens of thousands.\n      let response = await axios.get(`/api/dispatch/invoices`)\n      if (response.data) {\n        this.invoiceList = response.data.invoices\n        if (this.isEdit) {\n          this.loadEditData()\n        }\n        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch\n        if (this.isToBeDispatch.length) {\n          this.loadIsToBeDispatch()\n        }\n      }\n    },\n    // Search-as-you-type for the invoice picker (create mode only - it's\n    // disabled while editing). Debounced so we're not firing a request per\n    // keystroke.\n    onInvoiceSearch (query) {\n      clearTimeout(this.invoiceSearchTimer)\n      this.invoiceSearchTimer = setTimeout(async () => {\n        this.invoiceSearchLoading = true\n        try {\n          let response = await axios.get(`/api/dispatch/invoices`, { params: { search: query } })\n          if (response.data) {\n            this.invoiceList = response.data.invoices\n          }\n        } finally {\n          this.invoiceSearchLoading = false\n        }\n      }, 350)\n    },\n    // The invoice picker's default/searched options are capped and only\n    // ever show still-pending bills - once a dispatch is sent its invoice(s)\n    // get marked COMPLETED and drop out of that list entirely. Without this,\n    // re-opening the edit page for an already-sent dispatch has nothing to\n    // match its invoice_id(s) against and the invoice field renders empty.\n    // Top up invoiceList with whichever ids are actually assigned to this\n    // dispatch, regardless of status, before loadInvoice() tries to resolve them.\n    async ensureInvoicesLoaded (invoiceIds) {\n      let missingIds = (invoiceIds || [])\n        .map(i => parseInt(i))\n        .filter(id => !isNaN(id) && !this.invoiceList.some(inv => inv.id === id))\n      if (! missingIds.length) {\n        return\n      }\n      let response = await axios.get(`/api/dispatch/invoices`, { params: { include_ids: missingIds.join(',') } })\n      if (response.data && response.data.invoices) {\n        let existingIds = this.invoiceList.map(inv => inv.id)\n        let toAdd = response.data.invoices.filter(inv => ! existingIds.includes(inv.id))\n        this.invoiceList = this.invoiceList.concat(toAdd)\n      }\n    },\n    async showDispatchPopup (invoice_id, invoices_master_id) {\n      this.change_invoice = true;\n      this.filterInvoice =  this.invoice.map(node=>{\n           let new_node = {};\n            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;\n            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {\n              return new Date(a.created_at) - new Date(b.created_at);\n            });\n           new_node.account_master_id = node.account_master_id;\n           new_node.name = node.master.name;\n           new_node.id = node.id;\n          return new_node;\n      });\n      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);\n      swal({\n        title: this.$t('dispatch.invoice_report_title'),\n        text: this.$t('dispatch.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printDispatch();\n        } else {\n          this.resetSelectedDispatch()\n          this.resetSelectedToBeDispatch()\n          this.$router.push('/dispatch')\n        }\n        this.change_invoice = false;\n      })\n    },\n    async submitDispatch () {\n      this.$v.formData.$touch()\n      if (this.$v.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return false\n      }\n      try {\n        this.isLoading = true\n        let response = null;\n        if (this.isEdit) {\n          if (this.assignToBeDispatch) {\n            response = await this.updateToBeDispatch(this.formData)\n          } else {\n            response = await this.updateDispatch(this.formData)\n          }\n        } else {\n          response = await this.addDispatch(this.formData)\n        }\n        if (response.data) {\n          this.isLoading = false\n          if (this.isEdit) {\n            window.toastr['success'](this.$tc('dispatch.updated_message'))\n          } else {\n            window.toastr['success'](this.$tc('dispatch.created_message'))\n          }\n          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Create.vue"],"names":[],"mappings":";AA0GA;EACA,WAAA;AACA;AACA;EACA,WAAA;EACA,YAAA;EACA,mBAAA;EACA,yBAAA;EACA,sBAAA;EACA,mBAAA;EACA,qBAAA;EACA,0BAAA;EACA,eAAA;EACA,gBAAA;EACA,eAAA;AACA","sourcesContent":["<template>\n  <div class=\"main-content item-create\">\n    <div class=\"page-header\">\n      <h3 class=\"page-title\">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>\n      <ol class=\"breadcrumb\">\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/invoices\">{{ $t('general.home') }}</router-link></li>\n        <li class=\"breadcrumb-item\"><router-link slot=\"item-title\" to=\"/dispatch\">{{ $tc('dispatch.dispatch',2) }}</router-link></li>\n        <li class=\"breadcrumb-item\"><a href=\"#\"> {{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</a></li>\n      </ol>\n    </div>\n    <div class=\"row\">\n      <div class=\"col col-12 col-md-12 col-lg-6\">\n        <div class=\"card\">\n          <form action=\"\" @submit.prevent=\"submitDispatch\">\n            <div class=\"card-body\" id=\"to_print\">\n              <div class=\"form-group\" v-if=\"invoiceList && invoiceList.length && !change_invoice\">\n                <label class=\"form-label\">{{ $t('receipts.invoice') }}</label>\n                <base-select\n                  v-model=\"invoice\"\n                  :multiple=\"true\"\n                  :show-pointer=\"false\"\n                  :options=\"isEdit ? invoiceList : invoiceList.filter(node=>node.status!=='COMPLETED')\"\n                  :searchable=\"true\"\n                  :show-labels=\"false\"\n                  :allow-empty=\"true\"\n                  :disabled=\"isEdit\"\n                  :custom-label=\"invoiceWithAmount\"\n                  track-by=\"id\"\n                  class=\"multi-select-item\"\n                  @select=\"addInvoice\"\n                  @remove=\"removeInvoice\"\n                />\n              </div>\n              <div class=\"form-group\" v-if=\"change_invoice\">\n                <span class=\"ml-2\" v-for=\"(value, index) in filterInvoice \" :key=\"index\" >\n                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}\n                </span>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.date_time') }}</label><span class=\"text-danger\"> *</span>\n                <base-date-picker\n                  v-model=\"formData.date_time\"\n                  format=\"Y-m-d\"\n                  :invalid=\"$v.formData.date_time.$error\"\n                  :calendar-button=\"true\"\n                  calendar-button-icon=\"calendar\"\n                  @change=\"$v.formData.date_time.$touch()\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.time') }}</label><span class=\"text-danger\"> *</span>\n                <div class=\"base-date-input\">\n                  <vue-timepicker\n                    v-model=\"formData.time\"\n                    format=\"hh:mm A\"\n                    :hide-clear-button=\"true\"\n                    @change=\"$v.formData.time.$touch()\">\n                    <template v-slot:icon>\n                      <span class=\"vdp-datepicker__calendar-button input-group-prepend\">\n                        <span>\n                          <font-awesome-icon id=\"time-icon\" :icon=\"['fas', 'clock']\"/>\n                        </span>\n                      </span>\n                    </template>\n                  </vue-timepicker>\n                </div>\n              </div>\n              <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.person') }}</label>\n                <base-input\n                  v-model.trim=\"formData.person\"\n                  focus\n                  type=\"text\"\n                  name=\"person\"\n                />\n              </div>\n               <div class=\"form-group\">\n                <label class=\"control-label\">{{ $t('dispatch.transport') }}</label>\n                <base-input\n                  v-model.trim=\"formData.transport\"\n                  focus\n                  type=\"text\"\n                  name=\"transport\"\n                />\n              </div>\n              <div class=\"form-group\">\n                <base-button\n                  id=\"submit-dispatch\"\n                  :loading=\"isLoading\"\n                  :disabled=\"isLoading\"\n                  icon=\"save\"\n                  color=\"theme\"\n                  type=\"submit\"\n                  class=\"collapse-button\"\n                >\n                  {{ isEdit ? $t('dispatch.update_dispatch') : $t('dispatch.save_dispatch') }}\n                </base-button>\n              </div>\n            </div>\n          </form>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n<style>\n.vue__time-picker {\n  width: 100%;\n}\n.base-date-input .vue__time-picker input.display-time {\n  width: 100%;\n  height: 40px;\n  background: #FFFFFF;\n  border: 1px solid #EBF1FA;\n  box-sizing: border-box;\n  border-radius: 5px ;\n  display: inline-block;\n  padding: 0px 6px 0px 40px ;\n  font-size: 1rem;\n  line-height: 1.4;\n  cursor: pointer;\n}\n</style>\n<script>\nimport { validationMixin } from 'vuelidate'\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\nconst { required, minLength, numeric, minValue, maxLength } = require('vuelidate/lib/validators')\nimport VueTimepicker from 'vue2-timepicker'\nimport 'vue2-timepicker/dist/VueTimepicker.css'\nimport getTime from 'date-fns/fp/getTime/index'\n\nexport default {\n  components: { VueTimepicker },\n  mixins: {\n    validationMixin\n  },\n  data () {\n    return {\n      isLoading: false,\n      filterInvoice: [],\n      change_invoice: false,\n      invoice_count: '',\n      title: 'Add Dispatch',\n      formData: {\n        name: '',\n        invoice_id: [],\n        date_time: new Date(),\n        transport: '',\n        person: '',\n        time: '',\n        status: {\n          id: 2,\n          name: 'Sent',\n        },\n        all_selected_dispatch: []\n      },\n      invoice: [],\n      invoiceList: [],\n      assignToBeDispatch: false,\n      isToBeDispatch: []\n    }\n  },\n  computed: {\n    isEdit () {\n      if (this.$route.name === 'dispatch.edit' || this.assignToBeDispatch) {\n        return true\n      }\n      return false\n    },\n    formatDate() {\n      if (this.formData.date_time) {\n        moment(this.formData.date_time).format('DD-MM-YYYY HH:mm:ss')\n      }\n      return moment().format('DD-MM-YYYY HH:mm:ss');\n    }\n  },\n  created () {\n    this.fetchInvoices()\n    let current = new Date();\n    this.formData.time = current.toLocaleTimeString(\"en-US\", {\n      hour: \"2-digit\",\n      minute: \"2-digit\",\n    });\n  },\n  destroyed() {\n    this.resetSelectedDispatch()\n    this.resetSelectedToBeDispatch()\n  },\n  validations: {\n    formData: {\n      date_time: {\n        required,\n      },\n      time: {\n        required,\n      },\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'addDispatch',\n      'editDispatch',\n      'editToBeDispatch',\n      'dipatchedData',\n      'updateDispatch',\n      'updateToBeDispatch',\n      'resetSelectedDispatch',\n      'resetSelectedToBeDispatch'\n    ]),\n    addInvoice (value) {\n      if (value) {\n        this.formData.invoice_id.push(value.id)\n      }\n    },\n    removeInvoice (value) {\n      let index = this.formData.invoice_id.findIndex(each => each === value.id)\n      if (index !== -1) {\n        this.formData.invoice_id.splice(index, 1)\n      }\n    },\n    invoiceWithAmount ({ invoice_number, due_amount, master}) {\n      let invoiceArr = this.invoice;\n      if (! invoiceArr.length) {\n        invoiceArr = this.invoiceList\n      }\n      if (invoiceArr) {\n        let count = invoiceArr.filter(i => i.account_master_id === master.id).length;\n        return `${invoice_number} (₹ ${parseFloat(due_amount).toFixed(2)}) - (${master.name}) * ${count}`\n      }\n    },\n    loadInvoice() {\n      this.invoice = []\n      this.formData.invoice_id.map(i => {\n        let findFromList = this.invoiceList.find(j => j.id === parseInt(i));\n        this.invoice.push(findFromList);\n      })\n      let current = new Date();\n      this.formData.time = current.toLocaleTimeString(\"en-US\", {\n        hour: \"2-digit\",\n        minute: \"2-digit\",\n      });\n    },\n    printDispatch() {\n      return printJS({\n            onPrintDialogClose: () => {\n              this.$router.push('/dispatch')\n            },\n            printable: 'to_print',\n            type: 'html',\n            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],\n            scanStyles: true,\n            targetStyles: ['*'],\n            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'\n          })\n    },\n    async loadEditData () {\n      let response = await this.editDispatch(this.$route.params.id)\n      this.formData = response.data.dispatch\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      await this.ensureInvoicesLoaded(this.formData.invoice_id)\n      this.loadInvoice()\n    },\n    async loadIsToBeDispatch() {\n      let response = await this.editToBeDispatch(this.isToBeDispatch.toString())\n      this.formData = response.data.dispatch[0]\n      this.formData.status = {\n          id: 2,\n          name: 'Sent',\n        };\n      let invoiceId = []\n      response.data.dispatch.map(each => each.invoice_id.map(i => invoiceId.push(i)))\n      this.formData.invoice_id = invoiceId\n      await this.ensureInvoicesLoaded(this.formData.invoice_id)\n      this.loadInvoice()\n      this.assignToBeDispatch = true\n      this.formData['all_selected_dispatch'] = [];\n      response.data.dispatch.map(each => this.formData.all_selected_dispatch.push(each.id))\n    },\n    // The invoice picker's options list (fetchInvoices) only returns bills\n    // still pending dispatch - once a dispatch is sent, its invoice(s) get\n    // marked COMPLETED and drop out of that list, so re-opening the edit\n    // page for an already-sent dispatch would otherwise have nothing to\n    // match against and render the invoice field empty. Top up invoiceList\n    // with whichever ids are actually assigned to this dispatch, regardless\n    // of their status, before trying to resolve them in loadInvoice().\n    async ensureInvoicesLoaded (invoiceIds) {\n      let missingIds = (invoiceIds || [])\n        .map(i => parseInt(i))\n        .filter(id => !isNaN(id) && !this.invoiceList.some(inv => inv.id === id))\n      if (! missingIds.length) {\n        return\n      }\n      let response = await axios.get(`/api/dispatch/invoices`, { params: { include_ids: missingIds.join(',') } })\n      if (response.data && response.data.invoices) {\n        let existingIds = this.invoiceList.map(inv => inv.id)\n        let toAdd = response.data.invoices.filter(inv => ! existingIds.includes(inv.id))\n        this.invoiceList = this.invoiceList.concat(toAdd)\n      }\n    },\n    async fetchInvoices () {\n      let response = await axios.get(`/api/dispatch/invoices`)\n      if (response.data) {\n        this.invoiceList = response.data.invoices\n        if (this.isEdit) {\n          this.loadEditData()\n        }\n        this.isToBeDispatch = this.$store.state.dispatch.selectedToBeDispatch\n        if (this.isToBeDispatch.length) {\n          this.loadIsToBeDispatch()\n        }\n      }\n    },\n    async showDispatchPopup (invoice_id, invoices_master_id) {\n      this.change_invoice = true;\n      this.filterInvoice =  this.invoice.map(node=>{\n           let new_node = {};\n            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;\n            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {\n              return new Date(a.created_at) - new Date(b.created_at);\n            });\n           new_node.account_master_id = node.account_master_id;\n           new_node.name = node.master.name;\n           new_node.id = node.id;\n          return new_node;\n      });\n      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);\n      swal({\n        title: this.$t('dispatch.invoice_report_title'),\n        text: this.$t('dispatch.invoice_report_text'),\n        icon: '/assets/icon/check-circle-solid.svg',\n        buttons: true,\n        dangerMode: false\n      }).then(async (success) => {\n        if (success) {\n          this.printDispatch();\n        } else {\n          this.resetSelectedDispatch()\n          this.resetSelectedToBeDispatch()\n          this.$router.push('/dispatch')\n        }\n        this.change_invoice = false;\n      })\n    },\n    async submitDispatch () {\n      this.$v.formData.$touch()\n      if (this.$v.$invalid) {\n        window.toastr['error'](\"Error! missing required field or value is invalid.!\")\n        return false\n      }\n      try {\n        this.isLoading = true\n        let response = null;\n        if (this.isEdit) {\n          if (this.assignToBeDispatch) {\n            response = await this.updateToBeDispatch(this.formData)\n          } else {\n            response = await this.updateDispatch(this.formData)\n          }\n        } else {\n          response = await this.addDispatch(this.formData)\n        }\n        if (response.data) {\n          this.isLoading = false\n          if (this.isEdit) {\n            window.toastr['success'](this.$tc('dispatch.updated_message'))\n          } else {\n            window.toastr['success'](this.$tc('dispatch.created_message'))\n          }\n          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)\n        }\n      } catch (err) {\n        if (err) {\n          this.isLoading = false\n          window.toastr['error'](err)\n        }\n      }\n    },\n  }\n}\n</script>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css":
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.dispatch-dashboard-cards[data-v-add9dadc] {\n  margin-top: 30px;\n}\n.dispatch-dashboard-card-link[data-v-add9dadc] {\n  display: block;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it renders as a distorted blob on a block-level card like this one. */\n.dispatch-dashboard-card-link[data-v-add9dadc]:hover,\n.dispatch-dashboard-card-link[data-v-add9dadc]:focus {\n  padding: 0 !important;\n  border: none !important;\n  border-radius: 0 !important;\n  color: inherit !important;\n}\n.dispatch-dashboard-card[data-v-add9dadc] {\n  border-radius: 10px;\n  border-top: 3px solid #55547a;\n}\n.dispatch-dashboard-card .card-body[data-v-add9dadc] {\n  display: flex;\n  align-items: center;\n  padding: 24px;\n}\n.dispatch-dashboard-card--dispatched[data-v-add9dadc] {\n  border-top-color: #29c76f;\n}\n.dispatch-dashboard-card--total[data-v-add9dadc] {\n  border-top-color: #6a94f0;\n}\n.dispatch-dashboard-card-icon[data-v-add9dadc] {\n  flex: 0 0 auto;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 52px;\n  height: 52px;\n  margin-right: 18px;\n  border-radius: 50%;\n  background: rgba(85, 84, 122, 0.1);\n  color: #55547a;\n  font-size: 20px;\n}\n.dispatch-dashboard-card--dispatched .dispatch-dashboard-card-icon[data-v-add9dadc] {\n  background: rgba(41, 199, 111, 0.12);\n  color: #29c76f;\n}\n.dispatch-dashboard-card--total .dispatch-dashboard-card-icon[data-v-add9dadc] {\n  background: rgba(106, 148, 240, 0.12);\n  color: #6a94f0;\n}\n.dispatch-dashboard-card-text[data-v-add9dadc] {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.dispatch-dashboard-card-label[data-v-add9dadc] {\n  margin-bottom: 2px;\n  color: #74767f;\n  font-size: 13px;\n  font-weight: 600;\n  letter-spacing: 0.03em;\n  text-transform: uppercase;\n}\n.dispatch-dashboard-card-value[data-v-add9dadc] {\n  margin-bottom: 0;\n  font-size: 30px;\n  font-weight: 700;\n  color: #2b2b40;\n}\n.dispatch-dashboard-card-arrow[data-v-add9dadc] {\n  flex: 0 0 auto;\n  color: #c4c4d0;\n  font-size: 14px;\n}\n\n/* Recent activity / top parties panels */\n.dispatch-dashboard-panels[data-v-add9dadc] {\n  margin-top: 24px;\n}\n.dispatch-panel-card[data-v-add9dadc] {\n  height: 100%;\n}\n.dispatch-panel-card .card-header[data-v-add9dadc] {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.dispatch-panel-card .card-header h3[data-v-add9dadc] {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 700;\n}\n.dispatch-view-all-link[data-v-add9dadc],\n.dispatch-view-all-link[data-v-add9dadc]:hover,\n.dispatch-view-all-link[data-v-add9dadc]:focus {\n  flex: 0 0 auto;\n  margin-left: auto;\n  padding: 0 !important;\n  border: none !important;\n  border-radius: 0 !important;\n  font-size: 13px;\n  font-weight: 600;\n  color: #55547a !important;\n  text-decoration: none !important;\n  white-space: nowrap;\n}\n.dispatch-view-all-link svg[data-v-add9dadc] {\n  margin-left: 4px;\n  font-size: 11px;\n}\n.dispatch-activity-section + .dispatch-activity-section[data-v-add9dadc] {\n  margin-top: 26px;\n}\n.dispatch-activity-section-title[data-v-add9dadc] {\n  display: flex;\n  align-items: center;\n  margin-bottom: 12px;\n  color: #74767f;\n  font-size: 12px;\n  font-weight: 700;\n  letter-spacing: 0.03em;\n  text-transform: uppercase;\n}\n.dispatch-activity-section-icon[data-v-add9dadc] {\n  margin-right: 8px;\n  font-size: 13px;\n}\n.dispatch-activity-section-icon--pending[data-v-add9dadc] {\n  color: #55547a;\n}\n.dispatch-activity-list[data-v-add9dadc] {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.dispatch-activity-item[data-v-add9dadc] {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 10px 8px;\n  border-radius: 6px;\n  cursor: pointer;\n  color: inherit;\n  text-decoration: none;\n}\n.dispatch-activity-item[data-v-add9dadc]:hover {\n  background: #f5f6fa;\n}\n.dispatch-activity-item + .dispatch-activity-item[data-v-add9dadc] {\n  border-top: 1px solid #f0f0f4;\n}\n.dispatch-activity-party[data-v-add9dadc] {\n  flex: 0 0 auto;\n  max-width: 40%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 600;\n  color: #2b2b40;\n}\n.dispatch-activity-invoices[data-v-add9dadc] {\n  flex: 1 1 auto;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: #74767f;\n  font-size: 13px;\n}\n.dispatch-activity-meta[data-v-add9dadc] {\n  flex: 0 0 auto;\n  color: #a4a6b3;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.dispatch-activity-empty[data-v-add9dadc] {\n  margin: 0;\n  color: #a4a6b3;\n  font-size: 13px;\n}\n\n/* Top parties list */\n.dispatch-party-list[data-v-add9dadc] {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.dispatch-party-item + .dispatch-party-item[data-v-add9dadc] {\n  margin-top: 16px;\n}\n.dispatch-party-row[data-v-add9dadc] {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  margin-bottom: 6px;\n}\n.dispatch-party-name[data-v-add9dadc] {\n  font-weight: 600;\n  color: #2b2b40;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  margin-right: 12px;\n}\n.dispatch-party-count[data-v-add9dadc] {\n  flex: 0 0 auto;\n  color: #74767f;\n  font-size: 13px;\n  font-weight: 700;\n}\n.dispatch-party-bar-track[data-v-add9dadc] {\n  height: 6px;\n  border-radius: 3px;\n  background: #f0f0f4;\n  overflow: hidden;\n}\n.dispatch-party-bar-fill[data-v-add9dadc] {\n  height: 100%;\n  border-radius: 3px;\n  background: linear-gradient(90deg, #55547a, #6a94f0);\n}\n/* Aging buckets - green (fresh) through amber to red (stale), so severity\n   reads at a glance instead of needing to compare numbers. */\n.dispatch-party-bar-fill--recent[data-v-add9dadc] {\n  background: #29c76f;\n}\n.dispatch-party-bar-fill--month[data-v-add9dadc] {\n  background: #f0ad4e;\n}\n.dispatch-party-bar-fill--old[data-v-add9dadc] {\n  background: #e0554f;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Dashboard.vue"],"names":[],"mappings":";AAgNA;EACA,gBAAA;AACA;AACA;EACA,cAAA;EACA,cAAA;EACA,qBAAA;EACA,eAAA;AACA;AACA;;wEAEA;AACA;;EAEA,qBAAA;EACA,uBAAA;EACA,2BAAA;EACA,yBAAA;AACA;AACA;EACA,mBAAA;EACA,6BAAA;AACA;AACA;EACA,aAAA;EACA,mBAAA;EACA,aAAA;AACA;AACA;EACA,yBAAA;AACA;AACA;EACA,yBAAA;AACA;AACA;EACA,cAAA;EACA,aAAA;EACA,mBAAA;EACA,uBAAA;EACA,WAAA;EACA,YAAA;EACA,kBAAA;EACA,kBAAA;EACA,kCAAA;EACA,cAAA;EACA,eAAA;AACA;AACA;EACA,oCAAA;EACA,cAAA;AACA;AACA;EACA,qCAAA;EACA,cAAA;AACA;AACA;EACA,cAAA;EACA,YAAA;AACA;AACA;EACA,kBAAA;EACA,cAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,yBAAA;AACA;AACA;EACA,gBAAA;EACA,eAAA;EACA,gBAAA;EACA,cAAA;AACA;AACA;EACA,cAAA;EACA,cAAA;EACA,eAAA;AACA;;AAEA,yCAAA;AACA;EACA,gBAAA;AACA;AACA;EACA,YAAA;AACA;AACA;EACA,aAAA;EACA,mBAAA;EACA,8BAAA;AACA;AACA;EACA,SAAA;EACA,eAAA;EACA,gBAAA;AACA;AACA;;;EAGA,cAAA;EACA,iBAAA;EACA,qBAAA;EACA,uBAAA;EACA,2BAAA;EACA,eAAA;EACA,gBAAA;EACA,yBAAA;EACA,gCAAA;EACA,mBAAA;AACA;AACA;EACA,gBAAA;EACA,eAAA;AACA;AACA;EACA,gBAAA;AACA;AACA;EACA,aAAA;EACA,mBAAA;EACA,mBAAA;EACA,cAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,yBAAA;AACA;AACA;EACA,iBAAA;EACA,eAAA;AACA;AACA;EACA,cAAA;AACA;AACA;EACA,gBAAA;EACA,SAAA;EACA,UAAA;AACA;AACA;EACA,aAAA;EACA,mBAAA;EACA,SAAA;EACA,iBAAA;EACA,kBAAA;EACA,eAAA;EACA,cAAA;EACA,qBAAA;AACA;AACA;EACA,mBAAA;AACA;AACA;EACA,6BAAA;AACA;AACA;EACA,cAAA;EACA,cAAA;EACA,gBAAA;EACA,uBAAA;EACA,mBAAA;EACA,gBAAA;EACA,cAAA;AACA;AACA;EACA,cAAA;EACA,gBAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;EACA,eAAA;AACA;AACA;EACA,cAAA;EACA,cAAA;EACA,eAAA;EACA,mBAAA;AACA;AACA;EACA,SAAA;EACA,cAAA;EACA,eAAA;AACA;;AAEA,qBAAA;AACA;EACA,gBAAA;EACA,SAAA;EACA,UAAA;AACA;AACA;EACA,gBAAA;AACA;AACA;EACA,aAAA;EACA,qBAAA;EACA,8BAAA;EACA,kBAAA;AACA;AACA;EACA,gBAAA;EACA,cAAA;EACA,gBAAA;EACA,uBAAA;EACA,mBAAA;EACA,kBAAA;AACA;AACA;EACA,cAAA;EACA,cAAA;EACA,eAAA;EACA,gBAAA;AACA;AACA;EACA,WAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;AACA;AACA;EACA,YAAA;EACA,kBAAA;EACA,oDAAA;AACA;AACA;6DACA;AACA;EACA,mBAAA;AACA;AACA;EACA,mBAAA;AACA;AACA;EACA,mBAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('dispatch.dashboard_title')\" :bread-crumb-links=\"breadCrumbLinks\" />\n    </div>\n\n    <div class=\"row dispatch-dashboard-cards\">\n      <div class=\"col-md-4\">\n        <router-link to=\"/dispatch/pending\" class=\"dispatch-dashboard-card-link\">\n          <div class=\"card dispatch-dashboard-card dispatch-dashboard-card--pending\">\n            <div class=\"card-body\">\n              <div class=\"dispatch-dashboard-card-icon\">\n                <font-awesome-icon :icon=\"['fas', 'clock']\" />\n              </div>\n              <div class=\"dispatch-dashboard-card-text\">\n                <p class=\"dispatch-dashboard-card-label\">{{ $t('dispatch.to_be_dispatched') }}</p>\n                <p class=\"dispatch-dashboard-card-value\">{{ counts.pending_count }}</p>\n              </div>\n              <font-awesome-icon :icon=\"['fas', 'arrow-right']\" class=\"dispatch-dashboard-card-arrow\" />\n            </div>\n          </div>\n        </router-link>\n      </div>\n\n      <div class=\"col-md-4\">\n        <router-link to=\"/dispatch/completed\" class=\"dispatch-dashboard-card-link\">\n          <div class=\"card dispatch-dashboard-card dispatch-dashboard-card--dispatched\">\n            <div class=\"card-body\">\n              <div class=\"dispatch-dashboard-card-icon\">\n                <font-awesome-icon :icon=\"['fas', 'check-circle']\" />\n              </div>\n              <div class=\"dispatch-dashboard-card-text\">\n                <p class=\"dispatch-dashboard-card-label\">{{ $t('dispatch.dispatched') }}</p>\n                <p class=\"dispatch-dashboard-card-value\">{{ counts.dispatched_count }}</p>\n              </div>\n              <font-awesome-icon :icon=\"['fas', 'arrow-right']\" class=\"dispatch-dashboard-card-arrow\" />\n            </div>\n          </div>\n        </router-link>\n      </div>\n\n      <div class=\"col-md-4\">\n        <div class=\"card dispatch-dashboard-card dispatch-dashboard-card--total\">\n          <div class=\"card-body\">\n            <div class=\"dispatch-dashboard-card-icon\">\n              <font-awesome-icon :icon=\"['fas', 'file-alt']\" />\n            </div>\n            <div class=\"dispatch-dashboard-card-text\">\n              <p class=\"dispatch-dashboard-card-label\">{{ $t('dispatch.total_dispatches') }}</p>\n              <p class=\"dispatch-dashboard-card-value\">{{ counts.total_count }}</p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"row dispatch-dashboard-panels\">\n      <div class=\"col-md-6\">\n        <div class=\"card dispatch-panel-card\">\n          <div class=\"card-header\">\n            <h3>{{ $t('dispatch.top_parties_pending') }}</h3>\n          </div>\n          <div class=\"card-body\">\n            <ul v-if=\"topPendingParties.length\" class=\"dispatch-party-list\">\n              <li v-for=\"party in topPendingParties\" :key=\"party.account_master_id\" class=\"dispatch-party-item\">\n                <div class=\"dispatch-party-row\">\n                  <span class=\"dispatch-party-name\">{{ party.name || $t('dispatch.unknown_party') }}</span>\n                  <span class=\"dispatch-party-count\">{{ party.pending_count }}</span>\n                </div>\n                <div class=\"dispatch-party-bar-track\">\n                  <div class=\"dispatch-party-bar-fill\" :style=\"{ width: partyBarWidth(party.pending_count) + '%' }\" />\n                </div>\n              </li>\n            </ul>\n            <p v-else class=\"dispatch-activity-empty\">{{ $t('dispatch.no_pending_backlog') }}</p>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"col-md-6\">\n        <div class=\"card dispatch-panel-card\">\n          <div class=\"card-header\">\n            <h3>{{ $t('dispatch.pending_aging_title') }}</h3>\n          </div>\n          <div class=\"card-body\">\n            <ul v-if=\"pendingAging.length\" class=\"dispatch-party-list\">\n              <li v-for=\"bucket in pendingAging\" :key=\"bucket.key\" class=\"dispatch-party-item\">\n                <div class=\"dispatch-party-row\">\n                  <span class=\"dispatch-party-name\">{{ bucket.label }}</span>\n                  <span class=\"dispatch-party-count\">{{ bucket.count }}</span>\n                </div>\n                <div class=\"dispatch-party-bar-track\">\n                  <div\n                    class=\"dispatch-party-bar-fill\"\n                    :class=\"`dispatch-party-bar-fill--${bucket.key}`\"\n                    :style=\"{ width: agingBarWidth(bucket.count) + '%' }\"\n                  />\n                </div>\n              </li>\n            </ul>\n            <p v-else class=\"dispatch-activity-empty\">{{ $t('dispatch.no_pending_backlog') }}</p>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"row dispatch-dashboard-panels\">\n      <div class=\"col-md-12\">\n        <div class=\"card dispatch-panel-card\">\n          <div class=\"card-header\">\n            <h3>{{ $t('dispatch.recent_activity') }}</h3>\n            <router-link to=\"/dispatch/pending\" class=\"dispatch-view-all-link\">\n              {{ $t('dispatch.view_all') }}\n              <font-awesome-icon :icon=\"['fas', 'arrow-right']\" />\n            </router-link>\n          </div>\n          <div class=\"card-body\">\n            <div class=\"dispatch-activity-section\">\n              <h6 class=\"dispatch-activity-section-title\">\n                <font-awesome-icon :icon=\"['fas', 'clock']\" class=\"dispatch-activity-section-icon dispatch-activity-section-icon--pending\" />\n                {{ $t('dispatch.recently_added_pending') }}\n              </h6>\n              <ul v-if=\"recentPending.length\" class=\"dispatch-activity-list\">\n                <router-link\n                  v-for=\"row in recentPending\"\n                  :key=\"'pending-' + row.id\"\n                  :to=\"{ path: `/dispatch/${row.id}/edit` }\"\n                  tag=\"li\"\n                  class=\"dispatch-activity-item\"\n                >\n                  <span class=\"dispatch-activity-party\">{{ row.master ? row.master.name : $t('dispatch.unknown_party') }}</span>\n                  <span class=\"dispatch-activity-invoices\">{{ invoiceSummary(row) }}</span>\n                  <span class=\"dispatch-activity-meta\">{{ formatDate(row.created_at) }}</span>\n                </router-link>\n              </ul>\n              <p v-else class=\"dispatch-activity-empty\">{{ $t('dispatch.no_recent_pending') }}</p>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport moment from 'moment'\n\nexport default {\n  data () {\n    return {\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home'),\n        },\n        {\n          url: '#',\n          title: this.$t('dispatch.dashboard_title'),\n        },\n      ],\n    }\n  },\n  computed: {\n    ...mapGetters('dispatch', ['dashboardCounts']),\n    counts () {\n      return this.dashboardCounts\n    },\n    recentPending () {\n      return this.counts.recent_pending || []\n    },\n    topPendingParties () {\n      return this.counts.top_pending_parties || []\n    },\n    pendingAging () {\n      return this.counts.pending_aging || []\n    },\n  },\n  created () {\n    this.fetchDispatchDashboard()\n  },\n  methods: {\n    ...mapActions('dispatch', ['fetchDispatchDashboard']),\n    formatDate (value) {\n      return value ? moment(value).format('DD MMM YYYY') : ''\n    },\n    invoiceSummary (row) {\n      if (!row.invoices || !row.invoices.length) {\n        return ''\n      }\n      if (row.invoices.length === 1) {\n        return row.invoices[0].invoice_number\n      }\n      return `${row.invoices[0].invoice_number} +${row.invoices.length - 1} more`\n    },\n    partyBarWidth (count) {\n      const max = Math.max(...this.topPendingParties.map((p) => p.pending_count), 1)\n      return Math.max(Math.round((count / max) * 100), 6)\n    },\n    agingBarWidth (count) {\n      const max = Math.max(...this.pendingAging.map((b) => b.count), 1)\n      return Math.max(Math.round((count / max) * 100), 6)\n    },\n  },\n}\n</script>\n\n<style scoped>\n.dispatch-dashboard-cards {\n  margin-top: 30px;\n}\n.dispatch-dashboard-card-link {\n  display: block;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it renders as a distorted blob on a block-level card like this one. */\n.dispatch-dashboard-card-link:hover,\n.dispatch-dashboard-card-link:focus {\n  padding: 0 !important;\n  border: none !important;\n  border-radius: 0 !important;\n  color: inherit !important;\n}\n.dispatch-dashboard-card {\n  border-radius: 10px;\n  border-top: 3px solid #55547a;\n}\n.dispatch-dashboard-card .card-body {\n  display: flex;\n  align-items: center;\n  padding: 24px;\n}\n.dispatch-dashboard-card--dispatched {\n  border-top-color: #29c76f;\n}\n.dispatch-dashboard-card--total {\n  border-top-color: #6a94f0;\n}\n.dispatch-dashboard-card-icon {\n  flex: 0 0 auto;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  width: 52px;\n  height: 52px;\n  margin-right: 18px;\n  border-radius: 50%;\n  background: rgba(85, 84, 122, 0.1);\n  color: #55547a;\n  font-size: 20px;\n}\n.dispatch-dashboard-card--dispatched .dispatch-dashboard-card-icon {\n  background: rgba(41, 199, 111, 0.12);\n  color: #29c76f;\n}\n.dispatch-dashboard-card--total .dispatch-dashboard-card-icon {\n  background: rgba(106, 148, 240, 0.12);\n  color: #6a94f0;\n}\n.dispatch-dashboard-card-text {\n  flex: 1 1 auto;\n  min-width: 0;\n}\n.dispatch-dashboard-card-label {\n  margin-bottom: 2px;\n  color: #74767f;\n  font-size: 13px;\n  font-weight: 600;\n  letter-spacing: 0.03em;\n  text-transform: uppercase;\n}\n.dispatch-dashboard-card-value {\n  margin-bottom: 0;\n  font-size: 30px;\n  font-weight: 700;\n  color: #2b2b40;\n}\n.dispatch-dashboard-card-arrow {\n  flex: 0 0 auto;\n  color: #c4c4d0;\n  font-size: 14px;\n}\n\n/* Recent activity / top parties panels */\n.dispatch-dashboard-panels {\n  margin-top: 24px;\n}\n.dispatch-panel-card {\n  height: 100%;\n}\n.dispatch-panel-card .card-header {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n.dispatch-panel-card .card-header h3 {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 700;\n}\n.dispatch-view-all-link,\n.dispatch-view-all-link:hover,\n.dispatch-view-all-link:focus {\n  flex: 0 0 auto;\n  margin-left: auto;\n  padding: 0 !important;\n  border: none !important;\n  border-radius: 0 !important;\n  font-size: 13px;\n  font-weight: 600;\n  color: #55547a !important;\n  text-decoration: none !important;\n  white-space: nowrap;\n}\n.dispatch-view-all-link svg {\n  margin-left: 4px;\n  font-size: 11px;\n}\n.dispatch-activity-section + .dispatch-activity-section {\n  margin-top: 26px;\n}\n.dispatch-activity-section-title {\n  display: flex;\n  align-items: center;\n  margin-bottom: 12px;\n  color: #74767f;\n  font-size: 12px;\n  font-weight: 700;\n  letter-spacing: 0.03em;\n  text-transform: uppercase;\n}\n.dispatch-activity-section-icon {\n  margin-right: 8px;\n  font-size: 13px;\n}\n.dispatch-activity-section-icon--pending {\n  color: #55547a;\n}\n.dispatch-activity-list {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.dispatch-activity-item {\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  padding: 10px 8px;\n  border-radius: 6px;\n  cursor: pointer;\n  color: inherit;\n  text-decoration: none;\n}\n.dispatch-activity-item:hover {\n  background: #f5f6fa;\n}\n.dispatch-activity-item + .dispatch-activity-item {\n  border-top: 1px solid #f0f0f4;\n}\n.dispatch-activity-party {\n  flex: 0 0 auto;\n  max-width: 40%;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 600;\n  color: #2b2b40;\n}\n.dispatch-activity-invoices {\n  flex: 1 1 auto;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  color: #74767f;\n  font-size: 13px;\n}\n.dispatch-activity-meta {\n  flex: 0 0 auto;\n  color: #a4a6b3;\n  font-size: 12px;\n  white-space: nowrap;\n}\n.dispatch-activity-empty {\n  margin: 0;\n  color: #a4a6b3;\n  font-size: 13px;\n}\n\n/* Top parties list */\n.dispatch-party-list {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n}\n.dispatch-party-item + .dispatch-party-item {\n  margin-top: 16px;\n}\n.dispatch-party-row {\n  display: flex;\n  align-items: baseline;\n  justify-content: space-between;\n  margin-bottom: 6px;\n}\n.dispatch-party-name {\n  font-weight: 600;\n  color: #2b2b40;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  margin-right: 12px;\n}\n.dispatch-party-count {\n  flex: 0 0 auto;\n  color: #74767f;\n  font-size: 13px;\n  font-weight: 700;\n}\n.dispatch-party-bar-track {\n  height: 6px;\n  border-radius: 3px;\n  background: #f0f0f4;\n  overflow: hidden;\n}\n.dispatch-party-bar-fill {\n  height: 100%;\n  border-radius: 3px;\n  background: linear-gradient(90deg, #55547a, #6a94f0);\n}\n/* Aging buckets - green (fresh) through amber to red (stale), so severity\n   reads at a glance instead of needing to compare numbers. */\n.dispatch-party-bar-fill--recent {\n  background: #29c76f;\n}\n.dispatch-party-bar-fill--month {\n  background: #f0ad4e;\n}\n.dispatch-party-bar-fill--old {\n  background: #e0554f;\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -86800,6 +89033,60 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n.table-actions[data-v-91dcb660] {\n  height: 55px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Index.vue"],"names":[],"mappings":";AAm3BA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$tc('dispatch.dispatch', 2)\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div v-show=\"totalDispatch || filtersApplied\" class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n\n        <router-link slot=\"item-title\" to=\"dispatch/create\">\n          <base-button\n            color=\"theme\"\n            icon=\"plus\"\n            size=\"large\"\n          >\n            {{ $t('dispatch.new_dispatch') }}\n          </base-button>\n        </router-link>\n        </div>\n       </Header>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n           <label>{{ $t('general.from') }}</label>\n              <base-date-picker\n                v-model=\"filters.from_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-3\">\n           <label>{{ $t('general.to') }}</label>\n              <base-date-picker\n                v-model=\"filters.to_date\"\n                :calendar-button=\"true\"\n                calendar-button-icon=\"calendar\"\n              />\n\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.transport') }} </label>\n            <base-input\n              v-model=\"filters.transport\"\n              type=\"text\"\n              name=\"transport\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>To Be Dispatch</h4>\n        <base-button\n            v-show=\"toBeDispatchedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            :style=\"['position: absolute',' margin-right: 5%']\"\n            right-icon\n            @click=\"printToBeDispatch\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <!-- <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"multipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item> -->\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('draft')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n          <!-- <span class=\"select-to-be-all-label\">{{ $t('general.select_all') }} </span> -->\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.dispatch') }}\n              </div>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n        <template slot-scope=\"row\">\n            <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n          <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n          </router-link>\n        </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n             <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <!-- <p class=\"table-stats\">{{ $t('general.showing') }}: <b>{{ dispatch.length }}</b> {{ $t('general.of') }} <b>{{ totalDispatch }}</b></p> -->\n        <h4>Dispatched</h4>\n          <base-button\n            v-show=\"dipatchedCompletedData\"\n            :outline=\"true\"\n            :icon=\"['fas', 'print']\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"printDispatched\"\n          >\n            Print\n          </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedDispatch && selectedDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch('sent')\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-all\"\n          v-model=\"selectAllFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllDispatch\"\n        >\n        <label v-show=\"!isRequestOngoing\" for=\"select-all\" class=\"custom-control-label selectall\">\n          <span class=\"select-all-label\">{{ $t('general.select_all') }} </span>\n        </label>\n      </div>\n\n      <table-component\n        ref=\"tableDispatch\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n        <template slot-scope=\"row\">\n          <span> {{ $t('dispatch.action') }} </span>\n          <v-dropdown>\n            <span slot=\"activator\" href=\"#\">\n              <dot-icon />\n            </span>\n            <v-dropdown-item>\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.edit') }}\n              </router-link>\n            </v-dropdown-item>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </template>\n      </table-column>\n      </table-component>\n\n      <!-- print table here -->\n      <table-component\n        id=\"to_print_dispatched\"\n        ref=\"tableDispatch1\"\n        :data=\"dipatchedCompletedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"row.id\"\n                v-model=\"selectField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n       <table-column :label=\"$t('dispatch.invoice_id')\">\n          <template slot-scope=\"row\">\n              <router-link :to=\"{path: `dispatch/${row.id}/edit`}\" >\n                <span> {{ $t('dispatch.invoice_id') }} </span>\n\n                <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n              <span> {{ $t('dispatch.name') }} </span>\n              <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <!-- <table-column\n          :label=\"$t('dispatch.status')\"\n          show=\"status\"\n        /> -->\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\nbody > .expandable-image.expanded {\n  width: 100% !important;\n}\n#to_print_dispatched, #to_print_to_be_dispatch {\n  display:none;\n}\n.expandable-image{\n  width: 100px;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      id: null,\n      sundryDebtorsList: [],\n      change_invoice: false,\n      breadCrumbLinks:[\n        {\n          url:'dashboard',\n          title:this.$t('general.home'),\n        },\n        {\n          url:'#',\n          title:this.$tc('dispatch.dispatch', 2)\n        }\n      ],\n      showFilters: false,\n      sortedBy: 'created_at',\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        name: '',\n        date_time: '',\n        status: '',\n        transport: '',\n        from_date: '',\n        to_date: ''\n      },\n      index: null,\n    }\n  },\n  computed: {\n      applyFilter() {\n        if (this.filters.name || this.filters.from_date ||  this.filters.to_date ||  this.filters.transport || this.filters.status) {\n          return true;\n        }\n        return false;\n    },\n    ...mapGetters('dispatch', [\n      'dispatch',\n      'toBeDispatch',\n      'selectedDispatch',\n      'selectedToBeDispatch',\n      'totalDispatch',\n      'selectAllField',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalDispatch && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectField: {\n      get: function () {\n        return this.selectedDispatch\n      },\n      set: function (val) {\n        this.selectDispatch(val)\n      }\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllFieldStatus: {\n      get: function () {\n        return this.selectAllField\n      },\n      set: function (val) {\n        this.setSelectAllState(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllField) {\n      this.selectAllDispatch()\n    }\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'dipatchedData',\n      'updateDispatch',\n      'selectAllDispatch',\n      'selectAllToBeDispatch',\n      'selectDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllState',\n      'setSelectAllToBeState',\n      'moveMultipleDispatch',\n      'moveMultipleToBeDispatch',\n    ]),\n    refreshTable () {\n      this.$refs.tableDispatch.refresh()\n      this.$refs.tableDispatch1.refresh()\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList;\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    async dipatchedCompletedData ({ page, filter, sort }) {\n      let data = {\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        transport: this.filters.transport !== null ? this.filters.transport : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.dipatchedData(data)\n      this.isRequestOngoing = false\n      return {\n        data: response.data.dispatch_completed.data,\n        pagination: {\n          totalPages: response.data.dispatch_completed.last_page,\n          currentPage: response.data.dispatch_completed.current_page,\n        }\n      }\n    },\n    setFilters () {\n      if (this.timer) {\n          clearTimeout(this.timer);\n          this.timer = null;\n      }\n      this.timer = setTimeout(() => {\n\t\t\t\tthis.filtersApplied = true\n        this.refreshTable();\n\t\t\t}, 1000);\n    },\n    clearFilter () {\n       this.filtersApplied = false;\n      this.showFilters=false;\n      this.filters = {\n        name: '',\n        from_date: '',\n        to_date: '',\n        status: '',\n        transport: ''\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch (type) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          const ids = 'draft' === type ? this.selectedToBeDispatch : this.selectedDispatch;\n          let res = await this.deleteMultipleDispatch(ids)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.$refs.tableDispatch.refresh()\n            this.$refs.toBeTableDispatch.refresh()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    // async multipleDispatch (type) {\n    //   let dispatchArray = this.dispatch.filter((i) => this.selectedDispatch.includes(i.id));\n    //   let tobeDispatchArray = this.toBeDispatch.filter((i) => this.selectedToBeDispatch.includes(i.id));\n    //   let modal_text = this.$tc('dispatch.confirm_to_be_dispatch', 2);\n    //   if (type === 'draft') {\n    //     modal_text = this.$tc('dispatch.confirm_dispatch', 2);\n    //   }\n    //   swal({\n    //     title: this.$t('general.are_you_sure'),\n    //     text: modal_text,\n    //     icon: '/assets/icon/paper-plane-solid.svg',\n    //     buttons: true,\n    //     dangerMode: false\n    //   }).then(async (willSend) => {\n    //     if (willSend) {\n    //       if ('sent' === type) {\n    //         let name = '';\n    //         dispatchArray.map(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              return\n    //           }\n    //         });\n    //         let res = await this.moveMultipleDispatch(this.selectedDispatch)\n    //         if (res) {\n    //           window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //           window.location.reload()\n    //         } else {\n    //           window.toastr['error'](res.data.message)\n    //         }\n    //       } else {\n    //         let name = '';\n    //         let allowMoving = true;\n    //         let showEdit = [];\n    //         tobeDispatchArray.some(i => {\n    //           if (name && name !== i.master.name) {\n    //              window.toastr['error']('To move multiple dispatch, party name should be same.')\n    //              allowMoving = false\n    //              return true\n    //           }\n    //           name = i.master.name\n    //           if (!i.person || !i.transport || i.invoices && !i.invoices.length) {\n    //             showEdit.push(i)\n    //             allowMoving = false\n    //           }\n    //         })\n    //         if (showEdit.length) {\n    //           showEdit.map(i => {\n    //             window.open('/dispatch/' + i.id + '/edit', '_blank').focus()\n    //           })\n    //         }\n    //         if (allowMoving) {\n    //           let res = await this.moveMultipleDispatch(this.selectedToBeDispatch)\n    //           if (res) {\n    //             window.toastr['success'](this.$tc('dispatch.multiple_dispatch_message', 2))\n    //             window.location.reload()\n    //           } else {\n    //             window.toastr['error'](res.data.message)\n    //           }\n    //         }\n    //       }\n    //     }\n    //   })\n    // },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id);\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n          id: 2,\n          name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus();\n        } else {\n          let res = await this.updateDispatch(data);\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    setIndex(index) {\n      this.index = index\n    },\n    printToBeDispatch() {\n        printJS({\n          printable: 'to_print_to_be_dispatch',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    },\n    printDispatched() {\n\n        printJS({\n          printable: 'to_print_dispatched',\n          type: 'html',\n          ignoreElements: ['no-print-check', 'no-print-option'],\n          scanStyles: true,\n          targetStyles: ['*'],\n          style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n        })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n</style>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n#to_print_to_be_dispatch {\n  display:none;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Pending.vue"],"names":[],"mappings":";AAiUA;EACA,YAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('dispatch.to_be_dispatched_page_title')\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n          <router-link slot=\"item-title\" to=\"/dispatch/create\">\n            <base-button\n              color=\"theme\"\n              icon=\"plus\"\n              size=\"large\"\n            >\n              {{ $t('dispatch.new_dispatch') }}\n            </base-button>\n          </router-link>\n        </div>\n      </Header>\n    </div>\n\n    <div class=\"dispatch-toolbar row\">\n      <div class=\"col-md-5\">\n        <base-input\n          v-model.trim=\"filters.search\"\n          type=\"text\"\n          name=\"search\"\n          autocomplete=\"off\"\n          :placeholder=\"$t('dispatch.search_placeholder')\"\n        />\n      </div>\n      <div class=\"col-md-4\">\n        <base-select\n          v-model=\"filters.name\"\n          ref=\"toolbarCustomerSelect\"\n          :options=\"sundryDebtorsList\"\n          :searchable=\"true\"\n          :show-labels=\"false\"\n          :allow-empty=\"true\"\n          :placeholder=\"$tc('items.party_name')\"\n          label=\"name\"\n          track-by=\"id\"\n          @select=\"onSelectCustomer\"\n          @deselect=\"clearCustomerSearch\"\n        />\n      </div>\n      <div class=\"col-md-3\">\n        <base-select\n          v-model=\"filters.dateFilter\"\n          :options=\"dateFilterOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label>{{ $t('general.from') }}</label>\n            <base-date-picker\n              v-model=\"filters.from_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label>{{ $t('general.to') }}</label>\n            <base-date-picker\n              v-model=\"filters.to_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('/dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <h4>{{ $t('dispatch.to_be_dispatched') }}</h4>\n        <base-button\n          v-show=\"toBeDispatchedData\"\n          :outline=\"true\"\n          :icon=\"['fas', 'print']\"\n          color=\"theme\"\n          size=\"large\"\n          :style=\"['position: absolute',' margin-right: 5%']\"\n          right-icon\n          @click=\"printToBeDispatch\"\n        >\n          Print\n        </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.action') }} </span>\n            <v-dropdown>\n              <span slot=\"activator\" href=\"#\">\n                <dot-icon />\n              </span>\n              <v-dropdown-item>\n                <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                  <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.dispatch') }}\n                </div>\n              </v-dropdown-item>\n              <v-dropdown-item>\n                <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                  <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.edit') }}\n                </router-link>\n              </v-dropdown-item>\n              <v-dropdown-item>\n                <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                  <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.delete') }}\n                </div>\n              </v-dropdown-item>\n            </v-dropdown>\n          </template>\n        </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\n#to_print_to_be_dispatch {\n  display:none;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      sundryDebtorsList: [],\n      totalPending: 0,\n      dateFilterOptions: [\n        { value: 'today', label: this.$t('dispatch.date_filter_today') },\n        { value: 'yesterday', label: this.$t('dispatch.date_filter_yesterday') },\n        { value: 'next_day', label: this.$t('dispatch.date_filter_next_day') },\n        { value: 'this_week', label: this.$t('dispatch.date_filter_this_week') },\n        { value: 'this_month', label: this.$t('dispatch.date_filter_this_month') },\n        { value: 'all', label: this.$t('dispatch.date_filter_all') },\n      ],\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home'),\n        },\n        {\n          url: '/dispatch/dashboard',\n          title: this.$t('dispatch.dashboard_title'),\n        },\n        {\n          url: '#',\n          title: this.$t('dispatch.to_be_dispatched_page_title'),\n        },\n      ],\n      showFilters: false,\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        search: '',\n        name: '',\n        status: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: { value: 'today', label: this.$t('dispatch.date_filter_today') },\n      },\n    }\n  },\n  computed: {\n    applyFilter () {\n      if (this.filters.name || this.filters.from_date || this.filters.to_date || this.filters.status) {\n        return true\n      }\n      return false\n    },\n    ...mapGetters('dispatch', [\n      'toBeDispatch',\n      'selectedToBeDispatch',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalPending && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'fetchPendingDispatch',\n      'updateDispatch',\n      'selectAllToBeDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllToBeState',\n    ]),\n    refreshTable () {\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        search: this.filters.search || '',\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        date_filter: this.filters.dateFilter ? this.filters.dateFilter.value : 'today',\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.fetchPendingDispatch(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList\n      this.totalPending = response.data.dispatch_inprogress.total\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    setFilters () {\n      if (this.timer) {\n        clearTimeout(this.timer)\n        this.timer = null\n      }\n      this.timer = setTimeout(() => {\n        this.filtersApplied = true\n        this.refreshTable()\n      }, 1000)\n    },\n    clearFilter () {\n      this.filtersApplied = false\n      this.showFilters = false\n      this.filters = {\n        search: '',\n        name: '',\n        status: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: this.dateFilterOptions[0],\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.refreshTable()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteMultipleDispatch(this.selectedToBeDispatch)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.refreshTable()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id)\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n        id: 2,\n        name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus()\n        } else {\n          let res = await this.updateDispatch(data)\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    printToBeDispatch () {\n      printJS({\n        printable: 'to_print_to_be_dispatch',\n        type: 'html',\n        ignoreElements: ['no-print-check', 'no-print-option'],\n        scanStyles: true,\n        targetStyles: ['*'],\n        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n      })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n.dispatch-toolbar {\n  margin: 25px 0 20px;\n  align-items: center;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it distorts any link wrapping a button, table row, or dropdown item.\n   Only border/border-radius are reset (those are the ones marked !important\n   in the global rule and cause the visible glitch) - padding is deliberately\n   left alone so elements with their own real padding (e.g. .dropdown-item,\n   set in tables.scss) aren't stripped of it, which misaligned the Edit\n   dropdown item (a router-link) against the Delete item (a plain div). */\na:hover,\na:focus {\n  border: none !important;\n  border-radius: 0 !important;\n}\n</style>\n"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css":
+/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js */ "./node_modules/laravel-mix/node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.table-actions[data-v-6a781995] {\n  height: 55px;\n}\n.dispatch-toolbar[data-v-6a781995] {\n  margin: 25px 0 20px;\n  align-items: center;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it distorts any link wrapping a button, table row, or dropdown item.\n   Only border/border-radius are reset (those are the ones marked !important\n   in the global rule and cause the visible glitch) - padding is deliberately\n   left alone so elements with their own real padding (e.g. .dropdown-item,\n   set in tables.scss) aren't stripped of it, which misaligned the Edit\n   dropdown item (a router-link) against the Delete item (a plain div). */\na[data-v-6a781995]:hover,\na[data-v-6a781995]:focus {\n  border: none !important;\n  border-radius: 0 !important;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/dispatch/Pending.vue"],"names":[],"mappings":";AAmkBA;EACA,YAAA;AACA;AACA;EACA,mBAAA;EACA,mBAAA;AACA;AACA;;;;;;;yEAOA;AACA;;EAEA,uBAAA;EACA,2BAAA;AACA","sourcesContent":["<template>\n  <div class=\"items main-content\">\n    <div class=\"page-header\">\n      <Header :title=\"$t('dispatch.to_be_dispatched_page_title')\" :bread-crumb-links=\"breadCrumbLinks\">\n        <div class=\"mr-4 mb-3 mb-sm-0\">\n          <base-button\n            :outline=\"true\"\n            :icon=\"filterIcon\"\n            color=\"theme\"\n            size=\"large\"\n            right-icon\n            @click=\"toggleFilter\"\n          >\n            {{ $t('general.filter') }}\n          </base-button>\n        </div>\n        <div>\n          <router-link slot=\"item-title\" to=\"/dispatch/create\">\n            <base-button\n              color=\"theme\"\n              icon=\"plus\"\n              size=\"large\"\n            >\n              {{ $t('dispatch.new_dispatch') }}\n            </base-button>\n          </router-link>\n        </div>\n      </Header>\n    </div>\n\n    <div class=\"dispatch-toolbar row\">\n      <div class=\"col-md-5\">\n        <base-input\n          v-model.trim=\"filters.search\"\n          type=\"text\"\n          name=\"search\"\n          autocomplete=\"off\"\n          :placeholder=\"$t('dispatch.search_placeholder')\"\n        />\n      </div>\n      <div class=\"col-md-4\">\n        <base-select\n          v-model=\"filters.name\"\n          ref=\"toolbarCustomerSelect\"\n          :options=\"sundryDebtorsList\"\n          :searchable=\"true\"\n          :show-labels=\"false\"\n          :allow-empty=\"true\"\n          :placeholder=\"$tc('items.party_name')\"\n          label=\"name\"\n          track-by=\"id\"\n          @select=\"onSelectCustomer\"\n          @deselect=\"clearCustomerSearch\"\n        />\n      </div>\n      <div class=\"col-md-3\">\n        <base-select\n          v-model=\"filters.dateFilter\"\n          :options=\"dateFilterOptions\"\n          :searchable=\"false\"\n          :show-labels=\"false\"\n          :allow-empty=\"false\"\n          label=\"label\"\n          track-by=\"value\"\n        />\n      </div>\n    </div>\n\n    <transition name=\"fade\">\n      <div v-show=\"showFilters\" class=\"filter-section\">\n        <div class=\"row\">\n          <div class=\"col-sm-3\">\n            <label class=\"form-label\"> {{ $tc('items.party_name') }} </label>\n            <base-select\n              v-model=\"filters.name\"\n              ref=\"customerSelect\"\n              :options=\"sundryDebtorsList\"\n              :required=\"'required'\"\n              :searchable=\"true\"\n              :show-labels=\"false\"\n              :allow-empty=\"false\"\n              label=\"name\"\n              track-by=\"id\"\n              @select=\"onSelectCustomer\"\n              @deselect=\"clearCustomerSearch\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label>{{ $t('general.from') }}</label>\n            <base-date-picker\n              v-model=\"filters.from_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <div class=\"col-sm-3\">\n            <label>{{ $t('general.to') }}</label>\n            <base-date-picker\n              v-model=\"filters.to_date\"\n              :calendar-button=\"true\"\n              calendar-button-icon=\"calendar\"\n            />\n          </div>\n          <div class=\"col-sm-2\">\n            <label class=\"form-label\"> {{ $tc('dispatch.status') }} </label>\n            <base-input\n              v-model.trim=\"filters.status\"\n              type=\"text\"\n              name=\"status\"\n              autocomplete=\"off\"\n            />\n          </div>\n          <label class=\"clear-filter\" @click=\"clearFilter\"> {{ $t('general.clear_all') }}</label>\n        </div>\n      </div>\n    </transition>\n\n    <div v-cloak v-show=\"showEmptyScreen\" class=\"col-xs-1 no-data-info\" align=\"center\">\n      <satellite-icon class=\"mt-5 mb-4\"/>\n      <div class=\"row\" align=\"center\">\n        <label class=\"col title\">{{ $t('dispatch.no_dispatch') }}</label>\n      </div>\n      <div class=\"row\">\n        <label class=\"description col mt-1\" align=\"center\">{{ $t('dispatch.list_of_dispatch') }}</label>\n      </div>\n      <div class=\"btn-container\">\n        <base-button\n          :outline=\"true\"\n          color=\"theme\"\n          class=\"mt-3\"\n          size=\"large\"\n          @click=\"$router.push('/dispatch/create')\"\n        >\n          {{ $t('dispatch.add_new_dispatch') }}\n        </base-button>\n      </div>\n    </div>\n\n    <div v-show=\"!showEmptyScreen\" class=\"table-container\">\n      <div class=\"table-actions mt-5\">\n        <h4>{{ $t('dispatch.to_be_dispatched') }}</h4>\n        <base-button\n          v-show=\"toBeDispatchedData\"\n          :outline=\"true\"\n          :icon=\"['fas', 'print']\"\n          color=\"theme\"\n          size=\"large\"\n          :style=\"['position: absolute',' margin-right: 5%']\"\n          right-icon\n          @click=\"printToBeDispatch\"\n        >\n          Print\n        </base-button>\n        <transition name=\"fade\">\n          <v-dropdown v-if=\"selectedToBeDispatch && selectedToBeDispatch.length\" :show-arrow=\"false\">\n            <span slot=\"activator\" href=\"#\" class=\"table-actions-button dropdown-toggle\">\n              {{ $t('general.actions') }}\n            </span>\n            <v-dropdown-item>\n              <div class=\"dropdown-item\" @click=\"removeMultipleDispatch\">\n                <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                {{ $t('general.delete') }}\n              </div>\n            </v-dropdown-item>\n          </v-dropdown>\n        </transition>\n      </div>\n\n      <div class=\"custom-control custom-checkbox\">\n        <input\n          id=\"select-to-be-all\"\n          v-model=\"selectAllToBeFieldStatus\"\n          type=\"checkbox\"\n          class=\"custom-control-input\"\n          @change=\"selectAllToBeDispatch\"\n        />\n        <label v-show=\"!isRequestOngoing\" for=\"select-to-be-all\" class=\"custom-control-label selectall\">\n        </label>\n      </div>\n\n      <table-component\n        ref=\"toBeTableDispatch\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length\">{{ row.invoices.map(i => ' ' + i.invoice_number).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.master\">{{ row.master.name }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"action-dropdown\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.action') }} </span>\n            <v-dropdown>\n              <span slot=\"activator\" href=\"#\">\n                <dot-icon />\n              </span>\n              <v-dropdown-item>\n                <div @click=\"singleDispatch(row.id)\" class=\"dropdown-item\">\n                  <font-awesome-icon :icon=\"['fas', 'circle']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.dispatch') }}\n                </div>\n              </v-dropdown-item>\n              <v-dropdown-item>\n                <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" class=\"dropdown-item\">\n                  <font-awesome-icon :icon=\"['fas', 'pencil-alt']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.edit') }}\n                </router-link>\n              </v-dropdown-item>\n              <v-dropdown-item>\n                <div class=\"dropdown-item\" @click=\"removeDispatch(row.id)\">\n                  <font-awesome-icon :icon=\"['fas', 'trash']\" class=\"dropdown-item-icon\" />\n                  {{ $t('general.delete') }}\n                </div>\n              </v-dropdown-item>\n            </v-dropdown>\n          </template>\n        </table-column>\n      </table-component>\n\n      <!--  print table -->\n      <table-component\n        id=\"to_print_to_be_dispatch\"\n        ref=\"toBeTableDispatch1\"\n        :data=\"toBeDispatchedData\"\n        :show-filter=\"false\"\n        table-class=\"table\"\n      >\n        <table-column\n          :sortable=\"false\"\n          :filterable=\"false\"\n          cell-class=\"no-click\"\n        >\n          <template slot-scope=\"row\">\n            <div class=\"custom-control custom-checkbox\">\n              <input\n                :id=\"'to_be_' + row.id\"\n                v-model=\"selectToBeField\"\n                :value=\"row.id\"\n                type=\"checkbox\"\n                class=\"custom-control-input\"\n              >\n              <label :for=\"'to_be_' + row.id\" class=\"custom-control-label\"/>\n            </div>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.invoice_id')\"\n        >\n          <template slot-scope=\"row\">\n            <router-link :to=\"{path: `/dispatch/${row.id}/edit`}\" >\n              <span> {{ $t('dispatch.invoice_id') }} </span>\n              <span v-if=\"row.invoices.length \">{{ row.invoices.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i).map(i => ' ' + i.invoice_number + '*' + row.invoices.filter(j=>j.account_master_id===i.account_master_id).length).toString() }}</span>\n            </router-link>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.name')\"\n        >\n          <template slot-scope=\"row\">\n            <span> {{ $t('dispatch.name') }} </span>\n            <span v-if=\"row.invoices.length && row.invoices[0].master\">{{ row.invoices.map(i => ' ' + i.master.name).toString() }}</span>\n          </template>\n        </table-column>\n        <table-column\n          :label=\"$t('dispatch.date_time')\"\n          show=\"date_time\"\n        />\n        <table-column\n          :label=\"$t('dispatch.transport')\"\n          show=\"transport\"\n        />\n      </table-component>\n    </div>\n  </div>\n</template>\n<style>\n#to_print_to_be_dispatch {\n  display:none;\n}\n</style>\n<script>\nimport { mapActions, mapGetters } from 'vuex'\nimport DotIcon from '../../components/icon/DotIcon'\nimport moment from 'moment'\nimport SatelliteIcon from '../../components/icon/SatelliteIcon'\nimport BaseButton from '../../../js/components/base/BaseButton'\n\nexport default {\n  components: {\n    DotIcon,\n    SatelliteIcon,\n    BaseButton,\n  },\n  data () {\n    return {\n      sundryDebtorsList: [],\n      totalPending: 0,\n      dateFilterOptions: [\n        { value: 'today', label: this.$t('dispatch.date_filter_today') },\n        { value: 'yesterday', label: this.$t('dispatch.date_filter_yesterday') },\n        { value: 'next_day', label: this.$t('dispatch.date_filter_next_day') },\n        { value: 'this_week', label: this.$t('dispatch.date_filter_this_week') },\n        { value: 'this_month', label: this.$t('dispatch.date_filter_this_month') },\n        { value: 'all', label: this.$t('dispatch.date_filter_all') },\n      ],\n      breadCrumbLinks: [\n        {\n          url: 'dashboard',\n          title: this.$t('general.home'),\n        },\n        {\n          url: '/dispatch/dashboard',\n          title: this.$t('dispatch.dashboard_title'),\n        },\n        {\n          url: '#',\n          title: this.$t('dispatch.to_be_dispatched_page_title'),\n        },\n      ],\n      showFilters: false,\n      isRequestOngoing: true,\n      filtersApplied: false,\n      filters: {\n        search: '',\n        name: '',\n        status: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: { value: 'today', label: this.$t('dispatch.date_filter_today') },\n      },\n    }\n  },\n  computed: {\n    applyFilter () {\n      if (this.filters.name || this.filters.from_date || this.filters.to_date || this.filters.status) {\n        return true\n      }\n      return false\n    },\n    ...mapGetters('dispatch', [\n      'toBeDispatch',\n      'selectedToBeDispatch',\n      'selectAllToBeField'\n    ]),\n    showEmptyScreen () {\n      return !this.totalPending && !this.isRequestOngoing && !this.filtersApplied\n    },\n    filterIcon () {\n      return (this.showFilters) ? 'times' : 'filter'\n    },\n    selectToBeField: {\n      get: function () {\n        return this.selectedToBeDispatch\n      },\n      set: function (val) {\n        this.selectToBeDispatch(val)\n      }\n    },\n    selectAllToBeFieldStatus: {\n      get: function () {\n        return this.selectAllToBeField\n      },\n      set: function (val) {\n        this.setSelectAllToBeState(val)\n      }\n    }\n  },\n  watch: {\n    filters: {\n      handler: 'setFilters',\n      deep: true\n    }\n  },\n  destroyed () {\n    if (this.selectAllToBeField) {\n      this.selectAllToBeDispatch()\n    }\n  },\n  methods: {\n    ...mapActions('dispatch', [\n      'fetchPendingDispatch',\n      'updateDispatch',\n      'selectAllToBeDispatch',\n      'selectToBeDispatch',\n      'deleteDispatch',\n      'deleteMultipleDispatch',\n      'setSelectAllToBeState',\n    ]),\n    refreshTable () {\n      this.$refs.toBeTableDispatch1.refresh()\n      this.$refs.toBeTableDispatch.refresh()\n    },\n    async toBeDispatchedData ({ page, filter, sort }) {\n      let data = {\n        search: this.filters.search || '',\n        name: this.filters.name === '' ? this.filters.name : this.filters.name.id,\n        status: this.filters.status !== null ? this.filters.status : '',\n        from_date: this.filters.from_date === '' ? this.filters.from_date : moment(this.filters.from_date).format('DD/MM/YYYY'),\n        to_date: this.filters.to_date === '' ? this.filters.to_date : moment(this.filters.to_date).format('DD/MM/YYYY'),\n        date_filter: this.filters.dateFilter ? this.filters.dateFilter.value : 'today',\n        orderByField: sort.fieldName || 'created_at',\n        orderBy: sort.order || 'desc',\n        filterBy: this.applyFilter,\n        page\n      }\n\n      this.isRequestOngoing = true\n      let response = await this.fetchPendingDispatch(data)\n      this.isRequestOngoing = false\n      this.sundryDebtorsList = response.data.sundryDebtorsList\n      this.totalPending = response.data.dispatch_inprogress.total\n      return {\n        data: response.data.dispatch_inprogress.data,\n        pagination: {\n          totalPages: response.data.dispatch_inprogress.last_page,\n          currentPage: response.data.dispatch_inprogress.current_page,\n        }\n      }\n    },\n    onSelectCustomer (customer) {\n      this.filters.name = customer\n    },\n    async clearCustomerSearch (removedOption, id) {\n      this.filters.name = ''\n      this.refreshTable()\n    },\n    setFilters () {\n      if (this.timer) {\n        clearTimeout(this.timer)\n        this.timer = null\n      }\n      this.timer = setTimeout(() => {\n        this.filtersApplied = true\n        this.refreshTable()\n      }, 1000)\n    },\n    clearFilter () {\n      this.filtersApplied = false\n      this.showFilters = false\n      this.filters = {\n        search: '',\n        name: '',\n        status: '',\n        from_date: '',\n        to_date: '',\n        dateFilter: this.dateFilterOptions[0],\n      }\n\n      this.$nextTick(() => {\n        this.filtersApplied = false\n      })\n    },\n    toggleFilter () {\n      if (this.showFilters && this.filtersApplied) {\n        this.clearFilter()\n        this.refreshTable()\n      }\n\n      this.showFilters = !this.showFilters\n    },\n    async removeDispatch (id) {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete'),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteDispatch(id)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 1))\n            this.refreshTable()\n            return true\n          }\n\n          window.toastr['error'](res.data.message)\n          return true\n        }\n      })\n    },\n    async removeMultipleDispatch () {\n      swal({\n        title: this.$t('general.are_you_sure'),\n        text: this.$tc('dispatch.confirm_delete', 2),\n        icon: '/assets/icon/trash-solid.svg',\n        buttons: true,\n        dangerMode: true\n      }).then(async (willDelete) => {\n        if (willDelete) {\n          let res = await this.deleteMultipleDispatch(this.selectedToBeDispatch)\n          if (res.data.dispatch) {\n            window.toastr['success'](this.$tc('dispatch.deleted_message', 2))\n            this.refreshTable()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      })\n    },\n    async singleDispatch (id) {\n      let data = this.toBeDispatch.find(i => i.id === id)\n      data.invoice_id = data.invoices.map(i => i.id.toString())\n      data.status = {\n        id: 2,\n        name: 'Sent',\n      }\n      if (data) {\n        if (!data.person || !data.transport || data.invoices && !data.invoices.length) {\n          window.open('/dispatch/' + id + '/edit', '_blank').focus()\n        } else {\n          let res = await this.updateDispatch(data)\n          if (res.data.dispatch) {\n            window.location.reload()\n          } else if (res.data.error) {\n            window.toastr['error'](res.data.message)\n          }\n        }\n      }\n    },\n    printToBeDispatch () {\n      printJS({\n        printable: 'to_print_to_be_dispatch',\n        type: 'html',\n        ignoreElements: ['no-print-check', 'no-print-option'],\n        scanStyles: true,\n        targetStyles: ['*'],\n        style: '.hide-print {display: none !important;}.table-component__table th, .table-component__table td {padding: 0.75em 1.25em;vertical-align: top;text-align: left;}.table thead th {border: 0;position: relative;top: 25px; botton: 20px;}.table-component__table { min-width: 100%; border-collapse: separate; table-layout: auto; margin-bottom: 0;border-spacing: 0 15px;} .table .table-component__table__body tr {border-radius: 10px;transition: all ease-in-out 0.2s;} .table .table-component__table__body tr:first-child td {border-top: 0;} .table .table-component__table__body td {padding: 0px 15px !important;height: 20px !important;} .table-component td > span:first-child {background: #EBF1FA;color: #55547A;display: none;font-size: 10px;font-weight: bold;padding: 5px;left: 0;position: absolute;text-transform: uppercase;top: 0;}'\n      })\n    }\n  }\n}\n</script>\n<style scoped>\n.table-actions {\n  height: 55px;\n}\n.dispatch-toolbar {\n  margin: 25px 0 20px;\n  align-items: center;\n}\n/* Override the global a:hover/:focus rule (resources/assets/sass/base.scss)\n   which adds a border + elliptical border-radius to every link on hover -\n   it distorts any link wrapping a button, table row, or dropdown item.\n   Only border/border-radius are reset (those are the ones marked !important\n   in the global rule and cause the visible glitch) - padding is deliberately\n   left alone so elements with their own real padding (e.g. .dropdown-item,\n   set in tables.scss) aren't stripped of it, which misaligned the Edit\n   dropdown item (a router-link) against the Delete item (a plain div). */\na:hover,\na:focus {\n  border: none !important;\n  border-radius: 0 !important;\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -87069,7 +89356,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_laravel_mix_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/layouts/partials/TheSiteSidebar.vue"],"names":[],"mappings":";AA6CA;EACA;AACA;AACA;EACA,UAAA;EACA,WAAA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;AACA","sourcesContent":["<template>\n  <div class=\"sidebar-left\">\n    <div class=\"sidebar-body scroll-pane\">\n      <div class=\"side-nav\">\n        <div v-for=\"(menuItems, index) in menu\" :key=\"index\" class=\"menu-group\">\n          <router-link\n            v-for=\"(item, index1) in menuItems.filter((i) =>\n              i.meta.includes(role)\n            )\"\n            :key=\"index1\"\n            :to=\"item.route\"\n            :exact=\"!!item.exact\"\n            class=\"menu-item\"\n            @click.native=\"Toggle\"\n          >\n            <font-awesome-icon :icon=\"item.icon\" class=\"icon menu-icon\" />\n            <span class=\"ml-3 menu-text\">{{ $t(item.title) }}</span>\n          </router-link>\n        </div>\n      </div>\n      <button type=\"button\"  @click=\"showModal\" class=\"btn ml-5 mb-3 btn-default\">\n\n<svg xmlns=\"http://www.w3.org/2000/svg\"  viewBox=\"0 0 50 50\" width=\"30px\" height=\"30px\">\n<path d=\"M 14 4 C 8.4886661 4 4 8.4886661 4 14 L 4 36 C 4 41.511334 8.4886661 46 14 46 L 36 46 C 41.511334 46 46 41.511334 46 36 L 46 14 C 46 8.4886661 41.511334 4 36 4 L 14 4 z M 14 6 L 36 6 C 40.430666 6 44 9.5693339 44 14 L 44 36 C 44 40.430666 40.430666 44 36 44 L 14 44 C 9.5693339 44 6 40.430666 6 36 L 6 14 C 6 9.5693339 9.5693339 6 14 6 z M 18 9 C 15.250484 9 13 11.250484 13 14 L 13 36 C 13 38.749516 15.250484 41 18 41 L 32 41 C 34.749516 41 37 38.749516 37 36 L 37 14 C 37 11.250484 34.749516 9 32 9 L 18 9 z M 18 11 L 32 11 C 33.668484 11 35 12.331516 35 14 L 35 36 C 35 37.668484 33.668484 39 32 39 L 18 39 C 16.331516 39 15 37.668484 15 36 L 15 14 C 15 12.331516 16.331516 11 18 11 z M 18 13 C 17.448 13 17 13.448 17 14 L 17 18 C 17 18.552 17.448 19 18 19 L 32 19 C 32.552 19 33 18.552 33 18 L 33 14 C 33 13.448 32.552 13 32 13 L 18 13 z M 19 21 A 2 2 0 0 0 19 25 A 2 2 0 0 0 19 21 z M 25 21 A 2 2 0 0 0 25 25 A 2 2 0 0 0 25 21 z M 31 21 A 2 2 0 0 0 31 25 A 2 2 0 0 0 31 21 z M 19 27 A 2 2 0 0 0 19 31 A 2 2 0 0 0 19 27 z M 25 27 A 2 2 0 0 0 25 31 A 2 2 0 0 0 25 27 z M 31 27 A 2 2 0 0 0 31 31 A 2 2 0 0 0 31 27 z M 19 33 C 17.895 33 17 33.895 17 35 C 17 36.105 17.895 37 19 37 L 25 37 C 26.105 37 27 36.105 27 35 C 27 33.895 26.105 33 25 33 L 19 33 z M 31 33 A 2 2 0 0 0 31 37 A 2 2 0 0 0 31 33 z\"/>\n</svg>\n</button>\n       <div class=\"modal\" id=\"showModal\">\n  <div class=\"modal-dialog mt-5 pt-5\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\"> Calculator</h5>\n        <button type=\"button\" @click=\"closeModal\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div class=\"modal-body\">\n      <vue-advanced-calculator description=\"Advance Cacluclator\" title=\"Cacluclator\"/>\n      </div>\n    </div>\n  </div>\n</div>\n    </div>\n  </div>\n</template>\n<style>\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n</style>\n<script type=\"text/babel\">\nimport {VueAdvancedCalculator} from 'vue-advanced-calculator'\nimport 'vue-advanced-calculator/dist/vue-advanced-calculator.min.css'\nexport default {\n  components: {\n  VueAdvancedCalculator\n},\n  props: [\"type\", \"role\"],\n  data() {\n    return {\n      sidebar: \"sidebar\",\n      menu: [\n        [\n          {\n            title: \"navigation.master\",\n            icon: \"file\",\n            route: \"/masters\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.inventory\",\n            icon: \"envelope\",\n            route: \"/inventory\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.orders\",\n            icon: \"plus\",\n            route: \"/orders\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.estimates\",\n            icon: \"file\",\n            route: \"/estimates\",\n            meta: [\"admin\", \"estimate\", \"accountant\"],\n          },\n          {\n            title: \"navigation.invoices\",\n            icon: \"file-alt\",\n            route: \"/invoices/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.dispatch\",\n            icon: \"file\",\n            route: \"/dispatch\",\n            meta: [\"admin\", \"accountant\", \"dispatch\"],\n          },\n          {\n            title: \"navigation.items\",\n            icon: \"file\",\n            route: \"/bill-ty\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipts\",\n            icon: \"credit-card\",\n            route: \"/receipts/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipt_approvals\",\n            icon: \"check-circle\",\n            route: \"/receipts/approvals\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.payments\",\n            icon: \"credit-card\",\n            route: \"/payments\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher\",\n            icon: \"file-alt\",\n            route: \"/vouchers\",\n            exact: true,\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher_approvals\",\n            icon: \"check-circle\",\n            route: \"/vouchers/approvals\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.notes\",\n            icon: \"envelope\",\n            route: \"/notes\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.ledger\",\n            icon: \"file\",\n            route: \"/ledgers\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.reports\",\n            icon: \"signal\",\n            route: \"/reports\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.customers',\n          //   icon: 'user',\n          //   route: '/customers',\n          //   meta: ['admin', 'accountant']\n          // },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.bank',\n          //   icon: 'file',\n          //   route: '/bank',\n          //   meta: ['admin']\n          // },\n        ],\n        [\n          // {\n          //   title: \"navigation.expenses\",\n          //   icon: \"space-shuttle\",\n          //   route: \"/expenses\",\n          //   meta: [\"admin\"],\n          // },\n          {\n            title: \"navigation.users\",\n            icon: \"user-plus\",\n            iconType: \"fa\",\n            route: \"/users\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.audit_logs\",\n            icon: \"history\",\n            route: \"/audit-logs\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.settings\",\n            icon: \"cog\",\n            route: \"/settings\",\n            meta: [\"admin\", \"accountant\"],\n          },\n        ],\n      ],\n    };\n  },\n  updated() {\n    this.update();\n  },\n  methods: {\n    Toggle() {\n      this.$utils.toggleSidebar();\n    },\n    update() {\n      this.$mount();\n    },\n     closeModal() {\n    document.getElementById('showModal').style.display=\"none\";\n   },\n     showModal() {\n    document.getElementById('showModal').style.display=\"block\";\n   }\n  },\n};\n</script>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n", "",{"version":3,"sources":["webpack://./resources/assets/js/views/layouts/partials/TheSiteSidebar.vue"],"names":[],"mappings":";AA6CA;EACA;AACA;AACA;EACA,UAAA;EACA,WAAA;EACA,mBAAA;EACA,OAAA;EACA,SAAA;AACA","sourcesContent":["<template>\n  <div class=\"sidebar-left\">\n    <div class=\"sidebar-body scroll-pane\">\n      <div class=\"side-nav\">\n        <div v-for=\"(menuItems, index) in menu\" :key=\"index\" class=\"menu-group\">\n          <router-link\n            v-for=\"(item, index1) in menuItems.filter((i) =>\n              i.meta.includes(role)\n            )\"\n            :key=\"index1\"\n            :to=\"item.route\"\n            :exact=\"!!item.exact\"\n            :class=\"['menu-item', { active: isRouteGroupActive(item) }]\"\n            @click.native=\"Toggle\"\n          >\n            <font-awesome-icon :icon=\"item.icon\" class=\"icon menu-icon\" />\n            <span class=\"ml-3 menu-text\">{{ $t(item.title) }}</span>\n          </router-link>\n        </div>\n      </div>\n      <button type=\"button\"  @click=\"showModal\" class=\"btn ml-5 mb-3 btn-default\">\n\n<svg xmlns=\"http://www.w3.org/2000/svg\"  viewBox=\"0 0 50 50\" width=\"30px\" height=\"30px\">\n<path d=\"M 14 4 C 8.4886661 4 4 8.4886661 4 14 L 4 36 C 4 41.511334 8.4886661 46 14 46 L 36 46 C 41.511334 46 46 41.511334 46 36 L 46 14 C 46 8.4886661 41.511334 4 36 4 L 14 4 z M 14 6 L 36 6 C 40.430666 6 44 9.5693339 44 14 L 44 36 C 44 40.430666 40.430666 44 36 44 L 14 44 C 9.5693339 44 6 40.430666 6 36 L 6 14 C 6 9.5693339 9.5693339 6 14 6 z M 18 9 C 15.250484 9 13 11.250484 13 14 L 13 36 C 13 38.749516 15.250484 41 18 41 L 32 41 C 34.749516 41 37 38.749516 37 36 L 37 14 C 37 11.250484 34.749516 9 32 9 L 18 9 z M 18 11 L 32 11 C 33.668484 11 35 12.331516 35 14 L 35 36 C 35 37.668484 33.668484 39 32 39 L 18 39 C 16.331516 39 15 37.668484 15 36 L 15 14 C 15 12.331516 16.331516 11 18 11 z M 18 13 C 17.448 13 17 13.448 17 14 L 17 18 C 17 18.552 17.448 19 18 19 L 32 19 C 32.552 19 33 18.552 33 18 L 33 14 C 33 13.448 32.552 13 32 13 L 18 13 z M 19 21 A 2 2 0 0 0 19 25 A 2 2 0 0 0 19 21 z M 25 21 A 2 2 0 0 0 25 25 A 2 2 0 0 0 25 21 z M 31 21 A 2 2 0 0 0 31 25 A 2 2 0 0 0 31 21 z M 19 27 A 2 2 0 0 0 19 31 A 2 2 0 0 0 19 27 z M 25 27 A 2 2 0 0 0 25 31 A 2 2 0 0 0 25 27 z M 31 27 A 2 2 0 0 0 31 31 A 2 2 0 0 0 31 27 z M 19 33 C 17.895 33 17 33.895 17 35 C 17 36.105 17.895 37 19 37 L 25 37 C 26.105 37 27 36.105 27 35 C 27 33.895 26.105 33 25 33 L 19 33 z M 31 33 A 2 2 0 0 0 31 37 A 2 2 0 0 0 31 33 z\"/>\n</svg>\n</button>\n       <div class=\"modal\" id=\"showModal\">\n  <div class=\"modal-dialog mt-5 pt-5\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <h5 class=\"modal-title\"> Calculator</h5>\n        <button type=\"button\" @click=\"closeModal\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div class=\"modal-body\">\n      <vue-advanced-calculator description=\"Advance Cacluclator\" title=\"Cacluclator\"/>\n      </div>\n    </div>\n  </div>\n</div>\n    </div>\n  </div>\n</template>\n<style>\n.justify-content-between .btn-sm {\n  visibility:hidden !important\n}\n.sidebar-left .modal {\n  width:auto;\n  height:auto;\n  bottom:0 !important;\n  top:30%;\n  left:10px;\n}\n</style>\n<script type=\"text/babel\">\nimport {VueAdvancedCalculator} from 'vue-advanced-calculator'\nimport 'vue-advanced-calculator/dist/vue-advanced-calculator.min.css'\nexport default {\n  components: {\n  VueAdvancedCalculator\n},\n  props: [\"type\", \"role\"],\n  data() {\n    return {\n      sidebar: \"sidebar\",\n      menu: [\n        [\n          {\n            title: \"navigation.master\",\n            icon: \"file\",\n            route: \"/masters\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.inventory\",\n            icon: \"envelope\",\n            route: \"/inventory\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.orders\",\n            icon: \"plus\",\n            route: \"/orders\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.estimates\",\n            icon: \"file\",\n            route: \"/estimates\",\n            meta: [\"admin\", \"estimate\", \"accountant\"],\n          },\n          {\n            title: \"navigation.invoices\",\n            icon: \"file-alt\",\n            route: \"/invoices/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.dispatch\",\n            icon: \"file\",\n            route: \"/dispatch\",\n            exact: true,\n            meta: [\"admin\", \"accountant\", \"dispatch\"],\n          },\n          {\n            title: \"navigation.dispatch_dashboard\",\n            icon: \"tachometer-alt\",\n            route: \"/dispatch/dashboard\",\n            exact: true,\n            // These pages live off the dashboard but aren't nested under its\n            // URL (/dispatch/pending, /dispatch/completed), so router-link's\n            // own exact-match can't cover them - keep this item lit up while\n            // the user is anywhere in the dashboard's pending/completed pages.\n            activeRoutes: [\"/dispatch/dashboard\", \"/dispatch/pending\", \"/dispatch/completed\"],\n            meta: [\"admin\", \"accountant\", \"dispatch\"],\n          },\n          {\n            title: \"navigation.items\",\n            icon: \"file\",\n            route: \"/bill-ty\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipts\",\n            icon: \"credit-card\",\n            route: \"/receipts/create\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.receipt_approvals\",\n            icon: \"check-circle\",\n            route: \"/receipts/approvals\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.payments\",\n            icon: \"credit-card\",\n            route: \"/payments\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher\",\n            icon: \"file-alt\",\n            route: \"/vouchers\",\n            exact: true,\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.voucher_approvals\",\n            icon: \"check-circle\",\n            route: \"/vouchers/approvals\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.notes\",\n            icon: \"envelope\",\n            route: \"/notes\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.ledger\",\n            icon: \"file\",\n            route: \"/ledgers\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.reports\",\n            icon: \"signal\",\n            route: \"/reports\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.customers',\n          //   icon: 'user',\n          //   route: '/customers',\n          //   meta: ['admin', 'accountant']\n          // },\n          // {\n          //   title: 'navigation.bills',\n          //   icon: 'star',\n          //   route: '/bills'\n          // },\n          // {\n          //   title: 'navigation.bank',\n          //   icon: 'file',\n          //   route: '/bank',\n          //   meta: ['admin']\n          // },\n        ],\n        [\n          // {\n          //   title: \"navigation.expenses\",\n          //   icon: \"space-shuttle\",\n          //   route: \"/expenses\",\n          //   meta: [\"admin\"],\n          // },\n          {\n            title: \"navigation.users\",\n            icon: \"user-plus\",\n            iconType: \"fa\",\n            route: \"/users\",\n            meta: [\"admin\", \"accountant\"],\n          },\n          {\n            title: \"navigation.audit_logs\",\n            icon: \"history\",\n            route: \"/audit-logs\",\n            meta: [\"admin\"],\n          },\n          {\n            title: \"navigation.settings\",\n            icon: \"cog\",\n            route: \"/settings\",\n            meta: [\"admin\", \"accountant\"],\n          },\n        ],\n      ],\n    };\n  },\n  updated() {\n    this.update();\n  },\n  methods: {\n    isRouteGroupActive(item) {\n      return !!(item.activeRoutes && item.activeRoutes.includes(this.$route.path));\n    },\n    Toggle() {\n      this.$utils.toggleSidebar();\n    },\n    update() {\n      this.$mount();\n    },\n     closeModal() {\n    document.getElementById('showModal').style.display=\"none\";\n   },\n     showModal() {\n    document.getElementById('showModal').style.display=\"block\";\n   }\n  },\n};\n</script>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -130748,7 +133035,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_vue_loader_lib_loaders_stylePostLoader_js_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_vue_loader_lib_index_js_vue_loader_options_SweetModal_vue_vue_type_style_index_0_id_7dbda72e_lang_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../vue-loader/lib/loaders/stylePostLoader.js!../../../postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../vue-loader/lib/index.js??vue-loader-options!./SweetModal.vue?vue&type=style&index=0&id=7dbda72e&lang=scss */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./node_modules/sweet-modal-vue/src/components/SweetModal.vue?vue&type=style&index=0&id=7dbda72e&lang=scss");
 
-            
+
 
 var options = {};
 
@@ -130778,7 +133065,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Cell_vue_vue_type_style_index_2_id_c0b2ab7a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Cell.vue?vue&type=style&index=2&id=c0b2ab7a&lang=scss&scoped=true */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Cell.vue?vue&type=style&index=2&id=c0b2ab7a&lang=scss&scoped=true");
 
-            
+
 
 var options = {};
 
@@ -130808,7 +133095,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Filters_vue_vue_type_style_index_0_id_2d667dac_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Filters.vue?vue&type=style&index=0&id=2d667dac&lang=scss&scoped=true */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Filters.vue?vue&type=style&index=0&id=2d667dac&lang=scss&scoped=true");
 
-            
+
 
 var options = {};
 
@@ -130838,7 +133125,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_Paginate_vue_vue_type_style_index_0_id_2c1bc350_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Paginate.vue?vue&type=style&index=0&id=2c1bc350&lang=scss&scoped=true */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Paginate.vue?vue&type=style&index=0&id=2c1bc350&lang=scss&scoped=true");
 
-            
+
 
 var options = {};
 
@@ -130868,7 +133155,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_VueEditableGrid_vue_vue_type_style_index_0_id_45d0f41f_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./VueEditableGrid.vue?vue&type=style&index=0&id=45d0f41f&lang=scss&scoped=true */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/VueEditableGrid.vue?vue&type=style&index=0&id=45d0f41f&lang=scss&scoped=true");
 
-            
+
 
 var options = {};
 
@@ -130898,7 +133185,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_12_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_12_use_2_node_modules_sass_loader_dist_cjs_js_clonedRuleSet_12_use_3_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutBasic_vue_vue_type_style_index_0_id_68eb71ca_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!../../../../../node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LayoutBasic.vue?vue&type=style&index=0&id=68eb71ca&lang=scss&scoped=true */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-12.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-12.use[2]!./node_modules/sass-loader/dist/cjs.js??clonedRuleSet-12.use[3]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/LayoutBasic.vue?vue&type=style&index=0&id=68eb71ca&lang=scss&scoped=true");
 
-            
+
 
 var options = {};
 
@@ -130928,7 +133215,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseLoader_vue_vue_type_style_index_0_id_82d1a2ca_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseLoader.vue?vue&type=style&index=0&id=82d1a2ca&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseLoader.vue?vue&type=style&index=0&id=82d1a2ca&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -130958,7 +133245,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePrefixInput_vue_vue_type_style_index_0_id_9f26c100_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BasePrefixInput.vue?vue&type=style&index=0&id=9f26c100&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BasePrefixInput.vue?vue&type=style&index=0&id=9f26c100&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -130988,7 +133275,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSwitch_vue_vue_type_style_index_0_id_cf998588_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseSwitch.vue?vue&type=style&index=0&id=cf998588&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseSwitch.vue?vue&type=style&index=0&id=cf998588&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131018,7 +133305,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseDatePicker_vue_vue_type_style_index_0_id_435e89c4_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseDatePicker.vue?vue&type=style&index=0&id=435e89c4&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-date-picker/BaseDatePicker.vue?vue&type=style&index=0&id=435e89c4&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131048,7 +133335,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSelect_vue_vue_type_style_index_0_id_4dbbc7fb_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseSelect.vue?vue&type=style&index=0&id=4dbbc7fb&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-select/BaseSelect.vue?vue&type=style&index=0&id=4dbbc7fb&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131078,7 +133365,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pagination_vue_vue_type_style_index_0_id_fbe14466_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pagination.vue?vue&type=style&index=0&id=fbe14466&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/Pagination.vue?vue&type=style&index=0&id=fbe14466&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131108,7 +133395,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_style_index_0_id_0045b1fc_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TableComponent.vue?vue&type=style&index=0&id=0045b1fc&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/TableComponent.vue?vue&type=style&index=0&id=0045b1fc&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131138,7 +133425,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_style_index_1_id_0045b1fc_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TableComponent.vue?vue&type=style&index=1&id=0045b1fc&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/TableComponent.vue?vue&type=style&index=1&id=0045b1fc&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131168,7 +133455,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseModal_vue_vue_type_style_index_0_id_7b6dbab3_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseModal.vue?vue&type=style&index=0&id=7b6dbab3&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/BaseModal.vue?vue&type=style&index=0&id=7b6dbab3&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131198,7 +133485,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupModal_vue_vue_type_style_index_0_id_1cad9727_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupModal.vue?vue&type=style&index=0&id=1cad9727&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/GroupModal.vue?vue&type=style&index=0&id=1cad9727&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131228,7 +133515,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_IncreasePriceModal_vue_vue_type_style_index_0_id_2b904502_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IncreasePriceModal.vue?vue&type=style&index=0&id=2b904502&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/IncreasePriceModal.vue?vue&type=style&index=0&id=2b904502&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131258,7 +133545,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryModal_vue_vue_type_style_index_0_id_539c646a_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InventoryModal.vue?vue&type=style&index=0&id=539c646a&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/InventoryModal.vue?vue&type=style&index=0&id=539c646a&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131288,7 +133575,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePopup_vue_vue_type_style_index_0_id_0d27a4f1_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BasePopup.vue?vue&type=style&index=0&id=0d27a4f1&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/popup/BasePopup.vue?vue&type=style&index=0&id=0d27a4f1&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131318,7 +133605,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_VDropdown_vue_vue_type_style_index_0_id_88a40040_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./VDropdown.vue?vue&type=style&index=0&id=88a40040&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/dropdown/VDropdown.vue?vue&type=style&index=0&id=88a40040&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131348,7 +133635,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Cell_vue_vue_type_style_index_0_id_c0b2ab7a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Cell.vue?vue&type=style&index=0&id=c0b2ab7a&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Cell.vue?vue&type=style&index=0&id=c0b2ab7a&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131378,7 +133665,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Cell_vue_vue_type_style_index_1_id_c0b2ab7a_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Cell.vue?vue&type=style&index=1&id=c0b2ab7a&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Cell.vue?vue&type=style&index=1&id=c0b2ab7a&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131408,7 +133695,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_DotIcon_vue_vue_type_style_index_0_id_5d2ded7a_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DotIcon.vue?vue&type=style&index=0&id=5d2ded7a&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/icon/DotIcon.vue?vue&type=style&index=0&id=5d2ded7a&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131438,7 +133725,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_19514592_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=0&id=19514592&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131468,7 +133755,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_19514592_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=1&id=19514592&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=style&index=1&id=19514592&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131498,7 +133785,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_5815c192_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=5815c192&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/bank/Index.vue?vue&type=style&index=0&id=5815c192&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131510,6 +133797,66 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_5815c192_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_0_id_44032a6e_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_0_id_44032a6e_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_0_id_44032a6e_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_1_id_44032a6e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_1_id_44032a6e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_1_id_44032a6e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -131528,7 +133875,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_52d73fee_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=52d73fee&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=style&index=0&id=52d73fee&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131540,6 +133887,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_52d73fee_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_style_index_0_id_add9dadc_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_style_index_0_id_add9dadc_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_style_index_0_id_add9dadc_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -131558,7 +133935,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_91dcb660_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=91dcb660&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Index.vue?vue&type=style&index=0&id=91dcb660&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131588,7 +133965,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_91dcb660_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=1&id=91dcb660&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Index.vue?vue&type=style&index=1&id=91dcb660&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131600,6 +133977,66 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_1_id_91dcb660_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_0_id_6a781995_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pending.vue?vue&type=style&index=0&id=6a781995&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_0_id_6a781995_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_0_id_6a781995_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_1_id_6a781995_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_1_id_6a781995_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_1_id_6a781995_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -131618,7 +134055,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_eb7995da_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=eb7995da&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/estimates/Create.vue?vue&type=style&index=0&id=eb7995da&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131648,7 +134085,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_4d6c113c_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=4d6c113c&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/Create.vue?vue&type=style&index=0&id=4d6c113c&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131678,7 +134115,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_471fa248_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=471fa248&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/Index.vue?vue&type=style&index=0&id=471fa248&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131708,7 +134145,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceStock_vue_vue_type_style_index_0_id_5ec1bd4f_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceStock.vue?vue&type=style&index=0&id=5ec1bd4f&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/InvoiceStock.vue?vue&type=style&index=0&id=5ec1bd4f&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131738,7 +134175,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_3f396602_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=3f396602&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/Create.vue?vue&type=style&index=0&id=3f396602&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131768,7 +134205,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Inventory_vue_vue_type_style_index_0_id_acfe6274_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Inventory.vue?vue&type=style&index=0&id=acfe6274&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/Inventory.vue?vue&type=style&index=0&id=acfe6274&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131798,7 +134235,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_213dc7fe_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=213dc7fe&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/items/Create.vue?vue&type=style&index=0&id=213dc7fe&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131828,7 +134265,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_c69c4a80_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=c69c4a80&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/items/Index.vue?vue&type=style&index=0&id=c69c4a80&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131858,7 +134295,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteHeader_vue_vue_type_style_index_0_id_ed617d3e_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TheSiteHeader.vue?vue&type=style&index=0&id=ed617d3e&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/partials/TheSiteHeader.vue?vue&type=style&index=0&id=ed617d3e&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131888,7 +134325,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteSidebar_vue_vue_type_style_index_0_id_44294cb8_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TheSiteSidebar.vue?vue&type=style&index=0&id=44294cb8&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/partials/TheSiteSidebar.vue?vue&type=style&index=0&id=44294cb8&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131918,7 +134355,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_420f22d8_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=420f22d8&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Create.vue?vue&type=style&index=0&id=420f22d8&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131948,7 +134385,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Display_vue_vue_type_style_index_0_id_f3607d4c_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Display.vue?vue&type=style&index=0&id=f3607d4c&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Display.vue?vue&type=style&index=0&id=f3607d4c&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -131978,7 +134415,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Display_vue_vue_type_style_index_1_id_f3607d4c_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Display.vue?vue&type=style&index=1&id=f3607d4c&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Display.vue?vue&type=style&index=1&id=f3607d4c&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132008,7 +134445,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_5745ed2c_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=5745ed2c&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Index.vue?vue&type=style&index=0&id=5745ed2c&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132038,7 +134475,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_28933e0d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=28933e0d&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/masters/Create.vue?vue&type=style&index=0&id=28933e0d&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132068,7 +134505,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSelect_vue_vue_type_style_index_0_id_7036a49a_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupSelect.vue?vue&type=style&index=0&id=7036a49a&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/masters/GroupSelect.vue?vue&type=style&index=0&id=7036a49a&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132098,7 +134535,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_5adde6d1_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=5adde6d1&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/masters/Index.vue?vue&type=style&index=0&id=5adde6d1&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132128,7 +134565,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_e096b346_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=e096b346&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/notes/Create.vue?vue&type=style&index=0&id=e096b346&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132158,7 +134595,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_9e7396fe_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=9e7396fe&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/notes/Index.vue?vue&type=style&index=0&id=9e7396fe&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132188,7 +134625,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_9379c43a_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=9379c43a&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/orders/Create.vue?vue&type=style&index=0&id=9379c43a&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132218,7 +134655,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_36b85c8d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=style&index=0&id=36b85c8d&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132248,7 +134685,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_66c9f590_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=66c9f590&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/layout/Index.vue?vue&type=style&index=0&id=66c9f590&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132278,7 +134715,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Customization_vue_vue_type_style_index_0_id_b08b968c_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Customization.vue?vue&type=style&index=0&id=b08b968c&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/Customization.vue?vue&type=style&index=0&id=b08b968c&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132308,7 +134745,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Book_vue_vue_type_style_index_0_id_5d852330_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Book.vue?vue&type=style&index=0&id=5d852330&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Book.vue?vue&type=style&index=0&id=5d852330&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132338,7 +134775,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Book_vue_vue_type_style_index_1_id_5d852330_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Book.vue?vue&type=style&index=1&id=5d852330&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Book.vue?vue&type=style&index=1&id=5d852330&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132368,7 +134805,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_style_index_0_id_18797803_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=style&index=0&id=18797803&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Create.vue?vue&type=style&index=0&id=18797803&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132398,7 +134835,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Daybook_vue_vue_type_style_index_0_id_5bbfc40e_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Daybook.vue?vue&type=style&index=0&id=5bbfc40e&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Daybook.vue?vue&type=style&index=0&id=5bbfc40e&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132428,7 +134865,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Daybook_vue_vue_type_style_index_1_id_5bbfc40e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Daybook.vue?vue&type=style&index=1&id=5bbfc40e&scoped=true&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Daybook.vue?vue&type=style&index=1&id=5bbfc40e&scoped=true&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132458,7 +134895,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Daysheet_vue_vue_type_style_index_0_id_061a370a_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Daysheet.vue?vue&type=style&index=0&id=061a370a&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Daysheet.vue?vue&type=style&index=0&id=061a370a&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132488,7 +134925,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_style_index_0_id_a624d3ca_lang_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=style&index=0&id=a624d3ca&lang=css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Index.vue?vue&type=style&index=0&id=a624d3ca&lang=css");
 
-            
+
 
 var options = {};
 
@@ -132813,7 +135250,7 @@ var component = (0,_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPOR
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -132835,7 +135272,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_lib_index_js_vue_loader_options_SweetModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../vue-loader/lib/index.js??vue-loader-options!./SweetModal.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/lib/index.js??vue-loader-options!./node_modules/sweet-modal-vue/src/components/SweetModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_vue_loader_lib_index_js_vue_loader_options_SweetModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_vue_loader_lib_index_js_vue_loader_options_SweetModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -132898,7 +135335,7 @@ var component = (0,_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPOR
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -132920,7 +135357,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_lib_index_js_vue_loader_options_SweetModalTab_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../vue-loader/lib/index.js??vue-loader-options!./SweetModalTab.vue?vue&type=script&lang=js */ "./node_modules/vue-loader/lib/index.js??vue-loader-options!./node_modules/sweet-modal-vue/src/components/SweetModalTab.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_vue_loader_lib_index_js_vue_loader_options_SweetModalTab_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_vue_loader_lib_index_js_vue_loader_options_SweetModalTab_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -133670,8 +136107,8 @@ module.exports = function normalizeComponent (
 	methods: {
 		/**
    * Effectue des traductions dans la langue choisie
-   * 
-   * @param {String} key 
+   *
+   * @param {String} key
    * @return {String}
    */
 		__vac_translate(key) {
@@ -133679,7 +136116,7 @@ module.exports = function normalizeComponent (
 		},
 		/**
    * Verifie qu'un element est un nombre
-   * 
+   *
    * @param {any} x
    * @return {Boolean}
    */
@@ -133688,9 +136125,9 @@ module.exports = function normalizeComponent (
 		},
 		/**
    * Formate un nombre pour etre plus facile à lire
-   * 
-   * @param {Number} x 
-   * @param {Integer} precision 
+   *
+   * @param {Number} x
+   * @param {Integer} precision
    * @example 12345.67 ==> 12 345.67
    */
 		formatNumber(x, precision = 5) {
@@ -133908,7 +136345,7 @@ var Component = normalizeComponent(
 	methods: {
 		/**
    * Change le type de calculatrice
-   * 
+   *
    * @param {String} mode
    */
 		changeMode(mode) {
@@ -135976,7 +138413,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_vue_advanced_calculator_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./vue-advanced-calculator.min.css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-advanced-calculator/dist/vue-advanced-calculator.min.css");
 
-            
+
 
 var options = {};
 
@@ -136298,9 +138735,9 @@ var update = _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMP
     /* functional template */
     var __vue_is_functional_template__ = false;
     /* style inject SSR */
-    
 
-    
+
+
     var ExpandableImage = normalizeComponent_1(
       { render: __vue_render__, staticRenderFns: __vue_staticRenderFns__ },
       __vue_inject_styles__,
@@ -136341,7 +138778,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /*!
- * vue-i18n v8.28.2 
+ * vue-i18n v8.28.2
  * (c) 2022 kazuya kawaguchi
  * Released under the MIT License.
  */
@@ -136631,7 +139068,7 @@ function extend (Vue) {
 
 /**
  * Mixin
- * 
+ *
  * If `bridge` mode, empty mixin is returned,
  * else regulary mixin implementation is returned.
  */
@@ -136646,7 +139083,7 @@ function defineMixin (bridge) {
 
   return bridge
     ? { mounted: mounted } // delegate `vue-i18n-bridge` mixin implementation
-    : { // regulary 
+    : { // regulary
     beforeCreate: function beforeCreate () {
       var options = this.$options;
       options.i18n = options.i18n || ((options.__i18nBridge || options.__i18n) ? {} : null);
@@ -142975,7 +145412,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_tabs_component_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./tabs-component.css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-tabs-component/docs/resources/tabs-component.css");
 
-            
+
 
 var options = {};
 
@@ -143689,7 +146126,7 @@ function createTextVNode(val) {
 // multiple renders, cloning them avoids errors when DOM manipulations rely
 // on their elm reference.
 function cloneVNode(vnode) {
-    var cloned = new VNode(vnode.tag, vnode.data, 
+    var cloned = new VNode(vnode.tag, vnode.data,
     // #7975
     // clone children array to avoid mutating original in case of cloning
     // a child.
@@ -145145,7 +147582,7 @@ function bindObjectListeners(data, value) {
     return data;
 }
 
-function resolveScopedSlots(fns, res, 
+function resolveScopedSlots(fns, res,
 // the following are added in 2.6
 hasDynamicKeys, contentHashKey) {
     res = res || { $stable: !hasDynamicKeys };
@@ -147159,7 +149596,7 @@ var uid$1 = 0;
  */
 var Watcher = /** @class */ (function () {
     function Watcher(vm, expOrFn, cb, options, isRenderWatcher) {
-        recordEffectScope(this, 
+        recordEffectScope(this,
         // if the active effect scope is manually created (not a component scope),
         // prioritize it
         activeEffectScope && !activeEffectScope._vm
@@ -148075,14 +150512,14 @@ function createComponent(Ctor, data, context, children, tag) {
     var name = getComponentName(Ctor.options) || tag;
     var vnode = new VNode(
     // @ts-expect-error
-    "vue-component-".concat(Ctor.cid).concat(name ? "-".concat(name) : ''), data, undefined, undefined, undefined, context, 
+    "vue-component-".concat(Ctor.cid).concat(name ? "-".concat(name) : ''), data, undefined, undefined, undefined, context,
     // @ts-expect-error
     { Ctor: Ctor, propsData: propsData, listeners: listeners, tag: tag, children: children }, asyncFactory);
     return vnode;
 }
 function createComponentInstanceForVnode(
 // we know it's MountedComponentVNode but flow doesn't
-vnode, 
+vnode,
 // activeInstance in lifecycle state
 parent) {
     var options = {
@@ -150173,7 +152610,7 @@ function createPatchFunction(backend) {
                 var oldElm = oldVnode.elm;
                 var parentElm = nodeOps.parentNode(oldElm);
                 // create new node
-                createElm(vnode, insertedVnodeQueue, 
+                createElm(vnode, insertedVnodeQueue,
                 // extremely rare edge case: do not insert if old element is in a
                 // leaving transition. Only happens when combining transition +
                 // keep-alive + HOCs. (#4590)
@@ -150552,7 +152989,7 @@ function parseFilters(exp) {
             if (c === 0x2f) {
                 // /
                 var j = i - 1;
-                var p 
+                var p
                 // find first non-whitespace prev char
                 = void 0;
                 // find first non-whitespace prev char
@@ -151076,7 +153513,7 @@ function add(name, handler, capture, passive) {
     target.addEventListener(name, handler, supportsPassive ? { capture: capture, passive: passive } : capture);
 }
 function remove(name, handler, capture, _target) {
-    (_target || target).removeEventListener(name, 
+    (_target || target).removeEventListener(name,
     //@ts-expect-error
     handler._wrapper || handler, capture);
 }
@@ -154076,7 +156513,7 @@ function genElement(el, state) {
             if (!el.plain || (el.pre && maybeComponent)) {
                 data = genData(el, state);
             }
-            var tag 
+            var tag
             // check if this is a component in <script setup>
             = void 0;
             // check if this is a component in <script setup>
@@ -154980,7 +157417,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_vue2Dropzone_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./vue2Dropzone.min.css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue2-dropzone/dist/vue2Dropzone.min.css");
 
-            
+
 
 var options = {};
 
@@ -157136,7 +159573,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     if (document.currentScript) {
       return document.currentScript
     }
-  
+
     // IE 8-10 support script readyState
     // IE 11+ & Firefox support stack trace
     try {
@@ -157154,24 +159591,24 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
         inlineScriptSourceRegExp,
         inlineScriptSource,
         scripts = document.getElementsByTagName('script'); // Live NodeList collection
-  
+
       if (scriptLocation === currentLocation) {
         pageSource = document.documentElement.outerHTML;
         inlineScriptSourceRegExp = new RegExp('(?:[^\\n]+?\\n){0,' + (line - 2) + '}[^<]*<script>([\\d\\D]*?)<\\/script>[\\d\\D]*', 'i');
         inlineScriptSource = pageSource.replace(inlineScriptSourceRegExp, '$1').trim();
       }
-  
+
       for (var i = 0; i < scripts.length; i++) {
         // If ready state is interactive, return the script tag
         if (scripts[i].readyState === 'interactive') {
           return scripts[i];
         }
-  
+
         // If src matches, return the script tag
         if (scripts[i].src === scriptLocation) {
           return scripts[i];
         }
-  
+
         // If inline source matches, return the script tag
         if (
           scriptLocation === currentLocation &&
@@ -157181,7 +159618,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
           return scripts[i];
         }
       }
-  
+
       // If no match, return null
       return null;
     }
@@ -158120,7 +160557,7 @@ if (isForced(NUMBER, !NativeNumber(' 0o1') || !NativeNumber('0b1') || NativeNumb
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_vue_timepicker_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __nested_webpack_require_99665__("fd6f");
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_vue_timepicker_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nested_webpack_require_99665__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_vue_timepicker_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_vue_timepicker_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_vue_timepicker_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a);
 
 /***/ }),
 
@@ -162085,7 +164522,7 @@ var DEFAULT_OPTIONS = {
   }
 });
 // CONCATENATED MODULE: ./src/vue-timepicker.vue?vue&type=script&lang=js&
- /* harmony default export */ var src_vue_timepickervue_type_script_lang_js_ = (vue_timepickervue_type_script_lang_js_); 
+ /* harmony default export */ var src_vue_timepickervue_type_script_lang_js_ = (vue_timepickervue_type_script_lang_js_);
 // EXTERNAL MODULE: ./src/vue-timepicker.vue?vue&type=style&index=0&lang=css&
 var vue_timepickervue_type_style_index_0_lang_css_ = __nested_webpack_require_137275__("aab0");
 
@@ -162206,7 +164643,7 @@ var component = normalizeComponent(
   null,
   null,
   null
-  
+
 )
 
 /* harmony default export */ var vue_timepicker = (component.exports);
@@ -162376,7 +164813,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_VueTimepicker_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./VueTimepicker.css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue2-timepicker/dist/VueTimepicker.css");
 
-            
+
 
 var options = {};
 
@@ -167810,7 +170247,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -167832,7 +170269,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Header.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/Header.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Header_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -167882,7 +170319,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -167904,7 +170341,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseButton_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseButton.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseButton.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseButton_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseButton_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -167954,7 +170391,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -167976,7 +170413,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseCustomerSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseCustomerSelect.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseCustomerSelect.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseCustomerSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseCustomerSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168026,7 +170463,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168048,7 +170485,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseInput.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseInput.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168100,7 +170537,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "82d1a2ca",
   null
-  
+
 )
 
 /* hot reload */
@@ -168122,7 +170559,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseLoader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseLoader.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseLoader.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseLoader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseLoader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168187,7 +170624,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "9f26c100",
   null
-  
+
 )
 
 /* hot reload */
@@ -168209,7 +170646,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePrefixInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BasePrefixInput.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BasePrefixInput.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePrefixInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePrefixInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168274,7 +170711,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "cf998588",
   null
-  
+
 )
 
 /* hot reload */
@@ -168296,7 +170733,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSwitch_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseSwitch.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseSwitch.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSwitch_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSwitch_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168359,7 +170796,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168381,7 +170818,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseTextArea_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseTextArea.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/BaseTextArea.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseTextArea_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseTextArea_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168433,7 +170870,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168455,7 +170892,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseDatePicker_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseDatePicker.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-date-picker/BaseDatePicker.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseDatePicker_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseDatePicker_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168518,7 +170955,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168540,7 +170977,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DateInput.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-date-picker/DateInput.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DateInput_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168590,7 +171027,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168612,7 +171049,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerDay_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PickerDay.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-date-picker/PickerDay.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerDay_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerDay_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168662,7 +171099,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168684,7 +171121,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerMonth_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PickerMonth.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-date-picker/PickerMonth.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerMonth_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerMonth_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -168734,7 +171171,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -168756,7 +171193,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerYear_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./PickerYear.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-date-picker/PickerYear.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerYear_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PickerYear_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -169146,7 +171583,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -169168,7 +171605,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseSelect.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-select/BaseSelect.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -170245,7 +172682,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "fbe14466",
   null
-  
+
 )
 
 /* hot reload */
@@ -170267,7 +172704,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Pagination_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pagination.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/Pagination.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Pagination_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Pagination_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -170361,7 +172798,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -170383,7 +172820,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableColumn_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TableColumn.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/TableColumn.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableColumn_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableColumn_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -170433,7 +172870,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -170455,7 +172892,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableColumnHeader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TableColumnHeader.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/TableColumnHeader.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableColumnHeader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableColumnHeader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -170509,7 +172946,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "0045b1fc",
   null
-  
+
 )
 
 /* hot reload */
@@ -170531,7 +172968,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TableComponent.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/TableComponent.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableComponent_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -170607,7 +173044,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -170629,7 +173066,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableRow_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TableRow.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/base-table/components/TableRow.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableRow_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TableRow_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -170940,7 +173377,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -170962,7 +173399,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BaseModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/BaseModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BaseModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171025,7 +173462,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171047,7 +173484,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CategoryModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/CategoryModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CategoryModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171097,7 +173534,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171119,7 +173556,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomerModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CustomerModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/CustomerModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomerModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomerModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171169,7 +173606,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171191,7 +173628,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EstimateTemplate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./EstimateTemplate.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/EstimateTemplate.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EstimateTemplate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EstimateTemplate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171243,7 +173680,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "1cad9727",
   null
-  
+
 )
 
 /* hot reload */
@@ -171265,7 +173702,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/GroupModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171330,7 +173767,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171352,7 +173789,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IncreasePriceModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./IncreasePriceModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/IncreasePriceModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IncreasePriceModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_IncreasePriceModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171417,7 +173854,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171439,7 +173876,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InventoryModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/InventoryModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171502,7 +173939,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171524,7 +173961,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceTemplate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceTemplate.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/InvoiceTemplate.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceTemplate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceTemplate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171574,7 +174011,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171596,7 +174033,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ItemModal.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/modal/ItemModal.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ItemModal_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171648,7 +174085,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171670,7 +174107,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePopup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BasePopup.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/popup/BasePopup.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePopup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BasePopup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171733,7 +174170,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171755,7 +174192,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomerSelectPopup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CustomerSelectPopup.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/base/popup/CustomerSelectPopup.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomerSelectPopup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomerSelectPopup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171807,7 +174244,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171829,7 +174266,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VDropdown_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./VDropdown.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/dropdown/VDropdown.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VDropdown_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VDropdown_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -171890,7 +174327,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -171944,7 +174381,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -172006,7 +174443,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "c0b2ab7a",
   null
-  
+
 )
 
 /* hot reload */
@@ -172028,7 +174465,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Cell_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Cell.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Cell.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Cell_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Cell_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -172119,7 +174556,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "2d667dac",
   null
-  
+
 )
 
 /* hot reload */
@@ -172141,7 +174578,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Filters_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Filters.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Filters.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Filters_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Filters_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -172206,7 +174643,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "2c1bc350",
   null
-  
+
 )
 
 /* hot reload */
@@ -172228,7 +174665,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Paginate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Paginate.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/Paginate.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Paginate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Paginate_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -172277,7 +174714,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_VueEditableGrid_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./VueEditableGrid.css */ "./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./resources/assets/js/components/grid-table/VueEditableGrid.css");
 
-            
+
 
 var options = {};
 
@@ -172323,7 +174760,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "45d0f41f",
   null
-  
+
 )
 
 /* hot reload */
@@ -172345,7 +174782,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VueEditableGrid_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./VueEditableGrid.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/grid-table/VueEditableGrid.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VueEditableGrid_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_VueEditableGrid_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -172682,7 +175119,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -172740,7 +175177,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -172762,7 +175199,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DotIcon_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./DotIcon.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/components/icon/DotIcon.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DotIcon_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DotIcon_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -172823,7 +175260,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -172877,7 +175314,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -172931,7 +175368,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -172985,7 +175422,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -173039,7 +175476,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -173093,7 +175530,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -173147,7 +175584,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -173444,7 +175881,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"navigation":{"dashboard":"Dashboard","customers":"Customers","calculator":"Calculator","items":"Bill-ty","bills":"Raw Bill","invoices":"Invoices","expenses":"Expenses","estimates":"Estimates","payments":"Payments","receipts":"Receipts","receipt_approvals":"Receipt Approvals","voucher_approvals":"Voucher Approvals","reports":"Reports","settings":"Settings","logout":"Logout","users":"Users","audit_logs":"Audit Logs","notes":"Notes","bank":"Bank","inventory":"Inventory","master":"Ledger","ledger":"Display","voucher":"Voucher","dispatch":"Dispatch","orders":"Orders"},"general":{"yes":"Yes","no":"No","view_pdf":"View PDF","download_pdf":"Download PDF","save":"Save","daybook":"Day Book","daysheet":"Day Sheet","dispatch":"Dispatch","undispatch":"Undispatch","cancel":"Cancel","update":"Update","download":"Download","from_date":"From Date","to_date":"To Date","from":"From","to":"To","go_back":"Go Back","back_to_login":"Back to Login?","home":"Home","filter":"Filter","delete":"Delete","edit":"Edit","view":"View","add_new_item":"Add New Item","clear_all":"Clear All","showing":"Showing","of":"of","actions":"Actions","subtotal":"SUBTOTAL","fixed":"Fixed","percentage":"Percentage","total_amount":"TOTAL AMOUNT","bill_to":"Bill to","ship_to":"Ship to","due":"Due","draft":"Draft","sent":"Sent","all":"All","select_all":"Select All","choose_file":"Click here to choose a file","choose_template":"Choose a template","choose":"Choose","remove":"Remove","powered_by":"Powered by","bytefury":"Bytefury","select_a_status":"Select a status","search":"Search","are_you_sure":"Are you sure?","list_is_empty":"List is empty.","four_zero_four":"404","you_got_lost":"Whoops! You got Lost!","go_home":"Go Home","setting_updated":"Setting updated successfully","select_state":"Select state","select_country":"Select Country","select_city":"Select City","street_1":"Street 1","street_2":"Street 2","action_failed":"Action Failed","to_display":"To Display","increase-price":"Increase Price","end_of_list":"End of list","summary_stock":"Summary Stock","inventory_stock":"Inventory Stock","invoice_stock":"Invoice Stock"},"dashboard":{"select_year":"Select year","cards":{"due_amount":"Amount Due","customers":"Customers","invoices":"Invoices","estimates":"Estimates"},"chart_info":{"total_sales":"Sales","total_receipts":"Receipts","total_expense":"Expenses","net_income":"Net Income","year":"Select year"},"weekly_invoices":{"title":"Weekly Invoices"},"monthly_chart":{"title":"Sales & Expenses"},"recent_invoices_card":{"title":"Due Invoices","due_on":"Due On","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"},"recent_estimate_card":{"title":"Recent Estimates","date":"Date","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"}},"customers":{"title":"Customers","add_customer":"Add Customer","contacts_list":"Customer List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_customer":"Add New Customer","save_customer":"Save Customer","update_customer":"Update Customer","customer":"Customer | Customers","new_customer":"New Customer","edit_customer":"Edit Customer","basic_info":"Basic Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_customers":"No customers yet!","no_customers_found":"No customers found!","list_of_customers":"This section will contain the list of customers.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_customer":"Select a customer","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this Customer | You will not be able to recover these Customers","created_message":"Customer created successfully","updated_message":"Customer updated successfully","deleted_message":"Customer deleted successfully | Customers deleted successfully"},"items":{"add_bill":"Add Bill-Ty","edit_bill":"Edit Bill-Ty","new_bill":"New Bill-Ty","title":"Items","date":"Date","sale_price":"Sale Price","dispatch":"Dispatch","party_name":"Party name","worker_name":"Worker Name","item_name":"Item Name","invoice_number":"Invoice Number","need_to_be_dispatch":"Need to be dispatch","items_list":"Items List","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_item":"Add Item","save_item":"Save Item","update_item":"Update Item","item":"Item | Items","add_new_item":"Add New Item","new_item":"New Item","edit_item":"Edit Item","no_items":"No items yet!","list_of_items":"This section will contain the list of items.","select_a_unit":"select unit","bill_ty":"Bill Ty","item_attached_message":"Cannot delete an item which is already in use","confirm_delete":"You will not be able to recover this Item | You will not be able to recover these Items","created_message":"Item created successfully","updated_message":"Item updated successfully","deleted_message":"Item deleted successfully | Items deleted successfully","price_increase_message":"Item price increased successfully | Items price increased successfully"},"masters":{"add_account_master":"Add Ledger","edit_account_master":"Edit Ledger","new_account_master":"New Ledger","title":"Ledger","date":"Date","masters_list":"Ledger List","name":"Name","unit":"Unit","mobile_number":"Mobile no.","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_master":"Add Ledger","save_master":"Save Ledger","update_master":"Update Ledger","master":"Ledger","add_new_master":"Add New Ledger","new_master":"New Ledger","edit_master":"Edit Ledger","no_masters":"No account masters yet!","list_of_masters":"This section will contain the list of masters.","select_a_unit":"select unit","account_master":"Ledger","groups":"Group","address":"Address","country":"Country","state":"State","select-state":"Select a State","opening_balance":"Opening Balance","save_masters":"Save Ledger","master_attached_message":"Cannot delete an master which is already in use","confirm_delete":"You will not be able to recover this Ledger | You will not be able to recover these Ledger","created_message":"Master created successfully","updated_message":"Master updated successfully","deleted_message":"Master deleted successfully | Ledger deleted successfully"},"groups":{"name":"Name","add_new_group":"Add new Group","select_an_group":"Select an Group","created_message":"Group created successfully","updated_message":"Group updated successfully","deleted_message":"Group deleted successfully | Groups deleted successfully"},"ledgers":{"title":"Display","date":"Date","ledgers_list":"Displays List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_ledger":"Add Display","save_ledger":"Save Display","update_ledger":"Update Display","ledger":"Display | Displays","add_new_ledger":"Add New Display","new_ledger":"New Display","edit_ledger":"Edit Display","no_ledgers":"No ledgers yet!","list_of_ledgers":"This section will contain the list of ledgers.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","closing_balance":"Closing Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Voucher Type","voucher_id":"Voucher Id","ledger_attached_message":"Cannot delete an ledger which is already in use","confirm_delete":"You will not be able to recover this Display | You will not be able to recover these Displays","created_message":"Display created successfully","updated_message":"Display updated successfully","deleted_message":"Display deleted successfully | Displays deleted successfully","inventory_item_quantity":"Quantity"},"daybook":{"title":"Day Book","title-2":"Day Sheet","date":"Date","daybooks_list":"Day Books List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","quantity":"Quantity","add_daybook":"Add Day Book","save_daybook":"Save Day Book","update_daybook":"Update Day Book","daybook":"Day Book | Day Books","add_new_daybook":"Add New Day Book","new_daybook":"New Day Book","edit_daybook":"Edit Day Book","no_daybook":"No daybooks yet!","list_of_daybook":"This section will contain the list of daybooks.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Type","voucher_count":"Count","voucher_debit":"Debit","voucher_credit":"Credit","voucher_balance":"Balance","voucher_id":"Voucher Id","daybook_attached_message":"Cannot delete an daybook which is already in use","confirm_delete":"You will not be able to recover this Day Book | You will not be able to recover these Day Books","created_message":"Day Book created successfully","updated_message":"Day Book updated successfully","deleted_message":"Day Book deleted successfully | Day Books deleted successfully","inventory_item_quantity":"Item Quantity"},"daysheet":{"city":"City","date":"Date:","transport":"Transport","lot":"Lot","reference-number":"Reference Number","name":"Name","party-name":"Party Name","pm":"PM","sign":"Sign"},"vouchers":{"title":"Vouchers","date":"Date","vouchers_list":"Account Vouchers List","name":"Name","unit":"Unit","groups":"Group","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_voucher":"Add Account Voucher","save_voucher":"Save Account Voucher","voucher":"Account Voucher | Account Vouchers","add_new_voucher":"Add New Account Voucher","new_voucher":"New Account Voucher","edit_voucher":"Edit Account Voucher","no_vouchers":"No vouchers yet!","no_vouchers_pending_approval":"No vouchers pending approval.","list_of_vouchers":"This section will contain the list of vouchers.","list_of_vouchers_pending_approval":"This section contains vouchers waiting for admin approval.","select_a_unit":"select unit","voucher_attached_message":"Cannot delete an voucher which is already in use","confirm_delete":"You will not be able to recover this Account Voucher | You will not be able to recover these Account Vouchers","created_message":"Account Voucher created successfully","updated_message":"Account Voucher updated successfully","deleted_message":"Account Voucher deleted successfully | Account Vouchers deleted successfully","approve_voucher":"Approve Voucher","decline_voucher":"Decline Voucher","need_approval":"Need Approval","confirm_approve":"Do you want to approve this voucher?","confirm_decline":"Do you want to decline this voucher?","approved_message":"Voucher approved successfully","declined_message":"Voucher declined successfully","submitted_for_approval_message":"Voucher submitted for admin approval","approvals_title":"Vouchers To Be Approved","balace_not_equal_title":"Balance!","balace_not_equal_desc":"Voucher debit/credit balance should be equal","duplicate_vouchers":"This will duplicate/update existing vouchers"},"estimates":{"title":"Estimates","count":"Item count","name":"Name","estimate":"Estimate | Estimates","estimates_list":"Estimates List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","estimate_number":"Estimate Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","estimate_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_estimate":"Send Estimate","record_payment":"Record Payment","add_estimate":"Add Estimate","save_estimate":"Save Estimate","confirm_conversion":"You want to convert this Estimate into Invoice?","conversion_message":"Invoice created successful","confirm_send_estimate":"This estimate will be sent via email to the customer","confirm_mark_as_sent":"This estimate will be marked as sent","confirm_mark_as_accepted":"This estimate will be marked as Accepted","confirm_mark_as_rejected":"This estimate will be marked as Rejected","no_matching_estimates":"There are no matching estimates!","mark_as_sent_successfully":"Estimate marked as sent successfully","send_estimate_successfully":"Estimate sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_estimate":"New Estimate","add_new_estimate":"Add New Estimate","update_Estimate":"Update Estimate","edit_estimate":"Edit Estimate","items":"items","Estimate":"Estimate | Estimates","no_estimates":"No estimates yet!","list_of_estimates":"This section will contain the list of estimates.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Estimate marked as accepted","marked_as_rejected_message":"Estimate marked as rejected","confirm_delete":"You will not be able to recover this Estimate | You will not be able to recover these Estimates","created_message":"Estimate created successfully","updated_message":"Estimate updated successfully","deleted_message":"Estimate deleted successfully | Estimates deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"orders":{"title":"Orders","count":"Item count","name":"Name","order":"Order | Orders","orders_list":"Orders List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","remaining_quantity":"Remaining Quantity","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","order_number":"Order Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","order_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_order":"Send Order","record_payment":"Record Payment","add_order":"Add Order","save_order":"Save Order","confirm_conversion":"You want to convert this Order into Invoice?","conversion_message":"Invoice created successful","confirm_send_order":"This order will be sent via email to the customer","confirm_mark_as_sent":"This order will be marked as sent","confirm_mark_as_accepted":"This order will be marked as Accepted","confirm_mark_as_rejected":"This order will be marked as Rejected","no_matching_orders":"There are no matching orders!","mark_as_sent_successfully":"Order marked as sent successfully","send_order_successfully":"Order sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_order":"New Order","add_new_order":"Add New Order","update_Order":"Update Order","edit_order":"Edit Order","items":"items","Order":"Order | Orders","no_orders":"No orders yet!","list_of_orders":"This section will contain the list of orders.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Order marked as accepted","marked_as_rejected_message":"Order marked as rejected","confirm_delete":"You will not be able to recover this Order | You will not be able to recover these Orders","created_message":"Order created successfully","updated_message":"Order updated successfully","deleted_message":"Order deleted successfully | Orders deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"invoices":{"add":"Add :","title":"Invoices","bulk_title":"Bulk Invoices","invoices_list":"Invoices List","days":"{days} Days","months":"{months} Month","years":"{years} Year","out_of_stock":"Out of stock","update_inventory_quantity":"Max quantity available is {max}, do you want to update the quantity.","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","paid_status":"PAID STATUS","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","invoice":"Invoice | Invoices","invoice_number":"Invoice Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","view":"View","quantity":"Quantity","send_invoice":"Send Invoice","invoice_template":"Invoice Template","template":"Template","mark_as_sent":"Mark as sent","confirm_send_invoice":"This invoice will be sent via email to the customer","invoice_mark_as_sent":"This invoice will be marked as sent","confirm_send":"This invoice will be sent via email to the customer","invoice_date":"Invoice Date","record_payment":"Record Payment","add_new_invoice":"Add New Invoice","update_expense":"Update Expense","edit_invoice":"Edit Invoice","new_invoice":"New Invoice","save_invoice":"Save Invoice","update_invoice":"Update Invoice","no_invoices":"No Invoices yet!","list_of_invoices":"This section will contain the list of invoices.","less":"Less : ","select_invoice":"Select Invoice","no_matching_invoices":"There are no matching invoices!","mark_as_sent_successfully":"Invoice marked as sent successfully","send_invoice_successfully":"Invoice sent successfully","updated_inventory_price":"Inventory item price updated","invoice_report_title":"Invoice","invoice_report_text":"Do you want to print this invoice?","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"payment_attached_message":"One of the selected invoices already have a payment attached to it. Make sure to delete the attached payments first in order to go ahead with the removal","confirm_delete":"You will not be able to recover this Invoice | You want to delete invoices.","confirm_delete_2":"You want to delete {count} invoice. | You want to delete {count} invoices.","created_message":"Invoice created successfully","updated_message":"Invoice updated successfully","deleted_message":"Invoice deleted successfully | Invoices deleted successfully","marked_as_sent_message":"Invoice marked as sent successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","invalid_due_amount_message":"Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.","estimate-list":"Select Estimate","whatsapp":"Sent on whatsapp","send_selected_whatsapp":"Send Selected on WhatsApp","sending_selected_whatsapp":"Sending on WhatsApp..."},"credit_notes":{"title":"Credit Notes","credit_notes_list":"Credit Notes List","credit_notes":"Credit Notes","contact":"Contact","date":"Date","amount":"Amount","action":"Action","credit_number":"Credit Number","notes":"Notes","confirm_delete":"Do you want to delete this credit note?","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total"}},"payments":{"title":"Payments","list":"Party name","payments_list":"Payments List","record_payment":"Record Payment","customer":"Customer","date":"Date","amount":"Amount","action":"Action","payment_number":"Payment Number","payment_mode":"Payment Mode","invoice":"Invoice","note":"Note","party_name":"Party name","select_a_list":"Select from list","add_payment":"Add Payment","new_payment":"New Payment","edit_payment":"Edit Payment","view_payment":"View Payment","add_new_payment":"Add New Payment","save_payment":"Save Payment","update_payment":"Update Payment","payment":"Payment | Payments","no_payments":"No payments yet!","list_of_payments":"This section will contain the list of payments.","select_payment_mode":"Select payment mode","payment_status":"Status","confirm_delete":"You will not be able to recover this Payment | You will not be able to recover these Payments","created_message":"Payment created successfully","updated_message":"Payment updated successfully","deleted_message":"Payment deleted successfully | Payments deleted successfully","invalid_amount_message":"Payment amount is invalid"},"receipts":{"title":"Receipts","list":"Party name","receipts_list":"Receipts List","record_receipt":"Record Receipt","customer":"Customer","date":"Date","amount":"Amount","action":"Action","receipt_number":"Receipt Number","receipt_mode":"Receipt Mode","invoice":"Invoice","note":"Note","number":"Number","name":"Name","count":"Count","view":"View","mode":"Mode","closing_balance":"Closing Balance","opening_balance":"Opening Balance","select_a_list":"Select from list","add_receipt":"Add Receipt","new_receipt":"New Receipt","edit_receipt":"Edit Receipt","view_receipt":"View Receipt","add_new_receipt":"Add New Receipt","save_receipt":"Save Receipt","update_receipt":"Update Receipt","receipt":"Receipt | Receipts","approvals_title":"Receipts To Be Approved","no_receipts":"No receipts yet!","list_of_receipts":"This section will contain the list of receipts.","no_receipts_pending_approval":"No receipts pending approval.","list_of_receipts_pending_approval":"This section contains receipts waiting for admin approval.","select_receipt_mode":"Select receipt mode","receipt_status":"Status","approve_receipt":"Approve Receipt","decline_receipt":"Decline Receipt","confirm_approve":"Do you want to approve this receipt?","confirm_decline":"Do you want to decline this receipt?","approved_message":"Receipt approved successfully","declined_message":"Receipt declined successfully","submitted_for_approval_message":"Receipt submitted for admin approval","confirm_delete":"You will not be able to recover this Receipt | You will not be able to recover these Receipts","created_message":"Receipt created successfully","updated_message":"Receipt updated successfully","deleted_message":"Receipt deleted successfully | Receipts deleted successfully","invalid_amount_message":"Receipt amount is invalid","receipt_greater_than_due_amount":"Receipt amount is greater than Due amount","receipt_greater_than_zero":"Receipt amount should be greater than 0"},"expenses":{"title":"Expenses","expenses_list":"Expenses List","expense_title":"Title","contact":"Contact","category":"Category","from_date":"From Date","to_date":"To Date","expense_date":"Date","description":"Description","receipt":"Receipt","amount":"Amount","action":"Action","note":"Note","category_id":"Category Id","date":"Expense Date","add_expense":"Add Expense","add_new_expense":"Add New Expense","save_expense":"Save Expense","update_expense":"Update Expense","download_receipt":"Download Receipt","edit_expense":"Edit Expense","new_expense":"New Expense","expense":"Expense | Expenses","no_expenses":"No expenses yet!","list_of_expenses":"This section will contain the list of expenses.","confirm_delete":"You will not be able to recover this Expense | You will not be able to recover these Expenses","created_message":"Expense created successfully","updated_message":"Expense updated successfully","deleted_message":"Expense deleted successfully | Expenses deleted successfully","categories":{"categories_list":"Categories List","title":"Title","name":"Name","description":"Description","amount":"Amount","actions":"Actions","add_category":"Add Category","new_category":"New Category","category":"Category | Categories","select_a_category":"Select a category"}},"login":{"email":"Email","password":"Password","forgot_password":"Forgot Password?","or_signIn_with":"or Sign in with","login":"Login","register":"Register","reset_password":"Reset Password","password_reset_successfully":"Password Reset Successfully","enter_email":"Enter email","enter_password":"Enter Password","retype_password":"Retype Password","login_placeholder":"mail@example.com"},"reports":{"title":"Report","from_date":"From Date","to_date":"To Date","status":"Status","paid":"Paid","unpaid":"Unpaid","download_pdf":"Download PDF","view_pdf":"View PDF","update_report":"Update Report","send_report":"Send Report on Whatsapp","report":"Report | Reports","profit_loss":{"profit_loss":"Profit & Loss","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"sales":{"sales":"Sales","date_range":"Select Date Range","to_date":"To Date","from_date":"From Date","report_type":"Report Type"},"errors":{"required":"Field is required."},"invoices":{"invoice":"Invoice","invoice_date":"Invoice Date","due_date":"Due Date","amount":"Amount","contact_name":"Contact Name","status":"Status"},"estimates":{"estimate":"Estimate","estimate_date":"Estimate Date","due_date":"Due Date","estimate_number":"Estimate Number","ref_number":"Ref Number","amount":"Amount","contact_name":"Contact Name","status":"Status"},"expenses":{"expenses":"Expenses","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"customers":{"customers":"Customers","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","till_date":"Till Date","from_date":"From Date","date_range":"Select Date Range","ledgers":"Select Ledgers"},"banks":{"banks":"Banks","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"}},"settings":{"menu_title":{"account_settings":"Account Settings","company_information":"Company Information","customization":"Customization","preferences":"Preferences","notifications":"Notifications","expense_category":"Expense Categories","update_app":"Update App","all-data":"All Data"},"title":"Settings","setting":"Settings | Settings","general":"General","view":"View","language":"Language","primary_currency":"Primary Currency","timezone":"Time Zone","date_format":"Date Format","currencies":{"title":"Currencies","currency":"Currency | Currencies","currencies_list":"Currencies List","select_currency":"Select Currency","name":"Name","code":"Code","symbol":"Symbol","precision":"Precision","thousand_separator":"Thousand Separator","decimal_separator":"Decimal Separator","position":"Position","position_of_symbol":"Position Of Symbol","right":"Right","left":"Left","action":"Action","add_currency":"Add Currency"},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"pdf":{"title":"PDF Setting","footer_text":"Footer Text","pdf_layout":"PDF Layout"},"company_info":{"company_info":"Company info","company_name":"Company Name","company_logo":"Company Logo","section_description":"Information about your company that will be displayed on invoices, estimates and other documents created by omtbiz.","phone":"Phone","country":"Country","state":"State","city":"City","address_1":"Address 1","address_2":"Address 2","zip":"Zip","save":"Save","updated_message":"Company information updated successfully"},"customization":{"customization":"customization","save":"Save","addresses":{"title":"Addresses","section_description":"You can set Customer Billing Address and Customer Shipping Address Format (Displayed in PDF only). ","customer_billing_address":"Customer Billing Address","customer_shipping_address":"Customer Shipping Address","company_address":"Company Address","insert_fields":"Insert Fields","contact":"Contact","address":"Address","display_name":"Display Name","primary_contact_name":"Primary Contact Name","email":"Email","website":"Website","name":"Name","country":"Country","state":"State","city":"City","company_name":"Company Name","address_street_1":"Address Street 1","address_street_2":"Address Street 2","phone":"Phone","zip_code":"Zip Code","address_setting_updated":"Address Setting updated successfully"},"updated_message":"Company information updated successfully","invoices":{"title":"Invoices","invoice_prefix":"Invoice Prefix","invoice_settings":"Invoice Settings","autogenerate_invoice_number":"Auto-generate Invoice Number","invoice_setting_description":"Disable this, If you don\'t wish to auto-generate invoice numbers each time you create a new invoice.","enter_invoice_prefix":"Enter invoice prefix","invoice_setting_updated":"Invoice Setting updated successfully"},"references":{"title":"References","reference_prefix":"Reference Prefix","reference_settings":"Reference Settings","autogenerate_reference_number":"Auto-generate Reference Number","reference_setting_description":"Disable this, If you don\'t wish to auto-generate reference numbers each time you create a new reference.","enter_reference_prefix":"Enter reference prefix","reference_setting_updated":"Reference Setting updated successfully"},"estimates":{"title":"Estimates","estimate_prefix":"Estimate Prefix","estimate_settings":"Estimate Settings","autogenerate_estimate_number":"Auto-generate Estimate Number","estimate_setting_description":"Disable this, If you don\'t wish to auto-generate estimate numbers each time you create a new estimate.","enter_estimate_prefix":"Enter estmiate prefix","estimate_setting_updated":"Estimate Setting updated successfully"},"payments":{"title":"Payments","payment_prefix":"Payment Prefix","payment_settings":"Payment Settings","autogenerate_payment_number":"Auto-generate Payment Number","payment_setting_description":"Disable this, If you don\'t wish to auto-generate payment numbers each time you create a new payment.","enter_payment_prefix":"Enter Payment Prefix","payment_setting_updated":"Payment Setting updated successfully"}},"account_settings":{"profile_picture":"Profile Picture","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","account_settings":"Account Settings","save":"Save","section_description":"You can update your name, email & password using the form below.","updated_message":"Account Settings updated successfully"},"user_profile":{"name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password"},"notification":{"title":"Notification","email":"Send Notifications to","description":"Which email notifications would you like to receive when something changes?","invoice_viewed":"Invoice viewed","invoice_viewed_desc":"When your customer views the invoice sent via omtbiz dashboard.","estimate_viewed":"Estimate viewed","estimate_viewed_desc":"When your customer views the estimate sent via omtbiz dashboard.","save":"Save","email_save_message":"Email saved successfully","please_enter_email":"Please Enter Email"},"expense_category":{"title":"Expense Categories","action":"Action","description":"Categories are required for adding expense entries. You can Add or Remove these categories according to your preference.","add_new_category":"Add New Category","category_name":"Category Name","category_description":"Description","created_message":"Expense Category created successfully","deleted_message":"Expense category deleted successfully","updated_message":"Expense category updated successfully","confirm_delete":"You will not be able to recover this Expense Category","already_in_use":"Category is already in use"},"preferences":{"currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","save":"Save","discount_per_item":"Discount Per Item","discount_setting_description":"Add Discount for each product.","preference":"Preference | Preferences","general_settings":"Default preferences for the system.","updated_message":"Preferences updated successfully","select_language":"select language","select_time_zone":"select Time Zone","select_date_formate":"select Date Formate","select_financial_year":"select financial year","allow_negative_inventory":"Allow Negative Inventory","allow_negative_description1":"If \'Yes\' is selected then app will allow Negative Inventory in Order, Estimate and in Invoice.","allow_negative_description2":"If \'No\' is selected then app will not allow Negative Inventory in Order, Estimate and in Invoice. An error message will be shown - \'Stock is negative\'"},"update_app":{"title":"Update App","description":"You can easily update Omtbiz by checking for a new update by clicking the button below","check_update":"Check for updates","avail_update":"New Update available","next_version":"Next version","update":"Update Now","update_progress":"Update in progress...","progress_text":"It will just take a few minutes. Please do not refresh the screen or close the window before the update finishes","update_success":"App has been updated! Please wait while your browser window gets reloaded automatically.","latest_message":"No update available! You are on the latest version.","current_version":"Current Version"}},"users":{"title":"Users","add_user":"Add User","contacts_list":"User List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","change_password":"New Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_user":"Add New User","save_user":"Save User","update_user":"Update User","user":"user | Users","new_user":"New User","edit_user":"Edit User","user_info":"User Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_Users":"No Users yet!","no_Users_found":"No Users found!","list_of_Users":"This section will contain the list of Users.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_user":"Select a User","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this User | You will not be able to recover these Users","created_message":"User created successfully","updated_message":"User updated successfully","deleted_message":"User deleted successfully | Users deleted successfully","confirm_password":"Confirm Password","change_confirm_password":"Confirm New Password","company_name":"Company Name","companies":"Companies","role":"Role","roles":"Roles"},"notes":{"add_note":"Add Note","edit_note":"Edit Note","new_note":"New Note","title":"Notes","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_note":"Save Note","update_note":"Update Note","note":"Note | Notes","add_new_note":"Add New Note","no_notes":"No notes yet!","list_of_notes":"This section will contain the list of notes.","select_a_unit":"select unit","notes":"Notes","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","note_attached_message":"Cannot delete an note which is already in use","confirm_delete":"You will not be able to recover this Note | You will not be able to recover these Notes","created_message":"Note created successfully","updated_message":"Note updated successfully","deleted_message":"Note deleted successfully | Notes deleted successfully"},"dispatch":{"add_dispatch":"Add dispatch","edit_dispatch":"Edit dispatch","new_dispatch":"New dispatch","title":"Dispatch","date":"Date","name":"Party Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","transport":"Transport","person":"Person name","status":"Status","time":"Time","date_of_creation":"Date Of Creation","action":"Action","save_dispatch":"Save dispatch","date_time":"Date","update_dispatch":"Update dispatch","dispatch":"Dispatch","confirm_dispatch":"Dispatch all selected items","confirm_to_be_dispatch":"Undispatch all selected items","add_new_dispatch":"Add New dispatch","no_dispatch":"No dispatch yet!","list_of_dispatch":"This section will contain the list of dispatch.","select_a_unit":"select unit","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","invoice_id":"Invoice Number","invoice_name":"Invoice Name","invoice_report_title":"Dispatch","invoice_report_text":"Do you want to print this dispatch?","dispatch_attached_message":"Cannot delete an dispatch which is already in use","confirm_delete":"You will not be able to recover this dispatch | You will not be able to recover these dispatch","created_message":"Dispatch created successfully","updated_message":"Dispatch updated successfully","deleted_message":"Dispatch deleted successfully","multiple_dispatch_message":"Selected dispatch moved","print_dispatch":"Print"},"inventory":{"avg_price":"Average Price","add_inventory":"Add Inventory","edit_inventory":"Edit Inventory","new_inventory":"New Inventory","title":"Inventory","date":"Date","name":"Name","worker_name":"Worker Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Cost Price","sale_price":"Sale Price","date_of_creation":"Date Of Creation","action":"Action","save_inventory":"Save Inventory","update_inventory":"Update Inventory","add_new_inventory":"Add New Inventory","no_inventory":"No inventory yet!","list_of_inventory":"This section will contain the list of inventory.","select_a_unit":"select unit","inventory":"Inventory","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","quantity":"Quantity","inventory_attached_message":"Cannot delete an inventory which is already in use","confirm_delete":"You will not be able to recover this Inventory | You will not be able to recover these Inventory","created_message":"Inventory created successfully","updated_message":"Inventory updated successfully","deleted_message":"Inventory deleted successfully | Inventory deleted successfully"},"bank":{"add_bank":"Add Bank","edit_bank":"Edit Bank","new_bank":"New Bank","title":"Banks","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_bank":"Save Bank","update_bank":"Update Bank","bank":"Bank | Banks","add_new_bank":"Add New Bank","no_banks":"No banks yet!","list_of_banks":"This section will contain the list of banks.","select_a_unit":"select unit","banks":"Banks","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","bank_attached_message":"Cannot delete an bank which is already in use","confirm_delete":"You will not be able to recover this Bank | You will not be able to recover these Banks","created_message":"Bank created successfully","updated_message":"Bank updated successfully","deleted_message":"Bank deleted successfully | Banks deleted successfully"},"wizard":{"account_info":"Account Information","account_info_desc":"Below details will be used to create the main Administrator account. Also you can change the details anytime after logging in.","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","save_cont":"Save & Continue","company_info":"Company Information","company_info_desc":"This information will be displayed on invoices. Note that you can edit this later on settings page.","company_name":"Company Name","company_logo":"Company Logo","logo_preview":"Logo Preview","preferences":"Preferences","preferences_desc":"Default preferences for the system.","country":"Country","state":"State","city":"City","address":"Address","street":"Street1 | Street2","phone":"Phone","zip_code":"Zip Code","go_back":"Go Back","currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","from_address":"From Address","username":"Username","next":"Next","continue":"Continue","skip":"Skip","database":{"database":"Site URL & Database","connection":"Database Connection","host":"Database Host","port":"Database Port","password":"Database Password","app_url":"App URL","username":"Database Username","db_name":"Database Name","desc":"Create a database on your server and set the credentials using the form below."},"permissions":{"permissions":"Permissions","permission_confirm_title":"Are you sure you want to continue?","permission_confirm_desc":"Folder permission check failed","permission_desc":"Below is the list of folder permissions which are required in order for the app to work. If the permission check fails, make sure to update your folder permissions."},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"req":{"system_req":"System Requirements","php_req_version":"Php (version {version} required)","check_req":"Check Requirements","system_req_desc":"Omtbiz has a few server requirements. Make sure that your server has the required php version and all the extensions mentioned below."},"errors":{"migrate_failed":"Migrate Failed","database_variables_save_error":"Cannot write configuration to .env file. Please check its file permissions","mail_variables_save_error":"Email configuration failed.","connection_failed":"Database connection failed","database_should_be_empty":"Database should be empty"},"success":{"mail_variables_save_successfully":"Email configured successfully","database_variables_save_successfully":"Database configured successfully."}},"layout_login":{"copyright_omtbiz":"Copyright @ Omtbiz - 2024","super_simple_invoicing":"Super Simple Invoicing","for_freelancer":"for Freelancers &","small_businesses":"Small Businesses ","omtbiz_help":""},"validation":{"invalid_url":"Invalid url (ex: http://www.omtbiz.com)","required":"Field is required.","email_incorrect":"Incorrect Email.","email_already_taken":"The email has already been taken.","email_does_not_exist":"User with given email doesn\'t exist","send_reset_link":"Send Reset Link","not_yet":"Not yet? Send it again","password_min_length":"Password must contain {count} characters","name_min_length":"Name must have at least {count} letters.","numbers_only":"Numbers Only.","number_min":"Minimum length should be {min}","number_max":"Maximum length should be {max}","characters_only":"Characters Only.","password_incorrect":"Passwords must be identical","password_length":"Password must be {count} character long.","qty_must_greater_than_zero":"Quantity must be greater than zero.","price_greater_than_zero":"Price must be greater than zero.","payment_greater_than_zero":"Payment must be greater than   zero.","payment_greater_than_due_amount":"Entered Payment is more than due amount of this invoice.","quantity_maxlength":"Quantity should not be greater than 20 digits.","price_maxlength":"Price should not be greater than 20 digits.","price_minvalue":"Price should be greater than 0.","amount_maxlength":"Amount should not be greater than 20 digits.","amount_minvalue":"Amount should be greater than 0.","description_maxlength":"Description should not be greater than 255 characters.","maximum_options_error":"Maximum  of {max} options selected. First remove a selected option to select another.","notes_maxlength":"Notes should not be greater than 255 characters.","address_maxlength":"Address should not be greater than 255 characters.","ref_number_required":"Reference number is required.","prefix_maxlength":"Prefix should not be greater than 5 characters."},"audit_logs":{"title":"Audit Logs","search_placeholder":"Search by number or customer name","type":"Type","select_type":"Select type","all_types":"All Types","login_logout":"Login & Logout","document":"Document","user":"User","user_placeholder":"Name or email","action":"Action","module":"Module","select_action":"Select action","select_module":"Select module","date_time":"Date & Time","description":"Description","ip":"IP Address","url":"URL","details":"Activity Details","view_details":"View Details","old_values":"Previous Values","new_values":"New Values","no_logs":"No activity found","list_of_logs":"Invoice/estimate/order creation & updates, plus logins and logouts, will appear here — search by number or click a row to open the record.","all_time":"All Time","today":"Today","this_week":"This Week","this_month":"This Month","show_more":"+{count} more","show_less":"Show less"}}');
+module.exports = /*#__PURE__*/JSON.parse('{"navigation":{"dashboard":"Dashboard","customers":"Customers","calculator":"Calculator","items":"Bill-ty","bills":"Raw Bill","invoices":"Invoices","expenses":"Expenses","estimates":"Estimates","payments":"Payments","receipts":"Receipts","receipt_approvals":"Receipt Approvals","voucher_approvals":"Voucher Approvals","reports":"Reports","settings":"Settings","logout":"Logout","users":"Users","audit_logs":"Audit Logs","notes":"Notes","bank":"Bank","inventory":"Inventory","master":"Ledger","ledger":"Display","voucher":"Voucher","dispatch":"Dispatch","dispatch_dashboard":"Dispatch Dashboard","orders":"Orders"},"general":{"yes":"Yes","no":"No","view_pdf":"View PDF","download_pdf":"Download PDF","save":"Save","daybook":"Day Book","daysheet":"Day Sheet","dispatch":"Dispatch","undispatch":"Undispatch","cancel":"Cancel","update":"Update","download":"Download","from_date":"From Date","to_date":"To Date","from":"From","to":"To","go_back":"Go Back","back_to_login":"Back to Login?","home":"Home","filter":"Filter","delete":"Delete","edit":"Edit","view":"View","add_new_item":"Add New Item","clear_all":"Clear All","showing":"Showing","of":"of","actions":"Actions","subtotal":"SUBTOTAL","fixed":"Fixed","percentage":"Percentage","total_amount":"TOTAL AMOUNT","bill_to":"Bill to","ship_to":"Ship to","due":"Due","draft":"Draft","sent":"Sent","all":"All","select_all":"Select All","choose_file":"Click here to choose a file","choose_template":"Choose a template","choose":"Choose","remove":"Remove","powered_by":"Powered by","bytefury":"Bytefury","select_a_status":"Select a status","search":"Search","are_you_sure":"Are you sure?","list_is_empty":"List is empty.","four_zero_four":"404","you_got_lost":"Whoops! You got Lost!","go_home":"Go Home","setting_updated":"Setting updated successfully","select_state":"Select state","select_country":"Select Country","select_city":"Select City","street_1":"Street 1","street_2":"Street 2","action_failed":"Action Failed","to_display":"To Display","increase-price":"Increase Price","end_of_list":"End of list","summary_stock":"Summary Stock","inventory_stock":"Inventory Stock","invoice_stock":"Invoice Stock"},"dashboard":{"select_year":"Select year","cards":{"due_amount":"Amount Due","customers":"Customers","invoices":"Invoices","estimates":"Estimates"},"chart_info":{"total_sales":"Sales","total_receipts":"Receipts","total_expense":"Expenses","net_income":"Net Income","year":"Select year"},"weekly_invoices":{"title":"Weekly Invoices"},"monthly_chart":{"title":"Sales & Expenses"},"recent_invoices_card":{"title":"Due Invoices","due_on":"Due On","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"},"recent_estimate_card":{"title":"Recent Estimates","date":"Date","customer":"Customer","due_amount":"Amount Due","actions":"Actions","view_all":"View All"}},"customers":{"title":"Customers","add_customer":"Add Customer","contacts_list":"Customer List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_customer":"Add New Customer","save_customer":"Save Customer","update_customer":"Update Customer","customer":"Customer | Customers","new_customer":"New Customer","edit_customer":"Edit Customer","basic_info":"Basic Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_customers":"No customers yet!","no_customers_found":"No customers found!","list_of_customers":"This section will contain the list of customers.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_customer":"Select a customer","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this Customer | You will not be able to recover these Customers","created_message":"Customer created successfully","updated_message":"Customer updated successfully","deleted_message":"Customer deleted successfully | Customers deleted successfully"},"items":{"add_bill":"Add Bill-Ty","edit_bill":"Edit Bill-Ty","new_bill":"New Bill-Ty","title":"Items","date":"Date","sale_price":"Sale Price","dispatch":"Dispatch","party_name":"Party name","worker_name":"Worker Name","item_name":"Item Name","invoice_number":"Invoice Number","need_to_be_dispatch":"Need to be dispatch","items_list":"Items List","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_item":"Add Item","save_item":"Save Item","update_item":"Update Item","item":"Item | Items","add_new_item":"Add New Item","new_item":"New Item","edit_item":"Edit Item","no_items":"No items yet!","list_of_items":"This section will contain the list of items.","select_a_unit":"select unit","bill_ty":"Bill Ty","item_attached_message":"Cannot delete an item which is already in use","confirm_delete":"You will not be able to recover this Item | You will not be able to recover these Items","created_message":"Item created successfully","updated_message":"Item updated successfully","deleted_message":"Item deleted successfully | Items deleted successfully","price_increase_message":"Item price increased successfully | Items price increased successfully"},"masters":{"add_account_master":"Add Ledger","edit_account_master":"Edit Ledger","new_account_master":"New Ledger","title":"Ledger","date":"Date","masters_list":"Ledger List","name":"Name","unit":"Unit","mobile_number":"Mobile no.","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_master":"Add Ledger","save_master":"Save Ledger","update_master":"Update Ledger","master":"Ledger","add_new_master":"Add New Ledger","new_master":"New Ledger","edit_master":"Edit Ledger","no_masters":"No account masters yet!","list_of_masters":"This section will contain the list of masters.","select_a_unit":"select unit","account_master":"Ledger","groups":"Group","address":"Address","country":"Country","state":"State","select-state":"Select a State","opening_balance":"Opening Balance","save_masters":"Save Ledger","master_attached_message":"Cannot delete an master which is already in use","confirm_delete":"You will not be able to recover this Ledger | You will not be able to recover these Ledger","created_message":"Master created successfully","updated_message":"Master updated successfully","deleted_message":"Master deleted successfully | Ledger deleted successfully"},"groups":{"name":"Name","add_new_group":"Add new Group","select_an_group":"Select an Group","created_message":"Group created successfully","updated_message":"Group updated successfully","deleted_message":"Group deleted successfully | Groups deleted successfully"},"ledgers":{"title":"Display","date":"Date","ledgers_list":"Displays List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_ledger":"Add Display","save_ledger":"Save Display","update_ledger":"Update Display","ledger":"Display | Displays","add_new_ledger":"Add New Display","new_ledger":"New Display","edit_ledger":"Edit Display","no_ledgers":"No ledgers yet!","list_of_ledgers":"This section will contain the list of ledgers.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","closing_balance":"Closing Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Voucher Type","voucher_id":"Voucher Id","ledger_attached_message":"Cannot delete an ledger which is already in use","confirm_delete":"You will not be able to recover this Display | You will not be able to recover these Displays","created_message":"Display created successfully","updated_message":"Display updated successfully","deleted_message":"Display deleted successfully | Displays deleted successfully","inventory_item_quantity":"Quantity"},"daybook":{"title":"Day Book","title-2":"Day Sheet","date":"Date","daybooks_list":"Day Books List","name":"Name","unit":"Unit","create":"Create","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","quantity":"Quantity","add_daybook":"Add Day Book","save_daybook":"Save Day Book","update_daybook":"Update Day Book","daybook":"Day Book | Day Books","add_new_daybook":"Add New Day Book","new_daybook":"New Day Book","edit_daybook":"Edit Day Book","no_daybook":"No daybooks yet!","list_of_daybook":"This section will contain the list of daybooks.","select_a_unit":"select unit","type":"Type","account":"Account","debit":"Debit","credit":"Credit","balance":"Balance","short_narration":"Short Narration","particulars":"Particulars","voucher_type":"Type","voucher_count":"Count","voucher_debit":"Debit","voucher_credit":"Credit","voucher_balance":"Balance","voucher_id":"Voucher Id","daybook_attached_message":"Cannot delete an daybook which is already in use","confirm_delete":"You will not be able to recover this Day Book | You will not be able to recover these Day Books","created_message":"Day Book created successfully","updated_message":"Day Book updated successfully","deleted_message":"Day Book deleted successfully | Day Books deleted successfully","inventory_item_quantity":"Item Quantity"},"daysheet":{"city":"City","date":"Date:","transport":"Transport","lot":"Lot","reference-number":"Reference Number","name":"Name","party-name":"Party Name","pm":"PM","sign":"Sign"},"vouchers":{"title":"Vouchers","date":"Date","vouchers_list":"Account Vouchers List","name":"Name","unit":"Unit","groups":"Group","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","add_voucher":"Add Account Voucher","save_voucher":"Save Account Voucher","voucher":"Account Voucher | Account Vouchers","add_new_voucher":"Add New Account Voucher","new_voucher":"New Account Voucher","edit_voucher":"Edit Account Voucher","no_vouchers":"No vouchers yet!","no_vouchers_pending_approval":"No vouchers pending approval.","list_of_vouchers":"This section will contain the list of vouchers.","list_of_vouchers_pending_approval":"This section contains vouchers waiting for admin approval.","select_a_unit":"select unit","voucher_attached_message":"Cannot delete an voucher which is already in use","confirm_delete":"You will not be able to recover this Account Voucher | You will not be able to recover these Account Vouchers","created_message":"Account Voucher created successfully","updated_message":"Account Voucher updated successfully","deleted_message":"Account Voucher deleted successfully | Account Vouchers deleted successfully","approve_voucher":"Approve Voucher","decline_voucher":"Decline Voucher","need_approval":"Need Approval","confirm_approve":"Do you want to approve this voucher?","confirm_decline":"Do you want to decline this voucher?","approved_message":"Voucher approved successfully","declined_message":"Voucher declined successfully","submitted_for_approval_message":"Voucher submitted for admin approval","approvals_title":"Vouchers To Be Approved","balace_not_equal_title":"Balance!","balace_not_equal_desc":"Voucher debit/credit balance should be equal","duplicate_vouchers":"This will duplicate/update existing vouchers"},"estimates":{"title":"Estimates","count":"Item count","name":"Name","estimate":"Estimate | Estimates","estimates_list":"Estimates List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","estimate_number":"Estimate Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","estimate_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_estimate":"Send Estimate","record_payment":"Record Payment","add_estimate":"Add Estimate","save_estimate":"Save Estimate","confirm_conversion":"You want to convert this Estimate into Invoice?","conversion_message":"Invoice created successful","confirm_send_estimate":"This estimate will be sent via email to the customer","confirm_mark_as_sent":"This estimate will be marked as sent","confirm_mark_as_accepted":"This estimate will be marked as Accepted","confirm_mark_as_rejected":"This estimate will be marked as Rejected","no_matching_estimates":"There are no matching estimates!","mark_as_sent_successfully":"Estimate marked as sent successfully","send_estimate_successfully":"Estimate sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_estimate":"New Estimate","add_new_estimate":"Add New Estimate","update_Estimate":"Update Estimate","edit_estimate":"Edit Estimate","items":"items","Estimate":"Estimate | Estimates","no_estimates":"No estimates yet!","list_of_estimates":"This section will contain the list of estimates.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Estimate marked as accepted","marked_as_rejected_message":"Estimate marked as rejected","confirm_delete":"You will not be able to recover this Estimate | You will not be able to recover these Estimates","created_message":"Estimate created successfully","updated_message":"Estimate updated successfully","deleted_message":"Estimate deleted successfully | Estimates deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"orders":{"title":"Orders","count":"Item count","name":"Name","order":"Order | Orders","orders_list":"Orders List","days":"{days} Days","months":"{months} Month","years":"{years} Year","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","remaining_quantity":"Remaining Quantity","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","order_number":"Order Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","expiry_date":"Expiry Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","bank":"Bank","banks":"Banks","order_template":"Template","convert_to_invoice":"Convert to Invoice","mark_as_sent":"Mark as Sent","send_order":"Send Order","record_payment":"Record Payment","add_order":"Add Order","save_order":"Save Order","confirm_conversion":"You want to convert this Order into Invoice?","conversion_message":"Invoice created successful","confirm_send_order":"This order will be sent via email to the customer","confirm_mark_as_sent":"This order will be marked as sent","confirm_mark_as_accepted":"This order will be marked as Accepted","confirm_mark_as_rejected":"This order will be marked as Rejected","no_matching_orders":"There are no matching orders!","mark_as_sent_successfully":"Order marked as sent successfully","send_order_successfully":"Order sent successfully","errors":{"required":"Field is required."},"accepted":"Accepted","sent":"Sent","draft":"Draft","declined":"Declined","new_order":"New Order","add_new_order":"Add New Order","update_Order":"Update Order","edit_order":"Edit Order","items":"items","Order":"Order | Orders","no_orders":"No orders yet!","list_of_orders":"This section will contain the list of orders.","mark_as_rejected":"Mark as rejected","mark_as_accepted":"Mark as accepted","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"marked_as_accepted_message":"Order marked as accepted","marked_as_rejected_message":"Order marked as rejected","confirm_delete":"You will not be able to recover this Order | You will not be able to recover these Orders","created_message":"Order created successfully","updated_message":"Order updated successfully","deleted_message":"Order deleted successfully | Orders deleted successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_item":"Type or click to select an item","type_item_description":"Type Item Description (optional)"},"quantity":"Quantity","view":"View"},"invoices":{"add":"Add :","title":"Invoices","bulk_title":"Bulk Invoices","invoices_list":"Invoices List","days":"{days} Days","months":"{months} Month","years":"{years} Year","out_of_stock":"Out of stock","update_inventory_quantity":"Max quantity available is {max}, do you want to update the quantity.","all":"All","paid":"Paid","unpaid":"Unpaid","customer":"CUSTOMER","paid_status":"PAID STATUS","ref_no":"REF NO.","number":"NUMBER","due_amount":"AMOUNT DUE","partially_paid":"Partially Paid","total":"Total","sub_total":"Sub Total","invoice":"Invoice | Invoices","invoice_number":"Invoice Number","ref_number":"Ref Number","contact":"Contact","add_item":"Add an Item","date":"Date","due_date":"Due Date","status":"Status","amount":"Amount","action":"Action","notes":"Notes","view":"View","quantity":"Quantity","send_invoice":"Send Invoice","invoice_template":"Invoice Template","template":"Template","mark_as_sent":"Mark as sent","confirm_send_invoice":"This invoice will be sent via email to the customer","invoice_mark_as_sent":"This invoice will be marked as sent","confirm_send":"This invoice will be sent via email to the customer","invoice_date":"Invoice Date","record_payment":"Record Payment","add_new_invoice":"Add New Invoice","update_expense":"Update Expense","edit_invoice":"Edit Invoice","new_invoice":"New Invoice","save_invoice":"Save Invoice","update_invoice":"Update Invoice","no_invoices":"No Invoices yet!","list_of_invoices":"This section will contain the list of invoices.","less":"Less : ","select_invoice":"Select Invoice","no_matching_invoices":"There are no matching invoices!","mark_as_sent_successfully":"Invoice marked as sent successfully","send_invoice_successfully":"Invoice sent successfully","updated_inventory_price":"Inventory item price updated","invoice_report_title":"Invoice","invoice_report_text":"Do you want to print this invoice?","inventory":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Cost Price","sale_price":"Sale Price","total":"Total","sub_total":"Sub Total","amount":"Amount","select_an_inventory":"Type or click to select an item","type_inventory_description":"Type Item Description (optional)"},"payment_attached_message":"One of the selected invoices already have a payment attached to it. Make sure to delete the attached payments first in order to go ahead with the removal","confirm_delete":"You will not be able to recover this Invoice | You want to delete invoices.","confirm_delete_2":"You want to delete {count} invoice. | You want to delete {count} invoices.","created_message":"Invoice created successfully","updated_message":"Invoice updated successfully","deleted_message":"Invoice deleted successfully | Invoices deleted successfully","marked_as_sent_message":"Invoice marked as sent successfully","user_email_does_not_exist":"User email does not exist","something_went_wrong":"something went wrong","invalid_due_amount_message":"Total Invoice amount cannot be less than total paid amount for this Invoice. Please update the invoice or delete the associated payments to continue.","estimate-list":"Select Estimate","whatsapp":"Sent on whatsapp","send_selected_whatsapp":"Send Selected on WhatsApp","sending_selected_whatsapp":"Sending on WhatsApp..."},"credit_notes":{"title":"Credit Notes","credit_notes_list":"Credit Notes List","credit_notes":"Credit Notes","contact":"Contact","date":"Date","amount":"Amount","action":"Action","credit_number":"Credit Number","notes":"Notes","confirm_delete":"Do you want to delete this credit note?","item":{"title":"Item Title","description":"Description","quantity":"Quantity","price":"Price","total":"Total","sub_total":"Sub Total"}},"payments":{"title":"Payments","list":"Party name","payments_list":"Payments List","record_payment":"Record Payment","customer":"Customer","date":"Date","amount":"Amount","action":"Action","payment_number":"Payment Number","payment_mode":"Payment Mode","invoice":"Invoice","note":"Note","party_name":"Party name","select_a_list":"Select from list","add_payment":"Add Payment","new_payment":"New Payment","edit_payment":"Edit Payment","view_payment":"View Payment","add_new_payment":"Add New Payment","save_payment":"Save Payment","update_payment":"Update Payment","payment":"Payment | Payments","no_payments":"No payments yet!","list_of_payments":"This section will contain the list of payments.","select_payment_mode":"Select payment mode","payment_status":"Status","confirm_delete":"You will not be able to recover this Payment | You will not be able to recover these Payments","created_message":"Payment created successfully","updated_message":"Payment updated successfully","deleted_message":"Payment deleted successfully | Payments deleted successfully","invalid_amount_message":"Payment amount is invalid"},"receipts":{"title":"Receipts","list":"Party name","receipts_list":"Receipts List","record_receipt":"Record Receipt","customer":"Customer","date":"Date","amount":"Amount","action":"Action","receipt_number":"Receipt Number","receipt_mode":"Receipt Mode","invoice":"Invoice","note":"Note","number":"Number","name":"Name","count":"Count","view":"View","mode":"Mode","closing_balance":"Closing Balance","opening_balance":"Opening Balance","select_a_list":"Select from list","add_receipt":"Add Receipt","new_receipt":"New Receipt","edit_receipt":"Edit Receipt","view_receipt":"View Receipt","add_new_receipt":"Add New Receipt","save_receipt":"Save Receipt","update_receipt":"Update Receipt","receipt":"Receipt | Receipts","approvals_title":"Receipts To Be Approved","no_receipts":"No receipts yet!","list_of_receipts":"This section will contain the list of receipts.","no_receipts_pending_approval":"No receipts pending approval.","list_of_receipts_pending_approval":"This section contains receipts waiting for admin approval.","select_receipt_mode":"Select receipt mode","receipt_status":"Status","approve_receipt":"Approve Receipt","decline_receipt":"Decline Receipt","confirm_approve":"Do you want to approve this receipt?","confirm_decline":"Do you want to decline this receipt?","approved_message":"Receipt approved successfully","declined_message":"Receipt declined successfully","submitted_for_approval_message":"Receipt submitted for admin approval","confirm_delete":"You will not be able to recover this Receipt | You will not be able to recover these Receipts","created_message":"Receipt created successfully","updated_message":"Receipt updated successfully","deleted_message":"Receipt deleted successfully | Receipts deleted successfully","invalid_amount_message":"Receipt amount is invalid","receipt_greater_than_due_amount":"Receipt amount is greater than Due amount","receipt_greater_than_zero":"Receipt amount should be greater than 0"},"expenses":{"title":"Expenses","expenses_list":"Expenses List","expense_title":"Title","contact":"Contact","category":"Category","from_date":"From Date","to_date":"To Date","expense_date":"Date","description":"Description","receipt":"Receipt","amount":"Amount","action":"Action","note":"Note","category_id":"Category Id","date":"Expense Date","add_expense":"Add Expense","add_new_expense":"Add New Expense","save_expense":"Save Expense","update_expense":"Update Expense","download_receipt":"Download Receipt","edit_expense":"Edit Expense","new_expense":"New Expense","expense":"Expense | Expenses","no_expenses":"No expenses yet!","list_of_expenses":"This section will contain the list of expenses.","confirm_delete":"You will not be able to recover this Expense | You will not be able to recover these Expenses","created_message":"Expense created successfully","updated_message":"Expense updated successfully","deleted_message":"Expense deleted successfully | Expenses deleted successfully","categories":{"categories_list":"Categories List","title":"Title","name":"Name","description":"Description","amount":"Amount","actions":"Actions","add_category":"Add Category","new_category":"New Category","category":"Category | Categories","select_a_category":"Select a category"}},"login":{"email":"Email","password":"Password","forgot_password":"Forgot Password?","or_signIn_with":"or Sign in with","login":"Login","register":"Register","reset_password":"Reset Password","password_reset_successfully":"Password Reset Successfully","enter_email":"Enter email","enter_password":"Enter Password","retype_password":"Retype Password","login_placeholder":"mail@example.com"},"reports":{"title":"Report","from_date":"From Date","to_date":"To Date","status":"Status","paid":"Paid","unpaid":"Unpaid","download_pdf":"Download PDF","view_pdf":"View PDF","update_report":"Update Report","send_report":"Send Report on Whatsapp","report":"Report | Reports","profit_loss":{"profit_loss":"Profit & Loss","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"sales":{"sales":"Sales","date_range":"Select Date Range","to_date":"To Date","from_date":"From Date","report_type":"Report Type"},"errors":{"required":"Field is required."},"invoices":{"invoice":"Invoice","invoice_date":"Invoice Date","due_date":"Due Date","amount":"Amount","contact_name":"Contact Name","status":"Status"},"estimates":{"estimate":"Estimate","estimate_date":"Estimate Date","due_date":"Due Date","estimate_number":"Estimate Number","ref_number":"Ref Number","amount":"Amount","contact_name":"Contact Name","status":"Status"},"expenses":{"expenses":"Expenses","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"},"customers":{"customers":"Customers","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","till_date":"Till Date","from_date":"From Date","date_range":"Select Date Range","ledgers":"Select Ledgers"},"banks":{"banks":"Banks","category":"Category","date":"Date","amount":"Amount","to_date":"To Date","from_date":"From Date","date_range":"Select Date Range"}},"settings":{"menu_title":{"account_settings":"Account Settings","company_information":"Company Information","customization":"Customization","preferences":"Preferences","notifications":"Notifications","expense_category":"Expense Categories","update_app":"Update App","all-data":"All Data"},"title":"Settings","setting":"Settings | Settings","general":"General","view":"View","language":"Language","primary_currency":"Primary Currency","timezone":"Time Zone","date_format":"Date Format","currencies":{"title":"Currencies","currency":"Currency | Currencies","currencies_list":"Currencies List","select_currency":"Select Currency","name":"Name","code":"Code","symbol":"Symbol","precision":"Precision","thousand_separator":"Thousand Separator","decimal_separator":"Decimal Separator","position":"Position","position_of_symbol":"Position Of Symbol","right":"Right","left":"Left","action":"Action","add_currency":"Add Currency"},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"pdf":{"title":"PDF Setting","footer_text":"Footer Text","pdf_layout":"PDF Layout"},"company_info":{"company_info":"Company info","company_name":"Company Name","company_logo":"Company Logo","section_description":"Information about your company that will be displayed on invoices, estimates and other documents created by omtbiz.","phone":"Phone","country":"Country","state":"State","city":"City","address_1":"Address 1","address_2":"Address 2","zip":"Zip","save":"Save","updated_message":"Company information updated successfully"},"customization":{"customization":"customization","save":"Save","addresses":{"title":"Addresses","section_description":"You can set Customer Billing Address and Customer Shipping Address Format (Displayed in PDF only). ","customer_billing_address":"Customer Billing Address","customer_shipping_address":"Customer Shipping Address","company_address":"Company Address","insert_fields":"Insert Fields","contact":"Contact","address":"Address","display_name":"Display Name","primary_contact_name":"Primary Contact Name","email":"Email","website":"Website","name":"Name","country":"Country","state":"State","city":"City","company_name":"Company Name","address_street_1":"Address Street 1","address_street_2":"Address Street 2","phone":"Phone","zip_code":"Zip Code","address_setting_updated":"Address Setting updated successfully"},"updated_message":"Company information updated successfully","invoices":{"title":"Invoices","invoice_prefix":"Invoice Prefix","invoice_settings":"Invoice Settings","autogenerate_invoice_number":"Auto-generate Invoice Number","invoice_setting_description":"Disable this, If you don\'t wish to auto-generate invoice numbers each time you create a new invoice.","enter_invoice_prefix":"Enter invoice prefix","invoice_setting_updated":"Invoice Setting updated successfully"},"references":{"title":"References","reference_prefix":"Reference Prefix","reference_settings":"Reference Settings","autogenerate_reference_number":"Auto-generate Reference Number","reference_setting_description":"Disable this, If you don\'t wish to auto-generate reference numbers each time you create a new reference.","enter_reference_prefix":"Enter reference prefix","reference_setting_updated":"Reference Setting updated successfully"},"estimates":{"title":"Estimates","estimate_prefix":"Estimate Prefix","estimate_settings":"Estimate Settings","autogenerate_estimate_number":"Auto-generate Estimate Number","estimate_setting_description":"Disable this, If you don\'t wish to auto-generate estimate numbers each time you create a new estimate.","enter_estimate_prefix":"Enter estmiate prefix","estimate_setting_updated":"Estimate Setting updated successfully"},"payments":{"title":"Payments","payment_prefix":"Payment Prefix","payment_settings":"Payment Settings","autogenerate_payment_number":"Auto-generate Payment Number","payment_setting_description":"Disable this, If you don\'t wish to auto-generate payment numbers each time you create a new payment.","enter_payment_prefix":"Enter Payment Prefix","payment_setting_updated":"Payment Setting updated successfully"}},"account_settings":{"profile_picture":"Profile Picture","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","account_settings":"Account Settings","save":"Save","section_description":"You can update your name, email & password using the form below.","updated_message":"Account Settings updated successfully"},"user_profile":{"name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password"},"notification":{"title":"Notification","email":"Send Notifications to","description":"Which email notifications would you like to receive when something changes?","invoice_viewed":"Invoice viewed","invoice_viewed_desc":"When your customer views the invoice sent via omtbiz dashboard.","estimate_viewed":"Estimate viewed","estimate_viewed_desc":"When your customer views the estimate sent via omtbiz dashboard.","save":"Save","email_save_message":"Email saved successfully","please_enter_email":"Please Enter Email"},"expense_category":{"title":"Expense Categories","action":"Action","description":"Categories are required for adding expense entries. You can Add or Remove these categories according to your preference.","add_new_category":"Add New Category","category_name":"Category Name","category_description":"Description","created_message":"Expense Category created successfully","deleted_message":"Expense category deleted successfully","updated_message":"Expense category updated successfully","confirm_delete":"You will not be able to recover this Expense Category","already_in_use":"Category is already in use"},"preferences":{"currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","save":"Save","discount_per_item":"Discount Per Item","discount_setting_description":"Add Discount for each product.","preference":"Preference | Preferences","general_settings":"Default preferences for the system.","updated_message":"Preferences updated successfully","select_language":"select language","select_time_zone":"select Time Zone","select_date_formate":"select Date Formate","select_financial_year":"select financial year","allow_negative_inventory":"Allow Negative Inventory","allow_negative_description1":"If \'Yes\' is selected then app will allow Negative Inventory in Order, Estimate and in Invoice.","allow_negative_description2":"If \'No\' is selected then app will not allow Negative Inventory in Order, Estimate and in Invoice. An error message will be shown - \'Stock is negative\'"},"update_app":{"title":"Update App","description":"You can easily update Omtbiz by checking for a new update by clicking the button below","check_update":"Check for updates","avail_update":"New Update available","next_version":"Next version","update":"Update Now","update_progress":"Update in progress...","progress_text":"It will just take a few minutes. Please do not refresh the screen or close the window before the update finishes","update_success":"App has been updated! Please wait while your browser window gets reloaded automatically.","latest_message":"No update available! You are on the latest version.","current_version":"Current Version"}},"users":{"title":"Users","add_user":"Add User","contacts_list":"User List","name":"Name","display_name":"Display Name","primary_contact_name":"Primary Contact Name","contact_name":"Contact Name","due_amount":"Amount Due","email":"Email","address":"Address","phone":"Phone","website":"Website","country":"Country","state":"State","city":"City","zip_code":"Zip Code","added_on":"Added On","action":"Action","password":"Password","change_password":"New Password","street_number":"Street Number","primary_currency":"Primary Currency","add_new_user":"Add New User","save_user":"Save User","update_user":"Update User","user":"user | Users","new_user":"New User","edit_user":"Edit User","user_info":"User Info","billing_address":"Billing Address","shipping_address":"Shipping Address","copy_billing_address":"Copy from Billing","no_Users":"No Users yet!","no_Users_found":"No Users found!","list_of_Users":"This section will contain the list of Users.","primary_display_name":"Primary Display Name","select_currency":"Select currency","select_a_user":"Select a User","type_or_click":"Type or click to select","confirm_delete":"You will not be able to recover this User | You will not be able to recover these Users","created_message":"User created successfully","updated_message":"User updated successfully","deleted_message":"User deleted successfully | Users deleted successfully","confirm_password":"Confirm Password","change_confirm_password":"Confirm New Password","company_name":"Company Name","companies":"Companies","role":"Role","roles":"Roles"},"notes":{"add_note":"Add Note","edit_note":"Edit Note","new_note":"New Note","title":"Notes","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_note":"Save Note","update_note":"Update Note","note":"Note | Notes","add_new_note":"Add New Note","no_notes":"No notes yet!","list_of_notes":"This section will contain the list of notes.","select_a_unit":"select unit","notes":"Notes","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","note_attached_message":"Cannot delete an note which is already in use","confirm_delete":"You will not be able to recover this Note | You will not be able to recover these Notes","created_message":"Note created successfully","updated_message":"Note updated successfully","deleted_message":"Note deleted successfully | Notes deleted successfully"},"dispatch":{"add_dispatch":"Add dispatch","edit_dispatch":"Edit dispatch","new_dispatch":"New dispatch","title":"Dispatch","date":"Date","name":"Party Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","transport":"Transport","person":"Person name","status":"Status","time":"Time","date_of_creation":"Date Of Creation","action":"Action","save_dispatch":"Save dispatch","date_time":"Date","update_dispatch":"Update dispatch","dispatch":"Dispatch","confirm_dispatch":"Dispatch all selected items","confirm_to_be_dispatch":"Undispatch all selected items","add_new_dispatch":"Add New dispatch","no_dispatch":"No dispatch yet!","list_of_dispatch":"This section will contain the list of dispatch.","select_a_unit":"select unit","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","invoice_id":"Invoice Number","invoice_name":"Invoice Name","invoice_report_title":"Dispatch","invoice_report_text":"Do you want to print this dispatch?","dispatch_attached_message":"Cannot delete an dispatch which is already in use","confirm_delete":"You will not be able to recover this dispatch | You will not be able to recover these dispatch","created_message":"Dispatch created successfully","updated_message":"Dispatch updated successfully","deleted_message":"Dispatch deleted successfully","multiple_dispatch_message":"Selected dispatch moved","print_dispatch":"Print","dashboard_title":"Dispatch Dashboard","to_be_dispatched":"To Be Dispatched","dispatched":"Dispatched","total_dispatches":"Total Dispatches","to_be_dispatched_page_title":"To Be Dispatched","completed_dispatch_page_title":"Completed Dispatch","recent_activity":"Recent Activity","recently_dispatched":"Recently Dispatched","recently_added_pending":"Recently Added to Pending","no_recent_dispatches":"Nothing dispatched yet.","no_recent_pending":"Nothing pending right now.","unknown_party":"Unknown party","top_parties_pending":"Top Parties Awaiting Dispatch","pending_aging_title":"Pending Backlog Age","no_pending_backlog":"No pending backlog by party.","view_all":"View All","search_placeholder":"Search by invoice number or party","search_placeholder_invoice_only":"Search by invoice number","date_filter_today":"Today","date_filter_yesterday":"Yesterday","date_filter_next_day":"Next Day","date_filter_this_week":"This Week","date_filter_this_month":"This Month","date_filter_all":"All Time"},"inventory":{"avg_price":"Average Price","add_inventory":"Add Inventory","edit_inventory":"Edit Inventory","new_inventory":"New Inventory","title":"Inventory","date":"Date","name":"Name","worker_name":"Worker Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Cost Price","sale_price":"Sale Price","date_of_creation":"Date Of Creation","action":"Action","save_inventory":"Save Inventory","update_inventory":"Update Inventory","add_new_inventory":"Add New Inventory","no_inventory":"No inventory yet!","list_of_inventory":"This section will contain the list of inventory.","select_a_unit":"select unit","inventory":"Inventory","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","quantity":"Quantity","inventory_attached_message":"Cannot delete an inventory which is already in use","confirm_delete":"You will not be able to recover this Inventory | You will not be able to recover these Inventory","created_message":"Inventory created successfully","updated_message":"Inventory updated successfully","deleted_message":"Inventory deleted successfully | Inventory deleted successfully"},"bank":{"add_bank":"Add Bank","edit_bank":"Edit Bank","new_bank":"New Bank","title":"Banks","date":"Date","name":"Name","unit":"Unit","description":"Description","added_on":"Added On","price":"Price","date_of_creation":"Date Of Creation","action":"Action","save_bank":"Save Bank","update_bank":"Update Bank","bank":"Bank | Banks","add_new_bank":"Add New Bank","no_banks":"No banks yet!","list_of_banks":"This section will contain the list of banks.","select_a_unit":"select unit","banks":"Banks","design_no":"Design No.","rate":"Rate","average":"Average","per_price":"Per Price","bank_attached_message":"Cannot delete an bank which is already in use","confirm_delete":"You will not be able to recover this Bank | You will not be able to recover these Banks","created_message":"Bank created successfully","updated_message":"Bank updated successfully","deleted_message":"Bank deleted successfully | Banks deleted successfully"},"wizard":{"account_info":"Account Information","account_info_desc":"Below details will be used to create the main Administrator account. Also you can change the details anytime after logging in.","name":"Name","email":"Email","password":"Password","confirm_password":"Confirm Password","save_cont":"Save & Continue","company_info":"Company Information","company_info_desc":"This information will be displayed on invoices. Note that you can edit this later on settings page.","company_name":"Company Name","company_logo":"Company Logo","logo_preview":"Logo Preview","preferences":"Preferences","preferences_desc":"Default preferences for the system.","country":"Country","state":"State","city":"City","address":"Address","street":"Street1 | Street2","phone":"Phone","zip_code":"Zip Code","go_back":"Go Back","currency":"Currency","language":"Language","time_zone":"Time Zone","fiscal_year":"Financial Year","date_format":"Date Format","from_address":"From Address","username":"Username","next":"Next","continue":"Continue","skip":"Skip","database":{"database":"Site URL & Database","connection":"Database Connection","host":"Database Host","port":"Database Port","password":"Database Password","app_url":"App URL","username":"Database Username","db_name":"Database Name","desc":"Create a database on your server and set the credentials using the form below."},"permissions":{"permissions":"Permissions","permission_confirm_title":"Are you sure you want to continue?","permission_confirm_desc":"Folder permission check failed","permission_desc":"Below is the list of folder permissions which are required in order for the app to work. If the permission check fails, make sure to update your folder permissions."},"mail":{"host":"Mail Host","port":"Mail Port","driver":"Mail Driver","secret":"Secret","mailgun_secret":"Mailgun Secret","mailgun_domain":"Domain","mailgun_endpoint":"Mailgun Endpoint","ses_secret":"SES Secret","ses_key":"SES Key","password":"Mail Password","username":"Mail Username","mail_config":"Mail Configuration","from_name":"From Mail Name","from_mail":"From Mail Address","encryption":"Mail Encryption","mail_config_desc":"Below is the form for Configuring Email driver for sending emails from the app. You can also configure third party providers like Sendgrid, SES etc."},"req":{"system_req":"System Requirements","php_req_version":"Php (version {version} required)","check_req":"Check Requirements","system_req_desc":"Omtbiz has a few server requirements. Make sure that your server has the required php version and all the extensions mentioned below."},"errors":{"migrate_failed":"Migrate Failed","database_variables_save_error":"Cannot write configuration to .env file. Please check its file permissions","mail_variables_save_error":"Email configuration failed.","connection_failed":"Database connection failed","database_should_be_empty":"Database should be empty"},"success":{"mail_variables_save_successfully":"Email configured successfully","database_variables_save_successfully":"Database configured successfully."}},"layout_login":{"copyright_omtbiz":"Copyright @ Omtbiz - 2024","super_simple_invoicing":"Super Simple Invoicing","for_freelancer":"for Freelancers &","small_businesses":"Small Businesses ","omtbiz_help":""},"validation":{"invalid_url":"Invalid url (ex: http://www.omtbiz.com)","required":"Field is required.","email_incorrect":"Incorrect Email.","email_already_taken":"The email has already been taken.","email_does_not_exist":"User with given email doesn\'t exist","send_reset_link":"Send Reset Link","not_yet":"Not yet? Send it again","password_min_length":"Password must contain {count} characters","name_min_length":"Name must have at least {count} letters.","numbers_only":"Numbers Only.","number_min":"Minimum length should be {min}","number_max":"Maximum length should be {max}","characters_only":"Characters Only.","password_incorrect":"Passwords must be identical","password_length":"Password must be {count} character long.","qty_must_greater_than_zero":"Quantity must be greater than zero.","price_greater_than_zero":"Price must be greater than zero.","payment_greater_than_zero":"Payment must be greater than   zero.","payment_greater_than_due_amount":"Entered Payment is more than due amount of this invoice.","quantity_maxlength":"Quantity should not be greater than 20 digits.","price_maxlength":"Price should not be greater than 20 digits.","price_minvalue":"Price should be greater than 0.","amount_maxlength":"Amount should not be greater than 20 digits.","amount_minvalue":"Amount should be greater than 0.","description_maxlength":"Description should not be greater than 255 characters.","maximum_options_error":"Maximum  of {max} options selected. First remove a selected option to select another.","notes_maxlength":"Notes should not be greater than 255 characters.","address_maxlength":"Address should not be greater than 255 characters.","ref_number_required":"Reference number is required.","prefix_maxlength":"Prefix should not be greater than 5 characters."},"audit_logs":{"title":"Audit Logs","search_placeholder":"Search by number or customer name","type":"Type","select_type":"Select type","all_types":"All Types","login_logout":"Login & Logout","document":"Document","user":"User","user_placeholder":"Name or email","action":"Action","module":"Module","select_action":"Select action","select_module":"Select module","date_time":"Date & Time","description":"Description","ip":"IP Address","url":"URL","details":"Activity Details","view_details":"View Details","old_values":"Previous Values","new_values":"New Values","no_logs":"No activity found","list_of_logs":"Invoice/estimate/order creation & updates, plus logins and logouts, will appear here — search by number or click a row to open the record.","all_time":"All Time","today":"Today","this_week":"This Week","this_month":"This Month","show_more":"+{count} more","show_less":"Show less"}}');
 
 /***/ }),
 
@@ -173487,7 +175924,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _store_index_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/index.js */ "./resources/assets/js/store/index.js");
 /* harmony import */ var _views_layouts_LayoutBasic_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/layouts/LayoutBasic.vue */ "./resources/assets/js/views/layouts/LayoutBasic.vue");
@@ -173558,6 +175995,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_bank_Create_vue__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./views/bank/Create.vue */ "./resources/assets/js/views/bank/Create.vue");
 /* harmony import */ var _views_dispatch_Index_vue__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./views/dispatch/Index.vue */ "./resources/assets/js/views/dispatch/Index.vue");
 /* harmony import */ var _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./views/dispatch/Create.vue */ "./resources/assets/js/views/dispatch/Create.vue");
+/* harmony import */ var _views_dispatch_Dashboard_vue__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./views/dispatch/Dashboard.vue */ "./resources/assets/js/views/dispatch/Dashboard.vue");
+/* harmony import */ var _views_dispatch_Pending_vue__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ./views/dispatch/Pending.vue */ "./resources/assets/js/views/dispatch/Pending.vue");
+/* harmony import */ var _views_dispatch_Completed_vue__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ./views/dispatch/Completed.vue */ "./resources/assets/js/views/dispatch/Completed.vue");
 
 
 
@@ -173687,7 +176127,10 @@ __webpack_require__.r(__webpack_exports__);
 // Dispatch
 
 
-vue__WEBPACK_IMPORTED_MODULE_70__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_73__["default"].use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var routes = [
 /*
  |--------------------------------------------------------------------------
@@ -174077,6 +176520,21 @@ var routes = [
     path: 'dispatch/create',
     name: 'dispatch.create',
     component: _views_dispatch_Create_vue__WEBPACK_IMPORTED_MODULE_69__["default"],
+    meta: ['admin', 'accountant', 'dispatch']
+  }, {
+    path: 'dispatch/dashboard',
+    name: 'dispatch.dashboard',
+    component: _views_dispatch_Dashboard_vue__WEBPACK_IMPORTED_MODULE_70__["default"],
+    meta: ['admin', 'accountant', 'dispatch']
+  }, {
+    path: 'dispatch/pending',
+    name: 'dispatch.pending',
+    component: _views_dispatch_Pending_vue__WEBPACK_IMPORTED_MODULE_71__["default"],
+    meta: ['admin', 'accountant', 'dispatch']
+  }, {
+    path: 'dispatch/completed',
+    name: 'dispatch.completedList',
+    component: _views_dispatch_Completed_vue__WEBPACK_IMPORTED_MODULE_72__["default"],
     meta: ['admin', 'accountant', 'dispatch']
   }, {
     path: 'dispatch/:id/edit',
@@ -176321,6 +178779,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   dipatchedData: () => (/* binding */ dipatchedData),
 /* harmony export */   editDispatch: () => (/* binding */ editDispatch),
 /* harmony export */   editToBeDispatch: () => (/* binding */ editToBeDispatch),
+/* harmony export */   fetchCompletedDispatchList: () => (/* binding */ fetchCompletedDispatchList),
+/* harmony export */   fetchDispatchDashboard: () => (/* binding */ fetchDispatchDashboard),
+/* harmony export */   fetchPendingDispatch: () => (/* binding */ fetchPendingDispatch),
 /* harmony export */   moveMultipleDispatch: () => (/* binding */ moveMultipleDispatch),
 /* harmony export */   moveMultipleToBeDispatch: () => (/* binding */ moveMultipleToBeDispatch),
 /* harmony export */   resetSelectedDispatch: () => (/* binding */ resetSelectedDispatch),
@@ -176369,9 +178830,58 @@ var dipatchedData = function dipatchedData(_ref2, params) {
     });
   });
 };
-var editDispatch = function editDispatch(_ref3, id) {
+
+// Dashboard cards - counts only, no rows.
+var fetchDispatchDashboard = function fetchDispatchDashboard(_ref3) {
   var commit = _ref3.commit,
-    dispatch = _ref3.dispatch;
+    dispatch = _ref3.dispatch,
+    state = _ref3.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.get("/api/dispatch/dashboard").then(function (response) {
+      commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_DASHBOARD_COUNTS, response.data);
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+
+// Standalone "To Be Dispatched" page - loads only the pending list.
+var fetchPendingDispatch = function fetchPendingDispatch(_ref4, params) {
+  var commit = _ref4.commit,
+    dispatch = _ref4.dispatch,
+    state = _ref4.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.get("/api/dispatch/pending", {
+      params: params
+    }).then(function (response) {
+      commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.BOOTSTRAP_TO_BE_DISPATCH, response.data.dispatch_inprogress.data);
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+
+// Standalone "Completed Dispatch" page - loads only the sent list.
+var fetchCompletedDispatchList = function fetchCompletedDispatchList(_ref5, params) {
+  var commit = _ref5.commit,
+    dispatch = _ref5.dispatch,
+    state = _ref5.state;
+  return new Promise(function (resolve, reject) {
+    window.axios.get("/api/dispatch/completed-list", {
+      params: params
+    }).then(function (response) {
+      commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.BOOTSTRAP_DISPATCH, response.data.dispatch_completed.data);
+      resolve(response);
+    })["catch"](function (err) {
+      reject(err);
+    });
+  });
+};
+var editDispatch = function editDispatch(_ref6, id) {
+  var commit = _ref6.commit,
+    dispatch = _ref6.dispatch;
   return new Promise(function (resolve, reject) {
     window.axios.get("/api/dispatch/".concat(id, "/edit")).then(function (response) {
       resolve(response);
@@ -176380,9 +178890,9 @@ var editDispatch = function editDispatch(_ref3, id) {
     });
   });
 };
-var editToBeDispatch = function editToBeDispatch(_ref4, data) {
-  var commit = _ref4.commit,
-    dispatch = _ref4.dispatch;
+var editToBeDispatch = function editToBeDispatch(_ref7, data) {
+  var commit = _ref7.commit,
+    dispatch = _ref7.dispatch;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/to-be-edit", data).then(function (response) {
       resolve(response);
@@ -176391,10 +178901,10 @@ var editToBeDispatch = function editToBeDispatch(_ref4, data) {
     });
   });
 };
-var addDispatch = function addDispatch(_ref5, data) {
-  var commit = _ref5.commit,
-    dispatch = _ref5.dispatch,
-    state = _ref5.state;
+var addDispatch = function addDispatch(_ref8, data) {
+  var commit = _ref8.commit,
+    dispatch = _ref8.dispatch,
+    state = _ref8.state;
   return new Promise(function (resolve, reject) {
     window.axios.post('/api/dispatch', data).then(function (response) {
       commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.ADD_DISPATCH, response.data);
@@ -176404,10 +178914,10 @@ var addDispatch = function addDispatch(_ref5, data) {
     });
   });
 };
-var updateDispatch = function updateDispatch(_ref6, data) {
-  var commit = _ref6.commit,
-    dispatch = _ref6.dispatch,
-    state = _ref6.state;
+var updateDispatch = function updateDispatch(_ref9, data) {
+  var commit = _ref9.commit,
+    dispatch = _ref9.dispatch,
+    state = _ref9.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/".concat(data.id, "/update"), data).then(function (response) {
       if (response.data.success) {
@@ -176419,10 +178929,10 @@ var updateDispatch = function updateDispatch(_ref6, data) {
     });
   });
 };
-var updateToBeDispatch = function updateToBeDispatch(_ref7, data) {
-  var commit = _ref7.commit,
-    dispatch = _ref7.dispatch,
-    state = _ref7.state;
+var updateToBeDispatch = function updateToBeDispatch(_ref10, data) {
+  var commit = _ref10.commit,
+    dispatch = _ref10.dispatch,
+    state = _ref10.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/update-to-be", data).then(function (response) {
       if (response.data.success) {
@@ -176434,10 +178944,10 @@ var updateToBeDispatch = function updateToBeDispatch(_ref7, data) {
     });
   });
 };
-var deleteDispatch = function deleteDispatch(_ref8, id) {
-  var commit = _ref8.commit,
-    dispatch = _ref8.dispatch,
-    state = _ref8.state;
+var deleteDispatch = function deleteDispatch(_ref11, id) {
+  var commit = _ref11.commit,
+    dispatch = _ref11.dispatch,
+    state = _ref11.state;
   return new Promise(function (resolve, reject) {
     window.axios["delete"]("/api/dispatch/".concat(id)).then(function (response) {
       commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.DELETE_DISPATCH, id);
@@ -176449,10 +178959,10 @@ var deleteDispatch = function deleteDispatch(_ref8, id) {
 };
 
 //Dispatched
-var deleteMultipleDispatch = function deleteMultipleDispatch(_ref9, ids) {
-  var commit = _ref9.commit,
-    dispatch = _ref9.dispatch,
-    state = _ref9.state;
+var deleteMultipleDispatch = function deleteMultipleDispatch(_ref12, ids) {
+  var commit = _ref12.commit,
+    dispatch = _ref12.dispatch,
+    state = _ref12.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/delete", {
       'id': ids
@@ -176464,16 +178974,16 @@ var deleteMultipleDispatch = function deleteMultipleDispatch(_ref9, ids) {
     });
   });
 };
-var setSelectAllState = function setSelectAllState(_ref10, data) {
-  var commit = _ref10.commit,
-    dispatch = _ref10.dispatch,
-    state = _ref10.state;
+var setSelectAllState = function setSelectAllState(_ref13, data) {
+  var commit = _ref13.commit,
+    dispatch = _ref13.dispatch,
+    state = _ref13.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, data);
 };
-var selectAllDispatch = function selectAllDispatch(_ref11) {
-  var commit = _ref11.commit,
-    dispatch = _ref11.dispatch,
-    state = _ref11.state;
+var selectAllDispatch = function selectAllDispatch(_ref14) {
+  var commit = _ref14.commit,
+    dispatch = _ref14.dispatch,
+    state = _ref14.state;
   if (state.selectedDispatch.length === state.dispatch.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_DISPATCH, []);
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
@@ -176485,10 +178995,10 @@ var selectAllDispatch = function selectAllDispatch(_ref11) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, true);
   }
 };
-var selectDispatch = function selectDispatch(_ref12, data) {
-  var commit = _ref12.commit,
-    dispatch = _ref12.dispatch,
-    state = _ref12.state;
+var selectDispatch = function selectDispatch(_ref15, data) {
+  var commit = _ref15.commit,
+    dispatch = _ref15.dispatch,
+    state = _ref15.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_DISPATCH, data);
   if (state.selectedDispatch.length === state.dispatch.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, true);
@@ -176496,16 +179006,16 @@ var selectDispatch = function selectDispatch(_ref12, data) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECT_ALL_STATE, false);
   }
 };
-var resetSelectedDispatch = function resetSelectedDispatch(_ref13, data) {
-  var commit = _ref13.commit,
-    dispatch = _ref13.dispatch,
-    state = _ref13.state;
+var resetSelectedDispatch = function resetSelectedDispatch(_ref16, data) {
+  var commit = _ref16.commit,
+    dispatch = _ref16.dispatch,
+    state = _ref16.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.RESET_SELECTED_DISPATCH);
 };
-var moveMultipleDispatch = function moveMultipleDispatch(_ref14, ids) {
-  var commit = _ref14.commit,
-    dispatch = _ref14.dispatch,
-    state = _ref14.state;
+var moveMultipleDispatch = function moveMultipleDispatch(_ref17, ids) {
+  var commit = _ref17.commit,
+    dispatch = _ref17.dispatch,
+    state = _ref17.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/multiple", {
       'id': ids
@@ -176519,10 +179029,10 @@ var moveMultipleDispatch = function moveMultipleDispatch(_ref14, ids) {
 };
 
 //To be dispatch
-var deleteMultipleToBeDispatch = function deleteMultipleToBeDispatch(_ref15, ids) {
-  var commit = _ref15.commit,
-    dispatch = _ref15.dispatch,
-    state = _ref15.state;
+var deleteMultipleToBeDispatch = function deleteMultipleToBeDispatch(_ref18, ids) {
+  var commit = _ref18.commit,
+    dispatch = _ref18.dispatch,
+    state = _ref18.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/delete", {
       'id': ids
@@ -176534,16 +179044,16 @@ var deleteMultipleToBeDispatch = function deleteMultipleToBeDispatch(_ref15, ids
     });
   });
 };
-var setSelectAllToBeState = function setSelectAllToBeState(_ref16, data) {
-  var commit = _ref16.commit,
-    dispatch = _ref16.dispatch,
-    state = _ref16.state;
+var setSelectAllToBeState = function setSelectAllToBeState(_ref19, data) {
+  var commit = _ref19.commit,
+    dispatch = _ref19.dispatch,
+    state = _ref19.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TO_BE_SELECT_ALL_STATE, data);
 };
-var selectAllToBeDispatch = function selectAllToBeDispatch(_ref17) {
-  var commit = _ref17.commit,
-    dispatch = _ref17.dispatch,
-    state = _ref17.state;
+var selectAllToBeDispatch = function selectAllToBeDispatch(_ref20) {
+  var commit = _ref20.commit,
+    dispatch = _ref20.dispatch,
+    state = _ref20.state;
   if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_TO_BE_DISPATCH, []);
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TO_BE_SELECT_ALL_STATE, false);
@@ -176558,10 +179068,10 @@ var selectAllToBeDispatch = function selectAllToBeDispatch(_ref17) {
   // commit(types.SET_SELECTED_TO_BE_DISPATCH, allToBeDispatchIds)
   // commit(types.SET_TO_BE_SELECT_ALL_STATE, allToBeDispatchIds.length ? true : false)
 };
-var selectToBeDispatch = function selectToBeDispatch(_ref18, data) {
-  var commit = _ref18.commit,
-    dispatch = _ref18.dispatch,
-    state = _ref18.state;
+var selectToBeDispatch = function selectToBeDispatch(_ref21, data) {
+  var commit = _ref21.commit,
+    dispatch = _ref21.dispatch,
+    state = _ref21.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_TO_BE_DISPATCH, data);
   if (state.selectedToBeDispatch.length === state.toBeDispatch.length) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TO_BE_SELECT_ALL_STATE, true);
@@ -176569,16 +179079,16 @@ var selectToBeDispatch = function selectToBeDispatch(_ref18, data) {
     commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TO_BE_SELECT_ALL_STATE, false);
   }
 };
-var resetSelectedToBeDispatch = function resetSelectedToBeDispatch(_ref19, data) {
-  var commit = _ref19.commit,
-    dispatch = _ref19.dispatch,
-    state = _ref19.state;
+var resetSelectedToBeDispatch = function resetSelectedToBeDispatch(_ref22, data) {
+  var commit = _ref22.commit,
+    dispatch = _ref22.dispatch,
+    state = _ref22.state;
   commit(_mutation_types__WEBPACK_IMPORTED_MODULE_0__.RESET_SELECTED_TO_BE_DISPATCH);
 };
-var moveMultipleToBeDispatch = function moveMultipleToBeDispatch(_ref20, id) {
-  var commit = _ref20.commit,
-    dispatch = _ref20.dispatch,
-    state = _ref20.state;
+var moveMultipleToBeDispatch = function moveMultipleToBeDispatch(_ref23, id) {
+  var commit = _ref23.commit,
+    dispatch = _ref23.dispatch,
+    state = _ref23.state;
   return new Promise(function (resolve, reject) {
     window.axios.post("/api/dispatch/multiple", {
       'id': state.selectedToBeDispatch
@@ -176603,6 +179113,7 @@ var moveMultipleToBeDispatch = function moveMultipleToBeDispatch(_ref20, id) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   currentDispatch: () => (/* binding */ currentDispatch),
+/* harmony export */   dashboardCounts: () => (/* binding */ dashboardCounts),
 /* harmony export */   dispatch: () => (/* binding */ dispatch),
 /* harmony export */   selectAllField: () => (/* binding */ selectAllField),
 /* harmony export */   selectAllToBeField: () => (/* binding */ selectAllToBeField),
@@ -176635,6 +179146,9 @@ var selectedToBeDispatch = function selectedToBeDispatch(state) {
 var totalDispatch = function totalDispatch(state) {
   return state.totalDispatch;
 };
+var dashboardCounts = function dashboardCounts(state) {
+  return state.dashboardCounts;
+};
 
 /***/ }),
 
@@ -176663,7 +179177,12 @@ var initialState = {
   selectAllField: false,
   selectAllToBeField: false,
   selectedDispatch: [],
-  selectedToBeDispatch: []
+  selectedToBeDispatch: [],
+  dashboardCounts: {
+    pending_count: 0,
+    dispatched_count: 0,
+    total_count: 0
+  }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   namespaced: true,
@@ -176696,6 +179215,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   RESET_CURRENT_DISPATCH: () => (/* binding */ RESET_CURRENT_DISPATCH),
 /* harmony export */   RESET_SELECTED_DISPATCH: () => (/* binding */ RESET_SELECTED_DISPATCH),
 /* harmony export */   RESET_SELECTED_TO_BE_DISPATCH: () => (/* binding */ RESET_SELECTED_TO_BE_DISPATCH),
+/* harmony export */   SET_DASHBOARD_COUNTS: () => (/* binding */ SET_DASHBOARD_COUNTS),
 /* harmony export */   SET_SELECTED_DISPATCH: () => (/* binding */ SET_SELECTED_DISPATCH),
 /* harmony export */   SET_SELECTED_TO_BE_DISPATCH: () => (/* binding */ SET_SELECTED_TO_BE_DISPATCH),
 /* harmony export */   SET_SELECT_ALL_STATE: () => (/* binding */ SET_SELECT_ALL_STATE),
@@ -176723,6 +179243,7 @@ var SET_SELECT_ALL_STATE = 'SET_SELECT_ALL_STATE';
 var SET_TO_BE_SELECT_ALL_STATE = 'SET_TO_BE_SELECT_ALL_STATE';
 var MULTIPLE_DISPATCH = 'MULTIPLE_DISPATCH';
 var MULTIPLE_TO_BE_DISPATCH = 'MULTIPLE_TO_BE_DISPATCH';
+var SET_DASHBOARD_COUNTS = 'SET_DASHBOARD_COUNTS';
 
 /***/ }),
 
@@ -176756,6 +179277,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   state.toBeDispatch = dispatch;
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_TOTAL_DISPATCH, function (state, totalDispatch) {
   state.totalDispatch = totalDispatch;
+}), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_DASHBOARD_COUNTS, function (state, counts) {
+  state.dashboardCounts = counts;
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.ADD_DISPATCH, function (state, data) {
   state.dispatch.push(data.dispatch);
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.UPDATE_DISPATCH, function (state, data) {
@@ -176768,7 +179291,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     return dispatch.id === id;
   });
   state.dispatch.splice(index, 1);
-}), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.DELETE_MULTIPLE_DISPATCH, function (state, selectedDispatch) {
+}), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_types$RESET_CURRENT_, _mutation_types__WEBPACK_IMPORTED_MODULE_0__.DELETE_MULTIPLE_DISPATCH, function (state, selectedDispatch) {
   selectedDispatch.forEach(function (dispatch) {
     var index = state.dispatch.findIndex(function (_cust) {
       return _cust.id === dispatch.id;
@@ -176776,7 +179299,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     state.dispatch.splice(index, 1);
   });
   state.selectedDispatch = [];
-}), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_types$RESET_CURRENT_, _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_DISPATCH, function (state, data) {
+}), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.SET_SELECTED_DISPATCH, function (state, data) {
   state.selectedDispatch = data;
 }), _mutation_types__WEBPACK_IMPORTED_MODULE_0__.RESET_SELECTED_DISPATCH, function (state, data) {
   state.selectedDispatch = [];
@@ -183512,7 +186035,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "19514592",
   null
-  
+
 )
 
 /* hot reload */
@@ -183534,7 +186057,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/audit-logs/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -183610,7 +186133,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -183632,7 +186155,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ForgotPassword_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ForgotPassword.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/auth/ForgotPassword.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ForgotPassword_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ForgotPassword_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -183682,7 +186205,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -183704,7 +186227,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Login.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/auth/Login.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Login_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -183754,7 +186277,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -183776,7 +186299,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Register.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/auth/Register.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Register_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -183826,7 +186349,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -183848,7 +186371,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ResetPassword.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/auth/ResetPassword.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ResetPassword_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -183898,7 +186421,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -183920,7 +186443,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/bank/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -183972,7 +186495,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -183994,7 +186517,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/bank/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184057,7 +186580,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184079,7 +186602,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImageBox_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ImageBox.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/components/ImageBox.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImageBox_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ImageBox_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184129,7 +186652,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184151,7 +186674,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/customers/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184201,7 +186724,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184223,7 +186746,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/customers/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184240,6 +186763,108 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_0e4dee95__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_template_id_0e4dee95__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=template&id=0e4dee95 */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/customers/Index.vue?vue&type=template&id=0e4dee95");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Completed.vue":
+/*!**********************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Completed.vue ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Completed_vue_vue_type_template_id_44032a6e_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Completed.vue?vue&type=template&id=44032a6e&scoped=true */ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=template&id=44032a6e&scoped=true");
+/* harmony import */ var _Completed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Completed.vue?vue&type=script&lang=js */ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=script&lang=js");
+/* harmony import */ var _Completed_vue_vue_type_style_index_0_id_44032a6e_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css */ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css");
+/* harmony import */ var _Completed_vue_vue_type_style_index_1_id_44032a6e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css */ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__["default"])(
+  _Completed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Completed_vue_vue_type_template_id_44032a6e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _Completed_vue_vue_type_template_id_44032a6e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "44032a6e",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/views/dispatch/Completed.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=script&lang=js":
+/*!**********************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Completed.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Completed.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=script&lang=js");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css":
+/*!******************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css ***!
+  \******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_0_id_44032a6e_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=0&id=44032a6e&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css":
+/*!******************************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css ***!
+  \******************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_style_index_1_id_44032a6e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=style&index=1&id=44032a6e&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Completed.vue?vue&type=template&id=44032a6e&scoped=true":
+/*!****************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Completed.vue?vue&type=template&id=44032a6e&scoped=true ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_template_id_44032a6e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_template_id_44032a6e_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Completed_vue_vue_type_template_id_44032a6e_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Completed.vue?vue&type=template&id=44032a6e&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Completed.vue?vue&type=template&id=44032a6e&scoped=true");
 
 
 /***/ }),
@@ -184275,7 +186900,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184297,7 +186922,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184327,6 +186952,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_52d73fee__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_template_id_52d73fee__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=template&id=52d73fee */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Create.vue?vue&type=template&id=52d73fee");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Dashboard.vue":
+/*!**********************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Dashboard.vue ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Dashboard_vue_vue_type_template_id_add9dadc_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=template&id=add9dadc&scoped=true */ "./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=template&id=add9dadc&scoped=true");
+/* harmony import */ var _Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=script&lang=js */ "./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=script&lang=js");
+/* harmony import */ var _Dashboard_vue_vue_type_style_index_0_id_add9dadc_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css */ "./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Dashboard_vue_vue_type_template_id_add9dadc_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _Dashboard_vue_vue_type_template_id_add9dadc_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "add9dadc",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/views/dispatch/Dashboard.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=script&lang=js":
+/*!**********************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=script&lang=js ***!
+  \**********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Dashboard.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=script&lang=js");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css":
+/*!******************************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css ***!
+  \******************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_style_index_0_id_add9dadc_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=style&index=0&id=add9dadc&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=template&id=add9dadc&scoped=true":
+/*!****************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=template&id=add9dadc&scoped=true ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_add9dadc_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_add9dadc_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Dashboard_vue_vue_type_template_id_add9dadc_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Dashboard.vue?vue&type=template&id=add9dadc&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Dashboard.vue?vue&type=template&id=add9dadc&scoped=true");
 
 
 /***/ }),
@@ -184364,7 +187076,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "91dcb660",
   null
-  
+
 )
 
 /* hot reload */
@@ -184386,7 +187098,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184433,6 +187145,108 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/assets/js/views/dispatch/Pending.vue":
+/*!********************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Pending.vue ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _Pending_vue_vue_type_template_id_6a781995_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Pending.vue?vue&type=template&id=6a781995&scoped=true */ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=template&id=6a781995&scoped=true");
+/* harmony import */ var _Pending_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Pending.vue?vue&type=script&lang=js */ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=script&lang=js");
+/* harmony import */ var _Pending_vue_vue_type_style_index_0_id_6a781995_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Pending.vue?vue&type=style&index=0&id=6a781995&lang=css */ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css");
+/* harmony import */ var _Pending_vue_vue_type_style_index_1_id_6a781995_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css */ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_4__["default"])(
+  _Pending_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Pending_vue_vue_type_template_id_6a781995_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render,
+  _Pending_vue_vue_type_template_id_6a781995_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "6a781995",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/views/dispatch/Pending.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=script&lang=js":
+/*!********************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Pending.vue?vue&type=script&lang=js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pending.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=script&lang=js");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css":
+/*!****************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_0_id_6a781995_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pending.vue?vue&type=style&index=0&id=6a781995&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=0&id=6a781995&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css":
+/*!****************************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css ***!
+  \****************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_laravel_mix_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_style_index_1_id_6a781995_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css */ "./node_modules/style-loader/dist/cjs.js!./node_modules/laravel-mix/node_modules/css-loader/dist/cjs.js??clonedRuleSet-9.use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9.use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=style&index=1&id=6a781995&scoped=true&lang=css");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/views/dispatch/Pending.vue?vue&type=template&id=6a781995&scoped=true":
+/*!**************************************************************************************************!*\
+  !*** ./resources/assets/js/views/dispatch/Pending.vue?vue&type=template&id=6a781995&scoped=true ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_template_id_6a781995_scoped_true__WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   staticRenderFns: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_template_id_6a781995_scoped_true__WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_loaders_templateLoader_js_ruleSet_1_rules_2_node_modules_vue_loader_lib_index_js_vue_loader_options_Pending_vue_vue_type_template_id_6a781995_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Pending.vue?vue&type=template&id=6a781995&scoped=true */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/loaders/templateLoader.js??ruleSet[1].rules[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/dispatch/Pending.vue?vue&type=template&id=6a781995&scoped=true");
+
+
+/***/ }),
+
 /***/ "./resources/assets/js/views/errors/404.vue":
 /*!**************************************************!*\
   !*** ./resources/assets/js/views/errors/404.vue ***!
@@ -184462,7 +187276,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184484,7 +187298,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./404.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/errors/404.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184536,7 +187350,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "eb7995da",
   null
-  
+
 )
 
 /* hot reload */
@@ -184558,7 +187372,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/estimates/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184621,7 +187435,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184643,7 +187457,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/estimates/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184693,7 +187507,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184715,7 +187529,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./View.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/estimates/View.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184765,7 +187579,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184787,7 +187601,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/expenses/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184837,7 +187651,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184859,7 +187673,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/expenses/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184911,7 +187725,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -184933,7 +187747,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -184998,7 +187812,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185020,7 +187834,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185083,7 +187897,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185105,7 +187919,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryStock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InventoryStock.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/InventoryStock.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryStock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventoryStock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185157,7 +187971,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185179,7 +187993,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceStock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceStock.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/inventory/InvoiceStock.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceStock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceStock_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185244,7 +188058,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "3f396602",
   null
-  
+
 )
 
 /* hot reload */
@@ -185266,7 +188080,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185329,7 +188143,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185351,7 +188165,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185403,7 +188217,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "acfe6274",
   null
-  
+
 )
 
 /* hot reload */
@@ -185425,7 +188239,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Inventory_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Inventory.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/Inventory.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Inventory_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Inventory_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185488,7 +188302,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185510,7 +188324,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventorySelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InventorySelect.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/InventorySelect.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventorySelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InventorySelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185560,7 +188374,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185582,7 +188396,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBulk_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./InvoiceBulk.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/InvoiceBulk.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBulk_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_InvoiceBulk_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185632,7 +188446,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185654,7 +188468,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./View.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/invoices/View.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185706,7 +188520,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "213dc7fe",
   null
-  
+
 )
 
 /* hot reload */
@@ -185728,7 +188542,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/items/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185793,7 +188607,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185815,7 +188629,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/items/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185880,7 +188694,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "68eb71ca",
   null
-  
+
 )
 
 /* hot reload */
@@ -185902,7 +188716,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutBasic_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LayoutBasic.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/LayoutBasic.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutBasic_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutBasic_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -185965,7 +188779,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -185987,7 +188801,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutLogin_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./LayoutLogin.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/LayoutLogin.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutLogin_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LayoutLogin_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186037,7 +188851,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186059,7 +188873,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteFooter_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TheSiteFooter.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/partials/TheSiteFooter.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteFooter_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteFooter_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186111,7 +188925,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186133,7 +188947,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteHeader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TheSiteHeader.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/partials/TheSiteHeader.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteHeader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteHeader_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186198,7 +189012,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186220,7 +189034,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteSidebar_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./TheSiteSidebar.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/layouts/partials/TheSiteSidebar.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteSidebar_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TheSiteSidebar_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186285,7 +189099,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "420f22d8",
   null
-  
+
 )
 
 /* hot reload */
@@ -186307,7 +189121,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186374,7 +189188,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "f3607d4c",
   null
-  
+
 )
 
 /* hot reload */
@@ -186396,7 +189210,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Display_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Display.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Display.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Display_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Display_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186474,7 +189288,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186496,7 +189310,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/ledgers/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186561,7 +189375,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "28933e0d",
   null
-  
+
 )
 
 /* hot reload */
@@ -186583,7 +189397,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/masters/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186648,7 +189462,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186670,7 +189484,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupSelect.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/masters/GroupSelect.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSelect_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186735,7 +189549,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186757,7 +189571,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/masters/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186822,7 +189636,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "e096b346",
   null
-  
+
 )
 
 /* hot reload */
@@ -186844,7 +189658,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/notes/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186909,7 +189723,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -186931,7 +189745,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/notes/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -186996,7 +189810,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "9379c43a",
   null
-  
+
 )
 
 /* hot reload */
@@ -187018,7 +189832,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/orders/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187081,7 +189895,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187103,7 +189917,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/orders/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187153,7 +189967,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187175,7 +189989,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./View.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/orders/View.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187225,7 +190039,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187247,7 +190061,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/payments/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187297,7 +190111,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187319,7 +190133,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/payments/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187369,7 +190183,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187391,7 +190205,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/raw-bill/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187441,7 +190255,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187463,7 +190277,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/raw-bill/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187515,7 +190329,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "36b85c8d",
   null
-  
+
 )
 
 /* hot reload */
@@ -187537,7 +190351,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187600,7 +190414,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187622,7 +190436,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187672,7 +190486,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187694,7 +190508,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./View.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/receipts/View.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_View_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187744,7 +190558,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187766,7 +190580,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BanksReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./BanksReport.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/BanksReport.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BanksReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_BanksReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187816,7 +190630,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187838,7 +190652,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomersReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CustomersReport.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/CustomersReport.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomersReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CustomersReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187888,7 +190702,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187910,7 +190724,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpensesReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExpensesReport.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/ExpensesReport.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpensesReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpensesReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -187960,7 +190774,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -187982,7 +190796,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfitLossReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ProfitLossReport.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/ProfitLossReport.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfitLossReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ProfitLossReport_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188032,7 +190846,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188054,7 +190868,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SalesReports_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./SalesReports.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/SalesReports.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SalesReports_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SalesReports_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188106,7 +190920,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "66c9f590",
   null
-  
+
 )
 
 /* hot reload */
@@ -188128,7 +190942,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/reports/layout/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188191,7 +191005,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188213,7 +191027,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Calculator_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Calculator.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/Calculator.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Calculator_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Calculator_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188263,7 +191077,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188285,7 +191099,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./CompanyInfo.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/CompanyInfo.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CompanyInfo_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188337,7 +191151,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188359,7 +191173,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Customization_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Customization.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/Customization.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Customization_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Customization_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188422,7 +191236,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188444,7 +191258,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpenseCategory_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./ExpenseCategory.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/ExpenseCategory.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpenseCategory_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_ExpenseCategory_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188494,7 +191308,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188516,7 +191330,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MailConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MailConfig.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/MailConfig.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MailConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MailConfig_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188566,7 +191380,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188588,7 +191402,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Notifications.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/Notifications.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Notifications_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188638,7 +191452,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188660,7 +191474,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Preferences_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Preferences.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/Preferences.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Preferences_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Preferences_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188710,7 +191524,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188732,7 +191546,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserProfile_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./UserProfile.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/UserProfile.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserProfile_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_UserProfile_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188782,7 +191596,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188804,7 +191618,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/layout/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188854,7 +191668,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188876,7 +191690,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Basic_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Basic.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/mailDriver/Basic.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Basic_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Basic_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188926,7 +191740,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -188948,7 +191762,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Mailgun_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Mailgun.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/mailDriver/Mailgun.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Mailgun_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Mailgun_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -188998,7 +191812,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -189020,7 +191834,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Ses_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Ses.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/mailDriver/Ses.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Ses_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Ses_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189070,7 +191884,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -189092,7 +191906,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Smtp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Smtp.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/settings/mailDriver/Smtp.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Smtp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Smtp_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189142,7 +191956,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -189164,7 +191978,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/users/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189214,7 +192028,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -189236,7 +192050,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/users/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189290,7 +192104,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "5d852330",
   null
-  
+
 )
 
 /* hot reload */
@@ -189312,7 +192126,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Book_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Book.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Book.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Book_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Book_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189390,7 +192204,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "18797803",
   null
-  
+
 )
 
 /* hot reload */
@@ -189412,7 +192226,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Create.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Create.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Create_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189479,7 +192293,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   "5bbfc40e",
   null
-  
+
 )
 
 /* hot reload */
@@ -189501,7 +192315,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Daybook_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Daybook.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Daybook.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Daybook_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Daybook_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189579,7 +192393,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -189601,7 +192415,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Daysheet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Daysheet.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Daysheet.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Daysheet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Daysheet_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189666,7 +192480,7 @@ var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__
   null,
   null,
   null
-  
+
 )
 
 /* hot reload */
@@ -189688,7 +192502,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Index.vue?vue&type=script&lang=js */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5.use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/views/vouchers/Index.vue?vue&type=script&lang=js");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]); 
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Index_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 /***/ }),
 
@@ -189762,7 +192576,7 @@ __webpack_require__.r(__webpack_exports__);
 /************************************************************************/
 /******/ 	// The module cache
 /******/ 	var __webpack_module_cache__ = {};
-/******/ 	
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
@@ -189776,20 +192590,20 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
-/******/ 	
+/******/
 /******/ 		// Execute the module function
 /******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/ 	
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.loaded = true;
-/******/ 	
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-/******/ 	
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
+/******/
 /************************************************************************/
 /******/ 	/* webpack/runtime/amd define */
 /******/ 	(() => {
@@ -189797,7 +192611,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			throw new Error('define cannot be used indirect');
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/chunk loaded */
 /******/ 	(() => {
 /******/ 		var deferred = [];
@@ -189829,7 +192643,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			return result;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
@@ -189841,7 +192655,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			return getter;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -189853,7 +192667,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			}
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -189865,12 +192679,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			}
 /******/ 		})();
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -189881,7 +192695,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nmd = (module) => {
@@ -189890,11 +192704,11 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			return module;
 /******/ 		};
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/jsonp chunk loading */
 /******/ 	(() => {
 /******/ 		// no baseURI
-/******/ 		
+/******/
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
@@ -189902,19 +192716,19 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			"/assets/js/app": 0,
 /******/ 			"assets/css/omtbiz": 0
 /******/ 		};
-/******/ 		
+/******/
 /******/ 		// no chunk on demand loading
-/******/ 		
+/******/
 /******/ 		// no prefetching
-/******/ 		
+/******/
 /******/ 		// no preloaded
-/******/ 		
+/******/
 /******/ 		// no HMR
-/******/ 		
+/******/
 /******/ 		// no HMR manifest
-/******/ 		
+/******/
 /******/ 		__webpack_require__.O.j = (chunkId) => (installedChunks[chunkId] === 0);
-/******/ 		
+/******/
 /******/ 		// install a JSONP callback for chunk loading
 /******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
 /******/ 			var [chunkIds, moreModules, runtime] = data;
@@ -189939,26 +192753,26 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 			}
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
-/******/ 		
+/******/
 /******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
-/******/ 	
+/******/
 /******/ 	/* webpack/runtime/nonce */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nc = undefined;
 /******/ 	})();
-/******/ 	
+/******/
 /************************************************************************/
-/******/ 	
+/******/
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
 /******/ 	__webpack_require__.O(undefined, ["assets/css/omtbiz"], () => (__webpack_require__("./resources/assets/js/app.js")))
 /******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["assets/css/omtbiz"], () => (__webpack_require__("./resources/assets/sass/omtbiz.scss")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
+/******/
 /******/ })()
 ;
 //# sourceMappingURL=app.js.map

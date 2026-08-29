@@ -39,6 +39,11 @@ class Voucher extends Model
         'payment_id',
     ];
 
+    public function scopeWhereRelatedVoucherContains($query, int $voucherId)
+    {
+        return $query->whereRaw('find_in_set(?, related_voucher)', [$voucherId]);
+    }
+
     public function accountMaster()
     {
         return $this->belongsTo(\App\Models\AccountMaster::class);

@@ -20,18 +20,27 @@ use App\Models\Currency;
 use App\Models\CompanySetting;
 use Carbon\Carbon;
 use App\Jobs\EraseData;
+use Illuminate\Validation\Rule;
 use Auth;
 use Notification;
+use App\Support\SafeImageProcessor;
+use Illuminate\Support\Str;
 
 class CompanyController extends Controller
 {
+    private const DATA_DELETE_CONFIRMATION = 'DELETE ALL DATA';
+
+    public function __construct(private readonly SafeImageProcessor $safeImages)
+    {
+    }
+
     /**
      * Retrive the Admin account.
      * @return \App\Models\User
      */
     public function getAdmin()
     {
-        return User::find(1);
+        return auth()->user();
     }
 
 
@@ -94,9 +103,10 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getAdminCompany()
+    public function getAdminCompany(Request $request)
     {
-        $user = User::with(['addresses', 'addresses.country', 'company'])->find(1);
+        $user = $request->user('api');
+        $user->load(['addresses', 'addresses.country', 'company']);
 
         return response()->json([
             'user' => $user
@@ -122,13 +132,16 @@ class CompanyController extends Controller
         ]);
 
         if ($request->has('logo')) {
+            $image = $this->safeImages->fromUploadedFile($request->file('logo'), 'logo');
             $company->clearMediaCollection('logo');
-            $company->addMediaFromRequest('logo')->toMediaCollection('logo');
+            $company->addMediaFromString($image['contents'])
+                ->usingFileName(Str::uuid() . '.' . $image['extension'])
+                ->toMediaCollection('logo');
         }
 
         $fields = $request->only(['address_street_1', 'address_street_2', 'city', 'state', 'country_id', 'zip', 'phone']);
         $address = Address::updateOrCreate(['user_id' => $user->id], $fields);
-        $user = User::with(['addresses', 'addresses.country', 'company'])->find(1);
+        $user->load(['addresses', 'addresses.country', 'company']);
 
         return response()->json([
             'user' => $user,
@@ -365,19 +378,16 @@ class CompanyController extends Controller
      */
     public function uploadCompanyLogo(Request $request)
     {
-        $data = json_decode($request->company_logo);
+        $request->validate(['company_logo' => ['required', 'string']]);
+        $image = $this->safeImages->fromJsonPayload($request->company_logo, 'company_logo');
+        $company = $request->user('api')->company;
 
-        if ($data) {
-            $company = Company::find($request->header('company'));
+        abort_unless($company, 404);
 
-            if ($company) {
-                $company->clearMediaCollection('logo');
-
-                $company->addMediaFromBase64($data->data)
-                    ->usingFileName($data->name)
-                    ->toMediaCollection('logo');
-            }
-        }
+        $company->clearMediaCollection('logo');
+        $company->addMediaFromString($image['contents'])
+            ->usingFileName(Str::uuid() . '.' . $image['extension'])
+            ->toMediaCollection('logo');
 
         return response()->json([
             'success' => true
@@ -392,19 +402,14 @@ class CompanyController extends Controller
      */
     public function uploadAdminAvatar(Request $request)
     {
-        $data = json_decode($request->admin_avatar);
+        $request->validate(['admin_avatar' => ['required', 'string']]);
+        $image = $this->safeImages->fromJsonPayload($request->admin_avatar, 'admin_avatar');
+        $user = $request->user('api');
 
-        if ($data) {
-            $user = auth()->user();
-
-            if ($user) {
-                $user->clearMediaCollection('admin_avatar');
-
-                $user->addMediaFromBase64($data->data)
-                    ->usingFileName($data->name)
-                    ->toMediaCollection('admin_avatar');
-            }
-        }
+        $user->clearMediaCollection('admin_avatar');
+        $user->addMediaFromString($image['contents'])
+            ->usingFileName(Str::uuid() . '.' . $image['extension'])
+            ->toMediaCollection('admin_avatar');
 
         return response()->json([
             'user' => $user,
@@ -420,8 +425,23 @@ class CompanyController extends Controller
      */
     public function delete(Request $request)
     {
-        $job = new EraseData();
-        dispatch($job);
+        $user = $request->user('api');
+
+        if (!$user || !$user->isAdmin()) {
+            return response()->json([
+                'error' => 'admin_only',
+            ], 403);
+        }
+
+        $request->validate([
+            'confirmation' => [
+                'required',
+                'string',
+                Rule::in([self::DATA_DELETE_CONFIRMATION]),
+            ],
+        ]);
+
+        EraseData::dispatch((int) $user->company_id, (int) $user->id);
 
         return response()->json([
             'success' => true
