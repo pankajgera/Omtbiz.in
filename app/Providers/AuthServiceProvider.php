@@ -24,6 +24,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
+        // This installation retains Passport's pre-v13 BIGINT client IDs.
+        Passport::$clientUuids = false;
+
         if ($keysPath = config('passport.keys_path')) {
             Passport::loadKeysFrom($keysPath);
         }

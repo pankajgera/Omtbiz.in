@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class ApiAuthenticationTest extends TestCase
@@ -25,6 +26,11 @@ class ApiAuthenticationTest extends TestCase
 
         $this->assertNotNull($route);
         $this->assertNotContains('auth:api', $route->gatherMiddleware());
+    }
+
+    public function test_passport_retains_legacy_integer_client_ids(): void
+    {
+        $this->assertFalse(Passport::$clientUuids);
     }
 
     public function test_sensitive_routes_require_admin_middleware(): void
