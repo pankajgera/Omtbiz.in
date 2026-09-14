@@ -104,7 +104,7 @@
                       <label class="control-label">{{ $t('masters.opening_balance') }}</label>
                       <base-input
                         v-model.trim="formData.opening_balance"
-                        focus
+                        disabled
                         type="number"
                         name="opening_balance"
                         @input="formData.opening_balance"
