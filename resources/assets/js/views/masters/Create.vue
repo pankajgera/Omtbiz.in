@@ -100,16 +100,6 @@
                      
                       </select>
                     </div>
-                    <div class="col-md-8 p-0">
-                      <label class="control-label">{{ $t('masters.opening_balance') }}</label>
-                      <base-input
-                        v-model.trim="formData.opening_balance"
-                        focus
-                        type="number"
-                        name="opening_balance"
-                        @input="formData.opening_balance"
-                      />
-                    </div>
                   </div>
                 </div>
               </div>
@@ -260,6 +250,7 @@ export default {
     async loadEditData () {
       let response = await this.fetchMaster(this.$route.params.id)
       this.formData = response.data.master
+      this.formData.opening_balance = this.formData.opening_balance || 0
       this.selectedGroup = this.formData.groups
     },
     async checkName() {
