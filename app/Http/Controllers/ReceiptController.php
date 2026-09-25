@@ -19,6 +19,7 @@ use App\Models\Voucher;
 use Illuminate\Support\Facades\Log;
 use stdClass;
 use Validator;
+use App\Support\PublicShareService;
 
 use function MongoDB\BSON\toJSON;
 
@@ -162,6 +163,7 @@ class ReceiptController extends Controller
 
         return response()->json([
             'receipt' => $receipt,
+            'shareable_link' => $this->shareableLink($receipt),
             'success' => true
         ]);
     }
@@ -172,7 +174,7 @@ class ReceiptController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $receipt = Receipt::with([
             'user',
@@ -180,7 +182,7 @@ class ReceiptController extends Controller
 
         $siteData = [
             'receipt' => $receipt,
-            'shareable_link' => url('/receipts/pdf/' . $receipt->id)
+            'shareable_link' => $this->shareableLink($receipt)
         ];
 
         return response()->json($siteData);
@@ -228,6 +230,7 @@ class ReceiptController extends Controller
             'account_ledger' => $account_ledger,
             'receipt_mode' => $receipt_mode,
             'nextReceiptNumberAttribute' => $receipt->receipt_number,
+            'shareable_link' => $this->shareableLink($receipt),
         ]);
     }
 
@@ -602,12 +605,20 @@ class ReceiptController extends Controller
         }
 
         $fileName = 'Receipt ' . $receipt->receipt_number . ' - ' . Carbon::parse($receipt->receipt_date)->format('d-m-Y');
-        $filePath = url('/receipts/pdf/' . $receipt->id);
+        $filePath = $this->shareableLink($receipt);
 
         return WhatsappController::sendPdfMessage(
             $accountMaster->mobile_number,
             $fileName,
             $filePath
         );
+    }
+
+    private function shareableLink(Receipt $receipt): string
+    {
+        $service = app(PublicShareService::class);
+        $share = $service->document($receipt, 'receipt', request()->user('api')?->id);
+
+        return $service->url($share);
     }
 }

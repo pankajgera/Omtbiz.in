@@ -15,6 +15,7 @@ use App\Models\Orders;
 use App\Services\AuditLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class OrdersController extends Controller
 {
@@ -158,7 +159,7 @@ class OrdersController extends Controller
                 'company_id' => $companyId,
                 'status' => $status,
                 'notes' => $request->notes,
-                'unique_hash' => str_random(60),
+                'unique_hash' => Str::random(60),
                 'account_master_id' => $request->debtors['id'],
                 'reference_number' => $reference_number,
             ]);

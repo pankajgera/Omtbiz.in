@@ -274,7 +274,7 @@ class VouchersController extends Controller
         $voucher = [];
         foreach ($day_voucher as $key => $each) {
             if (0 === $key % 2) {
-                $each['voucher_count'] = Voucher::whereRaw("find_in_set(" . $each->id . ",related_voucher)")->count();
+                $each['voucher_count'] = Voucher::whereRelatedVoucherContains((int) $each->id)->count();
                 $each['voucher_debit'] = $each->debit;
                 $each['voucher_credit'] = $each->credit;
                 $each['quantity'] = InvoiceItem::where('invoice_id', $each->invoice_id)->sum('quantity');
@@ -292,7 +292,7 @@ class VouchersController extends Controller
      */
     public function book(Request $request, $id)
     {
-        $related_vouchers = Voucher::whereRaw("find_in_set(" . $id . ",related_voucher)")
+        $related_vouchers = Voucher::whereRelatedVoucherContains((int) $id)
             ->whereCompany($request->header('company'))
             ->visibleOutsideApproval()
             ->where('updated_at', '>', Carbon::today())

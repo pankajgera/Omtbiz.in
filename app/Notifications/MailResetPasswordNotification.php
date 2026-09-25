@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
 use Illuminate\Auth\Notifications\ResetPassword;
+use RuntimeException;
 
 class MailResetPasswordNotification extends ResetPassword
 {
@@ -41,7 +42,15 @@ class MailResetPasswordNotification extends ResetPassword
      */
     public function toMail($notifiable)
     {
-        $link = url( "/reset-password/". $this->token );
+        $trustedBaseUrl = rtrim((string) config('app.url'), '/');
+        $scheme = parse_url($trustedBaseUrl, PHP_URL_SCHEME);
+        $host = parse_url($trustedBaseUrl, PHP_URL_HOST);
+
+        if (! in_array($scheme, ['http', 'https'], true) || ! is_string($host) || $host === '') {
+            throw new RuntimeException('APP_URL must be a trusted absolute HTTP or HTTPS URL before password resets can be sent.');
+        }
+
+        $link = $trustedBaseUrl . '/reset-password/' . rawurlencode((string) $this->token);
 
         return ( new MailMessage )
             ->subject('Reset Password Notification')

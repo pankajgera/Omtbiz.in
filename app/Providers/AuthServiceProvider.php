@@ -20,12 +20,20 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->registerPolicies();
 
+        // This installation retains Passport's pre-v13 BIGINT client IDs.
+        Passport::$clientUuids = false;
+
+        if ($keysPath = config('passport.keys_path')) {
+            Passport::loadKeysFrom($keysPath);
+        }
+
         Passport::cookie('access_token_'.env('APP_ENV'));
-        Passport::routes();
+        Passport::enablePasswordGrant();
+        // Passport::routes(); // Removed in Passport v11+
         Passport::personalAccessTokensExpireIn(now()->addYears(10));
         Passport::withoutCookieSerialization();
     }
