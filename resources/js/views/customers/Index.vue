@@ -281,9 +281,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllCustomers()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectCustomer([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('customer', [

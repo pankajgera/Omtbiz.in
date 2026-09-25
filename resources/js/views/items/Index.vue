@@ -476,12 +476,11 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllItems()
-    }
-    if (this.selectAllFieldToBe) {
-      this.selectAllItemsToBe()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectItem([])
+    this.setSelectAllState(false)
+    this.selectItemToBe([])
+    this.$store.commit('item/SET_SELECT_ALL_STATE_TO_BE', false)
   },
   methods: {
     ...mapActions('item', [

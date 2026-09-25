@@ -336,10 +336,10 @@ export default {
       deep: true
     }
   },
-  destroyed () {
-    if (this.selectAllField) {
-      this.selectAllDispatch()
-    }
+  unmounted () {
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectDispatch([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('dispatch', [

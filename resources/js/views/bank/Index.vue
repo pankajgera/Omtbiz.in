@@ -285,9 +285,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllBanks()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectBank([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('banks', [

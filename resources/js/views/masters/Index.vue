@@ -306,9 +306,9 @@ export default {
       clearTimeout(this.timer)
     }
 
-    if (this.selectAllField) {
-      this.selectAllMasters()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectMaster([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('master', [

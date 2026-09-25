@@ -292,9 +292,9 @@ export default {
       clearTimeout(this.timer)
     }
 
-    if (this.selectAllField) {
-      this.selectAllUsers()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectUser([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('user', [
