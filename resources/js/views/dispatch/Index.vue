@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
       <Header :title="$tc('dispatch.dispatch', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalDispatch || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalDispatch || filtersApplied" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -131,9 +131,11 @@
           </base-button>
           <transition name="fade">
             <v-dropdown v-if="selectedToBeDispatch && selectedToBeDispatch.length" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
               <!-- <v-dropdown-item>
                 <div class="dropdown-item" @click="multipleDispatch('draft')">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -227,9 +229,11 @@
         <template #default="row">
           <span> {{ $t('dispatch.action') }} </span>
           <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
+            <template #activator>
+              <span href="#">
+                <dot-icon />
+              </span>
+            </template>
             <v-dropdown-item>
               <div @click="singleDispatch(row.id)" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'circle']" class="dropdown-item-icon" />
@@ -331,9 +335,11 @@
           </base-button>
           <transition name="fade">
             <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeMultipleDispatch('sent')">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -421,9 +427,11 @@
         <template #default="row">
           <span> {{ $t('dispatch.action') }} </span>
           <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
+            <template #activator>
+              <span href="#">
+                <dot-icon />
+              </span>
+            </template>
             <v-dropdown-item>
               <router-link :to="{path: `dispatch/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -610,12 +618,11 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllDispatch()
-    }
-    if (this.selectAllToBeField) {
-      this.selectAllToBeDispatch()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectDispatch([])
+    this.setSelectAllState(false)
+    this.selectToBeDispatch([])
+    this.$store.commit('dispatch/SET_TO_BE_SELECT_ALL_STATE', false)
   },
   methods: {
     ...mapActions('dispatch', [

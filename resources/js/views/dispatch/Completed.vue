@@ -87,9 +87,11 @@
           </base-button>
           <transition name="fade">
             <v-dropdown v-if="selectedDispatch && selectedDispatch.length" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeMultipleDispatch">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -172,9 +174,11 @@
           <template #default="row">
             <span> {{ $t('dispatch.action') }} </span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <router-link :to="{path: `/dispatch/${row.id}/edit`}" class="dropdown-item">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -332,10 +336,10 @@ export default {
       deep: true
     }
   },
-  destroyed () {
-    if (this.selectAllField) {
-      this.selectAllDispatch()
-    }
+  unmounted () {
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectDispatch([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('dispatch', [

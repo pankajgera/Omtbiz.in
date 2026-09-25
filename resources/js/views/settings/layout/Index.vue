@@ -13,15 +13,15 @@
           <li v-for="(menuItem, index) in menuItems.filter(each => each.meta.includes(role))" :key="index" class="settings-menu-item">
             <router-link :class="['link-color tw:no-underline', {'active-setting': hasActiveUrl(menuItem.link)}]" :to="menuItem.link">
               <font-awesome-icon :icon="[menuItem.iconType, menuItem.icon]" class="setting-icon"/>
-              <span class="menu-title ml-3">{{ $t(menuItem.title) }}</span>
+              <span class="menu-title ms-3">{{ $t(menuItem.title) }}</span>
             </router-link>
           </li>
           <li v-if="'admin' === role" class="settings-menu-item">
-            <button type="button" class="link-color ml-2 tw:border-0 tw:bg-transparent tw:text-left" @click.stop="showDeleteDataModal">
+            <button type="button" class="link-color ms-2 tw:border-0 tw:bg-transparent tw:text-left" @click.stop="showDeleteDataModal">
               <svg aria-hidden="true" focusable="false" data-prefix="fa" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="setting-icon svg-inline--fa fa-trash fa-w-14">
                 <path fill="currentColor" d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path>
               </svg>
-              <span class="menu-title ml-3 pl-1">All Data</span>
+              <span class="menu-title ms-3 ps-1">All Data</span>
             </button>
           </li>
         </ol>

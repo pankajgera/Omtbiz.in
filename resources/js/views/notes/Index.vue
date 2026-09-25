@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
        <Header :title="$tc('notes.notes', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalNotes" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalNotes" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="['fas', 'print']"
@@ -14,7 +14,7 @@
             Print
           </base-button>
         </div>
-        <div v-show="totalNotes || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalNotes || filtersApplied" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -110,9 +110,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ notes.length }}</b> {{ $t('general.of') }} <b>{{ totalNotes }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedNotes.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleNotes">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -162,7 +164,7 @@
                   </button>
                 </th>
                 <th class="notes-action-column hide-print" scope="col">
-                  <span class="sr-only">{{ $t('notes.action') }}</span>
+                  <span class="visually-hidden">{{ $t('notes.action') }}</span>
                 </th>
               </tr>
             </thead>
@@ -325,9 +327,9 @@ export default {
     this.loadNotes()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllNotes()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectNote([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('notes', [

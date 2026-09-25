@@ -7,7 +7,7 @@
         <router-link
           class="btn btn-lg bg-yellow text-white"
           to="/invoices">
-          <font-awesome-icon icon="arrow-left" class="icon text-white mr-2"/> {{ $t('general.go_home') }}
+          <font-awesome-icon icon="arrow-left" class="icon text-white me-2"/> {{ $t('general.go_home') }}
         </router-link>
       </div>
     </div>

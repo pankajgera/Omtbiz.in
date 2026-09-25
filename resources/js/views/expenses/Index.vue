@@ -19,7 +19,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-2 me-4">
           <base-button
             v-show="totalExpenses || filtersApplied"
             :outline="true"
@@ -104,10 +104,12 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ expenses.length }}</b> {{ $t('general.of') }} <b>{{ totalExpenses }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedExpenses.length" :show-arrow="false" theme-light class="action mr-5">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+          <v-dropdown v-if="selectedExpenses.length" :show-arrow="false" theme-light class="action me-5">
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleExpenses">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -195,9 +197,11 @@
           <template #default="row">
             <span>{{ $t('expenses.action') }}</span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <router-link :to="{path: `expenses/${row.id}/edit`}" class="dropdown-item">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -287,9 +291,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllExpenses()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectExpense([])
+    this.setSelectAllState(false)
   },
   created () {
     this.fetchCategories()

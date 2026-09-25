@@ -39,31 +39,31 @@
       </li>
       <li class="notifications">
         <v-dropdown :show-arrow="false">
-          <button
-            slot="activator"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-label="Notifications"
-            class="header-icon-button tw:grid tw:size-10 tw:place-items-center tw:rounded-md tw:border tw:border-line tw:bg-surface tw:text-ink-muted tw:transition-colors tw:hover:bg-surface-hover tw:hover:text-ink"
-          >
-          <font-awesome-icon icon="bell" class="dropdown-item-icon"/>
-          <span class="notification-count">{{ listNotifications ? listNotifications.length : 0 }}</span>
-          </button>
+          <template #activator>
+            <button
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-label="Notifications"
+              class="header-icon-button tw:grid tw:size-10 tw:place-items-center tw:rounded-md tw:border tw:border-line tw:bg-surface tw:text-ink-muted tw:transition-colors tw:hover:bg-surface-hover tw:hover:text-ink"
+            >
+            <font-awesome-icon icon="bell" class="dropdown-item-icon"/>
+            <span class="notification-count">{{ listNotifications ? listNotifications.length : 0 }}</span>
+            </button>
+          </template>
           <v-dropdown-item>
-            
-            <div v-for="(item,index) in listNotifications"
-            :key="index">
-            <div class="alert alert-success" role="alert">
-             
-              <p class="mb-1"> <a :href="'/invoices/create?id='+item.data.id" class="bg-transparent">Estimate Number : <span class="badge badge-success">{{ item.data.estimate_number }}</span> </a>
-                <!-- <br/>
-                Status : <span class="badge badge-secondary">{{ item.data.status }}</span> -->
-              </p>
+            <div class="notification-list">
+              <a
+                v-for="(item,index) in listNotifications"
+                :key="index"
+                :href="'/invoices/create?id='+item.data.id"
+                class="notification-item"
+              >
+                <span>Estimate Number</span>
+                <span class="badge text-bg-success">{{ item.data.estimate_number }}</span>
+              </a>
             </div>
-        </div>
-        <!-- <button type="button" class="btn btn-link" @click="markAsRead">Mark as read</button> -->
-        </v-dropdown-item>
+          </v-dropdown-item>
         </v-dropdown>
       </li>
       <li v-if="currentUser" class="user-info">
@@ -72,17 +72,18 @@
       </li>
       <li>
         <v-dropdown :show-arrow="false">
-          <a
-            slot="activator"
-            href="#"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-label="Open user menu"
-            class="avatar"
-          >
-            <img :src="profilePicture" alt="Avatar" width="40" height="40">
-          </a>
+          <template #activator>
+            <a
+              href="#"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+              aria-label="Open user menu"
+              class="avatar"
+            >
+              <img :src="profilePicture" alt="Avatar" width="40" height="40">
+            </a>
+          </template>
           <v-dropdown-item>
             <router-link class="dropdown-item" to="/settings">
               <font-awesome-icon icon="cogs" class="dropdown-item-icon"/> <span> {{ $t('navigation.settings') }} </span>

@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-2 me-4">
           <base-button
             v-show="totalItems || filtersApplied"
             :outline="true"
@@ -112,9 +112,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ items.length }}</b> {{ $t('general.of') }} <b>{{ totalItems }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedItems.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleItems">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -193,9 +195,11 @@
           <template #default="row">
             <span> {{ $t('items.action') }} </span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
 
                 <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
@@ -297,9 +301,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllItems()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectItem([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('item', [

@@ -2,7 +2,7 @@
   <div class="items order-index-page main-content">
     <div class="page-header">
       <Header :title="$tc('orders.order', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalPendingOrders || totalCompletedOrders || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalPendingOrders || totalCompletedOrders || filtersApplied" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -47,7 +47,7 @@
             />
           </div>
           <div class="filter-date">
-            <div class="from pr-3">
+            <div class="from pe-3">
               <label>{{ $t('general.from') }}</label>
               <base-date-picker
                 v-model="filters.from_date"
@@ -56,7 +56,7 @@
               />
             </div>
             <div class="dashed" />
-            <div class="to pl-3">
+            <div class="to ps-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
                 v-model="filters.to_date"
@@ -103,9 +103,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ pendingOrders.length }}</b> {{ $t('general.of') }} <b>{{ pending_filtered_count }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleOrders">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -202,9 +204,11 @@
           <template #default="row">
             <span>{{ $t('orders.action') }}</span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -233,9 +237,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ completedOrders.length }}</b> {{ $t('general.of') }} <b>{{ completed_filtered_count }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedOrders && selectedOrders.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleOrders">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -332,9 +338,11 @@
           <template #default="row">
             <span>{{ $t('orders.action') }}</span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <!-- <router-link :to="{path: `orders/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -470,9 +478,9 @@ export default {
     this.fetchData()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllOrders()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectOrder([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('orders', [

@@ -2,7 +2,7 @@
   <div class="invoice-index-page invoices main-content">
     <div class="page-header">
        <Header :title="$t('invoices.title')" :bread-crumb-links="breadCrumbLinks">
-          <div v-show="totalInvoices || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+          <div v-show="totalInvoices || filtersApplied" class="me-4 mb-3 mb-sm-0">
             <base-button
               :outline="true"
               :icon="filterIcon"
@@ -44,7 +44,7 @@
             />
           </div>
           <div class="filter-date">
-            <div class="from pr-3">
+            <div class="from pe-3">
               <label>{{ $t('general.from') }}</label>
               <base-date-picker
                 v-model="filters.from_date"
@@ -53,7 +53,7 @@
               />
             </div>
             <div class="dashed" />
-            <div class="to pl-3">
+            <div class="to ps-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
                 v-model="filters.to_date"
@@ -103,7 +103,7 @@
               v-if="role === 'accountant' && selectedInvoices.length > 1"
               color="theme"
               size="small"
-              class="mr-2"
+              class="me-2"
               :loading="isBulkWhatsappSending"
               :disabled="isBulkWhatsappSending"
               @click="sendMultipleReports"
@@ -111,9 +111,11 @@
               {{ isBulkWhatsappSending ? $t('invoices.sending_selected_whatsapp') : $t('invoices.send_selected_whatsapp') }}
             </base-button>
             <v-dropdown v-if="role === 'admin'" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeMultipleInvoices">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -220,7 +222,7 @@
               </v-dropdown-item>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="sendReports(row)" v-if="role === 'admin' || role === 'accountant'">
-                  <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" />
+                  <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 me-2" />
                   {{ $t('invoices.whatsapp') }}
                 </div>
               </v-dropdown-item>
@@ -328,9 +330,9 @@ export default {
     this.fetchCustomers()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllInvoices()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectInvoice([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('invoice', [

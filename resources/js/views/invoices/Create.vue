@@ -69,7 +69,7 @@
             data-date-format="DD/MM/YYYY"
             class="base-prefix-input"
             @change="vNewInvoice.invoice_date.$touch()"
-            :disabled="isDisabled"
+            :disabled="isDisabled || !isAdmin"
           />
           <span v-if="vNewInvoice.invoice_date.$error && !vNewInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
@@ -113,32 +113,32 @@
           </colgroup>
           <thead class="item-table-header">
             <tr>
-              <th class="text-left">
+              <th class="text-start">
                 <span class="column-heading heading-1 item-heading">
                   {{ $tc('invoices.inventory.title',2) }}
                 </span>
               </th>
-              <th class="text-right">
+              <th class="text-end">
                 <span class="column-heading">
                   {{ $t('invoices.inventory.quantity') }}
                 </span>
               </th>
-              <th class="text-left">
+              <th class="text-start">
                 <span class="column-heading">
                   {{ $t('invoices.inventory.price') }}
                 </span>
               </th>
-              <th class="text-left">
+              <th class="text-start">
                 <span class="column-heading">
                   {{ $t('invoices.inventory.sale_price') }}
                 </span>
               </th>
-              <th v-if="discountPerInventory === 'YES'" class="text-right">
+              <th v-if="discountPerInventory === 'YES'" class="text-end">
                 <span class="column-heading">
                   {{ $t('invoices.inventory.discount') }}
                 </span>
               </th>
-              <th class="text-right">
+              <th class="text-end">
                 <span class="column-heading amount-heading">
                   {{ $t('invoices.inventory.amount') }}
                 </span>
@@ -168,7 +168,7 @@
         </table>
       </div>
       <button v-if="showAddNewInventory" type="button" class="add-item-action add-invoice-item tw:flex tw:min-h-12 tw:w-full tw:items-center tw:justify-center tw:border-0 tw:border-t tw:border-line tw:bg-surface-muted tw:text-accent tw:hover:bg-surface-hover" :disabled="isDisabled" @click="addInventory">
-        <font-awesome-icon icon="shopping-basket" class="mr-2"/>
+        <font-awesome-icon icon="shopping-basket" class="me-2"/>
         {{ $t('invoices.add_item') }}
       </button>
       <button v-if="showEndOfList" type="button" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
@@ -206,10 +206,10 @@
           </div>
           <div class="section" v-if="incomeLedgerList.length">
             <div class="row align-items-center">
-              <div class="pl-3">
+              <div class="ps-3">
               <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
               </div>
-              <div class="pl-3 mr-5">
+              <div class="ps-3 me-5">
                 <base-select
                 v-model="income_ledger"
                 :options="incomeLedgerList"
@@ -238,10 +238,10 @@
           </div>
           <div class="section" v-if="expenseLedgerList.length">
            <div class="row align-items-center">
-            <div class="pl-3 mb-2">
+            <div class="ps-3 mb-2">
              <label class="form-label"><strong>{{ $t('invoices.less') }}</strong></label>
            </div>
-             <div class="pl-3 mb-2 mr-5">
+             <div class="ps-3 mb-2 me-5">
             <base-select
               v-model="expense_ledger"
               :options="expenseLedgerList"
@@ -279,16 +279,17 @@
                 @input="vNewInvoice.discount_val.$touch()"
               />
               <v-dropdown :show-arrow="false">
-                <button
-                  slot="activator"
-                  type="button"
-                  class="btn item-dropdown dropdown-toggle"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {{ newInvoice.discount_type == 'fixed' ? currency.symbol : '%' }}
-                </button>
+                <template #activator>
+                  <button
+                    type="button"
+                    class="btn item-dropdown dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    {{ newInvoice.discount_type == 'fixed' ? currency.symbol : '%' }}
+                  </button>
+                </template>
                 <v-dropdown-item>
                   <a class="dropdown-item" href="#" @click.prevent="selectFixed">
                     {{ $t('general.fixed') }}
@@ -312,7 +313,7 @@
         </div>
       </div>
       <div class="invoice-form-actions tw:flex tw:flex-wrap tw:justify-end tw:gap-2 tw:pb-4">
-          <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="mr-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+          <!-- <a v-if="$route.name === 'invoices.edit'" :href="`/invoices/pdf/${newInvoice.unique_hash}`" target="_blank" class="me-3 invoice-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
           <base-button
@@ -325,7 +326,7 @@
             {{ $t('invoices.save_invoice') }}
           </base-button>
           <br/>
-          <base-button v-if="this.$route.name === 'invoices.edit'" outline color="theme" class="report-button ml-2" @click="sendReports()">
+          <base-button v-if="this.$route.name === 'invoices.edit'" outline color="theme" class="report-button ms-2" @click="sendReports()">
             {{ $t('reports.send_report') }}
           </base-button>
         </div>

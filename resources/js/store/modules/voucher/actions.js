@@ -110,6 +110,11 @@ export const selectAllVouchers = ({ commit, dispatch, state }) => {
   }
 }
 
+export const clearSelectedVouchers = ({ commit }) => {
+  commit(types.SET_SELECTED_VOUCHERS, [])
+  commit(types.SET_SELECT_ALL_STATE, false)
+}
+
 export const selectVoucher = ({ commit, dispatch, state }, data) => {
   commit(types.SET_SELECTED_VOUCHERS, data)
   if (state.selectedVouchers.length === state.vouchers.length) {

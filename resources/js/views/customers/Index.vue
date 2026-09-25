@@ -19,7 +19,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-2 me-4">
           <base-button
             v-show="totalCustomers || filtersApplied"
             :outline="true"
@@ -105,9 +105,11 @@
 
         <transition name="fade">
           <v-dropdown v-if="selectedCustomers.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleCustomers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -189,9 +191,11 @@
           <template #default="row">
             <span> {{ $t('customers.action') }} </span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
 
                 <router-link :to="{path: `customers/${row.id}/edit`}" class="dropdown-item">
@@ -277,9 +281,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllCustomers()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectCustomer([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('customer', [

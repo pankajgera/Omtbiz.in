@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-2">
+        <div class="col-xs-2 me-2">
           <base-button
             :outline="true"
             color="theme"
@@ -34,7 +34,7 @@
             {{ $t('general.to_display') }}
           </base-button>
         </div>
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-2 me-4">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -54,7 +54,7 @@
         <div class="row">
           <div class="col-sm-3">
             <div class="filter-date">
-              <div class="from pr-3">
+              <div class="from pe-3">
                 <label>{{ $t('general.from') }}</label>
                 <base-date-picker
                   v-model="filters.from_date"
@@ -65,7 +65,7 @@
             </div>
           </div>
           <div class="col-sm-3">
-            <div class="to pl-3">
+            <div class="to ps-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
                 v-model="filters.to_date"
@@ -139,9 +139,11 @@
         <div class="table-actions mt-5 mb-5">
           <transition name="fade">
             <v-dropdown v-if="selectedLedgers.length" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
             </v-dropdown>
           </transition>
           <!-- <div class="custom-control custom-checkbox">
@@ -261,9 +263,11 @@
         <template #default="row">
           <span> {{ $t('daybook.action') }} </span>
           <v-dropdown>
-            <span slot="activator" href="#">
-              <dot-icon />
-            </span>
+            <template #activator>
+              <span href="#">
+                <dot-icon />
+              </span>
+            </template>
             <v-dropdown-item>
               <router-link :to="{path: `${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -352,9 +356,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllLedgers()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectLedger([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('ledger', [

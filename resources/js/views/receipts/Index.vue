@@ -2,7 +2,7 @@
   <div class="items receipt-index-page main-content">
     <div class="page-header">
       <Header :title="approvalMode ? $t('receipts.approvals_title') : $tc('receipts.receipt', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div class="mr-4 mb-3 mb-sm-0">
+        <div class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -47,7 +47,7 @@
             />
           </div>
           <div class="filter-date">
-            <div class="from pr-3">
+            <div class="from pe-3">
               <label>{{ $t('general.from') }}</label>
               <base-date-picker
                 v-model="filters.from_date"
@@ -56,7 +56,7 @@
               />
             </div>
             <div class="dashed" />
-            <div class="to pl-3">
+            <div class="to ps-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
                 v-model="filters.to_date"
@@ -116,9 +116,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ total_counts }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="role === 'admin' && selectedReceipts && selectedReceipts.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="approveMultipleReceiptsAction">
                 <font-awesome-icon :icon="['fas', 'check']" class="dropdown-item-icon" />
@@ -225,9 +227,11 @@
           <template #default="row">
             <span>{{ $t('receipts.action') }}</span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -373,15 +377,27 @@ export default {
     filters: {
       handler: 'setFilters',
       deep: true
+    },
+    // Receipts and Receipt Approvals share this component, so switching between them
+    // reuses the instance: reset the selection and reload the other list.
+    approvalMode () {
+      this.selectReceipt([])
+      this.setSelectAllState(false)
+      this.breadCrumbLinks[1].title = this.approvalMode ? this.$t('receipts.approvals_title') : this.$tc('receipts.receipt', 2)
+      this.$nextTick(() => {
+        if (this.$refs.table) {
+          this.refreshTable()
+        }
+      })
     }
   },
   created () {
     this.fetchCustomers()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllReceipts()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectReceipt([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('receipt', [

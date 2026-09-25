@@ -301,15 +301,15 @@
                 </td>
                 <td>
                     <span class="overview-label">Transactions</span>
-                    <span class="overview-value">{{ number_format($related_vouchers->count()) }}</span>
+                    <span class="overview-value">{{ format_inr($related_vouchers->count(), 0) }}</span>
                 </td>
                 <td>
                     <span class="overview-label">Total quantity</span>
-                    <span class="overview-value">{{ number_format((float) $inventory_sum, 0) }}</span>
+                    <span class="overview-value">{{ format_inr((float) $inventory_sum, 0) }}</span>
                 </td>
                 <td>
                     <span class="overview-label">Period movement</span>
-                    <span class="overview-value">&#8377; {{ number_format((float) max($transactionDebit, $transactionCredit), 2) }}</span>
+                    <span class="overview-value">&#8377; {{ format_inr((float) max($transactionDebit, $transactionCredit), 2) }}</span>
                 </td>
             </tr>
         </table>
@@ -346,9 +346,9 @@
                         </td>
                         <td class="particulars-column">{{ $each->account }}</td>
                         <td class="reference-column reference">{{ $reference }}</td>
-                        <td class="quantity-column">{{ number_format((float) $quantity, 0) }}</td>
-                        <td class="amount-column amount">&#8377; {{ number_format((float) ($each->credit ?: 0), 2) }}</td>
-                        <td class="amount-column amount">&#8377; {{ number_format((float) ($each->debit ?: 0), 2) }}</td>
+                        <td class="quantity-column">{{ format_inr((float) $quantity, 0) }}</td>
+                        <td class="amount-column amount">&#8377; {{ format_inr((float) ($each->credit ?: 0), 2) }}</td>
+                        <td class="amount-column amount">&#8377; {{ format_inr((float) ($each->debit ?: 0), 2) }}</td>
                     </tr>
                 @empty
                     <tr class="empty-row">
@@ -374,18 +374,18 @@
                 <tbody>
                     <tr>
                         <td>Opening balance</td>
-                        <td class="money">&#8377; {{ number_format((float) ($total_opening_balance_cr ?: 0), 2) }}</td>
-                        <td class="money">&#8377; {{ number_format((float) ($total_opening_balance_dr ?: 0), 2) }}</td>
+                        <td class="money">&#8377; {{ format_inr((float) ($total_opening_balance_cr ?: 0), 2) }}</td>
+                        <td class="money">&#8377; {{ format_inr((float) ($total_opening_balance_dr ?: 0), 2) }}</td>
                     </tr>
                     <tr>
                         <td>Current period</td>
-                        <td class="money">&#8377; {{ number_format((float) ($current_balance_cr ?: 0), 2) }}</td>
-                        <td class="money">&#8377; {{ number_format((float) ($current_balance_dr ?: 0), 2) }}</td>
+                        <td class="money">&#8377; {{ format_inr((float) ($current_balance_cr ?: 0), 2) }}</td>
+                        <td class="money">&#8377; {{ format_inr((float) ($current_balance_dr ?: 0), 2) }}</td>
                     </tr>
                     <tr class="closing-row">
                         <td>Closing balance</td>
-                        <td class="money">&#8377; {{ number_format((float) ($closing_balance_cr ?: 0), 2) }}</td>
-                        <td class="money">&#8377; {{ number_format((float) ($closing_balance_dr ?: 0), 2) }}</td>
+                        <td class="money">&#8377; {{ format_inr((float) ($closing_balance_cr ?: 0), 2) }}</td>
+                        <td class="money">&#8377; {{ format_inr((float) ($closing_balance_dr ?: 0), 2) }}</td>
                     </tr>
                 </tbody>
             </table>

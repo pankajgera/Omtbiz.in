@@ -69,7 +69,7 @@
       <div class="card-footer">
         <base-button
           :outline="true"
-          class="mr-3"
+          class="me-3"
           color="theme"
           type="button"
           @click="closeItemModal"

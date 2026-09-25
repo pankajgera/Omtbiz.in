@@ -123,7 +123,7 @@ class UsersController extends Controller
     /***
      * Get all roles and companies
      */
-    public function getRolesAndCompanies() {
+    public function getRolesAndCompanies(Request $request) {
         $companies = Company::whereKey($request->user('api')->company_id)->get()->toArray();
         $roles = Role::all()->toArray();
 

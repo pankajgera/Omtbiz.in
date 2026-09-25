@@ -90,18 +90,18 @@
           </colgroup>
           <thead class="item-table-header">
             <tr>
-              <th class="text-left">
+              <th class="text-start">
                 <span class="column-heading heading-1 item-heading">
                   {{ $tc('orders.inventory.title',2) }}
                 </span>
               </th>
-              <th class="text-right">
+              <th class="text-end">
                 <span class="column-heading">
                   {{ $t('orders.inventory.quantity') }}
                 </span>
               </th>
-              <th class="text-left"></th>
-              <th class="text-left"></th>
+              <th class="text-start"></th>
+              <th class="text-start"></th>
             </tr>
           </thead>
           <draggable
@@ -131,7 +131,7 @@
         </table>
       </div>
       <button v-if="showAddNewInventory" type="button" class="add-item-action add-order-item" @click="addInventory">
-        <font-awesome-icon icon="shopping-basket" class="mr-2"/>
+        <font-awesome-icon icon="shopping-basket" class="me-2"/>
         {{ $t('orders.add_item') }}
       </button>
       <button v-if="showEndOfList" type="button" @click="removeEndOfList" class="btn btn-primary" style="margin: 10px">
@@ -175,7 +175,7 @@
         </div>
       </div>
       <div class="page-actions row">
-          <!-- <a v-if="isEdit" :href="`/orders/pdf/${newOrder.unique_hash}`" target="_blank" class="mr-3 order-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
+          <!-- <a v-if="isEdit" :href="`/orders/pdf/${newOrder.unique_hash}`" target="_blank" class="me-3 order-action-btn base-button btn btn-outline-primary default-size" outline color="theme">
             {{ $t('general.view_pdf') }}
           </a> -->
           <base-button

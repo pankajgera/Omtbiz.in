@@ -48,7 +48,7 @@
                 />
               </div>
             </td>
-            <td class="text-right tw:align-middle tw:px-2 tw:py-4">
+            <td class="text-end tw:align-middle tw:px-2 tw:py-4">
               <base-input
                 ref="inventoryQuantity"
                 :id="'inventoryQuantity'+index"
@@ -65,7 +65,7 @@
                 <span v-if="!vInvoiceItem.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
               </div>
             </td>
-            <td class="text-left tw:align-middle tw:px-2 tw:py-4" v-if="('orders' !== inventoryType)">
+            <td class="text-start tw:align-middle tw:px-2 tw:py-4" v-if="('orders' !== inventoryType)">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
@@ -82,7 +82,7 @@
 
               </div>
             </td>
-            <td class="text-left tw:align-middle tw:px-2 tw:py-4" v-if="('orders' !== inventoryType)">
+            <td class="text-start tw:align-middle tw:px-2 tw:py-4" v-if="('orders' !== inventoryType)">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                    <base-input
@@ -116,16 +116,17 @@
                     @input="vInvoiceItem.discount_val.$touch()"
                   />
                   <v-dropdown :show-arrow="false" theme-light>
-                    <button
-                      slot="activator"
-                      type="button"
-                      class="btn item-dropdown dropdown-toggle"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      {{ invoiceItem.discount_type == 'fixed' ? currency.symbol : '%' }}
-                    </button>
+                    <template #activator>
+                      <button
+                        type="button"
+                        class="btn item-dropdown dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        {{ invoiceItem.discount_type == 'fixed' ? currency.symbol : '%' }}
+                      </button>
+                    </template>
                     <v-dropdown-item>
                       <a class="dropdown-inventory" href="#" @click.prevent="selectFixed" >
                         {{ $t('general.fixed') }}
@@ -140,7 +141,7 @@
                 </div>
               </div>
             </td>
-            <td class="text-left tw:align-middle tw:px-3 tw:py-4">
+            <td class="text-start tw:align-middle tw:px-3 tw:py-4">
               <div class="item-amount tw:flex tw:items-center tw:justify-end tw:gap-2" v-if="('orders' !== inventoryType)">
                 <span class="tw:whitespace-nowrap tw:text-ink">
                    ₹ {{ total }}
