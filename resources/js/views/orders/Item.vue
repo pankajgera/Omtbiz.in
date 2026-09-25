@@ -32,7 +32,7 @@
                 />
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-end">
               <base-input
                 v-model="item.quantity"
                 :invalid="$v.item.quantity.$error"
@@ -45,7 +45,7 @@
                 <span v-if="!$v.item.quantity.maxLength" class="text-danger">{{ $t('validation.quantity_maxlength') }}</span>
               </div>
             </td>
-            <td class="text-left">
+            <td class="text-start">
               <div class="d-flex flex-column">
                 <div class="flex-fillbd-highlight">
                   <base-input
@@ -73,16 +73,17 @@
                     @input="$v.item.discount_val.$touch()"
                   />
                   <v-dropdown :show-arrow="false" theme-light>
-                    <button
-                      slot="activator"
-                      type="button"
-                      class="btn item-dropdown dropdown-toggle"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      {{ item.discount_type == 'fixed' ? currency.symbol : '%' }}
-                    </button>
+                    <template #activator>
+                      <button
+                        type="button"
+                        class="btn item-dropdown dropdown-toggle"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        {{ item.discount_type == 'fixed' ? currency.symbol : '%' }}
+                      </button>
+                    </template>
                     <v-dropdown-item>
                       <a class="dropdown-item" href="#" @click.prevent="selectFixed" >
                         {{ $t('general.fixed') }}
@@ -98,7 +99,7 @@
                 <!-- <div v-if="$v.item.discount.$error"> discount error </div> -->
               </div>
             </td>
-            <td class="text-right">
+            <td class="text-end">
               <div class="item-amount">
                 <span>
                   <div>{{ $utils.formatMoney(total, currency) }}</div>

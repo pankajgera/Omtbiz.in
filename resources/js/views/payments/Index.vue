@@ -2,7 +2,7 @@
   <div class="items receipt-index-page main-content">
     <div class="page-header">
       <Header :title="$tc('payments.payment', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalPayments || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalPayments || filtersApplied" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -46,7 +46,7 @@
             />
           </div>
           <div class="filter-date">
-            <div class="from pr-3">
+            <div class="from pe-3">
               <label>{{ $t('general.from') }}</label>
               <base-date-picker
                 v-model="filters.from_date"
@@ -55,7 +55,7 @@
               />
             </div>
             <div class="dashed" />
-            <div class="to pl-3">
+            <div class="to ps-3">
               <label>{{ $t('general.to') }}</label>
               <base-date-picker
                 v-model="filters.to_date"
@@ -101,9 +101,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ payments.length }}</b> {{ $t('general.of') }} <b>{{ totalPayments }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="role === 'admin' && selectedPayments && selectedPayments.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultiplePayments">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -183,9 +185,11 @@
           <template #default="row">
             <span>{{ $t('payments.action') }}</span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <router-link :to="{path: `payments/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>

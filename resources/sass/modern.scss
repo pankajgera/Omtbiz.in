@@ -130,6 +130,46 @@ textarea {
     min-width: 23rem !important;
 }
 
+/* partials/header.scss paints header items with the default (black) button colour. */
+.site-header .action-list li,
+.site-header .action-list .dropdown-group,
+.site-header .action-list .avatar {
+    background: transparent !important;
+}
+
+.site-header .action-list .avatar {
+    display: block;
+    padding: 0 !important;
+    border-radius: 50%;
+}
+
+/* The menu is teleported to <body>, so these can't be scoped under .notifications. */
+.notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 16rem;
+    padding: 4px;
+}
+
+.notification-list .notification-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    color: var(--ui-text);
+    font-size: 13px;
+    text-decoration: none;
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: 6px;
+}
+
+.notification-list .notification-item:hover {
+    background: var(--ui-surface-hover);
+}
+
 .notifications .alert {
     margin-bottom: 4px;
     padding: 8px 12px;

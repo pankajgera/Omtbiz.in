@@ -4,11 +4,13 @@
       <h3 class="page-title"> {{ receipt.receipt_number }}</h3>
       <div class="page-actions row">
         <v-dropdown :close-on-select="false" align="left" class="filter-container">
-          <span slot="activator" href="#">
-            <base-button color="theme">
-              <font-awesome-icon icon="ellipsis-h" />
-            </base-button>
-          </span>
+          <template #activator>
+            <span href="#">
+              <base-button color="theme">
+                <font-awesome-icon icon="ellipsis-h" />
+              </base-button>
+            </span>
+          </template>
           <v-dropdown-item>
             <router-link v-if="canEdit" :to="{path: `/receipts/${$route.params.id}/edit`}" class="dropdown-item">
               <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
@@ -35,16 +37,18 @@
           @input="onSearched()"
         />
         <div
-          class="btn-group ml-3"
+          class="btn-group ms-3"
           role="group"
           aria-label="First group"
         >
           <v-dropdown :close-on-select="false" align="left" class="filter-container">
-            <span slot="activator" href="#">
-              <base-button class="inv-button inv-filter-fields-btn" color="default" size="medium">
-                <font-awesome-icon icon="filter" />
-              </base-button>
-            </span>
+            <template #activator>
+              <span href="#">
+                <base-button class="inv-button inv-filter-fields-btn" color="default" size="medium">
+                  <font-awesome-icon icon="filter" />
+                </base-button>
+              </span>
+            </template>
 
             <div class="filter-items">
               <input

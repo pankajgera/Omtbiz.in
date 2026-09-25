@@ -36,7 +36,7 @@
                 />
               </div>
               <div class="form-group" v-if="change_invoice">
-                <span class="ml-2" v-for="(value, index) in filterInvoice " :key="index" >
+                <span class="ms-2" v-for="(value, index) in filterInvoice " :key="index" >
                   {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}
                 </span>
               </div>

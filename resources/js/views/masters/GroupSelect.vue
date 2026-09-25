@@ -21,12 +21,14 @@
       @value="onTextChange"
       @select="(val) => $emit('select', val)"
     >
-      <div slot="afterList">
-        <button type="button" class="list-add-button" @click="openGroupModal">
-          <font-awesome-icon class="icon" icon="cart-plus" />
-          <label>{{ $t('groups.add_new_group') }}</label>
-        </button>
-      </div>
+      <template #afterList>
+        <div>
+          <button type="button" class="list-add-button" @click="openGroupModal">
+            <font-awesome-icon class="icon" icon="cart-plus" />
+            <label>{{ $t('groups.add_new_group') }}</label>
+          </button>
+        </div>
+      </template>
     </base-select>
   </div>
 </template>

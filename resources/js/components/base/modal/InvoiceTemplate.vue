@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="card-footer">
-      <base-button outline class="mr-3" color="theme" @click="closeInvoiceModal">
+      <base-button outline class="me-3" color="theme" @click="closeInvoiceModal">
         {{ $t('general.cancel') }}
       </base-button>
       <base-button

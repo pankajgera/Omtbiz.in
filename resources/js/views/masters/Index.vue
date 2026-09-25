@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-3 mr-4">
+        <div class="col-xs-3 me-4">
           <base-button
             v-show="totalMasters || filtersApplied"
             :outline="true"
@@ -102,9 +102,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ masters.length }}</b> {{ $t('general.of') }} <b>{{ totalMasters }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedMasters.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleMasters">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -154,7 +156,7 @@
                   </button>
                 </th>
                 <th class="masters-action-column" scope="col">
-                  <span class="sr-only">{{ $t('masters.action') }}</span>
+                  <span class="visually-hidden">{{ $t('masters.action') }}</span>
                 </th>
               </tr>
             </thead>

@@ -107,7 +107,7 @@
         </p>
       </div>
       <a v-if="getReportUrl && !isReportLoading" class="base-button btn btn-primary btn-lg report-view-button" @click="viewReportsPDF">
-        <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 mr-2" /> <span>{{ $t('reports.view_pdf') }}</span>
+        <font-awesome-icon icon="file-pdf" class="vue-icon icon-left svg-inline--fa fa-download fa-w-16 me-2" /> <span>{{ $t('reports.view_pdf') }}</span>
       </a>
     </div>
   </div>

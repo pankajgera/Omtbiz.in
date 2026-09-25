@@ -2,7 +2,7 @@
   <div class="audit-logs main-content">
     <div class="page-header">
       <Header :title="$t('audit_logs.title')" :bread-crumb-links="breadCrumbLinks">
-        <div class="mr-4 mb-3 mb-sm-0">
+        <div class="me-4 mb-3 mb-sm-0">
           <base-button
             v-show="totalAuditLogs || filtersApplied"
             :outline="true"

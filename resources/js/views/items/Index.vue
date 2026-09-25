@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
        <Header :title="$tc('items.bill_ty', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div  v-show="totalItemsToBe>0 || totalItems>0 || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div  v-show="totalItemsToBe>0 || totalItems>0 || filtersApplied" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -92,9 +92,11 @@
           <h4>Pending Bill-Ty</h4>
           <transition name="fade">
             <v-dropdown v-if="selectedItemsToBe.length" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeMultipleItemsToBe">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -190,9 +192,11 @@
             <template #default="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
-                <span slot="activator" href="#">
-                  <dot-icon />
-                </span>
+                <template #activator>
+                  <span href="#">
+                    <dot-icon />
+                  </span>
+                </template>
                 <v-dropdown-item>
 
                   <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
@@ -218,9 +222,11 @@
           <h4>Completed Bill-Ty</h4>
           <transition name="fade">
             <v-dropdown v-if="selectedItems.length" :show-arrow="false">
-              <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-                {{ $t('general.actions') }}
-              </span>
+              <template #activator>
+                <span href="#" class="table-actions-button dropdown-toggle">
+                  {{ $t('general.actions') }}
+                </span>
+              </template>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="removeMultipleItems">
                   <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -317,9 +323,11 @@
             <template #default="row">
               <span> {{ $t('items.action') }} </span>
               <v-dropdown>
-                <span slot="activator" href="#">
-                  <dot-icon />
-                </span>
+                <template #activator>
+                  <span href="#">
+                    <dot-icon />
+                  </span>
+                </template>
                 <v-dropdown-item>
                   <router-link :to="{path: `bill-ty/${row.id}/edit`}" class="dropdown-item">
                     <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />

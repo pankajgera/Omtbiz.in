@@ -1,6 +1,6 @@
 <template>
   <footer class="site-footer">
-    <div class="text-right">
+    <div class="text-end">
       <!-- {{ $t('general.powered_by') }}
       <a
         href="http://bytefury.com/"

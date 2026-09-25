@@ -30,7 +30,7 @@
       <div class="card-footer">
         <base-button
           :outline="true"
-          class="mr-3 display-inline"
+          class="me-3 display-inline"
           color="theme"
           type="button"
           @click="closeGroupModal"

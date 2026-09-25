@@ -184,9 +184,9 @@ export default {
     iconClass () {
       if (this.loading || !this.iconButton) {
         if (this.rightIcon) {
-          return 'ml-2'
+          return 'ms-2'
         }
-        return 'mr-2'
+        return 'me-2'
       }
       return 'icon-button'
     }
