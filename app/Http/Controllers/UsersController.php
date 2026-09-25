@@ -28,7 +28,7 @@ class UsersController extends Controller
             return redirect()->guest('login');
         }
         $user = Auth::user();
-        $company = $request->header('company') ?? 1;
+        $company = (int) $user->company_id;
 
         $customers = User::with('billingAddress', 'shippingAddress')
             ->customer()
@@ -54,9 +54,9 @@ class UsersController extends Controller
             $request->header('company')
         );
 
-        $items = Item::all();
+        $items = Item::whereCompany($company)->get();
 
-        $companies = Company::all()->toArray();
+        $companies = Company::whereKey($company)->get()->toArray();
 
         $roles = Role::all()->toArray();
 
@@ -124,7 +124,7 @@ class UsersController extends Controller
      * Get all roles and companies
      */
     public function getRolesAndCompanies() {
-        $companies = Company::all()->toArray();
+        $companies = Company::whereKey($request->user('api')->company_id)->get()->toArray();
         $roles = Role::all()->toArray();
 
         return response()->json([
@@ -179,7 +179,7 @@ class UsersController extends Controller
     public function show($id)
     {
         try {
-            $user = User::find($id);
+            $user = User::whereCompany(request()->header('company'))->findOrFail($id);
 
             return response()->json([
                 'user' => $user
@@ -197,8 +197,8 @@ class UsersController extends Controller
     public function edit($id)
     {
         try {
-            $user = User::findOrFail($id);
-            $companies = Company::all()->toArray();
+            $user = User::whereCompany(request()->header('company'))->findOrFail($id);
+            $companies = Company::whereKey(request()->header('company'))->get()->toArray();
             $roles = Role::all()->toArray();
 
             return response()->json([
@@ -220,7 +220,7 @@ class UsersController extends Controller
     public function update($id, UserRequest $request)
     {
         try {
-            $user = User::find($id);
+            $user = User::whereCompany($request->header('company'))->findOrFail($id);
 
             if ($request->email != null) {
                 $verifyEmail = User::where('email', $request->email)->first();
@@ -263,7 +263,7 @@ class UsersController extends Controller
     public function destroy($id)
     {
         try {
-            $user = User::findOrFail($id);
+            $user = User::whereCompany(request()->header('company'))->findOrFail($id);
             $user->deleteUser();
             return response()->json([
                 'success' => true
@@ -283,7 +283,7 @@ class UsersController extends Controller
     {
         try {
             foreach ($request->id as $id) {
-                $user = User::findOrFail($id);
+                $user = User::whereCompany($request->header('company'))->findOrFail($id);
                 $user->deleteUser();
             }
             return response()->json([

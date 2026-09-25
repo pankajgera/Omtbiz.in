@@ -13,8 +13,6 @@ class UpdateTypeAndIntAccountLedger extends Migration
      */
     public function up()
     {
-        Schema::getConnection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-
         Schema::table('account_ledgers', function (Blueprint $table) {
             $table->dropColumn('type');
         });

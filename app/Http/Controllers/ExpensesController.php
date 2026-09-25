@@ -5,12 +5,13 @@ use App\Models\Expense;
 use App\Models\User;
 use App\Models\Currency;
 use App\Models\Company;
+use App\Models\PublicShare;
+use App\Support\PublicShareService;
 use App\Models\CompanySetting;
 use Illuminate\Http\Request;
 use App\Models\ExpenseCategory;
 use App\Http\Requests\ExpenseRequest;
 use Carbon\Carbon;
-use Intervention\Image\Facades\Image;
 
 class ExpensesController extends Controller
 {
@@ -206,7 +207,7 @@ class ExpensesController extends Controller
      * @param   int $id
      * @return  \Illuminate\Http\JsonResponse
      */
-    public function showReceipt($id)
+    public function showReceipt(Request $request, $id)
     {
         $expense = Expense::find($id);
         $imagePath  = null;
@@ -228,7 +229,8 @@ class ExpensesController extends Controller
 
         return response()->json([
             'image' => $image,
-            'type' => $type
+            'type' => $type,
+            'shareable_link' => $this->shareableLink($expense),
         ]);
     }
 
@@ -240,13 +242,16 @@ class ExpensesController extends Controller
      * @param   strig $hash
      * @return  \Symfony\Component\HttpFoundation\BinaryFileResponse | \Illuminate\Http\JsonResponse
      */
-    public function downloadReceipt($id, $hash)
+    public function downloadReceipt(string $token)
     {
-        $company = Company::where('unique_hash', $hash)->first();
-
-        $expense = Expense::whereCompany($company->id)
-            ->where('id', $id)
-            ->first();
+        $share = PublicShare::withoutGlobalScopes()
+            ->active()
+            ->where('token', $token)
+            ->where('resource_type', 'expense')
+            ->firstOrFail();
+        $expense = Expense::withoutGlobalScopes()
+            ->where('company_id', $share->company_id)
+            ->findOrFail($share->resource_id);
         $imagePath  = null;
 
         if($expense) {
@@ -270,5 +275,12 @@ class ExpensesController extends Controller
             'error' => 'receipt_not_found'
         ]);
     }
-}
 
+    private function shareableLink(Expense $expense): string
+    {
+        $service = app(PublicShareService::class);
+        $share = $service->document($expense, 'expense', request()->user('api')?->id);
+
+        return $service->url($share);
+    }
+}

@@ -63,6 +63,13 @@ class User extends Authenticatable implements HasMedia
         'avatar'
     ];
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('admin_avatar')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
+            ->singleFile();
+    }
+
     /**
      * Find the user instance for the given username.
      *

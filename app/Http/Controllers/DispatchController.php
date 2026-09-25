@@ -9,6 +9,7 @@ use App\Models\Invoice;
 use App\Models\Item;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Log;
 
 class DispatchController extends Controller
@@ -64,6 +65,249 @@ class DispatchController extends Controller
             'dispatch_inprogress' => $dispatch_inprogress,
             'dispatch_completed' => $dispatch_completed,
             'dispatch_total' =>  Dispatch::count(),
+            'sundryDebtorsList' => $sundryDebtorsList,
+        ]);
+    }
+
+    /**
+     * Summary counts for the Dispatch dashboard cards.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function dashboard(Request $request)
+    {
+        $company = $request->header('company');
+
+        // No $filter arg to whereCompany() here on purpose - it would otherwise
+        // restrict to *today's* dispatches only (see Dispatch::scopeWhereCompany).
+        // These are all-time backlog counts, matching the Pending/Completed pages.
+        //
+        // distinct(invoice_id)->count() (rather than groupBy()->count(), which
+        // returns per-group counts, not a total) so this matches the number of
+        // rows a user actually sees on the To Be Dispatch / Dispatched tables.
+        $pending = Dispatch::where('status', 'Draft')
+            ->whereCompany($company)
+            ->distinct('invoice_id')
+            ->count('invoice_id');
+
+        $dispatched = Dispatch::where('status', 'Sent')
+            ->whereCompany($company)
+            ->distinct('invoice_id')
+            ->count('invoice_id');
+
+        // Recent activity: last 5 dispatches sent out, last 5 newly added to
+        // the pending queue - each enriched with invoice/party info the same
+        // way the Pending/Completed list pages are.
+        $recentDispatched = Dispatch::where('status', 'Sent')
+            ->whereCompany($company)
+            ->groupBy('invoice_id')
+            ->orderByDesc('date_time')
+            ->limit(5)
+            ->get();
+
+        $recentPending = Dispatch::where('status', 'Draft')
+            ->whereCompany($company)
+            ->groupBy('invoice_id')
+            ->orderByDesc('created_at')
+            ->limit(5)
+            ->get();
+
+        foreach ([$recentDispatched, $recentPending] as $list) {
+            foreach ($list as $row) {
+                $invoiceIds = array_filter(array_map('trim', explode(',', (string) $row->invoice_id)));
+                $invoices = Invoice::whereIn('id', $invoiceIds)->select('id', 'invoice_number', 'account_master_id')->get();
+                $row->invoices = $invoices;
+                $row->master = $invoices->isNotEmpty()
+                    ? AccountMaster::where('id', $invoices->first()->account_master_id)->select('id', 'name')->first()
+                    : null;
+            }
+        }
+
+        // Top 5 parties by how many dispatches are currently waiting to go out.
+        // Invoice.status isn't reliably kept in sync with the dispatch flow on
+        // older/imported data (most historical rows never got flipped to
+        // TO_BE_DISPATCH), so this counts straight off the Draft dispatches
+        // themselves - joining on the first invoice id in each dispatch's
+        // (possibly comma-separated) invoice_id, since a bundled dispatch is
+        // always one party (see the "party name should be same" rule used
+        // when merging dispatches).
+        $topPendingParties = DB::table('dispatches')
+            ->join('invoices', DB::raw('CAST(SUBSTRING_INDEX(dispatches.invoice_id, \',\', 1) AS UNSIGNED)'), '=', 'invoices.id')
+            ->where('dispatches.status', 'Draft')
+            ->where('dispatches.company_id', $company)
+            ->whereNotNull('invoices.account_master_id')
+            ->select('invoices.account_master_id', DB::raw('count(*) as pending_count'))
+            ->groupBy('invoices.account_master_id')
+            ->orderByDesc('pending_count')
+            ->limit(5)
+            ->get();
+
+        $partyNames = AccountMaster::whereIn('id', $topPendingParties->pluck('account_master_id'))
+            ->select('id', 'name')
+            ->get()
+            ->keyBy('id');
+
+        $topPendingParties = $topPendingParties->map(function ($row) use ($partyNames) {
+            return [
+                'account_master_id' => $row->account_master_id,
+                'pending_count' => $row->pending_count,
+                'name' => optional($partyNames->get($row->account_master_id))->name,
+            ];
+        })->values();
+
+        // How stale is the pending backlog - bucketed by the dispatch's
+        // date_time (the same field the Pending page's Today/Yesterday/etc.
+        // quick-filter uses), so staff can see how much is genuinely old vs
+        // recent rather than just one flat total.
+        $weekAgo = Carbon::now('Asia/Kolkata')->subDays(7);
+        $monthAgo = Carbon::now('Asia/Kolkata')->subDays(30);
+
+        $pendingAging = [
+            [
+                'key' => 'recent',
+                'label' => '0-7 days',
+                'count' => Dispatch::where('status', 'Draft')
+                    ->whereCompany($company)
+                    ->where('dispatches.date_time', '>=', $weekAgo)
+                    ->distinct('invoice_id')
+                    ->count('invoice_id'),
+            ],
+            [
+                'key' => 'month',
+                'label' => '8-30 days',
+                'count' => Dispatch::where('status', 'Draft')
+                    ->whereCompany($company)
+                    ->where('dispatches.date_time', '<', $weekAgo)
+                    ->where('dispatches.date_time', '>=', $monthAgo)
+                    ->distinct('invoice_id')
+                    ->count('invoice_id'),
+            ],
+            [
+                'key' => 'old',
+                'label' => '31+ days',
+                'count' => Dispatch::where('status', 'Draft')
+                    ->whereCompany($company)
+                    ->where('dispatches.date_time', '<', $monthAgo)
+                    ->distinct('invoice_id')
+                    ->count('invoice_id'),
+            ],
+        ];
+
+        return response()->json([
+            'pending_count' => $pending,
+            'dispatched_count' => $dispatched,
+            'total_count' => $pending + $dispatched,
+            'recent_dispatched' => $recentDispatched,
+            'recent_pending' => $recentPending,
+            'top_pending_parties' => $topPendingParties,
+            'pending_aging' => $pendingAging,
+        ]);
+    }
+
+    /**
+     * Paginated list of dispatches still pending (status = Draft), for the
+     * standalone "To Be Dispatched" page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function pending(Request $request)
+    {
+        $limit = $request->has('limit') ? $request->limit : 100;
+
+        $query = Dispatch::where('dispatches.status', 'Draft')->applyFilters($request->only([
+            'name',
+            'from_date',
+            'to_date',
+            'orderByField',
+            'orderBy',
+        ]))
+            // No $filter arg here on purpose: whereCompany() secretly restricts
+            // to *today's* dispatches when $filter is falsy (see Dispatch::scopeWhereCompany).
+            // Date scoping for this page is handled explicitly below instead.
+            ->whereCompany($request->header('company'));
+
+        // A search term looks across all pending dispatches regardless of
+        // date (so searching an invoice number/party always finds it);
+        // otherwise fall back to the named date-range filter, defaulting to
+        // "today" per the page's default worklist view.
+        if ($request->filled('search')) {
+            $query->whereSearch($request->search);
+        } else {
+            $query->whereDateFilter($request->filled('date_filter') ? $request->date_filter : 'today');
+        }
+
+        $dispatch_inprogress = $query
+            ->groupBy('dispatches.invoice_id')
+            ->latest('dispatches.created_at')
+            ->paginate($limit);
+
+        foreach ($dispatch_inprogress as $inprogress) {
+            $invoiceIds = array_filter(array_map('trim', explode(',', (string) $inprogress['invoice_id'])));
+            $inprogress['invoices'] = Invoice::whereIn('id', $invoiceIds)->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            foreach ($inprogress['invoices'] as $each) {
+                $inprogress['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
+            }
+        }
+
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+
+        return response()->json([
+            'dispatch_inprogress' => $dispatch_inprogress,
+            'sundryDebtorsList' => $sundryDebtorsList,
+        ]);
+    }
+
+    /**
+     * Paginated list of dispatches already sent (status = Sent), for the
+     * standalone "Completed Dispatch" page.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function completedList(Request $request)
+    {
+        $limit = $request->has('limit') ? $request->limit : 100;
+
+        $query = Dispatch::where('dispatches.status', 'Sent')->applyFilters($request->only([
+            'name',
+            'from_date',
+            'to_date',
+            'orderByField',
+            'orderBy',
+        ]))
+            // No $filter arg here on purpose: whereCompany() secretly restricts
+            // to *today's* dispatches when $filter is falsy (see Dispatch::scopeWhereCompany).
+            // Date scoping for this page is handled explicitly below instead.
+            ->whereCompany($request->header('company'));
+
+        // Search here is invoice-number-only (unlike the Pending page, which
+        // also matches party name); otherwise fall back to the named
+        // date-range filter, defaulting to "today" to match Pending's page.
+        if ($request->filled('search')) {
+            $query->whereSearch($request->search, false);
+        } else {
+            $query->whereDateFilter($request->filled('date_filter') ? $request->date_filter : 'today');
+        }
+
+        $dispatch_completed = $query
+            ->groupBy('dispatches.invoice_id')
+            ->latest('dispatches.created_at')
+            ->paginate($limit);
+
+        foreach ($dispatch_completed as $processed) {
+            $invoiceIds = array_filter(array_map('trim', explode(',', (string) $processed['invoice_id'])));
+            $processed['invoices'] = Invoice::whereIn('id', $invoiceIds)->with('master')->select('id', 'invoice_number', 'account_master_id')->get()->toArray();
+            foreach ($processed['invoices'] as $each) {
+                $processed['master'] = AccountMaster::where('id', $each['account_master_id'])->select('id', 'name', 'opening_balance')->first();
+            }
+        }
+
+        $sundryDebtorsList = AccountMaster::where('groups', 'like', 'Sundry Debtors')->select('id', 'name', 'opening_balance')->get();
+
+        return response()->json([
+            'dispatch_completed' => $dispatch_completed,
             'sundryDebtorsList' => $sundryDebtorsList,
         ]);
     }

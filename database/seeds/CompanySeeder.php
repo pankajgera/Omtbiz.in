@@ -4,7 +4,9 @@ use App\Models\Address;
 use Illuminate\Database\Seeder;
 use App\Models\Company;
 use App\Models\CompanySetting;
+use App\Support\InitialAdminCredentials;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class CompanySeeder extends Seeder
 {
@@ -15,13 +17,15 @@ class CompanySeeder extends Seeder
      */
     public function run()
     {
+        $credentials = InitialAdminCredentials::fromConfig();
+
         Company::create([
             'name' => 'Local Company',
             'logo' => null,
-            'unique_hash' => 'Rd3ZDw9IiawGQZDJAVRSsUNjNHtpskFGOeqhKN0f4uln8aIJSbNpC5k9Z4ff',
+            'unique_hash' => Str::random(64),
         ]);
 
-        CompanySetting::create(['option' => 'notification_email', 'value' => 'testing@gmail.com', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'notification_email', 'value' => $credentials['email'], 'company_id' => 1]);
         CompanySetting::create(['option' => 'currency', 'value' => '12', 'company_id' => 1]);
         CompanySetting::create(['option' => 'time_zone', 'value' => 'UTC', 'company_id' => 1]);
         CompanySetting::create(['option' => 'language', 'value' => 'en', 'company_id' => 1]);
@@ -53,6 +57,8 @@ class CompanySeeder extends Seeder
         CompanySetting::create(['option' => 'invoice_description_text', 'value' => '#595959', 'company_id' => 1]);
         CompanySetting::create(['option' => 'invoice_border_color', 'value' => '#EAF1FB', 'company_id' => 1]);
         CompanySetting::create(['option' => 'allow_negative_inventory', 'value' => 'NO', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'order_prefix', 'value' => 'ORD', 'company_id' => 1]);
+        CompanySetting::create(['option' => 'order_auto_generate', 'value' => 'YES', 'company_id' => 1]);
 
 
         User::where('id', 1)->update([

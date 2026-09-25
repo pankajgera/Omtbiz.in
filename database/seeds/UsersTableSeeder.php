@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Setting;
+use App\Support\InitialAdminCredentials;
 use Illuminate\Support\Facades\Hash;
 
 class UsersTableSeeder extends Seeder
@@ -14,11 +15,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $credentials = InitialAdminCredentials::fromConfig();
+
         User::create([
-            'email' => 'testing@gmail.com',
-            'name' => 'testing',
+            'email' => $credentials['email'],
+            'name' => $credentials['name'],
             'role' => 'admin',
-            'password' => Hash::make('testing@123'),
+            'password' => Hash::make($credentials['password']),
         ]);
 
         Setting::setSetting('profile_complete', 0);
