@@ -160,7 +160,7 @@
               :inventory-negative="inventoryNegative"
               :is-edit="$route.name === 'invoices.edit'"
               @remove="removeInventory"
-              @update="updateInventoryBounce"
+              @update="updateInventory"
               @inventoryValidate="checkInventoryData"
               @endlist="showEndList"
             />
@@ -572,9 +572,6 @@ export default {
   created () {
     this.loadData()
     this.fetchInitialInventory()
-    this.updateInventoryBounce = _.debounce((data) => {
-      this.updateInventory(data);
-    }, 500);
   },
   methods: {
     ...mapActions('modal', [
@@ -737,8 +734,7 @@ export default {
           return
         }
 
-        inventoryRow.$el?.focus?.()
-        inventoryRow.$refs.inventorySelect?.$refs.baseSelect?.$el?.focus?.()
+        inventoryRow.$refs.inventorySelect?.focusSearch()
       })
     },
     getInventoryRow (index) {
@@ -757,9 +753,6 @@ export default {
       })
     },
     updateInventory (data) {
-      if (data.inventory && !data.inventory.inventory_id) {
-        return false
-      }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
     },
     // Stable per-row key so editing a row doesn't re-render it and steal focus from the field the user tabbed to.

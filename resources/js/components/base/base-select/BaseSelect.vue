@@ -9,7 +9,8 @@
     @blur="searchable ? false : deactivate()"
     @keydown.self.down.prevent="pointerForward()"
     @keydown.self.up.prevent="pointerBackward()"
-    @keypress.enter.tab.stop.self="addPointerElement($event, doNotSelectDefault)"
+    @keypress.enter.prevent.stop.self="selectWithEnter"
+    @keydown.tab.self="selectWithTab"
     @keyup.esc="deactivate()"
   >
     <slot :toggle="toggle" name="caret">
@@ -67,7 +68,8 @@
         @keyup.esc="deactivate()"
         @keydown.down.prevent="pointerForward()"
         @keydown.up.prevent="pointerBackward()"
-        @keypress.enter.prevent.stop.self="addPointerElement($event, doNotSelectDefault)"
+        @keydown.tab="selectWithTab"
+        @keypress.enter.prevent.stop.self="selectWithEnter"
         @keydown.delete.stop="removeLastElement()"
       >
       </span>
@@ -153,8 +155,13 @@
                 <slot name="noOptions">{{ $t('general.list_is_empty') }}</slot>
               </span>
             </li>
+            <li v-if="showNoResults && search && !filteredOptions.length && !loading">
+              <span class="multiselect__option">
+                <slot name="noResult">{{ $t('general.no_matching_items') }}</slot>
+              </span>
+            </li>
           </ul>
-          <slot name="afterList"/>
+          <slot name="afterList" :search="search" :options="filteredOptions" :loading="loading"/>
         </div>
       </transition>
     </teleport>
@@ -316,6 +323,14 @@ export default {
       type: Boolean,
       default: false
     },
+    selectOnTab: {
+      type: Boolean,
+      default: false
+    },
+    canSelectOnTab: {
+      type: Function,
+      default: () => true
+    },
     appendToBody: {
       type: Boolean,
       default: true
@@ -417,6 +432,30 @@ export default {
     }
   },
   methods:{
+    selectWithEnter (event) {
+      if (this.search.trim() && !this.filteredOptions.length && !this.loading) {
+        this.$emit('empty-enter', this.search)
+        return
+      }
+      this.addPointerElement(event, this.doNotSelectDefault)
+    },
+    selectWithTab (event) {
+      if (!this.selectOnTab || event.shiftKey || !this.isOpen || this.disabled ||
+        !this.search.trim() || this.blockKeys.includes('Tab')) return
+
+      const option = this.filteredOptions[this.pointer]
+      if (!option || option.$isDisabled || option.$isLabel || option.isTag || !this.canSelectOnTab(option)) return
+
+      // The consumer moves focus after Vue enables the next field.
+      event.preventDefault()
+      this.pointerDirty = true
+      this.select(option, 'Tab')
+      this.deactivate()
+      this.$emit('tab-select', option)
+    },
+    focusSearch () {
+      if (!this.disabled) (this.$refs.search || this.$el).focus()
+    },
     updateDropdownPosition (event) {
       if (!this.appendToBody || !this.isOpen || !this.$el) {
         return

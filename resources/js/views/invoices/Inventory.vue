@@ -37,12 +37,13 @@
                   :invalid-description="vInvoiceItem.description.$error"
                   :inventory="inventoryList"
                   :is-disable="isDisable"
-                  :picked-inventory="inventoryData"
-                  @search="searchVal"
+                  :picked-inventory="invoiceItem"
+                  :select-on-tab="inventoryType === 'invoice'"
+                  :clearable="inventoryType === 'invoice'"
                   @select="onSelectInventory"
+                  @advance="focusQuantity"
                   @deselect="deselectInventory"
                   @onDesriptionInput="vInvoiceItem.description.$touch()"
-                  @onSelectInventory="isSelected = true"
                   @endlist="showEndList"
                 />
               </div>
@@ -168,7 +169,6 @@
 <script>
 import Guid from 'guid'
 import { validationMixin } from 'vuelidate'
-import { mapActions, mapGetters } from 'vuex'
 import InvoiceStub from '../../stub/invoice'
 import InventorySelect from './InventorySelect'
 import { required, minValue, between, maxLength, requiredIf } from '@vuelidate/validators';
@@ -239,7 +239,6 @@ export default {
       inventorySelect: null,
       invoiceItem: {...this.inventoryData},
       maxDiscount: 0,
-      isSelected: false,
       updatingInput: '',
     }
   },
@@ -248,9 +247,6 @@ export default {
       const v = this.$v && this.$v.value ? this.$v.value : this.$v
       return (v && v.invoiceItem) || this._fallbackVInvoiceItem
     },
-    ...mapGetters('modal', [
-      'modalActive'
-    ]),
     disabled() {
       return !this.invoiceItem.inventory_id;
     },
@@ -356,11 +352,6 @@ export default {
       if (this.invoiceItem.discount_type === 'percentage') {
         this.invoiceItem.discount_val = (this.invoiceItem.discount * newValue)
       }
-    },
-    modalActive (val) {
-      if (!val) {
-        this.isSelected = false
-      }
     }
   },
   validations () {
@@ -399,21 +390,20 @@ export default {
   },
   created () {
     window.hub.$on('checkInventory', this.validateInventory)
-    window.hub.$on('newInventory', (val) => {
-      if (!this.invoiceItem.inventory_id && this.modalActive && this.isSelected) {
-        this.onSelectInventory(val)
-      }
-    });
   },
   methods: {
-    searchVal (val) {
-      this.invoiceItem.name = val
-    },
     deselectInventory () {
-      this.invoiceItem = {...InvoiceStub, id: this.invoiceItem.id}
-      this.$nextTick(() => {
-        this.$refs.inventorySelect.$refs.baseSelect.$refs.search.focus()
-      })
+      this.invoiceItem = {
+        ...InvoiceStub,
+        id: this.invoiceItem.id,
+        inventory_id: null,
+        discount: 0,
+        discount_val: 0,
+        discount_type: 'fixed',
+        valid: false
+      }
+      this.updatingInput = ''
+      this.updateInventory()
     },
     onSelectInventory (newItem) {
       if (!newItem || 0 === newItem.id) {
@@ -427,8 +417,11 @@ export default {
       this.invoiceItem.description = newItem.description
       this.updatingInput = 'quantity'
       this.updateInventory()
+      this.focusQuantity()
+    },
+    focusQuantity () {
       this.$nextTick(() => {
-        this.$refs.inventoryQuantity.$refs.baseInput.focus()
+        this.$refs.inventoryQuantity?.$refs.baseInput?.focus()
       })
     },
     selectFixed () {

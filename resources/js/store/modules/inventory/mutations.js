@@ -30,7 +30,12 @@ export default {
       state.totalInventories = totalInventories
     },
     [types.ADD_INVENTORY](state, data) {
-        state.inventory.push(data.inventory)
+        // Both the inventory screen and invoice picker must see the saved item.
+        for (const list of [state.inventory, state.inventories]) {
+            const index = list.findIndex(inventory => inventory.id === data.inventory.id)
+            if (index === -1) list.push(data.inventory)
+            else list.splice(index, 1, data.inventory)
+        }
     },
     [types.UPDATE_INVENTORY](state, data) {
         let pos = state.inventory.findIndex(inventory => inventory.id === data.inventory.id)
