@@ -1816,6 +1816,239 @@ textarea:disabled,
     font-weight: 600;
 }
 
+/* This action is teleported with the picker menu, outside the invoice page. */
+.list-add-button.inventory-add-action {
+    min-height: 48px;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    color: var(--ui-accent);
+    background: var(--ui-surface-muted);
+    border-top: 1px solid var(--ui-border);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.list-add-button.inventory-add-action .icon {
+    color: inherit;
+}
+
+.list-add-button.inventory-add-action:hover,
+.list-add-button.inventory-add-action:focus-visible {
+    color: var(--ui-accent-hover);
+    background: var(--ui-surface-hover);
+}
+
+.list-add-button.inventory-add-action:focus-visible {
+    outline: 2px solid var(--ui-accent);
+    outline-offset: -3px;
+}
+
+.base-modal.inventory-dialog {
+    inset: 0;
+    padding: 24px;
+    background: var(--ui-overlay);
+}
+
+.base-modal.inventory-dialog > .modal-body {
+    display: flex;
+    flex-direction: column;
+    flex: 0 1 640px;
+    width: 100%;
+    max-width: 640px;
+    max-height: calc(100dvh - 48px);
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: hidden !important;
+    color: var(--ui-text);
+    background: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    border-radius: 12px;
+    box-shadow: var(--ui-shadow-md);
+}
+
+.base-modal.inventory-dialog .modal-header {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 68px;
+    padding: 20px 64px 20px 24px !important;
+    background: var(--ui-surface);
+    border-bottom: 1px solid var(--ui-border);
+}
+
+.base-modal.inventory-dialog .modal-header::before {
+    display: none;
+}
+
+.base-modal.inventory-dialog .modal-heading {
+    margin: 0;
+    color: var(--ui-text);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.base-modal.inventory-dialog .close-icon {
+    top: 18px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    padding: 8px;
+    align-items: center;
+    color: var(--ui-text);
+    border-radius: 6px;
+}
+
+.base-modal.inventory-dialog .close-icon:hover {
+    background: var(--ui-surface-hover);
+}
+
+.inventory-modal,
+.inventory-modal > form {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.inventory-modal > form {
+    margin: 0;
+}
+
+.inventory-modal__fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.inventory-modal__field,
+.inventory-modal__control {
+    min-width: 0;
+}
+
+.inventory-modal__label {
+    display: block;
+    margin: 0 0 8px;
+    padding: 0;
+    color: var(--ui-text);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    text-align: left;
+}
+
+.inventory-modal .required {
+    position: static;
+    margin-left: 4px;
+    color: var(--ui-danger);
+}
+
+.inventory-modal .base-input .input-field {
+    width: 100%;
+    height: 44px;
+    min-height: 44px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.inventory-modal .multiselect {
+    box-sizing: border-box;
+    min-height: 44px;
+}
+
+.inventory-modal .multiselect__tags {
+    min-height: 44px;
+    padding: 10px 36px 10px 12px;
+    border-radius: 6px;
+}
+
+.inventory-modal .multiselect__single,
+.inventory-modal .multiselect__placeholder {
+    margin: 0;
+    padding: 0;
+    line-height: 22px;
+}
+
+.inventory-modal .text-danger {
+    display: block;
+    margin-top: 6px;
+    color: var(--ui-danger) !important;
+    font-size: 12px;
+    line-height: 18px;
+}
+
+.inventory-modal__footer {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    background: var(--ui-surface-muted);
+    border-top: 1px solid var(--ui-border);
+}
+
+.inventory-modal__footer .base-button {
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 18px;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.inventory-modal__footer .inventory-modal__cancel {
+    color: var(--ui-text) !important;
+    background: transparent !important;
+    border-color: var(--ui-border-strong) !important;
+}
+
+.inventory-modal__footer .inventory-modal__cancel:hover {
+    background: var(--ui-surface-hover) !important;
+}
+
+.inventory-modal__footer .inventory-modal__save {
+    color: #fff !important;
+    background: color-mix(in srgb, var(--ui-primary) 80%, #000) !important;
+    border-color: transparent !important;
+}
+
+.inventory-modal__footer .inventory-modal__save:hover {
+    background: color-mix(in srgb, var(--ui-primary) 70%, #000) !important;
+}
+
+@media (max-width: 575.98px) {
+    .base-modal.inventory-dialog {
+        padding: 12px;
+    }
+
+    .base-modal.inventory-dialog > .modal-body {
+        max-height: calc(100dvh - 24px);
+    }
+
+    .base-modal.inventory-dialog .modal-header {
+        padding-left: 20px !important;
+    }
+
+    .inventory-modal__fields {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .inventory-modal__footer {
+        padding: 16px 20px;
+    }
+
+    .inventory-modal__footer .base-button {
+        flex: 1;
+        padding-inline: 12px;
+    }
+}
+
 .table,
 .table th,
 .table td,

@@ -1,12 +1,12 @@
 <template>
-  <div class="item-modal">
+  <div class="item-modal inventory-modal">
     <form action="" @submit.prevent="submitInventoryData">
-      <div class="card-body">
-        <div class="form-group row">
-          <label for="inventory-modal-name" class="col-sm-4 col-form-label input-label">
+      <div class="inventory-modal__fields">
+        <div class="inventory-modal__field">
+          <label for="inventory-modal-name" class="inventory-modal__label">
             {{ $t('inventory.name') }}<span class="required">*</span>
           </label>
-          <div class="col-sm-7">
+          <div class="inventory-modal__control">
             <base-input
               ref="name"
               name="inventory-modal-name"
@@ -22,15 +22,15 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="inventory-modal-worker" class="col-sm-4 col-form-label input-label">{{ $t('inventory.worker_name') }}</label>
-          <div class="col-sm-7">
+        <div class="inventory-modal__field">
+          <label for="inventory-modal-worker" class="inventory-modal__label">{{ $t('inventory.worker_name') }}</label>
+          <div class="inventory-modal__control">
             <base-input v-model.trim="formData.worker_name" name="inventory-modal-worker" type="text" />
           </div>
         </div>
-        <div class="form-group row">
-          <label for="inventory-modal-quantity" class="col-sm-4 col-form-label input-label">{{ $t('inventory.quantity') }}<span class="required">*</span></label>
-          <div class="col-sm-7">
+        <div class="inventory-modal__field">
+          <label for="inventory-modal-quantity" class="inventory-modal__label">{{ $t('inventory.quantity') }}<span class="required">*</span></label>
+          <div class="inventory-modal__control">
             <base-input
               v-model.trim="formData.quantity"
               :invalid="v$.formData.quantity.$error"
@@ -45,9 +45,9 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="inventory-modal-price" class="col-sm-4 col-form-label input-label">{{ $t('inventory.price') }}<span class="required">*</span></label>
-          <div class="col-sm-7">
+        <div class="inventory-modal__field">
+          <label for="inventory-modal-price" class="inventory-modal__label">{{ $t('inventory.price') }}<span class="required">*</span></label>
+          <div class="inventory-modal__control">
             <base-input
               v-model.trim="formData.price"
               :invalid="v$.formData.price.$error"
@@ -63,9 +63,9 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="inventory-modal-sale-price" class="col-sm-4 col-form-label input-label">{{ $t('inventory.sale_price') }}</label>
-          <div class="col-sm-7">
+        <div class="inventory-modal__field">
+          <label for="inventory-modal-sale-price" class="inventory-modal__label">{{ $t('inventory.sale_price') }}</label>
+          <div class="inventory-modal__control">
             <base-input
               v-model.trim="formData.sale_price"
               :invalid="v$.formData.sale_price.$error"
@@ -80,12 +80,13 @@
             </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label class="col-sm-4 col-form-label input-label">{{ $t('inventory.unit') }}</label>
-          <div class="col-sm-7">
+        <div class="inventory-modal__field">
+          <label class="inventory-modal__label">{{ $t('inventory.unit') }}</label>
+          <div class="inventory-modal__control">
             <base-select
               v-model="formData.unit"
               :options="units"
+              :aria-label="$t('inventory.unit')"
               :searchable="false"
               :show-labels="false"
                :allow-empty="false"
@@ -93,10 +94,10 @@
           </div>
         </div>
       </div>
-      <div class="card-footer">
+      <div class="inventory-modal__footer">
         <base-button
           :outline="true"
-          class="me-3"
+          class="inventory-modal__cancel"
           color="theme"
           type="button"
           @click="closeInventoryModal"
@@ -105,6 +106,7 @@
         </base-button>
         <base-button
           v-if="isEdit"
+          class="inventory-modal__save"
           :loading="isLoading"
           :disabled="isLoading"
           color="theme"
@@ -114,6 +116,7 @@
         </base-button>
         <base-button
           v-else
+          class="inventory-modal__save"
           :loading="isLoading"
           :disabled="isLoading"
           icon="save"

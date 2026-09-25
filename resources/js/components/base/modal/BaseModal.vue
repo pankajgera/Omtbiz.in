@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="modalActive" :class="'size-' + modalSize" class="base-modal">
+    <div v-if="modalActive" :class="['size-' + modalSize, { 'inventory-dialog': componentName === 'InventoryModal' }]" class="base-modal">
       <div class="modal-body">
         <div class="close-icon" @click="closeModal">
           <font-awesome-icon icon="times" />
