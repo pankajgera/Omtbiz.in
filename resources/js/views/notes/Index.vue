@@ -327,9 +327,9 @@ export default {
     this.loadNotes()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllNotes()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectNote([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('notes', [

@@ -8,7 +8,6 @@
       <base-input
         :invalid="v$.loginData.email.$error"
         v-model="loginData.email"
-        :placeholder="$t('login.login_placeholder')"
         focus
         type="email"
         name="email"

@@ -301,9 +301,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllItems()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectItem([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('item', [

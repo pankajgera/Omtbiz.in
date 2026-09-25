@@ -377,15 +377,27 @@ export default {
     filters: {
       handler: 'setFilters',
       deep: true
+    },
+    // Receipts and Receipt Approvals share this component, so switching between them
+    // reuses the instance: reset the selection and reload the other list.
+    approvalMode () {
+      this.selectReceipt([])
+      this.setSelectAllState(false)
+      this.breadCrumbLinks[1].title = this.approvalMode ? this.$t('receipts.approvals_title') : this.$tc('receipts.receipt', 2)
+      this.$nextTick(() => {
+        if (this.$refs.table) {
+          this.refreshTable()
+        }
+      })
     }
   },
   created () {
     this.fetchCustomers()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllReceipts()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectReceipt([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('receipt', [

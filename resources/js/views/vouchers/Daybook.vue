@@ -356,9 +356,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllLedgers()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectLedger([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('ledger', [

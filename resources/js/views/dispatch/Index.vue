@@ -618,12 +618,11 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllDispatch()
-    }
-    if (this.selectAllToBeField) {
-      this.selectAllToBeDispatch()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectDispatch([])
+    this.setSelectAllState(false)
+    this.selectToBeDispatch([])
+    this.$store.commit('dispatch/SET_TO_BE_SELECT_ALL_STATE', false)
   },
   methods: {
     ...mapActions('dispatch', [

@@ -314,9 +314,9 @@ export default {
       clearTimeout(this.timer)
     }
 
-    if (this.selectAllField) {
-      this.selectAllInventory()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectInventory([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('modal', [

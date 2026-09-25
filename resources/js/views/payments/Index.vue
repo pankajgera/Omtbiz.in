@@ -328,9 +328,9 @@ export default {
     this.fetchCustomers()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllPayments()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectPayment([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('payment', [

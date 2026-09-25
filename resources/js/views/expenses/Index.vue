@@ -291,9 +291,9 @@ export default {
     }
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllExpenses()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectExpense([])
+    this.setSelectAllState(false)
   },
   created () {
     this.fetchCategories()

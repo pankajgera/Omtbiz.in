@@ -330,9 +330,9 @@ export default {
     this.fetchCustomers()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllInvoices()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectInvoice([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('invoice', [

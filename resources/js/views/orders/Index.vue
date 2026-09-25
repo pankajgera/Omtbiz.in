@@ -478,9 +478,9 @@ export default {
     this.fetchData()
   },
   unmounted() {
-    if (this.selectAllField) {
-      this.selectAllOrders()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectOrder([])
+    this.setSelectAllState(false)
   },
   methods: {
     ...mapActions('orders', [
