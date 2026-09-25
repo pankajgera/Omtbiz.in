@@ -2,10 +2,7 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "development": "vite",
-    "watch": "vite",
-    "watch-poll": "vite --watch-options-poll=1000",
-    "hot": "vite --hot",
+    "build": "vite build",
     "production": "vite build"
   },
   "devDependencies": {
@@ -35,7 +32,6 @@
     "axios": "^1.13.6",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
-    "cross-env": "^10.1.0",
     "date-fns": "^4.1.0",
     "guid": "0.0.12",
     "lodash": "^4.17.23",

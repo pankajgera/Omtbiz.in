@@ -24,10 +24,20 @@
 }
 
 .base-prefix-input p.prefix-label {
+  align-items: center;
+  flex-shrink: 0;
   height: 100%;
+  margin: 0;
+  padding: 0 10px;
+  white-space: nowrap;
   color: var(--ui-text) !important;
   background: var(--ui-surface-muted);
   border-right: 1px solid var(--ui-border);
+}
+
+.base-prefix-input .prefix-input-field {
+  flex: 1;
+  min-width: 0;
 }
 
 .base-prefix-input.disabled p.prefix-label {
@@ -42,7 +52,7 @@
 
 @media screen and (max-width: 1030px) {
   .base-prefix-input p.prefix-label {
-    padding: 3px;
+    padding-inline: 8px;
   }
 }
 </style>

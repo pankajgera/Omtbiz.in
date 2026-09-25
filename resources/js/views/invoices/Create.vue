@@ -138,7 +138,7 @@
                   {{ $t('invoices.inventory.discount') }}
                 </span>
               </th>
-              <th class="text-end">
+              <th class="text-start">
                 <span class="column-heading amount-heading">
                   {{ $t('invoices.inventory.amount') }}
                 </span>

@@ -16,8 +16,8 @@
         <tbody>
           <tr class="tw:bg-surface">
             <td class="tw:align-middle tw:px-4 tw:py-4">
-              <div class="item-select-wrapper tw:grid tw:grid-cols-[2rem_minmax(0,1fr)] tw:items-start tw:gap-3">
-                <div class="item-order-control tw:flex tw:flex-col tw:items-center tw:gap-1">
+              <div class="item-select-wrapper tw:grid tw:grid-cols-[auto_minmax(0,1fr)] tw:items-start tw:gap-3">
+                <div class="item-order-control tw:flex tw:flex-row tw:items-center tw:gap-1">
                   <span class="weight-600 tw:text-xs tw:text-ink-muted">{{ index + 1 }}</span>
                   <button
                     type="button"

@@ -27,7 +27,8 @@ class DispatchController extends Controller
             'orderBy',
             'status',
         ]))
-            ->whereCompany($request->header('company'), $request['filterBy'])
+            // The combined list includes the backlog; only explicit date filters narrow it.
+            ->whereCompany($request->header('company'))
             ->groupBy('invoice_id')
             ->latest()
             ->paginate($limit);
@@ -48,7 +49,7 @@ class DispatchController extends Controller
             'orderByField',
             'orderBy',
         ]))
-            ->whereCompany($request->header('company'), $request['filterBy'])
+            ->whereCompany($request->header('company'))
             ->groupBy('invoice_id')
             ->latest()
             ->paginate($limit);

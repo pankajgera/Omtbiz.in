@@ -38,7 +38,15 @@ docker compose stop
 docker compose down
 ```
 
-Do not run `docker compose down -v` unless the Docker MySQL database should be permanently deleted. During frontend development, run `npm run watch`; otherwise use the compiled assets from `npm run production`.
+Do not run `docker compose down -v` unless the Docker MySQL database should be permanently deleted.
+
+## Frontend Assets
+
+This project uses Laravel 13 with Vite. Run `npm run dev` during frontend development; Vite watches source files and provides hot reload automatically. Stop it with Ctrl+C when finished.
+
+Run `npm run build` to compile assets for use without the development server. The existing `npm run production` command runs the same build. Laravel's `@vite` directive selects the development server while it is running and compiled assets otherwise.
+
+The legacy `development`, `watch`, `watch-poll`, and `hot` scripts have been removed. If file changes are not detected in a Docker or WSL environment, configure `server.watch.usePolling` in `vite.config.mjs` rather than passing webpack watch flags to Vite.
 
 ## Local Requirements
 

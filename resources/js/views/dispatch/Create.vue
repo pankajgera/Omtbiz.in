@@ -2,6 +2,9 @@
   <div class="main-content item-create">
     <div class="page-header">
       <h3 class="page-title">{{ isEdit ? $t('dispatch.edit_dispatch') : $t('dispatch.new_dispatch') }}</h3>
+      <base-button v-if="isEdit" type="button" :disabled="!invoice.length" @click="printDispatch">
+        {{ $t('dispatch.print_preview') }}
+      </base-button>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/dispatch">{{ $tc('dispatch.dispatch',2) }}</router-link></li>
@@ -13,7 +16,7 @@
         <div class="card">
           <form action="" @submit.prevent="submitDispatch">
             <div class="card-body" id="to_print">
-              <div class="form-group" v-if="invoiceList && invoiceList.length && !change_invoice">
+              <div class="form-group" v-if="invoiceList && invoiceList.length">
                 <label class="form-label">{{ $t('receipts.invoice') }}</label>
                 <base-select
                   v-model="invoice"
@@ -35,20 +38,15 @@
                   @remove="removeInvoice"
                 />
               </div>
-              <div class="form-group" v-if="change_invoice">
-                <span class="ms-2" v-for="(value, index) in filterInvoice " :key="index" >
-                  {{ '('+value.data[0].invoice_number + ' - ' + '(' + value.data[0].master.name+')' + ' * ' + value.count +')' }}
-                </span>
-              </div>
               <div class="form-group">
                 <label class="control-label">{{ $t('dispatch.date_time') }}</label><span class="text-danger"> *</span>
                 <base-date-picker
                   v-model="formData.date_time"
                   format="Y-m-d"
-                  :invalid="$v.formData.date_time.$error"
+                  :invalid="v$.formData.date_time.$error"
                   :calendar-button="true"
                   calendar-button-icon="calendar"
-                  @change="$v.formData.date_time.$touch()"
+                  @change="v$.formData.date_time.$touch()"
                 />
               </div>
               <div class="form-group">
@@ -58,7 +56,7 @@
                     v-model="formData.time"
                     format="hh:mm A"
                     :hide-clear-button="true"
-                    @change="$v.formData.time.$touch()">
+                    @change="v$.formData.time.$touch()">
                     <template v-slot:icon>
                       <span class="vdp-datepicker__calendar-button input-group-prepend">
                         <span>
@@ -105,27 +103,29 @@
         </div>
       </div>
     </div>
+    <dispatch-print-preview ref="printPreview" :dispatch="formData" :invoices="invoice.filter(Boolean)" @close="closePrintPreview" />
   </div>
 </template>
 <style src="../../../css/vue-timepicker-theme.css"></style>
 <script>
-import { validationMixin } from 'vuelidate'
+import useVuelidate from '@vuelidate/core'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import { required, minLength, numeric, minValue, maxLength } from '@vuelidate/validators';
 import VueTimepicker from 'vue3-timepicker'
 import 'vue3-timepicker/dist/VueTimepicker.css'
 import getTime from 'date-fns/fp/getTime'
+import DispatchPrintPreview from './DispatchPrintPreview.vue'
 
 export default {
-  components: { VueTimepicker },
-  mixins: [validationMixin],
+  components: { VueTimepicker, DispatchPrintPreview },
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data () {
     return {
       isLoading: false,
-      filterInvoice: [],
-      change_invoice: false,
-      invoice_count: '',
+      returnAfterPrint: false,
       title: 'Add Dispatch',
       formData: {
         name: '',
@@ -225,24 +225,15 @@ export default {
         let findFromList = this.invoiceList.find(j => j.id === parseInt(i));
         this.invoice.push(findFromList);
       })
-      let current = new Date();
-      this.formData.time = current.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
     },
-    printDispatch() {
-      return printJS({
-            onPrintDialogClose: () => {
-              this.$router.push('/dispatch')
-            },
-            printable: 'to_print',
-            type: 'html',
-            ignoreElements: ['submit-dispatch', 'print-dispatch', 'time-icon', 'select-date-icon', 'clear-icon', 'caret', 'tag_icon', 'hide_tags'],
-            scanStyles: true,
-            targetStyles: ['*'],
-            style: '.base-date-input .vue__time-picker input.display-time {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer;}.base-input .input-field {width: 100%;height: 40px;padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 400;font-size: 14px;line-height: 21px; margin-bottom:5px}.multiselect__tag {position: relative;display: inline-block;padding: 4px 26px 4px 10px;border-radius: 5px;margin-right: 10px;color: #fff;line-height: 1;background: #41b883;margin-bottom: 5px;white-space: nowrap;overflow: hidden;max-width: 100%;text-overflow: ellipsis;}.skin-omtbiz .multiselect .multiselect__tags-wrap .multiselect__tag {background: #1eaec5;color: #fff;}.base-date-input .date-field {width: 100%;height: 40px;background: #FFFFFF;border: 1px solid #EBF1FA;box-sizing: border-box;border-radius: 5px;display: inline-block;padding: 0px 6px 0px 40px;font-size: 1rem;line-height: 1.4;cursor: pointer; color:#333}.multiselect__tags {min-height: 40px;display: block;padding: 8px 40px 0 8px;border-radius: 5px;border: 1px solid #EBF1FA;background: #fff;font-size: 14px;  color:#333 } .multiselect__tags-wrap .multiselect__select span { color:#000 !important}'
-          })
+    async printDispatch () {
+      await this.$nextTick()
+      this.$refs.printPreview.open()
+    },
+    closePrintPreview () {
+      if (this.returnAfterPrint) {
+        this.$router.push('/dispatch')
+      }
     },
     async loadEditData () {
       let response = await this.editDispatch(this.$route.params.id)
@@ -327,40 +318,24 @@ export default {
         }
       }, 350)
     },
-    async showDispatchPopup (invoice_id, invoices_master_id) {
-      this.change_invoice = true;
-      this.filterInvoice =  this.invoice.map(node=>{
-           let new_node = {};
-            new_node.count = this.invoice.filter(i => i.account_master_id === node.account_master_id).length;
-            new_node.data = this.invoice.filter(i => i.account_master_id === node.account_master_id).sort((a, b) => {
-              return new Date(a.created_at) - new Date(b.created_at);
-            });
-           new_node.account_master_id = node.account_master_id;
-           new_node.name = node.master.name;
-           new_node.id = node.id;
-          return new_node;
-      });
-      this.filterInvoice = this.filterInvoice.filter((v,i,a)=>a.findIndex(v2=>(v2.account_master_id===v.account_master_id))===i);
-      swal({
+    async showDispatchPopup () {
+      const confirmed = await swal({
         title: this.$t('dispatch.invoice_report_title'),
         text: this.$t('dispatch.invoice_report_text'),
         icon: '/assets/icon/check-circle-solid.svg',
         buttons: true,
         dangerMode: false
-      }).then(async (success) => {
-        if (success) {
-          this.printDispatch();
-        } else {
-          this.resetSelectedDispatch()
-          this.resetSelectedToBeDispatch()
-          this.$router.push('/dispatch')
-        }
-        this.change_invoice = false;
       })
+      if (confirmed) {
+        this.returnAfterPrint = true
+        await this.printDispatch()
+      } else {
+        this.$router.push('/dispatch')
+      }
     },
     async submitDispatch () {
-      this.$v.formData.$touch()
-      if (this.$v.$invalid) {
+      this.v$.formData.$touch()
+      if (this.v$.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }
@@ -383,7 +358,7 @@ export default {
           } else {
             window.toastr['success'](this.$tc('dispatch.created_message'))
           }
-          this.showDispatchPopup(response.data.dispatch.id, response.data.invoices)
+          await this.showDispatchPopup()
         }
       } catch (err) {
         if (err) {
