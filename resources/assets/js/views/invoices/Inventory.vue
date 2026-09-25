@@ -398,6 +398,9 @@ export default {
       this.invoiceItem.description = newItem.description
       this.updatingInput = 'quantity'
       this.updateInventory()
+      this.$nextTick(() => {
+        this.$refs.inventoryQuantity.$refs.baseInput.focus()
+      })
     },
     selectFixed () {
       if (this.invoiceItem.discount_type === 'fixed') {

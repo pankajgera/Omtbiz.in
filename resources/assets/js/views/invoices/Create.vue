@@ -69,7 +69,7 @@
             data-date-format="DD/MM/YYYY"
             class="base-prefix-input"
             @change="$v.newInvoice.invoice_date.$touch()"
-            :disabled="isDisabled"
+            :disabled="isDisabled || !isAdmin"
           />
           <span v-if="$v.newInvoice.invoice_date.$error && !$v.newInvoice.invoice_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
@@ -148,7 +148,7 @@
             <invoice-inventory
               v-for="(each, index) in inventoryBind"
               ref="invoiceInventory"
-              :key="each.name+index+each.quantity"
+              :key="rowKey(each)"
               :index="index"
               :inventory-data="each"
               :currency="currency"
@@ -479,6 +479,9 @@ export default {
     ...mapGetters('user', {
       user: 'currentUser'
     }),
+    isAdmin () {
+      return this.role === 'admin'
+    },
     currency () {
       return this.selectedCurrency
     },
@@ -763,15 +766,13 @@ export default {
         return false
       }
       Object.assign(this.inventoryBind[data.index], {...data.inventory})
-      this.$nextTick(() => {
-        this.$refs.invoiceInventory[data.index].$el.focus()
-        if (data.updatingInput === 'sale_price') {
-          this.$refs.invoiceInventory[data.index].$children[3].$refs.baseInput.focus()
-        }
-        if (data.updatingInput === 'quantity') {
-          this.$refs.invoiceInventory[data.index].$children[1].$refs.baseInput.focus()
-        }
-      })
+    },
+    // Stable per-row key so editing a row doesn't re-render it and steal focus from the field the user tabbed to.
+    rowKey (row) {
+      if (!row._rowKey) {
+        Object.defineProperty(row, '_rowKey', { value: Guid.raw(), enumerable: false })
+      }
+      return row._rowKey
     },
     async validateInventoryQuantity() {
       let valid = true;
@@ -969,8 +970,9 @@ export default {
       })
 
       //set invoice data
+      const invoiceDate = this.isAdmin ? moment(invoice.estimate_date).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
       this.newInvoice = {
-        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD'),
+        invoice_date: invoiceDate,
         invoice_number: this.invoicePrefix + '-' + this.invoiceNumAttribute,
         reference_number: this.referencePrefix + '-' + this.invoiceNumAttribute,
         user_id: invoice.user_id,
@@ -989,7 +991,7 @@ export default {
       //set reference number
       this.searchDebtorRefNumber({
         id: invoice.account_master_id,
-        invoice_date: moment(invoice.estimate_date).format('YYYY-MM-DD')
+        invoice_date: invoiceDate
       })
     },
     sendReports() {

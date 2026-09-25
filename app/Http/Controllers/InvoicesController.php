@@ -175,7 +175,10 @@ class InvoicesController extends Controller
             $invoice_prefix = CompanySetting::getSetting('invoice_prefix', $companyId);
             $reference_prefix = CompanySetting::getSetting('reference_prefix', $companyId);
 
-            $invoice_date = Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d');
+            // Only admins may choose the invoice date; everyone else gets today's date.
+            $invoice_date = auth()->user()->isAdmin()
+                ? Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d')
+                : Carbon::now()->toDateString();
             $invoice = DB::transaction(function () use ($request, $number_attributes, $invoice_date, $companyId, $invoice_prefix, $reference_prefix) {
                 // Serialize number assignment for this company, even when no invoice rows exist yet.
                 Company::where('id', $companyId)->lockForUpdate()->first();
