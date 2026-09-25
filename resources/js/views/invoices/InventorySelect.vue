@@ -27,7 +27,7 @@
         <button
           v-if="search.trim() && !options.length && !searching"
           type="button"
-          class="list-add-button"
+          class="list-add-button inventory-add-action"
           @click="openInventoryModal(search)"
         >
           <font-awesome-icon class="icon" icon="cart-plus" />
