@@ -838,6 +838,21 @@ export default {
       this.siteURL = `/reports/invoice/${invoiceToken}`
       this.url = this.siteURL
 
+      // Open the print dialog on this page (as before the upgrade) instead of a new tab.
+      if (typeof window.printJS === 'function') {
+        window.printJS({
+          printable: this.url,
+          type: 'pdf',
+          onPrintDialogClose: () => {
+            this.reset()
+          },
+          onError: () => {
+            this.reset()
+          }
+        })
+        return
+      }
+
       const pdfWindow = window.open(this.url, '_blank')
 
       if (!pdfWindow) {

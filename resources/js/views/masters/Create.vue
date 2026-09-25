@@ -90,18 +90,14 @@
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-4 p-0">
-                      <label class="control-label">Type</label>
-                      <select class="select-class" style="width: 95%" v-model="formData.type">
-                        <option value="Dr">Dr</option>
-                        <option value="Cr">Cr</option>
-                     
-                      </select>
-                    </div>
-                  </div>
-                </div>
+                <label class="input-label">Type</label>
+                <base-select
+                  v-model="formData.type"
+                  :options="['Dr', 'Cr']"
+                  :searchable="false"
+                  :show-labels="false"
+                  :allow-empty="false"
+                />
               </div>
                <div class="form-group">
                 <base-button
@@ -123,15 +119,6 @@
   </div>
 </template>
 <style scoped>
-.select-class {
-  min-height: 40px;
-  display: block;
-  padding: 8px 40px 0 8px;
-  border-radius: 5px;
-  border: 1px solid #EBF1FA;
-  background: #fff;
-  font-size: 14px;
-}
 .base-input.select-input{
     width: 100%;
     height: 40px;

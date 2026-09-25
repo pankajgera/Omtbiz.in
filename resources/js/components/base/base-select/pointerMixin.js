@@ -36,7 +36,12 @@ export default {
       this.pointerDirty = false
     },
     pointer () {
-      this.$refs.search.setAttribute('aria-activedescendant', this.id + '-' + this.pointer.toString())
+      // Non-searchable selects have no search input; throwing here aborts Vue's render
+      // flush, so the highlight and the chosen value stop updating on screen.
+      const target = this.$refs.search || this.$el
+      if (target && target.setAttribute) {
+        target.setAttribute('aria-activedescendant', this.id + '-' + this.pointer.toString())
+      }
     }
   },
   methods: {
