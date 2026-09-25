@@ -3,66 +3,92 @@
     <form action="" @submit.prevent="submitInventoryData">
       <div class="card-body">
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label input-label">
-            {{ $t('items.name') }}<span class="required">*</span>
+          <label for="inventory-modal-name" class="col-sm-4 col-form-label input-label">
+            {{ $t('inventory.name') }}<span class="required">*</span>
           </label>
           <div class="col-sm-7">
             <base-input
               ref="name"
-              :invalid="$v.formData.name.$error"
+              name="inventory-modal-name"
+              :invalid="v$.formData.name.$error"
               v-model.trim="formData.name"
               type="text"
-              @input="$v.formData.name.$touch()"
+              @input="v$.formData.name.$touch()"
             />
 
-            <div v-if="$v.formData.name.$error">
-              <span v-if="!$v.formData.name.required" class="text-danger">{{ $tc('validation.required') }}</span>
-              <span v-if="!$v.formData.name.minLength" class="text-danger"> {{ $tc('validation.name_min_length', $v.formData.name.$params.minLength.min, { count: $v.formData.name.$params.minLength.min }) }} </span>
+            <div v-if="v$.formData.name.$error">
+              <span v-if="v$.formData.name.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
+              <span v-if="v$.formData.name.minLength.$invalid" class="text-danger"> {{ $tc('validation.name_min_length', v$.formData.name.minLength.$params.min, { count: v$.formData.name.minLength.$params.min }) }} </span>
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label input-label">{{ $t('items.price') }}<span class="required">*</span></label>
+          <label for="inventory-modal-worker" class="col-sm-4 col-form-label input-label">{{ $t('inventory.worker_name') }}</label>
           <div class="col-sm-7">
-            <base-input
-                v-model.trim="price"
-                :class="{'invalid' : $v.formData.price.$error, 'input-field': true}"
-                type="text"
-                name="price"
-              />
-            <div v-if="$v.formData.price.$error">
-              <span v-if="!$v.formData.price.required" class="text-danger">{{ $tc('validation.required') }}</span>
-              <span v-if="!$v.formData.price.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
-              <span v-if="!$v.formData.price.maxLength" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
-              <span v-if="!$v.formData.price.minValue" class="text-danger">{{ $t('validation.price_minvalue') }}</span>
-            </div>
+            <base-input v-model.trim="formData.worker_name" name="inventory-modal-worker" type="text" />
           </div>
         </div>
-          <div class="form-group row">
-          <label class="col-sm-4 col-form-label input-label">{{ $t('daybook.quantity') }}<span class="required">*</span></label>
+        <div class="form-group row">
+          <label for="inventory-modal-quantity" class="col-sm-4 col-form-label input-label">{{ $t('inventory.quantity') }}<span class="required">*</span></label>
           <div class="col-sm-7">
             <base-input
-                v-model="formData.quantity"
-                :invalid="$v.formData.quantity.$error"
-                type="text"
-                name="quantity"
-                @input="$v.formData.quantity.$touch()"
-              />
-            <div v-if="$v.formData.quantity.$error">
-            <span v-if="!$v.formData.quantity.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              v-model.trim="formData.quantity"
+              :invalid="v$.formData.quantity.$error"
+              type="text"
+              name="inventory-modal-quantity"
+              @input="v$.formData.quantity.$touch()"
+            />
+            <div v-if="v$.formData.quantity.$error">
+              <span v-if="v$.formData.quantity.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
+              <span v-if="v$.formData.quantity.numeric.$invalid" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
+              <span v-if="v$.formData.quantity.minValue.$invalid" class="text-danger">{{ v$.formData.quantity.minValue.$message }}</span>
             </div>
           </div>
         </div>
         <div class="form-group row">
-          <label class="col-sm-4 col-form-label input-label">{{ $t('items.unit') }}</label>
+          <label for="inventory-modal-price" class="col-sm-4 col-form-label input-label">{{ $t('inventory.price') }}<span class="required">*</span></label>
+          <div class="col-sm-7">
+            <base-input
+              v-model.trim="formData.price"
+              :invalid="v$.formData.price.$error"
+              type="text"
+              name="inventory-modal-price"
+              @input="v$.formData.price.$touch()"
+            />
+            <div v-if="v$.formData.price.$error">
+              <span v-if="v$.formData.price.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
+              <span v-if="v$.formData.price.numeric.$invalid" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
+              <span v-if="v$.formData.price.maxLength.$invalid" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
+              <span v-if="v$.formData.price.minValue.$invalid" class="text-danger">{{ $t('validation.price_minvalue') }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="inventory-modal-sale-price" class="col-sm-4 col-form-label input-label">{{ $t('inventory.sale_price') }}</label>
+          <div class="col-sm-7">
+            <base-input
+              v-model.trim="formData.sale_price"
+              :invalid="v$.formData.sale_price.$error"
+              type="text"
+              name="inventory-modal-sale-price"
+              @input="v$.formData.sale_price.$touch()"
+            />
+            <div v-if="v$.formData.sale_price.$error">
+              <span v-if="v$.formData.sale_price.numeric.$invalid" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
+              <span v-if="v$.formData.sale_price.maxLength.$invalid" class="text-danger">{{ $t('validation.price_maxlength') }}</span>
+              <span v-if="v$.formData.sale_price.minValue.$invalid" class="text-danger">{{ v$.formData.sale_price.minValue.$message }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 col-form-label input-label">{{ $t('inventory.unit') }}</label>
           <div class="col-sm-7">
             <base-select
               v-model="formData.unit"
               :options="units"
-              :searchable="true"
+              :searchable="false"
               :show-labels="false"
                :allow-empty="false"
-              class="hide-select-header"
             />
           </div>
         </div>
@@ -80,6 +106,7 @@
         <base-button
           v-if="isEdit"
           :loading="isLoading"
+          :disabled="isLoading"
           color="theme"
           @click="submitInventoryData"
         >
@@ -88,11 +115,12 @@
         <base-button
           v-else
           :loading="isLoading"
+          :disabled="isLoading"
           icon="save"
           color="theme"
           type="submit"
         >
-          {{ $t('general.save') }}
+          {{ $t('inventory.save_inventory') }}
         </base-button>
       </div>
     </form>
@@ -105,10 +133,12 @@ div.hide-select-header div.multiselect__tags input.multiselect__input{
 </style>
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { validationMixin } from 'vuelidate'
+import { useVuelidate } from '@vuelidate/core'
 import { required, minLength, numeric, maxLength, minValue } from '@vuelidate/validators';
 export default {
-  mixins: [validationMixin],
+  setup () {
+    return { v$: useVuelidate() }
+  },
   data () {
     return {
       isEdit: false,
@@ -117,6 +147,8 @@ export default {
       units: ['pc', 'sqm'],
       formData: {
         name: null,
+        worker_name: null,
+        sale_price: null,
         price: null,
         unit: 'pc',
         quantity: null
@@ -130,7 +162,14 @@ export default {
         minLength: minLength(3)
       },
       quantity: {
-        required
+        required,
+        numeric,
+        minValue: minValue(1)
+      },
+      sale_price: {
+        numeric,
+        minValue: minValue(0),
+        maxLength: maxLength(20)
       },
       price: {
         required,
@@ -141,16 +180,9 @@ export default {
     }
   },
   computed: {
-    price: {
-      get: function () {
-        return this.formData.price
-      },
-      set: function (newValue) {
-        this.formData.price = newValue
-      }
-    },
     ...mapGetters('modal', [
-      'modalDataID'
+      'modalDataID',
+      'modalData'
     ]),
     ...mapGetters('inventory', [
       'getInventoryById'
@@ -166,10 +198,12 @@ export default {
     if (this.modalDataID) {
       this.isEdit = true
       this.fetchEditData()
+    } else if (this.modalData?.name) {
+      this.formData.name = this.modalData.name
     }
   },
   mounted () {
-    this.$refs.name.focus = true
+    this.$refs.name.$refs.baseInput.focus()
   },
   methods: {
     ...mapActions('modal', [
@@ -178,26 +212,28 @@ export default {
     ]),
     ...mapActions('inventory', [
       'addInventory',
-      'updateInventory'
-    ]),
-    ...mapActions('invoice', [
-      'setInventory'
+      'updateInventory',
+      'fetchAllInventory'
     ]),
     resetFormData () {
       this.formData = {
         name: null,
+        worker_name: null,
+        sale_price: null,
         price: null,
         unit: null,
         quantity: null,
         id: null
       }
 
-      this.$v.$reset()
+      this.v$.$reset()
     },
     fetchEditData () {
       this.tempData = this.getInventoryById(this.modalDataID)
       if (this.tempData) {
         this.formData.name = this.tempData.name
+        this.formData.worker_name = this.tempData.worker_name
+        this.formData.sale_price = this.tempData.sale_price
         this.formData.price = this.tempData.price
         this.formData.unit = this.tempData.unit
         this.formData.quantity = this.tempData.quantity
@@ -205,35 +241,44 @@ export default {
       }
     },
     async submitInventoryData () {
-      this.$v.formData.$touch()
+      if (this.isLoading) return
+      this.v$.formData.$touch()
 
-      if (this.$v.$invalid) {
+      if (this.v$.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
-      if (this.formData.unit) {
-        this.formData.unit = this.formData.unit
-      }
       this.isLoading = true
-      let response
-      if (this.isEdit) {
-        response = await this.updateInventory(this.formData)
-      } else {
-        response = await this.addInventory(this.formData)
+      const onCreated = this.modalData?.onCreated
+      const payload = {
+        ...this.formData,
+        sale_price: this.formData.sale_price === '' ? null : this.formData.sale_price
       }
-
-      if (response.data) {
-        window.toastr['success'](this.$tc('items.created_message'))
-        this.setInventory(response.data.inventory)
-        window.hub.$emit('newInventory', response.data.inventory)
-        this.isLoading = false
-        this.resetModalData()
-        this.resetFormData()
+      try {
+        const response = this.isEdit
+          ? await this.updateInventory(payload)
+          : await this.addInventory(payload)
+        if (!response.data?.inventory?.id) {
+          throw new Error(response.data?.error || this.$t('general.action_failed'))
+        }
+        const inventory = { ...payload, ...response.data.inventory }
+        window.toastr['success'](this.$tc(this.isEdit ? 'inventory.updated_message' : 'inventory.created_message'))
+        if (onCreated) onCreated(inventory)
+        window.hub.$emit('newInventory', inventory)
         this.closeModal()
-        // window.location.reload()
-        return true
+        // A refresh failure must not turn a successful save into a retry/duplicate.
+        this.fetchAllInventory({ name: '', limit: 50, page: 1 }).catch(() => {
+          window.toastr['error'](this.$t('general.action_failed'))
+        })
+      } catch (error) {
+        const errors = error.response?.data?.errors
+        const message = errors
+          ? Object.values(errors).flat().join(' ')
+          : error.response?.data?.message || error.message || this.$t('general.action_failed')
+        window.toastr['error'](message)
+      } finally {
+        this.isLoading = false
       }
-      window.toastr['error'](response.data.error)
     },
     closeInventoryModal () {
       this.resetFormData()
