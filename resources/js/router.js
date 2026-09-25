@@ -725,59 +725,35 @@ const router = createRouter({
     linkActiveClass: 'active'
 })
 
-router.beforeEach((to, from, next) => {
+// Where each role lands when it is sent away from a page (or away from login once signed in).
+const homeForRole = (role) => {
+    switch (role) {
+        case 'estimate':
+            return '/estimates/create'
+        case 'dispatch':
+            return '/dispatch/create'
+        default:
+            return '/invoices/create'
+    }
+}
+
+router.beforeEach((to) => {
     let role = Ls.get('role');
     //  Redirect if not authenticated on secured routes
     if (to.matched.some(m => m.meta.requiresAuth)) {
         if (!store.getters['auth/isAuthenticated']) {
-            return next('/login')
+            return '/login'
         }
     }
 
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
-        switch (role) {
-            case 'admin':
-                return next('/invoices/create')
-            case 'accountant':
-                return next('/invoices/create')
-            case 'estimate':
-                return next('/estimates/create')
-            case 'dispatch':
-                return next('/dispatch/create')
-            default:
-                return next('/invoices/create')
-        }
+        return homeForRole(role)
     }
 
-    if (to.meta.length) {
-        if (to.meta.includes('admin') && role === 'admin') {
-            next()
-        } else if (to.meta.includes('accountant') && role === 'accountant') {
-            next()
-        } else if (to.meta.includes('estimate') && role === 'estimate') {
-            next()
-        } else if (to.meta.includes('dispatch') && role === 'dispatch') {
-            next()
-        }
-         else if (role && role !== 'undefined') {
-            switch (role) {
-                case 'admin':
-                    return next('/invoices/create')
-                case 'accountant':
-                    return next('/invoices/create')
-                case 'accountant':
-                    return next('/bill-ty')
-                case 'estimate':
-                return next('/estimates/create')
-                case 'dispatch':
-                    return next('/dispatch/create')
-                default:
-                    return next('/invoices/create')
-            }
-        }
+    // Role-restricted routes list the allowed roles in `meta`.
+    if (to.meta.length && role && role !== 'undefined' && !to.meta.includes(role)) {
+        return homeForRole(role)
     }
-
-    return next()
 })
 
 export default router

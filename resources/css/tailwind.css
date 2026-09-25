@@ -1799,10 +1799,21 @@ textarea:disabled,
 }
 
 .multiselect__option:hover,
+.multiselect__option--highlight,
 .dropdown-item:hover,
 .dropdown-item:focus {
     color: var(--ui-text) !important;
     background-color: var(--ui-surface-hover) !important;
+}
+
+/* The option under the keyboard pointer must stand out from the rest, or arrow keys
+   look like they do nothing (the rule above forces every option to one background). */
+.multiselect__option--highlight {
+    box-shadow: inset 3px 0 0 var(--ui-primary);
+}
+
+.multiselect__option--selected {
+    font-weight: 600;
 }
 
 .table,
