@@ -53,7 +53,7 @@
       </div>
     </div>
     <div class="other-actions row">
-      <div class="col-sm-12 text-sm-left mb-4">
+      <div class="col-sm-12 text-sm-start mb-4">
         <router-link to="forgot-password" class="forgot-link">
           {{ $t('login.forgot_password') }}
         </router-link>

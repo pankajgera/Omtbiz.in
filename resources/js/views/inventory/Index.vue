@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-2 me-4">
           <base-button
             v-show="totalInventories || filtersApplied"
             :outline="true"
@@ -91,9 +91,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ inventories.length }}</b> {{ $t('general.of') }} <b>{{ totalInventories }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedInventory.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="openIncreasePriceModal">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
@@ -151,7 +153,7 @@
                   <span v-else>{{ column.label }}</span>
                 </th>
                 <th class="inventory-action-column" scope="col">
-                  <span class="sr-only">{{ $t('inventory.action') }}</span>
+                  <span class="visually-hidden">{{ $t('inventory.action') }}</span>
                 </th>
               </tr>
             </thead>

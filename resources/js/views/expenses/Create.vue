@@ -9,7 +9,7 @@
           <li class="breadcrumb-item"><a href="#">{{ isEdit ? $t('expenses.edit_expense') : $t('expenses.new_expense') }}</a></li>
         </ol>
         <div class="page-actions row header-button-container">
-          <div v-if="isReceiptAvailable" class="col-xs-2 mr-4">
+          <div v-if="isReceiptAvailable" class="col-xs-2 me-4">
             <a :href="getReceiptUrl">
               <base-button
                 :loading="isLoading"
@@ -46,12 +46,14 @@
                     track-by="id"
                     @input="$v.category.$touch()"
                   >
-                    <div slot="afterList">
-                      <button type="button" class="list-add-button" @click="openCategoryModal">
-                        <font-awesome-icon class="icon" icon="cart-plus" />
-                        <label>{{ $t('settings.expense_category.add_new_category') }}</label>
-                      </button>
-                    </div>
+                    <template #afterList>
+                      <div>
+                        <button type="button" class="list-add-button" @click="openCategoryModal">
+                          <font-awesome-icon class="icon" icon="cart-plus" />
+                          <label>{{ $t('settings.expense_category.add_new_category') }}</label>
+                        </button>
+                      </div>
+                    </template>
                   </base-select>
                   <div v-if="$v.category.$error">
                     <span v-if="!$v.category.required" class="text-danger">{{ $t('validation.required') }}</span>

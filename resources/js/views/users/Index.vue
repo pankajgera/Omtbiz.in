@@ -2,7 +2,7 @@
   <div class="user-create main-content">
     <div class="page-header">
       <Header :title="$tc('users.title', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div class="mr-4 mb-3 mb-sm-0">
+        <div class="me-4 mb-3 mb-sm-0">
           <base-button
             v-show="totalUsers || filtersApplied"
             :outline="true"
@@ -94,9 +94,11 @@
 
         <transition name="fade">
           <v-dropdown v-if="selectedUsers.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleUsers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -134,7 +136,7 @@
                 <th scope="col">{{ $t('users.role') }}</th>
                 <th scope="col">{{ $t('users.added_on') }}</th>
                 <th class="users-action-column" scope="col">
-                  <span class="sr-only">{{ $t('users.action') }}</span>
+                  <span class="visually-hidden">{{ $t('users.action') }}</span>
                 </th>
               </tr>
             </thead>

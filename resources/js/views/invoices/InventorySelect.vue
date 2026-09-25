@@ -19,12 +19,14 @@
       track-by="id"
       @value="onTextChange"
     >
-      <div slot="afterList">
-        <button type="button" class="list-add-button" @click="openInventoryModal">
-          <font-awesome-icon class="icon" icon="cart-plus" />
-          <label>{{ $t('general.add_new_item') }}</label>
-        </button>
-      </div>
+      <template #afterList>
+        <div>
+          <button type="button" class="list-add-button" @click="openInventoryModal">
+            <font-awesome-icon class="icon" icon="cart-plus" />
+            <label>{{ $t('general.add_new_item') }}</label>
+          </button>
+        </div>
+      </template>
     </base-select>
   </div>
 </template>

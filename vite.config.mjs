@@ -36,6 +36,12 @@ export default defineConfig(({ mode }) => ({
                 replacement: path.resolve(import.meta.dirname, 'resources/js'),
             },
             {
+                // cropperjs's "browser" field points at a UMD build with no default export,
+                // and vue-avatar-cropper is excluded from pre-bundling, so use its ESM build.
+                find: /^cropperjs$/,
+                replacement: path.resolve(import.meta.dirname, 'node_modules/cropperjs/dist/cropper.esm.js'),
+            },
+            {
                 find: 'vue',
                 replacement: '@vue/compat',
             },

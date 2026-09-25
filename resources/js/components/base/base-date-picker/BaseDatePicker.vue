@@ -28,7 +28,9 @@
       @closeCalendar="close"
       @typedDate="setTypedDate"
       @clearDate="clearDate">
-      <slot slot="afterDateInput" name="afterDateInput"/>
+      <template #afterDateInput>
+        <slot name="afterDateInput"/>
+      </template>
     </date-input>
 
     <!-- Day View -->
@@ -53,7 +55,9 @@
       @selectDate="selectDate"
       @showMonthCalendar="showMonthCalendar"
       @selectedDisabled="selectDisabledDate">
-      <slot slot="beforeCalendarHeader" name="beforeCalendarHeader"/>
+      <template #beforeCalendarHeader>
+        <slot name="beforeCalendarHeader"/>
+      </template>
     </picker-day>
 
     <!-- Month View -->
@@ -72,7 +76,9 @@
       @selectMonth="selectMonth"
       @showYearCalendar="showYearCalendar"
       @changedYear="setPageDate">
-      <slot slot="beforeCalendarHeader" name="beforeCalendarHeader"/>
+      <template #beforeCalendarHeader>
+        <slot name="beforeCalendarHeader"/>
+      </template>
     </picker-month>
 
     <!-- Year View -->
@@ -90,7 +96,9 @@
       :use-utc="useUtc"
       @selectYear="selectYear"
       @changedDecade="setPageDate">
-      <slot slot="beforeCalendarHeader" name="beforeCalendarHeader"/>
+      <template #beforeCalendarHeader>
+        <slot name="beforeCalendarHeader"/>
+      </template>
     </picker-year>
   </div>
 </template>

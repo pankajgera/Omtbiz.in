@@ -2,7 +2,7 @@
   <div class="items main-content">
     <div class="page-header">
       <Header :title="isApprovalMode ? $t('vouchers.approvals_title') : $tc('vouchers.voucher', 2)" :bread-crumb-links="breadCrumbLinks">
-        <div v-show="totalVouchers || filtersApplied" class="mr-4 mb-3 mb-sm-0">
+        <div v-show="totalVouchers || filtersApplied" class="me-4 mb-3 mb-sm-0">
           <base-button
             :outline="true"
             :icon="filterIcon"
@@ -14,7 +14,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div v-if="role === 'admin' && !isApprovalMode" class="mr-4 mb-3 mb-sm-0">
+        <div v-if="role === 'admin' && !isApprovalMode" class="me-4 mb-3 mb-sm-0">
           <router-link :to="{ name: 'vouchers.approvals' }">
             <base-button
               :outline="true"
@@ -111,9 +111,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ vouchers.length }}</b> {{ $t('general.of') }} <b>{{ totalVouchers }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="role === 'admin' && selectedVouchers.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleVouchers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -349,9 +351,7 @@ export default {
     '$route.name' () {
       this.updateBreadCrumbTitle()
       this.filtersApplied = false
-      if (this.selectAllField) {
-        this.selectAllVouchers()
-      }
+      this.clearSelectedVouchers()
       this.$nextTick(() => {
         if (this.$refs.table) {
           this.$refs.table.refresh()
@@ -363,15 +363,14 @@ export default {
     this.updateBreadCrumbTitle()
   },
   unmounted () {
-    if (this.selectAllField) {
-      this.selectAllVouchers()
-    }
+    this.clearSelectedVouchers()
   },
   methods: {
     ...mapActions('voucher', [
       'fetchVouchers',
       'selectAllVouchers',
       'selectVoucher',
+      'clearSelectedVouchers',
       'deleteVoucher',
       'deleteMultipleVouchers',
       'setSelectAllState',
@@ -395,6 +394,8 @@ export default {
         page
       }
 
+      // Rows are reloaded, so drop any selection that pointed at the previous rows.
+      this.clearSelectedVouchers()
       this.isRequestOngoing = true
       let response = await this.fetchVouchers(data)
       this.isRequestOngoing = false

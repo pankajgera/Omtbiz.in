@@ -201,7 +201,7 @@
             <div class="basic-info">
               <div class="form-group row ">
                 <div class="col-sm-12 copy-address-button">
-                  <base-button ref="sameAddress" icon="copy" class="mr-2 btn-sm" color="theme" @click="copyAddress(true)">
+                  <base-button ref="sameAddress" icon="copy" class="me-2 btn-sm" color="theme" @click="copyAddress(true)">
                     {{ $t('customers.copy_billing_address') }}
                   </base-button>
                 </div>
@@ -308,7 +308,7 @@
         </tabs>
       </div>
       <div class="card-footer">
-        <base-button :outline="true" class="mr-3" color="theme" @click="cancelCustomer">
+        <base-button :outline="true" class="me-3" color="theme" @click="cancelCustomer">
           {{ $t('general.cancel') }}
         </base-button>
         <base-button

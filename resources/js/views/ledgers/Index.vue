@@ -23,7 +23,7 @@
         </li>
       </ol>
       <div class="page-actions row">
-        <div class="col-xs-2 mr-2">
+        <div class="col-xs-2 me-2">
           <base-button
             :outline="true"
             color="theme"
@@ -34,7 +34,7 @@
             {{ $t('general.daysheet') }}
           </base-button>
         </div>
-        <div class="col-xs-2 mr-2">
+        <div class="col-xs-2 me-2">
           <base-button
             :outline="true"
             color="theme"
@@ -45,7 +45,7 @@
             {{ $t('general.daybook') }}
           </base-button>
         </div>
-        <div class="col-xs-2 mr-2">
+        <div class="col-xs-2 me-2">
           <base-button
             :outline="true"
             color="theme"
@@ -56,7 +56,7 @@
             {{ $t('general.summary_stock') }}
           </base-button>
         </div>
-        <div class="col-xs-2 mr-4">
+        <div class="col-xs-2 me-4">
           <base-button
             v-show="totalLedgers || filtersApplied"
             :outline="true"
@@ -158,9 +158,11 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ ledgers.length }}</b> {{ $t('general.of') }} <b>{{ totalLedgers }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedLedgers.length" :show-arrow="false">
-            <span slot="activator" href="#" class="table-actions-button dropdown-toggle">
-              {{ $t('general.actions') }}
-            </span>
+            <template #activator>
+              <span href="#" class="table-actions-button dropdown-toggle">
+                {{ $t('general.actions') }}
+              </span>
+            </template>
             <v-dropdown-item>
               <div class="dropdown-item" @click="removeMultipleLedgers">
                 <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
@@ -197,7 +199,7 @@
                   {{ $t('ledgers.closing_balance') }}
                 </th>
                 <th class="ledgers-action-column" rowspan="2" scope="col">
-                  <span class="sr-only">{{ $t('ledgers.action') }}</span>
+                  <span class="visually-hidden">{{ $t('ledgers.action') }}</span>
                 </th>
               </tr>
               <tr>

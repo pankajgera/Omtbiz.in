@@ -1,7 +1,6 @@
 <template>
   <th
     v-if="this.isVisible"
-    slot-scope="col"
     :aria-sort="ariaSort"
     :aria-disabled="ariaDisabled"
     :class="headerClass"

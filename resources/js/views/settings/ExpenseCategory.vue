@@ -49,9 +49,11 @@
           <template #default="row">
             <span>{{ $t('settings.expense_category.action') }}</span>
             <v-dropdown>
-              <span slot="activator" href="#">
-                <dot-icon />
-              </span>
+              <template #activator>
+                <span href="#">
+                  <dot-icon />
+                </span>
+              </template>
               <v-dropdown-item>
                 <div class="dropdown-item" @click="EditCategory(row.id)">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
