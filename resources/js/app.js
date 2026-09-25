@@ -37,15 +37,13 @@ const stopNavigationLoader = () => {
   }, delay)
 }
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   if (to.fullPath !== from.fullPath) {
     navigationLoaderToken += 1
     navigationLoaderStartedAt = Date.now()
     navigationLoader.active = true
     window.clearTimeout(navigationLoaderTimer)
   }
-
-  next()
 })
 
 router.afterEach(stopNavigationLoader)

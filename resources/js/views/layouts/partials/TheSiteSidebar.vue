@@ -20,7 +20,7 @@
             :to="item.route"
             :exact="!!item.exact"
             class="menu-item tw:flex tw:min-h-10 tw:items-center tw:gap-3 tw:rounded-md tw:px-3 tw:py-2 tw:text-sm tw:font-medium tw:text-sidebar-ink tw:no-underline tw:transition-colors tw:hover:bg-sidebar-hover tw:hover:text-sidebar-ink tw:focus-visible:bg-sidebar-hover"
-            @click.native="Toggle"
+            @click="Toggle"
           >
             <font-awesome-icon :icon="item.icon" class="icon menu-icon" aria-hidden="true" />
             <span class="menu-text tw:text-inherit tw:no-underline">{{ $t(item.title) }}</span>

@@ -23,7 +23,7 @@
     }
 
     .content-box {
-        background-image: url('/images/login-vector1.svg');
+        background-image: url('../../../public/images/login-vector1.svg');
         background-size: cover;
         background-repeat: no-repeat;
         height: 100%;
@@ -50,7 +50,7 @@
     }
 
     .content-bottom {
-        background-image: url('/images/login-vector3.svg');
+        background-image: url('../../../public/images/login-vector3.svg');
         background-size: 100% 100%;
         background-repeat: no-repeat;
         z-index: 100;
@@ -62,7 +62,7 @@
     }
 
     .content-box::before {
-        background-image: url('/images/frame.svg');
+        background-image: url('../../../public/images/frame.svg');
         content: "";
         background-size: 100% 100%;
         background-repeat: no-repeat;
@@ -75,7 +75,7 @@
     }
 
     .content-box::after {
-        background-image: url('/images/login-vector2.svg');
+        background-image: url('../../../public/images/login-vector2.svg');
         content: "";
         background-size: cover;
         background-repeat: no-repeat;
