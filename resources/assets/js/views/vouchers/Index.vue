@@ -356,9 +356,7 @@ export default {
     '$route.name' () {
       this.updateBreadCrumbTitle()
       this.filtersApplied = false
-      if (this.selectAllField) {
-        this.selectAllVouchers()
-      }
+      this.clearSelectedVouchers()
       this.$nextTick(() => {
         if (this.$refs.table) {
           this.$refs.table.refresh()
@@ -370,15 +368,14 @@ export default {
     this.updateBreadCrumbTitle()
   },
   destroyed () {
-    if (this.selectAllField) {
-      this.selectAllVouchers()
-    }
+    this.clearSelectedVouchers()
   },
   methods: {
     ...mapActions('voucher', [
       'fetchVouchers',
       'selectAllVouchers',
       'selectVoucher',
+      'clearSelectedVouchers',
       'deleteVoucher',
       'deleteMultipleVouchers',
       'setSelectAllState',
@@ -402,6 +399,8 @@ export default {
         page
       }
 
+      // Rows are reloaded, so drop any selection that pointed at the previous rows.
+      this.clearSelectedVouchers()
       this.isRequestOngoing = true
       let response = await this.fetchVouchers(data)
       this.isRequestOngoing = false
