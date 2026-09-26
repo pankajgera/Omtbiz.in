@@ -32,6 +32,11 @@ class PublicShareController extends Controller
 
     public function store(Request $request)
     {
+        // Issuing a bearer URL must not widen the caller's resource permissions.
+        if ($request->user('api')->role === 'estimate' && $request->input('type') !== 'estimate') {
+            return response()->json(['error' => 'role_forbidden'], 403);
+        }
+
         $request->validate([
             'type' => ['required', Rule::in(array_merge(PublicShareService::DOCUMENT_TYPES, PublicShareService::REPORT_TYPES))],
             'resource_id' => ['required_if:type,invoice,estimate,receipt,expense', 'nullable', 'integer', 'min:1'],

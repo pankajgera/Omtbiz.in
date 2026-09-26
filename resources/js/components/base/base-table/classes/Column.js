@@ -12,8 +12,7 @@ export default class Column {
     }
 
     this.id = id
-    this.template = (columnComponent.$scopedSlots && columnComponent.$scopedSlots.default) ||
-      columnComponent.$slots.default
+    this.template = columnComponent.$slots.default
   }
 
   isFilterable () {

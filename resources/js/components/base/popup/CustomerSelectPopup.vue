@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <button type="button" class="list-add-button" @click="openCustomerModal">
+    <button v-if="currentUser?.role === 'admin'" type="button" class="list-add-button" @click="openCustomerModal">
       <font-awesome-icon class="icon" icon="user-plus" />
       <label>{{ $t('customers.add_new_customer') }}</label>
     </button>
@@ -58,6 +58,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('user', ['currentUser']),
     ...mapGetters('customer', [
       'customers'
     ])

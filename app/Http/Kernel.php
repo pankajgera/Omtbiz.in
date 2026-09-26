@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'accountant' => AccountantMiddleware::class,
         'employee' => EmployeeMiddleware::class,
         'company.context' => \App\Http\Middleware\EnsureCompanyContext::class,
+        'route.role' => \App\Http\Middleware\EnsureRouteRole::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'install' => \App\Http\Middleware\InstallationMiddleware::class,
         'redirect-if-installed' => \App\Http\Middleware\RedirectIfInstalled::class,
@@ -82,6 +83,8 @@ class Kernel extends HttpKernel
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \App\Http\Middleware\Authenticate::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
+        \App\Http\Middleware\EnsureCompanyContext::class,
+        \App\Http\Middleware\EnsureRouteRole::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,
     ];

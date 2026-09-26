@@ -60,9 +60,7 @@ export default {
   },
 
   created () {
-    this.bootstrap().then((res) => {
-      this.setInitialCompany()
-    })
+    this.setInitialCompany()
   },
 
   methods: {

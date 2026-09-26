@@ -16,51 +16,51 @@
               <label class="input-label">{{ $tc('users.name') }}</label><span class="text-danger"> * </span>
               <base-input
                 v-model="formData.name"
-                :invalid="$v.formData.name.$error"
+                :invalid="v$.formData.name.$error"
                 :placeholder="$t('users.name')"
-                @input="$v.formData.name.$touch()"
+                @input="v$.formData.name.$touch()"
               />
-              <div v-if="$v.formData.name.$error">
-                <span v-if="!$v.formData.name.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <div v-if="v$.formData.name.$error">
+                <span v-if="v$.formData.name.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
             <div class="col-md-6 mb-4 form-group">
               <label class="input-label">{{ $tc('users.email') }}</label><span class="text-danger"> * </span>
               <base-input
                 v-model="formData.email"
-                :invalid="$v.formData.email.$error"
+                :invalid="v$.formData.email.$error"
                 :placeholder="$t('users.email')"
-                @input="$v.formData.email.$touch()"
+                @input="v$.formData.email.$touch()"
               />
-              <div v-if="$v.formData.email.$error">
-                <span v-if="!$v.formData.email.required" class="text-danger">{{ $tc('validation.required') }}</span>
-                <span v-if="!$v.formData.email.email" class="text-danger">{{ $tc('validation.email_incorrect') }}</span>
+              <div v-if="v$.formData.email.$error">
+                <span v-if="v$.formData.email.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
+                <span v-if="v$.formData.email.email.$invalid" class="text-danger">{{ $tc('validation.email_incorrect') }}</span>
               </div>
             </div>
             <div class="col-md-6 mb-4 form-group">
               <label class="input-label">{{ $tc('users.password') }}</label><span class="text-danger"> * </span>
               <base-input
                 v-model="formData.password"
-                :invalid="$v.formData.password.$error"
+                :invalid="v$.formData.password.$error"
                 :placeholder="!isEdit ? $t('users.password') : $t('users.change_password')"
                 type="password"
-                @input="$v.formData.password.$touch()"
+                @input="v$.formData.password.$touch()"
               />
-              <div v-if="$v.formData.password.$error">
-                <span v-if="!$v.formData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', $v.formData.password.$params.minLength.min, {count: $v.formData.password.$params.minLength.min}) }} </span>
+              <div v-if="v$.formData.password.$error">
+                <span v-if="v$.formData.password.minLength.$invalid" class="text-danger"> {{ $tc('validation.password_min_length', v$.formData.password.minLength.$params.min, {count: v$.formData.password.minLength.$params.min}) }} </span>
               </div>
             </div>
             <div class="col-md-6 mb-4 form-group">
               <label class="input-label">{{ $tc('users.confirm_password') }}</label><span class="text-danger"> * </span>
               <base-input
                 v-model="formData.confirm_password"
-                :invalid="$v.formData.confirm_password.$error"
+                :invalid="v$.formData.confirm_password.$error"
                 :placeholder="!isEdit ? $t('users.confirm_password') : $t('users.change_confirm_password')"
                 type="password"
-                @input="$v.formData.confirm_password.$touch()"
+                @input="v$.formData.confirm_password.$touch()"
               />
-              <div v-if="$v.formData.confirm_password.$error">
-                <span v-if="!$v.formData.confirm_password.sameAsPassword" class="text-danger">{{ $tc('validation.password_incorrect') }}</span>
+              <div v-if="v$.formData.confirm_password.$error">
+                <span v-if="v$.formData.confirm_password.sameAsPassword.$invalid" class="text-danger">{{ $tc('validation.password_incorrect') }}</span>
               </div>
             </div>
             <div class="col-md-6 mb-4 form-group">
@@ -68,19 +68,18 @@
               <base-select
                 v-model="companyBind"
                 :options="companies"
-                :class="{'error': $v.formData.company.$error }"
+                :class="{'error': v$.formData.company.$error }"
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
                 :placeholder="$tc('users.companies')"
-                :value="formData.company"
                 label="name"
                 track-by="id"
                 name="company"
                 id="company"
               />
-              <div v-if="$v.formData.company.$error">
-                <span v-if="!$v.formData.company.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <div v-if="v$.formData.company.$error">
+                <span v-if="v$.formData.company.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
             <div class="col-md-6 mb-4 form-group">
@@ -88,19 +87,18 @@
               <base-select
                 v-model="roleBind"
                 :options="roles"
-                :class="{'error': $v.formData.role.$error}"
+                :class="{'error': v$.formData.role.$error}"
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
                 :placeholder="$tc('users.roles')"
-                :value="formData.role"
                 label="name"
                 track-by="id"
                 name="role"
                 id="role"
               />
-              <div v-if="$v.formData.role.$error">
-                <span v-if="!$v.formData.role.required" class="text-danger">{{ $tc('validation.required') }}</span>
+              <div v-if="v$.formData.role.$error">
+                <span v-if="v$.formData.role.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
           </div>
@@ -126,11 +124,11 @@
 <script>
 import { mapActions } from 'vuex'
 import MultiSelect from 'vue-multiselect'
-import { validationMixin } from 'vuelidate'
+import useVuelidate from '@vuelidate/core'
 import { required, requiredIf, sameAs, minLength, email, url, maxLength } from '@vuelidate/validators';
 export default {
   components: { MultiSelect },
-  mixins: [validationMixin],
+  setup () { return { v$: useVuelidate() } },
   data () {
     return {
       isFetchingData: false,
@@ -140,6 +138,8 @@ export default {
         name: null,
         email: null,
         company: null,
+        password: '',
+        confirm_password: '',
         role: null
       },
       companies: [],
@@ -148,40 +148,42 @@ export default {
       roleBind: null
     }
   },
-  validations: {
-    formData: {
-      name: {
-        required
-      },
-      email: {
-        required,
-        email
-      },
-      password: {
-        required,
-        minLength: minLength(5)
-      },
-      confirm_password: {
-        required: requiredIf('isRequired'),
-        sameAsPassword: sameAs('password')
-      },
-      company: {
-        required
-      },
-      role: {
-        required
-      },
+  validations () {
+    return {
+      formData: {
+        name: {
+          required
+        },
+        email: {
+          required,
+          email
+        },
+        password: {
+          required: requiredIf(() => !this.isEdit),
+          minLength: minLength(8)
+        },
+        confirm_password: {
+          required: requiredIf(() => this.isRequired),
+          sameAsPassword: sameAs(this.formData.password || '')
+        },
+        company: {
+          required
+        },
+        role: {
+          required
+        },
+      }
     }
   },
   watch: {
     companyBind (newCompany) {
-      this.formData.company = newCompany.name
+      this.formData.company = newCompany?.name || null
       if (this.isFetchingData) {
         return true
       }
     },
     roleBind (newRole) {
-      this.formData.role = newRole.name
+      this.formData.role = newRole?.name || null
       if (this.isFetchingData) {
         return true
       }
@@ -204,8 +206,9 @@ export default {
   mounted () {
     if (this.isEdit) {
       this.loaduser()
+    } else {
+      this.loadNewUser()
     }
-    this.loadNewUser()
   },
   methods: {
     ...mapActions('user', [
@@ -222,8 +225,11 @@ export default {
       this.formData.email = user.email
       this.formData.company = user.company_name
       this.formData.role = user.role
-      this.companyBind = companies.find(each => each.name === user.company_name)
-      this.roleBind = roles.find(each => each.name === user.role)
+      this.companies = companies
+      this.roles = roles
+      this.companyBind = companies.find(each => each.id === user.company_id) || companies.find(each => each.name === user.company_name) || null
+      this.roleBind = roles.find(each => each.name === user.role) || null
+      this.isFetchingData = false
     },
 
     async loadNewUser () {
@@ -234,9 +240,9 @@ export default {
     },
 
     async submitUserData () {
-      this.$v.formData.$touch()
+      this.v$.formData.$touch()
 
-      if (this.$v.$invalid) {
+      if (this.v$.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }
@@ -244,7 +250,7 @@ export default {
       this.isLoading = true
       if (this.isEdit) {
         try {
-          let response = await this.updateUser(this.formData)
+          let response = await this.updateUser({ ...this.formData, company_name: this.formData.company, password: this.formData.password || undefined })
           if (response.data.success) {
             window.toastr['success'](this.$t('users.updated_message'))
             this.$router.push('/users')

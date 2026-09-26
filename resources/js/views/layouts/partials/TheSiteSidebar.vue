@@ -237,7 +237,7 @@ export default {
             title: "navigation.users",
             icon: "users",
             route: "/users",
-            meta: ["admin", "accountant"],
+            meta: ["admin"],
           },
           {
             title: "navigation.audit_logs",
@@ -249,7 +249,7 @@ export default {
             title: "navigation.settings",
             icon: "sliders-h",
             route: "/settings",
-            meta: ["admin", "accountant"],
+            meta: ["admin"],
           },
         ],
       ],

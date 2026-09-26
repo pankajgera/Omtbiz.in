@@ -101,10 +101,10 @@ app.config.compatConfig = {
 }
 
 app.component('Header', Header)
+setupBootstrap(app)
 app.use(router)
 app.use(store)
 app.use(i18n)
-setupBootstrap(app)
 app.mixin(validationMixin)
 
 app.config.globalProperties.$utils = utils

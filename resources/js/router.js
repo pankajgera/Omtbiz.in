@@ -191,13 +191,13 @@ const routes = [
                 path: 'customers/create',
                 name: 'customers.create',
                 component: CustomerCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
             {
                 path: 'customers/:id/edit',
                 name: 'customers.edit',
                 component: CustomerCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             // Items
@@ -492,6 +492,7 @@ const routes = [
             {
                 path: 'reports',
                 component: ReportLayout,
+                meta: ['admin', 'accountant'],
                 children: [{
                         path: 'sales',
                         component: SalesReports,
@@ -668,6 +669,7 @@ const routes = [
             {
                 path: 'settings',
                 component: SettingsLayout,
+                meta: ['admin'],
                 children: [{
                         path: 'company-info',
                         name: 'company.info',
@@ -732,13 +734,15 @@ const homeForRole = (role) => {
             return '/estimates/create'
         case 'dispatch':
             return '/dispatch/create'
-        default:
+        case 'admin':
+        case 'accountant':
             return '/invoices/create'
+        default:
+            return '/login'
     }
 }
 
-router.beforeEach((to) => {
-    let role = Ls.get('role');
+router.beforeEach(async (to) => {
     //  Redirect if not authenticated on secured routes
     if (to.matched.some(m => m.meta.requiresAuth)) {
         if (!store.getters['auth/isAuthenticated']) {
@@ -746,12 +750,26 @@ router.beforeEach((to) => {
         }
     }
 
+    if (store.getters['auth/isAuthenticated']) {
+        try {
+            await store.dispatch('refreshCurrentUser')
+        } catch (error) {
+            // A failed identity check must never fall back to a cached role.
+            await store.dispatch('auth/logout', true)
+            return to.path === '/login' ? undefined : '/login'
+        }
+    }
+    const role = store.getters['user/currentUser']?.role
+
     if (to.matched.some(m => m.meta.redirectIfAuthenticated) && store.getters['auth/isAuthenticated']) {
-        return homeForRole(role)
+        const home = homeForRole(role)
+        if (home !== to.path) return home
     }
 
     // Role-restricted routes list the allowed roles in `meta`.
-    if (to.meta.length && role && role !== 'undefined' && !to.meta.includes(role)) {
+    // Vue Router merges `to.meta` into an object, so inspect the original
+    // role arrays on matched records instead of reading to.meta.length.
+    if (to.matched.some(m => Array.isArray(m.meta) && m.meta.length && !m.meta.includes(role))) {
         return homeForRole(role)
     }
 })

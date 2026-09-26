@@ -24,7 +24,7 @@ export const fetchBanksReport = ({ commit, dispatch, state }, params) => {
 //new
 export const fetchBanks = ({ commit, dispatch, state }, params) => {
     return new Promise((resolve, reject) => {
-        window.axios.get(`/api/bank`, { params }).then((response) => {
+        window.axios.get(`/api/banks`, { params }).then((response) => {
             commit(types.BOOTSTRAP_BANKS, response.data.banks.data)
             commit(types.SET_TOTAL_BANKS, response.data.banks.total)
             resolve(response)
@@ -36,7 +36,7 @@ export const fetchBanks = ({ commit, dispatch, state }, params) => {
 
 export const fetchBank = ({ commit, dispatch }, id) => {
     return new Promise((resolve, reject) => {
-        window.axios.get(`/api/bank/${id}/edit`).then((response) => {
+        window.axios.get(`/api/banks/${id}/edit`).then((response) => {
             resolve(response)
         }).catch((err) => {
             reject(err)
@@ -46,7 +46,7 @@ export const fetchBank = ({ commit, dispatch }, id) => {
 
 export const addBank = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
-        window.axios.post('/api/bank', data).then((response) => {
+        window.axios.post('/api/banks', data).then((response) => {
             commit(types.ADD_BANK, response.data)
             resolve(response)
         }).catch((err) => {
@@ -57,8 +57,8 @@ export const addBank = ({ commit, dispatch, state }, data) => {
 
 export const updateBank = ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
-        window.axios.put(`/api/bank/${data.id}`, data).then((response) => {
-            if (response.data.success) {
+        window.axios.put(`/api/banks/${data.id}`, data).then((response) => {
+            if (response.data.bank) {
                 commit(types.UPDATE_BANK, response.data)
             }
             resolve(response)
@@ -70,7 +70,7 @@ export const updateBank = ({ commit, dispatch, state }, data) => {
 
 export const deleteBank = ({ commit, dispatch, state }, id) => {
     return new Promise((resolve, reject) => {
-        window.axios.delete(`/api/bank/${id}`).then((response) => {
+        window.axios.delete(`/api/banks/${id}`).then((response) => {
             commit(types.DELETE_BANK, id)
             resolve(response)
         }).catch((err) => {
@@ -81,7 +81,7 @@ export const deleteBank = ({ commit, dispatch, state }, id) => {
 
 export const deleteMultipleBanks = ({ commit, dispatch, state }, id) => {
     return new Promise((resolve, reject) => {
-        window.axios.post(`/api/bank/delete`, { 'id': state.selectedBanks }).then((response) => {
+        window.axios.post(`/api/banks/delete`, { 'id': state.selectedBanks }).then((response) => {
             commit(types.DELETE_MULTIPLE_BANKS, state.selectedBanks)
             resolve(response)
         }).catch((err) => {
@@ -103,7 +103,7 @@ export const selectAllBanks = ({ commit, dispatch, state }) => {
 
 export const selectBank = ({ commit, dispatch, state }, data) => {
     commit(types.SET_SELECTED_BANKS, data)
-    if (state.selectedBank.length === state.banks.length) {
+    if (state.selectedBanks.length === state.banks.length) {
         commit(types.SET_SELECT_ALL_STATE, true)
     } else {
         commit(types.SET_SELECT_ALL_STATE, false)
@@ -113,3 +113,5 @@ export const selectBank = ({ commit, dispatch, state }, data) => {
 export const resetSelectedBank = ({ commit, dispatch, state }, data) => {
     commit(types.RESET_SELECTED_BANK)
 }
+
+export const setSelectAllState = ({ commit }, value) => commit(types.SET_SELECT_ALL_STATE, value)

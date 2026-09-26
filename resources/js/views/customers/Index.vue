@@ -32,7 +32,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="customers/create">
+        <router-link v-if="canManageAccounts" class="col-xs-2" to="customers/create">
           <base-button
             size="large"
             icon="plus"
@@ -92,6 +92,7 @@
           color="theme"
           class="mt-3"
           size="large"
+          v-if="canManageAccounts"
           @click="$router.push('customers/create')"
         >
           {{ $t('customers.add_new_customer') }}
@@ -104,7 +105,7 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ customers.length }}</b> {{ $t('general.of') }} <b>{{ totalCustomers }}</b></p>
 
         <transition name="fade">
-          <v-dropdown v-if="selectedCustomers.length" :show-arrow="false">
+          <v-dropdown v-if="canManageAccounts && selectedCustomers.length" :show-arrow="false">
             <template #activator>
               <span href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
@@ -120,7 +121,7 @@
         </transition>
       </div>
 
-      <div class="custom-control custom-checkbox">
+      <div v-if="canManageAccounts" class="custom-control custom-checkbox">
         <input
           id="select-all"
           v-model="selectAllFieldStatus"
@@ -143,6 +144,7 @@
           :sortable="false"
           :filterable="false"
           cell-class="no-click"
+          v-if="canManageAccounts"
         >
           <template #default="row">
             <div class="custom-control custom-checkbox">
@@ -187,6 +189,7 @@
           :sortable="false"
           :filterable="false"
           cell-class="action-dropdown"
+          v-if="canManageAccounts"
         >
           <template #default="row">
             <span> {{ $t('customers.action') }} </span>
@@ -245,6 +248,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('user', ['currentUser']),
+    canManageAccounts () {
+      return this.currentUser?.role === 'admin'
+    },
     showEmptyScreen () {
       return !this.totalCustomers && !this.isRequestOngoing && !this.filtersApplied
     },

@@ -116,12 +116,12 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import { validationMixin } from 'vuelidate'
+import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators';
 import whatsappIconUrl from '@fortawesome/fontawesome-free/svgs/brands/whatsapp.svg'
 import { createReportShare } from '@/helpers/publicShares'
 export default {
-  mixins: [validationMixin],
+  setup () { return { v$: useVuelidate() } },
   data () {
     return {
       whatsappIconUrl,
@@ -141,8 +141,8 @@ export default {
       ],
       selectedRange: 'This Month',
       formData: {
-        from_date: moment().startOf('month').toString(),
-        to_date: moment().endOf('month').toString()
+        from_date: moment().startOf('month').toISOString(),
+        to_date: moment().endOf('month').toISOString()
       },
       url: null,
       siteURL: null,
@@ -154,7 +154,7 @@ export default {
     }
   },
   validations: {
-    range: {
+    selectedRange: {
       required
     },
     formData: {
@@ -168,10 +168,10 @@ export default {
   },
   computed: {
     vRange () {
-      return this.$v?.range || { $error: false, required: true, $touch: () => {} }
+      return this.v$?.range || { $error: false, required: true, $touch: () => {} }
     },
     vFormData () {
-      return this.$v?.formData || {
+      return this.v$?.formData || {
         $error: false,
         $invalid: false,
         $touch: () => {},
@@ -191,8 +191,8 @@ export default {
   },
   watch: {
     range (newRange) {
-      this.formData.from_date = moment(newRange).startOf('year').toString()
-      this.formData.to_date = moment(newRange).endOf('year').toString()
+      this.formData.from_date = moment(newRange).startOf('year').toISOString()
+      this.formData.to_date = moment(newRange).endOf('year').toISOString()
     }
   },
   mounted () {
@@ -211,21 +211,21 @@ export default {
       this.invalidateReport()
     },
     getThisDate (type, time) {
-      return moment()[type](time).toString()
+      return moment()[type](time).toISOString()
     },
     getPreDate (type, time) {
-      return moment().subtract(1, time)[type](time).toString()
+      return moment().subtract(1, time)[type](time).toISOString()
     },
     onChangeDateRange () {
       switch (this.selectedRange) {
         case 'Today':
-          this.formData.from_date = moment().toString()
-          this.formData.to_date = moment().toString()
+          this.formData.from_date = moment().toISOString()
+          this.formData.to_date = moment().toISOString()
           break
 
         case 'Till Date':
-          this.formData.from_date = moment(this.formData.to_date).startOf('month').toString()
-          this.formData.to_date = moment(this.formData.to_date).toString()
+          this.formData.from_date = moment(this.formData.to_date).startOf('month').toISOString()
+          this.formData.to_date = moment(this.formData.to_date).toISOString()
           break
 
         case 'This Week':
@@ -299,10 +299,10 @@ export default {
       this.vRange.$touch()
       this.vFormData.$touch()
       if (this.selectedRange === 'Till Date') {
-        this.formData.from_date = moment(this.formData.to_date).startOf('month').toString()
-        this.formData.to_date = moment(this.formData.to_date).toString()
+        this.formData.from_date = moment(this.formData.to_date).startOf('month').toISOString()
+        this.formData.to_date = moment(this.formData.to_date).toISOString()
       }
-      if (this.$v?.$invalid) {
+      if (this.v$?.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return false
       }

@@ -26,8 +26,10 @@
     <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width tw:w-full">
       <section class="row invoice-input-group invoice-details-panel tw:grid tw:grid-cols-1 tw:gap-4 tw:rounded-lg tw:border tw:border-line tw:bg-surface tw:p-4 tw:shadow-sm tw:md:grid-cols-2 tw:xl:grid-cols-12" aria-label="Invoice details">
         <div class="col-md-6 invoice-customer-container mb-2 tw:w-full tw:max-w-none tw:xl:col-span-6">
-          <label class="form-label">{{ $t('invoices.estimate-list') }}</label>
+          <label for="invoice-estimate" class="form-label">{{ $t('invoices.estimate-list') }}</label>
             <base-select
+              id="invoice-estimate"
+              ref="estimateSelect"
               v-model="setEstimate"
               :options="estimateList"
               :required="'required'"
@@ -44,6 +46,7 @@
           <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
               v-model="setInvoiceDebtor"
+              :autofocus="false"
               :invalid="vNewInvoice.debtors.$error || submissionErrors.debtors"
               :options="sundryDebtorsList"
               :required="'required'"
@@ -719,6 +722,8 @@ export default {
         }
       }
       this.initLoading = false
+      await this.$nextTick()
+      this.$refs.estimateSelect?.focusSearch()
     },
     openTemplateModal () {
       this.openModal({

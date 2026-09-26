@@ -5,6 +5,6 @@ export default {
     state.momentDateFormat = data
   },
   [types.SET_LANGUAGE_FORMAT] (state, data) {
-    window.i18n.locale = data
+    window.i18n.global.locale.value = data
   }
 }

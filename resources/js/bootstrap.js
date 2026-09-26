@@ -19,6 +19,14 @@ import CategoryModal from './components/base/modal/CategoryModal.vue'
  * Global css plugins
  */
 
+export function handleResponseError (err) {
+  const isLoginRequest = /\/auth\/login(?:[?#]|$)/.test(err.config?.url || '')
+  if (err.response?.status === 401 && !isLoginRequest) {
+    store.dispatch('auth/logout', true)
+  }
+  return Promise.reject(err)
+}
+
 export function setupBootstrap (app) {
   window._ = _
   window.axios = axios
@@ -48,18 +56,7 @@ export function setupBootstrap (app) {
     return Promise.reject(error)
   })
 
-  window.axios.interceptors.response.use(undefined, function (err) {
-    return new Promise((resolve, reject) => {
-      if (err.response.data.error === 'invalid_credentials') {
-        window.toastr['error']('Invalid Credentials')
-      }
-      if (err.response.data && (err.response.statusText === 'Unauthorized' || err.response.data === ' Unauthorized.')) {
-        store.dispatch('auth/logout', true)
-      } else {
-        throw err
-      }
-    })
-  })
+  window.axios.interceptors.response.use(undefined, handleResponseError)
 
   window.toastr = toastr
 

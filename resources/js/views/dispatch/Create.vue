@@ -118,7 +118,7 @@ import getTime from 'date-fns/fp/getTime'
 import DispatchPrintPreview from './DispatchPrintPreview.vue'
 
 export default {
-  components: { VueTimepicker, DispatchPrintPreview },
+  components: { VueTimepicker: { ...VueTimepicker, compatConfig: { COMPONENT_V_MODEL: false } }, DispatchPrintPreview },
   setup () {
     return { v$: useVuelidate() }
   },

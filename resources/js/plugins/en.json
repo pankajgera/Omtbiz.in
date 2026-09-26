@@ -1,4 +1,35 @@
 {
+    "bills": {
+        "bill": "Bill | Bills",
+        "no_items": "No bills yet",
+        "list_of_items": "Your bills will appear here.",
+        "name": "Name",
+        "unit": "Unit",
+        "select_a_unit": "Select a unit",
+        "price": "Price",
+        "add_new_item": "Add Bill",
+        "added_on": "Added On"
+},
+    "banks": {
+        "save_failed": "Unable to save this bank entry. Please check the fields and try again.",
+        "banks": "Bank | Banks",
+        "bank": "Bank",
+        "new_bank": "New Bank",
+        "add_new_bank": "Add Bank",
+        "edit_bank": "Edit Bank",
+        "save_bank": "Save Bank",
+        "update_bank": "Update Bank",
+        "no_banks": "No banks yet",
+        "list_of_banks": "Your bank entries will appear here.",
+        "name": "Name",
+        "amount": "Amount",
+        "date": "Date",
+        "action": "Actions",
+        "confirm_delete": "Delete this bank entry? | Delete these bank entries?",
+        "deleted_message": "Bank entry deleted. | Bank entries deleted.",
+        "updated_message": "Bank entry updated.",
+        "created_message": "Bank entry created."
+},
     "navigation": {
         "dashboard": "Dashboard",
         "customers": "Customers",
@@ -853,6 +884,10 @@
         "forgot_password": "Forgot Password?",
         "or_signIn_with": "or Sign in with",
         "login": "Login",
+        "invalid_credentials": "The email or password is incorrect. Please try again.",
+        "connection_error": "Unable to connect. Check your connection and try again.",
+        "too_many_attempts": "Too many login attempts. Please wait a minute and try again.",
+        "failed": "Unable to log in right now. Please try again.",
         "register": "Register",
         "reset_password": "Reset Password",
         "password_reset_successfully": "Password Reset Successfully",
@@ -1172,6 +1207,8 @@
         }
     },
     "users": {
+        "list_of_users": "Your users will appear here.",
+        "no_users": "No users yet",
         "title": "Users",
         "add_user": "Add User",
         "contacts_list": "User List",

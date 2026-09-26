@@ -113,6 +113,8 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
+  compatConfig: { COMPONENT_V_MODEL: false },
+  emits: ['update:modelValue', 'input', 'selected', 'cleared', 'selectedDisabled', 'changedMonth', 'changedYear', 'closed'],
   components: {
     DateInput,
     PickerDay,
@@ -120,7 +122,7 @@ export default {
     PickerYear
   },
   props: {
-    value: {
+    modelValue: {
       validator: val => utils.validateDateInput(val)
     },
     name: String,
@@ -200,7 +202,7 @@ export default {
     }
   },
   watch: {
-    value (value) {
+    modelValue (value) {
       this.setValue(value)
     },
     openDate () {
@@ -215,7 +217,7 @@ export default {
       'format': 'getMomentDateFormat'
     }),
     customFormatter () {
-      let newDate = new Date(this.value)
+      let newDate = new Date(this.modelValue)
       return moment(newDate).format(this.format)
     },
     computedInitialView () {
@@ -354,6 +356,7 @@ export default {
       this.selectedDate = date
       this.setPageDate(date)
       this.$emit('selected', date)
+      this.$emit('update:modelValue', date)
       this.$emit('input', date)
     },
     /**
@@ -363,6 +366,7 @@ export default {
       this.selectedDate = null
       this.setPageDate()
       this.$emit('selected', null)
+      this.$emit('update:modelValue', null)
       this.$emit('input', null)
       this.$emit('cleared')
     },
@@ -468,8 +472,8 @@ export default {
      * Initiate the component
      */
     init () {
-      if (this.value) {
-        this.setValue(this.value)
+      if (this.modelValue) {
+        this.setValue(this.modelValue)
       }
       if (this.isInline) {
         this.setInitialView()

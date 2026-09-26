@@ -66,7 +66,7 @@
           </v-dropdown-item>
         </v-dropdown>
       </li>
-      <li v-if="currentUser" class="user-info">
+      <li v-if="currentUser" class="user-info" :title="currentUser.email || `Account #${currentUser.id}`">
         <span class="user-name">{{ currentUser.name }}</span>
         <span class="user-role">{{ currentUser.role }}</span>
       </li>
@@ -84,7 +84,12 @@
               <img :src="profilePicture" alt="Avatar" width="40" height="40">
             </a>
           </template>
-          <v-dropdown-item>
+          <v-dropdown-item v-if="currentUser">
+            <div class="tw:px-4 tw:py-2 tw:text-sm tw:text-ink-muted">
+              {{ currentUser.email || `Account #${currentUser.id}` }}
+            </div>
+          </v-dropdown-item>
+          <v-dropdown-item v-if="role === 'admin'">
             <router-link class="dropdown-item" to="/settings">
               <font-awesome-icon icon="cogs" class="dropdown-item-icon"/> <span> {{ $t('navigation.settings') }} </span>
             </router-link>

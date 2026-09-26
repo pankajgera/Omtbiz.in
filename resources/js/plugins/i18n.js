@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n'
 import en from './en.json'
 
 const i18n = createI18n({
-  legacy: true,
+  legacy: false,
   globalInjection: true,
   locale: 'en',
   messages: {

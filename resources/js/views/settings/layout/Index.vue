@@ -50,7 +50,7 @@ export default {
           title: 'settings.menu_title.account_settings',
           icon: 'user',
           iconType: 'far',
-          meta: ['admin', 'accountant', 'employee']
+          meta: ['admin']
         },
         {
           link: '/settings/company-info',

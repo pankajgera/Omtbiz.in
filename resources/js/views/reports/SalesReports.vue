@@ -11,7 +11,7 @@
             :show-labels="false"
             @input="onChangeDateRange"
           />
-          <span v-if="$v.range.$error && !$v.range.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="v$.selectedRange.$error && v$.selectedRange.required.$invalid" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
       </div>
       <div class="row report-fields-container">
@@ -19,25 +19,25 @@
           <label class="report-label">{{ $t('reports.sales.from_date') }}</label>
           <base-date-picker
             v-model="formData.from_date"
-            :invalid="$v.formData.from_date.$error"
+            :invalid="v$.formData.from_date.$error"
             :calendar-button="true"
             calendar-button-icon="calendar"
-            @change="$v.formData.from_date.$touch()"
+            @change="v$.formData.from_date.$touch()"
             @input="setRangeToCustom"
           />
-          <span v-if="$v.formData.from_date.$error && !$v.formData.from_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="v$.formData.from_date.$error && v$.formData.from_date.required.$invalid" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
         <div class="col-md-6 report-field-container">
           <label class="report-label">{{ $t('reports.sales.to_date') }}</label>
           <base-date-picker
             v-model="formData.to_date"
-            :invalid="$v.formData.to_date.$error"
+            :invalid="v$.formData.to_date.$error"
             :calendar-button="true"
             calendar-button-icon="calendar"
-            @change="$v.formData.to_date.$touch()"
+            @change="v$.formData.to_date.$touch()"
             @input="setRangeToCustom"
           />
-          <span v-if="$v.formData.to_date.$error && !$v.formData.to_date.required" class="text-danger"> {{ $t('validation.required') }} </span>
+          <span v-if="v$.formData.to_date.$error && v$.formData.to_date.required.$invalid" class="text-danger"> {{ $t('validation.required') }} </span>
         </div>
       </div>
       <div class="row report-fields-container">
@@ -73,11 +73,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
-import { validationMixin } from 'vuelidate'
+import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators';
 import { createReportShare } from '@/helpers/publicShares'
 export default {
-  mixins: [validationMixin],
+  setup () { return { v$: useVuelidate() } },
   data () {
     return {
       reportTypes: ['By Customer', 'By Item'],
@@ -97,8 +97,8 @@ export default {
       selectedRange: 'This Month',
       range: new Date(),
       formData: {
-        from_date: moment().startOf('month').toString(),
-        to_date: moment().endOf('month').toString()
+        from_date: moment().startOf('month').toISOString(),
+        to_date: moment().endOf('month').toISOString()
       },
       url: null,
       customerSiteURL: null,
@@ -106,7 +106,7 @@ export default {
     }
   },
   validations: {
-    range: {
+    selectedRange: {
       required
     },
     formData: {
@@ -128,8 +128,8 @@ export default {
   },
   watch: {
     range (newRange) {
-      this.formData.from_date = moment(newRange).startOf('year').toString()
-      this.formData.to_date = moment(newRange).endOf('year').toString()
+      this.formData.from_date = moment(newRange).startOf('year').toISOString()
+      this.formData.to_date = moment(newRange).endOf('year').toISOString()
     }
   },
   mounted () {
@@ -141,16 +141,16 @@ export default {
       'loadLinkByItems'
     ]),
     getThisDate (type, time) {
-      return moment()[type](time).toString()
+      return moment()[type](time).toISOString()
     },
     getPreDate (type, time) {
-      return moment().subtract(1, time)[type](time).toString()
+      return moment().subtract(1, time)[type](time).toISOString()
     },
     onChangeDateRange () {
       switch (this.selectedRange) {
         case 'Today':
-          this.formData.from_date = moment().toString()
-          this.formData.to_date = moment().toString()
+          this.formData.from_date = moment().toISOString()
+          this.formData.to_date = moment().toISOString()
           break
 
         case 'This Week':
@@ -209,11 +209,11 @@ export default {
       return data
     },
     async getReports (isDownload = false) {
-      this.$v.range.$touch()
-      this.$v.formData.$touch()
-      if (this.$v.$invalid) {
+      this.v$.selectedRange.$touch()
+      this.v$.formData.$touch()
+      if (this.v$.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
-        return true
+        return false
       }
 
       this.url = await createReportShare(

@@ -32,7 +32,7 @@
                   @change="vFormData.receipt_date.$touch()"
                 />
                 <div v-if="vFormData.receipt_date.$error">
-                  <span v-if="!vFormData.receipt_date.required" class="text-danger">{{ $t('validation.required') }}</span>
+                  <span v-if="vFormData.receipt_date.required.$invalid" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
             </div>
@@ -47,8 +47,8 @@
                   @input="vReceiptNumAttribute.$touch()"
                 />
                 <div v-if="vReceiptNumAttribute.$error">
-                  <span v-if="!vReceiptNumAttribute.required" class="text-danger">{{ $tc('validation.required') }}</span>
-                  <span v-if="!vReceiptNumAttribute.numeric" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
+                  <span v-if="vReceiptNumAttribute.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
+                  <span v-if="vReceiptNumAttribute.numeric.$invalid" class="text-danger">{{ $tc('validation.numbers_only') }}</span>
                 </div>
               </div>
             </div>
@@ -66,7 +66,7 @@
                 :disabled="isEdit"
               />
               <div v-if="vFormData.list.$error">
-                <span v-if="!vFormData.list.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                <span v-if="vFormData.list.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
               </div>
             </div>
             <div class="col-sm-6">
@@ -83,7 +83,7 @@
                   ₹ {{ numberWithCommas(formData.amount) }}
                 </div>
                 <div v-if="vFormData.amount.$error">
-                  <span v-if="!vFormData.amount.required" class="text-danger">{{ $t('validation.required') }}</span>
+                  <span v-if="vFormData.amount.required.$invalid" class="text-danger">{{ $t('validation.required') }}</span>
                 </div>
               </div>
             </div>
@@ -100,7 +100,7 @@
                   :disabled="isEdit"
                 />
                 <div v-if="vFormData.receipt_mode.$error">
-                  <span v-if="!vFormData.receipt_mode.required" class="text-danger">{{ $tc('validation.required') }}</span>
+                  <span v-if="vFormData.receipt_mode.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
                 </div>
               </div>
             </div>
@@ -184,13 +184,14 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import MultiSelect from 'vue-multiselect'
-import { validationMixin } from 'vuelidate'
+import useVuelidate from '@vuelidate/core'
 import moment from 'moment'
 import GlobalMixin from '../../helpers/mixins.js';
 import { required, between, maxLength, numeric } from '@vuelidate/validators';
 export default {
   components: { MultiSelect },
-  mixins: [validationMixin, GlobalMixin],
+  mixins: [GlobalMixin],
+  setup () { return { v$: useVuelidate() } },
   data () {
     return {
       formData: {
@@ -244,20 +245,8 @@ export default {
     }
   },
   computed: {
-    vReceiptNumAttribute () {
-      return this.$v?.receiptNumAttribute || { $error: false, required: true, numeric: true, $touch: () => {} }
-    },
-    vFormData () {
-      return this.$v?.formData || {
-        $error: false,
-        $invalid: false,
-        $touch: () => {},
-        receipt_date: { $error: false, required: true, $touch: () => {} },
-        list: { $error: false, required: true, $touch: () => {} },
-        amount: { $error: false, required: true, $touch: () => {} },
-        receipt_mode: { $error: false, required: true, $touch: () => {} }
-      }
-    },
+    vReceiptNumAttribute () { return this.v$.receiptNumAttribute },
+    vFormData () { return this.v$.formData },
     ...mapGetters('currency', [
       'defaultCurrencyForInput'
     ]),
@@ -288,14 +277,14 @@ export default {
     openingBalance() {
       if (this.formData.list && this.formData.list.id) {
         let ledger = this.accountLedger.find(each => each.id === this.formData.list.id);
-        return parseFloat(ledger.balance).toFixed(2);
+        return parseFloat(ledger?.balance || 0).toFixed(2);
       }
       return 0
     },
     openingBalanceType() {
       if (this.formData.list && this.formData.list.id) {
         let typeObj = this.accountLedger.find(each => each.id === this.formData.list.id);
-        return typeObj.type;
+        return typeObj?.type || 'Cr';
       }
       return 'Cr';
     },
@@ -336,14 +325,15 @@ export default {
     }
   },
   async mounted () {
-    this.$nextTick(() => {
-      this.loadData()
+    this.$nextTick(async () => {
+      await this.loadData()
       if (this.$route.params.id && !this.isEdit) {
-        this.setInvoiceReceiptData()
+        await this.setInvoiceReceiptData()
       }
     })
   },
   methods: {
+    ...mapActions('invoice', ['fetchInvoice']),
     ...mapActions('receipt', [
       'fetchCreateReceipt',
       'addReceipt',
@@ -362,14 +352,14 @@ export default {
         this.formData.receipt_date = response.data.receipt.receipt_date
         this.formData.amount = parseFloat(response.data.receipt.amount)
         this.receiptPrefix = response.data.receipt_prefix
-        this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
+        this.receiptNumAttribute = response.data.nextReceiptNumber
         this.sundryDebtorList = response.data.usersOfSundryDebitors
         this.formData.list = response.data.usersOfSundryDebitors.filter(i => i.id === response.data.receipt.account_master_id)[0]
         this.accountLedger = response.data.account_ledger
         this.receiptMode = response.data.receipt_mode
 
         this.siteURL = response.data.shareable_link
-        if (response.data.receipt.invoice !== null) {
+        if (response.data.receipt.invoice) {
           this.maxPayableAmount = parseInt(response.data.receipt.amount) + parseInt(response.data.receipt.invoice.due_amount)
         }
       } else {
@@ -378,14 +368,18 @@ export default {
         this.accountLedger = response.data.account_ledger
         this.receiptNumAttribute = response.data.nextReceiptNumberAttribute
         this.receiptPrefix = response.data.receipt_prefix
-        this.formData.receipt_date = moment(new Date()).toString()
+        this.formData.receipt_date = moment().toISOString()
         this.receiptMode = response.data.receipt_mode
       }
       return true
     },
     async setInvoiceReceiptData () {
       let data = await this.fetchInvoice(this.$route.params.id)
-      this.customer = data.data.invoice.user
+      const invoice = data.data.invoice
+      this.formData.invoice_id = invoice.id
+      this.formData.list = this.sundryDebtorList.find(party => party.id === invoice.account_master_id) || null
+      this.formData.amount = Number(invoice.due_amount).toFixed(2)
+      this.maxPayableAmount = Number(invoice.due_amount)
     },
     async setReceiptAmountByInvoiceData (id) {
       let data = await this.fetchInvoice(id)
@@ -393,8 +387,8 @@ export default {
       this.maxPayableAmount = parseFloat(data.data.invoice.due_amount).toFixed(2)
     },
     async submitReceiptData () {
-      this.vFormData.$touch()
-      if (this.vFormData.$invalid) {
+      this.v$.$touch()
+      if (this.v$.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
         return true
       }

@@ -132,7 +132,7 @@ import 'vue3-timepicker/dist/VueTimepicker.css'
 // costs a navigation away from the list (or, as `singleDispatch` used to do, a
 // pop-up window).
 export default {
-  components: { VueTimepicker },
+  components: { VueTimepicker: { ...VueTimepicker, compatConfig: { COMPONENT_V_MODEL: false } } },
   mixins: [validationMixin],
   props: {
     // Dispatch ids to send. One for a row action, many when rows are ticked.

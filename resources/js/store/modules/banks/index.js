@@ -3,11 +3,11 @@ import * as actions from './actions'
 import * as getters from './getters'
 
 const initialState = {
-  currentNote: null,
-  bank: [],
-  totalNotes: 0,
+  currentBank: null,
+  banks: [],
+  totalBanks: 0,
   selectAllField: false,
-  selectedNotes: []
+  selectedBanks: []
 }
 
 export default {

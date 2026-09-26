@@ -2,13 +2,13 @@ import * as types from './mutation-types'
 
 export default {
     [types.RESET_CURRENT_BANK](state, bank) {
-        state.currentNote = null
+        state.currentBank = null
     },
     [types.BOOTSTRAP_CURRENT_BANK](state, bank) {
-        state.currentNote = bank
+        state.currentBank = bank
     },
     [types.UPDATE_CURRENT_BANK](state, bank) {
-        state.currentNote = bank
+        state.currentBank = bank
     },
 
     [types.BOOTSTRAP_BANKS](state, banks) {
@@ -26,12 +26,12 @@ export default {
     },
     [types.DELETE_BANK](state, id) {
         let index = state.banks.findIndex(bank => bank.id === id)
-        state.banks.splice(index, 1)
+        if (index !== -1) state.banks.splice(index, 1)
     },
     [types.DELETE_MULTIPLE_BANKS](state, selectedBanks) {
         selectedBanks.forEach((bank) => {
-            let index = state.banks.findIndex(_cust => _cust.id === bank.id)
-            state.banks.splice(index, 1)
+            let index = state.banks.findIndex(row => row.id === bank)
+            if (index !== -1) state.banks.splice(index, 1)
         })
         state.selectedBanks = []
     },
@@ -39,7 +39,8 @@ export default {
         state.selectedBanks = data
     },
     [types.RESET_SELECTED_BANK](state, data) {
-        state.selectedNote = null
+        state.selectedBanks = []
+        state.selectAllField = false
     },
     [types.SET_SELECT_ALL_STATE](state, data) {
         state.selectAllField = data

@@ -13,19 +13,13 @@
         name="email"
         :id="'login-id'"
         @input="v$.loginData.email.$touch()"
-        @change="isError=false"
       />
       <div v-if="v$.loginData.email.$error">
-        <span v-if="!v$.loginData.email.required" class="text-danger">
+        <span v-if="v$.loginData.email.required.$invalid" class="text-danger">
           {{ $tc('validation.required') }}
         </span>
-        <span v-else-if="!v$.loginData.email.email" class="text-danger">
+        <span v-else-if="v$.loginData.email.email.$invalid" class="text-danger">
           {{ $tc('validation.email_incorrect') }}
-        </span>
-      </div>
-      <div v-else-if="isError">
-        <span class="text-danger">
-          {{ customError }}
         </span>
       </div>
     </div>
@@ -39,17 +33,14 @@
         show-password
         :id="'login-password'"
         @input="v$.loginData.password.$touch()"
-        @change="isError=false"
       />
       <div v-if="v$.loginData.password.$error">
-        <span v-if="!v$.loginData.password.required" class="text-danger">{{ $tc('validation.required') }}</span>
-        <span v-else-if="!v$.loginData.password.minLength" class="text-danger"> {{ $tc('validation.password_min_length', v$.loginData.password.$params.minLength.min, {count: v$.loginData.password.$params.minLength.min}) }} </span>
+        <span v-if="v$.loginData.password.required.$invalid" class="text-danger">{{ $tc('validation.required') }}</span>
+        <span v-else-if="v$.loginData.password.minLength.$invalid" class="text-danger">{{ $t('validation.password_min_length', { count: v$.loginData.password.minLength.$params.min }) }}</span>
       </div>
-      <div v-else-if="isError">
-        <span class="text-danger">
-          {{ customError }}
-        </span>
-      </div>
+    </div>
+    <div v-if="customError" id="login-error" class="text-danger mb-3" role="alert">
+      {{ customError }}
     </div>
     <div class="other-actions row">
       <div class="col-sm-12 text-sm-start mb-4">
@@ -59,7 +50,7 @@
       </div>
     </div>
 
-    <base-button type="submit" color="theme">{{ $t('login.login') }}</base-button>
+    <base-button :loading="isLoading" type="submit" color="theme">{{ $t('login.login') }}</base-button>
 
     <!-- <div class="social-links">
 
@@ -85,6 +76,9 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, email, minLength } from '@vuelidate/validators'
 
 export default {
+  setup () {
+    return { v$: useVuelidate() }
+  },
   components: {
     IconFacebook,
     IconTwitter,
@@ -98,33 +92,30 @@ export default {
         remember: ''
       },
       submitted: false,
-      isError: false,
       customError: '',
-      isLoading: false,
-      v$: null
+      isLoading: false
     }
   },
   validations () {
     return {
       loginData: {
         email: { required, email },
-        password: { required, minLength: minLength(5) }
+        password: { required, minLength: minLength(8) }
       }
     }
-  },
-  created() {
-    this.v$ = useVuelidate();
   },
   methods: {
     ...mapActions('auth', [ 'login' ]),
     async validateBeforeSubmit () {
+      if (this.isLoading) return
+      this.customError = ''
       this.v$.$touch()
       if (this.v$.$invalid) {
-        window.toastr['error']("Error! missing required field or value is invalid.!")
-        return true
+        return
       }
       this.isLoading = true
-      this.login(this.loginData).then((res) => {
+      try {
+        await this.login(this.loginData)
         let role = Ls.get('role');
         switch (role) {
             case 'admin':
@@ -138,14 +129,24 @@ export default {
             default:
                 return this.$router.push('/')
         }
-        this.isLoading = false
-      }).catch((err) => {
-        if ('invalid_grant' === err.response.data.error) {
-          this.isError = true;
-          this.customError = err.response.data.message;
+      } catch (err) {
+        const response = err.response
+        const data = response?.data
+        if (!response) {
+          this.customError = this.$t('login.connection_error')
+        } else if (['invalid_grant', 'invalid_credentials'].includes(data?.error)) {
+          this.customError = this.$t('login.invalid_credentials')
+        } else if (response.status === 429) {
+          this.customError = this.$t('login.too_many_attempts')
+        } else if (response.status === 422) {
+          const messages = Object.values(data?.errors || {}).flat().filter(message => typeof message === 'string')
+          this.customError = messages.join(' ') || data?.message || this.$t('login.failed')
+        } else {
+          this.customError = response.status < 500 && (data?.error_description || data?.message) || this.$t('login.failed')
         }
+      } finally {
         this.isLoading = false
-      })
+      }
     }
   }
 }

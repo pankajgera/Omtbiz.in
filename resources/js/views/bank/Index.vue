@@ -36,7 +36,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <router-link slot="item-title" class="col-xs-2" to="banks/create">
+        <router-link slot="item-title" class="col-xs-2" to="/bank/create">
           <base-button
             color="theme"
             icon="plus"
@@ -61,32 +61,24 @@
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('banks.design_no') }} </label>
+            <label class="form-label"> {{ $tc('banks.amount') }} </label>
             <base-input
-              v-model.trim="filters.design_no"
+              v-model.trim="filters.amount"
               type="text"
-              name="design_no"
+              name="amount"
               autocomplete="off"
             />
           </div>
           <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('banks.rate') }} </label>
+            <label class="form-label"> {{ $tc('banks.date') }} </label>
             <base-input
-              v-model="filters.rate"
-              type="text"
-              name="rate"
+              v-model="filters.date"
+              type="date"
+              name="date"
               autocomplete="off"
             />
           </div>
-          <div class="col-sm-3">
-            <label class="form-label"> {{ $tc('banks.average') }} </label>
-            <base-input
-              v-model="filters.average"
-              type="text"
-              name="average"
-              autocomplete="off"
-            />
-          </div>
+
           <label class="clear-filter" @click="clearFilter"> {{ $t('general.clear_all') }}</label>
         </div>
       </div>
@@ -106,7 +98,7 @@
           color="theme"
           class="mt-3"
           size="large"
-          @click="$router.push('banks/create')"
+          @click="$router.push('/bank/create')"
         >
           {{ $t('banks.add_new_bank') }}
         </base-button>
@@ -176,17 +168,14 @@
           show="name"
         />
         <table-column
-          :label="$t('banks.design_no')"
-          show="design_no"
+          :label="$t('banks.amount')"
+          show="amount"
         />
         <table-column
-          :label="$t('banks.rate')"
-          show="rate"
+          :label="$t('banks.date')"
+          show="date"
         />
-        <table-column
-          :label="$t('banks.average')"
-          show="average"
-        />
+
         <table-column
           :sortable="false"
           :filterable="false"
@@ -201,7 +190,7 @@
               </span>
             </template>
             <v-dropdown-item>
-              <router-link :to="{path: `banks/${row.id}/edit`}" class="dropdown-item">
+              <router-link :to="{path: `/bank/${row.id}/edit`}" class="dropdown-item">
                 <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                 {{ $t('general.edit') }}
               </router-link>
@@ -241,9 +230,8 @@ export default {
       filtersApplied: false,
       filters: {
         name: '',
-        design_no: '',
-        rate: '',
-        average: ''
+        amount: '',
+        date: '',
       },
       index: null
     }
@@ -304,9 +292,8 @@ export default {
     async fetchData ({ page, filter, sort }) {
       let data = {
         name: this.filters.name !== null ? this.filters.name : '',
-        rate: this.filters.rate !== null ? this.filters.rate : '',
-        average: this.filters.average !== null ? this.filters.average : '',
-        design_no: this.filters.design_no !== null ? this.filters.design_no : '',
+        date: this.filters.date !== null ? this.filters.date : '',
+        amount: this.filters.amount !== null ? this.filters.amount : '',
         orderByField: sort.fieldName || 'created_at',
         orderBy: sort.order || 'desc',
         page
@@ -337,9 +324,8 @@ export default {
     clearFilter () {
       this.filters = {
         name: '',
-        design_no: '',
-        rate: '',
-        average: ''
+        amount: '',
+        date: '',
       }
 
       this.$nextTick(() => {

@@ -315,6 +315,10 @@ export default {
       type: Number,
       default: 0
     },
+    autofocus: {
+      type: Boolean,
+      default: null
+    },
     invalid: {
       type: Boolean,
       default: false
@@ -338,7 +342,6 @@ export default {
   },
   data() {
     return {
-      focus: this.name==='party_name' ? true : false,
       dropdownPosition: null
     }
   },
@@ -484,7 +487,8 @@ export default {
       }
     },
     focusInput () {
-      if (this.focus && this.$refs.search) {
+      const shouldFocus = this.autofocus ?? (this.name === 'party_name')
+      if (shouldFocus && !this.disabled && this.$refs.search) {
         this.$refs.search.focus()
       }
     },

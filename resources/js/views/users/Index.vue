@@ -15,8 +15,8 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div>
-          <router-link slot="item-title" class="" to="users/create">
+        <div v-if="canManageUsers">
+          <router-link to="users/create">
             <base-button
               size="large"
               icon="plus"
@@ -81,6 +81,7 @@
           color="theme"
           class="mt-3"
           size="large"
+          v-if="canManageUsers"
           @click="$router.push('users/create')"
         >
           {{ $t('users.add_new_user') }}
@@ -93,7 +94,7 @@
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ users.length }}</b> {{ $t('general.of') }} <b>{{ totalUsers }}</b></p>
 
         <transition name="fade">
-          <v-dropdown v-if="selectedUsers.length" :show-arrow="false">
+          <v-dropdown v-if="canManageUsers && selectedUsers.length" :show-arrow="false">
             <template #activator>
               <span href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
@@ -119,7 +120,7 @@
             </caption>
             <thead class="table-component__table__head">
               <tr>
-                <th class="users-selection-column" scope="col">
+                <th v-if="canManageUsers" class="users-selection-column" scope="col">
                   <label class="users-select-all-label" for="select-all-users">
                     <input
                       id="select-all-users"
@@ -135,14 +136,14 @@
                 <th scope="col">{{ $t('users.email') }}</th>
                 <th scope="col">{{ $t('users.role') }}</th>
                 <th scope="col">{{ $t('users.added_on') }}</th>
-                <th class="users-action-column" scope="col">
+                <th v-if="canManageUsers" class="users-action-column" scope="col">
                   <span class="visually-hidden">{{ $t('users.action') }}</span>
                 </th>
               </tr>
             </thead>
             <tbody class="table-component__table__body">
               <tr v-for="user in users" :key="user.id">
-                <td class="users-selection-column">
+                <td v-if="canManageUsers" class="users-selection-column">
                   <input
                     :id="`user-${user.id}`"
                     v-model="selectField"
@@ -153,14 +154,15 @@
                   >
                 </td>
                 <td :data-label="$t('users.display_name')">
-                  <router-link :to="{ path: `users/${user.id}/edit` }">
+                  <router-link v-if="canManageUsers" :to="{ path: `users/${user.id}/edit` }">
                     {{ user.name }}
                   </router-link>
+                  <span v-else>{{ user.name }}</span>
                 </td>
                 <td :data-label="$t('users.email')">{{ user.email }}</td>
                 <td :data-label="$t('users.role')">{{ user.role }}</td>
                 <td :data-label="$t('users.added_on')">{{ user.formattedCreatedAt }}</td>
-                <td class="action-dropdown users-action-column">
+                <td v-if="canManageUsers" class="action-dropdown users-action-column">
                   <v-dropdown :show-arrow="false">
                     <template #activator>
                       <button class="table-row-menu" type="button" :aria-label="$t('users.action')">
@@ -252,6 +254,9 @@ export default {
     this.loadUsers()
   },
   computed: {
+    canManageUsers () {
+      return this.currentUser?.role === 'admin'
+    },
     showEmptyScreen () {
       return !this.totalUsers && !this.isRequestOngoing && !this.filtersApplied
     },
@@ -259,6 +264,7 @@ export default {
       return (this.showFilters) ? 'times' : 'filter'
     },
     ...mapGetters('user', [
+      'currentUser',
       'users',
       'selectedUsers',
       'totalUsers',

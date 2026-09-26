@@ -42,13 +42,16 @@ Route::get('/countries', [App\Http\Controllers\LocationController::class, 'getCo
 // ----------------------------------
 Route::get('/settings/app/version', [App\Http\Controllers\SettingsController::class, 'getAppVersion'])->name('settings.app.version');
 
-Route::group(['middleware' => ['auth:api', 'company.context']], function () {
+Route::group(['middleware' => ['auth:api', 'company.context', 'route.role']], function () {
     Route::get('/bootstrap', [App\Http\Controllers\UsersController::class, 'getBootstrap'])->name('bootstrap');
 
     // Customers
     //----------------------------------
-    Route::post('/customers/delete', [App\Http\Controllers\CustomersController::class, 'delete'])->name('customers.delete');
-    Route::resource('customers', App\Http\Controllers\CustomersController::class);
+    // Customer records also carry login credentials; their write endpoints must
+    // not provide an alternate way to create or change accounts.
+    Route::post('/customers/delete', [App\Http\Controllers\CustomersController::class, 'delete'])->middleware('admin:api')->name('customers.delete');
+    Route::resource('customers', App\Http\Controllers\CustomersController::class)
+        ->middlewareFor(['store', 'update', 'destroy'], 'admin:api');
 
     // Items
     //----------------------------------
@@ -116,8 +119,8 @@ Route::group(['middleware' => ['auth:api', 'company.context']], function () {
         Route::delete('/data/delete', [App\Http\Controllers\CompanyController::class, 'delete'])
             ->middleware('admin:api')
             ->name('admin.data.delete');
-        Route::put('/profile', [App\Http\Controllers\CompanyController::class, 'updateAdminProfile'])->name('admin.put.profile');
-        Route::post('/profile/upload-avatar', [App\Http\Controllers\CompanyController::class, 'uploadAdminAvatar'])->name('admin.profile.avatar');
+        Route::put('/profile', [App\Http\Controllers\CompanyController::class, 'updateAdminProfile'])->middleware('admin:api')->name('admin.put.profile');
+        Route::post('/profile/upload-avatar', [App\Http\Controllers\CompanyController::class, 'uploadAdminAvatar'])->middleware('admin:api')->name('admin.profile.avatar');
         Route::post('/company/upload-logo', [App\Http\Controllers\CompanyController::class, 'uploadCompanyLogo'])->middleware('admin:api')->name('upload.admin.company.logo');
         Route::get('/company', [App\Http\Controllers\CompanyController::class, 'getAdminCompany'])->name('get.admin.company');
         Route::post('/company', [App\Http\Controllers\CompanyController::class, 'updateAdminCompany'])->middleware('admin:api')->name('admin.company');

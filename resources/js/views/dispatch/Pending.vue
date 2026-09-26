@@ -379,7 +379,7 @@ export default {
       deep: true
     }
   },
-  destroyed () {
+  unmounted () {
     if (this.selectAllToBeField) {
       this.selectAllToBeDispatch()
     }

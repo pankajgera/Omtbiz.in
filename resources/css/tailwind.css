@@ -1201,6 +1201,12 @@ a:focus {
     color: var(--ui-accent);
 }
 
+.invoice-create-page .add-item-action:focus-visible {
+    outline: 3px solid var(--ui-accent) !important;
+    outline-offset: -4px;
+    background-color: var(--ui-surface-hover) !important;
+}
+
 /* Same gap on the summary box at the foot of those two pages: `.order-total`
    and `.estimate-total` keep `background: #ffffff` from their page sass, so in
    dark mode the panel stays white while the value inside it inherits

@@ -151,6 +151,7 @@
                   type="button"
                   class="remove-icon-wrapper tw:grid tw:size-8 tw:place-items-center tw:rounded-md tw:text-ink-muted tw:hover:bg-surface-hover tw:hover:text-red-500"
                   aria-label="Remove item"
+                  :tabindex="inventoryType === 'invoice' ? -1 : 0"
                   title="Remove item"
                   @click="removeInventory"
                 >
