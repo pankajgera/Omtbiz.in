@@ -29,7 +29,6 @@
           <label for="invoice-estimate" class="form-label">{{ $t('invoices.estimate-list') }}</label>
             <base-select
               id="invoice-estimate"
-              ref="estimateSelect"
               v-model="setEstimate"
               :options="estimateList"
               :required="'required'"
@@ -43,8 +42,10 @@
             />
         </div>
         <div class="col-md-6 invoice-customer-container mb-2 tw:w-full tw:max-w-none tw:xl:col-span-6">
-          <label class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
+          <label for="invoice-party" class="form-label">{{ $t('receipts.list') }}</label><span class="text-danger"> *</span>
             <base-select
+              id="invoice-party"
+              ref="partySelect"
               v-model="setInvoiceDebtor"
               :autofocus="false"
               :invalid="vNewInvoice.debtors.$error || submissionErrors.debtors"
@@ -723,7 +724,7 @@ export default {
       }
       this.initLoading = false
       await this.$nextTick()
-      this.$refs.estimateSelect?.focusSearch()
+      this.$refs.partySelect?.focusSearch()
     },
     openTemplateModal () {
       this.openModal({
@@ -833,33 +834,15 @@ export default {
       }, 1000)
     },
     printInvoice(invoiceToken) {
-      this.siteURL = `/reports/invoice/${invoiceToken}`
+      if (typeof invoiceToken !== 'string' || !invoiceToken.trim()) {
+        window.toastr.error(this.$t('invoices.print_error'))
+        return
+      }
+
+      this.siteURL = `/reports/invoice/${encodeURIComponent(invoiceToken)}?preview=1`
       this.url = this.siteURL
-
-      // Open the print dialog on this page (as before the upgrade) instead of a new tab.
-      if (typeof window.printJS === 'function') {
-        window.printJS({
-          printable: this.url,
-          type: 'pdf',
-          onPrintDialogClose: () => {
-            this.reset()
-          },
-          onError: () => {
-            this.reset()
-          }
-        })
-        return
-      }
-
-      const pdfWindow = window.open(this.url, '_blank')
-
-      if (!pdfWindow) {
-        window.location.assign(this.url)
-        return
-      }
-
-      pdfWindow.opener = null
-      this.reset()
+      // The HTML preview also works in browsers without an embedded PDF viewer.
+      window.location.assign(this.url)
     },
     printSlip(invoiceToken) {
       //print slip
@@ -874,7 +857,7 @@ export default {
       })
     },
     async showInvoicePopup (invoice) {
-      swal({
+      return swal({
         title: this.$t('invoices.invoice_report_title'),
         text: this.$t('invoices.invoice_report_text'),
         icon: '/assets/icon/check-circle-solid.svg',
@@ -882,7 +865,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.printInvoice(invoice.unique_hash)
+          this.printInvoice(invoice?.unique_hash)
         } else {
           this.reset()
         }

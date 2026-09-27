@@ -88,6 +88,12 @@
     --ui-sidebar-muted: #000000;
     --ui-sidebar-hover: #edf4f5;
     --ui-sidebar-border: #d8dee6;
+    --ui-icon-blue: #2563eb;
+    --ui-icon-teal: #0f766e;
+    --ui-icon-green: #15803d;
+    --ui-icon-amber: #b45309;
+    --ui-icon-purple: #7c3aed;
+    --ui-icon-rose: #be185d;
     --ui-focus: rgba(8, 127, 140, 0.24);
     --ui-overlay: rgba(15, 23, 42, 0.45);
     --ui-success-bg: #e8f6ee;
@@ -121,6 +127,12 @@
     --ui-sidebar-muted: #ffffff;
     --ui-sidebar-hover: #222a33;
     --ui-sidebar-border: #2c3540;
+    --ui-icon-blue: #93c5fd;
+    --ui-icon-teal: #5eead4;
+    --ui-icon-green: #86efac;
+    --ui-icon-amber: #fcd34d;
+    --ui-icon-purple: #c4b5fd;
+    --ui-icon-rose: #f9a8d4;
     --ui-focus: rgba(43, 179, 192, 0.34);
     --ui-overlay: rgba(0, 0, 0, 0.68);
     --ui-success-bg: #173b2a;

@@ -518,7 +518,15 @@ class ReportController extends Controller
             'company' => $company,
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.invoice');
+        if ($request->boolean('preview')) {
+            return view('app.pdf.reports.invoice', ['printPreview' => true]);
+        }
+
+        $pdf = PDF::loadView('app.pdf.reports.invoice', ['printPreview' => false]);
+
+        if ($request->boolean('download')) {
+            return $pdf->download('invoice.pdf');
+        }
 
         return $pdf->stream();
     }

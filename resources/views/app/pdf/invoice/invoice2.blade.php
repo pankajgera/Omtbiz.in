@@ -24,6 +24,7 @@
             width:30%;
         }
         @page {
+            size: A4 portrait;
             margin-top: 60px !important;
         }
         .header-table {

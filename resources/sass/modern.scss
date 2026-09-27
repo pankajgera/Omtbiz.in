@@ -306,7 +306,7 @@ textarea {
     max-width: 20px;
     height: 16px;
     margin: 0;
-    color: var(--ui-sidebar-muted);
+    color: var(--ui-menu-icon, var(--ui-accent));
 }
 
 .skin-omtbiz .sidebar-left .menu-item .menu-text {
@@ -333,12 +333,16 @@ textarea {
 /* Active items force a white icon for the teal selected state, but the
    menu-item also carries tw:hover:bg-sidebar-hover (utilities !important),
    which replaces that teal with the light hover wash. Keep the icon on
-   --ui-sidebar-text so it stays black on light hover / white on dark hover. */
+   its theme-aware palette color so it stays legible on the hover wash. */
 .skin-omtbiz .sidebar-left .menu-item:hover .menu-icon,
 .skin-omtbiz .sidebar-left .menu-item:focus-visible .menu-icon,
 .skin-omtbiz .sidebar-left .menu-item.active:hover .menu-icon,
 .skin-omtbiz .sidebar-left .menu-item.active:focus-visible .menu-icon {
-    color: var(--ui-sidebar-text) !important;
+    color: var(--ui-menu-icon, var(--ui-accent)) !important;
+}
+
+.skin-omtbiz .sidebar-left .calculator-button svg {
+    color: var(--ui-icon-purple);
 }
 
 .sidebar-left .menu-item.active::after {

@@ -3,6 +3,7 @@
 <head>
     <title>Sales Customer Report</title>
     <style type="text/css">
+        @page { size: A4 portrait; }
         body {
             font-family: "DejaVu Sans";
         }

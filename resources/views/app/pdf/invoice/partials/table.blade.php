@@ -36,7 +36,7 @@
     @endforeach
 </table>
 
-<table cellspacing="0px" style="width:770px; margin-left:550px; top: 30px" border="0" class="table3 @if (count($invoice->inventories) > 12) page-break @endif">
+<table cellspacing="0px" style="width:40%; margin-left:55%;" border="0" class="table3 @if (count($invoice->inventories) > 12) page-break @endif">
     <tr>
         <td style="padding:3px 0px"></td>
         <td style="padding:3px 0px"></td>

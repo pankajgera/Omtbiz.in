@@ -5,6 +5,7 @@
     <title>Customer Ledger Report</title>
     <style type="text/css">
         @page {
+            size: A4 landscape;
             margin: 92px 34px 58px;
         }
 

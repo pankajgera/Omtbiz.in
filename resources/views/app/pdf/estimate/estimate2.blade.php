@@ -26,6 +26,7 @@
         }
 
         @page {
+            size: A4 portrait;
             margin-top: 60px !important;
         }
         .header-table {

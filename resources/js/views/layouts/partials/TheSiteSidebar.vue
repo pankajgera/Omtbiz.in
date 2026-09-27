@@ -19,6 +19,7 @@
             :key="item.route"
             :to="item.route"
             :exact="!!item.exact"
+            :style="{ '--ui-menu-icon': `var(--ui-icon-${item.color})` }"
             class="menu-item tw:flex tw:min-h-10 tw:items-center tw:gap-3 tw:rounded-md tw:px-3 tw:py-2 tw:text-sm tw:font-medium tw:text-sidebar-ink tw:no-underline tw:transition-colors tw:hover:bg-sidebar-hover tw:hover:text-sidebar-ink tw:focus-visible:bg-sidebar-hover"
             @click="Toggle"
           >
@@ -131,36 +132,42 @@ export default {
           {
             title: "navigation.master",
             icon: "book-open",
+            color: "blue",
             route: "/masters",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.inventory",
             icon: "boxes",
+            color: "amber",
             route: "/inventory",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.orders",
             icon: "shopping-cart",
+            color: "purple",
             route: "/orders",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.estimates",
             icon: "clipboard-list",
+            color: "blue",
             route: "/estimates",
             meta: ["admin", "estimate", "accountant"],
           },
           {
             title: "navigation.invoices",
             icon: "file-invoice-dollar",
+            color: "teal",
             route: "/invoices/create",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.dispatch",
             icon: "truck",
+            color: "amber",
             route: "/dispatch",
             exact: true,
             meta: ["admin", "accountant", "dispatch"],
@@ -168,6 +175,7 @@ export default {
           {
             title: "navigation.dispatch_dashboard",
             icon: "tachometer-alt",
+            color: "purple",
             route: "/dispatch/dashboard",
             exact: true,
             meta: ["admin", "accountant", "dispatch"],
@@ -175,6 +183,7 @@ export default {
           {
             title: "navigation.items",
             icon: "file-contract",
+            color: "blue",
             route: "/bill-ty",
             meta: ["admin", "accountant"],
           },
@@ -183,24 +192,28 @@ export default {
           {
             title: "navigation.receipts",
             icon: "receipt",
+            color: "green",
             route: "/receipts/create",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.receipt_approvals",
             icon: "user-check",
+            color: "teal",
             route: "/receipts/approvals",
             meta: ["admin"],
           },
           {
             title: "navigation.payments",
             icon: "credit-card",
+            color: "rose",
             route: "/payments",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.voucher",
             icon: "ticket-alt",
+            color: "purple",
             route: "/vouchers",
             exact: true,
             meta: ["admin", "accountant"],
@@ -208,6 +221,7 @@ export default {
           {
             title: "navigation.voucher_approvals",
             icon: "shield-alt",
+            color: "green",
             route: "/vouchers/approvals",
             meta: ["admin"],
           },
@@ -216,18 +230,21 @@ export default {
           {
             title: "navigation.notes",
             icon: "sticky-note",
+            color: "amber",
             route: "/notes",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.ledger",
             icon: "balance-scale",
+            color: "blue",
             route: "/ledgers",
             meta: ["admin", "accountant"],
           },
           {
             title: "navigation.reports",
             icon: "chart-bar",
+            color: "teal",
             route: "/reports",
             meta: ["admin", "accountant"],
           },
@@ -236,18 +253,21 @@ export default {
           {
             title: "navigation.users",
             icon: "users",
+            color: "purple",
             route: "/users",
             meta: ["admin"],
           },
           {
             title: "navigation.audit_logs",
             icon: "history",
+            color: "amber",
             route: "/audit-logs",
             meta: ["admin"],
           },
           {
             title: "navigation.settings",
             icon: "sliders-h",
+            color: "blue",
             route: "/settings",
             meta: ["admin"],
           },

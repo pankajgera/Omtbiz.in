@@ -50,7 +50,7 @@
     @endforeach
 </table>
 
-<table width="100%" cellspacing="0px" style="margin-left:420px" border="0" class="table3 @if(count($estimate->items) > 12) page-break @endif">
+<table cellspacing="0px" style="width:40%; margin-left:55%;" border="0" class="table3 @if(count($estimate->items) > 12) page-break @endif">
     <tr>
         <td class="no-borde" style="color: #55547A; padding-left:10px;  font-size:12px;">Subtotal</td>
         <td class="no-border items"

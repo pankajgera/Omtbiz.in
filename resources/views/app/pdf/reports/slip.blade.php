@@ -19,8 +19,8 @@
             padding-bottom: 15px;
         }
         @page {
-            size: landscape letter;
-            size: 4in 4in;
+            size: A4 portrait;
+            margin: 12mm;
         }
     </style>
 </head>

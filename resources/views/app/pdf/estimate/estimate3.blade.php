@@ -75,6 +75,7 @@
         }
 
         @page {
+            size: A4 portrait;
             margin-top: 60px !important;
         }
 
@@ -202,7 +203,7 @@
         .job-add {
             display: inline;
             position: absolute;
-            float: right;
+            right: 0;
             padding: 20px 30px 0 0;
         }
         .amount-due {
