@@ -92,7 +92,7 @@ class ReportDesignTest extends TestCase
         }
     }
 
-    public function test_remaining_pdf_templates_use_a4_including_landscape_customer_ledger(): void
+    public function test_remaining_pdf_templates_use_a4_portrait_including_customer_ledger(): void
     {
         $data = self::reportData();
         $user = (object) [
@@ -128,9 +128,8 @@ class ReportDesignTest extends TestCase
             $renderer = app('dompdf.wrapper')->setPaper('letter')->loadView('app.pdf.' . $view, $data);
             $bytes = $renderer->output();
             $canvas = $renderer->getDomPDF()->getCanvas();
-            $landscape = $view === 'reports.customers';
-            $this->assertEqualsWithDelta($landscape ? 841.89 : 595.28, $canvas->get_width(), 0.02, $view);
-            $this->assertEqualsWithDelta($landscape ? 595.28 : 841.89, $canvas->get_height(), 0.02, $view);
+            $this->assertEqualsWithDelta(595.28, $canvas->get_width(), 0.02, $view);
+            $this->assertEqualsWithDelta(841.89, $canvas->get_height(), 0.02, $view);
             if ($directory = getenv('REPORT_DESIGN_QA_DIR')) {
                 file_put_contents($directory . '/' . $view . '.pdf', $bytes);
             }
