@@ -211,16 +211,20 @@
           <div class="section" v-if="incomeLedgerList.length">
             <div class="row align-items-center">
               <div class="ps-3">
-              <label class="form-label"><strong>{{ $t('invoices.add') }}</strong></label>
+              <label class="form-label" for="income-ledger"><strong>{{ $t('invoices.add') }}</strong></label>
               </div>
               <div class="ps-3 me-5">
                 <base-select
+                id="income-ledger"
                 v-model="income_ledger"
                 :options="incomeLedgerList"
                 :required="'required'"
                 :searchable="true"
                 :show-labels="false"
                 :allow-empty="false"
+                :select-on-tab="true"
+                @tab-select="focusAdjustmentAmount('income')"
+                @input="focusAdjustmentAmount('income')"
                 :disabled="isDisabled"
                 :placeholder="$t('receipts.select_a_list')"
                 label="name"
@@ -230,9 +234,13 @@
 
             </div>
             <div>
+              <label class="visually-hidden" for="income-ledger-amount">{{ $t('invoices.add') }} {{ $t('invoices.amount') }}</label>
               <base-input
+                ref="incomeAmount"
+                name="income-ledger-amount"
                 style="width:100px"
-                :disabled="this.income_ledger===null"
+                :disabled="isDisabled"
+                :read-only="!income_ledger"
                 v-model="income_ledger_value"
                 type="number"
                 min="0"
@@ -243,16 +251,20 @@
           <div class="section" v-if="expenseLedgerList.length">
            <div class="row align-items-center">
             <div class="ps-3 mb-2">
-             <label class="form-label"><strong>{{ $t('invoices.less') }}</strong></label>
+             <label class="form-label" for="expense-ledger"><strong>{{ $t('invoices.less') }}</strong></label>
            </div>
              <div class="ps-3 mb-2 me-5">
             <base-select
+              id="expense-ledger"
               v-model="expense_ledger"
               :options="expenseLedgerList"
               :required="'required'"
               :searchable="true"
               :show-labels="false"
               :allow-empty="false"
+              :select-on-tab="true"
+              @tab-select="focusAdjustmentAmount('expense')"
+              @input="focusAdjustmentAmount('expense')"
               :disabled="isDisabled"
               :placeholder="$t('receipts.select_a_list')"
               label="name"
@@ -260,14 +272,20 @@
             />
         </div>
            </div>
+           <div>
+           <label class="visually-hidden" for="expense-ledger-amount">{{ $t('invoices.less') }} {{ $t('invoices.amount') }}</label>
            <base-input
+              ref="expenseAmount"
+              name="expense-ledger-amount"
               style="width:100px"
-              :disabled="this.expense_ledger===null"
+              :disabled="isDisabled"
+              :read-only="!expense_ledger"
               v-model="expense_ledger_value"
               type="number"
               min="0"
               input-class="item-discount"
               />
+           </div>
         </div>
 
           <div v-if="discountPerInventory === 'NO' || discountPerInventory === null" class="section mt-2">
@@ -339,6 +357,7 @@
   </div>
 </template>
 <script>
+import { openReportInNewTab } from '@/helpers/reportTabs'
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
 import InvoiceInventory from './Inventory'
@@ -833,6 +852,14 @@ export default {
         window.location.reload()
       }, 1000)
     },
+    async focusAdjustmentAmount(kind) {
+      await this.$nextTick()
+      const input = this.$refs[`${kind}Amount`]?.$refs.baseInput
+      if (input && !input.disabled && !input.readOnly) {
+        input.focus()
+        input.select()
+      }
+    },
     printInvoice(invoiceToken) {
       if (typeof invoiceToken !== 'string' || !invoiceToken.trim()) {
         window.toastr.error(this.$t('invoices.print_error'))
@@ -842,19 +869,16 @@ export default {
       this.siteURL = `/reports/invoice/${encodeURIComponent(invoiceToken)}?preview=1`
       this.url = this.siteURL
       // The HTML preview also works in browsers without an embedded PDF viewer.
-      window.location.assign(this.url)
+      return openReportInNewTab(this.url)
     },
     printSlip(invoiceToken) {
-      //print slip
-      this.siteURL = `/reports/slip/${invoiceToken}`
+      if (typeof invoiceToken !== 'string' || !invoiceToken.trim()) {
+        window.toastr.error(this.$t('invoices.print_error'))
+        return false
+      }
+      this.siteURL = `/reports/slip/${encodeURIComponent(invoiceToken)}`
       this.url = this.siteURL
-      printJS({
-        printable: this.url,
-        type: 'pdf',
-        onPrintDialogClose: () => {
-          this.reset();
-        }
-      })
+      return openReportInNewTab(this.url)
     },
     async showInvoicePopup (invoice) {
       return swal({
@@ -865,7 +889,7 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          this.printInvoice(invoice?.unique_hash)
+          return this.printInvoice(invoice?.unique_hash)
         } else {
           this.reset()
         }

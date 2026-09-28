@@ -247,6 +247,7 @@ input.base-prefix-input:disabled {
 }
 </style>
 <script>
+import { openReportInNewTab } from '@/helpers/reportTabs'
 import draggable from '../../compat/draggable'
 import MultiSelect from 'vue-multiselect'
 import InvoiceInventory from '../invoices/Inventory'
@@ -584,7 +585,7 @@ export default {
       }, 2000)
     },
     async showEstimatePopup (estimate_id) {
-      swal({
+      return swal({
         title: this.$t('estimates.estimate_report_title'),
         text: this.$t('estimates.estimate_report_text'),
         icon: '/assets/icon/check-circle-solid.svg',
@@ -595,13 +596,7 @@ export default {
           this.siteURL = `/reports/estimate/${estimate_id}`
           this.url = `${this.siteURL}?company_id=${this.user.company_id}`
 
-          printJS({
-            printable: this.url,
-            type: 'pdf',
-            onPrintDialogClose: () => {
-              this.reset();
-            }
-          })
+          return openReportInNewTab(this.url)
         } else {
           this.reset()
         }

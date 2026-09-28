@@ -114,6 +114,7 @@
 </template>
 
 <script>
+import { openReportInNewTab } from '@/helpers/reportTabs'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import useVuelidate from '@vuelidate/core'
@@ -312,8 +313,7 @@ export default {
       if (!this.getReportUrl) {
         return false
       }
-      window.open(this.getReportUrl, '_blank')
-      return true
+      return openReportInNewTab(this.getReportUrl)
     },
     prepareReportParameters ({ silent = false } = {}) {
       this.vRange.$touch()
@@ -377,6 +377,8 @@ export default {
       const downloadLink = document.createElement('a')
       downloadLink.href = this.getReportUrl + '?download=true'
       downloadLink.download = ''
+      downloadLink.target = '_blank'
+      downloadLink.rel = 'noopener'
       document.body.appendChild(downloadLink)
       downloadLink.click()
       downloadLink.remove()

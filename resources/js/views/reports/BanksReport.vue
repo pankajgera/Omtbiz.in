@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { openReportInNewTab } from '@/helpers/reportTabs'
 import { mapActions, mapGetters } from 'vuex'
 import moment from 'moment'
 import useVuelidate from '@vuelidate/core'
@@ -181,9 +182,10 @@ export default {
       this.selectedRange = 'Custom'
     },
     async viewReportsPDF () {
-      let data = await this.getReports()
-      window.open(this.getReportUrl, '_blank')
-      return data
+      return openReportInNewTab(async () => {
+        if (!await this.getReports()) return null
+        return this.getReportUrl
+      })
     },
     async getReports (isDownload = false) {
       this.v$.selectedRange.$touch()
@@ -200,10 +202,10 @@ export default {
       return true
     },
     async downloadReport () {
-      if (!await this.getReports()) {
-        return false
-      }
-      window.open(this.getReportUrl + '?download=true')
+      return openReportInNewTab(async () => {
+        if (!await this.getReports()) return null
+        return this.getReportUrl + '?download=true'
+      })
     },
   }
 }

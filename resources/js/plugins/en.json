@@ -898,6 +898,8 @@
         "login_placeholder": "mail\\@example.com"
     },
     "reports": {
+        "popup_blocked": "Allow pop-ups for this site, then open the report again.",
+        "open_failed": "Unable to open the report. Please try again.",
         "title": "Report",
         "from_date": "From Date",
         "to_date": "To Date",
