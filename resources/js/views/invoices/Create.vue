@@ -356,6 +356,7 @@
 </template>
 <script>
 import { openReportInNewTab } from '@/helpers/reportTabs'
+import { printInvoiceReport } from '@/helpers/printInvoiceReport'
 import draggable from 'vuedraggable'
 import MultiSelect from 'vue-multiselect'
 import InvoiceInventory from './Inventory'
@@ -858,7 +859,7 @@ export default {
         input.select()
       }
     },
-    printInvoice(invoiceToken) {
+    async printInvoice(invoiceToken) {
       if (typeof invoiceToken !== 'string' || !invoiceToken.trim()) {
         window.toastr.error(this.$t('invoices.print_error'))
         return
@@ -866,8 +867,12 @@ export default {
 
       this.siteURL = `/reports/invoice/${encodeURIComponent(invoiceToken)}?preview=1`
       this.url = this.siteURL
-      // The HTML preview also works in browsers without an embedded PDF viewer.
-      return openReportInNewTab(this.url)
+      try {
+        return await printInvoiceReport(this.url)
+      } catch {
+        window.toastr.error(this.$t('invoices.print_failed'))
+        return false
+      }
     },
     printSlip(invoiceToken) {
       if (typeof invoiceToken !== 'string' || !invoiceToken.trim()) {
@@ -887,9 +892,9 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          const opened = await this.printInvoice(invoice?.unique_hash)
-          if (opened) this.reset()
-          return opened
+          const finished = await this.printInvoice(invoice?.unique_hash)
+          if (finished) this.reset()
+          return finished
         } else {
           this.reset()
         }

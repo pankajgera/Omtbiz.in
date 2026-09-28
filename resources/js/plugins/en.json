@@ -704,6 +704,7 @@
         "invoice_report_title": "Invoice",
         "invoice_report_text": "Do you want to print this invoice?",
         "print_error": "The invoice PDF link is unavailable. Reopen the saved invoice and try again.",
+        "print_failed": "The invoice report could not be printed. Reopen the saved invoice and try again.",
         "inventory": {
             "title": "Item Title",
             "description": "Description",
