@@ -331,7 +331,7 @@ class ReportController extends Controller
         ]);
 
         $pdf = PDF::loadView('app.pdf.reports.customers')
-            ->setPaper('a4', 'landscape');
+            ->setPaper('a4', 'portrait');
         if ($request->has('download')) {
             return $pdf->download();
         }
