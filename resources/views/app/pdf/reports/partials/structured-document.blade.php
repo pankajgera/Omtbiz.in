@@ -64,15 +64,17 @@
             </tbody>
         </table>
     @endif
-    <table class="document-notes"><tr>
-        <td><p class="label">Amount Chargeable (in words)</p><p class="amount-words">{{ $numberTowords($total_amount) }}</p></td>
-        <td><p class="label">Remark:</p><p>{{ $document->notes }}</p></td>
-    </tr></table>
-    <div class="declaration">
-        <table><tr>
-            <td><p class="label">Declaration:</p><p>We declare that this {{ $documentKind === 'receipt' ? 'receipt' : 'estimate' }} shows the actual price of the goods described and that all particulars are true and correct</p></td>
-            <td class="signature">Authorised Signatory</td>
+    <div class="document-footer" data-last-page-footer>
+        <table class="document-notes"><tr>
+            <td><p class="label">Amount Chargeable (in words)</p><p class="amount-words">{{ $numberTowords($total_amount) }}</p></td>
+            <td><p class="label">Remark:</p><p>{{ $document->notes }}</p></td>
         </tr></table>
-        <p class="document-footnote">This is a Computer Generated {{ $documentKind === 'receipt' ? 'Receipt' : 'Estimate' }}</p>
+        <div class="declaration">
+            <table><tr>
+                <td><p class="label">Declaration:</p><p>We declare that this {{ $documentKind === 'receipt' ? 'receipt' : 'estimate' }} shows the actual price of the goods described and that all particulars are true and correct</p></td>
+                <td class="signature">Authorised Signatory</td>
+            </tr></table>
+            <p class="document-footnote">This is a Computer Generated {{ $documentKind === 'receipt' ? 'Receipt' : 'Estimate' }}</p>
+        </div>
     </div>
 </section>

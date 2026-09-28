@@ -92,9 +92,6 @@
             text-align: right;
         }
 
-        .page-number:after {
-            content: counter(page);
-        }
 
         .report-overview {
             margin: 0 0 14px;
@@ -283,9 +280,6 @@
     <table class="report-footer">
         <tr>
             <td>Generated {{ $generatedAt }} | {{ $company->name }}</td>
-            <td class="footer-right">
-                Page <span class="page-number"></span>
-            </td>
         </tr>
     </table>
 

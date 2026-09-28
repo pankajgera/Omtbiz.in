@@ -93,10 +93,21 @@ $numberTowords = function ($num)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ 'invoice - ' . $invoice->invoice_number }}</title>
     @include('app.pdf.reports.partials.structured-styles')
+    <style>
+        .report-document { font-size: 13px; }
+        .party-name { font-size: 19px; }
+        .metadata th, .metadata td { font-size: 15px; font-weight: bold; }
+        .document-heading .identity { width: 42%; }
+        .document-heading .metadata { width: 58%; }
+        .document-footnote { font-size: 11px; }
+        .line-items th:first-child { padding-left: 5px; padding-right: 5px; white-space: nowrap; }
+    </style>
+    @if ($printPreview ?? false)
+        @include('app.pdf.reports.partials.invoice-preview-styles')
+    @endif
 </head>
 <body>
     @if ($printPreview ?? false)
-        @include('app.pdf.reports.partials.invoice-preview-toolbar')
         <main class="invoice-preview-sheet">
     @endif
     @include('app.pdf.reports.partials.structured-document', [
@@ -108,6 +119,7 @@ $numberTowords = function ($num)
     ])
     @if ($printPreview ?? false)
         </main>
+        @include('app.pdf.reports.partials.invoice-preview-pagination')
     @endif
 </body>
 </html>

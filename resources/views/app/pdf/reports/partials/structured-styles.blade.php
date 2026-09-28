@@ -31,6 +31,8 @@
     .totals-breakdown { table-layout: fixed; }
     .totals-breakdown td { width: 50%; }
     .document-notes { margin-top: 20px; margin-bottom: 22px; table-layout: fixed; }
+    .document-footer { page-break-inside: avoid; padding-top: 20px; }
+    .document-footer .document-notes { margin-top: 0; }
     .document-notes td { padding: 0 14px 0 0; width: 50%; }
     .document-notes td + td { border-left: 1px solid #acbbc7; padding-left: 20px; padding-right: 0; }
     .document-notes .label { color: #536274; margin-bottom: 4px; }

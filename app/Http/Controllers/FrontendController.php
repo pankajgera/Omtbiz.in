@@ -93,7 +93,8 @@ class FrontendController extends Controller
             'colors' => $colorSettings,
             'labels' => $labels,
         ]);
-        $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view);
+        $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view)
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }
@@ -163,7 +164,8 @@ class FrontendController extends Controller
             'logo' => $logo ?? null,
             'labels' => $labels,
         ]);
-        $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
+        $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view)
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }
@@ -221,7 +223,8 @@ class FrontendController extends Controller
             'colorSettings' => $colorSettings,
             'company' => $company,
         ]);
-        $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view);
+        $pdf = PDF::loadView('app.pdf.estimate.' . $estimateTemplate->view)
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }
@@ -358,7 +361,8 @@ class FrontendController extends Controller
             'company' => $company,
         ]);
 
-        $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view);
+        $pdf = PDF::loadView('app.pdf.invoice.' . $invoiceTemplate->view)
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }
@@ -402,7 +406,8 @@ class FrontendController extends Controller
             'company' => $company,
         ]);
 
-        $pdf = PDF::loadView('app.pdf.receipt.receipt');
+        $pdf = PDF::loadView('app.pdf.receipt.receipt')
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }

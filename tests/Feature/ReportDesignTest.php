@@ -55,6 +55,16 @@ class ReportDesignTest extends TestCase
         DB::table('currencies')->insert(['id' => 1, 'precision' => 2, 'symbol' => '₹', 'decimal_separator' => '.', 'thousand_separator' => ',', 'swap_currency_symbol' => false]);
     }
 
+    public function test_pdf_renderer_defaults_to_a4_portrait_without_template_page_rules(): void
+    {
+        $renderer = app('dompdf.wrapper')->loadHTML('<html><body>A4 default</body></html>');
+        $renderer->output();
+        $canvas = $renderer->getDomPDF()->getCanvas();
+
+        $this->assertEqualsWithDelta(595.28, $canvas->get_width(), 0.02);
+        $this->assertEqualsWithDelta(841.89, $canvas->get_height(), 0.02);
+    }
+
     public function test_all_matching_report_templates_render_as_pdf_with_their_existing_content(): void
     {
         $views = ['reports.invoice', 'invoice.invoice1', 'estimate.estimate1', 'receipt.receipt', 'reports.banks', 'reports.expenses', 'reports.profit-loss', 'reports.sales-items'];
@@ -89,6 +99,50 @@ class ReportDesignTest extends TestCase
         $this->assertGreaterThan(1, $pdf->getDomPDF()->getCanvas()->get_page_count());
         if ($directory = getenv('REPORT_DESIGN_QA_DIR')) {
             file_put_contents($directory . '/long-invoice.pdf', $bytes);
+        }
+    }
+
+    public function test_document_footer_is_once_at_the_bottom_of_the_last_pdf_page(): void
+    {
+        foreach ([1, 14, 40, 65] as $rowCount) {
+            $renderer = app('dompdf.wrapper')->loadView('app.pdf.reports.invoice', self::reportData($rowCount));
+            $dompdf = $renderer->getDomPDF();
+            $callbacks = [];
+            foreach ($dompdf->getCallbacks() as $event => $handlers) {
+                foreach ($handlers as $handler) {
+                    $callbacks[] = ['event' => $event, 'f' => $handler];
+                }
+            }
+            $footers = [];
+            $tables = [];
+            $callbacks[] = ['event' => 'end_frame', 'f' => function ($frame, $canvas) use (&$footers, &$tables): void {
+                $node = $frame->get_node();
+                if (! $node instanceof \DOMElement) {
+                    return;
+                }
+                $position = [
+                    'page' => $canvas->get_page_number(),
+                    'top' => $frame->get_position('y'),
+                    'bottom' => $frame->get_position('y') + $frame->get_margin_height(),
+                ];
+                if ($node->hasAttribute('data-last-page-footer')) {
+                    $footers[] = $position;
+                } elseif ($node->getAttribute('class') === 'line-items') {
+                    $tables[] = $position;
+                }
+            }];
+            $dompdf->setCallbacks($callbacks);
+            $renderer->output();
+
+            $this->assertCount(1, $footers, "{$rowCount} rows");
+            $canvas = $dompdf->getCanvas();
+            $this->assertSame($canvas->get_page_count(), $footers[0]['page']);
+            $this->assertEqualsWithDelta($canvas->get_height() - 12 * 72 / 25.4, $footers[0]['bottom'], 0.1);
+            foreach ($tables as $table) {
+                if ($table['page'] === $footers[0]['page']) {
+                    $this->assertGreaterThanOrEqual($table['bottom'], $footers[0]['top']);
+                }
+            }
         }
     }
 

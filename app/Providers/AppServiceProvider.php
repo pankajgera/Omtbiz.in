@@ -62,6 +62,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->resolving('dompdf', function (\Dompdf\Dompdf $pdf): void {
+            $pdf->setCallbacks([[
+                'event' => 'begin_frame',
+                'f' => [\App\Support\PdfDocumentLayout::class, 'alignFinalFooter'],
+            ], [
+                'event' => 'end_document',
+                'f' => [\App\Support\PdfDocumentLayout::class, 'numberPage'],
+            ]]);
+        });
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Laravel\Passport\Console\InstallCommand::class,

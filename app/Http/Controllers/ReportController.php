@@ -84,7 +84,8 @@ class ReportController extends Controller
             'from_date' => $from_date,
             'to_date' => $to_date
         ]);
-        $pdf = PDF::loadView('app.pdf.reports.sales-customers');
+        $pdf = PDF::loadView('app.pdf.reports.sales-customers')
+            ->setPaper('a4', 'portrait');
 
         if ($request->has('download')) {
             return $pdf->download();
@@ -142,7 +143,8 @@ class ReportController extends Controller
             'from_date' => $from_date,
             'to_date' => $to_date
         ]);
-        $pdf = PDF::loadView('app.pdf.reports.sales-items');
+        $pdf = PDF::loadView('app.pdf.reports.sales-items')
+            ->setPaper('a4', 'portrait');
 
         if ($request->has('download')) {
             return $pdf->download();
@@ -200,7 +202,8 @@ class ReportController extends Controller
             'from_date' => $from_date,
             'to_date' => $to_date
         ]);
-        $pdf = PDF::loadView('app.pdf.reports.expenses');
+        $pdf = PDF::loadView('app.pdf.reports.expenses')
+            ->setPaper('a4', 'portrait');
 
         if ($request->has('download')) {
             return $pdf->download();
@@ -264,7 +267,8 @@ class ReportController extends Controller
             'from_date' => $from_date,
             'to_date' => $to_date
         ]);
-        $pdf = PDF::loadView('app.pdf.reports.profit-loss');
+        $pdf = PDF::loadView('app.pdf.reports.profit-loss')
+            ->setPaper('a4', 'portrait');
 
         if ($request->has('download')) {
             return $pdf->download();
@@ -465,7 +469,8 @@ class ReportController extends Controller
             'to_date' => $to_date
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.banks');
+        $pdf = PDF::loadView('app.pdf.reports.banks')
+            ->setPaper('a4', 'portrait');
 
         if ($request->has('download')) {
             return $pdf->download();
@@ -522,7 +527,8 @@ class ReportController extends Controller
             return view('app.pdf.reports.invoice', ['printPreview' => true]);
         }
 
-        $pdf = PDF::loadView('app.pdf.reports.invoice', ['printPreview' => false]);
+        $pdf = PDF::loadView('app.pdf.reports.invoice', ['printPreview' => false])
+            ->setPaper('a4', 'portrait');
 
         if ($request->boolean('download')) {
             return $pdf->download('invoice.pdf');
@@ -574,7 +580,8 @@ class ReportController extends Controller
             'company' => $company,
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.estimate');
+        $pdf = PDF::loadView('app.pdf.reports.estimate')
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }
@@ -622,7 +629,8 @@ class ReportController extends Controller
             'reference_number' => $invoice->reference_number,
         ]);
 
-        $pdf = PDF::loadView('app.pdf.reports.slip');
+        $pdf = PDF::loadView('app.pdf.reports.slip')
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
     }

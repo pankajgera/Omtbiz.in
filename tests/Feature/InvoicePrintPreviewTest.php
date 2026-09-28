@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class InvoicePrintPreviewTest extends TestCase
 {
-    public function test_preview_renders_saved_details_and_controls_but_pdf_has_no_toolbar(): void
+    public function test_preview_and_pdf_render_saved_details_without_preview_controls(): void
     {
         $invoice = (object) [
             'invoice_number' => 'INV-100', 'invoice_date' => '2026-09-27',
@@ -26,8 +26,10 @@ class InvoicePrintPreviewTest extends TestCase
         ];
 
         $preview = view('app.pdf.reports.invoice', $data + ['printPreview' => true])->render();
-        $this->assertStringContainsString('Invoice print controls', $preview);
-        $this->assertStringContainsString('?download=1', $preview);
+        $this->assertStringNotContainsString('Invoice print controls', $preview);
+        $this->assertStringNotContainsString('Invoice preview', $preview);
+        $this->assertStringNotContainsString('Download PDF', $preview);
+        $this->assertStringNotContainsString('If your browser does not show a print dialog', $preview);
         $this->assertStringContainsString('Preview party', $preview);
         $this->assertStringContainsString('Preview item', $preview);
         $this->assertMatchesRegularExpression('/FOUR THOUSAND\s+ONLY/', $preview);
