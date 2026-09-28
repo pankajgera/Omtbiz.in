@@ -14,21 +14,23 @@
       >
     </div>
     <div class="form-group">
-      <input
+      <base-input
         id="password"
+        v-model="password"
         type="password"
-        class="form-control form-control-danger"
+        input-class="form-control form-control-danger"
         placeholder="Enter Password"
         name="password"
-      >
+      />
     </div>
     <div class="form-group">
-      <input
+      <base-input
+        v-model="password_confirmation"
         type="password"
-        class="form-control form-control-danger"
+        input-class="form-control form-control-danger"
         placeholder="Retype Password"
         name="password_confirmation"
-      >
+      />
     </div>
     <base-button class="btn btn-login btn-full">{{ $t('login.register') }}</base-button>
   </form>

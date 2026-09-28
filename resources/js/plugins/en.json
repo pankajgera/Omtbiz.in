@@ -65,6 +65,8 @@
         }
     },
     "general": {
+        "show_password": "Show password",
+        "hide_password": "Hide password",
         "yes": "Yes",
         "no": "No",
         "view_pdf": "View PDF",
@@ -1518,7 +1520,7 @@
         }
     },
     "layout_login": {
-        "copyright_omtbiz": "Copyright © Omtbiz - 2024",
+        "copyright_omtbiz": "Copyright © Omtbiz - {year}",
         "super_simple_invoicing": "Super Simple Invoicing",
         "for_freelancer": "for Freelancers &",
         "small_businesses": "Small Businesses ",

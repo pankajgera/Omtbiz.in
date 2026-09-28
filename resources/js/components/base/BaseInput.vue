@@ -10,7 +10,7 @@
       :readonly="readOnly"
       :name="name"
       :tabindex="tabIndex"
-      :class="[{'input-field-left-icon': icon && isAlignLeftIcon ,'input-field-right-icon': icon && !isAlignLeftIcon ,'invalid': isFieldValid, 'disabled': disabled, 'small-input': small}, inputClass]"
+      :class="[{'input-field-left-icon': icon && isAlignLeftIcon ,'input-field-right-icon': icon && !isAlignLeftIcon, 'input-field-password': type === 'password', 'invalid': isFieldValid, 'disabled': disabled, 'small-input': small}, inputClass]"
       :placeholder="placeholder"
       :autocomplete="autocomplete"
       class="input-field"
@@ -23,10 +23,20 @@
       @keydown.enter.prevent
       @blur="handleFocusOut"
     >
-    <div v-if="showPassword && isAlignLeftIcon" style="cursor: pointer" @click="showPass = !showPass" >
-      <font-awesome-icon :icon="!showPass ?'eye': 'eye-slash'" class="right-icon" />
-    </div>
-    <font-awesome-icon v-if="icon && !isAlignLeftIcon" :icon="icon" class="right-icon" />
+    <button
+      v-if="type === 'password'"
+      type="button"
+      class="password-visibility-toggle"
+      :disabled="disabled"
+      :tabindex="tabIndex"
+      :aria-label="$t(showPass ? 'general.hide_password' : 'general.show_password')"
+      :title="$t(showPass ? 'general.hide_password' : 'general.show_password')"
+      :aria-pressed="showPass"
+      @click="showPass = !showPass"
+    >
+      <font-awesome-icon :icon="showPass ? 'eye-slash' : 'eye'" aria-hidden="true" />
+    </button>
+    <font-awesome-icon v-else-if="icon && !isAlignLeftIcon" :icon="icon" class="right-icon" />
   </div>
 </template>
 
@@ -139,7 +149,7 @@ export default {
       return false
     },
     toggleType () {
-      if (this.showPass) {
+      if (this.type === 'password' && this.showPass) {
         return 'text'
       }
       return this.type
@@ -171,3 +181,39 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.base-input .input-field-password {
+  padding-right: 48px;
+}
+
+.password-visibility-toggle {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  bottom: 1px;
+  width: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ui-text-muted);
+  cursor: pointer;
+}
+
+.password-visibility-toggle:hover:not(:disabled) {
+  background: var(--ui-surface-hover);
+}
+
+.password-visibility-toggle:focus-visible {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: -3px;
+}
+
+.password-visibility-toggle:disabled {
+  color: var(--ui-disabled-text);
+  cursor: not-allowed;
+}
+</style>

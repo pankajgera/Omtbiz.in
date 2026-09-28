@@ -23,7 +23,7 @@
 
         <!-- <div class="content-bottom"/> -->
         <div class="page-copyright">
-            <p>{{ $t('layout_login.copyright_omtbiz') }}</p>
+            <p>{{ $t('layout_login.copyright_omtbiz', { year: new Date().getFullYear() }) }}</p>
           </div>
       </div>
     </div>
