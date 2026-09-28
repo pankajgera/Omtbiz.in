@@ -5,7 +5,7 @@
     <title>Customer Ledger Report</title>
     <style type="text/css">
         @page {
-            size: A4 landscape;
+            size: A4 portrait;
             margin: 92px 34px 58px;
         }
 
@@ -16,9 +16,9 @@
         body {
             margin: 0;
             font-family: "DejaVu Sans", sans-serif;
-            font-size: 9px;
-            line-height: 1.35;
-            color: #172033;
+            font-size: 10.5px;
+            line-height: 1.4;
+            color: #000000;
             background: #ffffff;
         }
 
@@ -33,7 +33,7 @@
             left: 0;
             right: 0;
             height: 60px;
-            border-bottom: 2px solid #db3f45;
+            border-bottom: 2px solid #000000;
         }
 
         .report-header td {
@@ -42,18 +42,18 @@
 
         .company-name {
             margin: 0 0 4px;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 700;
-            color: #111827;
+            color: #000000;
         }
 
         .report-kicker {
             margin: 0;
-            font-size: 8px;
+            font-size: 9.5px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            color: #db3f45;
+            color: #000000;
         }
 
         .header-meta {
@@ -62,14 +62,15 @@
 
         .account-name {
             margin: 0 0 4px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
-            color: #111827;
+            color: #000000;
         }
 
         .period {
             margin: 0;
-            color: #4b5563;
+            font-weight: 700;
+            color: #000000;
         }
 
         .report-footer {
@@ -78,9 +79,9 @@
             bottom: -38px;
             left: 0;
             height: 24px;
-            border-top: 1px solid #d8dee8;
-            color: #6b7280;
-            font-size: 8px;
+            border-top: 1px solid #555555;
+            color: #000000;
+            font-size: 9px;
         }
 
         .report-footer td {
@@ -97,14 +98,14 @@
 
         .report-overview {
             margin: 0 0 14px;
-            border: 1px solid #d8dee8;
-            background: #f7f9fc;
+            border: 1px solid #555555;
+            background: #ffffff;
         }
 
         .report-overview td {
             width: 25%;
             padding: 9px 12px;
-            border-right: 1px solid #d8dee8;
+            border-right: 1px solid #555555;
         }
 
         .report-overview td:last-child {
@@ -114,17 +115,17 @@
         .overview-label {
             display: block;
             margin-bottom: 3px;
-            font-size: 7px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #6b7280;
+            color: #000000;
         }
 
         .overview-value {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 700;
-            color: #172033;
+            color: #000000;
         }
 
         .transactions {
@@ -137,11 +138,11 @@
 
         .transactions th {
             padding: 8px 7px;
-            border-top: 1px solid #cbd3df;
-            border-bottom: 1px solid #aeb8c7;
-            background: #edf1f6;
-            color: #374151;
-            font-size: 7.5px;
+            border-top: 1px solid #000000;
+            border-bottom: 1.5px solid #000000;
+            background: #e6e6e6;
+            color: #000000;
+            font-size: 9.5px;
             font-weight: 700;
             text-align: left;
             text-transform: uppercase;
@@ -149,14 +150,10 @@
         }
 
         .transactions td {
-            padding: 7px;
-            border-bottom: 1px solid #e4e8ef;
+            padding: 5px 7px;
+            border-bottom: 1px solid #888888;
             vertical-align: top;
             overflow-wrap: break-word;
-        }
-
-        .transactions tbody tr:nth-child(even) td {
-            background: #fafbfc;
         }
 
         .transactions tr {
@@ -188,8 +185,8 @@
         }
 
         .reference {
-            font-size: 8px;
-            color: #4b5563;
+            font-size: 9.5px;
+            color: #000000;
         }
 
         .amount {
@@ -200,46 +197,43 @@
         .empty-row td {
             padding: 28px 12px;
             text-align: center;
-            color: #6b7280;
+            font-size: 11px;
+            color: #000000;
         }
 
         .summary-title {
             margin: 18px 0 7px;
-            font-size: 9px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.45px;
-            color: #374151;
+            color: #000000;
         }
 
         .summary-context {
             float: right;
-            font-size: 8px;
+            font-size: 9.5px;
             font-weight: 400;
             text-transform: none;
             letter-spacing: 0;
-            color: #6b7280;
-        }
-
-        .summary-section.new-page {
-            page-break-before: always;
+            color: #000000;
         }
 
         .balance-summary {
             page-break-inside: avoid;
-            border: 1px solid #cbd3df;
+            border: 1px solid #000000;
         }
 
         .balance-summary th,
         .balance-summary td {
             padding: 8px 10px;
-            border-bottom: 1px solid #e2e7ee;
+            border-bottom: 1px solid #888888;
         }
 
         .balance-summary th {
-            background: #f3f5f8;
-            color: #4b5563;
-            font-size: 7.5px;
+            background: #e6e6e6;
+            color: #000000;
+            font-size: 9.5px;
             text-align: left;
             text-transform: uppercase;
             letter-spacing: 0.35px;
@@ -258,9 +252,11 @@
         }
 
         .balance-summary .closing-row td {
+            border-top: 2px solid #000000;
             border-bottom: 0;
-            background: #fff5f5;
-            color: #b4232a;
+            background: #ffffff;
+            color: #000000;
+            font-size: 11.5px;
         }
     </style>
 </head>
@@ -359,7 +355,7 @@
             </tbody>
         </table>
 
-        <section class="summary-section {{ $related_vouchers->count() > 15 ? 'new-page' : '' }}">
+        <section class="summary-section">
             <p class="summary-title">
                 Balance summary
                 <span class="summary-context">{{ $ledger->account }} | {{ $from_date }} to {{ $to_date }}</span>

@@ -150,6 +150,8 @@ export default {
       selectedLedger: null,
       isReportLoading: false,
       reportPreviewKey: 0,
+      reportRequestId: 0,
+      autoReportTimer: null,
       vouchersListArr: [],
     }
   },
@@ -196,6 +198,9 @@ export default {
     }
   },
   mounted () {
+  },
+  unmounted () {
+    clearTimeout(this.autoReportTimer)
   },
   methods: {
      ...mapActions('customer', [
@@ -284,6 +289,16 @@ export default {
     invalidateReport () {
       this.url = null
       this.isReportLoading = false
+      this.scheduleReport()
+    },
+    // Reload the preview whenever a filter changes, once a ledger is picked; the short
+    // delay folds quick successive changes (e.g. from and to date) into one request.
+    scheduleReport () {
+      clearTimeout(this.autoReportTimer)
+      if (!this.selectedLedger) {
+        return
+      }
+      this.autoReportTimer = setTimeout(() => this.getReports({ silent: true }), 400)
     },
     onReportLoaded () {
       this.isReportLoading = false
@@ -295,7 +310,7 @@ export default {
       window.open(this.getReportUrl, '_blank')
       return true
     },
-    prepareReportParameters () {
+    prepareReportParameters ({ silent = false } = {}) {
       this.vRange.$touch()
       this.vFormData.$touch()
       if (this.selectedRange === 'Till Date') {
@@ -303,12 +318,16 @@ export default {
         this.formData.to_date = moment(this.formData.to_date).toISOString()
       }
       if (this.v$?.$invalid) {
-        window.toastr['error']("Error! missing required field or value is invalid.!")
+        if (!silent) {
+          window.toastr['error']("Error! missing required field or value is invalid.!")
+        }
         return false
       }
 
       if (!this.selectedLedger) {
-        window.toastr['error'](this.$t('reports.customers.select_ledger_preview'))
+        if (!silent) {
+          window.toastr['error'](this.$t('reports.customers.select_ledger_preview'))
+        }
         return false
       }
 
@@ -318,16 +337,23 @@ export default {
         ledger_id: this.selectedLedger.id
       }
     },
-    async getReports () {
-      const parameters = this.prepareReportParameters()
+    async getReports ({ silent = false } = {}) {
+      clearTimeout(this.autoReportTimer)
+      const parameters = this.prepareReportParameters({ silent })
       if (!parameters) {
         this.isReportLoading = false
         return false
       }
 
+      const requestId = ++this.reportRequestId
       this.isReportLoading = true
       this.reportPreviewKey += 1
-      this.url = await createReportShare('customers', parameters)
+      const url = await createReportShare('customers', parameters)
+      // A newer filter change started another request; keep only the latest preview.
+      if (requestId !== this.reportRequestId) {
+        return false
+      }
+      this.url = url
       return true
     },
     downloadReport () {
