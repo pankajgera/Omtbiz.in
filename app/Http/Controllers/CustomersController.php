@@ -206,7 +206,7 @@ class CustomersController extends Controller
     }
 
     /**
-     * Remove the specified Customer along side all his/her resources (ie. Estimates, Invoices, Payments and Addresses)
+     * Archive the customer while preserving all associated business records.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -222,7 +222,7 @@ class CustomersController extends Controller
 
 
     /**
-     * Remove a list of Customers along side all their resources (ie. Estimates, Invoices, Payments and Addresses)
+     * Archive customers while preserving all associated business records.
      *
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse

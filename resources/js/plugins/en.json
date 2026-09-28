@@ -1255,7 +1255,7 @@
         "select_currency": "Select currency",
         "select_a_user": "Select a User",
         "type_or_click": "Type or click to select",
-        "confirm_delete": "You will not be able to recover this User | You will not be able to recover these Users",
+        "confirm_delete": "Remove this user's account access? Existing invoices and other business records will be kept. | Remove these users' account access? Existing invoices and other business records will be kept.",
         "created_message": "User created successfully",
         "updated_message": "User updated successfully",
         "deleted_message": "User deleted successfully | Users deleted successfully",

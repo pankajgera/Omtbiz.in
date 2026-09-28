@@ -256,7 +256,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Remove the specified User along side all his/her resources (ie. Estimates, Invoices, Payments and Addresses)
+     * Archive the user account while preserving all associated business records.
      *
      * @param  int  $id
      */
@@ -275,7 +275,7 @@ class UsersController extends Controller
 
 
     /**
-     * Remove a list of Users along side all their resources (ie. Estimates, Invoices, Payments and Addresses)
+     * Archive user accounts while preserving all associated business records.
      *
      * @param  \Illuminate\Http\Request $request
      */
