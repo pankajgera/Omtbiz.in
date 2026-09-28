@@ -5,11 +5,7 @@
     <site-sidebar type="basic" :role="user.role"/>
 
     <router-view v-slot="{ Component }">
-      <transition
-        name="fade"
-        mode="out-in">
-        <component :is="Component" />
-      </transition>
+      <component :is="Component" />
     </router-view>
     <!-- <site-footer/> -->
   </div>

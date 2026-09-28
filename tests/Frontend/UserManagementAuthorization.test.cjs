@@ -50,6 +50,7 @@ test('actual router metadata blocks direct user URLs and trusts the loaded role 
   const store = { getters: { 'auth/isAuthenticated': true, 'user/currentUser': { role: 'accountant' } }, dispatch: async () => {} }
   const context = {
     module: { exports: {} }, store, Ls: { get: () => 'admin' }, LayoutBasic: {}, LayoutLogin: {},
+    installNavigationLoader: () => {},
     createWebHistory: createMemoryHistory,
     createRouter: options => {
       const router = createRouter(options)

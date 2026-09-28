@@ -209,6 +209,9 @@ export default {
     onLedgerSelected (ledger) {
       this.selectedLedger = ledger
       this.invalidateReport()
+      if (ledger) {
+        return this.getReports()
+      }
     },
     getThisDate (type, time) {
       return moment()[type](time).toISOString()
@@ -282,6 +285,7 @@ export default {
       this.selectedRange = 'Custom'
     },
     invalidateReport () {
+      this.reportPreviewKey += 1
       this.url = null
       this.isReportLoading = false
     },
@@ -325,10 +329,23 @@ export default {
         return false
       }
 
+      this.invalidateReport()
       this.isReportLoading = true
-      this.reportPreviewKey += 1
-      this.url = await createReportShare('customers', parameters)
-      return true
+      const previewKey = this.reportPreviewKey
+      try {
+        const url = await createReportShare('customers', parameters)
+        if (previewKey !== this.reportPreviewKey) {
+          return false
+        }
+        this.url = url
+        return true
+      } catch (error) {
+        if (previewKey === this.reportPreviewKey) {
+          this.isReportLoading = false
+          window.toastr['error'](this.$t('reports.customers.report_load_failed'))
+        }
+        return false
+      }
     },
     downloadReport () {
       if (!this.getReportUrl || this.isReportLoading) {

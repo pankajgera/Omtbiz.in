@@ -964,6 +964,7 @@
             "ledgers": "Select Ledgers",
             "report_preview": "Customer report preview",
             "select_ledger_preview": "Select a ledger to preview the report.",
+            "report_load_failed": "Unable to load the report. Please try again.",
             "update_report_preview": "Click Update Report to generate the preview.",
             "generating_report": "Generating report preview...",
             "send_on_whatsapp": "Send on WhatsApp"

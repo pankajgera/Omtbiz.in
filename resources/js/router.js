@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import store from './store/index.js'
+import { installNavigationLoader } from './helpers/navigationLoader'
 
 /*
  |--------------------------------------------------------------------------
@@ -726,6 +727,8 @@ const router = createRouter({
     routes,
     linkActiveClass: 'active'
 })
+
+installNavigationLoader(router)
 
 // Where each role lands when it is sent away from a page (or away from login once signed in).
 const homeForRole = (role) => {
