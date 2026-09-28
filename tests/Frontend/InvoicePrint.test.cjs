@@ -30,11 +30,17 @@ function invoiceMethods(answer, blocked = false) {
   return { form, navigations, errors, openedTabs }
 }
 
-test('OK opens the saved invoice preview in a new tab and preserves the form', async () => {
+test('OK opens the saved invoice preview before resetting for a new invoice', async () => {
   const { form, navigations, openedTabs } = invoiceMethods(true)
-  await form.showInvoicePopup({ unique_hash: 'saved-invoice-token' })
+  let resets = 0
+  form.reset = () => {
+    assert.deepEqual(navigations, ['/reports/invoice/saved-invoice-token?preview=1'])
+    resets++
+  }
+  assert.equal(await form.showInvoicePopup({ unique_hash: 'saved-invoice-token' }), true)
   assert.deepEqual(navigations, ['/reports/invoice/saved-invoice-token?preview=1'])
   assert.deepEqual(openedTabs, [{ url: 'about:blank', target: '_blank' }])
+  assert.equal(resets, 1)
 })
 
 test('a blocked report tab shows an error without navigating away', async () => {

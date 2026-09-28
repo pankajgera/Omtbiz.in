@@ -887,7 +887,9 @@ export default {
         dangerMode: false
       }).then(async (success) => {
         if (success) {
-          return this.printInvoice(invoice?.unique_hash)
+          const opened = await this.printInvoice(invoice?.unique_hash)
+          if (opened) this.reset()
+          return opened
         } else {
           this.reset()
         }
