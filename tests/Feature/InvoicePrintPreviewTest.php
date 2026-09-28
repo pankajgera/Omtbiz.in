@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class InvoicePrintPreviewTest extends TestCase
 {
-    public function test_preview_and_pdf_render_saved_details_without_preview_controls(): void
+    public function test_preview_has_a_print_button_that_is_excluded_from_the_pdf(): void
     {
         $invoice = (object) [
             'invoice_number' => 'INV-100', 'invoice_date' => '2026-09-27',
@@ -30,6 +30,7 @@ class InvoicePrintPreviewTest extends TestCase
         $this->assertStringNotContainsString('Invoice preview', $preview);
         $this->assertStringNotContainsString('Download PDF', $preview);
         $this->assertStringNotContainsString('If your browser does not show a print dialog', $preview);
+        $this->assertStringContainsString('<button id="print-report" type="button" autofocus>Print</button>', $preview);
         $this->assertStringContainsString('Preview party', $preview);
         $this->assertStringContainsString('Preview item', $preview);
         $this->assertMatchesRegularExpression('/FOUR THOUSAND\s+ONLY/', $preview);
@@ -37,6 +38,7 @@ class InvoicePrintPreviewTest extends TestCase
 
         $pdf = view('app.pdf.reports.invoice', $data + ['printPreview' => false])->render();
         $this->assertStringNotContainsString('Invoice print controls', $pdf);
+        $this->assertStringNotContainsString('id="print-report"', $pdf);
         $this->assertStringContainsString('Preview item', $pdf);
     }
 

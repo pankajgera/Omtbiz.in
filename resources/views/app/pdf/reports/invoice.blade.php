@@ -108,6 +108,9 @@ $numberTowords = function ($num)
 </head>
 <body>
     @if ($printPreview ?? false)
+        <div class="invoice-preview-actions">
+            <button id="print-report" type="button" autofocus>Print</button>
+        </div>
         <main class="invoice-preview-sheet">
     @endif
     @include('app.pdf.reports.partials.structured-document', [

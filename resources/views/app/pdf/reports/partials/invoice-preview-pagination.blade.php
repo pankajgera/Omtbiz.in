@@ -67,5 +67,8 @@
     paginate();
     document.fonts.ready.then(paginate);
     window.addEventListener('beforeprint', paginate);
+    const printButton = document.getElementById('print-report');
+    printButton.addEventListener('click', () => window.print());
+    printButton.focus({ preventScroll: true });
 })();
 </script>

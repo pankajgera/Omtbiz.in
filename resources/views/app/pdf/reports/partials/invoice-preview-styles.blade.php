@@ -1,4 +1,8 @@
 <style>
+    .invoice-preview-actions { width: 210mm; margin: 0 auto 16px; display: flex; justify-content: flex-end; }
+    .invoice-preview-actions button { padding: 10px 24px; border: 0; border-radius: 6px; background: #117c75; color: #fff; font: bold 16px "DejaVu Sans", sans-serif; cursor: pointer; }
+    .invoice-preview-actions button:hover { background: #0d655f; }
+    .invoice-preview-actions button:focus-visible { outline: 3px solid #203c4a; outline-offset: 3px; }
     .invoice-preview-sheet { position: relative; width: 210mm; min-height: 297mm; margin: 0 auto; padding: 12mm; background: #fff; }
     .invoice-preview-page-number { display: none; }
     .invoice-preview-sheet.is-paginated .report-document { display: flex; flex-direction: column; min-height: 273mm; }
@@ -12,6 +16,7 @@
         .invoice-preview-page-number { display: block; position: absolute; right: 12mm; bottom: 6mm; font-size: 10px; color: #536274; }
     }
     @media print {
+        .invoice-preview-actions { display: none !important; }
         /* Keep browser-generated titles, URLs, dates and page counts out of the page margins. */
         @page {
             size: A4 portrait;
