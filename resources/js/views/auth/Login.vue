@@ -31,6 +31,7 @@
         type="password"
         name="password"
         show-password
+        password-toggle-tab-index="-1"
         :id="'login-password'"
         @input="v$.loginData.password.$touch()"
       />
@@ -44,7 +45,7 @@
     </div>
     <div class="other-actions row">
       <div class="col-sm-12 text-sm-start mb-4">
-        <router-link to="forgot-password" class="forgot-link">
+        <router-link to="forgot-password" class="forgot-link" tabindex="-1">
           {{ $t('login.forgot_password') }}
         </router-link>
       </div>

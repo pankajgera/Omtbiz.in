@@ -28,7 +28,7 @@
       type="button"
       class="password-visibility-toggle"
       :disabled="disabled"
-      :tabindex="tabIndex"
+      :tabindex="passwordToggleTabIndex ?? tabIndex"
       :aria-label="$t(showPass ? 'general.hide_password' : 'general.show_password')"
       :title="$t(showPass ? 'general.hide_password' : 'general.show_password')"
       :aria-pressed="showPass"
@@ -61,6 +61,10 @@ export default {
     tabIndex: {
       type: String,
       default: ''
+    },
+    passwordToggleTabIndex: {
+      type: String,
+      default: null
     },
     modelValue: {
       type: [String, Number, File],

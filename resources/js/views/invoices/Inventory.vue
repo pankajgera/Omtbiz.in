@@ -21,6 +21,7 @@
                   <span class="weight-600 tw:text-xs tw:text-ink-muted">{{ index + 1 }}</span>
                   <button
                     type="button"
+                    tabindex="-1"
                     class="sort-icon-wrapper handle tw:grid tw:size-7 tw:place-items-center tw:rounded-md tw:border-0 tw:bg-transparent tw:text-ink-muted tw:hover:bg-surface-hover tw:hover:text-ink"
                     aria-label="Reorder item"
                     title="Reorder item"
