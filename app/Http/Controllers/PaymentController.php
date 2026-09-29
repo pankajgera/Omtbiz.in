@@ -21,6 +21,7 @@ use stdClass;
 use Validator;
 
 use function MongoDB\BSON\toJSON;
+use App\Services\RecycleBin;
 
 class PaymentController extends Controller
 {
@@ -364,22 +365,9 @@ class PaymentController extends Controller
             return $response;
         }
 
-        $payment = Payment::find($id);
+        $payment = Payment::findOrFail($id);
 
-        if ($payment->invoice_id != null) {
-            $invoice = Invoice::find($payment->invoice_id);
-            $invoice->due_amount = ((int)$invoice->due_amount + (int)$payment->amount);
-            $invoice->paid_status = Invoice::STATUS_PAID;
-            $invoice->status = Invoice::TO_BE_DISPATCH;
-            $invoice->save();
-        }
-
-        $vouchers = Voucher::where('payment_id', $id)->get();
-        foreach($vouchers as $each) {
-            $each->delete();
-        }
-
-        $payment->delete();
+        RecycleBin::trashPayment($payment);
 
         return response()->json([
             'success' => true
@@ -394,21 +382,9 @@ class PaymentController extends Controller
 
         foreach ($request->id as $id) {
             $payment = Payment::find($id);
-
-            if ($payment->invoice_id != null) {
-                $invoice = Invoice::find($payment->invoice_id);
-                $invoice->due_amount = ((int)$invoice->due_amount + (int)$payment->amount);
-                $invoice->paid_status = Invoice::STATUS_PAID;
-                $invoice->status = Invoice::TO_BE_DISPATCH;
-                $invoice->save();
+            if ($payment) {
+                RecycleBin::trashPayment($payment);
             }
-
-            $vouchers = Voucher::where('payment_id', $id)->get();
-            foreach($vouchers as $each) {
-                $each->delete();
-            }
-
-            $payment->delete();
         }
 
         return response()->json([

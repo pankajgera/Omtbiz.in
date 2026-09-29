@@ -217,6 +217,8 @@ Route::group(['middleware' => ['auth:api', 'company.context', 'route.role']], fu
 
     // Audit Logs (admin only)
     //----------------------------------
+    Route::get('/recycle-bin', [App\Http\Controllers\RecycleBinController::class, 'index'])->middleware('admin:api')->name('recycle-bin.index');
+    Route::post('/recycle-bin/{id}/restore', [App\Http\Controllers\RecycleBinController::class, 'restore'])->middleware('admin:api')->whereNumber('id')->name('recycle-bin.restore');
     Route::get('/audit-logs', [App\Http\Controllers\AuditLogsController::class, 'index'])->middleware('admin:api')->name('audit-logs.index');
     Route::get('/audit-logs/{id}', [App\Http\Controllers\AuditLogsController::class, 'show'])->middleware('admin:api')->name('audit-logs.show');
 

@@ -20,6 +20,7 @@ use App\Models\Orders;
 use App\Models\Payment;
 use App\Models\PublicShare;
 use App\Models\Receipt;
+use App\Models\RecycleBinEntry;
 use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Database\Eloquent\Builder;
@@ -103,6 +104,7 @@ class AppServiceProvider extends ServiceProvider
             Payment::class,
             PublicShare::class,
             Receipt::class,
+            RecycleBinEntry::class,
             User::class,
             Voucher::class,
         ];

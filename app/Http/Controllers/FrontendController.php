@@ -249,7 +249,7 @@ class FrontendController extends Controller
             ->where('account', $master->name)
             ->firstOrFail();
 
-        $all_voucher_ids = Voucher::withoutGlobalScopes()
+        $all_voucher_ids = Voucher::withoutGlobalScope('authenticated_company')
             ->where('company_id', $invoice->company_id)
             ->where('account_ledger_id', $ledger->id)
             ->whereNotNull('related_voucher')
@@ -263,7 +263,7 @@ class FrontendController extends Controller
             }
         }
         $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::withoutGlobalScopes()->with(['invoice.inventories'])
+        $related_vouchers = Voucher::withoutGlobalScope('authenticated_company')->with(['invoice.inventories'])
             ->where('company_id', $invoice->company_id)
             ->whereIn('id', explode(',', $unique_ids))
             ->where('account_ledger_id', '!=', $ledger->id)
@@ -339,7 +339,7 @@ class FrontendController extends Controller
             ->whereCompany($company->id)
             ->get();
 
-        $invoice_i = InvoiceItem::withoutGlobalScopes()->with('inventory')
+        $invoice_i = InvoiceItem::withoutGlobalScope('authenticated_company')->with('inventory')
             ->where('company_id', $invoice->company_id)
             ->where('type', 'invoice')
             ->where('invoice_id', $invoice->id);
@@ -420,7 +420,8 @@ class FrontendController extends Controller
             ->where('resource_type', $type)
             ->firstOrFail();
 
-        return $model::withoutGlobalScopes()
+        // Tenant scope only: keep the soft-delete scope so recycle-bin records stay hidden.
+        return $model::withoutGlobalScope('authenticated_company')
             ->with($relations)
             ->where('company_id', $share->company_id)
             ->findOrFail($share->resource_id);

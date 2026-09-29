@@ -8,10 +8,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Receipt extends Model
 {
     use Auditable;
+    use SoftDeletes;
 
     public const STATUS_DRAFT = 'Draft';
     public const STATUS_DONE = 'Done';
@@ -69,7 +71,8 @@ class Receipt extends Model
     public static function getNextReceiptNumber($value, $company_id)
     {
         // Get the last created order
-        $receipt = Receipt::where('receipt_number', 'LIKE', $value . '-%')
+        // Include recycle-bin receipts so their numbers are not reused.
+        $receipt = Receipt::withTrashed()->where('receipt_number', 'LIKE', $value . '-%')
             ->where('company_id', $company_id)
             ->orderBy('created_at', 'desc')
             ->first();

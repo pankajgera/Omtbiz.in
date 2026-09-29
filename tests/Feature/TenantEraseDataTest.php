@@ -24,8 +24,12 @@ class TenantEraseDataTest extends TestCase
         'orders',
         'payments',
         'receipts',
+        'recycle_bin_entries',
         'vouchers',
     ];
+
+    // Recycle-bin tables: erasing company data must remove these rows permanently.
+    private const SOFT_DELETE_TABLES = ['invoice_items', 'invoices', 'payments', 'receipts', 'vouchers'];
 
     protected function setUp(): void
     {
@@ -33,9 +37,12 @@ class TenantEraseDataTest extends TestCase
         request()->attributes->remove('company_id');
 
         foreach (self::COMPANY_TABLES as $table) {
-            Schema::create($table, function (Blueprint $definition): void {
+            Schema::create($table, function (Blueprint $definition) use ($table): void {
                 $definition->id();
                 $definition->unsignedInteger('company_id');
+                if (in_array($table, self::SOFT_DELETE_TABLES, true)) {
+                    $definition->softDeletes();
+                }
             });
         }
 

@@ -377,7 +377,7 @@ class ReportController extends Controller
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
 
         foreach ($related_masters as $key => $master) {
-            $all_voucher_ids = Voucher::withoutGlobalScopes()
+            $all_voucher_ids = Voucher::withoutGlobalScope('authenticated_company')
                 ->where('company_id', $company->id)
                 ->where('account_master_id', $master->id)
                 ->whereNotNull('related_voucher')
@@ -393,7 +393,7 @@ class ReportController extends Controller
             $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
             $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
             $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
-            $vouchers = Voucher::withoutGlobalScopes()->with(['invoice', 'receipt'])
+            $vouchers = Voucher::withoutGlobalScope('authenticated_company')->with(['invoice', 'receipt'])
                 ->where('company_id', $company->id)
                 ->whereIn('id', explode(',', $unique_ids))
                 ->where('account_master_id', '!=', $master->id)
@@ -506,7 +506,7 @@ class ReportController extends Controller
             ->get();
 
 
-        $invoice_i = InvoiceItem::withoutGlobalScopes()->with('inventory')
+        $invoice_i = InvoiceItem::withoutGlobalScope('authenticated_company')->with('inventory')
             ->where('company_id', $company->id)
             ->where('type', 'invoice')
             ->where('invoice_id', $invoiceWith->id);
@@ -607,7 +607,8 @@ class ReportController extends Controller
             ->where('resource_type', $type)
             ->firstOrFail();
 
-        return $model::withoutGlobalScopes()
+        // Tenant scope only: keep the soft-delete scope so recycle-bin records stay hidden.
+        return $model::withoutGlobalScope('authenticated_company')
             ->with($relations)
             ->where('company_id', $share->company_id)
             ->findOrFail($share->resource_id);

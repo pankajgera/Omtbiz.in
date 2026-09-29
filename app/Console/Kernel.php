@@ -28,6 +28,11 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('check:estimates:status')
             ->daily();
+
+        // Deleted invoices/vouchers/receipts/payments are kept 7 days, then removed for good.
+        $schedule->command('recycle-bin:purge')
+            ->hourly()
+            ->withoutOverlapping();
     }
 
     /**
