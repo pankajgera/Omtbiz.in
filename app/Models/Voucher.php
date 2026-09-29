@@ -7,10 +7,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Log;
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Voucher extends Model
 {
     use Auditable;
+    use SoftDeletes;
 
     public const STATUS_DONE = 'Done';
     public const STATUS_TO_BE_APPROVED = 'To Be Approved';
@@ -181,10 +183,11 @@ class Voucher extends Model
             return false;
         }
         $voucher = self::find($id);
-        $related_voucher = Voucher::where('related_voucher', $voucher->related_voucher)->get();
-        foreach($related_voucher as $each) {
-            $each->delete();
+        if (!$voucher) {
+            return false;
         }
+        // Sends every leg of the voucher to the recycle bin.
+        \App\Services\RecycleBin::trashVoucher($voucher);
         return true;
     }
 }

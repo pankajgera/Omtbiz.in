@@ -23,6 +23,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use App\Models\RecycleBinEntry;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EraseData implements ShouldQueue
 {
@@ -45,15 +47,19 @@ class EraseData implements ShouldQueue
                 ->pluck('id');
 
             EstimateItem::withoutGlobalScopes()->where('company_id', $this->companyId)->delete();
-            InvoiceItem::withoutGlobalScopes()->where('company_id', $this->companyId)->delete();
+            InvoiceItem::withoutGlobalScopes()->where('company_id', $this->companyId)->forceDelete();
             OrderItems::withoutGlobalScopes()->where('company_id', $this->companyId)->delete();
             InventoryItem::withoutGlobalScopes()->whereIn('inventory_id', $inventoryIds)->delete();
 
             foreach ($this->companyOwnedModels() as $model) {
-                $model::withoutGlobalScopes()
-                    ->where('company_id', $this->companyId)
-                    ->delete();
+                $query = $model::withoutGlobalScopes()->where('company_id', $this->companyId);
+                // Erasing data is permanent: bypass the recycle bin for soft-deletable models.
+                in_array(SoftDeletes::class, class_uses_recursive($model), true)
+                    ? $query->forceDelete()
+                    : $query->delete();
             }
+
+            RecycleBinEntry::withoutGlobalScopes()->where('company_id', $this->companyId)->delete();
 
             // AccountMaster is shared and has no company_id. Deleting it
             // would corrupt every other tenant.

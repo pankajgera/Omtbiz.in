@@ -8,10 +8,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Payment extends Model
 {
     use Auditable;
+    use SoftDeletes;
 
     public const PAYMENT_MODE_CHECK = 'CHECK';
     public const PAYMENT_MODE_OTHER = 'OTHER';
@@ -64,7 +66,8 @@ class Payment extends Model
     public static function getNextPaymentNumber($value, $company_id)
     {
         // Get the last created order
-        $payment = Payment::where('payment_number', 'LIKE', $value . '-%')
+        // Include recycle-bin payments so their numbers are not reused.
+        $payment = Payment::withTrashed()->where('payment_number', 'LIKE', $value . '-%')
             ->where('company_id', $company_id)
             ->orderBy('created_at', 'desc')
             ->first();

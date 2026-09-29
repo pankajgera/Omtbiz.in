@@ -69,7 +69,7 @@ class RouteRoleAuthorizationTest extends TestCase
                 || ($method === 'POST' && $url === '/api/public-shares');
         }
         if ($role === 'dispatch') return str_starts_with($url, '/api/dispatch');
-        if (preg_match('#^/api/(users|audit-logs)(/|$)#', $url)) return false;
+        if (preg_match('#^/api/(users|audit-logs|recycle-bin)(/|$)#', $url)) return false;
         if (str_starts_with($url, '/api/settings/')) return $method === 'GET' && in_array($url, ['/api/settings/colors', '/api/settings/get-inventory-type', '/api/settings/get-customize-setting'], true);
         if (str_starts_with($url, '/api/categories')) return $method === 'GET' && $url === '/api/categories';
         if (str_starts_with($url, '/api/states')) return $method === 'GET' && in_array($url, ['/api/states', '/api/states/42'], true);

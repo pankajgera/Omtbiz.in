@@ -8,10 +8,12 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Inventory;
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class InvoiceItem extends Model
 {
     use Auditable;
+    use SoftDeletes;
 
     protected $fillable = [
         'invoice_id',

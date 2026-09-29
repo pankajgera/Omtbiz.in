@@ -265,6 +265,13 @@ export default {
             meta: ["admin"],
           },
           {
+            title: "navigation.recycle_bin",
+            icon: "trash-restore",
+            color: "rose",
+            route: "/recycle-bin",
+            meta: ["admin"],
+          },
+          {
             title: "navigation.settings",
             icon: "sliders-h",
             color: "blue",

@@ -28,6 +28,7 @@ use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Str;
 use App\Support\PublicShareService;
+use App\Services\RecycleBin;
 
 class InvoicesController extends Controller
 {
@@ -436,7 +437,7 @@ class InvoicesController extends Controller
         $maxAttempts = 20;
 
         while ($attempt < $maxAttempts) {
-            $exists = Invoice::where('company_id', $companyId)
+            $exists = Invoice::withTrashed()->where('company_id', $companyId)
                 ->where('invoice_number', $invoiceNumber)
                 ->exists();
 
@@ -458,7 +459,7 @@ class InvoicesController extends Controller
 
     private function buildInvoiceNumberFromMaxSuffix($companyId, $invoicePrefix, $offset = 1)
     {
-        $maxSuffix = Invoice::where('company_id', $companyId)
+        $maxSuffix = Invoice::withTrashed()->where('company_id', $companyId)
             ->where('invoice_number', 'like', $invoicePrefix . '-%')
             ->selectRaw("MAX(CAST(SUBSTRING_INDEX(invoice_number, '-', -1) AS UNSIGNED)) as max_suffix")
             ->value('max_suffix');
@@ -690,7 +691,7 @@ class InvoicesController extends Controller
                 $find_invent->update([
                     'quantity' => $find_invent->quantity + $del->quantity,
                 ]);
-                $del->delete();
+                $del->forceDelete();
             }
 
             $amount = $total_amount;
@@ -780,23 +781,8 @@ class InvoicesController extends Controller
             ]);
         }
 
-        AuditLogger::withoutAuditing(function () use ($invoice, $id) {
-            $vouchers = Voucher::where('invoice_id', $invoice->id)->get();
-            foreach ($vouchers as $each) {
-                $each->delete();
-            }
-
-            $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
-            foreach ($invoice_item as $each) {
-                //'Add' deleting item quantity back to inventory
-                $find_invent = Inventory::where('id', $each->inventory_id)->first();
-                $find_invent->update([
-                    'quantity' => $find_invent->quantity + $each->quantity,
-                ]);
-            }
-        });
-
-        $invoice = Invoice::destroy($id);
+        // Moves the invoice (with its items and vouchers) to the recycle bin; stock is returned as before.
+        RecycleBin::trashInvoice($invoice);
 
         return response()->json([
             'success' => true
@@ -824,23 +810,7 @@ class InvoicesController extends Controller
                 ]);
             }
 
-            AuditLogger::withoutAuditing(function () use ($id) {
-                $vouchers = Voucher::where('invoice_id', $id)->get();
-                foreach ($vouchers as $each) {
-                    $each->delete();
-                }
-
-                $invoice_item = InvoiceItem::where('invoice_id', $id)->get();
-                foreach ($invoice_item as $each) {
-                    //'Add' deleting item quantity back to inventory
-                    $find_invent = Inventory::where('id', $each->inventory_id)->first();
-                    $find_invent->update([
-                        'quantity' => $find_invent->quantity + $each->quantity,
-                    ]);
-                }
-            });
-
-            $invoice = Invoice::destroy($id);
+            RecycleBin::trashInvoice($invoice);
 
         }
         return response()->json([

@@ -8,10 +8,12 @@ use App\Models\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Traits\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Invoice extends Model
 {
     use Auditable;
+    use SoftDeletes;
 
     public const STATUS_PAID = 'PAID';
     public const DISPATCH = 'DISPATCH';
@@ -64,7 +66,8 @@ class Invoice extends Model
     public static function getNextInvoiceNumber($value, $company_id)
     {
         // Get the last created order
-        $lastOrder = Invoice::orderBy('created_at', 'desc')->where('company_id', $company_id)->first();
+        // Include recycle-bin invoices so a restorable invoice's number is never handed out again.
+        $lastOrder = Invoice::withTrashed()->orderBy('created_at', 'desc')->where('company_id', $company_id)->first();
 
         if (!$lastOrder) {
             // We get here if there is no order at all

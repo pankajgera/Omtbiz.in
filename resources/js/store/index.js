@@ -37,6 +37,7 @@ import banks from './modules/banks'
 import dispatch from './modules/disptach'
 import orders from './modules/orders'
 import auditLogs from './modules/audit-logs'
+import recycleBin from './modules/recycle-bin'
 
 const initialState = {
     isAppLoaded: false
@@ -84,5 +85,6 @@ export default createStore({
         estimate,
         orders,
         auditLogs,
+        recycleBin,
     }
 })

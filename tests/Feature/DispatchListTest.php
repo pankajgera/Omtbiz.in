@@ -33,6 +33,7 @@ class DispatchListTest extends TestCase
             $table->unsignedInteger('company_id');
             $table->string('invoice_number');
             $table->unsignedInteger('account_master_id');
+            $table->softDeletes();
         });
         Schema::create('account_masters', function (Blueprint $table): void {
             $table->id();

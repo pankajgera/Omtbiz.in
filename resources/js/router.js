@@ -78,6 +78,7 @@ const BanksReport = () => import('./views/reports/BanksReport.vue')
 const UserIndex = () => import('./views/users/Index.vue')
 const UserCreate = () => import('./views/users/Create.vue')
 const AuditLogsIndex = () => import('./views/audit-logs/Index.vue')
+const RecycleBinIndex = () => import('./views/recycle-bin/Index.vue')
 
 // Settings
 const SettingsLayout = () => import('./views/settings/layout/Index.vue')
@@ -663,6 +664,14 @@ const routes = [
                 path: 'audit-logs',
                 name: 'audit.logs',
                 component: AuditLogsIndex,
+                meta: ['admin']
+            },
+
+            // Recycle Bin: deleted invoices, vouchers, receipts and payments (7-day restore window)
+            {
+                path: 'recycle-bin',
+                name: 'recycle.bin',
+                component: RecycleBinIndex,
                 meta: ['admin']
             },
 

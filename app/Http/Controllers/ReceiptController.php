@@ -22,6 +22,7 @@ use Validator;
 use App\Support\PublicShareService;
 
 use function MongoDB\BSON\toJSON;
+use App\Services\RecycleBin;
 
 class ReceiptController extends Controller
 {
@@ -441,23 +442,9 @@ class ReceiptController extends Controller
             return $response;
         }
 
-        $receipt = Receipt::find($id);
+        $receipt = Receipt::findOrFail($id);
 
-        $vouchers = Voucher::where('receipt_id', $id)->get();
-
-        if ($receipt->invoice_id != null && $vouchers->isNotEmpty()) {
-            $invoice = Invoice::find($receipt->invoice_id);
-            $invoice->due_amount = ((int)$invoice->due_amount + (int)$receipt->amount);
-            $invoice->paid_status = Invoice::STATUS_PAID;
-            $invoice->status = Invoice::TO_BE_DISPATCH;
-            $invoice->save();
-        }
-
-        foreach($vouchers as $each) {
-            $each->delete();
-        }
-
-        $receipt->delete();
+        RecycleBin::trashReceipt($receipt);
 
         return response()->json([
             'success' => true
@@ -477,21 +464,9 @@ class ReceiptController extends Controller
 
         foreach ($request->id as $id) {
             $receipt = Receipt::find($id);
-            $vouchers = Voucher::where('receipt_id', $id)->get();
-
-            if ($receipt->invoice_id != null && $vouchers->isNotEmpty()) {
-                $invoice = Invoice::find($receipt->invoice_id);
-                $invoice->due_amount = ((int)$invoice->due_amount + (int)$receipt->amount);
-                $invoice->paid_status = Invoice::STATUS_PAID;
-                $invoice->status = Invoice::TO_BE_DISPATCH;
-                $invoice->save();
+            if ($receipt) {
+                RecycleBin::trashReceipt($receipt);
             }
-
-            foreach($vouchers as $each) {
-                $each->delete();
-            }
-
-            $receipt->delete();
         }
 
         return response()->json([

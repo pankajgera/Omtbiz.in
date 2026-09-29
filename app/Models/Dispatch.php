@@ -82,6 +82,8 @@ class Dispatch extends Model
     {
         $query
             ->join('invoices', DB::raw('CAST(SUBSTRING_INDEX(dispatches.invoice_id, \',\', 1) AS UNSIGNED)'), '=', 'invoices.id')
+            // A recycle-bin invoice drops out of the join, as a deleted invoice always has.
+            ->whereNull('invoices.deleted_at')
             ->select('dispatches.*');
 
         if (! $matchParty) {

@@ -135,6 +135,7 @@ class DispatchController extends Controller
         // when merging dispatches).
         $topPendingParties = DB::table('dispatches')
             ->join('invoices', DB::raw('CAST(SUBSTRING_INDEX(dispatches.invoice_id, \',\', 1) AS UNSIGNED)'), '=', 'invoices.id')
+            ->whereNull('invoices.deleted_at')
             ->where('dispatches.status', 'Draft')
             ->where('dispatches.company_id', $company)
             ->whereNotNull('invoices.account_master_id')
