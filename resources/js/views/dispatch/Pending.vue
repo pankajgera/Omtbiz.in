@@ -380,9 +380,9 @@ export default {
     }
   },
   unmounted () {
-    if (this.selectAllToBeField) {
-      this.selectAllToBeDispatch()
-    }
+    // Leaving the page: drop rows ticked here so they aren't still checked on return.
+    this.selectToBeDispatch([])
+    this.$store.commit('dispatch/SET_TO_BE_SELECT_ALL_STATE', false)
   },
   methods: {
     ...mapActions('dispatch', [

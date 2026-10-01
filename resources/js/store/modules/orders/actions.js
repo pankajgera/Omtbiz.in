@@ -151,9 +151,10 @@ export const searchOrder = ({ commit, orders, state }, data) => {
   })
 }
 
+// The Orders list shows pending orders; this module has no plain `orders` list.
 export const selectOrder = ({ commit, orders, state }, data) => {
   commit(types.SET_SELECTED_ORDERS, data)
-  if (state.selectedOrders.length === state.orders.length) {
+  if (state.selectedOrders.length === state.pendingOrders.length) {
     commit(types.SET_SELECT_ALL_STATE, true)
   } else {
     commit(types.SET_SELECT_ALL_STATE, false)
@@ -165,11 +166,11 @@ export const setSelectAllState = ({ commit, orders, state }, data) => {
 }
 
 export const selectAllOrders = ({ commit, orders, state }) => {
-  if (state.selectedOrders.length === state.orders.length) {
+  if (state.selectedOrders.length === state.pendingOrders.length) {
     commit(types.SET_SELECTED_ORDERS, [])
     commit(types.SET_SELECT_ALL_STATE, false)
   } else {
-    let allOrderIds = state.orders.map(estimt => estimt.id)
+    let allOrderIds = state.pendingOrders.map(estimt => estimt.id)
     commit(types.SET_SELECTED_ORDERS, allOrderIds)
     commit(types.SET_SELECT_ALL_STATE, true)
   }
