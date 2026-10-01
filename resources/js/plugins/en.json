@@ -707,6 +707,10 @@
         "updated_inventory_price": "Inventory item price updated",
         "invoice_report_title": "Invoice",
         "invoice_report_text": "Do you want to print this invoice?",
+        "print_invoice": "Print",
+        "print_unsaved_title": "Unsaved changes",
+        "print_unsaved_text": "You have changes that are not saved yet. Printing now shows the last saved invoice. Update the invoice first to print your changes.",
+        "print_saved_version": "Print saved version",
         "print_error": "The invoice PDF link is unavailable. Reopen the saved invoice and try again.",
         "print_failed": "The invoice report could not be printed. Reopen the saved invoice and try again.",
         "inventory": {
