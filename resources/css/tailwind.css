@@ -21,6 +21,37 @@
         scroll-behavior: auto !important;
     }
 
+    /* Exception: loading indicators must move, or they read as frozen (the table loader
+       showed as a still dash). These selectors are more specific than `body *` above and
+       sit in the same layer, so they win; everything else stays motion-free. */
+    .base-loader .spinner {
+        animation: base-loader-spin 0.75s linear infinite !important;
+    }
+
+    .fa-spin {
+        animation: base-loader-spin 1s linear infinite !important;
+    }
+
+    .route-loading-overlay .money-loader__coin {
+        animation: money-coin-turn 900ms cubic-bezier(0.42, 0, 0.3, 1) infinite !important;
+    }
+
+    .route-loading-overlay .money-loader__shadow {
+        animation: money-shadow-pulse 900ms ease-in-out infinite !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .base-loader .spinner,
+        .fa-spin {
+            animation-duration: 1.6s !important;
+        }
+
+        .route-loading-overlay .money-loader__coin,
+        .route-loading-overlay .money-loader__shadow {
+            animation: none !important;
+        }
+    }
+
     /* The utilities import above carries `important`, so `tw:flex` emits
        `display: flex !important` — which outranks the inline `display: none`
        that `v-show` writes, leaving the element permanently visible. (For
@@ -220,21 +251,49 @@ body,
     background-color: color-mix(in srgb, var(--ui-surface) 88%, transparent);
 }
 
-.base-loader.table-loader .spinner {
-    width: 2rem;
-    height: 0.25rem;
-    border: 0;
-    border-radius: 9999px;
-    background-color: var(--ui-primary);
-    animation: none;
+.base-loader__indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 1.25rem;
+    color: var(--ui-text-muted);
+    background-color: var(--ui-surface-elevated);
+    border: 1px solid var(--ui-border);
+    border-radius: 0.625rem;
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--ui-text) 10%, transparent);
 }
 
 .base-loader .spinner {
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 4px solid var(--ui-border-strong);
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 3px solid color-mix(in srgb, var(--ui-primary) 18%, transparent);
     border-top-color: var(--ui-primary);
     border-radius: 9999px;
+    animation: base-loader-spin 0.75s linear infinite;
+}
+
+.base-loader__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+/* Tables can be taller than the screen: keep the indicator near the middle of what is visible. */
+.base-loader.table-loader {
+    align-items: flex-start;
+}
+
+.base-loader.table-loader .base-loader__indicator {
+    position: sticky;
+    top: 40vh;
+    margin-top: 1.5rem;
+}
+
+@keyframes base-loader-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .settings-container {
@@ -999,11 +1058,7 @@ a:has(button):focus {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .base-loader .spinner {
-        animation-duration: 1400ms;
-    }
-}
+
 
 body,
 input,
