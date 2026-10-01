@@ -66,6 +66,7 @@
         }
     },
     "general": {
+        "loading": "Loading…",
         "show_password": "Show password",
         "hide_password": "Hide password",
         "yes": "Yes",
