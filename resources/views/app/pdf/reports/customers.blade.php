@@ -256,6 +256,32 @@
             font-size: 11.5px;
         }
     </style>
+    @if ($printPreview ?? false)
+    {{-- On-screen preview: the PDF layout pins header/footer with negative offsets
+         outside the @page margins, which a browser would render off-screen. --}}
+    <style type="text/css">
+        body {
+            display: flex;
+            flex-direction: column;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+        .report-header,
+        .report-footer {
+            position: static;
+            height: auto;
+        }
+        .report-header { order: 0; margin-bottom: 18px; padding-bottom: 6px; }
+        main { order: 1; }
+        .report-footer { order: 2; margin-top: 18px; }
+        @media print {
+            @page { size: A4 portrait; margin: 12mm; }
+            body { max-width: none; padding: 0; }
+            .transactions thead { display: table-header-group; }
+        }
+    </style>
+    @endif
 </head>
 <body>
     @php
@@ -305,6 +331,9 @@
             </tr>
         </table>
 
+        {{-- One table per page-sized chunk: dompdf re-flows a single long table at every page
+             break, which made time and memory grow quadratically with the number of rows. --}}
+        @forelse ($related_vouchers->chunk(30) as $chunk)
         <table class="transactions">
             <thead>
                 <tr>
@@ -317,7 +346,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($related_vouchers as $each)
+                @foreach ($chunk as $each)
                     @php
                         if ($each->invoice_id) {
                             $reference = optional($each->invoice)->invoice_number ?: 'Invoice';
@@ -341,13 +370,28 @@
                         <td class="amount-column amount">&#8377; {{ format_inr((float) ($each->credit ?: 0), 2) }}</td>
                         <td class="amount-column amount">&#8377; {{ format_inr((float) ($each->debit ?: 0), 2) }}</td>
                     </tr>
-                @empty
+                @endforeach
+            </tbody>
+        </table>
+        @empty
+        <table class="transactions">
+            <thead>
+                <tr>
+                    <th class="date-column">Date</th>
+                    <th class="particulars-column">Particulars</th>
+                    <th class="reference-column">Reference</th>
+                    <th class="quantity-column">Quantity</th>
+                    <th class="amount-column">Debit</th>
+                    <th class="amount-column">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
                     <tr class="empty-row">
                         <td colspan="6">No transactions were found for the selected period.</td>
                     </tr>
-                @endforelse
             </tbody>
         </table>
+        @endforelse
 
         <section class="summary-section">
             <p class="summary-title">

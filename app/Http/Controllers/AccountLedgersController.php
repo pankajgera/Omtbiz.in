@@ -35,34 +35,12 @@ class AccountLedgersController extends Controller
 
 
         foreach ($ledgers as $ledger) {
-            $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
-                ->whereCompany($request->header('company'))
-                ->visibleOutsideApproval()
-                ->whereNotNull('related_voucher')
-                ->get();
-            $each_ids = null;
-            foreach ($all_voucher_ids as $each) {
-                if ($each_ids) {
-                    $each_ids = $each_ids . ', ' . $each->related_voucher;
-                } else {
-                    $each_ids = $each->related_voucher;
-                }
-            }
-            $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-            $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
-                ->where('account_ledger_id', '!=', $ledger->id)
-                ->whereCompany($request->header('company'))
-                ->visibleOutsideApproval()
-                ->orderBy('date', 'desc')
-                ->get();
-            //Update balance according to 'debit' or 'credit'
+            //Update balance according to 'debit' or 'credit' (summed in SQL)
             $vouchers_by_ledger = Voucher::where('account_ledger_id', $ledger->id)
-                ->visibleOutsideApproval()
-                ->get();
+                ->visibleOutsideApproval();
+            $vouchers_debit_sum = (float) (clone $vouchers_by_ledger)->sum('debit');
 
-            $vouchers_debit_sum = $vouchers_by_ledger->sum('debit');
-
-            $vouchers_credit_sum = $vouchers_by_ledger->sum('credit');
+            $vouchers_credit_sum = (float) (clone $vouchers_by_ledger)->sum('credit');
             $opening_balance = $ledger->accountMaster->opening_balance;
             $calc_balance = $ledger->balance;
             $calc_type = $ledger->type;
@@ -108,11 +86,6 @@ class AccountLedgersController extends Controller
                 'balance' => $calc_balance,
             ]);
 
-            //Extra's for vouchers collection
-            foreach ($related_vouchers as $each) {
-                $each['voucher_type'] = 'Journal';
-                $each['particulars'] = $each->account;
-            }
         }
 
         return response()->json([
@@ -145,8 +118,24 @@ class AccountLedgersController extends Controller
         //Update ledger related data
         $response = AccountLedger::ledgerMutation($ledger, $from, $to);
 
+        // Only the fields the Display screen renders: full invoice/item records made the
+        // response ~10 MB and pushed memory past the PHP limit on busy ledgers (e.g. Sales).
+        $vouchers = $response['related_vouchers']->map(fn ($voucher) => [
+            'id' => $voucher->id,
+            'date' => $voucher->date,
+            'account' => $voucher->account,
+            'voucher_type' => $voucher->voucher_type,
+            'invoice_id' => $voucher->invoice_id,
+            'receipt_id' => $voucher->receipt_id,
+            'debit' => $voucher->debit,
+            'credit' => $voucher->credit,
+            'invoice' => $voucher->invoice ? [
+                'inventories' => $voucher->invoice->inventories->map(fn ($item) => ['quantity' => $item->quantity])->values(),
+            ] : null,
+        ])->values();
+
         return response()->json([
-            'vouchers' => $response['related_vouchers'],
+            'vouchers' => $vouchers,
             'ledger' => $ledger,
             'account_master' => AccountMaster::where('id', $ledger->account_master_id)->first(),
             'inventory_sum' => $response['inventory_sum'],
