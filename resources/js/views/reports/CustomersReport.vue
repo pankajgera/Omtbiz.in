@@ -88,16 +88,20 @@
         <font-awesome-icon icon="spinner" class="report-preview-icon fa-spin"/>
         <p>{{ $t('reports.customers.generating_report') }}</p>
       </div>
+      <div v-if="getReportUrl && !isReportLoading && reportInfo && !reportInfo.preview_allowed" class="report-preview-empty" role="status">
+        <font-awesome-icon icon="file-pdf" class="report-preview-icon"/>
+        <p>{{ $t('reports.customers.preview_too_large', { rows: formatCount(reportInfo.rows), max: formatCount(reportInfo.preview_max_rows) }) }}</p>
+      </div>
       <iframe
-        v-if="getReportUrl"
+        v-else-if="getReportUrl && reportInfo && reportInfo.preview_allowed"
         v-show="!isReportLoading"
         :key="reportPreviewKey"
-        :src="getReportUrl"
+        :src="getReportUrl + '?preview=1'"
         :title="$t('reports.customers.report_preview')"
         class="reports-frame-style"
         @load="onReportLoaded"
       />
-      <div v-else-if="!isReportLoading" class="report-preview-empty" role="status">
+      <div v-else-if="!isReportLoading && !getReportUrl" class="report-preview-empty" role="status">
         <font-awesome-icon icon="file-pdf" class="report-preview-icon"/>
         <p>
           {{ selectedLedger
@@ -151,6 +155,9 @@ export default {
       selectedLedger: null,
       isReportLoading: false,
       reportPreviewKey: 0,
+      // Row count and limits for the current report: large ledgers (e.g. Sales) are only
+      // previewed as HTML, and only periods up to pdf_max_rows can be turned into a PDF.
+      reportInfo: null,
       reportRequestId: 0,
       autoReportTimer: null,
       vouchersListArr: [],
@@ -309,9 +316,26 @@ export default {
     onReportLoaded () {
       this.isReportLoading = false
     },
+    formatCount (value) {
+      return new Intl.NumberFormat('en-IN').format(value || 0)
+    },
+    // Returns true when the period is too large for a PDF (and tells the user why).
+    blockLargePdf () {
+      if (!this.reportInfo || this.reportInfo.pdf_allowed) {
+        return false
+      }
+      window.toastr['warning'](this.$t('reports.customers.pdf_too_large', {
+        rows: this.formatCount(this.reportInfo.rows),
+        max: this.formatCount(this.reportInfo.pdf_max_rows)
+      }))
+      return true
+    },
     viewReportsPDF () {
       if (!this.getReportUrl) {
         return false
+      }
+      if (this.blockLargePdf()) {
+        return true
       }
       return openReportInNewTab(this.getReportUrl)
     },
@@ -346,6 +370,7 @@ export default {
       clearTimeout(this.autoReportTimer)
       const requestId = ++this.reportRequestId
       this.url = null
+      this.reportInfo = null
       const parameters = this.prepareReportParameters({ silent })
       if (!parameters) {
         this.isReportLoading = false
@@ -356,10 +381,16 @@ export default {
       this.reportPreviewKey += 1
       try {
         const url = await createReportShare('customers', parameters)
+        // Same-origin path: the share URL is built from APP_URL, which may differ from the browser host.
+        const summary = await window.axios.get(new URL(url, window.location.origin).pathname, { params: { summary: 1 } })
         if (requestId !== this.reportRequestId) {
           return false
         }
+        this.reportInfo = summary.data
         this.url = url
+        if (!this.reportInfo.preview_allowed) {
+          this.isReportLoading = false
+        }
         return true
       } catch (error) {
         if (requestId === this.reportRequestId) {
@@ -372,6 +403,10 @@ export default {
     downloadReport () {
       if (!this.getReportUrl || this.isReportLoading) {
         return false
+      }
+      if (this.blockLargePdf()) {
+        // handled: the message explains why, so the layout's "not ready" alert is skipped
+        return true
       }
 
       const downloadLink = document.createElement('a')
@@ -389,6 +424,9 @@ export default {
       this.ledgersArr = response.data.ledgers
     },
     sendReports() {
+      if (this.blockLargePdf()) {
+        return
+      }
       let mobile = this.selectedLedger.account_master.mobile_number
       if (!mobile) {
         window.toastr['error']("Sorry, didn't find mobile number for selected ledger.")

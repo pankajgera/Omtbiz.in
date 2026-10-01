@@ -174,28 +174,61 @@ class AccountLedger extends Model
         ]);
     }
 
-    public static function ledgerMutation($ledger, $from, $to)
+    /**
+     * IDs of every voucher linked (via related_voucher) to this ledger's own vouchers.
+     * Read as one column, not as models: busy ledgers such as Sales have tens of thousands.
+     */
+    public static function relatedVoucherIds($ledger): array
     {
-        $all_voucher_ids = Voucher::where('account_ledger_id', $ledger->id)
+        return Voucher::where('account_ledger_id', $ledger->id)
             ->visibleOutsideApproval()
             ->whereNotNull('related_voucher')
-            ->get();
-        $each_ids = null;
-        foreach ($all_voucher_ids as $each) {
-            if ($each_ids) {
-                $each_ids = $each_ids . ', ' . $each->related_voucher;
-            } else {
-                $each_ids = $each->related_voucher;
-            }
-        }
-        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::with(['invoice.inventories'])->whereIn('id', explode(',', $unique_ids))
-            ->where('account_ledger_id', '!=', $ledger->id)
-            ->visibleOutsideApproval()
+            ->pluck('related_voucher')
+            ->flatMap(fn ($related) => explode(',', $related))
+            ->map(fn ($id) => (int) trim($id))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+    }
+
+    /**
+     * The other side of this ledger's vouchers, queried in chunks of IDs: a single
+     * whereIn over all of them exceeds MySQL's 65,535 placeholder limit on large ledgers.
+     */
+    private static function counterpartChunks($ledger, array $ids, callable $query): \Illuminate\Support\Collection
+    {
+        return collect(array_chunk($ids, 5000))->map(fn ($chunk) => $query(
+            Voucher::whereIn('id', $chunk)
+                ->where('account_ledger_id', '!=', $ledger->id)
+                ->visibleOutsideApproval()
+        ));
+    }
+
+    /**
+     * Number of transactions a ledger report for this period would list, without loading them.
+     */
+    public static function countLedgerRows($ledger, $from, $to): int
+    {
+        return (int) self::counterpartChunks($ledger, self::relatedVoucherIds($ledger), fn ($query) => $query
             ->whereDate('date', '>=', $from)
             ->whereDate('date', '<=', $to)
-            ->orderBy('date')
-            ->get();
+            ->count())
+            ->sum();
+    }
+
+    public static function ledgerMutation($ledger, $from, $to)
+    {
+        $relatedIds = self::relatedVoucherIds($ledger);
+
+        $related_vouchers = self::counterpartChunks($ledger, $relatedIds, fn ($query) => $query
+            ->with(['invoice.inventories', 'receipt'])
+            ->whereDate('date', '>=', $from)
+            ->whereDate('date', '<=', $to)
+            ->get())
+            ->flatten(1)
+            ->sortBy([['date', 'asc'], ['id', 'asc']])
+            ->values();
 
         $inventory_sum = 0;
         $current_balance_cr = 0;
@@ -215,23 +248,13 @@ class AccountLedger extends Model
             $current_balance_dr += $each->debit;
         }
 
-        //Calculate Opening balance
-        $calc_opening_balance = Voucher::whereIn('id', explode(',', $unique_ids))
-            ->where('account_ledger_id', '!=', $ledger->id)
-            ->visibleOutsideApproval()
+        //Calculate Opening balance (summed in SQL rather than loading every earlier voucher)
+        $opening = self::counterpartChunks($ledger, $relatedIds, fn ($query) => $query
             ->whereDate('date', '<', $from)
-            ->orderBy('date')
-            ->get(['id', 'debit', 'credit']);
-
-
-        foreach ($calc_opening_balance as $each) {
-            if ($each->debit) {
-                $total_opening_balance_dr += $each->debit;
-            }
-            if ($each->credit) {
-                $total_opening_balance_cr += $each->credit;
-            }
-        }
+            ->selectRaw('COALESCE(SUM(debit), 0) as dr, COALESCE(SUM(credit), 0) as cr')
+            ->first());
+        $total_opening_balance_dr += $opening->sum(fn ($row) => (float) $row->dr);
+        $total_opening_balance_cr += $opening->sum(fn ($row) => (float) $row->cr);
 
         $sum_opening_current_cr = 0;
         $sum_opening_current_dr = 0;
@@ -272,8 +295,11 @@ class AccountLedger extends Model
             $closing_balance_dr = 0;
         }
 
-        $vouchers_debit_sum = $all_voucher_ids->sum('debit');
-        $vouchers_credit_sum = $all_voucher_ids->sum('credit');
+        $ownVouchers = Voucher::where('account_ledger_id', $ledger->id)
+            ->visibleOutsideApproval()
+            ->whereNotNull('related_voucher');
+        $vouchers_debit_sum = (float) (clone $ownVouchers)->sum('debit');
+        $vouchers_credit_sum = (float) (clone $ownVouchers)->sum('credit');
 
         $opening_balance = $ledger->accountMaster->opening_balance;
         $calc_balance = $ledger->balance;

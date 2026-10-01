@@ -249,33 +249,15 @@ class FrontendController extends Controller
             ->where('account', $master->name)
             ->firstOrFail();
 
-        $all_voucher_ids = Voucher::withoutGlobalScope('authenticated_company')
+        // Party ledger totals, summed in SQL. (The invoice templates never used the party's
+        // full voucher history, which used to be loaded here on every invoice PDF.)
+        $partyVouchers = Voucher::withoutGlobalScope('authenticated_company')
             ->where('company_id', $invoice->company_id)
             ->where('account_ledger_id', $ledger->id)
-            ->whereNotNull('related_voucher')
-            ->get();
-        $each_ids = null;
-        foreach ($all_voucher_ids as $each) {
-            if ($each_ids) {
-                $each_ids = $each_ids . ', ' . $each->related_voucher;
-            } else {
-                $each_ids = $each->related_voucher;
-            }
-        }
-        $unique_ids = implode(',', array_unique(explode(',', $each_ids)));
-        $related_vouchers = Voucher::withoutGlobalScope('authenticated_company')->with(['invoice.inventories'])
-            ->where('company_id', $invoice->company_id)
-            ->whereIn('id', explode(',', $unique_ids))
-            ->where('account_ledger_id', '!=', $ledger->id)
-            ->orderBy('date')
-            ->get();
-
-        foreach ($related_vouchers as $each) {
-            $each['amount'] = 0 < $each->credit ? $each->credit : $each->debit;
-        }
-
-        $vouchers_debit_sum = $all_voucher_ids->sum('debit');
-        $vouchers_credit_sum = $all_voucher_ids->sum('credit');
+            ->whereNotNull('related_voucher');
+        $vouchers_debit_sum = (float) (clone $partyVouchers)->sum('debit');
+        $vouchers_credit_sum = (float) (clone $partyVouchers)->sum('credit');
+        $related_vouchers = collect();
 
         $opening_balance = $ledger->accountMaster->opening_balance;
         $calc_balance = $ledger->balance;

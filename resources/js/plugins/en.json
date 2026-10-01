@@ -971,6 +971,8 @@
             "report_preview": "Customer report preview",
             "select_ledger_preview": "Select a ledger to preview the report.",
             "report_load_failed": "Unable to load the report. Please try again.",
+            "preview_too_large": "This period has {rows} transactions, more than the {max} the preview can show. Choose a shorter date range.",
+            "pdf_too_large": "This period has {rows} transactions. A PDF can include up to {max}; choose a shorter date range to download, print or send it. The preview above still shows the full period.",
             "update_report_preview": "Click Update Report to generate the preview.",
             "generating_report": "Generating report preview...",
             "send_on_whatsapp": "Send on WhatsApp"

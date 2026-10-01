@@ -22,6 +22,12 @@ use App\Models\PublicShare;
 
 class ReportController extends Controller
 {
+    /** Largest customer report rendered as PDF (dompdf: ~4 s / ~200 MB at this size). */
+    public const CUSTOMER_REPORT_PDF_MAX_ROWS = 1500;
+
+    /** Largest customer report shown as the on-screen HTML preview. */
+    public const CUSTOMER_REPORT_PREVIEW_MAX_ROWS = 10000;
+
     /**
      * Customer sales report
      *
@@ -294,6 +300,34 @@ class ReportController extends Controller
         $from = Carbon::parse(str_replace('/', '-', $request->from_date))->startOfDay();
         $to = Carbon::parse(str_replace('/', '-', $request->to_date))->endOfDay();
 
+        // dompdf needs ~100 MB per 1,000 rows, so large periods (e.g. the Sales ledger) are
+        // previewed as HTML and only smaller ones are rendered to PDF.
+        $rows = AccountLedger::countLedgerRows($ledger, $from, $to);
+        if ($request->has('summary')) {
+            return response()->json([
+                'rows' => $rows,
+                'pdf_allowed' => $rows <= self::CUSTOMER_REPORT_PDF_MAX_ROWS,
+                'preview_allowed' => $rows <= self::CUSTOMER_REPORT_PREVIEW_MAX_ROWS,
+                'pdf_max_rows' => self::CUSTOMER_REPORT_PDF_MAX_ROWS,
+                'preview_max_rows' => self::CUSTOMER_REPORT_PREVIEW_MAX_ROWS,
+            ]);
+        }
+
+        $isPreview = $request->boolean('preview');
+        $maxRows = $isPreview ? self::CUSTOMER_REPORT_PREVIEW_MAX_ROWS : self::CUSTOMER_REPORT_PDF_MAX_ROWS;
+        if ($rows > $maxRows) {
+            return response()->view('app.pdf.reports.too-large', [
+                'ledger' => $ledger,
+                'rows' => $rows,
+                'maxRows' => $maxRows,
+                'isPreview' => $isPreview,
+            ], 422);
+        }
+
+        // Up to the row caps above, building the rows (and dompdf, which holds the whole layout,
+        // ~100 MB per 1,000 rows) needs more than PHP's default 128M memory_limit.
+        $this->raiseMemoryLimit('512M');
+
         //Update ledger related data
         $response = AccountLedger::ledgerMutation($ledger, $from, $to);
 
@@ -333,6 +367,10 @@ class ReportController extends Controller
             'closing_balance_cr' => $response['closing_balance_cr'],
             'closing_balance_dr' => $response['closing_balance_dr'],
         ]);
+
+        if ($isPreview) {
+            return response()->view('app.pdf.reports.customers', ['printPreview' => true]);
+        }
 
         $pdf = PDF::loadView('app.pdf.reports.customers')
             ->setPaper('a4', 'portrait');
@@ -584,6 +622,28 @@ class ReportController extends Controller
             ->setPaper('a4', 'portrait');
 
         return $pdf->stream();
+    }
+
+    private function raiseMemoryLimit(string $limit): void
+    {
+        $toBytes = function (string $value): int {
+            $value = trim($value);
+            if ($value === '-1') {
+                return PHP_INT_MAX;
+            }
+            $unit = strtolower(substr($value, -1));
+            $number = (int) $value;
+            return match ($unit) {
+                'g' => $number * 1024 ** 3,
+                'm' => $number * 1024 ** 2,
+                'k' => $number * 1024,
+                default => (int) $value,
+            };
+        };
+
+        if ($toBytes((string) ini_get('memory_limit')) < $toBytes($limit)) {
+            ini_set('memory_limit', $limit);
+        }
     }
 
     private function sharedReportCompany(string $token, string $type, Request $request): Company
