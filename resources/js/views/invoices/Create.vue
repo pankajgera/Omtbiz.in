@@ -21,6 +21,17 @@
             {{ $t('invoices.bulk_title') }}
           </base-button>
         </router-link>
+        <base-button
+          v-if="$route.name === 'invoices.edit' && !initLoading"
+          icon="print"
+          color="theme"
+          outline
+          :loading="isPrinting"
+          :disabled="isPrinting || isLoading"
+          @click="printSavedInvoice"
+        >
+          {{ $t('invoices.print_invoice') }}
+        </base-button>
       </div>
     </div>
     <form v-if="!initLoading" action="" @submit.prevent="submitInvoiceData" class="ipad-width tw:w-full">
@@ -418,6 +429,11 @@ export default {
       isDisabled: false,
       url: null,
       siteURL: null,
+      // Edit page printing: the saved invoice's share token and a fingerprint of the
+      // user-editable fields as loaded, to warn before printing with unsaved changes.
+      printToken: null,
+      isPrinting: false,
+      savedFingerprint: null,
       showAddNewInventory: true,
       showEndOfList: false,
       estimateSelected: false,
@@ -701,6 +717,8 @@ export default {
 
             this.estimateList.push(obj)
           })
+          this.printToken = this.tokenFromShareLink(response.data.shareable_link) || response.data.invoice.unique_hash
+          this.savedFingerprint = this.editableFingerprint()
         }
         this.initLoading = false
         return
@@ -859,6 +877,47 @@ export default {
         input.select()
       }
     },
+    // The share link is the report URL the print view accepts; its last path segment is the token.
+    tokenFromShareLink (link) {
+      if (!link) return null
+      try {
+        return decodeURIComponent(new URL(link, window.location.origin).pathname.split('/').filter(Boolean).pop() || '') || null
+      } catch {
+        return null
+      }
+    },
+    // Only what the user can change: rows also store computed totals that are rewritten
+    // after load, which must not count as an unsaved edit.
+    editableFingerprint () {
+      const inv = this.newInvoice || {}
+      return JSON.stringify({
+        date: inv.invoice_date,
+        debtor: inv.debtors && inv.debtors.id ? inv.debtors.id : inv.debtors,
+        notes: inv.notes || '',
+        discount: [inv.discount_type, Number(inv.discount_val) || 0],
+        rows: (this.inventoryBind || []).map(row => [row.inventory_id, Number(row.quantity) || 0, Number(row.sale_price) || 0, Number(row.discount_val) || 0]),
+        income: [this.income_ledger ? this.income_ledger.name : null, Number(this.income_ledger_value) || 0],
+        expense: [this.expense_ledger ? this.expense_ledger.name : null, Number(this.expense_ledger_value) || 0]
+      })
+    },
+    async printSavedInvoice () {
+      if (this.isPrinting) return
+      if (this.savedFingerprint && this.editableFingerprint() !== this.savedFingerprint) {
+        const printSaved = await swal({
+          title: this.$t('invoices.print_unsaved_title'),
+          text: this.$t('invoices.print_unsaved_text'),
+          icon: 'warning',
+          buttons: [this.$t('general.cancel'), this.$t('invoices.print_saved_version')]
+        })
+        if (!printSaved) return
+      }
+      this.isPrinting = true
+      try {
+        await this.printInvoice(this.printToken)
+      } finally {
+        this.isPrinting = false
+      }
+    },
     async printInvoice(invoiceToken) {
       if (typeof invoiceToken !== 'string' || !invoiceToken.trim()) {
         window.toastr.error(this.$t('invoices.print_error'))
@@ -929,6 +988,7 @@ export default {
         if (res.data.success) {
           window.toastr['success'](this.$t('invoices.updated_message'))
           this.isLoading = false
+          this.savedFingerprint = this.editableFingerprint()
           this.showInvoicePopup(res.data.invoice)
         }
 
