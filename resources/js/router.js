@@ -237,7 +237,7 @@ const routes = [
                 path: 'masters/:id/edit',
                 name: 'masters.edit',
                 component: MastersCreate,
-                meta: ['admin', 'accountant']
+                meta: ['admin']
             },
 
             // Account Ledger

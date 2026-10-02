@@ -101,7 +101,7 @@
       <div class="table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ masters.length }}</b> {{ $t('general.of') }} <b>{{ totalMasters }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedMasters.length" :show-arrow="false">
+          <v-dropdown v-if="isAdmin && selectedMasters.length" :show-arrow="false">
             <template #activator>
               <span href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
@@ -127,7 +127,7 @@
             </caption>
             <thead class="table-component__table__head">
               <tr>
-                <th class="masters-selection-column" scope="col">
+                <th v-if="isAdmin" class="masters-selection-column" scope="col">
                   <label class="masters-select-all-label" for="select-all-masters">
                     <input
                       id="select-all-masters"
@@ -155,14 +155,14 @@
                     />
                   </button>
                 </th>
-                <th class="masters-action-column" scope="col">
+                <th v-if="isAdmin" class="masters-action-column" scope="col">
                   <span class="visually-hidden">{{ $t('masters.action') }}</span>
                 </th>
               </tr>
             </thead>
             <tbody class="table-component__table__body">
               <tr v-for="master in masters" :key="master.id">
-                <td class="masters-selection-column">
+                <td v-if="isAdmin" class="masters-selection-column">
                   <input
                     :id="`master-${master.id}`"
                     v-model="selectField"
@@ -173,12 +173,14 @@
                   >
                 </td>
                 <td :data-label="$t('masters.name')">
-                  <router-link :to="{ path: `masters/${master.id}/edit` }">
+                  <router-link v-if="isAdmin" :to="{ path: `masters/${master.id}/edit` }">
                     {{ master.name }}
                   </router-link>
+                  <!-- not a <span>: the table styles hide a cell's first span (mobile column label) -->
+                  <div v-else>{{ master.name }}</div>
                 </td>
                 <td :data-label="$t('masters.groups')">{{ master.groups }}</td>
-                <td class="action-dropdown masters-action-column">
+                <td v-if="isAdmin" class="action-dropdown masters-action-column">
                   <v-dropdown :show-arrow="false">
                     <template #activator>
                       <button class="table-row-menu" type="button" :aria-label="$t('masters.action')">
@@ -282,6 +284,11 @@ export default {
       set: function (val) {
         this.selectMaster(val)
       }
+    },
+    // Accountants can create ledgers but not edit or delete them (also enforced by the API).
+    isAdmin () {
+      const user = this.$store.state.user.currentUser
+      return !!user && user.role === 'admin'
     },
     selectAllFieldStatus: {
       get: function () {

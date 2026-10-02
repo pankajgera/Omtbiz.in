@@ -67,6 +67,15 @@
             {{ $t('reports.update_report') }}
           </base-button>
           <base-button
+            v-if="getReportUrl && !isReportLoading && reportInfo && reportInfo.preview_allowed"
+            icon="print"
+            color="theme"
+            class="report-button"
+            @click="printReport()"
+          >
+            {{ $t('reports.print') }}
+          </base-button>
+          <base-button
             v-if="getReportUrl && !isReportLoading"
             color="success"
             class="report-button whatsapp-report-button"
@@ -95,8 +104,9 @@
       <iframe
         v-else-if="getReportUrl && reportInfo && reportInfo.preview_allowed"
         v-show="!isReportLoading"
+        ref="reportFrame"
         :key="reportPreviewKey"
-        :src="getReportUrl + '?preview=1'"
+        :src="previewSrc"
         :title="$t('reports.customers.report_preview')"
         class="reports-frame-style"
         @load="onReportLoaded"
@@ -192,6 +202,17 @@ export default {
     ...mapGetters('company', [
       'getSelectedCompany'
     ]),
+    // Periods that fit in a PDF preview as the PDF itself, so the browser's PDF viewer (with
+    // its print, zoom and download buttons) shows as before; larger ones fall back to HTML.
+    // Same-origin path: the share URL is built from APP_URL, and printing the frame needs
+    // the frame to be same-origin with this page.
+    previewSrc () {
+      if (!this.url || !this.reportInfo) {
+        return null
+      }
+      const path = new URL(this.url, window.location.origin).pathname
+      return this.reportInfo.pdf_allowed ? path : path + '?preview=1'
+    },
     getReportUrl () {
       return this.url
     }
@@ -315,6 +336,19 @@ export default {
     },
     onReportLoaded () {
       this.isReportLoading = false
+    },
+    // Prints whatever the preview shows (the PDF, or the HTML preview for large periods).
+    printReport () {
+      const frameWindow = this.$refs.reportFrame && this.$refs.reportFrame.contentWindow
+      try {
+        frameWindow.focus()
+        frameWindow.print()
+      } catch (error) {
+        // Some browsers refuse to print an embedded PDF: open it, where their viewer can print it.
+        if (!this.viewReportsPDF()) {
+          window.toastr['error'](this.$t('reports.customers.report_load_failed'))
+        }
+      }
     },
     formatCount (value) {
       return new Intl.NumberFormat('en-IN').format(value || 0)
