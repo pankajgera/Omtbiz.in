@@ -1,18 +1,19 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ isEdit ? $t('masters.edit_master') : $t('masters.new_master') }}</h3>
+      <h3 class="page-title">{{ pageTitle }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/masters">{{ $tc('masters.account_master',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('masters.edit_master') : $t('masters.new_master') }}</a></li>
+        <li class="breadcrumb-item"><a href="#"> {{ pageTitle }}</a></li>
       </ol>
     </div>
     <div class="row">
       <div class="col col-12 col-md-12 col-lg-6">
         <div class="card">
           <form action="" @submit.prevent="submitMaster" autocomplete="off">
-            <div class="card-body">
+            <!-- Accountants can view a ledger but not change it: every field is disabled. -->
+            <fieldset :disabled="isReadOnly" class="ledger-fieldset card-body">
               <div class="form-group">
                 <label class="control-label">{{ $t('masters.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -54,6 +55,7 @@
                   @select="onSelectGroup"
                   @deselect="deselectGroup"
                   @onSelectGroup="isSelected = true"
+                  :disabled="isReadOnly"
                 />
                 <div v-if="$v.formData.groups.$error">
                   <span v-if="!$v.formData.groups.maxLength" class="text-danger">{{ $t('validation.required') }}</span>
@@ -81,6 +83,7 @@
                     :show-labels="false"
                     :allow-empty="false"
                     :placeholder="$tc('masters.select-state')"
+                    :disabled="isReadOnly"
                     autocomplete="off" aria-invalid="false" aria-haspopup="false" spellcheck="false"
                     track-by="code"
                     label="name"
@@ -94,12 +97,13 @@
                 <base-select
                   v-model="formData.type"
                   :options="['Dr', 'Cr']"
+                  :disabled="isReadOnly"
                   :searchable="false"
                   :show-labels="false"
                   :allow-empty="false"
                 />
               </div>
-               <div class="form-group">
+               <div v-if="!isReadOnly" class="form-group">
                 <base-button
                   :loading="isLoading"
                   :disabled="isLoading"
@@ -111,7 +115,7 @@
                   {{ isEdit ? $t('masters.update_master') : $t('masters.save_master') }}
                 </base-button>
               </div>
-            </div>
+            </fieldset>
           </form>
         </div>
       </div>
@@ -119,6 +123,11 @@
   </div>
 </template>
 <style scoped>
+.ledger-fieldset {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+}
 .base-input.select-input{
     width: 100%;
     height: 40px;
@@ -165,6 +174,18 @@ export default {
     }
   },
   computed: {
+    isAdmin () {
+      const user = this.$store.state.user.currentUser
+      return !!user && user.role === 'admin'
+    },
+    // Viewing an existing ledger as a non-admin: details only, no changes.
+    isReadOnly () {
+      return this.isEdit && !this.isAdmin
+    },
+    pageTitle () {
+      if (this.isReadOnly) return this.$t('masters.view_master')
+      return this.isEdit ? this.$t('masters.edit_master') : this.$t('masters.new_master')
+    },
     isEdit () {
       if (this.$route.name === 'masters.edit') {
         return true
@@ -246,6 +267,9 @@ export default {
       }
     },
     async submitMaster () {
+      if (this.isReadOnly) {
+        return false
+      }
       this.$v.formData.$touch()
       if (this.$v.$invalid || this.duplicateName) {
         return false

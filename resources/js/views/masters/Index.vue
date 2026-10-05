@@ -155,7 +155,7 @@
                     />
                   </button>
                 </th>
-                <th v-if="isAdmin" class="masters-action-column" scope="col">
+                <th class="masters-action-column" scope="col">
                   <span class="visually-hidden">{{ $t('masters.action') }}</span>
                 </th>
               </tr>
@@ -173,27 +173,33 @@
                   >
                 </td>
                 <td :data-label="$t('masters.name')">
-                  <router-link v-if="isAdmin" :to="{ path: `masters/${master.id}/edit` }">
+                  <!-- Accountants open the same page read-only (see masters/Create.vue). -->
+                  <router-link :to="{ path: `masters/${master.id}/edit` }">
                     {{ master.name }}
                   </router-link>
-                  <!-- not a <span>: the table styles hide a cell's first span (mobile column label) -->
-                  <div v-else>{{ master.name }}</div>
                 </td>
                 <td :data-label="$t('masters.groups')">{{ master.groups }}</td>
-                <td v-if="isAdmin" class="action-dropdown masters-action-column">
+                <td class="action-dropdown masters-action-column">
                   <v-dropdown :show-arrow="false">
                     <template #activator>
                       <button class="table-row-menu" type="button" :aria-label="$t('masters.action')">
                         <dot-icon />
                       </button>
                     </template>
-                    <v-dropdown-item>
+                    <!-- Accountants only view (the page opens read-only); admins edit and delete. -->
+                    <v-dropdown-item v-if="!isAdmin">
+                      <router-link :to="{ path: `masters/${master.id}/edit` }" class="dropdown-item">
+                        <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                        {{ $t('general.view') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item v-if="isAdmin">
                       <router-link :to="{ path: `masters/${master.id}/edit` }" class="dropdown-item">
                         <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                         {{ $t('general.edit') }}
                       </router-link>
                     </v-dropdown-item>
-                    <v-dropdown-item>
+                    <v-dropdown-item v-if="isAdmin">
                       <button class="dropdown-item" type="button" @click="removeMasters(master.id)">
                         <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                         {{ $t('general.delete') }}
