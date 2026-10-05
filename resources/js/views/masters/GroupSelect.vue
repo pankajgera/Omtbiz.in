@@ -15,6 +15,7 @@
       :preserve-search="true"
       :initial-search="groupOptions.name"
       :invalid="invalid"
+      :disabled="disabled"
       :placeholder="$t('groups.select_an_group')"
       label="name"
       class="multi-select-item"
@@ -52,6 +53,11 @@ export default {
       default: null,
     },
     invalid: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       required: false,
       default: false
