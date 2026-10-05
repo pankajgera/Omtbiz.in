@@ -47,6 +47,7 @@ class Invoice extends Model
         'due_amount',
         'notes',
         'unique_hash',
+        'submission_token',
         'sent',
         'viewed',
         'account_master_id',
