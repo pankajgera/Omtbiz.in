@@ -348,8 +348,8 @@
             {{ $t('general.view_pdf') }}
           </a> -->
           <base-button
-            :loading="isLoading"
-            :disabled="isLoading"
+            :loading="isLoading || isSubmitting"
+            :disabled="isLoading || isSubmitting"
             icon="save"
             color="theme"
             class="invoice-action-btn"
@@ -412,6 +412,12 @@ export default {
       discountPerInventory: null,
       initLoading: false,
       isLoading: false,
+      // True from the moment Save is pressed until the request is under way (isLoading),
+      // so a double click / Enter + click can't send the invoice twice.
+      isSubmitting: false,
+      // One id per new-invoice form, sent with every save attempt of it: the server returns
+      // the invoice already created for this id instead of creating a duplicate on retry.
+      submissionToken: null,
       estimateDisabled: false,
       maxDiscount: 0,
       invoicePrefix: null,
@@ -833,7 +839,24 @@ export default {
       })
       return valid
     },
+    newSubmissionToken () {
+      if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+        return window.crypto.randomUUID()
+      }
+      return 'inv-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12)
+    },
     async submitInvoiceData () {
+      if (this.isSubmitting || this.isLoading) {
+        return false
+      }
+      this.isSubmitting = true
+      try {
+        await this.sendInvoice()
+      } finally {
+        this.isSubmitting = false
+      }
+    },
+    async sendInvoice () {
       let validQuantity = await this.validateInventoryQuantity();
       if (!this.checkValid() || this.newInvoice.inventories.length && !validQuantity) {
         return false
@@ -861,6 +884,10 @@ export default {
         return
       }
 
+      if (!this.submissionToken) {
+        this.submissionToken = this.newSubmissionToken()
+      }
+      data.submission_token = this.submissionToken
       this.submitSave(data)
     },
     reset() {

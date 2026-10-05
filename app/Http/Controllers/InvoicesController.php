@@ -182,7 +182,13 @@ class InvoicesController extends Controller
             $invoice_date = auth()->user()->isAdmin()
                 ? Carbon::createFromFormat('d/m/Y', $request->invoice_date)->format('Y-m-d')
                 : Carbon::now()->toDateString();
-            $invoice = DB::transaction(function () use ($request, $number_attributes, $invoice_date, $companyId, $invoice_prefix, $reference_prefix) {
+            // A retried or double-sent save (same form submission) returns the invoice it already created.
+            $submissionToken = $this->submissionToken($request);
+            if ($submissionToken && ($existing = $this->invoiceForSubmission($companyId, $submissionToken))) {
+                return $this->invoiceCreatedResponse($existing);
+            }
+
+            $invoice = DB::transaction(function () use ($request, $number_attributes, $invoice_date, $companyId, $invoice_prefix, $reference_prefix, $submissionToken) {
                 // Serialize number assignment for this company, even when no invoice rows exist yet.
                 Company::where('id', $companyId)->lockForUpdate()->first();
 
@@ -203,7 +209,7 @@ class InvoicesController extends Controller
                     abort(500);
                 }
 
-                return Invoice::create([
+                $invoice = Invoice::create([
                     'invoice_date' => $invoice_date,
                     //'due_date' => $due_date,
                     'invoice_number' => $finalInvoiceNumber,
@@ -223,173 +229,23 @@ class InvoicesController extends Controller
                     'indirect_expense_value' => $request->expense_ledger_value,
                     'unique_hash' => Str::random(60),
                     'account_master_id' => $request->debtors['id'],
+                    'submission_token' => $submissionToken,
                 ]);
+
+                // The cascade belongs to the same unit of work: if any of it fails, the invoice is
+                // rolled back too, so "try again" can never leave a saved invoice behind.
+                $this->createInvoiceCascade($request, $invoice, $invoice_date, $companyId);
+
+                return $invoice;
             }, 3);
 
-            // Cascade (dispatch, items, stock, ledgers, vouchers) is one user action — log invoice only.
-            AuditLogger::withoutAuditing(function () use ($request, $invoice, $invoice_date, $companyId) {
-                //Added dispatch bill
-                $dispatch = new Dispatch();
-                $dispatch->name = $invoice->invoice_number;
-                $dispatch->invoice_id = $invoice->id;
-                $dispatch->date_time = Carbon::now('Asia/Kolkata');
-                $dispatch->transport = null;
-                $dispatch->status = 'Draft';
-                $dispatch->company_id = $request->header('company');
-                $dispatch->save();
-
-                $invoice->update([
-                    'dispatch_id' => $dispatch->id,
-                    'paid_status' => 'TO_BE_DISPATCH',
-                ]);
-
-                //Now for each inventory item create journal entry
-                $invoiceInventories = $request->inventories;
-                $inventory_id = null;
-                foreach ($invoiceInventories as $invoiceInventory) {
-                    $invoiceInventory['company_id'] = $request->header('company');
-                    $invoiceInventory['type'] = 'invoice';
-                    $inventory = $invoice->inventories()->create($invoiceInventory);
-
-                    $inventory_id = $inventory->id;
-                    //Reset inventory quantity
-                    $quantity_used = (int) ($inventory->quantity);
-                    $invent = Inventory::where('id', $inventory->inventory_id)->first();
-                    $invent->update([
-                        'quantity' => $invent->quantity - $quantity_used,
-                    ]);
-                }
-
-                //Add journal entry
-                //It will be "Sales" type
-                $sale_account = AccountMaster::where('name', 'Sales')->first();
-                if (!$sale_account) {
-                    $sale_account = AccountMaster::create([
-                        'name' => 'Sales',
-                        'groups' => 'Sales Accounts',
-                        'address' => '-',
-                        'country' => '-',
-                        'state' => '-',
-                        'opening_balance' => '0',
-                        'type' => 'Cr',
-                    ]);
-                }
-                $company_id = $companyId;
-                $account_master_id = (int) $request->debtors['id'];
-                $total_amount = (int) ($request->total);
-
-                $account_ledger = AccountLedger::firstOrCreate([
-                    'account_master_id' => $sale_account->id,
-                    'account' => 'Sales',
-                    'company_id' => $company_id,
-                ], [
-                    'date' => Carbon::now()->toDateTimeString(),
-                    'type' => 'Cr',
-                    'debit' => 0,
-                    'credit' => $total_amount,
-                    'balance' => $total_amount,
-                ]);
-                $dr_account_ledger = AccountLedger::firstOrCreate([
-                    'account_master_id' => $account_master_id,
-                    'account' => $request->debtors['name'],
-                    'company_id' => $company_id,
-                ], [
-                    'date' => Carbon::now()->toDateTimeString(),
-                    'debit' => $total_amount,
-                    'type' => 'Dr',
-                    'credit' => 0,
-                    'balance' => $total_amount,
-                ]);
-
-                //Handle vouchers
-                //Add journal entry
-                //It will add voucher for sales from invoice
-                $voucher_1 = Voucher::create([
-                    'account_master_id' => $account_master_id,
-                    'account' => $request->debtors['name'],
-                    'debit' => $total_amount,
-                    'credit' => 0,
-                    'account_ledger_id' => $dr_account_ledger->id,
-                    'date' => $invoice_date,
-                    'related_voucher' => null,
-                    'type' => 'Dr',
-                    'company_id' => $company_id,
-                    'invoice_id' => $invoice->id,
-                    'invoice_item_id' => $inventory_id,
-                    'voucher_type' => 'Sales',
-                ]);
-                $voucher_2 = Voucher::create([
-                    'account_master_id' => $sale_account->id,
-                    'account' => 'Sales',
-                    'debit' => 0,
-                    'credit' => $total_amount,
-                    'account_ledger_id' => $account_ledger->id,
-                    'date' => $invoice_date,
-                    'related_voucher' => null,
-                    'type' => 'Cr',
-                    'company_id' => $company_id,
-                    'invoice_id' => $invoice->id,
-                    'invoice_item_id' => $inventory_id,
-                    'voucher_type' => 'Sales',
-                ]);
-
-                //Now update vouchers id to ledger-bill-no and related_voucher
-                $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
-                $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
-                $account_ledger->update([
-                    'credit' => $account_ledger->credit + $total_amount,
-                    'balance' => $account_ledger->balance + $total_amount,
-                ]);
-                $dr_account_ledger->update([
-                    'debit' => $dr_account_ledger->debit + $total_amount,
-                    'balance' => $dr_account_ledger->balance + $total_amount,
-                ]);
-                foreach ($voucher as $key => $each) {
-                    if ($key < substr_count($voucher_ids, ',') + 1) {
-                        $each->update([
-                            'related_voucher' => $voucher_ids,
-                        ]);
-                    }
-                }
-
-                //Update estimate
-                if ($request->estimate) {
-                    Estimate::where('id', $request->estimate['id'])->update([
-                        'status' => 'SENT',
-                        'reference_number' => $invoice->invoice_number,
-                    ]);
-
-                    // update notifications
-                    $notifications = auth()->user()->notifications()
-                    ->whereNull('read_at')
-                    ->orderBy('id', 'desc')
-                    ->limit(10)
-                    ->get();
-
-                    foreach($notifications as $notifi) {
-                        $data = $notifi['data'];
-                        if($data['id'] === (int)$request->estimate['id']) {
-                            $notifi->update([
-                                'read_at' => Carbon::now()
-                            ]);
-
-                            break;
-                        }
-                    }
-                }
-            });
-
-            $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
-
-            if ($invoice) {
-                return response()->json([
-                    'url' => $this->shareableLink($invoice),
-                    'invoice' => $invoice
-                ]);
-            }
-
-            return response()->json(204);
+            return $this->invoiceCreatedResponse($invoice);
         } catch (QueryException $e) {
+            // Two identical submissions raced past the check above: the unique index stopped the
+            // second one, so answer with the invoice the first one created.
+            if (isset($submissionToken) && $submissionToken && ($existing = $this->invoiceForSubmission($companyId, $submissionToken))) {
+                return $this->invoiceCreatedResponse($existing);
+            }
             Log::error('Database error while storing invoice ', [$e]);
             return response()->json([
                 'error' => 'Unable to create invoice. Please try again.',
@@ -400,6 +256,192 @@ class InvoicesController extends Controller
                 'error' => 'Unable to create invoice. Please try again.',
             ], 500);
         }
+    }
+
+    private function submissionToken(Request $request): ?string
+    {
+        $token = $request->input('submission_token');
+
+        return is_string($token) && preg_match('/^[A-Za-z0-9-]{8,64}$/', $token) ? $token : null;
+    }
+
+    private function invoiceForSubmission(int $companyId, string $token): ?Invoice
+    {
+        return Invoice::where('company_id', $companyId)->where('submission_token', $token)->first();
+    }
+
+    private function invoiceCreatedResponse(Invoice $invoice)
+    {
+        $invoice = Invoice::with(['inventories', 'user', 'invoiceTemplate'])->find($invoice->id);
+
+        if (! $invoice) {
+            return response()->json(204);
+        }
+
+        return response()->json([
+            'url' => $this->shareableLink($invoice),
+            'invoice' => $invoice,
+        ]);
+    }
+
+    /**
+     * Everything a new invoice creates besides itself: dispatch entry, items, stock,
+     * ledgers and vouchers. Runs inside store()'s transaction.
+     */
+    private function createInvoiceCascade($request, Invoice $invoice, $invoice_date, $companyId): void
+    {
+        // Cascade (dispatch, items, stock, ledgers, vouchers) is one user action — log invoice only.
+        AuditLogger::withoutAuditing(function () use ($request, $invoice, $invoice_date, $companyId) {
+            //Added dispatch bill
+            $dispatch = new Dispatch();
+            $dispatch->name = $invoice->invoice_number;
+            $dispatch->invoice_id = $invoice->id;
+            $dispatch->date_time = Carbon::now('Asia/Kolkata');
+            $dispatch->transport = null;
+            $dispatch->status = 'Draft';
+            $dispatch->company_id = $request->header('company');
+            $dispatch->save();
+
+            $invoice->update([
+                'dispatch_id' => $dispatch->id,
+                'paid_status' => 'TO_BE_DISPATCH',
+            ]);
+
+            //Now for each inventory item create journal entry
+            $invoiceInventories = $request->inventories;
+            $inventory_id = null;
+            foreach ($invoiceInventories as $invoiceInventory) {
+                $invoiceInventory['company_id'] = $request->header('company');
+                $invoiceInventory['type'] = 'invoice';
+                $inventory = $invoice->inventories()->create($invoiceInventory);
+
+                $inventory_id = $inventory->id;
+                //Reset inventory quantity
+                $quantity_used = (int) ($inventory->quantity);
+                $invent = Inventory::where('id', $inventory->inventory_id)->first();
+                $invent->update([
+                    'quantity' => $invent->quantity - $quantity_used,
+                ]);
+            }
+
+            //Add journal entry
+            //It will be "Sales" type
+            $sale_account = AccountMaster::where('name', 'Sales')->first();
+            if (!$sale_account) {
+                $sale_account = AccountMaster::create([
+                    'name' => 'Sales',
+                    'groups' => 'Sales Accounts',
+                    'address' => '-',
+                    'country' => '-',
+                    'state' => '-',
+                    'opening_balance' => '0',
+                    'type' => 'Cr',
+                ]);
+            }
+            $company_id = $companyId;
+            $account_master_id = (int) $request->debtors['id'];
+            $total_amount = (int) ($request->total);
+
+            $account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $sale_account->id,
+                'account' => 'Sales',
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'type' => 'Cr',
+                'debit' => 0,
+                'credit' => $total_amount,
+                'balance' => $total_amount,
+            ]);
+            $dr_account_ledger = AccountLedger::firstOrCreate([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'company_id' => $company_id,
+            ], [
+                'date' => Carbon::now()->toDateTimeString(),
+                'debit' => $total_amount,
+                'type' => 'Dr',
+                'credit' => 0,
+                'balance' => $total_amount,
+            ]);
+
+            //Handle vouchers
+            //Add journal entry
+            //It will add voucher for sales from invoice
+            $voucher_1 = Voucher::create([
+                'account_master_id' => $account_master_id,
+                'account' => $request->debtors['name'],
+                'debit' => $total_amount,
+                'credit' => 0,
+                'account_ledger_id' => $dr_account_ledger->id,
+                'date' => $invoice_date,
+                'related_voucher' => null,
+                'type' => 'Dr',
+                'company_id' => $company_id,
+                'invoice_id' => $invoice->id,
+                'invoice_item_id' => $inventory_id,
+                'voucher_type' => 'Sales',
+            ]);
+            $voucher_2 = Voucher::create([
+                'account_master_id' => $sale_account->id,
+                'account' => 'Sales',
+                'debit' => 0,
+                'credit' => $total_amount,
+                'account_ledger_id' => $account_ledger->id,
+                'date' => $invoice_date,
+                'related_voucher' => null,
+                'type' => 'Cr',
+                'company_id' => $company_id,
+                'invoice_id' => $invoice->id,
+                'invoice_item_id' => $inventory_id,
+                'voucher_type' => 'Sales',
+            ]);
+
+            //Now update vouchers id to ledger-bill-no and related_voucher
+            $voucher_ids = $voucher_1->id . ', ' . $voucher_2->id;
+            $voucher = Voucher::whereCompany($request->header('company'))->whereIn('id', explode(',', $voucher_ids))->orderBy('id')->get();
+            $account_ledger->update([
+                'credit' => $account_ledger->credit + $total_amount,
+                'balance' => $account_ledger->balance + $total_amount,
+            ]);
+            $dr_account_ledger->update([
+                'debit' => $dr_account_ledger->debit + $total_amount,
+                'balance' => $dr_account_ledger->balance + $total_amount,
+            ]);
+            foreach ($voucher as $key => $each) {
+                if ($key < substr_count($voucher_ids, ',') + 1) {
+                    $each->update([
+                        'related_voucher' => $voucher_ids,
+                    ]);
+                }
+            }
+
+            //Update estimate
+            if ($request->estimate) {
+                Estimate::where('id', $request->estimate['id'])->update([
+                    'status' => 'SENT',
+                    'reference_number' => $invoice->invoice_number,
+                ]);
+
+                // update notifications
+                $notifications = auth()->user()->notifications()
+                ->whereNull('read_at')
+                ->orderBy('id', 'desc')
+                ->limit(10)
+                ->get();
+
+                foreach($notifications as $notifi) {
+                    $data = $notifi['data'];
+                    if($data['id'] === (int)$request->estimate['id']) {
+                        $notifi->update([
+                            'read_at' => Carbon::now()
+                        ]);
+
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     private function getReferenceNumberForInvoice($companyId, $accountMasterId, $invoiceDate, $invoiceNumber, $referencePrefix)

@@ -4,8 +4,8 @@
     <site-header/>
     <site-sidebar type="basic" :role="user.role"/>
 
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
+    <router-view v-slot="{ Component, route }">
+      <component :is="Component" :key="pageKey(route)" />
     </router-view>
     <!-- <site-footer/> -->
   </div>
@@ -60,6 +60,14 @@ export default {
   },
 
   methods: {
+    // Routes such as invoices/create and invoices/:id/edit share one component. Without a key
+    // Vue reuses the open page, so New Invoice kept showing the invoice just edited (and saving
+    // it created a copy). Keyed by this layout's child route + params: switching route or record
+    // gives a fresh page, while tabs nested inside one page (settings, reports) don't remount it.
+    pageKey (route) {
+      const page = route.matched[1]
+      return (page ? (page.name || page.path) : route.path) + '|' + JSON.stringify(route.params)
+    },
     ...mapActions(['bootstrap']),
     ...mapActions('company', ['setSelectedCompany']),
     setInitialCompany () {
