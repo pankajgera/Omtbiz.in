@@ -95,7 +95,7 @@
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
-      <div class="table-actions mt-5">
+      <div class="table-actions mt-3">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ invoices.length }}</b> {{ $t('general.of') }} <b>{{ filtered_count }}</b></p>
         <transition name="fade">
           <div v-if="selectedInvoices.length" class="d-flex align-items-center">
@@ -251,7 +251,7 @@ export default {
   mixins:[GlobalMixin],
   data () {
     return {
-      showFilters: false,
+      showFilters: true,
       //currency: null,
     breadCrumbLinks:[
         {
