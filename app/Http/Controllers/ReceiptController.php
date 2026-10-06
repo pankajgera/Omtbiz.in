@@ -244,7 +244,7 @@ class ReceiptController extends Controller
      */
     public function update(ReceiptRequest $request, $id)
     {
-        if ($response = $this->adminOrAccountantOnlyResponse()) {
+        if ($response = $this->adminOnlyResponse()) {
             return $response;
         }
 

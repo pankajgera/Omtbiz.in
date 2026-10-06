@@ -276,7 +276,7 @@ const routes = [
               path: 'vouchers/approvals',
               name: 'vouchers.approvals',
               component: VouchersIndex,
-              meta: ['admin'],
+              meta: ['admin', 'accountant'],
               props: { approvalMode: true }
             },
             {

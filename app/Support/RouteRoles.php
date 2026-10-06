@@ -29,7 +29,7 @@ final class RouteRoles
             'ExpensesController' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy', 'delete', 'showReceipt', 'uploadReceipts'],
             'ExpenseCategoryController' => ['index'],
             'PaymentController' => ['index', 'create', 'store', 'show'],
-            'ReceiptController' => ['index', 'create', 'store', 'show', 'edit', 'update'],
+            'ReceiptController' => ['index', 'create', 'store', 'show', 'edit'],
             'CompanyController' => ['getColors', 'getInventoryType', 'getCustomizeSetting'],
             'NoteController' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy', 'delete'],
             'InventoryController' => ['index', 'create', 'store', 'show', 'edit', 'update', 'destroy', 'delete', 'increasePrice', 'getInventoryStock', 'getInvoiceStock'],
