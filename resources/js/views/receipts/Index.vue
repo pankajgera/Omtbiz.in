@@ -112,7 +112,7 @@
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
-      <div class="table-actions mt-5">
+      <div class="table-actions mt-2">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ receipts.length }}</b> {{ $t('general.of') }} <b>{{ total_counts }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="role === 'admin' && selectedReceipts && selectedReceipts.length" :show-arrow="false">

@@ -826,7 +826,7 @@ a:has(button):focus {
 }
 
 .table-actions:has(> .table-stats) {
-    margin-bottom: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
 }
 
 .table-container > .table-actions:has(> .table-stats) ~ .table-component {
