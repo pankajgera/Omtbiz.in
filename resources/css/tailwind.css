@@ -1243,7 +1243,6 @@ a:focus {
    mode that is white on white: the column headings vanish and the row reads as a
    blank white bar. Theme the thead itself too, so no white sliver shows through
    where the cell padding does not reach. */
-.filter-section,
 .bg-light,
 .invoice-create-page .item-table .item-table-header th,
 .invoice-create-page .add-item-action,
@@ -1255,6 +1254,14 @@ a:focus {
 .order-create-page .add-item-action {
     color: var(--ui-text);
     background-color: var(--ui-surface-muted) !important;
+}
+
+/* The muted surface is almost the page background, so the panel disappeared. */
+.filter-section {
+    color: var(--ui-text);
+    background-color: var(--ui-surface) !important;
+    border: 1px solid var(--ui-border);
+    padding: 20px !important;
 }
 
 .estimate-create-page .item-table .item-table-header th,
