@@ -9,6 +9,7 @@
         :invalid="v$.loginData.email.$error"
         v-model="loginData.email"
         focus
+        submit-on-enter
         type="email"
         name="email"
         :id="'login-id'"
@@ -31,6 +32,7 @@
         type="password"
         name="password"
         show-password
+        submit-on-enter
         password-toggle-tab-index="-1"
         :id="'login-password'"
         @input="v$.loginData.password.$touch()"
