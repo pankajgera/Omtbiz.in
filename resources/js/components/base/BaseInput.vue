@@ -20,7 +20,7 @@
       :maxlength="type === 'number' ? max : null"
       @change="handleChange"
       @keyup="handleKeyupEnter"
-      @keydown.enter.prevent
+      @keydown.enter="handleEnterKey"
       @blur="handleFocusOut"
     >
     <button
@@ -121,6 +121,10 @@ export default {
     max: {
       type: Number,
       default: null
+    },
+    submitOnEnter: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -175,6 +179,9 @@ export default {
     },
     handleChange (e) {
         this.$emit('change', this.inputValue)
+    },
+    handleEnterKey (e) {
+      if (!this.submitOnEnter) e.preventDefault()
     },
     handleKeyupEnter (e) {
         this.$emit('keyup', this.inputValue)
