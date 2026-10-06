@@ -154,7 +154,7 @@
     </div>
 
     <div v-show="!showEmptyScreen" class="table-container">
-      <div class="table-actions mt-5">
+      <div class="table-actions mt-3">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ ledgers.length }}</b> {{ $t('general.of') }} <b>{{ totalLedgers }}</b></p>
         <transition name="fade">
           <v-dropdown v-if="selectedLedgers.length" :show-arrow="false">

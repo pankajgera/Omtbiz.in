@@ -273,6 +273,7 @@ export default {
       range: new Date(),
       dateRange: [
         'Today',
+        'Yesterday',
         'This Week',
         'This Month',
         'This Quarter',
@@ -370,6 +371,11 @@ export default {
     },
     onChangeDateRange () {
       switch (this.selectedRange) {
+        case 'Yesterday':
+          this.formData.from_date = moment().subtract(1, 'day').startOf('day').toISOString()
+          this.formData.to_date = moment().subtract(1, 'day').endOf('day').toISOString()
+          break
+
         case 'Today':
           this.formData.from_date = moment().toISOString()
           this.formData.to_date = moment().toISOString()
