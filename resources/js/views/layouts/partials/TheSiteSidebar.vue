@@ -223,7 +223,7 @@ export default {
             icon: "shield-alt",
             color: "green",
             route: "/vouchers/approvals",
-            meta: ["admin"],
+            meta: ["admin", "accountant"],
           },
         ],
         [

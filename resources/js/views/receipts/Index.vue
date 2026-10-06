@@ -233,7 +233,7 @@
                 </span>
               </template>
               <v-dropdown-item>
-                <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin' || role === 'accountant'">
+                <router-link :to="{path: `receipts/${row.id}/edit`}" class="dropdown-item" v-if="role === 'admin'">
                   <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon"/>
                   {{ $t('general.edit') }}
                 </router-link>
@@ -680,7 +680,7 @@ export default {
       })
     },
     getReceiptLink (row) {
-      const path = (this.role === 'admin' || this.role === 'accountant')
+      const path = this.role === 'admin'
         ? `/receipts/${row.id}/edit?d=true`
         : `/receipts/${row.id}/view`
 

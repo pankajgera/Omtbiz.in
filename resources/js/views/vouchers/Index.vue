@@ -14,7 +14,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div v-if="role === 'admin' && !isApprovalMode" class="me-4 mb-3 mb-sm-0">
+        <div v-if="!isApprovalMode" class="me-4 mb-3 mb-sm-0">
           <router-link :to="{ name: 'vouchers.approvals' }">
             <base-button
               :outline="true"
