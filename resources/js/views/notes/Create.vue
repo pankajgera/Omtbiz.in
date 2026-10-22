@@ -1,18 +1,18 @@
 <template>
   <div class="main-content item-create">
     <div class="page-header">
-      <h3 class="page-title">{{ isEdit ? $t('notes.edit_note') : $t('notes.new_note') }}</h3>
+      <h3 class="page-title">{{ pageTitle }}</h3>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><router-link slot="item-title" to="/invoices">{{ $t('general.home') }}</router-link></li>
         <li class="breadcrumb-item"><router-link slot="item-title" to="/notes">{{ $tc('notes.notes',2) }}</router-link></li>
-        <li class="breadcrumb-item"><a href="#"> {{ isEdit ? $t('notes.edit_note') : $t('notes.new_note') }}</a></li>
+        <li class="breadcrumb-item"><a href="#"> {{ pageTitle }}</a></li>
       </ol>
     </div>
     <div class="row">
       <div class="col col-12 col-md-12 col-lg-6">
         <div class="card">
           <form action="" @submit.prevent="submitNote">
-            <div class="card-body" id="to_print">
+            <fieldset :disabled="isView" class="card-body" id="to_print">
               <div class="form-group">
                 <label class="control-label">{{ $t('notes.name') }}</label><span class="text-danger"> *</span>
                 <base-input
@@ -76,7 +76,7 @@
                 />
               </div>
                 <div class="form-group">
-                <div class="fileUpload btn btn-default">
+                <div id="note-upload" class="fileUpload btn btn-default">
                   <label class="upload mb-0">
                     <input type="file" accept="image/*" name="image" @change="uploadImage">
                       Upload Photo
@@ -89,7 +89,7 @@
                   <a style="font-size: 12px" :href="formData.image" target="_blank"></a>
                 </div>
               </div>
-              <div class="form-group">
+              <div v-if="!isView" class="form-group">
                 <base-button
                   id="submit-note"
                   :loading="isLoading"
@@ -102,7 +102,7 @@
                   {{ isEdit ? $t('notes.update_note') : $t('notes.save_note') }}
                 </base-button>
               </div>
-            </div>
+            </fieldset>
           </form>
           <button type="button" class="btn btn-lg btn-default print_no mt-2" @click="printNote">Print</button>
         </div>
@@ -156,11 +156,15 @@ export default {
     }
   },
   computed: {
+    isView () {
+      return this.$route.name === 'notes.view'
+    },
     isEdit () {
-      if (this.$route.name === 'notes.edit') {
-        return true
-      }
-      return false
+      return this.$route.name === 'notes.edit' || this.isView
+    },
+    pageTitle () {
+      if (this.isView) return this.$tc('notes.notes', 1)
+      return this.isEdit ? this.$t('notes.edit_note') : this.$t('notes.new_note')
     }
   },
   created () {
@@ -189,6 +193,7 @@ export default {
       this.formData.image = response.data.image
     },
     async submitNote () {
+      if (this.isView) return false
       this.$v.formData.$touch()
       if (this.$v.$invalid) {
         window.toastr['error']("Error! missing required field or value is invalid.!")
@@ -229,10 +234,17 @@ export default {
         printJS({
           printable: 'to_print',
           type: 'html',
-          ignoreElements: ['submit-note'],
-          scanStyles: true,
-          targetStyles: ['*'],
-          style: '.base-text-area.text-area-field, .base-input .input-field { margin-bottom: 10px; width: 100%; padding: 8px 13px;text-align: left;background: #FFFFFF;border: 1px solid #000;box-sizing: border-box;border-radius: 5px;font-style: normal;font-weight: 500;font-size: 14px;line-height: 21px;}'
+          ignoreElements: ['submit-note', 'note-upload'],
+          scanStyles: false,
+          style: `
+            #to_print { border: 0; margin: 0; padding: 0; min-width: 0; font-family: Arial, sans-serif; }
+            .form-group { margin: 0 0 14px; }
+            label, .control-label { display: block; width: auto; margin: 0 0 4px; font-size: 13px; font-weight: 600; white-space: normal; }
+            .text-danger { display: none; }
+            input[type="text"], textarea { display: block; box-sizing: border-box; width: 100%; padding: 8px 12px; border: 1px solid #000; border-radius: 4px; font-size: 14px; line-height: 21px; background: #fff; color: #000; resize: none; }
+            textarea { min-height: 110px; }
+            img { max-width: 200px; height: auto; }
+          `
         })
     }
   }

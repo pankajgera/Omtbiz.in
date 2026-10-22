@@ -26,7 +26,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div>
+        <div v-if="isAdmin">
           <router-link slot="item-title" to="notes/create">
             <base-button
               color="theme"
@@ -92,7 +92,7 @@
       <div class="row">
         <label class="description col mt-1" align="center">{{ $t('notes.list_of_notes') }}</label>
       </div>
-      <div class="btn-container">
+      <div v-if="isAdmin" class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -109,7 +109,7 @@
       <div class="table-actions notes-table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ notes.length }}</b> {{ $t('general.of') }} <b>{{ totalNotes }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="selectedNotes.length" :show-arrow="false">
+          <v-dropdown v-if="isAdmin && selectedNotes.length" :show-arrow="false">
             <template #activator>
               <span href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
@@ -136,7 +136,7 @@
             <thead class="table-component__table__head">
               <tr>
                 <th class="notes-selection-column hide-print" scope="col">
-                  <label class="notes-select-all-label" for="select-all">
+                  <label v-if="isAdmin" class="notes-select-all-label" for="select-all">
                     <input
                       id="select-all"
                       v-model="selectAllFieldStatus"
@@ -172,6 +172,7 @@
               <tr v-for="note in notes" :key="note.id">
                 <td class="notes-selection-column hide-print">
                   <input
+                    v-if="isAdmin"
                     :id="`note-${note.id}`"
                     v-model="selectField"
                     :value="note.id"
@@ -181,7 +182,7 @@
                   >
                 </td>
                 <td :data-label="$t('notes.name')">
-                  <router-link :to="{ path: `notes/${note.id}/edit` }">
+                  <router-link :to="{ path: isAdmin ? `notes/${note.id}/edit` : `notes/${note.id}/view` }">
                     {{ note.name }}
                   </router-link>
                 </td>
@@ -195,13 +196,19 @@
                         <dot-icon />
                       </button>
                     </template>
-                    <v-dropdown-item>
+                    <v-dropdown-item v-if="isAdmin">
                       <router-link :to="{ path: `notes/${note.id}/edit` }" class="dropdown-item">
                         <font-awesome-icon :icon="['fas', 'pencil-alt']" class="dropdown-item-icon" />
                         {{ $t('general.edit') }}
                       </router-link>
                     </v-dropdown-item>
-                    <v-dropdown-item>
+                    <v-dropdown-item v-else>
+                      <router-link :to="{ path: `notes/${note.id}/view` }" class="dropdown-item">
+                        <font-awesome-icon icon="eye" class="dropdown-item-icon" />
+                        {{ $t('general.view') }}
+                      </router-link>
+                    </v-dropdown-item>
+                    <v-dropdown-item v-if="isAdmin">
                       <button class="dropdown-item" type="button" @click="removeNotes(note.id)">
                         <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                         {{ $t('general.delete') }}
@@ -280,6 +287,9 @@ export default {
     }
   },
   computed: {
+    isAdmin () {
+      return this.$store.state.user.currentUser.role === 'admin'
+    },
     ...mapGetters('notes', [
       'notes',
       'selectedNotes',
