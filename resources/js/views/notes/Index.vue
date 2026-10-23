@@ -26,7 +26,7 @@
             {{ $t('general.filter') }}
           </base-button>
         </div>
-        <div v-if="isAdmin">
+        <div>
           <router-link slot="item-title" to="notes/create">
             <base-button
               color="theme"
@@ -92,7 +92,7 @@
       <div class="row">
         <label class="description col mt-1" align="center">{{ $t('notes.list_of_notes') }}</label>
       </div>
-      <div v-if="isAdmin" class="btn-container">
+      <div class="btn-container">
         <base-button
           :outline="true"
           color="theme"
@@ -109,7 +109,7 @@
       <div class="table-actions notes-table-actions mt-5">
         <p class="table-stats">{{ $t('general.showing') }}: <b>{{ notes.length }}</b> {{ $t('general.of') }} <b>{{ totalNotes }}</b></p>
         <transition name="fade">
-          <v-dropdown v-if="isAdmin && selectedNotes.length" :show-arrow="false">
+          <v-dropdown v-if="selectedNotes.length" :show-arrow="false">
             <template #activator>
               <span href="#" class="table-actions-button dropdown-toggle">
                 {{ $t('general.actions') }}
@@ -136,7 +136,7 @@
             <thead class="table-component__table__head">
               <tr>
                 <th class="notes-selection-column hide-print" scope="col">
-                  <label v-if="isAdmin" class="notes-select-all-label" for="select-all">
+                  <label class="notes-select-all-label" for="select-all">
                     <input
                       id="select-all"
                       v-model="selectAllFieldStatus"
@@ -172,7 +172,6 @@
               <tr v-for="note in notes" :key="note.id">
                 <td class="notes-selection-column hide-print">
                   <input
-                    v-if="isAdmin"
                     :id="`note-${note.id}`"
                     v-model="selectField"
                     :value="note.id"
@@ -208,7 +207,7 @@
                         {{ $t('general.view') }}
                       </router-link>
                     </v-dropdown-item>
-                    <v-dropdown-item v-if="isAdmin">
+                    <v-dropdown-item>
                       <button class="dropdown-item" type="button" @click="removeNotes(note.id)">
                         <font-awesome-icon :icon="['fas', 'trash']" class="dropdown-item-icon" />
                         {{ $t('general.delete') }}

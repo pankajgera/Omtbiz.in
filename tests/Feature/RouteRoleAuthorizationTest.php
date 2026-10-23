@@ -78,7 +78,7 @@ class RouteRoleAuthorizationTest extends TestCase
             if ($method === 'GET' && $url === '/api/vouchers/42/edit') return true; // Accountant read-only view.
             if (in_array($method, ['PUT', 'PATCH', 'DELETE'], true) || preg_match('#/(edit|delete|update|approve|decline|approve-multiple|decline-multiple)$#', $url)) return false;
         }
-        if (str_starts_with($url, '/api/notes')) return $method === 'GET' && in_array($url, ['/api/notes', '/api/notes/42', '/api/notes/42/edit'], true); // Accountant read-only.
+        if (str_starts_with($url, '/api/notes')) return ! in_array($method, ['PUT', 'PATCH'], true); // Accountant can do everything except update.
         if (str_starts_with($url, '/api/receipts') && (in_array($method, ['PUT', 'PATCH', 'DELETE'], true) || preg_match('#/(delete|approve|decline|approve-multiple|decline-multiple)$#', $url))) return false;
         return true;
     }

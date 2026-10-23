@@ -533,7 +533,7 @@ const routes = [
                 path: 'notes/create',
                 name: 'notes.create',
                 component: NotesCreate,
-                meta: ['admin']
+                meta: ['admin', 'accountant']
             },
             {
                 path: 'notes/:id/edit',
