@@ -41,7 +41,7 @@
                         <td class="number">₹ {{ $item->sale_price }}</td><td class="number">₹ {{ $item->total }}</td>
                     </tr>
                 @endforeach
-                @if ($documentKind === 'invoice')
+                @if (in_array($documentKind, ['invoice', 'estimate'], true))
                     <tr class="summary">
                         <td colspan="2"></td>
                         <td class="quantity">Total Quantity: {{ str_replace('.00', '', $total_quantity) }}</td>

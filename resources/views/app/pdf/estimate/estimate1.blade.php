@@ -100,7 +100,7 @@ $numberTowords = function ($num)
         'documentKind' => 'estimate',
         'documentTitle' => 'Estimate',
         'documentItems' => $estimate_items,
-        'metadata' => ['Estimate Date' => $estimate->estimate_date, 'Estimate Number' => $estimate->estimate_number],
+        'metadata' => ['Estimate Date' => $estimate->estimate_date, 'Estimate Number' => $estimate->estimate_number, 'Reference Number' => $estimate->reference_number],
     ])
 </body>
 </html>
